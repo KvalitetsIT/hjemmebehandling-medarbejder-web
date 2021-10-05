@@ -33,3 +33,6 @@ target
 .project
 .settings/
 .classpath
+
+# Node stuff
+node_modules

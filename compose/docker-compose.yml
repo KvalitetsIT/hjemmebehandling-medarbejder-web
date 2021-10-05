@@ -1,0 +1,9 @@
+version: '2.1'
+services:
+   medarbejder-web:
+     build:
+       context: ..
+     ports:
+       - 9090:3000
+     volumes:
+       - ../src:/app/src
