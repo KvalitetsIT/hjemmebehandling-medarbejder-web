@@ -37,26 +37,6 @@ jobs:
     - name: Build and test
       run: ./build/build.sh ${{ env.DOCKER_SERVICE }}:latest
 
-    - name: Generate Jacoco Badge
-      id: jacoco
-      uses: cicirello/jacoco-badge-generator@v1.0.0
-      with:
-        jacoco-csv-file: testreport/target/site/jacoco-aggregate/jacoco.csv
-
-    - name: Log coverage percentage
-      run: |
-        echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-
-    - name: Update coverage badge
-      if: ${{ steps.tag.conclusion == 'skipped' }}
-      run: ./build/badge-update.sh
-
-    - name: Upload Jacoco coverage report
-      uses: actions/upload-artifact@v2
-      with:
-        name: jacoco-report
-        path: testreport/target/site/jacoco-aggregate/
-
     - name: Tag service dev docker image
       run: ./build/docker-tag.sh ${{ env.DOCKER_SERVICE }}:latest ${{ env.DOCKER_SERVICE }}:dev
 
@@ -69,17 +49,18 @@ jobs:
     - name: Push service git id docker image.
       run: ./build/docker-push.sh ${{ env.DOCKER_SERVICE }}:${{ github.sha }}
 
-    - name: Tag documentation dev docker image
-      run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:dev
+# TODO: Figure out whether we want this or not.
+    # - name: Tag documentation dev docker image
+    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:dev
 
-    - name: Push documentation dev docker image
-      run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:dev
+    # - name: Push documentation dev docker image
+    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:dev
 
-    - name: Tag documentation git id docker image
-      run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
+    # - name: Tag documentation git id docker image
+    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
 
-    - name: Push documentation git id docker image.
-      run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
+    # - name: Push documentation git id docker image.
+    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
 
     - name: Push latest service docker image
       if: ${{ steps.tag.conclusion != 'skipped' }}
@@ -93,14 +74,15 @@ jobs:
       if: ${{ steps.tag.conclusion != 'skipped' }}
       run: ./build/docker-push.sh ${{ env.DOCKER_SERVICE }}:${{ steps.tag.outputs.VERSION }}
 
-    - name: Push latest documentation docker image
-      if: ${{ steps.tag.conclusion != 'skipped' }}
-      run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:latest
+# TODO: Figure out whether we want this or not.      
+    # - name: Push latest documentation docker image
+    #   if: ${{ steps.tag.conclusion != 'skipped' }}
+    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:latest
 
-    - name: Tag version documentation docker image
-      if: ${{ steps.tag.conclusion != 'skipped' }}
-      run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}
+    # - name: Tag version documentation docker image
+    #   if: ${{ steps.tag.conclusion != 'skipped' }}
+    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}
 
-    - name: Push version documentation docker image.
-      if: ${{ steps.tag.conclusion != 'skipped' }}
-      run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}
+    # - name: Push version documentation docker image.
+    #   if: ${{ steps.tag.conclusion != 'skipped' }}
+    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}
