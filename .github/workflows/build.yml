@@ -21,19 +21,6 @@ jobs:
 # Checkout source code
     - uses: actions/checkout@v2
 
-# Fail if DOCKER_SERVICE is rim-medarbejder-web and repo is not rim-medarbejder-web. This step can be deleted once
-    - name: Initial build
-      run: ./build/failOnFirstBuild.sh
-
-# Cache maven stuff
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-
 # if below step is skipped this build is a tag build. Can be used for skipping other steps.
     - name: Is Tag Build
       id: tag
@@ -48,7 +35,7 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Build and test
-      run: ./build/build.sh
+      run: ./build/build.sh ${{ env.DOCKER_SERVICE }}:latest
 
     - name: Generate Jacoco Badge
       id: jacoco
