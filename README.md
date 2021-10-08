@@ -11,6 +11,7 @@ https://mui.com/getting-started/installation/ :
 ```
 npm install @mui/material @emotion/react @emotion/styled
 npm install @mui/icons-material
+npm install @mui/material @mui/styled-engine-sc styled-components
 ```
 
 https://nextjs.org/docs :
