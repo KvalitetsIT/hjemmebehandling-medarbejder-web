@@ -3,13 +3,14 @@ FROM node:16.10
 # set working directory
 WORKDIR /app
 
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install 
-
 # add app
 COPY . ./
+
+# install app dependencies
+RUN npm install 
+RUN npm run-script build
+
+
 
 # start app
 CMD ["npm", "start"]
