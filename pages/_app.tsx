@@ -7,10 +7,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   
   return (
     <>
-    <Layout>
-    <Component {...pageProps} />
-    </Layout>
+    <div suppressHydrationWarning>
+
+      {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}
     
+    </div>
     </>
     )
   

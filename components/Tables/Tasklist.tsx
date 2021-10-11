@@ -9,6 +9,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export interface Props {
     backendApi : IBackendApi
@@ -105,7 +106,7 @@ getDanishColornameFromCategory(category : CategoryEnum){
                   <TableCell align="right">{row.answeredTime.toLocaleDateString()} {row.answeredTime.toLocaleTimeString()}</TableCell>
                   <TableCell align="right"></TableCell>
                   <TableCell align="right">
-                    <Button color="inherit" variant="contained">Se mere</Button>
+                    <Button  component={Link} to={"/patients/"+row.patient.cpr} variant="contained">Se mere</Button>
                 </TableCell>
                 </TableRow>
               ))}

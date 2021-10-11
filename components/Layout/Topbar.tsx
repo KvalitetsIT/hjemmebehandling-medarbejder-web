@@ -15,12 +15,6 @@ export interface State {
 export class Topbar extends Component<Props,State> {
   static displayName = Topbar.name;
 
-
-
-constructor(props : Props){
-    super(props);
-}
-
 toogleDrawer = () => {
     
   };

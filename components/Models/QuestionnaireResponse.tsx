@@ -1,11 +1,11 @@
 import { CategoryEnum } from "./CategoryEnum";
-import { Patient } from "./Patient";
+import { PatientSimple } from "./PatientSimple";
 import { Questionnaire } from "./Questionnaire";
 
 export class QuestionnaireResponse {
     answeredTime!: Date;
     category! : CategoryEnum;
     questionnaire!: Questionnaire;
-    patient! : Patient
+    patient! : PatientSimple
     
 }

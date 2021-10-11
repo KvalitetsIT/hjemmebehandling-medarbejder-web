@@ -1,3 +1,7 @@
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
+
   function foo(x: number) {
     return x;
   }
@@ -30,6 +34,7 @@
   
           <button onClick={bar}>Call medarbejder-bff</button>
         </header>
+        
       </div>
     );
   }

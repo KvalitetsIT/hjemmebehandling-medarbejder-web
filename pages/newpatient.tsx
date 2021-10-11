@@ -13,15 +13,13 @@ function Patients() {
           </Typography>
           </Box>  
 
-        <Tasklist pageSize={7} categories={[CategoryEnum.RED,CategoryEnum.YELLOW, CategoryEnum.GREEN]} backendApi={new MockedBackendApi()}/>   
-       
 
       <Box paddingTop={5} paddingBottom={2}>
           <Typography variant="h6">
               Mangler besvarelse
           </Typography>
           </Box>   
-      <Tasklist pageSize={3} categories={[CategoryEnum.BLUE]} backendApi={new MockedBackendApi()}/>      
+
       
       </>
     );
