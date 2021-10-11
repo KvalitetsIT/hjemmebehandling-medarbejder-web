@@ -1,6 +1,8 @@
 import { Address } from "../components/Models/Address";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
+import { Measurement, MeasurementType, UnitType } from "../components/Models/Measurement";
+import { MeasurementCollection, MeasurementCollectionStatus } from "../components/Models/MeasurementCollection";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Questionnaire } from "../components/Models/Questionnaire";
@@ -9,6 +11,21 @@ import { IBackendApi } from "./IBackendApi";
 
 
 export class MockedBackendApi implements IBackendApi {
+    GetMeasurements (cpr: string) : Array<MeasurementCollection> {
+        let collection =  new MeasurementCollection();
+        collection.time = new Date();
+        collection.status = MeasurementCollectionStatus.NotProcessed;
+        
+        
+        let measurement1 = new Measurement();
+        measurement1.type = MeasurementType.WEIGHT;
+        measurement1.unit = UnitType.KG
+        measurement1.value = 78
+        collection.measurements = [measurement1] 
+
+        return [collection];
+
+    }
     GetPatient(cpr: string) : PatientDetail {
 
         let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);

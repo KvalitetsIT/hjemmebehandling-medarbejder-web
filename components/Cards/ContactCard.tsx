@@ -1,4 +1,4 @@
-import { CircularProgress, Divider, Grid, Typography } from '@material-ui/core';
+import { CircularProgress, Divider, Grid, Tooltip, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -34,7 +34,7 @@ toogleDrawer = () => {
         <Card>
             <CardContent>
                 <Box position="fixed" >
-                {contact.favContact ? <StarIcon color="info"/> : "" }
+                {contact.favContact ? <Tooltip title="Favorit kontaktperson"><StarIcon color="info"/></Tooltip> : "" }
                 </Box>
               <Box textAlign="center">
                 {contact.fullname} 
