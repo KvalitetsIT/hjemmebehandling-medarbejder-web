@@ -13,13 +13,6 @@ function Patients() {
           </Typography>
           </Box>  
 
-
-      <Box paddingTop={5} paddingBottom={2}>
-          <Typography variant="h6">
-              Mangler besvarelse
-          </Typography>
-          </Box>   
-
       
       </>
     );

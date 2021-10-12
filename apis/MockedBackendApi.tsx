@@ -1,8 +1,8 @@
 import { Address } from "../components/Models/Address";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
-import { Measurement, MeasurementType, UnitType } from "../components/Models/Measurement";
-import { MeasurementCollection, MeasurementCollectionStatus } from "../components/Models/MeasurementCollection";
+import { Measurement, UnitType } from "../components/Models/Measurement";
+import { MeasurementCollection, MeasurementCollectionStatus, MeasurementType } from "../components/Models/MeasurementCollection";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Questionnaire } from "../components/Models/Questionnaire";
@@ -11,22 +11,22 @@ import { IBackendApi } from "./IBackendApi";
 
 
 export class MockedBackendApi implements IBackendApi {
-    GetMeasurements (cpr: string) : Array<MeasurementCollection> {
-        let collection =  new MeasurementCollection();
-        collection.time = new Date();
-        collection.status = MeasurementCollectionStatus.NotProcessed;
-        
-        
-        let measurement1 = new Measurement();
-        measurement1.type = MeasurementType.WEIGHT;
-        measurement1.unit = UnitType.KG
-        measurement1.value = 78
-        collection.measurements = [measurement1] 
+    async SetQuestionaireResponse(id: string, measurementCollection: MeasurementCollection) {
+        await new Promise(f => setTimeout(f, 1000));
+    };
 
-        return [collection];
+    async GetMeasurements (cpr: string) : Promise<Array<MeasurementCollection>> {
+        await new Promise(f => setTimeout(f, 1000));
 
+        let collection1 = this.createRandomMeasurementCollection();
+        let collection2 = this.createRandomMeasurementCollection();
+        let collection3 = this.createRandomMeasurementCollection();
+        return [collection1,collection2,collection3].sort( (a,b) => a.time.getTime() - b.time.getTime() );
     }
-    GetPatient(cpr: string) : PatientDetail {
+
+
+    async GetPatient(cpr: string) : Promise<PatientDetail> {
+        await new Promise(f => setTimeout(f, 1000));
 
         let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);
         let patient : PatientDetail = new PatientDetail(questionaireResponse.patient.name,cpr);
@@ -66,8 +66,8 @@ export class MockedBackendApi implements IBackendApi {
     }
     
     static results: QuestionnaireResponse[] = [];
-    GetQuestionnaireResponses(categories : Array<CategoryEnum>, page : number, pagesize : number) : Array<QuestionnaireResponse>{
-        
+    async GetQuestionnaireResponses(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<QuestionnaireResponse>>{
+        await new Promise(f => setTimeout(f, 1000));
         let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE,]
         let array: QuestionnaireResponse[] = [];
         if(MockedBackendApi.results.length == 0){
@@ -80,6 +80,32 @@ export class MockedBackendApi implements IBackendApi {
         }
         return MockedBackendApi.results.sort( (a,b)=>b.category - a.category).filter(patient=>categories.some(cat => cat == patient.category));
     }
+
+    createRandomMeasurementCollection(){
+        let collection =  new MeasurementCollection();
+        collection.time = new Date(this.getRandomInt(2000,2020),this.getRandomInt(1,30),this.getRandomInt(1,30));
+        collection.status = MeasurementCollectionStatus.NotProcessed;
+        
+        let measurement1 = new Measurement();
+        measurement1.unit = UnitType.KG
+        measurement1.value = this.getRandomInt(70,100)
+
+        let measurement2 = new Measurement();
+        measurement2.unit = UnitType.DEGREASE_CELSIUS
+        measurement2.value = this.getRandomInt(20,40)
+
+
+        let measurement3 = new Measurement();
+        measurement3.unit = UnitType.DEGREASE_CELSIUS
+        measurement3.value = this.getRandomInt(10,20)
+
+        collection.measurements = new Map<MeasurementType,Measurement>();
+        collection.measurements.set(MeasurementType.WEIGHT, measurement1);
+        collection.measurements.set(MeasurementType.TEMPERATURE, measurement2);
+        collection.measurements.set(MeasurementType.CRP, measurement3);
+        return collection;
+    }
+
     createRandomPatient(category : CategoryEnum) : QuestionnaireResponse{
 
         let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar"]

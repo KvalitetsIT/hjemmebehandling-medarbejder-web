@@ -25,6 +25,9 @@ import { Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
 import { AnswerTable } from '../../components/Tables/AnswerTable';
 import { MockedBackendApi } from '../../apis/MockedBackendApi';
+import { MeasurementType } from '../../components/Models/MeasurementCollection';
+import { LoadingComponent } from '../../components/Layout/LoadingComponent';
+import { PatientCard } from '../../components/Cards/PatientCard';
 
 interface State {
   patient : PatientDetail
@@ -46,40 +49,33 @@ export default class PatientDetails extends React.Component<Props,State> {
 
   render () {
     
-    let contents = this.state.loading ? <CircularProgress color="inherit" /> : this.renderTableData(this.state.patient);
+    let contents = this.state.loading ? <LoadingComponent/> : this.renderTableData(this.state.patient);
     return contents;
   }
 
   renderTableData(patient: PatientDetail) {
     return (
 <>
-      <Grid container>
-      <Grid item xs={10}>
+      <Stack spacing={5}>
+        <PatientCard patient={this.state.patient} />
 
-        <AnswerTable cpr={this.state.patient.cpr} backendApi={new MockedBackendApi()} />
-               </Grid>
-        <Grid item xs={2}>
-          
-          <Box paddingBottom={10}>
-          <ContactCard contact={this.state.patient.patientContact} >
-          <Box color="red" position="fixed"> <Tooltip title="Patient"><HealingIcon/></Tooltip></Box>
-          <Typography variant="subtitle2" display="block" gutterBottom>
-          {this.state.patient.cpr}
-        </Typography>
-          </ContactCard>
-        </Box>
-        <Stack>
-        {patient.contacts.sort( a => a.favContact ? -1 : 1 ).map(contact=>{
-          return (
-        <Box paddingBottom={1}>
-            <ContactCard contact={contact} />
-        </Box>
-          )
-        })}
+            <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} backendApi={new MockedBackendApi()} />
+
+{/* 
+          <Stack direction="row">
+              {patient.contacts.sort( a => a.favContact ? -1 : 1 ).map(contact=>{
+              return (
+            <Box padding={5}>
+                <ContactCard contact={contact} />
+            </Box>
+              )
+            })}
+          </Stack>
+            */}  
       </Stack>
-      </Grid>
+  
 
-</Grid>
+
 </>
 
       
@@ -92,7 +88,7 @@ export default class PatientDetails extends React.Component<Props,State> {
 
   async populateQuestionnaireResponses() {
     let { cpr } = this.props.match.params;
-    let responses = this.props.backendApi.GetPatient(cpr);
+    let responses = await this.props.backendApi.GetPatient(cpr);
     this.setState({
         patient : responses,
         loading : false

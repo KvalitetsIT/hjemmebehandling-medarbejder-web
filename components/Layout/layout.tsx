@@ -6,12 +6,12 @@ import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
-import AutoBreadcrumbs from './AutoBreadcrumbs';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Patients from '../../pages/patients';
 import App from '../../pages';
 import PatientDetails from '../../pages/patients/[cpr]';
 import { MockedBackendApi } from '../../apis/MockedBackendApi';
+import AutoBreadcrumbs from './AutoBreadcrumbs';
 
 export interface Props {
 }

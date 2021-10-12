@@ -2,7 +2,7 @@ import { AppBar, Box, Button, CircularProgress, Container, Divider, Drawer, Fab,
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Alert, ListItemButton } from '@mui/material';
+import { Alert, ListItemButton, Skeleton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
@@ -10,6 +10,8 @@ import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Backdrop from '@mui/material/Backdrop';
+import { LoadingComponent } from '../Layout/LoadingComponent';
 
 export interface Props {
     backendApi : IBackendApi
@@ -35,7 +37,7 @@ constructor(props : Props){
 }
 
   render () {
-    let contents = this.state.loading ? <CircularProgress color="inherit" /> : this.renderTableData(this.state.questionnaireResponses);
+    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaireResponses);
     return contents;
   }
 
@@ -45,7 +47,7 @@ constructor(props : Props){
 
   async populateQuestionnaireResponses() {
 
-    let responses = this.props.backendApi.GetQuestionnaireResponses(this.props.categories,1,this.props.pageSize);
+    let responses = await this.props.backendApi.GetQuestionnaireResponses(this.props.categories,1,this.props.pageSize);
     this.setState({
         questionnaireResponses : responses,
         loading : false

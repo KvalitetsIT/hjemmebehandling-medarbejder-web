@@ -70,7 +70,6 @@ toogleDrawer = () => {
              
    
         <ListItem button component={Link} color="inherit" to="/">
-        <ListItemText >Home</ListItemText>
             </ListItem>
             <ListSubheader>Patienter
                 </ListSubheader>

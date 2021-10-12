@@ -15,6 +15,9 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 
 export interface Props {
     contact : Contact;
+    iconTopLeftColor? : string;
+    iconTopLeft? : JSX.Element;
+
 }
 
 export interface State {
@@ -24,16 +27,13 @@ export interface State {
 export class ContactCard extends Component<Props,State> {
   static displayName = ContactCard.name;
 
-toogleDrawer = () => {
-    
-  };
-
   render () {
       let contact = this.props.contact;
     return (
-        <Card>
+        <Card component={Box} minWidth={100}>
             <CardContent>
-                <Box position="fixed" >
+                <Box position="static" color={this.props.iconTopLeftColor} >
+                {this.props.iconTopLeft}
                 {contact.favContact ? <Tooltip title="Favorit kontaktperson"><StarIcon color="info"/></Tooltip> : "" }
                 </Box>
               <Box textAlign="center">
