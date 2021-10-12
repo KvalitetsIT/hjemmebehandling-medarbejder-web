@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, CircularProgress, Container, Divider, Drawer, Fab, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemText, ListSubheader, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import Stack from '@mui/material/Stack';
 import { Alert, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
@@ -11,11 +11,10 @@ import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { MeasurementCollection, MeasurementCollectionStatus, MeasurementType } from '../Models/MeasurementCollection';
-import { MockedBackendApi } from '../../apis/MockedBackendApi';
 import { MeasurementCollectionStatusSelect } from '../Input/MeasurementCollectionStatusSelect';
+import ApiContext from '../../pages/_context';
 
 export interface Props {
-    backendApi : IBackendApi
     cpr : string;
     typesToShow : MeasurementType[]
 }
@@ -27,6 +26,7 @@ export interface State {
 
 export class AnswerTable extends Component<Props,State> {
   static displayName = AnswerTable.name;
+  static contextType = ApiContext
 
 constructor(props : Props){
     super(props);
@@ -47,7 +47,7 @@ constructor(props : Props){
 
 
   async populateQuestionnaireResponses() {
-      let measurements = await this.props.backendApi.GetMeasurements(this.props.cpr)
+      let measurements = await this.context.backendApi.GetMeasurements(this.props.cpr)
     this.setState({
         loading : false,
         measurementCollections : measurements
@@ -97,7 +97,7 @@ constructor(props : Props){
                 return (
                     
                     <TableCell>
-                        <MeasurementCollectionStatusSelect backendApi={this.props.backendApi} measurementCollection={collection} />
+                        <MeasurementCollectionStatusSelect measurementCollection={collection} />
                         
                     </TableCell>
                 )

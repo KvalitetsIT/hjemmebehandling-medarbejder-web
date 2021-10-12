@@ -1,6 +1,5 @@
 import { Typography } from '@material-ui/core';
 import { Box } from '@mui/system';
-import { MockedBackendApi } from '../apis/MockedBackendApi';
 import { CategoryEnum } from '../components/Models/CategoryEnum';
 import { Tasklist } from '../components/Tables/Tasklist';
 function Patients() {
@@ -13,7 +12,7 @@ function Patients() {
           </Typography>
           </Box>  
 
-        <Tasklist pageSize={7} categories={[CategoryEnum.RED,CategoryEnum.YELLOW, CategoryEnum.GREEN]} backendApi={new MockedBackendApi()}/>   
+        <Tasklist pageSize={7} categories={[CategoryEnum.RED,CategoryEnum.YELLOW, CategoryEnum.GREEN]}/>   
        
 
       <Box paddingTop={5} paddingBottom={2}>
@@ -21,7 +20,7 @@ function Patients() {
               Mangler besvarelse
           </Typography>
           </Box>   
-      <Tasklist pageSize={3} categories={[CategoryEnum.BLUE]} backendApi={new MockedBackendApi()}/>      
+      <Tasklist pageSize={3} categories={[CategoryEnum.BLUE]}/>      
       
       </>
     );

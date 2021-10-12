@@ -24,20 +24,23 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import { Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
 import { AnswerTable } from '../../components/Tables/AnswerTable';
-import { MockedBackendApi } from '../../apis/MockedBackendApi';
 import { MeasurementType } from '../../components/Models/MeasurementCollection';
 import { LoadingComponent } from '../../components/Layout/LoadingComponent';
 import { PatientCard } from '../../components/Cards/PatientCard';
+import BasicTabs from '../../components/Layout/Tabs';
+import { useContext } from 'react';
+import ApiContext from '../_context';
 
 interface State {
   patient : PatientDetail
   loading: boolean
 }
 interface Props {
-  backendApi : IBackendApi,
+
   match : { params : {cpr : string} }
 }
 export default class PatientDetails extends React.Component<Props,State> {
+  static contextType = ApiContext
 
   constructor(props : Props){
     super(props);
@@ -58,20 +61,14 @@ export default class PatientDetails extends React.Component<Props,State> {
 <>
       <Stack spacing={5}>
         <PatientCard patient={this.state.patient} />
-
-            <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} backendApi={new MockedBackendApi()} />
-
-{/* 
-          <Stack direction="row">
-              {patient.contacts.sort( a => a.favContact ? -1 : 1 ).map(contact=>{
-              return (
-            <Box padding={5}>
-                <ContactCard contact={contact} />
-            </Box>
-              )
-            })}
-          </Stack>
-            */}  
+        <Card>
+        <CardContent>
+        <BasicTabs />
+        <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} />
+        </CardContent>
+        </Card>
+        
+        
       </Stack>
   
 
@@ -87,8 +84,9 @@ export default class PatientDetails extends React.Component<Props,State> {
   }
 
   async populateQuestionnaireResponses() {
+    
     let { cpr } = this.props.match.params;
-    let responses = await this.props.backendApi.GetPatient(cpr);
+    let responses = await this.context.backendApi.GetPatient(cpr);
     this.setState({
         patient : responses,
         loading : false

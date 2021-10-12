@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, CircularProgress, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import Stack from '@mui/material/Stack';
 import { Alert, ListItemButton, Skeleton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
@@ -12,9 +12,10 @@ import { CategoryEnum } from '../Models/CategoryEnum';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import { LoadingComponent } from '../Layout/LoadingComponent';
+import ApiContext from '../../pages/_context';
+import { isContext } from 'vm';
 
 export interface Props {
-    backendApi : IBackendApi
     categories : Array<CategoryEnum>
     pageSize : number
 }
@@ -26,9 +27,11 @@ export interface State {
 
 export class Tasklist extends Component<Props,State> {
   static displayName = Tasklist.name;
+  static contextType = ApiContext
 
 constructor(props : Props){
     super(props);
+
     this.state = {
         questionnaireResponses : [],
         loading : true
@@ -45,9 +48,11 @@ constructor(props : Props){
       this.populateQuestionnaireResponses()
   }
 
-  async populateQuestionnaireResponses() {
+  async  populateQuestionnaireResponses() {
 
-    let responses = await this.props.backendApi.GetQuestionnaireResponses(this.props.categories,1,this.props.pageSize);
+    
+    
+    let responses = await this.context.backendApi.GetQuestionnaireResponses(this.props.categories,1,this.props.pageSize);
     this.setState({
         questionnaireResponses : responses,
         loading : false

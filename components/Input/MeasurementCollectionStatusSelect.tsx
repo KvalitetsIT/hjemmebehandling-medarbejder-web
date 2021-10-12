@@ -5,13 +5,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { MeasurementCollection, MeasurementCollectionStatus } from '../Models/MeasurementCollection';
-import { Component } from 'react';
+import { Component, useContext } from 'react';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
+import ApiContext from '../../pages/_context';
 
 export interface Props {
     measurementCollection : MeasurementCollection
-    backendApi : IBackendApi
 }
 
 export interface State {
@@ -25,6 +25,7 @@ export interface State {
 
 export class MeasurementCollectionStatusSelect extends Component<Props,State> {
   static displayName = MeasurementCollectionStatusSelect.name;
+  static contextType = ApiContext
 
   constructor(props : Props){
       super(props);
@@ -48,11 +49,10 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
     changes.status = collectionStatus;
 
     this.setState({snackbarColor : "info",snackbarOpen : true,snackbarTitle: "Opdaterer ...", snackbarText: "Ændrer status til: " + changes.status , status : collectionStatus})
-    
-    
+
 
     try{
-        await this.props.backendApi.SetQuestionaireResponse(this.props.measurementCollection.id, changes)
+        await this.context.backendApi.SetQuestionaireResponse(this.props.measurementCollection.id, changes)
         this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : collectionStatus})
     } catch(error : unknown){
         if(!(error instanceof Error)) { throw error; }
