@@ -11,12 +11,17 @@ import { IBackendApi } from "./IBackendApi";
 
 
 export class MockedBackendApi implements IBackendApi {
+
+
+
+    waitTimeMS = 1000
+
     async SetQuestionaireResponse(id: string, measurementCollection: MeasurementCollection) {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.waitTimeMS));
     };
 
     async GetMeasurements (cpr: string) : Promise<Array<MeasurementCollection>> {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let collection1 = this.createRandomMeasurementCollection();
         let collection2 = this.createRandomMeasurementCollection();
@@ -26,7 +31,7 @@ export class MockedBackendApi implements IBackendApi {
 
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);
         let patient : PatientDetail = new PatientDetail(questionaireResponse.patient.name,cpr);
@@ -67,7 +72,7 @@ export class MockedBackendApi implements IBackendApi {
     
     static results: QuestionnaireResponse[] = [];
     async GetQuestionnaireResponses(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<QuestionnaireResponse>>{
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.waitTimeMS));
         let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE,]
         let array: QuestionnaireResponse[] = [];
         if(MockedBackendApi.results.length == 0){
