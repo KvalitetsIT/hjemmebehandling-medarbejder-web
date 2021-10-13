@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, createContext } from 'react';
 import { IBackendApi } from '../apis/IBackendApi';
-import { MockedBackendApi } from '../apis/MockedBackendApi';
+import { BffBackendApi } from '../apis/BffBackendApi';
 
 interface IApiContext {
     backendApi : IBackendApi
 }
 
-const ApiContext = createContext<IApiContext>({backendApi : new MockedBackendApi()}); //Default value
+const ApiContext = createContext<IApiContext>({backendApi : new BffBackendApi()}); //Default value
 
 export default ApiContext;

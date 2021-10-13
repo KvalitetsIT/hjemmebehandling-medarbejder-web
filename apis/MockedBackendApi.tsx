@@ -32,6 +32,8 @@ export class MockedBackendApi implements IBackendApi {
 
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
+        console.log('Inside GetPatient! Cpr is ' + cpr);
+
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);
@@ -82,8 +84,11 @@ export class MockedBackendApi implements IBackendApi {
                 let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
                 array.push(this.createRandomPatient(category));
             }
-            MockedBackendApi.results = array;        
+            array.unshift(this.createRandomPatient(CategoryEnum.RED, "0101010101"));
+            MockedBackendApi.results = array;
         }
+
+
         return MockedBackendApi.results.sort( (a,b)=>b.category - a.category).filter(patient=>categories.some(cat => cat == patient.category));
     }
 
@@ -122,7 +127,11 @@ export class MockedBackendApi implements IBackendApi {
         return collection;
     }
 
-    createRandomPatient(category : CategoryEnum) : QuestionnaireResponse{
+    createRandomPatient(category : CategoryEnum) : QuestionnaireResponse {
+        return this.createRandomPatient(category, this.generateCPR());
+    }
+
+    createRandomPatient(category : CategoryEnum, cpr: string) : QuestionnaireResponse{
 
         let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar"]
         let questionnaireNames = ["IVF til immundefekt"]
@@ -132,7 +141,7 @@ export class MockedBackendApi implements IBackendApi {
         let questionnaireName = questionnaireNames[this.getRandomInt(0,questionnaireNames.length-1)]
 
         let questionnaireResponse = new QuestionnaireResponse();
-        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName,this.generateCPR());
+        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, cpr);
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
         questionnaireResponse.questionnaire = new Questionnaire(questionnaireName);
