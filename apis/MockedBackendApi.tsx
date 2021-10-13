@@ -84,7 +84,6 @@ export class MockedBackendApi implements IBackendApi {
                 let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
                 array.push(this.createRandomPatient(category));
             }
-            array.unshift(this.createRandomPatient(CategoryEnum.RED, "0101010101"));
             MockedBackendApi.results = array;
         }
 
