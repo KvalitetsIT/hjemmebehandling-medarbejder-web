@@ -4,14 +4,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { MeasurementCollection, MeasurementCollectionStatus } from '../Models/MeasurementCollection';
+import { QuestionnaireResponse, MeasurementCollectionStatus } from '../Models/QuestionnaireResponse';
 import { Component, useContext } from 'react';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
 import ApiContext from '../../pages/_context';
 
 export interface Props {
-    measurementCollection : MeasurementCollection
+    measurementCollection : QuestionnaireResponse
 }
 
 export interface State {
@@ -45,7 +45,7 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
 
   handleChange = async (event: SelectChangeEvent) => {
     let collectionStatus = event.target.value as MeasurementCollectionStatus;
-    let changes = new MeasurementCollection();
+    let changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
     this.setState({snackbarColor : "info",snackbarOpen : true,snackbarTitle: "Opdaterer ...", snackbarText: "Ændrer status til: " + changes.status , status : collectionStatus})
@@ -84,7 +84,7 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
                     <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
                         <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
                             <h5>{this.state.snackbarTitle}</h5>
-                            Besvarelse : {this.props.measurementCollection.time.toDateString()} <br/>
+                            Besvarelse : {this.props.measurementCollection.answeredTime.toDateString()} <br/>
                             {this.state.snackbarText}
                         </Alert>
                     </Snackbar>

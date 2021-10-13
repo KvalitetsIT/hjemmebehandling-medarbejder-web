@@ -1,12 +1,13 @@
 import { Address } from "../components/Models/Address";
+import { Answer } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
 import { Measurement, UnitType } from "../components/Models/Measurement";
-import { MeasurementCollection, MeasurementCollectionStatus, MeasurementType } from "../components/Models/MeasurementCollection";
+import { MeasurementCollectionStatus, MeasurementType, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
+import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { IBackendApi } from "./IBackendApi";
 
 
@@ -16,17 +17,17 @@ export class MockedBackendApi implements IBackendApi {
 
     waitTimeMS = 1000
 
-    async SetQuestionaireResponse(id: string, measurementCollection: MeasurementCollection) {
+    async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
     };
 
-    async GetMeasurements (cpr: string) : Promise<Array<MeasurementCollection>> {
+    async GetMeasurements (cpr: string) : Promise<Array<QuestionnaireResponse>> {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let collection1 = this.createRandomMeasurementCollection();
         let collection2 = this.createRandomMeasurementCollection();
         let collection3 = this.createRandomMeasurementCollection();
-        return [collection1,collection2,collection3].sort( (a,b) => a.time.getTime() - b.time.getTime() );
+        return [collection1,collection2,collection3].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
     }
 
 
@@ -87,8 +88,8 @@ export class MockedBackendApi implements IBackendApi {
     }
 
     createRandomMeasurementCollection(){
-        let collection =  new MeasurementCollection();
-        collection.time = new Date(this.getRandomInt(2000,2020),this.getRandomInt(1,30),this.getRandomInt(1,30));
+        let collection =  new QuestionnaireResponse();
+        collection.answeredTime = new Date(this.getRandomInt(2000,2020),this.getRandomInt(1,30),this.getRandomInt(1,30));
         collection.status = MeasurementCollectionStatus.NotProcessed;
         
         let measurement1 = new Measurement();
@@ -108,6 +109,16 @@ export class MockedBackendApi implements IBackendApi {
         collection.measurements.set(MeasurementType.WEIGHT, measurement1);
         collection.measurements.set(MeasurementType.TEMPERATURE, measurement2);
         collection.measurements.set(MeasurementType.CRP, measurement3);
+
+        
+        collection.questions = new Map<Question,Answer>();
+        let question = new Question();
+        question.question = "Hvordan har du det med at komme til VM?"
+        let answer = new Answer();
+        answer.answer = "Ok"
+        collection.questions.set(question,answer);
+        
+
         return collection;
     }
 

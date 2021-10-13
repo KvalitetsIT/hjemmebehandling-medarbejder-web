@@ -10,7 +10,7 @@ import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { MeasurementCollection, MeasurementCollectionStatus, MeasurementType } from '../Models/MeasurementCollection';
+import { MeasurementCollectionStatus, MeasurementType } from '../Models/QuestionnaireResponse';
 import { MeasurementCollectionStatusSelect } from '../Input/MeasurementCollectionStatusSelect';
 import ApiContext from '../../pages/_context';
 
@@ -21,7 +21,7 @@ export interface Props {
 
 export interface State {
   loading : boolean
-  measurementCollections : Array<MeasurementCollection>
+  measurementCollections : Array<QuestionnaireResponse>
 }
 
 export class AnswerTable extends Component<Props,State> {
@@ -54,7 +54,7 @@ constructor(props : Props){
     });
 }
 
-  renderTableData(measurementCollections : Array<MeasurementCollection>){
+  renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
 
         
 
@@ -64,9 +64,9 @@ constructor(props : Props){
         <TableHead>
           <TableRow>
           <TableCell>MÅLINGER</TableCell>
-            {measurementCollections.map(collection => {
+            {questionaireResponses.map(collection => {
                 return (
-                    <TableCell>{collection.time.toDateString()}</TableCell>
+                    <TableCell>{collection.answeredTime.toDateString()}</TableCell>
                 )
                 
             })}
@@ -80,25 +80,24 @@ constructor(props : Props){
                         return (
                             <TableRow>
                                 <TableCell>{type}</TableCell>
-                                {measurementCollections.map(collection => {
+                                {questionaireResponses.map(collection => {
                                     let measurement = collection.measurements.get(type);
                                     return (
-
                                         <TableCell>{measurement ? measurement.value : "N/A"} {measurement ? measurement.unit : "N/A"}</TableCell>
                                     )
                                 })}
                             </TableRow>
                         )
-                        
                     })}
+
+    
 <TableRow>
 <TableCell></TableCell>
-            {measurementCollections.map(collection => {
+            {questionaireResponses.map(collection => {
                 return (
                     
                     <TableCell>
                         <MeasurementCollectionStatusSelect measurementCollection={collection} />
-                        
                     </TableCell>
                 )
                 

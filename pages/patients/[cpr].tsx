@@ -24,7 +24,7 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import { Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
 import { AnswerTable } from '../../components/Tables/AnswerTable';
-import { MeasurementType } from '../../components/Models/MeasurementCollection';
+import { MeasurementType } from '../../components/Models/QuestionnaireResponse';
 import { LoadingComponent } from '../../components/Layout/LoadingComponent';
 import { PatientCard } from '../../components/Cards/PatientCard';
 import { useContext } from 'react';
