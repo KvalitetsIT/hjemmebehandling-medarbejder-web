@@ -132,11 +132,7 @@ export class MockedBackendApi implements IBackendApi {
         return collection;
     }
 
-    createRandomPatient(category : CategoryEnum) : QuestionnaireResponse {
-        return this.createRandomPatient(category, this.generateCPR());
-    }
-
-    createRandomPatient(category : CategoryEnum, cpr: string) : QuestionnaireResponse{
+    createRandomPatient(category : CategoryEnum) : QuestionnaireResponse{
 
         let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar"]
         let questionnaireNames = ["IVF til immundefekt"]
@@ -146,7 +142,7 @@ export class MockedBackendApi implements IBackendApi {
         let questionnaireName = questionnaireNames[this.getRandomInt(0,questionnaireNames.length-1)]
 
         let questionnaireResponse = new QuestionnaireResponse();
-        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, cpr);
+        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, this.generateCPR());
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
         questionnaireResponse.questionnaire = new Questionnaire(questionnaireName);

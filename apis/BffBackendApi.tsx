@@ -46,22 +46,22 @@ export class BffBackendApi implements IBackendApi {
 
         // Map the body to a PatientDetail object
 
-        var name = body.familyName + ', ' + body.givenName;
+        var name = body['familyName'] + ', ' + body['givenName'];
         let patient : PatientDetail = new PatientDetail(name, cpr);
 
         let patientContact = new Contact();
         patientContact.address.country = "Danmark";
         patientContact.address.road = "Fiskergade 66";
         patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.emailAddress = body.patientContactDetails.emailAddress;
+        patientContact.emailAddress = body['patientContactDetails']['emailAddress'];
         patientContact.fullname = name;
-        patientContact.primaryPhone = body.patientContactDetails.primaryPhone;
+        patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
         patient.patientContact = patientContact;
 
         return patient;
     }
 
-    async createPatient(category : CategoryEnum, cpr: string) : QuestionnaireResponse {
+    async createPatient(category : CategoryEnum, cpr: string) : Promise<QuestionnaireResponse> {
         let pd : PatientDetail = await this.GetPatient(cpr);
 
         let questionnaireName = "IVF til immundefekt";
