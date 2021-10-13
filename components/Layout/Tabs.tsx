@@ -3,65 +3,77 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { Component } from 'react';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
+export interface TabPanelProps {
+    children?: React.ReactNode;
   index: number;
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
+export interface BasicTabsProps {
+    tabLabels : string[]
+    tabContent : JSX.Element[]
+}
+export interface BasicTabsState {
+    value : number
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
+export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
+  static displayName = BasicTabs.name;
+
+constructor(props : BasicTabsProps){
+    super(props);
+    this.state = {
+        value : 0
+    }
 }
 
-export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    this.setState({value : newValue})
   };
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Besvarelser"  />
-          <Tab label="Grafer"  />
-          <Tab label="Behandlingsplan" />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-    </Box>
-  );
+  render () {
+        let indexTabPanelCounter = 0;
+        return (
+            <>
+                    <Tabs value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
+                        {this.props.tabLabels.map(tabLabel => {
+                            return (
+                                <Tab label={tabLabel}  />
+                            )
+                        })}
+                    </Tabs>
+            
+                    {this.props.tabContent.map(content => {
+                            
+                            return (
+                                <this.TabPanel  value={this.state.value} index={indexTabPanelCounter++}>
+                                {content}
+                              </this.TabPanel>
+                            )
+                        })}
+            </>
+              );
+  }
+
+
+  TabPanel(props: TabPanelProps) {
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={props.value !== props.index}
+        id={`simple-tabpanel-${props.index}`}
+        aria-labelledby={`simple-tab-${props.index}`}
+      >
+        {props.value === props.index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{props.children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
 }

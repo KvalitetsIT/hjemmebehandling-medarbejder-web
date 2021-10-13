@@ -27,9 +27,9 @@ import { AnswerTable } from '../../components/Tables/AnswerTable';
 import { MeasurementType } from '../../components/Models/MeasurementCollection';
 import { LoadingComponent } from '../../components/Layout/LoadingComponent';
 import { PatientCard } from '../../components/Cards/PatientCard';
-import BasicTabs from '../../components/Layout/Tabs';
 import { useContext } from 'react';
 import ApiContext from '../_context';
+import { BasicTabs } from '../../components/Layout/Tabs';
 
 interface State {
   patient : PatientDetail
@@ -63,8 +63,13 @@ export default class PatientDetails extends React.Component<Props,State> {
         <PatientCard patient={this.state.patient} />
         <Card>
         <CardContent>
-        <BasicTabs />
-        <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} />
+        <BasicTabs 
+            tabLabels={["Besvarelser","Grafer","Behandlingsplan"]}
+            tabContent={[
+              <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} />
+            ]}
+            />
+        
         </CardContent>
         </Card>
         
