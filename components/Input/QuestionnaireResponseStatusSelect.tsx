@@ -4,18 +4,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, MeasurementCollectionStatus } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { Component, useContext } from 'react';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
 import ApiContext from '../../pages/_context';
 
 export interface Props {
-    measurementCollection : QuestionnaireResponse
+    questionnaireResponse : QuestionnaireResponse
 }
 
 export interface State {
-    status : MeasurementCollectionStatus;
+    status : QuestionnaireResponseStatus;
     
     snackbarOpen : boolean
     snackbarColor: AlertColor
@@ -23,14 +23,14 @@ export interface State {
     snackbarTitle : string
 }
 
-export class MeasurementCollectionStatusSelect extends Component<Props,State> {
-  static displayName = MeasurementCollectionStatusSelect.name;
+export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
+  static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
 
   constructor(props : Props){
       super(props);
       this.state = {
-          status : props.measurementCollection.status,
+          status : props.questionnaireResponse.status,
           snackbarOpen : false,
             snackbarColor: "info",
             snackbarText : "",
@@ -44,7 +44,7 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
   };
 
   handleChange = async (event: SelectChangeEvent) => {
-    let collectionStatus = event.target.value as MeasurementCollectionStatus;
+    let collectionStatus = event.target.value as QuestionnaireResponseStatus;
     let changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
@@ -52,7 +52,7 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
 
 
     try{
-        await this.context.backendApi.SetQuestionaireResponse(this.props.measurementCollection.id, changes)
+        await this.context.backendApi.SetQuestionaireResponse(this.props.questionnaireResponse.id, changes)
         this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : collectionStatus})
     } catch(error : unknown){
         if(!(error instanceof Error)) { throw error; }
@@ -74,9 +74,9 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
                         label="Status"
                         onChange={this.handleChange}
                     >
-                        <MenuItem value={MeasurementCollectionStatus.NotProcessed}>{MeasurementCollectionStatus.NotProcessed}</MenuItem>
-                        <MenuItem value={MeasurementCollectionStatus.InProgress}>{MeasurementCollectionStatus.InProgress}</MenuItem>
-                        <MenuItem value={MeasurementCollectionStatus.Processed}>{MeasurementCollectionStatus.Processed}</MenuItem>
+                        <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
+                        <MenuItem value={QuestionnaireResponseStatus.InProgress}>{QuestionnaireResponseStatus.InProgress}</MenuItem>
+                        <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
                     </Select>
                     </FormControl>
 
@@ -84,7 +84,7 @@ export class MeasurementCollectionStatusSelect extends Component<Props,State> {
                     <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
                         <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
                             <h5>{this.state.snackbarTitle}</h5>
-                            Besvarelse : {this.props.measurementCollection.answeredTime.toDateString()} <br/>
+                            Besvarelse : {this.props.questionnaireResponse.answeredTime.toDateString()} <br/>
                             {this.state.snackbarText}
                         </Alert>
                     </Snackbar>

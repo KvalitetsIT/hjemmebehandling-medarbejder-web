@@ -10,8 +10,8 @@ import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { MeasurementCollectionStatus, MeasurementType } from '../Models/QuestionnaireResponse';
-import { MeasurementCollectionStatusSelect } from '../Input/MeasurementCollectionStatusSelect';
+import { QuestionnaireResponseStatus, MeasurementType } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 
 export interface Props {
@@ -80,8 +80,8 @@ constructor(props : Props){
                         return (
                             <TableRow>
                                 <TableCell>{type}</TableCell>
-                                {questionaireResponses.map(collection => {
-                                    let measurement = collection.measurements.get(type);
+                                {questionaireResponses.map(questionResponse => {
+                                    let measurement = questionResponse.measurements.get(type);
                                     return (
                                         <TableCell>{measurement ? measurement.value : "N/A"} {measurement ? measurement.unit : "N/A"}</TableCell>
                                     )
@@ -93,11 +93,11 @@ constructor(props : Props){
     
 <TableRow>
 <TableCell></TableCell>
-            {questionaireResponses.map(collection => {
+            {questionaireResponses.map(questionResponse => {
                 return (
                     
                     <TableCell>
-                        <MeasurementCollectionStatusSelect measurementCollection={collection} />
+                        <QuestionnaireResponseStatusSelect questionnaireResponse={questionResponse} />
                     </TableCell>
                 )
                 

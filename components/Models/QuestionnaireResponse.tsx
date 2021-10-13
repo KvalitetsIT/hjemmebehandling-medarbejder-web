@@ -11,7 +11,7 @@ export class QuestionnaireResponse {
     measurements! : Map<MeasurementType,Measurement>
     questions! : Map<Question,Answer>
     answeredTime! : Date;
-    status! : MeasurementCollectionStatus
+    status! : QuestionnaireResponseStatus
     category! : CategoryEnum;
     patient! : PatientSimple
 }
@@ -24,7 +24,7 @@ export enum  MeasurementType {
     WEIGHT = "VÆGT"
 }
 
-export enum  MeasurementCollectionStatus {
+export enum  QuestionnaireResponseStatus {
     Processed = "Behandlet",
     NotProcessed = "Ikke behandlet",
     InProgress = "Under behandling"

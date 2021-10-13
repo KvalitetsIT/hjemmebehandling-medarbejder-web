@@ -3,7 +3,7 @@ import { Answer } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
 import { Measurement, UnitType } from "../components/Models/Measurement";
-import { MeasurementCollectionStatus, MeasurementType, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { QuestionnaireResponseStatus, MeasurementType, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Question } from "../components/Models/Question";
@@ -90,7 +90,7 @@ export class MockedBackendApi implements IBackendApi {
     createRandomMeasurementCollection(){
         let collection =  new QuestionnaireResponse();
         collection.answeredTime = new Date(this.getRandomInt(2000,2020),this.getRandomInt(1,30),this.getRandomInt(1,30));
-        collection.status = MeasurementCollectionStatus.NotProcessed;
+        collection.status = QuestionnaireResponseStatus.NotProcessed;
         
         let measurement1 = new Measurement();
         measurement1.unit = UnitType.KG
