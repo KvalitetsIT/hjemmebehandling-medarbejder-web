@@ -32,8 +32,6 @@ export class MockedBackendApi implements IBackendApi {
 
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
-        console.log('Inside GetPatient! Cpr is ' + cpr);
-
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);
