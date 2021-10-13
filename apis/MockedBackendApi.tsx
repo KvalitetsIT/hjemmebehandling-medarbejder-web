@@ -27,7 +27,9 @@ export class MockedBackendApi implements IBackendApi {
         let collection1 = this.createRandomMeasurementCollection();
         let collection2 = this.createRandomMeasurementCollection();
         let collection3 = this.createRandomMeasurementCollection();
-        return [collection1,collection2,collection3].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
+        let collection4 = this.createRandomMeasurementCollection();
+        let collection5 = this.createRandomMeasurementCollection();
+        return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
     }
 
 
@@ -111,17 +113,23 @@ export class MockedBackendApi implements IBackendApi {
         collection.measurements = new Map<MeasurementType,Measurement>();
         collection.measurements.set(MeasurementType.WEIGHT, measurement1);
         collection.measurements.set(MeasurementType.TEMPERATURE, measurement2);
-        collection.measurements.set(MeasurementType.CRP, measurement3);
-
+        collection.measurements.set(MeasurementType.CRP, measurement3);       
         
         collection.questions = new Map<Question,Answer>();
-        let question = new Question();
-        question.question = "Hvordan har du det med at komme til VM?"
-        let answer = new Answer();
-        answer.answer = "Ok"
-        collection.questions.set(question,answer);
+        for(let i = 0; i<200; i++){
+            let posibleQuestions = ["Hvordan har du det?","Føler du dig tryg?","Har du nye symptomer? Hvis ja - Hvilke?","Føler du din helbredstilstand er blevet værre?","Har du problemer med kateter?","Har du problemer med antibiotika?"]
+            let posibleAnswers = ["Fint","Ja","Nej","Rotterne gnaver"]
+            let question = new Question();
+            question.question = posibleQuestions[this.getRandomInt(0,posibleQuestions.length-1)]
+    
+            let answer = new Answer();
+            answer.answer = posibleAnswers[this.getRandomInt(0,posibleAnswers.length-1)]
+    
+            
+            collection.questions.set(question,answer);
+        }
         
-
+        console.log(collection.questions)
         return collection;
     }
 

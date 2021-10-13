@@ -59,8 +59,10 @@ export default class PatientDetails extends React.Component<Props,State> {
   renderTableData(patient: PatientDetail) {
     return (
 <>
-      <Stack spacing={5}>
-        <PatientCard patient={this.state.patient} />
+      <Stack display="inline-flex" spacing={2} direction="row">
+      <Stack>
+          <PatientCard patient={this.state.patient} />
+        </Stack>
         <Card>
         <CardContent>
         <BasicTabs 
@@ -72,6 +74,8 @@ export default class PatientDetails extends React.Component<Props,State> {
         
         </CardContent>
         </Card>
+        
+        
         
         
       </Stack>
