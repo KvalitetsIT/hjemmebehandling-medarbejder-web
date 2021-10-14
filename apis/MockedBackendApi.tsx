@@ -15,7 +15,7 @@ export class MockedBackendApi implements IBackendApi {
 
 
 
-    waitTimeMS = 1000
+    waitTimeMS = 0
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
