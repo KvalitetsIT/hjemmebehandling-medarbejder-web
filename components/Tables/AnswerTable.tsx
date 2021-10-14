@@ -96,7 +96,7 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-          <TableCell></TableCell>
+          <TableCell>{this.props.children}</TableCell>
             {questionaireResponses.map(collection => {
                 return (
                     <TableCell>{collection.answeredTime.toDateString()}</TableCell>

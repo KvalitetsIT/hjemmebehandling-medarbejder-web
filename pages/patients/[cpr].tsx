@@ -68,7 +68,13 @@ export default class PatientDetails extends React.Component<Props,State> {
         <BasicTabs 
             tabLabels={["Besvarelser","Grafer","Behandlingsplan"]}
             tabContent={[
-              <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} />
+              <AnswerTable typesToShow={[MeasurementType.CRP,MeasurementType.WEIGHT,MeasurementType.TEMPERATURE]} cpr={this.state.patient.cpr} >
+
+                <Typography variant="h6">
+                  {this.state.patient.name}
+                </Typography >  
+              
+              </AnswerTable>
             ]}
             />
         
