@@ -1,11 +1,10 @@
 import { Frequency } from "./Frequency";
 import { QuestionnaireResponse } from "./QuestionnaireResponse";
+import { Threshold } from "./Threshold";
 
 export class Questionnaire {
-    name: string;
+    name!: string;
     frequency!: Frequency;
+    thresholds : Threshold[] = []
 
-    constructor(name : string){
-        this.name = name;
-    }
 }

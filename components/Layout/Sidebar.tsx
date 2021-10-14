@@ -78,7 +78,7 @@ toogleDrawer = () => {
             <ListItem button component={Link} color="inherit" to="/patients">
                 <ListItemText>Opgaveliste</ListItemText>
             </ListItem>
-            <ListItem button>                
+            <ListItem button component={Link} color="inherit"  to="/patients/2329657870">                
                 <ListItemText primary="Aktive patienter" />
             </ListItem>
             <ListItem button>                

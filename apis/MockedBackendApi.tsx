@@ -9,13 +9,31 @@ import { PatientSimple } from "../components/Models/PatientSimple";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { IBackendApi } from "./IBackendApi";
+import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
+import { Threshold } from "../components/Models/Threshold";
 
 
 export class MockedBackendApi implements IBackendApi {
 
+    async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]>{
+        let careplan = new PatientCareplan();
+        let firstPlanDefinition = new PlanDefinition();
+        firstPlanDefinition.name = "Hjemmebhandling af immundefekt"
+        careplan.planDefinitions = [firstPlanDefinition]
 
+        let questionnaire = new Questionnaire();
+        questionnaire.name = "Generelt infektionssygdomme spørgeskema"
 
-    waitTimeMS = 0
+        let thresholdOne = new Threshold();
+        questionnaire.thresholds = [thresholdOne]
+
+        careplan.questionnaires = [questionnaire]
+
+        return [careplan];
+    }
+
+    waitTimeMS = 1000
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
@@ -145,7 +163,8 @@ export class MockedBackendApi implements IBackendApi {
         questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, this.generateCPR());
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
-        questionnaireResponse.questionnaire = new Questionnaire(questionnaireName);
+        questionnaireResponse.questionnaire = new Questionnaire();
+        questionnaireResponse.questionnaire.name = questionnaireName;
 
         return questionnaireResponse;
 

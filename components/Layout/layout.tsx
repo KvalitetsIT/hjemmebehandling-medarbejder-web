@@ -7,11 +7,13 @@ import MenuIcon from "@mui/icons-material/Menu"
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Patients from '../../pages/patients';
 import App from '../../pages';
-import PatientDetails from '../../pages/patients/[cpr]';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
 import ApiContext from '../../pages/_context';
+import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/questionnaires';
+import PatientCareplans from '../../pages/patients/[cpr]';
+import Patients from '../../pages/patients';
+
 
 export interface Props {
 }
@@ -51,10 +53,11 @@ toogleDrawer = () => {
             <Box paddingTop={5} >
         
             <Switch>
-              <Route path="/patients/:cpr" render={(props) => <PatientDetails {...props}/>} />
-              <Route path="/patients">
-                <Patients/>
-              </Route>
+              <Route path="/patients/:cpr/questionnaires" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
+              
+              <Route path="/patients/:cpr" render={(props) => <PatientCareplans {...props}/>} />
+              
+              <Route path="/patients"><Patients/></Route>
               <Route path="/">
                 <h2>Home</h2>
               </Route>
