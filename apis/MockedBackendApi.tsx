@@ -84,8 +84,10 @@ export class MockedBackendApi implements IBackendApi {
                 let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
                 array.push(this.createRandomPatient(category));
             }
-            MockedBackendApi.results = array;        
+            MockedBackendApi.results = array;
         }
+
+
         return MockedBackendApi.results.sort( (a,b)=>b.category - a.category).filter(patient=>categories.some(cat => cat == patient.category));
     }
 
@@ -140,7 +142,7 @@ export class MockedBackendApi implements IBackendApi {
         let questionnaireName = questionnaireNames[this.getRandomInt(0,questionnaireNames.length-1)]
 
         let questionnaireResponse = new QuestionnaireResponse();
-        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName,this.generateCPR());
+        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, this.generateCPR());
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
         questionnaireResponse.questionnaire = new Questionnaire(questionnaireName);
