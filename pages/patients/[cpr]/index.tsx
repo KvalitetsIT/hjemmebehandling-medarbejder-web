@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import { FormatItalic } from '@mui/icons-material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -19,14 +19,16 @@ import ContentCut from '@mui/icons-material/ContentCut';
 import Slider from '@mui/material/Slider';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
-import { Stack } from '@mui/material';
+import { Avatar, BottomNavigation, BottomNavigationAction, IconButton, List, ListItem, ListItemAvatar, Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
 import { useContext } from 'react';
 import { PatientCareplan } from '../../../components/Models/PatientCareplan';
 import { LoadingComponent } from '../../../components/Layout/LoadingComponent';
 import ApiContext from '../../_context';
 import { PatientDetail } from '../../../components/Models/PatientDetail';
-
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { PatientCard } from '../../../components/Cards/PatientCard';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface State {
   
@@ -34,7 +36,7 @@ interface State {
   careplans : PatientCareplan[]
 }
 interface Props {
-    match : { params : {comment : string} }
+    match : { params : {cpr : string} }
 }
 export default class PatientCareplans extends React.Component<Props,State> {
   static contextType = ApiContext
@@ -60,7 +62,7 @@ export default class PatientCareplans extends React.Component<Props,State> {
 
 async populateCareplans() {
   
-  let cpr = this.props.match.params.comment
+  let cpr = this.props.match.params.cpr
   let responses = await this.context.backendApi.GetPatientCareplans(cpr)
   this.setState({
       careplans : responses,
@@ -83,65 +85,65 @@ async populateCareplans() {
         {careplans.map(careplan=>{
             return (
                 <>
-                <Stack spacing={2}>
-
+                
+                <Stack direction="row" spacing={2}>
+                <PatientCard patient={careplan.patient}></PatientCard>
                 
                 <Card>
                     <CardHeader title="Patientgrupper"/>
                     <CardContent>
-                        
+                    <List>
                         {careplan.planDefinitions.map(planDefinition => {
                         return (
                             <>
-                            {planDefinition.name}
+                            
+                                <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                    <AssignmentIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={planDefinition.name}
+                                    secondary={<Button  color="inherit" size="small">Se standard</Button>}
+                                />
+                                </ListItem>
+                            
                             </>
                         )
                     })}
+                    </List>
                     </CardContent>
+                  
                 </Card>
 
                 <Card>
                     <CardHeader title="Spørgeskemaer"/>
                     <CardContent>
-                        
-                        {careplan.questionnaires.length > 0 ? careplan.questionnaires.map(questionnaire => {
+                    <List>
+                        {careplan.questionnaireResponses.length > 0 ? careplan.questionnaireResponses.map(questionnaireResponse => {
                         return (
                             <>
-                            {questionnaire.name}
-                            {questionnaire.thresholds.map(threshold => {
-                                return (
-                                    <>
-                                    <Box sx={{ width: 300 }}>
-                                    {threshold.points.map(point => {
-                                            <>
-                                            <Slider
-                                        getAriaLabel={() => 'Minimum distance'}
-                                        value={point.from}
-                                        //onChange={handleChange1}
-                                        valueLabelDisplay="auto"
-                                        //getAriaValueText={valuetext}
-                                        disableSwap
-                                    />
-                                    <Slider
-                                        getAriaLabel={() => 'Minimum distance shift'}
-                                        value={point.to}
-                                        valueLabelDisplay="auto"
-                                        //getAriaValueText={valuetext}
-                                        disableSwap
-                                    />
-                                            </>
-                                    })}
-                                    
-                                    
-                                    </Box>
-                                    </>
-                                )
-                            })}
+                            
+                                <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                    <AssignmentIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={questionnaireResponse.questionnaire.name}
+                                    secondary={<Button component={Link} color="inherit" to={"/patients/"+this.props.match.params.cpr + "/questionnaires/"+questionnaireResponse.id} size="small">Se besvarelser</Button>}
+                                />
+                                </ListItem>
                             
                             </>
                         )
                     }) : "Ingen spørgeskemaer"}
+                    </List>
                     </CardContent>
+                    <CardActions>
+                    </CardActions>
                 </Card>
                 </Stack>
                 </>

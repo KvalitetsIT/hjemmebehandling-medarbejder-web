@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import App from '../../pages';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
 import ApiContext from '../../pages/_context';
-import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/questionnaires';
+import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/questionnaires/[questionnaireId]';
 import PatientCareplans from '../../pages/patients/[cpr]';
 import Patients from '../../pages/patients';
 
@@ -53,8 +53,8 @@ toogleDrawer = () => {
             <Box paddingTop={5} >
         
             <Switch>
-              <Route path="/patients/:cpr/questionnaires" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
-              
+              <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
+              <Route path="/patients/:cpr/questionnaires/" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
               <Route path="/patients/:cpr" render={(props) => <PatientCareplans {...props}/>} />
               
               <Route path="/patients"><Patients/></Route>

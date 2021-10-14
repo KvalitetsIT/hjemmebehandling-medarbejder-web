@@ -11,7 +11,7 @@ import AutoBreadcrumbs from './AutoBreadcrumbs';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Patients from '../../pages/patients';
 import App from '../../pages';
-import PatientDetails from '../../pages/patients/[cpr]/questionnaires';
+import PatientDetails from '../../pages/patients/[cpr]/questionnaires/[questionnaireId]';
 
 export interface Props {
 }

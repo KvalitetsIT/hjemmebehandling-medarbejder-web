@@ -22,11 +22,11 @@ import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlin
 export interface Props {
     cpr : string;
     typesToShow : MeasurementType[]
+    questionnaireResponses : Array<QuestionnaireResponse>
 }
 
 export interface State {
-  loading : boolean
-  measurementCollections : Array<QuestionnaireResponse>
+  measurementCollections : Array<QuestionnaireResponse> 
 }
 
 export class AnswerTable extends Component<Props,State> {
@@ -35,30 +35,14 @@ export class AnswerTable extends Component<Props,State> {
 
 constructor(props : Props){
     super(props);
-    this.state = {
-        loading : true,
-        measurementCollections : []
-    }
+
 }
 
   render () {
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.measurementCollections);
+    let contents = this.renderTableData(this.props.questionnaireResponses);
     return contents;
   }
-
-  componentDidMount(){
-      this.populateQuestionnaireResponses()
-  }
-
-
-  async populateQuestionnaireResponses() {
-      let measurements = await this.context.backendApi.GetMeasurements(this.props.cpr)
-    this.setState({
-        loading : false,
-        measurementCollections : measurements
-    });
-}
-
+  
 findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {
     let answer : Answer | undefined;
     questionResponses.questions.forEach( (responseAnswer,responseQuestion) => {

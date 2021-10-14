@@ -28,8 +28,11 @@ export class MockedBackendApi implements IBackendApi {
         let thresholdOne = new Threshold();
         questionnaire.thresholds = [thresholdOne]
 
-        careplan.questionnaires = [questionnaire]
+        let questionnaireResponse = this.createRandomMeasurementCollection()
+        questionnaireResponse.questionnaire = questionnaire;
 
+        careplan.questionnaireResponses = await this.GetMeasurements(cpr)
+        careplan.patient = await this.GetPatient(cpr);
         return [careplan];
     }
 
@@ -42,11 +45,19 @@ export class MockedBackendApi implements IBackendApi {
     async GetMeasurements (cpr: string) : Promise<Array<QuestionnaireResponse>> {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
+        let questionnaire = new Questionnaire();
+        questionnaire.name = "Generelt infektionssygdomme spørgeskema"
+
         let collection1 = this.createRandomMeasurementCollection();
+        collection1.questionnaire = questionnaire;
         let collection2 = this.createRandomMeasurementCollection();
+        collection2.questionnaire = questionnaire;
         let collection3 = this.createRandomMeasurementCollection();
+        collection3.questionnaire = questionnaire;
         let collection4 = this.createRandomMeasurementCollection();
+        collection4.questionnaire = questionnaire;
         let collection5 = this.createRandomMeasurementCollection();
+        collection5.questionnaire = questionnaire;
         return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
     }
 
@@ -165,6 +176,7 @@ export class MockedBackendApi implements IBackendApi {
         questionnaireResponse.answeredTime = new Date();
         questionnaireResponse.questionnaire = new Questionnaire();
         questionnaireResponse.questionnaire.name = questionnaireName;
+        questionnaireResponse.id = this.generateCPR();
 
         return questionnaireResponse;
 
@@ -179,11 +191,11 @@ export class MockedBackendApi implements IBackendApi {
     generateCPR() : string {
         let cpr = "";
         for(let i = 0; i<10;i++){
-            cpr += this.getRandomInt(0,10);
+            if(i == 6) 
+                cpr += "-"
+            cpr += this.getRandomInt(0,9);
         }
         return cpr;
 
     }
-
-
 }
