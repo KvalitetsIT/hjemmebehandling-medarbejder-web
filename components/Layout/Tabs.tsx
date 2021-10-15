@@ -27,7 +27,8 @@ export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
 constructor(props : BasicTabsProps){
     super(props);
     let startTabIndex = props.idOfStartTab != undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
-    console.log("start: " + startTabIndex)
+    console.log(props.tabIds)
+    console.log("idToStart: " + props.idOfStartTab)
     this.state = {
         value : startTabIndex
     }
@@ -52,7 +53,7 @@ constructor(props : BasicTabsProps){
                     {this.props.tabContent.map(content => {
                             
                             return (
-                                <this.TabPanel  value={this.state.value} index={indexTabPanelCounter++}>
+                                <this.TabPanel value={this.state.value} index={indexTabPanelCounter++}>
                                 {content}
                               </this.TabPanel>
                             )

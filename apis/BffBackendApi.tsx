@@ -14,8 +14,8 @@ export class BffBackendApi implements IBackendApi {
         return await new MockedBackendApi().GetPatientCareplans(cpr);
     }
 
-    async GetQuestionnaireResponses(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<QuestionnaireResponse>> {
-        let array: QuestionnaireResponse[] = await new MockedBackendApi().GetQuestionnaireResponses(categories, page, pagesize - 1);
+    async GetPatientQuestionnaires(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        let array: Questionnaire[] = await new MockedBackendApi().GetPatientQuestionnaires(categories, page, pagesize - 1);
 
        // let qr : QuestionnaireResponse = await this.createPatient(CategoryEnum.RED, "0101010101");
         //array.unshift(qr);
@@ -68,15 +68,11 @@ export class BffBackendApi implements IBackendApi {
 
     async createPatient(category : CategoryEnum, cpr: string) : Promise<QuestionnaireResponse> {
         let pd : PatientDetail = await this.GetPatient(cpr);
-
-        let questionnaireName = "IVF til immundefekt";
-
+        
         let questionnaireResponse = new QuestionnaireResponse();
         questionnaireResponse.patient = pd;
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
-        questionnaireResponse.questionnaire = new Questionnaire();
-        questionnaireResponse.questionnaire.name = questionnaireName;
 
         return questionnaireResponse;
     }

@@ -14,6 +14,7 @@ import Backdrop from '@mui/material/Backdrop';
 import { LoadingComponent } from '../Layout/LoadingComponent';
 import ApiContext from '../../pages/_context';
 import { isContext } from 'vm';
+import { Questionnaire } from '../Models/Questionnaire';
 
 export interface Props {
     categories : Array<CategoryEnum>
@@ -21,7 +22,7 @@ export interface Props {
 }
 
 export interface State {
-  questionnaireResponses : Array<QuestionnaireResponse>
+  questionnaires : Array<Questionnaire>
   loading : boolean
 }
 
@@ -33,14 +34,14 @@ constructor(props : Props){
     super(props);
 
     this.state = {
-        questionnaireResponses : [],
+        questionnaires : [],
         loading : true
 
     }
 }
 
   render () {
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaireResponses);
+    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaires);
     return contents;
   }
 
@@ -50,11 +51,9 @@ constructor(props : Props){
 
   async  populateQuestionnaireResponses() {
 
-    
-    
-    let responses = await this.context.backendApi.GetQuestionnaireResponses(this.props.categories,1,this.props.pageSize);
+    let responses = await this.context.backendApi.GetPatientQuestionnaires(this.props.categories,1,this.props.pageSize);
     this.setState({
-        questionnaireResponses : responses,
+        questionnaires : responses,
         loading : false
     });
 }
@@ -86,7 +85,7 @@ getDanishColornameFromCategory(category : CategoryEnum){
     return "Ukendt"
 
 }
-  renderTableData(questionnaireResponses : Array<QuestionnaireResponse>){
+  renderTableData(questionnaireResponses : Array<Questionnaire>){
         return (
             
             <TableContainer component={Paper}>
@@ -101,21 +100,29 @@ getDanishColornameFromCategory(category : CategoryEnum){
             <TableCell align="right">frekvens</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
-                    {questionnaireResponses.map((row) => (
-                <TableRow
-                  key={row.patient.cpr}>
-                  <TableCell component="th" scope="row">
-                    <Chip color={this.getChipColorFromCategory(row.category)} label={this.getDanishColornameFromCategory(row.category)} />
-                  </TableCell>
-                  <TableCell align="right">{row.patient.name}</TableCell>
-                  <TableCell align="right">{row.patient.cpr}</TableCell>
-                  <TableCell align="right">{row.id}</TableCell>
-                  <TableCell align="right">{row.answeredTime.toLocaleDateString()} {row.answeredTime.toLocaleTimeString()}</TableCell>
-                  <TableCell align="right"></TableCell>
-                  <TableCell align="right">
-                    <Button  component={Link} to={"/patients/"+row.patient.cpr+"/questionnaires/"+row.id} variant="contained">Se mere</Button>
-                </TableCell>
-                </TableRow>
+                    {questionnaireResponses.map((questionnaire) => ( 
+                        <>
+                        {questionnaire.questionnaireResponses.map((questionnaireResponse) => {
+                            return (
+                              <TableRow
+                                key={questionnaireResponse.patient.cpr}>
+                                <TableCell component="th" scope="row">
+                                  <Chip color={this.getChipColorFromCategory(questionnaireResponse.category)} label={this.getDanishColornameFromCategory(questionnaireResponse.category)} />
+                                </TableCell>
+                                <TableCell align="right">{questionnaireResponse.patient.name}</TableCell>
+                                <TableCell align="right">{questionnaireResponse.patient.cpr}</TableCell>
+                                <TableCell align="right">{questionnaire.name}</TableCell>
+                                <TableCell align="right">{questionnaireResponse.answeredTime.toLocaleDateString()} {questionnaireResponse.answeredTime.toLocaleTimeString()}</TableCell>
+                                <TableCell align="right"></TableCell>
+                                <TableCell align="right">
+                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se mere</Button>
+                              </TableCell>
+                              </TableRow>
+                            )
+                        })}
+                        </>
+                      
+                
               ))}
         </TableHead>
         <TableBody>

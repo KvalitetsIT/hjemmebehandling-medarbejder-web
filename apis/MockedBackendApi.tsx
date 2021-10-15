@@ -16,6 +16,8 @@ import { Threshold } from "../components/Models/Threshold";
 
 export class MockedBackendApi implements IBackendApi {
 
+    questionnaireNames = ["Generelt infektionssygdomme spørgeskema","IVF til immundefekt","HIV Hjemmebehandling"];
+
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]>{
         let careplan = new PatientCareplan();
         let firstPlanDefinition = new PlanDefinition();
@@ -23,15 +25,17 @@ export class MockedBackendApi implements IBackendApi {
         careplan.planDefinitions = [firstPlanDefinition]
 
         let questionnaire = new Questionnaire();
-        questionnaire.name = "Generelt infektionssygdomme spørgeskema"
+        questionnaire.name = this.questionnaireNames[0]
         let thresholdOne = new Threshold();
         questionnaire.thresholds = [thresholdOne]
-        questionnaire.id = 1+""
+        questionnaire.id = this.questionnaireNames.indexOf(questionnaire.name)+""
         questionnaire.questionnaireResponses = await this.GetMeasurements(cpr);
 
         let questionnaire2 = new Questionnaire();
-        questionnaire2.name = "HIV Hjemmebehandling"
-        questionnaire2.id = 2+""
+
+
+        questionnaire2.name = this.questionnaireNames[1];
+        questionnaire2.id = this.questionnaireNames.indexOf(questionnaire2.name)+""
         questionnaire2.questionnaireResponses = await this.GetMeasurements(cpr);
 
 
@@ -40,7 +44,7 @@ export class MockedBackendApi implements IBackendApi {
         return [careplan];
     }
 
-    waitTimeMS = 1000
+    waitTimeMS = 0
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
@@ -64,7 +68,7 @@ export class MockedBackendApi implements IBackendApi {
     async GetPatient(cpr: string) : Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
-        let questionaireResponse = this.createRandomPatient(CategoryEnum.RED);
+        let questionaireResponse = this.createQuestionnaireResponse(CategoryEnum.RED);
         let patient : PatientDetail = new PatientDetail(questionaireResponse.patient.name,cpr);
         
         let patientContact = new Contact();
@@ -101,22 +105,34 @@ export class MockedBackendApi implements IBackendApi {
         return patient;
     }
     
-    static results: QuestionnaireResponse[] = [];
-    async GetQuestionnaireResponses(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<QuestionnaireResponse>>{
+    static results: Questionnaire[] = [];
+    async GetPatientQuestionnaires(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>>{
         await new Promise(f => setTimeout(f, this.waitTimeMS));
-        let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE,]
-        let array: QuestionnaireResponse[] = [];
+        let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE]
+
+        let array: Questionnaire[] = [];
         if(MockedBackendApi.results.length == 0){
             let numberOfPatients = pagesize;
             for(let i = 0; i < numberOfPatients; i++ ){
+
+                
+                
+
                 let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
-                array.push(this.createRandomPatient(category));
+                let questionnaire = new Questionnaire();
+                let questionnaireName = this.questionnaireNames[this.getRandomInt(0,this.questionnaireNames.length-1)]
+                questionnaire.name = questionnaireName;
+                questionnaire.id = this.questionnaireNames.indexOf(questionnaire.name)+""
+                questionnaire.questionnaireResponses = [this.createQuestionnaireResponse(category),this.createQuestionnaireResponse(category)];
+                array.push(questionnaire);
             }
             MockedBackendApi.results = array;
         }
 
 
-        return MockedBackendApi.results.sort( (a,b)=>b.category - a.category).filter(patient=>categories.some(cat => cat == patient.category));
+
+        return MockedBackendApi.results
+                .filter(questionnaire => questionnaire.questionnaireResponses.some(resp => categories.some(cat => cat == resp.category)));
     }
 
     createRandomMeasurementCollection(){
@@ -160,21 +176,19 @@ export class MockedBackendApi implements IBackendApi {
         return collection;
     }
 
-    createRandomPatient(category : CategoryEnum) : QuestionnaireResponse{
+    createQuestionnaireResponse(category : CategoryEnum) : QuestionnaireResponse{
 
         let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar"]
-        let questionnaireNames = ["IVF til immundefekt"]
+        
 
         let firstName = names[this.getRandomInt(0,names.length-1)]
         let lastName = names[this.getRandomInt(0,names.length-1)] + "sen"
-        let questionnaireName = questionnaireNames[this.getRandomInt(0,questionnaireNames.length-1)]
+        
 
         let questionnaireResponse = new QuestionnaireResponse();
         questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, this.generateCPR());
         questionnaireResponse.category = category;
         questionnaireResponse.answeredTime = new Date();
-        questionnaireResponse.questionnaire = new Questionnaire();
-        questionnaireResponse.questionnaire.name = questionnaireName;
         questionnaireResponse.id = this.generateCPR();
 
         return questionnaireResponse;
