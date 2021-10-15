@@ -27,6 +27,7 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
 
     urlSegmentToDisplayName["patients"] = {displayName: "Patienter"}
     urlSegmentToDisplayName["questionnaires"] = {displayName: "Spørgeskemaer"}
+    urlSegmentToDisplayName["careplans"] = {displayName: "Behandlingsplaner"}
 
     
     let urlSegments = this.props.location.pathname.split("/")

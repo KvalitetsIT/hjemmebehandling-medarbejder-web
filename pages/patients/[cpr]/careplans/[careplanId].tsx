@@ -18,37 +18,41 @@ import ContentCut from '@mui/icons-material/ContentCut';
 import Slider from '@mui/material/Slider';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
-import { Avatar, BottomNavigation, BottomNavigationAction, IconButton, List, ListItem, ListItemAvatar, Stack } from '@mui/material';
+import { Alert, Avatar, BottomNavigation, BottomNavigationAction, Chip, IconButton, List, ListItem, ListItemAvatar, Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
 import { useContext } from 'react';
-import { PatientCareplan } from '../../../components/Models/PatientCareplan';
-import { LoadingComponent } from '../../../components/Layout/LoadingComponent';
-import ApiContext from '../../_context';
-import { PatientDetail } from '../../../components/Models/PatientDetail';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { PatientCard } from '../../../components/Cards/PatientCard';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import GroupIcon from '@mui/icons-material/Group';
-import { CareplanTimeline } from '../../../components/Timelines/CareplanTimeline';
+import { withRouter } from "next/router"
+import { PatientCard } from '../../../../components/Cards/PatientCard';
+import { PatientCareplan } from '../../../../components/Models/PatientCareplan';
+import ApiContext from '../../../_context';
+import { LoadingComponent } from '../../../../components/Layout/LoadingComponent';
+import { CareplanTimeline } from '../../../../components/Timelines/CareplanTimeline';
 
 interface State {
   
   loading: boolean
+  activeCareplan : PatientCareplan
   careplans : PatientCareplan[]
 }
 interface Props {
-    match : { params : {cpr : string} }
+    match : { params : {cpr : string, careplanId : string} }
+
 }
-export default class PatientCareplans extends React.Component<Props,State> {
+class PatientCareplans extends React.Component<Props,State> {
   static contextType = ApiContext
 
   constructor(props : Props){
     super(props);
+    this.changeCareplan = this.changeCareplan.bind(this);
     this.state = {
         loading : true,
-        careplans : []
+        careplans : [],
+        activeCareplan : new PatientCareplan() //overriden in async
     }
 }
 
@@ -57,19 +61,31 @@ export default class PatientCareplans extends React.Component<Props,State> {
     return contents;
   }
 
-
   componentDidMount(){
     this.populateCareplans()
 }
 
+changeCareplan(careplan : PatientCareplan){
+    this.setState({
+        activeCareplan : careplan
+    })
+}
 
 async populateCareplans() {
-  
-  let cpr = this.props.match.params.cpr
-  let responses = await this.context.backendApi.GetPatientCareplans(cpr)
+  let cpr = this.props.match.params.cpr;
+  let id = this.props.match.params.careplanId;
+
+  let responses : PatientCareplan[] = await this.context.backendApi.GetPatientCareplans(cpr);
+  let activeCareplan = responses.find(x=>{
+      console.log(x.id +"=="+id)
+      return x.id === id
+  } );
+  console.log(responses)
   this.setState({
       careplans : responses,
-      loading : false
+      loading : false,
+      activeCareplan : activeCareplan ? activeCareplan : responses[0]
+
   });
 }
 
@@ -82,29 +98,39 @@ async populateCareplans() {
         return (
             <div>Ingen behandlingsplaner fundet :-(</div>
         )
-    let careplan = this.state.careplans[0]
+    let careplan = this.state.activeCareplan
     return (
         <>
         <Stack spacing={2} paddingBottom={2}>
 
 
+               
+
+                <Card>
+                    <CardContent>
+                        <CareplanTimeline careplanClicked={this.changeCareplan} activeCareplan={this.state.activeCareplan} careplans={this.state.careplans}/>
+                    </CardContent>
+                </Card>
                 <Card>
                     <CardContent>
                         <Stack>
                             
-                        <Typography variant="h4">Behandlingsplan</Typography>
+                        <Typography variant="h4">Behandlingsplan {
+                            careplan.terminationDate ? 
+                                <Chip label="Ikke aktiv plan" color="info"  /> : 
+                                <Chip label="Aktiv plan" color="success" /> } </Typography>
+                                
+                        {careplan.id}
+
+                        <Typography variant="overline">Oprettet : {careplan.creationDate.toLocaleDateString()}</Typography>
+                        
+                        {careplan.terminationDate ? <Typography variant="overline">Afsluttet : {careplan.terminationDate.toLocaleDateString()}</Typography> : "" }
+                        
                         
                         </Stack>
 
                     </CardContent>
                 </Card>
-
-                <Card>
-                    <CardContent>
-                        <CareplanTimeline careplans={this.state.careplans}/>
-                    </CardContent>
-                </Card>
-
                 
                 </Stack>
 
@@ -173,7 +199,6 @@ async populateCareplans() {
                     </CardActions>
                 </Card>
                 
-                
                 </Stack>
                 <Stack direction="row" paddingTop={2}>
                 <ButtonGroup variant="contained" aria-label="outlined button group">
@@ -190,4 +215,4 @@ async populateCareplans() {
 
   
   }
-  
+  export default PatientCareplans;

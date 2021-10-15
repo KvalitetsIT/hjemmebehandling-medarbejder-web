@@ -8,7 +8,7 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 export interface IBackendApi {
     GetPatientQuestionnaires : (categories : Array<CategoryEnum>, page : number, pagesize : number) => Promise<Array<Questionnaire>>
     GetPatient : (cpr : string) => Promise<PatientDetail>
-    GetPatientCareplans : (cpr: string) => Promise<PatientCareplan[]>
+    GetPatientCareplans : (cpr: string) => Promise<Array<PatientCareplan>>
     SetQuestionaireResponse : (id : string, questionnaireResponses : QuestionnaireResponse) => Promise<void>
 }
 

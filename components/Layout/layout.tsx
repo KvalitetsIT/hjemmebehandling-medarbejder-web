@@ -6,13 +6,13 @@ import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import App from '../../pages';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
 import ApiContext from '../../pages/_context';
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/questionnaires/[questionnaireId]';
-import PatientCareplans from '../../pages/patients/[cpr]';
 import Patients from '../../pages/patients';
+import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 
 
 export interface Props {
@@ -48,15 +48,17 @@ toogleDrawer = () => {
        
         <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
         
-            <AutoBreadcrumbs/>
+            <AutoBreadcrumbs/> 
             
             <Box paddingTop={5} >
         
             <Switch>
               <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
               <Route path="/patients/:cpr/questionnaires/" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
-              <Route path="/patients/:cpr" render={(props) => <PatientCareplans {...props}/>} />
-              
+              <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props}/>} />
+              <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>} />
+              <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
+
               <Route path="/patients"><Patients/></Route>
               <Route path="/">
                 <h2>Home</h2>

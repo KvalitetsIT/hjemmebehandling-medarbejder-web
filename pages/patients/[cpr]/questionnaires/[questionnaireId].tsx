@@ -32,7 +32,6 @@ import ApiContext from '../../../_context';
 import { BasicTabs } from '../../../../components/Layout/Tabs';
 import { PlanDefinition } from '../../../../components/Models/PlanDefinition';
 import { PatientCareplan } from '../../../../components/Models/PatientCareplan';
-import PatientCareplanView from '..';
 import { PatientSimple } from '../../../../components/Models/PatientSimple';
 import { Questionnaire } from '../../../../components/Models/Questionnaire';
 
