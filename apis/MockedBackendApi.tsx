@@ -24,14 +24,18 @@ export class MockedBackendApi implements IBackendApi {
 
         let questionnaire = new Questionnaire();
         questionnaire.name = "Generelt infektionssygdomme spørgeskema"
-
         let thresholdOne = new Threshold();
         questionnaire.thresholds = [thresholdOne]
+        questionnaire.id = 1+""
+        questionnaire.questionnaireResponses = await this.GetMeasurements(cpr);
 
-        let questionnaireResponse = this.createRandomMeasurementCollection()
-        questionnaireResponse.questionnaire = questionnaire;
+        let questionnaire2 = new Questionnaire();
+        questionnaire2.name = "HIV Hjemmebehandling"
+        questionnaire2.id = 2+""
+        questionnaire2.questionnaireResponses = await this.GetMeasurements(cpr);
 
-        careplan.questionnaireResponses = await this.GetMeasurements(cpr)
+
+        careplan.questionnaires = [questionnaire,questionnaire2]
         careplan.patient = await this.GetPatient(cpr);
         return [careplan];
     }
@@ -45,19 +49,14 @@ export class MockedBackendApi implements IBackendApi {
     async GetMeasurements (cpr: string) : Promise<Array<QuestionnaireResponse>> {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
-        let questionnaire = new Questionnaire();
-        questionnaire.name = "Generelt infektionssygdomme spørgeskema"
+        
 
         let collection1 = this.createRandomMeasurementCollection();
-        collection1.questionnaire = questionnaire;
         let collection2 = this.createRandomMeasurementCollection();
-        collection2.questionnaire = questionnaire;
         let collection3 = this.createRandomMeasurementCollection();
-        collection3.questionnaire = questionnaire;
         let collection4 = this.createRandomMeasurementCollection();
-        collection4.questionnaire = questionnaire;
         let collection5 = this.createRandomMeasurementCollection();
-        collection5.questionnaire = questionnaire;
+
         return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
     }
 

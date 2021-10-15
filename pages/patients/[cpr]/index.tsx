@@ -121,7 +121,7 @@ async populateCareplans() {
                     <CardHeader title="Spørgeskemaer"/>
                     <CardContent>
                     <List>
-                        {careplan.questionnaireResponses.length > 0 ? careplan.questionnaireResponses.map(questionnaireResponse => {
+                        {careplan.questionnaires.length > 0 ? careplan.questionnaires.map(questionnaire => {
                         return (
                             <>
                             
@@ -132,8 +132,8 @@ async populateCareplans() {
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={questionnaireResponse.questionnaire.name}
-                                    secondary={<Button component={Link} color="inherit" to={"/patients/"+this.props.match.params.cpr + "/questionnaires/"+questionnaireResponse.id} size="small">Se besvarelser</Button>}
+                                    primary={questionnaire.name}
+                                    secondary={<Button component={Link} color="inherit" to={"/patients/"+this.props.match.params.cpr + "/questionnaires/"+questionnaire.id} size="small">Se besvarelser</Button>}
                                 />
                                 </ListItem>
                             

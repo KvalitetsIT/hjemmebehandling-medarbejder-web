@@ -109,11 +109,11 @@ getDanishColornameFromCategory(category : CategoryEnum){
                   </TableCell>
                   <TableCell align="right">{row.patient.name}</TableCell>
                   <TableCell align="right">{row.patient.cpr}</TableCell>
-                  <TableCell align="right">{row.questionnaire.name}</TableCell>
+                  <TableCell align="right">{row.id}</TableCell>
                   <TableCell align="right">{row.answeredTime.toLocaleDateString()} {row.answeredTime.toLocaleTimeString()}</TableCell>
                   <TableCell align="right"></TableCell>
                   <TableCell align="right">
-                    <Button  component={Link} to={"/patients/"+row.patient.cpr+"/questionnaires/"+row.questionnaire.name} variant="contained">Se mere</Button>
+                    <Button  component={Link} to={"/patients/"+row.patient.cpr+"/questionnaires/"+row.id} variant="contained">Se mere</Button>
                 </TableCell>
                 </TableRow>
               ))}

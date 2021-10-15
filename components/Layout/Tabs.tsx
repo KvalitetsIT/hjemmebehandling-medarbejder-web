@@ -7,13 +7,15 @@ import { Component } from 'react';
 
 export interface TabPanelProps {
     children?: React.ReactNode;
-  index: number;
-  value: number;
+    index: number;
+    value: number;
 }
 
 export interface BasicTabsProps {
-    tabLabels : string[]
-    tabContent : JSX.Element[]
+  idOfStartTab?: string;
+  tabLabels : string[]
+  tabIds : string[]
+  tabContent : JSX.Element[]
 }
 export interface BasicTabsState {
     value : number
@@ -24,8 +26,10 @@ export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
 
 constructor(props : BasicTabsProps){
     super(props);
+    let startTabIndex = props.idOfStartTab != undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
+    console.log("start: " + startTabIndex)
     this.state = {
-        value : 0
+        value : startTabIndex
     }
 }
 

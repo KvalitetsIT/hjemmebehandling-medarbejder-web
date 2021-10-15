@@ -34,6 +34,7 @@ import { PlanDefinition } from '../../../../components/Models/PlanDefinition';
 import { PatientCareplan } from '../../../../components/Models/PatientCareplan';
 import PatientCareplanView from '..';
 import { PatientSimple } from '../../../../components/Models/PatientSimple';
+import { Questionnaire } from '../../../../components/Models/Questionnaire';
 
 interface State {
   loading: boolean
@@ -78,23 +79,21 @@ async populateCareplans() {
 
 
   renderTabs() {
-    let questionnaireNames : string[] = []
-    this.state.careplans.forEach(careplan => careplan.questionnaireResponses.forEach(response => questionnaireNames.push(response.questionnaire.name)))
-    let dto = {
-      "patient" : this.state.careplans[0].patient,
-      "questionnaireNames" : this.state.careplans[0].questionnaireResponses[0].questionnaire.name,
-      "questionnaireResponses" : this.state.careplans[0].questionnaireResponses
-    }
-    console.log(questionnaireNames);
-    console.log(this.state.careplans);
+    let questionnaires : Questionnaire[] = []
+    this.state.careplans.forEach(careplan => careplan.questionnaires.forEach(questionnaire => {
+      questionnaires.push(questionnaire);
+    }))
+
     return (
 <>
       <Stack display="inline-flex" spacing={2} direction="row">
         <Card>
         <CardContent>
         <BasicTabs 
-            tabLabels={[dto.questionnaireNames]}
-            tabContent={[this.renderQuestionnaireResponseTab(dto.patient,dto.questionnaireResponses)]}
+            idOfStartTab={this.props.match.params.questionnaireId}
+            tabIds={questionnaires.map(x=>x.id)}
+            tabLabels={questionnaires.map(x=>x.name)}
+            tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x.questionnaireResponses))}
             />
         
         </CardContent>
@@ -112,13 +111,9 @@ async populateCareplans() {
 
   //=====================TABS===============================
 
-  renderQuestionnaireResponseTab(patient : PatientSimple, questionnaireResponses : QuestionnaireResponse[]){
+  renderQuestionnaireResponseTab(questionnaireResponses : QuestionnaireResponse[]){
     return (
-      <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} cpr={patient.cpr} questionnaireResponses={questionnaireResponses} >
-
-      <Typography variant="h6">
-        {patient.name}
-      </Typography >  
+      <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaireResponses={questionnaireResponses} >
     
     </AnswerTable>
     )

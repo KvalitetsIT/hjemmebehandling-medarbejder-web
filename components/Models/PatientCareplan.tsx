@@ -7,6 +7,6 @@ import { Threshold } from "./Threshold";
 
 export class PatientCareplan {
     planDefinitions : Array<PlanDefinition> = [];
-    questionnaireResponses : Array<QuestionnaireResponse> = [];
+    questionnaires : Questionnaire[] = []
     patient! : PatientDetail
 }

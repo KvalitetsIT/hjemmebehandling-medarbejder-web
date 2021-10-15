@@ -20,7 +20,6 @@ import DeviceThermostatOutlinedIcon from '@mui/icons-material/DeviceThermostatOu
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
 
 export interface Props {
-    cpr : string;
     typesToShow : MeasurementType[]
     questionnaireResponses : Array<QuestionnaireResponse>
 }
@@ -42,7 +41,7 @@ constructor(props : Props){
     let contents = this.renderTableData(this.props.questionnaireResponses);
     return contents;
   }
-  
+
 findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {
     let answer : Answer | undefined;
     questionResponses.questions.forEach( (responseAnswer,responseQuestion) => {

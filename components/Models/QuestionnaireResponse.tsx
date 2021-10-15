@@ -7,7 +7,6 @@ import { Questionnaire } from "./Questionnaire";
 
 export class QuestionnaireResponse {
     id! : string
-    questionnaire!: Questionnaire
     measurements! : Map<MeasurementType,Measurement>
     questions! : Map<Question,Answer>
     answeredTime! : Date;
