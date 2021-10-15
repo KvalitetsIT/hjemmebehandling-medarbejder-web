@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import { useParams,Link } from 'react-router-dom';
 import { FormatItalic } from '@mui/icons-material';
 import Tabs from '@mui/material/Tabs';
@@ -29,6 +28,10 @@ import { PatientDetail } from '../../../components/Models/PatientDetail';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { PatientCard } from '../../../components/Cards/PatientCard';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import GroupIcon from '@mui/icons-material/Group';
+import { CareplanTimeline } from '../../../components/Timelines/CareplanTimeline';
 
 interface State {
   
@@ -79,14 +82,34 @@ async populateCareplans() {
         return (
             <div>Ingen behandlingsplaner fundet :-(</div>
         )
-
+    let careplan = this.state.careplans[0]
     return (
         <>
-        {careplans.map(careplan=>{
-            return (
-                <>
+        <Stack spacing={2} paddingBottom={2}>
+
+
+                <Card>
+                    <CardContent>
+                        <Stack>
+                            
+                        <Typography variant="h4">Behandlingsplan</Typography>
+                        
+                        </Stack>
+
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent>
+                        <CareplanTimeline careplans={this.state.careplans}/>
+                    </CardContent>
+                </Card>
+
                 
+                </Stack>
+
                 <Stack direction="row" spacing={2}>
+                
                 <PatientCard patient={careplan.patient}></PatientCard>
                 
                 <Card>
@@ -100,7 +123,7 @@ async populateCareplans() {
                                 <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
-                                    <AssignmentIcon />
+                                    <GroupIcon />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -114,6 +137,9 @@ async populateCareplans() {
                     })}
                     </List>
                     </CardContent>
+                    <CardActions>
+                        <Button>Tilføj ny patientgruppe</Button>
+                    </CardActions>
                   
                 </Card>
 
@@ -143,14 +169,21 @@ async populateCareplans() {
                     </List>
                     </CardContent>
                     <CardActions>
+                        <Button>Tilføj spørgeskema</Button>
                     </CardActions>
                 </Card>
+                
+                
                 </Stack>
+                <Stack direction="row" paddingTop={2}>
+                <ButtonGroup variant="contained" aria-label="outlined button group">
+                    <Button color="error">Afslut behandlingsplan</Button>
+                </ButtonGroup>
+                </Stack>
+                
                 </>
             )
-        })}
-        </>
-    )
+    
     
   }
 

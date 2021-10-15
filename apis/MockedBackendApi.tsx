@@ -19,7 +19,17 @@ export class MockedBackendApi implements IBackendApi {
     questionnaireNames = ["Generelt infektionssygdomme spørgeskema","IVF til immundefekt","HIV Hjemmebehandling"];
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]>{
+        let careplan = await this.generateCareplan(cpr,false,2021);
+        let careplan2 = await this.generateCareplan(cpr, true,2019);
+        let careplan3 = await this.generateCareplan(cpr, true,2017);
+        let careplan4 = await this.generateCareplan(cpr, true,2013);
+        
+        return [careplan,careplan2, careplan3, careplan4];
+    }
+
+    async generateCareplan(cpr : string, hasTerminationDate : boolean, year : number) : Promise<PatientCareplan> {
         let careplan = new PatientCareplan();
+        careplan.id = this.generateCPR();
         let firstPlanDefinition = new PlanDefinition();
         firstPlanDefinition.name = "Hjemmebhandling af immundefekt"
         careplan.planDefinitions = [firstPlanDefinition]
@@ -41,7 +51,10 @@ export class MockedBackendApi implements IBackendApi {
 
         careplan.questionnaires = [questionnaire,questionnaire2]
         careplan.patient = await this.GetPatient(cpr);
-        return [careplan];
+        careplan.creationDate = new Date(year,this.getRandomInt(1,30),this.getRandomInt(1,30));
+        if(hasTerminationDate)
+            careplan.terminationDate = new Date(year+1,this.getRandomInt(1,30),this.getRandomInt(1,30));
+        return careplan;
     }
 
     waitTimeMS = 0

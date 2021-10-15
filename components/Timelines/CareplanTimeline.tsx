@@ -1,0 +1,60 @@
+import { AppBar, Box, Breadcrumbs, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
+import React, { Component } from 'react';
+import Timeline from '@material-ui/lab/Timeline';
+import TimelineItem from '@material-ui/lab/TimelineItem';
+import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
+import TimelineConnector from '@material-ui/lab/TimelineConnector';
+import TimelineContent from '@material-ui/lab/TimelineContent';
+import TimelineDot from '@material-ui/lab/TimelineDot';
+import { PatientCareplan } from '../Models/PatientCareplan';
+import { makeStyles } from '@material-ui/styles';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import { Button } from '@mui/material';
+
+export interface Props {
+    careplans : PatientCareplan[]
+}
+export interface State {
+    
+}
+
+
+
+export class CareplanTimeline extends Component<Props,State> {
+  static displayName = CareplanTimeline.name;
+
+constructor(props : Props){
+    super(props);
+
+}
+
+
+  render () {
+      let activeCareplan : PatientCareplan = this.props.careplans[0];
+    return (
+        <Stepper activeStep={1} alternativeLabel>
+        {this.props.careplans.sort( (a,b) => b.creationDate.getTime() - a.creationDate.getTime()).map(careplan => {
+    return (
+        
+            <Step>
+                    <StepLabel StepIconComponent={AssignmentIndIcon}>
+                    <Button disabled={activeCareplan.id == careplan.id ? true : false} variant="outlined">
+                    {careplan.planDefinitions.map(x=>x.name + ", ")}
+                    <br/>
+                    {careplan.creationDate.toLocaleDateString()} - {careplan.terminationDate ? careplan.terminationDate.toLocaleDateString() : ""}
+                    <br/>
+                    </Button>
+                </StepLabel>
+            </Step>
+    )
+    
+    
+})}
+</Stepper>
+   
+    )
+  }
+}

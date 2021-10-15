@@ -109,13 +109,15 @@ getDanishColornameFromCategory(category : CategoryEnum){
                                 <TableCell component="th" scope="row">
                                   <Chip color={this.getChipColorFromCategory(questionnaireResponse.category)} label={this.getDanishColornameFromCategory(questionnaireResponse.category)} />
                                 </TableCell>
-                                <TableCell align="right">{questionnaireResponse.patient.name}</TableCell>
+                                <TableCell align="right">
+                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr} variant="text">{questionnaireResponse.patient.name}</Button>
+                                </TableCell>
                                 <TableCell align="right">{questionnaireResponse.patient.cpr}</TableCell>
                                 <TableCell align="right">{questionnaire.name}</TableCell>
                                 <TableCell align="right">{questionnaireResponse.answeredTime.toLocaleDateString()} {questionnaireResponse.answeredTime.toLocaleTimeString()}</TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right">
-                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se mere</Button>
+                                  <Button component={Link} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelse</Button>
                               </TableCell>
                               </TableRow>
                             )

@@ -14,9 +14,10 @@ import { Component } from 'react';
 import StarIcon from '@mui/icons-material/Star';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import { PatientSimple } from '../Models/PatientSimple';
-import { Stack } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import { ContactCard } from './ContactCard';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export interface Props {
     patient : PatientDetail
@@ -60,12 +61,19 @@ export class PatientCard extends Component<Props,State> {
                 {this.props.patient.patientContact.primaryPhone} {this.props.patient.patientContact.secondaryPhone ? "("+this.props.patient.patientContact.secondaryPhone+")" : ""}<br/>
                 {this.props.patient.patientContact.emailAddress}<br/>
             </Typography>
-
-            <Divider/>
-            <Typography variant="button">
+            <br/>
+            <Accordion variant="outlined">
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography variant="button">
             Pårørende:
             </Typography>
-            {this.props.patient.contacts.map(contact => {
+        </AccordionSummary>
+        <AccordionDetails>
+        {this.props.patient.contacts.map(contact => {
                 return (
                     <>
                     
@@ -77,9 +85,16 @@ export class PatientCard extends Component<Props,State> {
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                         {contact.emailAddress}<br/>
                     </Typography>
+                    <br/>
                     </>
                 )
             })}
+        </AccordionDetails>
+      </Accordion>
+
+      
+            
+           
             </Stack>
           </CardContent>
         </Card>
