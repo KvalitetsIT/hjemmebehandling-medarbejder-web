@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 import App from '../../pages';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
 import ApiContext from '../../pages/_context';
-import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/questionnaires/[questionnaireId]';
+import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 
@@ -53,9 +53,12 @@ toogleDrawer = () => {
             <Box paddingTop={5} >
         
             <Switch>
-              <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
-              <Route path="/patients/:cpr/questionnaires/" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
+              <Route path="/patients/:cpr/careplans/:careplanId/questionnaires/:questionnaireId" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
+              
+              <Route path="/patients/:cpr/careplans/:careplanId/questionnaires/" render={(props) => <QuestionnaireResponseDetails {...props}/>} />
               <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props}/>} />
+
+              <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv/questionnaires/"+props.match.params.questionnaireId}/>} />
               <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>} />
               <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
 

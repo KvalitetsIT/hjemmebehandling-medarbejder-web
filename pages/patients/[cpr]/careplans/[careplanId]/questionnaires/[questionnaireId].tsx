@@ -6,9 +6,9 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
-import { IBackendApi } from '../../../../apis/IBackendApi';
-import { PatientDetail } from '../../../../components/Models/PatientDetail';
-import { ContactCard } from '../../../../components/Cards/ContactCard';
+import { IBackendApi } from '../../../../../../apis/IBackendApi';
+import { PatientDetail } from '../../../../../../components/Models/PatientDetail';
+import { ContactCard } from '../../../../../../components/Cards/ContactCard';
 import { FormatItalic } from '@mui/icons-material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -23,17 +23,17 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import { Stack } from '@mui/material';
 import HealingIcon from '@mui/icons-material/Healing';
-import { AnswerTable } from '../../../../components/Tables/AnswerTable';
-import { MeasurementType, QuestionnaireResponse } from '../../../../components/Models/QuestionnaireResponse';
-import { LoadingComponent } from '../../../../components/Layout/LoadingComponent';
-import { PatientCard } from '../../../../components/Cards/PatientCard';
+import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
+import { MeasurementType, QuestionnaireResponse } from '../../../../../../components/Models/QuestionnaireResponse';
+import { LoadingComponent } from '../../../../../../components/Layout/LoadingComponent';
+import { PatientCard } from '../../../../../../components/Cards/PatientCard';
 import { useContext } from 'react';
-import ApiContext from '../../../_context';
-import { BasicTabs } from '../../../../components/Layout/Tabs';
-import { PlanDefinition } from '../../../../components/Models/PlanDefinition';
-import { PatientCareplan } from '../../../../components/Models/PatientCareplan';
-import { PatientSimple } from '../../../../components/Models/PatientSimple';
-import { Questionnaire } from '../../../../components/Models/Questionnaire';
+import ApiContext from '../../../../../_context';
+import { BasicTabs } from '../../../../../../components/Layout/Tabs';
+import { PlanDefinition } from '../../../../../../components/Models/PlanDefinition';
+import { PatientCareplan } from '../../../../../../components/Models/PatientCareplan';
+import { PatientSimple } from '../../../../../../components/Models/PatientSimple';
+import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 
 interface State {
   loading: boolean
@@ -41,7 +41,7 @@ interface State {
 }
 interface Props {
 
-  match : { params : {cpr : string, questionnaireId? : string} }
+  match : { params : {cpr : string, questionnaireId? : string,careplanId? : string} }
 }
 export default class QuestionnaireResponseDetails extends React.Component<Props,State> {
   static contextType = ApiContext
@@ -56,8 +56,6 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
   render () {
     let contents = this.state.loading ? <LoadingComponent/> : this.renderTabs();
-    console.log("CPR CPR CPR "+this.props.match.params.cpr)
-    console.log("ID ID ID  "+this.props.match.params.questionnaireId)
     return contents;
   }
 
@@ -78,10 +76,16 @@ async populateCareplans() {
 
 
   renderTabs() {
+    
     let questionnaires : Questionnaire[] = []
-    this.state.careplans.forEach(careplan => careplan.questionnaires.forEach(questionnaire => {
-      questionnaires.push(questionnaire);
-    }))
+    let currentCareplan = this.state.careplans.find(x=>x.id == this.props.match.params.careplanId);
+    if(!currentCareplan)
+      currentCareplan = this.state.careplans.find(x=>!x.terminationDate);
+    
+    if(currentCareplan)
+      questionnaires = currentCareplan.questionnaires;  
+    
+    
 
     return (
 <>

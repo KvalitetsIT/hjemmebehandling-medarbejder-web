@@ -119,7 +119,7 @@ export class MockedBackendApi implements IBackendApi {
     }
     
     static results: Questionnaire[] = [];
-    async GetPatientQuestionnaires(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>>{
+    async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>>{
         await new Promise(f => setTimeout(f, this.waitTimeMS));
         let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE]
 

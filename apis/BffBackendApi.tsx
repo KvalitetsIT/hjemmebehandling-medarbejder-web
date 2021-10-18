@@ -14,8 +14,8 @@ export class BffBackendApi implements IBackendApi {
         return await new MockedBackendApi().GetPatientCareplans(cpr);
     }
 
-    async GetPatientQuestionnaires(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        let array: Questionnaire[] = await new MockedBackendApi().GetPatientQuestionnaires(categories, page, pagesize - 1);
+    async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        let array: Questionnaire[] = await new MockedBackendApi().GetTasklist(categories, page, pagesize - 1);
 
        // let qr : QuestionnaireResponse = await this.createPatient(CategoryEnum.RED, "0101010101");
         //array.unshift(qr);

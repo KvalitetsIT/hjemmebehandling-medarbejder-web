@@ -27,11 +27,11 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import GroupIcon from '@mui/icons-material/Group';
 import { withRouter } from "next/router"
-import { PatientCard } from '../../../../components/Cards/PatientCard';
-import { PatientCareplan } from '../../../../components/Models/PatientCareplan';
-import ApiContext from '../../../_context';
-import { LoadingComponent } from '../../../../components/Layout/LoadingComponent';
-import { CareplanTimeline } from '../../../../components/Timelines/CareplanTimeline';
+import { PatientCard } from '../../../../../components/Cards/PatientCard';
+import { PatientCareplan } from '../../../../../components/Models/PatientCareplan';
+import ApiContext from '../../../../_context';
+import { LoadingComponent } from '../../../../../components/Layout/LoadingComponent';
+import { CareplanTimeline } from '../../../../../components/Timelines/CareplanTimeline';
 
 interface State {
   
@@ -119,9 +119,7 @@ async populateCareplans() {
                             careplan.terminationDate ? 
                                 <Chip label="Ikke aktiv plan" color="info"  /> : 
                                 <Chip label="Aktiv plan" color="success" /> } </Typography>
-                                
-                        {careplan.id}
-
+                        <Typography variant="overline">Id : {careplan.id}</Typography>
                         <Typography variant="overline">Oprettet : {careplan.creationDate.toLocaleDateString()}</Typography>
                         
                         {careplan.terminationDate ? <Typography variant="overline">Afsluttet : {careplan.terminationDate.toLocaleDateString()}</Typography> : "" }
@@ -185,7 +183,7 @@ async populateCareplans() {
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={questionnaire.name}
-                                    secondary={<Button component={Link} color="inherit" to={"/patients/"+this.props.match.params.cpr + "/questionnaires/"+questionnaire.id} size="small">Se besvarelser</Button>}
+                                    secondary={<Button component={Link} color="inherit" to={"/patients/"+this.props.match.params.cpr + "/careplans/"+careplan.id+"/questionnaires/"+questionnaire.id} size="small">Se besvarelser</Button>}
                                 />
                                 </ListItem>
                             

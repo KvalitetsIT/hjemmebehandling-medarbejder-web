@@ -51,7 +51,7 @@ constructor(props : Props){
 
   async  populateQuestionnaireResponses() {
 
-    let responses = await this.context.backendApi.GetPatientQuestionnaires(this.props.categories,1,this.props.pageSize);
+    let responses = await this.context.backendApi.GetTasklist(this.props.categories,1,this.props.pageSize);
     this.setState({
         questionnaires : responses,
         loading : false
