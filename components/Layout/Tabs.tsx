@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export interface TabPanelProps {
     children?: React.ReactNode;
@@ -27,8 +28,6 @@ export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
 constructor(props : BasicTabsProps){
     super(props);
     let startTabIndex = props.idOfStartTab != undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
-    console.log(props.tabIds)
-    console.log("idToStart: " + props.idOfStartTab)
     this.state = {
         value : startTabIndex
     }
@@ -39,13 +38,14 @@ constructor(props : BasicTabsProps){
   };
 
   render () {
-        let indexTabPanelCounter = 0;
+        let indexTabPanelCounterLabel = 0;
+        let indexTabPanelCounterContent = 0;
         return (
             <>
-                    <Tabs value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
+                    <Tabs  value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
                         {this.props.tabLabels.map(tabLabel => {
                             return (
-                                <Tab label={tabLabel}  />
+                                <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={tabLabel}  />
                             )
                         })}
                     </Tabs>
@@ -53,7 +53,7 @@ constructor(props : BasicTabsProps){
                     {this.props.tabContent.map(content => {
                             
                             return (
-                                <this.TabPanel value={this.state.value} index={indexTabPanelCounter++}>
+                                <this.TabPanel value={this.state.value} index={indexTabPanelCounterContent++}>
                                 {content}
                               </this.TabPanel>
                             )
