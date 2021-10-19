@@ -9,8 +9,8 @@ export class QuestionnaireResponse {
     id! : string
     measurements! : Map<MeasurementType,Measurement>
     questions! : Map<Question,Answer>
-    answeredTime! : Date;
-    status! : QuestionnaireResponseStatus
+    answeredTime! : Date | undefined ;
+    status! : QuestionnaireResponseStatus | undefined
     category! : CategoryEnum;
     patient! : PatientSimple
 }

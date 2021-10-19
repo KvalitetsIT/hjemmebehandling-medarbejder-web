@@ -48,18 +48,18 @@ export class PatientCard extends Component<Props,State> {
   renderCard(){
     return (
         <Card padding={4} component={Stack}>
-            <CardHeader component={Typography} align="center" title={this.props.patient.name}/>
+            <CardHeader component={Typography} align="center" title={this.props.patient.firstname + " " +this.props.patient.lastname}/>
           <CardContent>
             <Stack spacing={3} >
             <Typography variant="subtitle2">
             {this.props.patient.cpr}
             </Typography>
             <Typography variant="subtitle2">
-                {this.props.patient.patientContact.address.road}<br/>
-                {this.props.patient.patientContact.address.zipCode}<br/>
+                {this.props.patient.patientContact?.address.road}<br/>
+                {this.props.patient.patientContact?.address.zipCode}<br/>
                 <br/>
-                {this.props.patient.patientContact.primaryPhone} {this.props.patient.patientContact.secondaryPhone ? "("+this.props.patient.patientContact.secondaryPhone+")" : ""}<br/>
-                {this.props.patient.patientContact.emailAddress}<br/>
+                {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}<br/>
+                {this.props.patient.patientContact?.emailAddress}<br/>
             </Typography>
             <br/>
             <Accordion variant="outlined">

@@ -3,11 +3,8 @@
     //- Tasklist
 
 export class PatientSimple {
-    name: string;
-    cpr: string;
+    firstname?: string;
+    lastname? : string;
+    cpr?: string;
 
-    constructor(name: string, cpr : string){
-        this.name = name;
-        this.cpr = cpr;
-    }
 }

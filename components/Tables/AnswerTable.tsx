@@ -82,7 +82,7 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
           <TableCell>{this.props.children}</TableCell>
             {questionaireResponses.map(collection => {
                 return (
-                    <TableCell>{collection.answeredTime.toDateString()}</TableCell>
+                    <TableCell>{collection.answeredTime ? collection.answeredTime.toDateString() : ""}</TableCell>
                 )
                 
             })}

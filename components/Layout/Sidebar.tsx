@@ -87,7 +87,7 @@ toogleDrawer = () => {
         </List>
 
         <div style={this.bottomPush}>
-          <Fab href="/newpatient" variant="extended">
+          <Fab component={Link} to="/newpatient" variant="extended">
             Opret patient
           </Fab>
         </div>

@@ -93,12 +93,13 @@ getDanishColornameFromCategory(category : CategoryEnum){
         <TableHead>
           <TableRow>
             <TableCell>Kategori</TableCell>
-            <TableCell align="right">Navn</TableCell>
-            <TableCell align="right">CPR</TableCell>
-            <TableCell align="right">Spørgeskema</TableCell>
-            <TableCell align="right">Besvaret</TableCell>
-            <TableCell align="right">frekvens</TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="left">Navn</TableCell>
+            <TableCell align="left">CPR</TableCell>
+            <TableCell align="left">Status</TableCell>
+            <TableCell align="left">Spørgeskema</TableCell>
+            <TableCell align="left">Besvaret</TableCell>
+            <TableCell align="left"></TableCell>
+            
           </TableRow>
                     {questionnaireResponses.map((questionnaire) => ( 
                         <>
@@ -109,15 +110,15 @@ getDanishColornameFromCategory(category : CategoryEnum){
                                 <TableCell component="th" scope="row">
                                   <Chip color={this.getChipColorFromCategory(questionnaireResponse.category)} label={this.getDanishColornameFromCategory(questionnaireResponse.category)} />
                                 </TableCell>
-                                <TableCell align="right">
-                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr} variant="text">{questionnaireResponse.patient.name}</Button>
+                                <TableCell align="left">
+                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr} variant="text">{questionnaireResponse.patient.firstname + " " + questionnaireResponse.patient.lastname}</Button>
                                 </TableCell>
-                                <TableCell align="right">{questionnaireResponse.patient.cpr}</TableCell>
-                                <TableCell align="right">{questionnaire.name}</TableCell>
-                                <TableCell align="right">{questionnaireResponse.answeredTime.toLocaleDateString()} {questionnaireResponse.answeredTime.toLocaleTimeString()}</TableCell>
-                                <TableCell align="right"></TableCell>
-                                <TableCell align="right">
-                                  <Button component={Link} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelse</Button>
+                                <TableCell align="left">{questionnaireResponse.patient.cpr}</TableCell>
+                                <TableCell align="left">{questionnaireResponse.status ? questionnaireResponse.status : "-" }</TableCell>
+                                <TableCell align="left">{questionnaire.name}</TableCell>
+                                <TableCell align="left">{questionnaireResponse.answeredTime ? questionnaireResponse.answeredTime.toLocaleDateString()+" "+questionnaireResponse.answeredTime.toLocaleTimeString() : "Ikke besvaret"}</TableCell>
+                                <TableCell align="left">
+                                  <Button component={Link} disabled={questionnaireResponse.status ? false : true} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelse</Button>
                               </TableCell>
                               </TableRow>
                             )

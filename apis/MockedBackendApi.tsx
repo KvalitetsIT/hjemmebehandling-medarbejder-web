@@ -74,7 +74,7 @@ export class MockedBackendApi implements IBackendApi {
         let collection4 = this.createRandomMeasurementCollection();
         let collection5 = this.createRandomMeasurementCollection();
 
-        return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime.getTime() - b.answeredTime.getTime() );
+        return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime!.getTime() - b.answeredTime!.getTime() );
     }
 
 
@@ -82,14 +82,17 @@ export class MockedBackendApi implements IBackendApi {
         await new Promise(f => setTimeout(f, this.waitTimeMS));
 
         let questionaireResponse = this.createQuestionnaireResponse(CategoryEnum.RED);
-        let patient : PatientDetail = new PatientDetail(questionaireResponse.patient.name,cpr);
-        
+        let patient : PatientDetail = new PatientDetail();
+        patient.cpr = cpr;
+        patient.firstname = questionaireResponse.patient.firstname;
+        patient.lastname = questionaireResponse.patient.lastname;
+
         let patientContact = new Contact();
         patientContact.address.country = "Danmark";
         patientContact.address.road = "Fiskergade 66";
         patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.emailAddress = patient.name + "@mail.dk";
-        patientContact.fullname = patient.name;
+        patientContact.emailAddress = patient.firstname + "@mail.dk";
+        patientContact.fullname = patient.firstname +" "+ patient.lastname;
         patientContact.primaryPhone = "+4528395028"
         patient.patientContact = patientContact;
 
@@ -191,7 +194,7 @@ export class MockedBackendApi implements IBackendApi {
 
     createQuestionnaireResponse(category : CategoryEnum) : QuestionnaireResponse{
 
-        let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar"]
+        let names = ["Jens","Peter","Morten","Mads", "Thomas", "Eva", "Lene", "Frederik","Oscar","Anne"]
         
 
         let firstName = names[this.getRandomInt(0,names.length-1)]
@@ -199,9 +202,20 @@ export class MockedBackendApi implements IBackendApi {
         
 
         let questionnaireResponse = new QuestionnaireResponse();
-        questionnaireResponse.patient = new PatientSimple(firstName + " " + lastName, this.generateCPR());
-        questionnaireResponse.category = category;
+        questionnaireResponse.patient = new PatientSimple();
+        questionnaireResponse.patient.firstname = firstName;
+        questionnaireResponse.patient.lastname = lastName;
+        questionnaireResponse.patient.cpr = this.generateCPR();
+        questionnaireResponse.status = QuestionnaireResponseStatus.NotProcessed
         questionnaireResponse.answeredTime = new Date();
+        if(category == CategoryEnum.BLUE){
+            questionnaireResponse.status = undefined;
+            questionnaireResponse.answeredTime = undefined;
+        }
+            
+
+        questionnaireResponse.category = category;
+        
         questionnaireResponse.id = this.generateCPR();
 
         return questionnaireResponse;

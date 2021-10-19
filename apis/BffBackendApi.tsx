@@ -52,7 +52,10 @@ export class BffBackendApi implements IBackendApi {
         // Map the body to a PatientDetail object
 
         var name = body['familyName'] + ', ' + body['givenName'];
-        let patient : PatientDetail = new PatientDetail(name, cpr);
+        let patient : PatientDetail = new PatientDetail();
+        patient.firstname = body['familyName'];
+        patient.lastname = body['givenName'];
+        patient.cpr = cpr;
 
         let patientContact = new Contact();
         patientContact.address.country = "Danmark";

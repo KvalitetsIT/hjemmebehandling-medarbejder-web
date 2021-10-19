@@ -15,7 +15,7 @@ export interface Props {
 }
 
 export interface State {
-    status : QuestionnaireResponseStatus;
+    status? : QuestionnaireResponseStatus;
     
     snackbarOpen : boolean
     snackbarColor: AlertColor
@@ -35,7 +35,6 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
             snackbarColor: "info",
             snackbarText : "",
             snackbarTitle : ""
-
       }
   }
 
@@ -84,7 +83,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
                     <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
                         <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
                             <h5>{this.state.snackbarTitle}</h5>
-                            Besvarelse : {this.props.questionnaireResponse.answeredTime.toDateString()} <br/>
+                            Besvarelse : {this.props.questionnaireResponse.answeredTime ? this.props.questionnaireResponse.answeredTime.toDateString() : ""} <br/>
                             {this.state.snackbarText}
                         </Alert>
                     </Snackbar>
