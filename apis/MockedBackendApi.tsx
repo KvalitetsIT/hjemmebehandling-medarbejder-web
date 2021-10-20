@@ -1,8 +1,7 @@
 import { Address } from "../components/Models/Address";
-import { Answer } from "../components/Models/Answer";
+import { Answer, NumberAnswer, StringAnswer, UnitType } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
-import { Measurement, UnitType } from "../components/Models/Measurement";
 import { QuestionnaireResponseStatus, MeasurementType, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
@@ -11,8 +10,8 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 import { IBackendApi } from "./IBackendApi";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Threshold } from "../components/Models/Threshold";
-
+import { ThresholdNumber } from "../components/Models/ThresholdNumber";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export class MockedBackendApi implements IBackendApi {
 
@@ -36,8 +35,8 @@ export class MockedBackendApi implements IBackendApi {
 
         let questionnaire = new Questionnaire();
         questionnaire.name = this.questionnaireNames[0]
-        let thresholdOne = new Threshold();
-        questionnaire.thresholds = [thresholdOne]
+
+  
         questionnaire.id = this.questionnaireNames.indexOf(questionnaire.name)+""
         questionnaire.questionnaireResponses = await this.GetMeasurements(cpr);
 
@@ -130,10 +129,6 @@ export class MockedBackendApi implements IBackendApi {
         if(MockedBackendApi.results.length == 0){
             let numberOfPatients = pagesize;
             for(let i = 0; i < numberOfPatients; i++ ){
-
-                
-                
-
                 let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
                 let questionnaire = new Questionnaire();
                 let questionnaireName = this.questionnaireNames[this.getRandomInt(0,this.questionnaireNames.length-1)]
@@ -156,34 +151,50 @@ export class MockedBackendApi implements IBackendApi {
         collection.answeredTime = new Date(this.getRandomInt(2000,2020),this.getRandomInt(1,30),this.getRandomInt(1,30));
         collection.status = QuestionnaireResponseStatus.NotProcessed;
         
-        let measurement1 = new Measurement();
-        measurement1.unit = UnitType.KG
-        measurement1.value = this.getRandomInt(70,100)
 
-        let measurement2 = new Measurement();
-        measurement2.unit = UnitType.DEGREASE_CELSIUS
-        measurement2.value = this.getRandomInt(20,40)
-
-
-        let measurement3 = new Measurement();
-        measurement3.unit = UnitType.DEGREASE_CELSIUS
-        measurement3.value = this.getRandomInt(10,20)
-
-        collection.measurements = new Map<MeasurementType,Measurement>();
-        collection.measurements.set(MeasurementType.WEIGHT, measurement1);
-        collection.measurements.set(MeasurementType.TEMPERATURE, measurement2);
-        collection.measurements.set(MeasurementType.CRP, measurement3);       
-        
         collection.questions = new Map<Question,Answer>();
+
+        let measurementQuestion = new Question();
+        measurementQuestion.question = "Hvad er din temperatur?"
+        let thresholdWeight = new ThresholdNumber();
+        thresholdWeight.from = 40;
+        thresholdWeight.to = 120;
+        thresholdWeight.category = CategoryEnum.RED;
+        measurementQuestion.thresholdPoint = [thresholdWeight]
+        let measurementAnswer = new NumberAnswer();
+        measurementAnswer.answer = this.getRandomInt(30,42);
+        measurementAnswer.unit = UnitType.DEGREASE_CELSIUS;
+        collection.questions.set(measurementQuestion,measurementAnswer);
+
+        let measurementQuestion2 = new Question();
+        measurementQuestion2.question = "Hvad er din vægt?"
+        let thresholdPoint = new ThresholdNumber();
+        thresholdPoint.from = 90;
+        thresholdPoint.to = 120;
+        thresholdPoint.category = CategoryEnum.RED;
+        let thresholdPoint2 = new ThresholdNumber();
+        thresholdPoint2.from = 75;
+        thresholdPoint2.to = 90;
+        thresholdPoint2.category = CategoryEnum.YELLOW;
+        measurementQuestion2.thresholdPoint = [thresholdPoint,thresholdPoint2]
+        let measurementAnswer2 = new NumberAnswer();
+        measurementAnswer2.answer = this.getRandomInt(60,120);
+        measurementAnswer2.unit = UnitType.KG;
+        collection.questions.set(measurementQuestion2,measurementAnswer2);
+        
         for(let i = 0; i<200; i++){
             let posibleQuestions = ["Hvordan har du det?","Føler du dig tryg?","Har du nye symptomer? Hvis ja - Hvilke?","Føler du din helbredstilstand er blevet værre?","Har du problemer med kateter?","Har du problemer med antibiotika?"]
             let posibleAnswers = ["Fint","Ja","Nej","Rotterne gnaver"]
             let question = new Question();
+            let threshold = new ThresholdOption;
+            threshold.option = "Nej"
+            threshold.category = CategoryEnum.RED
+            question.options = [threshold];
             question.question = posibleQuestions[this.getRandomInt(0,posibleQuestions.length-1)]
     
-            let answer = new Answer();
+            let answer = new StringAnswer();
             answer.answer = posibleAnswers[this.getRandomInt(0,posibleAnswers.length-1)]
-    
+            
             
             collection.questions.set(question,answer);
         }

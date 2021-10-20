@@ -14,7 +14,7 @@ import { QuestionnaireResponseStatus, MeasurementType } from '../Models/Question
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import { Question } from '../Models/Question';
-import { Answer } from '../Models/Answer';
+import { Answer, NumberAnswer, StringAnswer } from '../Models/Answer';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import DeviceThermostatOutlinedIcon from '@mui/icons-material/DeviceThermostatOutlined';
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
@@ -51,6 +51,36 @@ findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse
         }
     });
     return answer;
+}
+
+getChipColorFromCategory(category : CategoryEnum){
+    if(category == CategoryEnum.RED)
+        return "error"
+    if(category == CategoryEnum.YELLOW)
+        return "warning"
+    //if(category == CategoryEnum.GREEN)
+      //  return "success"
+    if(category == CategoryEnum.BLUE)
+        return "primary"
+
+    return "default"
+
+}
+
+findCategory(question: Question, answer: Answer) : CategoryEnum {
+    
+    if(answer instanceof NumberAnswer){
+        let answerAsNumber = answer as NumberAnswer;
+        let thresholdPoint = question.thresholdPoint.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
+        return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
+    }
+    if(answer instanceof StringAnswer){
+        let answerAsString = answer as StringAnswer;
+        let thresholdPoint = question.options.find(x=>x.option == answerAsString.answer);
+        return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
+    }
+
+    return CategoryEnum.GREEN
 }
 
 findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
@@ -90,23 +120,6 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
             
         </TableHead>
         <TableBody>
-
-                    
-                    {this.props.typesToShow.map(type =>{
-                        return (
-                            <TableRow>
-                                <TableCell>
-                                    <Tooltip title="Måling"><DeviceThermostatOutlinedIcon color="info"/></Tooltip> {type}
-                                </TableCell>
-                                {questionaireResponses.map(questionResponse => {
-                                    let measurement = questionResponse.measurements.get(type);
-                                    return (
-                                        <TableCell>{measurement ? measurement.value : "N/A"} {measurement ? measurement.unit : "N/A"}</TableCell>
-                                    )
-                                })}
-                            </TableRow>
-                        )
-                    })}
                     
                     
                     {this.findAllQuestions(questionaireResponses).map(question => {
@@ -118,20 +131,14 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
                                 
                                 {questionaireResponses.map(questionResponse => {
                                     let answer = this.findAnswer(question,questionResponse);
+                                    let category = answer ? this.findCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
-                                        <TableCell>{answer?.answer ? answer.answer : "N/A"}</TableCell>
+                                        <TableCell> <Chip color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
                                 })}
                             </TableRow>
                         )
                     })}
-                        
-                        
-                        
-                        
-                    
-
-    
 <TableRow>
 <TableCell></TableCell>
             {questionaireResponses.map(questionResponse => {
@@ -150,4 +157,5 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
     </>
         )
   }
+    
 }
