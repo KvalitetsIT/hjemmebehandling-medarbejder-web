@@ -18,7 +18,6 @@ import { CategoryEnum } from '../Models/CategoryEnum';
 export interface Props {
     category : CategoryEnum
     values : number[]
-    disabled : boolean
     onChange : (values : number[]) => void
 }
 
@@ -62,10 +61,11 @@ export class ColorSlider extends Component<Props,State> {
   render () {
     return (
             <Slider
-            disabled={this.props.disabled}
             onChange={this.handleChange}
             getAriaLabel={() => 'Temperature range'}
             value={this.state.values}
+            min={0}
+            max={200}
             valueLabelDisplay="on"/>
     )
   }

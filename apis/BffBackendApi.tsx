@@ -5,11 +5,19 @@ import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { ThresholdNumber } from "../components/Models/ThresholdNumber";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 import { IBackendApi } from "./IBackendApi";
 import { MockedBackendApi } from "./MockedBackendApi";
 
 export class BffBackendApi implements IBackendApi {
+    async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
+        return await new MockedBackendApi().SetThresholdNumber(thresholdId,threshold);
+    }
+    async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
+        return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
+    }
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{
         return await new MockedBackendApi().GetPatientCareplans(cpr);
     }

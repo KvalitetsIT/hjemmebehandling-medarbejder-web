@@ -1,7 +1,7 @@
 import { AppBar, Box, CardHeader, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Modal, Paper, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Button, Card, CardContent, Chip, ListItemButton, Slider, Table, TableCell, TableHead } from '@mui/material';
+import { Button, Card, CardContent, Chip, ListItemButton, MenuItem, OutlinedInput, Select, Slider, Table, TableCell, TableHead } from '@mui/material';
 import { withStyles, withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import { Question } from '../Models/Question';
@@ -10,15 +10,18 @@ import { CategoryEnum } from '../Models/CategoryEnum';
 import { ColorSlider } from '../Input/ColorSlider';
 import { ThresholdNumber } from '../Models/ThresholdNumber';
 import { ThresholdOption } from '../Models/ThresholdOption';
+import { CategorySelect } from '../Input/CategorySelect';
 
 export interface Props {
     question : Question;
     onThresholdNumberChange : (newThresholdNumber : ThresholdNumber) => void
+    onThresholdOptionChange : (newThresholdOption : ThresholdOption) => void
 }
 export interface State {
   modalIsOpen: boolean
   editMode : boolean
   onThresholdNumberChange : (newThresholdNumber : ThresholdNumber) => void
+  onThresholdOptionChange : (newThresholdOption : ThresholdOption) => void
 }
 
 
@@ -29,6 +32,7 @@ export class ThresholdModal extends Component<Props,State> {
     
     this.state = {
         onThresholdNumberChange : props.onThresholdNumberChange.bind(props.onThresholdNumberChange),
+        onThresholdOptionChange : props.onThresholdOptionChange.bind(props.onThresholdOptionChange),
         modalIsOpen : false,
         editMode : false
     }
@@ -61,12 +65,19 @@ getDanishColornameFromCategory(category : CategoryEnum){
     return "Ukendt"
 }
 
-valueChange(threshold : ThresholdNumber){
+SliderThresholdNumberChange(threshold : ThresholdNumber){
     return (newValues : number[]) => {
         let sortedNumbers = newValues.sort( (a,b) => a - b );
         threshold.from = sortedNumbers[0];
         threshold.to = sortedNumbers[1];
         this.state.onThresholdNumberChange(threshold)
+    }
+}
+
+SelectThresholdOptionChange(threshold : ThresholdOption){
+    return (newCategory : CategoryEnum) => {
+        threshold.category = newCategory;
+        this.state.onThresholdOptionChange(threshold)
     }
 }
 
@@ -81,7 +92,7 @@ valueChange(threshold : ThresholdNumber){
 
     return (
         <>
-        <Modal open={this.state.modalIsOpen} onClose={()=>this.setState({modalIsOpen : false})}>
+        <Modal disableEnforceFocus open={this.state.modalIsOpen} onClose={()=>this.setState({modalIsOpen : false})}>
             <Box top={200} right={500}  sx={{ width: 400 , position: 'absolute' as 'absolute'}}>
                 <Card>
                     <CardHeader title="Tærskelværdier" subheader={this.props.question.question}/>
@@ -94,7 +105,7 @@ valueChange(threshold : ThresholdNumber){
                            <Typography>
                                {this.getDanishColornameFromCategory(threshold.category)}
                            </Typography>
-                                <ColorSlider onChange={this.valueChange(threshold)} disabled={!this.state.editMode} category={threshold.category} values={[threshold.from, threshold.to]} />
+                                <ColorSlider onChange={this.SliderThresholdNumberChange(threshold)} category={threshold.category} values={[threshold.from, threshold.to]} />
                      </Stack>
                             </>
                             )
@@ -113,7 +124,9 @@ valueChange(threshold : ThresholdNumber){
                                 <>
                                     <TableRow>
                                         <TableCell>{threshold.option}</TableCell>
-                                        <TableCell><Chip color={this.getChipColorFromCategory(threshold.category)} label={this.getDanishColornameFromCategory(threshold.category)}/></TableCell>
+                                        <TableCell>
+                                        <CategorySelect  onChange={this.SelectThresholdOptionChange(threshold)} category={threshold.category}/>
+                                        </TableCell>
                                     </TableRow>
                             </>
                             )
@@ -140,3 +153,4 @@ valueChange(threshold : ThresholdNumber){
     );
   }
 }
+

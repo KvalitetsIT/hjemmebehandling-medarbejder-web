@@ -21,6 +21,7 @@ import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlin
 import { width } from '@mui/system';
 import { ThresholdModal } from '../Modals/ThresholdModal';
 import { ThresholdNumber } from '../Models/ThresholdNumber';
+import { ThresholdOption } from '../Models/ThresholdOption';
 
 export interface Props {
     typesToShow : MeasurementType[]
@@ -108,8 +109,14 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
     return questions;
 }
 
-updateThresholds(question : Question, threshold : ThresholdNumber){
+updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
     let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
+    thresholdToChange = threshold;
+    this.forceUpdate()
+}
+
+updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
+    let thresholdToChange = question.options.find(existingThreshold => existingThreshold.id == threshold.id);
     thresholdToChange = threshold;
     this.forceUpdate()
 }
@@ -125,11 +132,11 @@ updateThresholds(question : Question, threshold : ThresholdNumber){
         <TableHead>
           <TableRow>
           <TableCell>{this.props.children}</TableCell>
+          <TableCell></TableCell>
             {questionaireResponses.map(collection => {
                 return (
                     <TableCell>{collection.answeredTime ? collection.answeredTime.toDateString() : ""}</TableCell>
                 )
-                
             })}
           </TableRow>
             
@@ -142,7 +149,7 @@ updateThresholds(question : Question, threshold : ThresholdNumber){
                             <TableRow>
                                 <TableCell>
                                     <Tooltip title="Se tærkselværdier">
-                                        <ThresholdModal onThresholdNumberChange={(newThreshold) => this.updateThresholds(question,newThreshold) }  question={question} />
+                                        <ThresholdModal onThresholdOptionChange={(newThreshold) => this.updateOptionallyThresholds(question, newThreshold)} onThresholdNumberChange={(newThreshold) => this.updateNumberedThresholds(question, newThreshold)} question={question}  />
                                     </Tooltip>
                                 </TableCell>
                                 <TableCell>
@@ -163,6 +170,7 @@ updateThresholds(question : Question, threshold : ThresholdNumber){
 <TableRow>
 <TableCell></TableCell>
 <TableCell></TableCell>
+
             {questionaireResponses.map(questionResponse => {
                 return (
                     

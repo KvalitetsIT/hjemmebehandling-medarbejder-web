@@ -14,6 +14,12 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export class MockedBackendApi implements IBackendApi {
+    async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
+
+    }
+    async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
+
+    }
 
     questionnaireNames = ["Generelt infektionssygdomme spørgeskema","IVF til immundefekt","HIV Hjemmebehandling"];
 
