@@ -1,8 +1,8 @@
-import { AppBar, Box, Button, CircularProgress, Tooltip,Container, Divider, Drawer, Fab, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemText, ListSubheader, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, CircularProgress, Tooltip,Container, Divider, Drawer, Fab, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemText, ListSubheader, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography, Modal } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component, useContext } from 'react';
 import Stack from '@mui/material/Stack';
-import { Alert, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
+import { Alert, Card, CardContent, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
@@ -18,6 +18,9 @@ import { Answer, NumberAnswer, StringAnswer } from '../Models/Answer';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import DeviceThermostatOutlinedIcon from '@mui/icons-material/DeviceThermostatOutlined';
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
+import { width } from '@mui/system';
+import { ThresholdModal } from '../Modals/ThresholdModal';
+import { ThresholdNumber } from '../Models/ThresholdNumber';
 
 export interface Props {
     typesToShow : MeasurementType[]
@@ -25,7 +28,7 @@ export interface Props {
 }
 
 export interface State {
-  measurementCollections : Array<QuestionnaireResponse> 
+  thresholdModalOpen : boolean
 }
 
 export class AnswerTable extends Component<Props,State> {
@@ -34,7 +37,9 @@ export class AnswerTable extends Component<Props,State> {
 
 constructor(props : Props){
     super(props);
-
+    this.state = {
+        thresholdModalOpen : false
+    }
 }
 
   render () {
@@ -103,8 +108,18 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
     return questions;
 }
 
+updateThresholds(question : Question, threshold : ThresholdNumber){
+    let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
+    thresholdToChange = threshold;
+    this.forceUpdate()
+}
+
   renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
         return (<>
+
+
+
+
             <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
@@ -120,13 +135,18 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
             
         </TableHead>
         <TableBody>
-                    
-                    
                     {this.findAllQuestions(questionaireResponses).map(question => {
                         return (
+                            <>
+                            
                             <TableRow>
                                 <TableCell>
-                                    <Tooltip title="Spørgsmål"><ContactSupportOutlinedIcon color="info"/></Tooltip> {question.question}
+                                    <Tooltip title="Se tærkselværdier">
+                                        <ThresholdModal onThresholdNumberChange={(newThreshold) => this.updateThresholds(question,newThreshold) }  question={question} />
+                                    </Tooltip>
+                                </TableCell>
+                                <TableCell>
+                                    {question.question}                                    
                                 </TableCell>
                                 
                                 {questionaireResponses.map(questionResponse => {
@@ -137,9 +157,11 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
                                     )
                                 })}
                             </TableRow>
+                            </>
                         )
                     })}
 <TableRow>
+<TableCell></TableCell>
 <TableCell></TableCell>
             {questionaireResponses.map(questionResponse => {
                 return (
@@ -154,6 +176,8 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
         </TableBody>
       </Table>
     </TableContainer>
+
+    
     </>
         )
   }

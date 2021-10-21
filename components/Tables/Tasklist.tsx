@@ -83,7 +83,6 @@ getDanishColornameFromCategory(category : CategoryEnum){
         return "Blå"
 
     return "Ukendt"
-
 }
   renderTableData(questionnaireResponses : Array<Questionnaire>){
         return (
