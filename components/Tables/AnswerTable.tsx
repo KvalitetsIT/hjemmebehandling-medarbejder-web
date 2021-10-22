@@ -89,25 +89,7 @@ findCategory(question: Question, answer: Answer) : CategoryEnum {
     return CategoryEnum.GREEN
 }
 
-findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
-    let questions : Question[] = [];
-    questionResponses.forEach(singleResponse => {
-        let iterator = singleResponse.questions.entries();
-        let element = iterator.next();
-        while(!element.done){
-            
-            let candidate = element.value[0];
-            let questionAlreadyExists = questions.some(q => q.isEqual(candidate))
 
-            if(!questionAlreadyExists){
-                questions.push(candidate)
-            }
-            element = iterator.next()
-        }
-
-    });
-    return questions;
-}
 
 async updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
     let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
@@ -144,7 +126,7 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
             
         </TableHead>
         <TableBody>
-                    {this.findAllQuestions(questionaireResponses).map(question => {
+                    {this.context.questionnaireService.findAllQuestions(questionaireResponses).map(question => {
                         return (
                             <>
                             

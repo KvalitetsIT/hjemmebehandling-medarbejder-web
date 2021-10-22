@@ -37,6 +37,7 @@ import { CareplanCardSimple } from '../../../../../components/Cards/CareplanCard
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
 import { QuestionnaireCardSimple } from '../../../../../components/Cards/QuestionnaireCardSimple';
 import { NumberedChartCard } from '../../../../../components/Cards/NumberedChartCard';
+import { ThresholdCardOverview } from '../../../../../components/Cards/ThresholdCardOverview';
 
 interface State {
   
@@ -125,8 +126,12 @@ async populateCareplans() {
                                     )
                                 })}
                             </Grid>
-                            <Grid item xs={4}>
-                               
+                            <Grid item xs={7}>
+                            {careplan.questionnaires.map(questionnaire => {
+                                    return (
+                                        <ThresholdCardOverview questionnaire={questionnaire}/> 
+                                    )
+                                })}
                             </Grid>
                     </Grid>
                     </Stack>

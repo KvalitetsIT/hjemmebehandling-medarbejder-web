@@ -54,7 +54,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         relativeContact.address.zipCode = "8000"
         this.patient1.contacts = [relativeContact];
 
-        this.planDefinition1.name = "Vejtrækningsproblemer"
+        this.planDefinition1.name = "Imundefekt"
         //======================================= Questions
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.options = [
@@ -143,7 +143,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
         //======================================= questionnaire
         this.questionnaire1.id = "q1"
-        this.questionnaire1.name = "Godt spørgeskema"
+        this.questionnaire1.name = "Imundefekt spørgeskema"
         let frequency = new Frequency();
         frequency.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
         frequency.repeated = FrequencyEnum.WEEKLY;
