@@ -2,6 +2,7 @@ import { Address } from "../components/Models/Address";
 import { Answer, NumberAnswer, StringAnswer, UnitType } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
+import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequency";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
@@ -81,7 +82,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse1.patient = this.patient1;
         this.questionnaireResponse1.category = CategoryEnum.RED;
         this.questionnaireResponse1.answeredTime = this.CreateDate()
-        this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
+        this.questionnaireResponse1.status = QuestionnaireResponseStatus.InProgress;
         
         let questionAnswerMap1 = new Map<Question,Answer>();
          questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.question1.options[0].option));        
@@ -143,11 +144,16 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         //======================================= questionnaire
         this.questionnaire1.id = "q1"
         this.questionnaire1.name = "Godt spørgeskema"
+        let frequency = new Frequency();
+        frequency.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+        frequency.repeated = FrequencyEnum.WEEKLY;
+        this.questionnaire1.frequency = frequency;
         this.questionnaire1.questionnaireResponses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
 
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
+        this.careplan1.department = "Infektionssygdomme";
         this.careplan1.planDefinitions = [this.planDefinition1]
         this.careplan1.creationDate = this.CreateDate()
         this.careplan1.questionnaires = [this.questionnaire1]

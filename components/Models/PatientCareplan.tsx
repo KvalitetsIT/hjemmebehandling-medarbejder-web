@@ -11,4 +11,5 @@ export class PatientCareplan {
     patient! : PatientDetail
     creationDate! : Date;
     terminationDate! : Date;
+    department!: string;
 }
