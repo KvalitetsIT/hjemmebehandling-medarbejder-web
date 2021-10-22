@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { PatientDetail } from '../../components/Models/PatientDetail';
 import { Contact } from '../Models/Contact';
@@ -47,10 +47,16 @@ export class CareplanUnreadResponse extends Component<Props,State> {
             return (
                 <>
                 {x.status == QuestionnaireResponseStatus.NotProcessed ? 
-                    <Alert severity="warning">Der er en ulæste besvarelse</Alert> : ""
+                    <Alert severity="warning" action={
+                        <Button component={Link} to={"/patients/"+careplan.patient.cpr+"/questionnaires/a"} color="inherit" variant="text">Se besvarelse</Button>        
+                    }>
+                        Der er en ulæste besvarelse fra {x.answeredTime?.toLocaleDateString()}
+                    </Alert> : ""
                 }
                 {x.status == QuestionnaireResponseStatus.InProgress ? 
-                    <Alert severity="error">Der er en besvarelse under processering</Alert> : ""
+                    <Alert severity="error">
+                        Der er en besvarelse under processering
+                    </Alert> : ""
                 }
                 </>
             )

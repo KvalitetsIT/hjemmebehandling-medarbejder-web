@@ -33,6 +33,7 @@ class dataset{
     data: number[] = [];
     backgroundColor:string[] = []
     pointRadius : number = 10
+    borderWidth: number = 8
 }
 class chartData {
     labels : string[] = [];

@@ -82,7 +82,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse1.patient = this.patient1;
         this.questionnaireResponse1.category = CategoryEnum.RED;
         this.questionnaireResponse1.answeredTime = this.CreateDate()
-        this.questionnaireResponse1.status = QuestionnaireResponseStatus.InProgress;
+        this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
         
         let questionAnswerMap1 = new Map<Question,Answer>();
          questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.question1.options[0].option));        
