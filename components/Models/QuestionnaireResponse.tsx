@@ -7,7 +7,7 @@ import { Questionnaire } from "./Questionnaire";
 export class QuestionnaireResponse {
     id! : string
     //measurements! : Map<MeasurementType,Measurement>
-    questions! : Map<Question,Answer>
+    questions! : Map<Question,Answer>;
     answeredTime! : Date | undefined ;
     status! : QuestionnaireResponseStatus | undefined
     category! : CategoryEnum;

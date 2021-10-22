@@ -25,4 +25,5 @@ export class NumberAnswer implements Answer {
 export enum  UnitType {
     KG = "KG",
     DEGREASE_CELSIUS = "Grader",
+    NOUNIT = ""
 }

@@ -109,15 +109,17 @@ findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
     return questions;
 }
 
-updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
+async updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
     let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
     thresholdToChange = threshold;
+    let responses = await this.context.backendApi.SetThresholdNumber(threshold.id,threshold);
     this.forceUpdate()
 }
 
-updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
+async updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
     let thresholdToChange = question.options.find(existingThreshold => existingThreshold.id == threshold.id);
     thresholdToChange = threshold;
+    let responses = await this.context.backendApi.SetThresholdOption(threshold.id,threshold);
     this.forceUpdate()
 }
 
@@ -149,7 +151,10 @@ updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
                             <TableRow>
                                 <TableCell>
                                     <Tooltip title="Se tærkselværdier">
-                                        <ThresholdModal onThresholdOptionChange={(newThreshold) => this.updateOptionallyThresholds(question, newThreshold)} onThresholdNumberChange={(newThreshold) => this.updateNumberedThresholds(question, newThreshold)} question={question}  />
+                                        <ThresholdModal 
+                                            onThresholdOptionChange={async (newThreshold) => await this.updateOptionallyThresholds(question, newThreshold)} 
+                                            onThresholdNumberChange={async (newThreshold) => await this.updateNumberedThresholds(question, newThreshold)} 
+                                            question={question} />
                                     </Tooltip>
                                 </TableCell>
                                 <TableCell>
