@@ -16,7 +16,12 @@ import { IBackendApi } from "./IBackendApi";
 import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
-import { CarePlanApi, GetCareplanRequest } from "../generated/apis/CarePlanApi";
+import { CarePlanApi, GetCarePlanRequest } from "../generated/apis/CarePlanApi";
+import { CarePlanDto } from "../generated/models/CarePlanDto";
+import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
+import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/FrequencyDto";
+import { PatientDto } from "../generated/models/PatientDto";
+import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 
 export class BffBackendApi implements IBackendApi {
     async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
@@ -94,14 +99,15 @@ export class BffBackendApi implements IBackendApi {
         return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
     }
 
-    private getQuestionnaireIds(carePlanDtos: List<CarePlanDto>) : List<string> {
-        let questionnaireIds = [];
+    private getQuestionnaireIds(carePlanDtos: Array<CarePlanDto>) : Array<string> {
+        let questionnaireIds: string[] = [];
 
         for(var carePlanDto of carePlanDtos) {
-            questionnaireIds = questionnaireIds.concat(carePlanDto.questionnaires.map(function(wrapper) {
+            let ids = carePlanDto.questionnaires?.map(function(wrapper: QuestionnaireWrapperDto) {
                 console.log('Extracting id from ' + JSON.stringify(wrapper));
-                return wrapper.questionnaire.id;
-            }));
+                return wrapper.questionnaire?.id ?? '';
+            }) ?? [];
+            questionnaireIds = questionnaireIds.concat(ids);
         }
         console.log('Got questionnaireIds: ' + questionnaireIds);
 
@@ -109,28 +115,28 @@ export class BffBackendApi implements IBackendApi {
         return questionnaireIds;
     }
 
-    private getQuestionnaireResponses(cpr: string, questionnaireIds: List<string>) : Map<string, List<QuestionnaireResponse>> {
-        let responses = {};
+    private getQuestionnaireResponses(cpr: string, questionnaireIds: Array<string>) : Map<string, Array<QuestionnaireResponse>> {
+        let responses: Map<string, Array<QuestionnaireResponse>> = new Map<string, Array<QuestionnaireResponse>>();
 
         // TODO: Call api instead.
         for(var questionnaireId of questionnaireIds) {
-            responses[questionnaireId] = this.getQuestionnaireResponse();
+            responses.set(questionnaireId, [this.getQuestionnaireResponse()]);
         }
 
         return responses;
     }
 
-    private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, List<QuestionnaireResponse>>) : PatientCareplan {
+    private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
         let carePlan = new PatientCareplan();
 
         let planDefinition = { name: "plandefinition-1" };
 
         carePlan.id = carePlanDto.id;
         carePlan.planDefinitions = [planDefinition]; // TODO - PlanDefinition is not included in the api response ...
-        carePlan.questionnaires = this.mapQuestionnaireDtos(carePlanDto.questionnaires, questionnaireResponses)
-        carePlan.patient = this.mapPatientDto(carePlanDto.patientDto);
+        carePlan.questionnaires = this.mapQuestionnaireDtos(carePlanDto.questionnaires!, questionnaireResponses)
+        carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
         carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
-        carePlan.terminationDate = undefined; // TODO
+        //carePlan.terminationDate = undefined; // TODO
         carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
 
         return carePlan;
@@ -142,7 +148,7 @@ export class BffBackendApi implements IBackendApi {
         patient.firstname = patientDto.givenName;
         patient.lastname = patientDto.familyName;
         patient.cpr = patientDto.cpr;
-        patient.patientContact = this.mapPatientContactDetails(patientDto.patientContactDetails);
+        patient.patientContact = this.mapPatientContactDetails(patientDto.patientContactDetails!);
         // TODO - map additional contact details.
 
         return patient;
@@ -153,20 +159,20 @@ export class BffBackendApi implements IBackendApi {
 
         let address = new Address();
         console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-        address.road = patientContactDetails.street;
-        address.zipCode = patientContactDetails.postalCode;
+        address.road = patientContactDetails.street!;
+        address.zipCode = patientContactDetails.postalCode!;
         address.city = "NOWHERE - TODO";
-        address.country = patientContactDetails.country;
+        address.country = patientContactDetails.country!;
         contact.address = address;
 
-        contact.primaryPhone = patientContactDetails.primaryPhone;
-        contact.secondaryPhone = patientContactDetails.secondaryPhone;
-        contact.emailAddress = patientContactDetails.emailAddress;
+        contact.primaryPhone = patientContactDetails.primaryPhone!;
+        contact.secondaryPhone = patientContactDetails.secondaryPhone!;
+        contact.emailAddress = patientContactDetails.emailAddress!;
 
         return contact;
     }
 
-    private mapQuestionnaireDtos(questionnaireDtos: List<QuestionnaireWrapperDto>, questionnaireResponses: Map<string, List<QuestionnaireResponse>>) : List<Questionnaire> {
+    private mapQuestionnaireDtos(questionnaireDtos: Array<QuestionnaireWrapperDto>, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Array<Questionnaire> {
         let questionnaires = [];
 
         for(var wrapper of questionnaireDtos) {
@@ -176,19 +182,20 @@ export class BffBackendApi implements IBackendApi {
         return questionnaires;
     }
 
-    private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto, questionnaireResponses: Map<string, List<QuestionnaireResponse>>) : Questionnaire {
+    private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
         let questionnaire = new Questionnaire();
 
-        questionnaire.id = wrapper.questionnaire.id;
-        questionnaire.name = wrapper.questionnaire.title;
-        questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency);
+        questionnaire.id = wrapper.questionnaire!.id!;
+        questionnaire.name = wrapper.questionnaire!.title!;
+        questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
 
-        if(!questionnaireResponses[questionnaire.id]) {
+        if(!questionnaireResponses.get(questionnaire.id)) {
             throw new Error('No responses for Questionnaire with id ' + questionnaire.id);
         }
-        console.log('Got questionnaireResponses: ' + questionnaireResponses[questionnaire.id]);
+        console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
         //questionnaire.questionnaireResponses = questionnaireResponses[questionnaire.id];
-        questionnaire.questionnaireResponses = [].concat(questionnaireResponses[questionnaire.id]);
+        let responses: QuestionnaireResponse[] = questionnaireResponses?.get(questionnaire.id) ?? [];
+        questionnaire.questionnaireResponses = responses;
 
         return questionnaire;
     }
@@ -197,7 +204,7 @@ export class BffBackendApi implements IBackendApi {
         let frequency = new Frequency();
 
         frequency.repeated = FrequencyEnum.WEEKLY;
-        frequency.days = [this.mapWeekday(frequencyDto.weekday)];
+        frequency.days = [this.mapWeekday(frequencyDto.weekday!)];
 
         return frequency;
     }
