@@ -34,7 +34,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "preinstall": "rm -rf generated; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o generated"
+    "preinstall": "rm -rf generated; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o generated --additional-properties=typescriptThreePlus=true"
   },
   "eslintConfig": {
     "extends": [

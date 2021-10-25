@@ -6,6 +6,9 @@ WORKDIR /app
 # add app
 COPY . ./
 
+# install java for openapi-generator
+RUN apt update; apt install -y openjdk-11-jre
+
 # install app dependencies
 RUN npm install 
 RUN npm run-script build
