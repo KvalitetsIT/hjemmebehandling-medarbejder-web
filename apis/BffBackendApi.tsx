@@ -71,20 +71,20 @@ export class BffBackendApi implements IBackendApi {
 
         // Retrieve the careplans
         let api = new CarePlanApi();
-        let request = { id: "careplan-1" };
-        let cp = await api.getCarePlan(request);
-        if(!cp) {
+        let request = { cpr: cpr };
+        let carePlans = await api.getCarePlans(request);
+        if(!carePlans) {
             throw new Error('Could not retrieve careplans!');
         }
 
         // Extract the questionnaire id's.
-        let questionnaireIds = this.getQuestionnaireIds([cp]);
+        let questionnaireIds = this.getQuestionnaireIds(carePlans);
         console.log('questionnaireIds: ' + JSON.stringify(questionnaireIds));
 
         // Retrieve responses for the questionnaires.
         let questionnaireResponses = this.getQuestionnaireResponses(cpr, questionnaireIds);
 
-        return [this.mapCarePlanDto(cp, questionnaireResponses)];
+        return carePlans.map(cp => this.mapCarePlanDto(cp, questionnaireResponses));
     }
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
