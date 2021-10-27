@@ -34,7 +34,8 @@
     "build": "next build",
     "export": "next build & next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preinstall": "rm -rf generated; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o generated --additional-properties=typescriptThreePlus=true"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.13",
     "@types/react-router-dom": "^5.3.1"
   }
 }
