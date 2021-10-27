@@ -236,12 +236,12 @@ export class BffBackendApi implements IBackendApi {
         let response = new QuestionnaireResponse();
         //let response = this.getQuestionnaireResponse();
 
-        response.id = questionnaireResponseDto.id;
+        response.id = questionnaireResponseDto.id!;
         response.questions = new Map<Question, Answer>();
 
-        for(var pair of questionnaireResponseDto.questionAnswerPairs) {
-            var question = this.mapQuestionDto(pair.question);
-            var answer = this.mapAnswerDto(pair.answer);
+        for(var pair of questionnaireResponseDto.questionAnswerPairs!) {
+            var question = this.mapQuestionDto(pair.question!);
+            var answer = this.mapAnswerDto(pair.answer!);
             response.questions.set(question, answer);
         }
 
@@ -264,7 +264,7 @@ export class BffBackendApi implements IBackendApi {
     private mapQuestionDto(questionDto: QuestionDto) : Question {
         let question = new Question();
 
-        question.question = questionDto.text;
+        question.question = questionDto.text!;
         //question.options = questionDto.options.map(o => this.createOption("1", CategoryEnum.GREEN));
 
         return question;
@@ -273,7 +273,7 @@ export class BffBackendApi implements IBackendApi {
     private mapAnswerDto(answerDto: AnswerDto) : Answer {
         let answer = new StringAnswer();
 
-        answer.answer = answerDto.value;
+        answer.answer = answerDto.value!;
 
         return answer;
     }
