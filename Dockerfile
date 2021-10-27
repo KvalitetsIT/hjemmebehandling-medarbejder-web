@@ -10,8 +10,7 @@ COPY . ./
 RUN apt update; apt install -y openjdk-11-jre
 
 # install app dependencies
-RUN npm install 
-RUN npm run-script export
+RUN npm install && npm run export
 
 FROM nginx
 COPY --from=builder /app/out /web
