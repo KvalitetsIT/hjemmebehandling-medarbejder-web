@@ -16,11 +16,17 @@ import { IBackendApi } from "./IBackendApi";
 import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
-import { CarePlanApi, GetCarePlanRequest } from "../generated/apis/CarePlanApi";
+import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesRequest } from "../generated/apis/QuestionnaireResponseApi";
+
+import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
 import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
 import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/FrequencyDto";
 import { PatientDto } from "../generated/models/PatientDto";
+import { QuestionDto } from "../generated/models/QuestionDto";
+import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
+import { QuestionnaireResponseDto } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 
 export class BffBackendApi implements IBackendApi {
@@ -72,7 +78,7 @@ export class BffBackendApi implements IBackendApi {
         // Retrieve the careplans
         let api = new CarePlanApi();
         let request = { cpr: cpr };
-        let carePlans = await api.getCarePlans(request);
+        let carePlans = await api.getCarePlansByCpr(request);
         if(!carePlans) {
             throw new Error('Could not retrieve careplans!');
         }
@@ -82,7 +88,7 @@ export class BffBackendApi implements IBackendApi {
         console.log('questionnaireIds: ' + JSON.stringify(questionnaireIds));
 
         // Retrieve responses for the questionnaires.
-        let questionnaireResponses = this.getQuestionnaireResponses(cpr, questionnaireIds);
+        let questionnaireResponses = await this.getQuestionnaireResponses(cpr, questionnaireIds);
 
         return carePlans.map(cp => this.mapCarePlanDto(cp, questionnaireResponses));
     }
@@ -115,12 +121,25 @@ export class BffBackendApi implements IBackendApi {
         return questionnaireIds;
     }
 
-    private getQuestionnaireResponses(cpr: string, questionnaireIds: Array<string>) : Map<string, Array<QuestionnaireResponse>> {
+    private async getQuestionnaireResponses(cpr: string, questionnaireIds: Array<string>) : Promise<Map<string, Array<QuestionnaireResponse>>> {
+        console.log('Inside BffBackendApi.getQuestionnaireResponses ! questionnaireIds: ' + questionnaireIds);
+
         let responses: Map<string, Array<QuestionnaireResponse>> = new Map<string, Array<QuestionnaireResponse>>();
 
-        // TODO: Call api instead.
-        for(var questionnaireId of questionnaireIds) {
-            responses.set(questionnaireId, [this.getQuestionnaireResponse()]);
+        let api = new QuestionnaireResponseApi();
+        let request = { cpr: cpr, questionnaireIds: questionnaireIds };
+        let questionnaireResponses = await api.getQuestionnaireResponses(request);
+        if(!questionnaireResponses) {
+            throw new Error('Could not retrieve questionnaireResponses!');
+        }
+        console.log('questionnaireResponses: ' + JSON.stringify(questionnaireResponses));
+
+        for(var response of questionnaireResponses) {
+            console.log('Mapping response for ' + response.questionnaireId);
+            if(!responses.get(response.questionnaireId!)) {
+                responses.set(response.questionnaireId!, []);
+            }
+            responses.get(response.questionnaireId!)!.push(this.mapQuestionnaireResponseDto(response));
         }
 
         return responses;
@@ -211,6 +230,52 @@ export class BffBackendApi implements IBackendApi {
 
     private mapWeekday(weekday: FrequencyDtoWeekdayEnum) : DayEnum {
         return DayEnum.Monday;
+    }
+
+    private mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto) : QuestionnaireResponse {
+        let response = new QuestionnaireResponse();
+        //let response = this.getQuestionnaireResponse();
+
+        response.id = questionnaireResponseDto.id;
+        response.questions = new Map<Question, Answer>();
+
+        for(var pair of questionnaireResponseDto.questionAnswerPairs) {
+            var question = this.mapQuestionDto(pair.question);
+            var answer = this.mapAnswerDto(pair.answer);
+            response.questions.set(question, answer);
+        }
+
+        response.answeredTime = questionnaireResponseDto.answered;
+        response.status = QuestionnaireResponseStatus.NotProcessed;
+        response.category = CategoryEnum.RED;
+        response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
+
+//         id! : string
+//             //measurements! : Map<MeasurementType,Measurement>
+//             questions! : Map<Question,Answer>;
+//             answeredTime! : Date | undefined ;
+//             status! : QuestionnaireResponseStatus | undefined
+//             category! : CategoryEnum;
+//             patient! : PatientSimple
+
+        return response;
+    }
+
+    private mapQuestionDto(questionDto: QuestionDto) : Question {
+        let question = new Question();
+
+        question.question = questionDto.text;
+        //question.options = questionDto.options.map(o => this.createOption("1", CategoryEnum.GREEN));
+
+        return question;
+    }
+
+    private mapAnswerDto(answerDto: AnswerDto) : Answer {
+        let answer = new StringAnswer();
+
+        answer.answer = answerDto.value;
+
+        return answer;
     }
 
     private getQuestionnaireResponse() : QuestionnaireResponse {
