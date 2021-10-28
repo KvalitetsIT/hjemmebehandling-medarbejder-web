@@ -269,9 +269,19 @@ export class BffBackendApi implements IBackendApi {
     }
 
     private mapAnswerDto(answerDto: AnswerDto) : Answer {
-        let answer = new StringAnswer();
+        let answer: Answer = new StringAnswer();
 
-        answer.answer = answerDto.value!;
+        let value = answerDto.value!
+        if(Number.parseInt(value)) {
+            let numberAnswer = new NumberAnswer()
+            numberAnswer.answer = Number.parseInt(value)
+            answer = numberAnswer
+        }
+        else {
+            let stringAnswer = new StringAnswer()
+            stringAnswer.answer = value
+            answer = stringAnswer
+        }
 
         return answer;
     }
