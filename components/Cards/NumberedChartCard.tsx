@@ -20,6 +20,7 @@ import { Questionnaire } from '../Models/Questionnaire';
 import { NumberAnswer } from '../Models/Answer';
 import { Question } from '../Models/Question';
 import { CategoryEnum } from '../Models/CategoryEnum';
+import { ThresholdNumber } from "../Models/ThresholdNumber";
 
 export interface Props {
     questionnaire : Questionnaire;
@@ -59,7 +60,8 @@ getChipColorFromCategory(category : CategoryEnum){
   render () {
     
     let data = new chartData();
-    let questionToData = new Map<Question,dataset>();
+    let questionToData = new Map<string, [dataset, ThresholdNumber[]]>();
+    //let questionToThreshold = new Map<string, ThresholdNumber[]>();
     
     for(let responseIndex = 0; responseIndex < this.props.questionnaire.questionnaireResponses.length; responseIndex++){
         let response = this.props.questionnaire.questionnaireResponses[responseIndex];
@@ -68,30 +70,33 @@ getChipColorFromCategory(category : CategoryEnum){
         response.questions.forEach( (a,q) => {
             
             let numberedAnswer = a as NumberAnswer;
-            if(numberedAnswer){
-                if(!questionToData.has(q)){
+            if(typeof numberedAnswer.answer === 'number') {
+                if(!questionToData.has(q.question!)){
                     let set = new dataset();
                     set.label = q.question.slice(0,30);
-                    questionToData.set(q,set)
+                    questionToData.set(q.question!, [set, q.thresholdPoint!])
                 }
-                    
-                questionToData.get(q)?.data.push(numberedAnswer.answer)
+
+                let ds: dataset = questionToData.get(q.question!)![0]
+                ds.data.push(numberedAnswer.answer)
             }
             
         })
         
     }
 
-    questionToData.forEach( (d,q) => {
+    questionToData.forEach( (d, q) => {
+        let ds: dataset = d[0]
+        let thresholds: ThresholdNumber[] = d[1]
         
         
-        for(let i = 0;i<d.data.length;i++){
-            let answerValue = d.data[i];
-            let threshold = q.thresholdPoint.find(x=>x.from <= answerValue && answerValue <= x.to)
+        for(let i = 0; i < ds.data.length; i++){
+            let answerValue = ds.data[i];
+            let threshold = thresholds.find(x=>x.from <= answerValue && answerValue <= x.to)
 
-            d.backgroundColor.push(this.getChipColorFromCategory(threshold?.category!));
+            ds.backgroundColor.push(this.getChipColorFromCategory(threshold?.category!));
         }
-        data.datasets.push(d)
+        data.datasets.push(ds)
     } )
 
       
