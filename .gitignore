@@ -39,3 +39,4 @@ node_modules
 
 .next/
 generated
+.vscode
