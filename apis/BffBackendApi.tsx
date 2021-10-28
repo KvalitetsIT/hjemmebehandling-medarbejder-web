@@ -136,13 +136,16 @@ export class BffBackendApi implements IBackendApi {
 
         for(var response of questionnaireResponses) {
             console.log('Mapping response for ' + response.questionnaireId);
-            if(!responses.get(response.questionnaireId!)) {
-                responses.set(response.questionnaireId!, []);
+            // TODO - id's containing slashes must be handled properly!
+            if(!responses.get(response.questionnaireId!.replace("Questionnaire/", ""))) {
+                responses.set(response.questionnaireId!.replace("Questionnaire/", ""), []);
             }
-            responses.get(response.questionnaireId!)!.push(this.mapQuestionnaireResponseDto(response));
+            responses.get(response.questionnaireId!.replace("Questionnaire/", ""))!.push(this.mapQuestionnaireResponseDto(response));
+
         }
 
         return responses;
+        //return new Map<string, Array<QuestionnaireResponse>>();
     }
 
     private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
@@ -178,10 +181,10 @@ export class BffBackendApi implements IBackendApi {
 
         let address = new Address();
         console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-        address.road = patientContactDetails.street!;
-        address.zipCode = patientContactDetails.postalCode!;
-        address.city = "NOWHERE - TODO";
-        address.country = patientContactDetails.country!;
+        address.road = patientContactDetails.street ?? 'Fiskergade 66';
+        address.zipCode = patientContactDetails.postalCode ?? '8000';
+        address.city = "Aarhus";
+        address.country = patientContactDetails.country ?? 'Danmark';
         contact.address = address;
 
         contact.primaryPhone = patientContactDetails.primaryPhone!;
@@ -204,16 +207,18 @@ export class BffBackendApi implements IBackendApi {
     private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
         let questionnaire = new Questionnaire();
 
-        questionnaire.id = wrapper.questionnaire!.id!;
+        questionnaire.id = wrapper.questionnaire!.id!.replace("Questionnaire/", "");
+
+
+
         questionnaire.name = wrapper.questionnaire!.title!;
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
 
-        if(!questionnaireResponses.get(questionnaire.id)) {
-            throw new Error('No responses for Questionnaire with id ' + questionnaire.id);
+        let responses: QuestionnaireResponse[] = [];
+        if(questionnaireResponses.get(questionnaire.id)) {
+            console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
+            responses = questionnaireResponses?.get(questionnaire.id) ?? [];
         }
-        console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
-        //questionnaire.questionnaireResponses = questionnaireResponses[questionnaire.id];
-        let responses: QuestionnaireResponse[] = questionnaireResponses?.get(questionnaire.id) ?? [];
         questionnaire.questionnaireResponses = responses;
 
         return questionnaire;
@@ -250,22 +255,15 @@ export class BffBackendApi implements IBackendApi {
         response.category = CategoryEnum.RED;
         response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
 
-//         id! : string
-//             //measurements! : Map<MeasurementType,Measurement>
-//             questions! : Map<Question,Answer>;
-//             answeredTime! : Date | undefined ;
-//             status! : QuestionnaireResponseStatus | undefined
-//             category! : CategoryEnum;
-//             patient! : PatientSimple
-
         return response;
     }
 
     private mapQuestionDto(questionDto: QuestionDto) : Question {
         let question = new Question();
 
-        question.question = questionDto.text!;
-        //question.options = questionDto.options.map(o => this.createOption("1", CategoryEnum.GREEN));
+        question.question = questionDto.text!
+        // TODO - handle options properly (there must be at least one option for the answer table to render).
+        question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
     }
