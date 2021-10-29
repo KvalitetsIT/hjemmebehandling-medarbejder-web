@@ -9,6 +9,7 @@ import { Component, useContext } from 'react';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
 import ApiContext from '../../pages/_context';
+import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
     questionnaireResponse : QuestionnaireResponse
@@ -26,6 +27,7 @@ export interface State {
 export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
   static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
+  questionnaireService! : IQuestionnaireService
 
   constructor(props : Props){
       super(props);
@@ -41,7 +43,9 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
   closeSnackbar = (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => {
     this.setState({snackbarOpen : false})
   };
-
+InitializeServices(){
+  this.questionnaireService = this.context.questionnaireService;
+}
   handleChange = async (event: SelectChangeEvent) => {
     let collectionStatus = event.target.value as QuestionnaireResponseStatus;
     let changes = new QuestionnaireResponse();
@@ -51,7 +55,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
 
 
     try{
-        await this.context.backendApi.SetQuestionaireResponse(this.props.questionnaireResponse.id, changes)
+        await this.questionnaireService.SetQuestionaireResponse(this.props.questionnaireResponse.id, changes)
         this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : collectionStatus})
     } catch(error : unknown){
         if(!(error instanceof Error)) { throw error; }
@@ -63,6 +67,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
   };
   
   render () {
+    this.InitializeServices()
     return ( <>
 <FormControl fullWidth>
   <InputLabel id="demo-simple-select-label">Status</InputLabel>

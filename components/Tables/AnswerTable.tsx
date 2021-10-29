@@ -22,6 +22,9 @@ import { width } from '@mui/system';
 import { ThresholdModal } from '../Modals/ThresholdModal';
 import { ThresholdNumber } from '../Models/ThresholdNumber';
 import { ThresholdOption } from '../Models/ThresholdOption';
+import QuestionAnswerService from '../../services/QuestionAnswerService';
+import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
+import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
     typesToShow : MeasurementType[]
@@ -36,6 +39,9 @@ export class AnswerTable extends Component<Props,State> {
   static displayName = AnswerTable.name;
   static contextType = ApiContext
 
+  questionAnswerService! : IQuestionAnswerService;
+  questionnaireService! : IQuestionnaireService;
+
 constructor(props : Props){
     super(props);
     this.state = {
@@ -44,20 +50,15 @@ constructor(props : Props){
 }
 
   render () {
+    this.InitializeServices();
     let contents = this.renderTableData(this.props.questionnaireResponses);
     return contents;
   }
 
-findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {
-    let answer : Answer | undefined;
-    questionResponses.questions.forEach( (responseAnswer,responseQuestion) => {
-        if(responseQuestion.isEqual(desiredQuestion)){
-            answer = responseAnswer;
-            return;
-        }
-    });
-    return answer;
-}
+  InitializeServices(){
+    this.questionAnswerService = this.context.questionAnswerService;
+    this.questionnaireService = this.context.questionnaireService;
+  }
 
 getChipColorFromCategory(category : CategoryEnum){
     if(category == CategoryEnum.RED)
@@ -70,11 +71,10 @@ getChipColorFromCategory(category : CategoryEnum){
         return "primary"
 
     return "default"
-
 }
 
 findCategory(question: Question, answer: Answer) : CategoryEnum {
-    
+        
     if(answer instanceof NumberAnswer){
         let answerAsNumber = answer as NumberAnswer;
         let thresholdPoint = question.thresholdPoint.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
@@ -90,28 +90,24 @@ findCategory(question: Question, answer: Answer) : CategoryEnum {
 }
 
 
-
 async updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
     let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
     thresholdToChange = threshold;
-    let responses = await this.context.backendApi.SetThresholdNumber(threshold.id,threshold);
+    let responses = await this.questionAnswerService.SetThresholdNumber(threshold.id,threshold);
     this.forceUpdate()
 }
 
 async updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
     let thresholdToChange = question.options.find(existingThreshold => existingThreshold.id == threshold.id);
     thresholdToChange = threshold;
-    let responses = await this.context.backendApi.SetThresholdOption(threshold.id,threshold);
+    let responses = await this.questionAnswerService.SetThresholdOption(threshold.id,threshold);
     this.forceUpdate()
 }
 
   renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
         return (<>
 
-
-
-
-            <TableContainer component={Paper}>
+    <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -126,7 +122,7 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
             
         </TableHead>
         <TableBody>
-                    {this.context.questionnaireService.findAllQuestions(questionaireResponses).map(question => {
+                    {this.questionnaireService.findAllQuestions(questionaireResponses).map(question => {
                         return (
                             <>
                             
@@ -144,7 +140,7 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
                                 </TableCell>
                                 
                                 {questionaireResponses.map(questionResponse => {
-                                    let answer = this.findAnswer(question,questionResponse);
+                                    let answer = this.questionnaireService.findAnswer(question,questionResponse);
                                     let category = answer ? this.findCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>

@@ -34,6 +34,7 @@ import { PlanDefinition } from '../../../../../../components/Models/PlanDefiniti
 import { PatientCareplan } from '../../../../../../components/Models/PatientCareplan';
 import { PatientSimple } from '../../../../../../components/Models/PatientSimple';
 import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
+import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
 
 interface State {
   loading: boolean
@@ -45,6 +46,7 @@ interface Props {
 }
 export default class QuestionnaireResponseDetails extends React.Component<Props,State> {
   static contextType = ApiContext
+  careplanService! : ICareplanService
 
   constructor(props : Props){
     super(props);
@@ -55,19 +57,24 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 }
 
   render () {
+    this.InitializeServices();
     let contents = this.state.loading ? <LoadingComponent/> : this.renderTabs();
     return contents;
   }
 
+  InitializeServices(){
+    this.careplanService = this.context.careplanService;
+  }
 
   componentDidMount(){
+    
     this.populateCareplans()
 }
 
 async populateCareplans() {
   
   let { cpr } = this.props.match.params;
-  let responses = await this.context.backendApi.GetPatientCareplans(cpr)
+  let responses = await this.careplanService.GetPatientCareplans(cpr)
   this.setState({
       careplans : responses,
       loading : false

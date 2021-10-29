@@ -38,6 +38,7 @@ import { CareplanUnreadResponse } from '../../../../../components/Alerts/Carepla
 import { QuestionnaireCardSimple } from '../../../../../components/Cards/QuestionnaireCardSimple';
 import { NumberedChartCard } from '../../../../../components/Cards/NumberedChartCard';
 import { ThresholdCardOverview } from '../../../../../components/Cards/ThresholdCardOverview';
+import ICareplanService from '../../../../../services/interfaces/ICareplanService';
 
 interface State {
   
@@ -51,6 +52,7 @@ interface Props {
 }
 class PatientCareplans extends React.Component<Props,State> {
   static contextType = ApiContext
+  careplanService! : ICareplanService
 
   constructor(props : Props){
     super(props);
@@ -60,11 +62,16 @@ class PatientCareplans extends React.Component<Props,State> {
         careplans : [],
         activeCareplan : new PatientCareplan() //overriden in async
     }
+    
 }
 
   render () {
+      this.InitializeServices();
     let contents = this.state.loading ? <LoadingComponent/> : this.renderCareplanTab();
     return contents;
+  }
+  InitializeServices(){
+    this.careplanService = this.context.careplanService;
   }
 
   componentDidMount(){
@@ -81,7 +88,7 @@ async populateCareplans() {
   let cpr = this.props.match.params.cpr;
   let id = this.props.match.params.careplanId;
 
-  let responses : PatientCareplan[] = await this.context.backendApi.GetPatientCareplans(cpr);
+  let responses : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
   let activeCareplan = responses.find(x=>{
       console.log(x.id +"=="+id)
       return x.id === id

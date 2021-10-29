@@ -15,6 +15,7 @@ import { LoadingComponent } from '../Layout/LoadingComponent';
 import ApiContext from '../../pages/_context';
 import { isContext } from 'vm';
 import { Questionnaire } from '../Models/Questionnaire';
+import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
     categories : Array<CategoryEnum>
@@ -29,29 +30,35 @@ export interface State {
 export class Tasklist extends Component<Props,State> {
   static displayName = Tasklist.name;
   static contextType = ApiContext
+  questionnaireService! : IQuestionnaireService;
 
-constructor(props : Props){
+  constructor(props : Props){
     super(props);
 
     this.state = {
         questionnaires : [],
         loading : true
-
     }
+    
 }
 
   render () {
+    this.InitializeServices();
     let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaires);
     return contents;
   }
 
+  InitializeServices(){
+    this.questionnaireService = this.context.questionnaireService;
+  }
   componentDidMount(){
+    
       this.populateQuestionnaireResponses()
   }
 
   async  populateQuestionnaireResponses() {
 
-    let responses = await this.context.backendApi.GetTasklist(this.props.categories,1,this.props.pageSize);
+    let responses = await this.questionnaireService.GetTasklist(this.props.categories,1,this.props.pageSize);
     this.setState({
         questionnaires : responses,
         loading : false
