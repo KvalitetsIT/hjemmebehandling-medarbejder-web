@@ -28,6 +28,7 @@ import { QuestionDto } from "../generated/models/QuestionDto";
 import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
 import { QuestionnaireResponseDto } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
+import { Configuration } from "../generated";
 
 export class BffBackendApi implements IBackendApi {
     async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
@@ -76,7 +77,8 @@ export class BffBackendApi implements IBackendApi {
         console.log('Inside BffBackendApi.GetPatientCareplans !');
 
         // Retrieve the careplans
-        let api = new CarePlanApi();
+        let conf : Configuration = new Configuration({ basePath: process.env.NEXT_PUBLIC_API_URL });
+        let api = new CarePlanApi(conf);
         let request = { cpr: cpr };
         let carePlans = await api.getCarePlansByCpr(request);
         if(!carePlans) {
