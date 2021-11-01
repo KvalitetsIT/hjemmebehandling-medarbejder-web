@@ -39,11 +39,11 @@ import { QuestionnaireCardSimple } from '../../../../../components/Cards/Questio
 import { NumberedChartCard } from '../../../../../components/Cards/NumberedChartCard';
 import { ThresholdCardOverview } from '../../../../../components/Cards/ThresholdCardOverview';
 import ICareplanService from '../../../../../services/interfaces/ICareplanService';
+import { CareplanSelectorCard } from '../../../../../components/Cards/CareplanSelectorCard';
 
 interface State {
   
   loading: boolean
-  activeCareplan : PatientCareplan
   careplans : PatientCareplan[]
 }
 interface Props {
@@ -56,11 +56,9 @@ class PatientCareplans extends React.Component<Props,State> {
 
   constructor(props : Props){
     super(props);
-    this.changeCareplan = this.changeCareplan.bind(this);
     this.state = {
         loading : true,
-        careplans : [],
-        activeCareplan : new PatientCareplan() //overriden in async
+        careplans : []
     }
     
 }
@@ -78,26 +76,16 @@ class PatientCareplans extends React.Component<Props,State> {
     this.populateCareplans()
 }
 
-changeCareplan(careplan : PatientCareplan){
-    this.setState({
-        activeCareplan : careplan
-    })
-}
 
 async populateCareplans() {
   let cpr = this.props.match.params.cpr;
   let id = this.props.match.params.careplanId;
 
   let responses : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
-  let activeCareplan = responses.find(x=>{
-      console.log(x.id +"=="+id)
-      return x.id === id
-  } );
   console.log(responses)
   this.setState({
       careplans : responses,
       loading : false,
-      activeCareplan : activeCareplan ? activeCareplan : responses[0]
 
   });
 }
@@ -106,50 +94,48 @@ async populateCareplans() {
   //=====================TABS===============================
 
   renderCareplanTab(){
+    
     let careplans = this.state.careplans;
     if(careplans.length == 0)
         return (
             <div>Ingen behandlingsplaner fundet :-(</div>
         )
-    let careplan = this.state.activeCareplan
+
+    let activeCareplan = this.state.careplans.find(c => c.id == this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
         <>
-
             <Grid container spacing={2}>
                 <Grid item xs={2}>
-                    <Stack>
-                        <PatientCard patient={careplan.patient}/>
+                    <Stack spacing={2}>
+                        <PatientCard patient={activeCareplan.patient}/>
+                        <CareplanSelectorCard activeCareplan={activeCareplan} careplans={this.state.careplans}/>
                     </Stack>
                 </Grid>
                 <Grid item xs={9}>
                     <Stack >
-                        <CareplanCardSimple careplan={careplan}/>
-                        <CareplanUnreadResponse careplan={careplan} />
+                        <CareplanCardSimple careplan={activeCareplan}/>
+                        <CareplanUnreadResponse careplan={activeCareplan} />
                         <Grid container spacing={2}>
                             <Grid item xs={5}>
-                                {careplan.questionnaires.map(questionnaire => {
+                                {activeCareplan.questionnaires.map(questionnaire => {
                                     return (
-                                        <QuestionnaireCardSimple cpr={careplan.patient.cpr!} questionnaire={questionnaire}/> 
+                                        <QuestionnaireCardSimple cpr={activeCareplan.patient.cpr!} questionnaire={questionnaire}/> 
                                     )
                                 })}
                             </Grid>
                             <Grid item xs={7}>
-                            {careplan.questionnaires.map(questionnaire => {
+                            {activeCareplan.questionnaires.map(questionnaire => {
                                     return (
                                         <ThresholdCardOverview questionnaire={questionnaire}/> 
                                     )
                                 })}
                             </Grid>
-                    </Grid>
+                        </Grid>
                     </Stack>
                 </Grid>
             </Grid>
-
-                
         </>
     )
-    
-    
   }
 
 

@@ -15,7 +15,8 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import { Questionnaire } from '../Models/Questionnaire';
 import { Question } from '../Models/Question';
 import ApiContext from '../../pages/_context';
-import { Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
+import { CategoryEnum } from '../Models/CategoryEnum';
 
 export interface Props {
     questionnaire : Questionnaire;
@@ -29,6 +30,19 @@ export class ThresholdCardOverview extends Component<Props,State> {
     static contextType = ApiContext
   static displayName = ThresholdCardOverview.name;
 
+  getChipColorFromCategory(category : CategoryEnum){
+    if(category == CategoryEnum.RED)
+        return "error"
+    if(category == CategoryEnum.YELLOW)
+        return "warning"
+    //if(category == CategoryEnum.GREEN)
+      //  return "success"
+    if(category == CategoryEnum.BLUE)
+        return "primary"
+
+    return "default"
+}
+
   render () {
     let allQuestions : Question[] = this.context.questionnaireService.findAllQuestions(this.props.questionnaire.questionnaireResponses)
     return (
@@ -37,11 +51,21 @@ export class ThresholdCardOverview extends Component<Props,State> {
                 <Stack spacing={3}>
             {allQuestions.map(x=>{
                 return (
-                    <Badge badgeContent={"hej"} color="primary">
-                        <Badge badgeContent={"hej"} color="primary">
-                        {x.question}
-                    </Badge>
-                    </Badge>
+                     <>
+                     <Stack direction="row" spacing={2}>
+                        <Typography> {x.question}</Typography>
+                        {x.options.map(op =>{
+                            return (
+                                <Chip color={this.getChipColorFromCategory(op.category)} label={op.option} />
+                            )
+                        })}
+                        {x.thresholdPoint.map(po => {
+                            return (
+                                <Chip color={this.getChipColorFromCategory(po.category)} label={po.from + " => "+po.to} />
+                                )
+                        })}
+                        </Stack>
+                        </>
                 )
             })}
             </Stack>

@@ -36,11 +36,11 @@ export class CareplanCardSimple extends Component<Props,State> {
             }
             <CardContent>
             <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                    <Typography variant="caption">Adeling</Typography>
                    <Typography>{this.props.careplan.department}</Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography variant="caption">Patientgrupper</Typography>
                     {careplan.planDefinitions.map(planDefinition => {
                         return (
@@ -49,9 +49,17 @@ export class CareplanCardSimple extends Component<Props,State> {
                     })}
                    
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography variant="caption">Opstart</Typography>
                    <Typography>{careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString()}</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Typography variant="caption">Stoppet</Typography>
+                    {!careplan.terminationDate ? 
+                    <Typography> - </Typography> : 
+                    <Typography>{careplan.terminationDate?.toLocaleDateString()+" "+careplan.terminationDate?.toLocaleTimeString()}</Typography>
+                    }
+                   
                 </Grid>
             </Grid>
             </CardContent>
