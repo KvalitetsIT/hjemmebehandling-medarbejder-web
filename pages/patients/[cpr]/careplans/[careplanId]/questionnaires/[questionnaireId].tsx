@@ -35,13 +35,15 @@ import { PatientCareplan } from '../../../../../../components/Models/PatientCare
 import { PatientSimple } from '../../../../../../components/Models/PatientSimple';
 import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
+import { ContactThumbnail } from '../../../../../../components/Cards/ContactThumbnail';
 
 interface State {
   loading: boolean
   careplans : PatientCareplan[]
 }
 interface Props {
-
   match : { params : {cpr : string, questionnaireId? : string,careplanId? : string} }
 }
 export default class QuestionnaireResponseDetails extends React.Component<Props,State> {
@@ -96,7 +98,12 @@ async populateCareplans() {
 
     return (
 <>
-      <Stack display="inline-flex" spacing={2} direction="row">
+      <Stack display="inline-flex" spacing={2}>
+        <Stack direction="row" spacing={2}>
+        <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
+        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contacts.find(x=>x.favContact)}></ContactThumbnail>
+        </Stack>
+        
         <Card>
         <CardContent>
         <BasicTabs 

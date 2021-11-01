@@ -38,6 +38,8 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
         let patientContact = new Contact();
+        patientContact.fullname = this.patient1.firstname+" "+this.patient1.lastname
+        patientContact.primaryPhone = "29483749"
         patientContact.address = new Address();
         patientContact.address.city = "Aarhus C"
         patientContact.address.country = "Danmark"
@@ -47,6 +49,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
         relativeContact.primaryPhone = "27384910"
+        relativeContact.favContact = true;
         relativeContact.emailAddress = "johannepetersen@mail.dk"
         relativeContact.address = new Address();
         relativeContact.address.city = "Aarhus C"
