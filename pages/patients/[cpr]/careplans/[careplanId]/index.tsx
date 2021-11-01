@@ -115,7 +115,7 @@ async populateCareplans() {
                     <Stack >
                         <CareplanCardSimple careplan={activeCareplan}/>
                         <CareplanUnreadResponse careplan={activeCareplan} />
-                        <Grid container spacing={2}>
+                        <Grid container spacing={1}>
                             <Grid item xs={5}>
                                 {activeCareplan.questionnaires.map(questionnaire => {
                                     return (
