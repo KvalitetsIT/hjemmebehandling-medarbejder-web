@@ -1,4 +1,4 @@
-import { AppBar, Box, Breadcrumbs, CardContent, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Breadcrumbs, Button, CardContent, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Backdrop, Card, ListItemButton, TextField } from '@mui/material';
@@ -9,18 +9,25 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { PatientDetail } from '../components/Models/PatientDetail';
 import { PatientCard } from '../components/Cards/PatientCard';
 import { Contact } from '../components/Models/Contact';
+import ApiContext from './_context';
+import IPatientService from '../services/interfaces/IPatientService';
+import { FamilyRestroomTwoTone } from '@mui/icons-material';
+import { LoadingComponent } from '../components/Layout/LoadingComponent';
 
 
 export interface Props {
 }
 export interface State {
     patient : PatientDetail;
+    loading: boolean;
 }
 
 
 
 export default class NewPatient extends Component<Props,State> {
+  static contextType = ApiContext
   static displayName = NewPatient.name;
+  patientService!: IPatientService;
 
 constructor(props : Props){
   
@@ -38,9 +45,13 @@ constructor(props : Props){
     newPatient.patientContact = new Contact();
     newPatient.contacts = [relativeContact]
     this.state = {
-      patient : newPatient
+      patient : newPatient,
+      loading : false
     }
 
+}
+InitializeServices(){
+  this.patientService = this.context.patientService;
 }
 
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
@@ -49,9 +60,30 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   this.setState({patient : modifiedPatient  })
 }
 
+async submitPatient(){
+  try{
+    this.setState({
+      loading: true
+    })
+    let newPatient = await this.patientService.CreatePatient(this.state.patient)
+    this.setState({
+      patient : newPatient
+    })
+  } catch(error){
+    this.setState({
+      loading: false
+    })
+    throw error;
+  }
+  
+}
+
 
   render () {
+    this.InitializeServices();
     return (
+      <>
+      
       <Stack direction="row" spacing={3}>
          
         <Card>
@@ -93,11 +125,14 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
                   <TextField id="outlined-basic" label="Telefonnummer" onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
                   <TextField id="outlined-basic" label="Email" onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
                 </Stack>
+                <Button variant="contained" onClick={async ()=>await this.submitPatient()}>Submit</Button>
               </Stack>
             </CardContent>
         </Card>
         <PatientCard patient={this.state.patient}/>
         </Stack>
+        {this.state.loading ? <LoadingComponent /> : ""}
+        </>
         
     )
   }

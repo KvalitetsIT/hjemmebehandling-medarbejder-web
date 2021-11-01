@@ -8,6 +8,7 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export interface IBackendApi {
+    
     /**
      * Return a list of Questionnaireresponse
      * One patient can at most be represented once in the list - The answer with highest categori is shown 
@@ -18,6 +19,12 @@ export interface IBackendApi {
      * Returns one patient
      */
     GetPatient : (cpr : string) => Promise<PatientDetail>
+
+    /**
+     * Creates and returns patient
+     * @param patient 
+     */
+    CreatePatient(patient: PatientDetail): Promise<PatientDetail>;
 
     /**
      * Returns all patient careplans for one patient

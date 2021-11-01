@@ -171,6 +171,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
+        await new Promise(f => setTimeout(f, 1000));
+        throw new Error("Method not implemented.");
+    }
 
     static date : Date = new Date()
     private CreateDate(){

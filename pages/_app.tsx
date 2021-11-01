@@ -8,6 +8,8 @@ import { FakeItToYouMakeItApi } from '../apis/FakeItToYouMakeItApi';
 import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
+import PatientService from '../services/PatientService';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   let backendApi = new FakeItToYouMakeItApi()
@@ -18,7 +20,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       value={{
         questionnaireService : new QuestionnaireService(backendApi),
         questionAnswerService : new QuestionAnswerService(backendApi),
-        careplanService : new CareplanService(backendApi)
+        careplanService : new CareplanService(backendApi),
+        patientService : new PatientService(backendApi)
       }}
     >
         {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}
