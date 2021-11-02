@@ -23,6 +23,22 @@ export default class QuestionAnswerService implements IQuestionAnswerService {
     SetThresholdOption(thresholdId: string, threshold: ThresholdOption) : Promise<void>{
         return this.backendApi.SetThresholdOption(thresholdId,threshold);
     };
+
+    FindCategory(question: Question, answer: Answer) : CategoryEnum {
+        
+        if(answer instanceof NumberAnswer){
+            let answerAsNumber = answer as NumberAnswer;
+            let thresholdPoint = question.thresholdPoint.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
+            return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
+        }
+        if(answer instanceof StringAnswer){
+            let answerAsString = answer as StringAnswer;
+            let thresholdPoint = question.options.find(x=>x.option == answerAsString.answer);
+            return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
+        }
+    
+        return CategoryEnum.GREEN
+    }
     
     
 }

@@ -84,7 +84,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         //======================================= Response // QuestionResponse1
         this.questionnaireResponse1.id = "qr1"
         this.questionnaireResponse1.patient = this.patient1;
-        this.questionnaireResponse1.category = CategoryEnum.RED;
+        this.questionnaireResponse1.category = CategoryEnum.GREEN;
         this.questionnaireResponse1.answeredTime = this.CreateDate()
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
         
@@ -100,7 +100,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          this.questionnaireResponse2.patient = this.patient1;
          this.questionnaireResponse2.category = CategoryEnum.RED;
          this.questionnaireResponse2.answeredTime = this.CreateDate()
-         this.questionnaireResponse2.status = QuestionnaireResponseStatus.Processed;
+         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
          
          let questionAnswerMap2 = new Map<Question,Answer>();
          questionAnswerMap2.set(this.question1,this.CreateStringAnswer(this.question1.options[0].option));        
@@ -111,7 +111,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          //======================================= Response // QuestionResponse3
          this.questionnaireResponse3.id = "qr3"
          this.questionnaireResponse3.patient = this.patient1;
-         this.questionnaireResponse3.category = CategoryEnum.RED;
+         this.questionnaireResponse3.category = CategoryEnum.YELLOW;
          this.questionnaireResponse3.answeredTime = this.CreateDate()
          this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
          

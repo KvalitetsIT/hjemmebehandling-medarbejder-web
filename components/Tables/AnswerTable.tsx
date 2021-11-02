@@ -2,7 +2,7 @@ import { AppBar, Box, Button, CircularProgress, Tooltip,Container, Divider, Draw
 import Chip from '@mui/material/Chip';
 import React, { Component, useContext } from 'react';
 import Stack from '@mui/material/Stack';
-import { Alert, Card, CardContent, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
+import { Alert, Badge, Card, CardContent, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
@@ -73,21 +73,7 @@ getChipColorFromCategory(category : CategoryEnum){
     return "default"
 }
 
-findCategory(question: Question, answer: Answer) : CategoryEnum {
-        
-    if(answer instanceof NumberAnswer){
-        let answerAsNumber = answer as NumberAnswer;
-        let thresholdPoint = question.thresholdPoint.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
-        return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
-    }
-    if(answer instanceof StringAnswer){
-        let answerAsString = answer as StringAnswer;
-        let thresholdPoint = question.options.find(x=>x.option == answerAsString.answer);
-        return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
-    }
 
-    return CategoryEnum.GREEN
-}
 
 
 async updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
@@ -115,7 +101,16 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
           <TableCell></TableCell>
             {questionaireResponses.map(collection => {
                 return (
-                    <TableCell>{collection.answeredTime ? collection.answeredTime.toDateString() : ""}</TableCell>
+                    <TableCell>
+                    <Tooltip title={collection.category.toString()} placement="right">
+                        <Badge color={this.getChipColorFromCategory(collection.category)}  badgeContent={<div></div>} >
+                        
+                            {collection.answeredTime ? collection.answeredTime.toDateString() : ""}
+                        
+                        </Badge>
+                      </Tooltip>
+                      </TableCell>
+                    
                 )
             })}
           </TableRow>
@@ -141,7 +136,7 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
                                 
                                 {questionaireResponses.map(questionResponse => {
                                     let answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    let category = answer ? this.findCategory(question,answer) : CategoryEnum.GREEN;
+                                    let category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
