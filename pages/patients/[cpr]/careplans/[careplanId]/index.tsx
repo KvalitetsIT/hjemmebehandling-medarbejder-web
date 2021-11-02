@@ -40,6 +40,9 @@ import { NumberedChartCard } from '../../../../../components/Cards/NumberedChart
 import { ThresholdCardOverview } from '../../../../../components/Cards/ThresholdCardOverview';
 import ICareplanService from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSelectorCard } from '../../../../../components/Cards/CareplanSelectorCard';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
+import { ContactThumbnail } from '../../../../../components/Cards/ContactThumbnail';
 
 interface State {
   
@@ -104,15 +107,27 @@ async populateCareplans() {
     let activeCareplan = this.state.careplans.find(c => c.id == this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
         <>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+        <Stack direction="row" spacing={2}>
+            <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={activeCareplan?.patient.patientContact}></ContactThumbnail>
+            <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={activeCareplan?.patient.contacts.find(x=>x.favContact)}></ContactThumbnail>
+        </Stack>
+        </Grid>
+        </Grid>
             <Grid container spacing={2}>
                 <Grid item xs={2}>
+                
                     <Stack spacing={2}>
-                        <PatientCard patient={activeCareplan.patient}/>
                         <CareplanSelectorCard activeCareplan={activeCareplan} careplans={this.state.careplans}/>
+                        <PatientCard patient={activeCareplan.patient}/>
+                        
                     </Stack>
                 </Grid>
+
                 <Grid item xs={9}>
                     <Stack >
+                        
                         <CareplanCardSimple careplan={activeCareplan}/>
                         <CareplanUnreadResponse careplan={activeCareplan} />
                         <Grid container spacing={1}>

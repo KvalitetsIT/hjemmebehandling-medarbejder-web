@@ -14,10 +14,12 @@ import { Component } from 'react';
 import StarIcon from '@mui/icons-material/Star';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import { PatientSimple } from '../Models/PatientSimple';
-import { Accordion, AccordionDetails, AccordionSummary, Stack } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Badge, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import { ContactCard } from './ContactCard';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 
 export interface Props {
     patient : PatientDetail
@@ -48,9 +50,11 @@ export class PatientCard extends Component<Props,State> {
   renderCard(){
     return (
         <Card padding={4} component={Stack}>
-            <CardHeader component={Typography} align="center" title={this.props.patient.firstname + " " +this.props.patient.lastname}/>
+            <CardHeader component={Typography} align="left" title={this.props.patient.firstname + " " +this.props.patient.lastname}/>
           <CardContent>
-            <Stack spacing={3} >
+          
+            <Stack spacing={0} >
+
             <Typography variant="subtitle2">
             {this.props.patient.cpr}
             </Typography>
@@ -63,35 +67,43 @@ export class PatientCard extends Component<Props,State> {
                 {this.props.patient.patientContact?.emailAddress}<br/>
             </Typography>
             <br/>
-            <Accordion variant="outlined">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
           <Typography variant="button">
             Pårørende:
             </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
+            
+     
         {this.props.patient.contacts.map(contact => {
+                let badge = (<div></div>)
+                let borderPixels = 0;
+
+                if(contact.favContact){
+                    borderPixels = 1;
+                    badge = (
+                      <Tooltip title="Primær kontakt" placement="right">
+                        <Badge color="info"  badgeContent={<LocalPhoneOutlinedIcon/>} ></Badge>
+                      </Tooltip>)
+                }
+
                 return (
                     <>
+                    {badge}
+                    <Box component="span" color="info" sx={{ p: 2, border: borderPixels+'px dashed grey' }}>
                     
                     <Typography variant="subtitle2">
-                        
-                        {contact.fullname}{contact.favContact ? <Tooltip title="Favorit kontaktperson"><StarIcon color="info"/></Tooltip> : "" }<br/>
+                    
+                        {contact.fullname}
+                        <br/>
                         {contact.address.road}<br/>
                         {contact.address.zipCode}<br/>
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                         {contact.emailAddress}<br/>
                     </Typography>
+                    </Box>
+                    
                     <br/>
                     </>
                 )
             })}
-        </AccordionDetails>
-      </Accordion>
 
       
             
