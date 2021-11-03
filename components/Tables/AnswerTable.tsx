@@ -73,6 +73,18 @@ getChipColorFromCategory(category : CategoryEnum){
     return "default"
 }
 
+getDisplayNameFromCategory(category : CategoryEnum){
+    if(category == CategoryEnum.RED)
+        return "Rød"
+    if(category == CategoryEnum.YELLOW)
+        return "Gul"
+    if(category == CategoryEnum.GREEN)
+        return "Grøn"
+    if(category == CategoryEnum.BLUE)
+        return "Blå"
+
+    return "Ukendt"
+}
 
 
 
@@ -102,7 +114,7 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
             {questionaireResponses.map(collection => {
                 return (
                     <TableCell>
-                    <Tooltip title={collection.category.toString()} placement="right">
+                    <Tooltip title={"jens"} placement="right">
                         <Badge color={this.getChipColorFromCategory(collection.category)}  badgeContent={<div></div>} >
                         
                             {collection.answeredTime ? collection.answeredTime.toDateString() : ""}

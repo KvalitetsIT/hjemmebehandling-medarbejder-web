@@ -8,6 +8,14 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export interface IBackendApi {
+
+    /**
+     * Change careplan
+     * Id should always be provided
+     * To change the terminationdate fx, provide only terminationdate and id - Everything else will stay the same
+     * @param careplan
+     */
+    SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
     
     /**
      * Return a list of Questionnaireresponse

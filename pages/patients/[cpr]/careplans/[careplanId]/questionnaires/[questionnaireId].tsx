@@ -41,7 +41,7 @@ import { ContactThumbnail } from '../../../../../../components/Cards/ContactThum
 
 interface State {
   loading: boolean
-  careplans : PatientCareplan[]
+  careplans : Array<PatientCareplan>
 }
 interface Props {
   match : { params : {cpr : string, questionnaireId? : string,careplanId? : string} }

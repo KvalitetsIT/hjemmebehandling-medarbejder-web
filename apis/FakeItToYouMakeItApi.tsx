@@ -19,7 +19,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     careplan1 : PatientCareplan = new PatientCareplan();
     careplan2 : PatientCareplan = new PatientCareplan();
     planDefinition1 : PlanDefinition = new PlanDefinition();
-
+    
     questionnaire1 : Questionnaire = new Questionnaire();
 
     //Response1
@@ -59,6 +59,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.patient1.contacts = [relativeContact];
 
         this.planDefinition1.name = "Imundefekt"
+        this.planDefinition1.id = "def1"
         //======================================= Questions
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.options = [
@@ -170,6 +171,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
+    }
+    async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        await new Promise(f => setTimeout(f, 1000));
+        return careplan;
     }
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, 1000));

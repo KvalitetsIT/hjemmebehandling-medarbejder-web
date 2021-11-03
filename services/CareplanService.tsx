@@ -17,6 +17,15 @@ export default class CareplanService implements ICareplanService {
     constructor(backendApi : IBackendApi){
         this.backendApi = backendApi;
     }
+    
+    SetPlanDefinitionsOnCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
+
+        let careplanOnlyChangedValues = new PatientCareplan();
+        careplanOnlyChangedValues.id = careplan.id;
+        careplanOnlyChangedValues.planDefinitions = careplan.planDefinitions
+        return this.backendApi.SetCareplan(careplanOnlyChangedValues);
+    }
+
     GetPatientCareplans(cpr: string) : Promise<Array<PatientCareplan>>{
         return this.backendApi.GetPatientCareplans(cpr);
     }

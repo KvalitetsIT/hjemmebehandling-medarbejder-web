@@ -12,4 +12,16 @@ export class PatientCareplan {
     creationDate! : Date;
     terminationDate! : Date;
     department!: string;
+
+    clone() : PatientCareplan{
+        let clone = new PatientCareplan();
+        clone.id = this.id;
+        clone.planDefinitions = this.planDefinitions;
+        clone.questionnaires = this.questionnaires;
+        clone.patient = this.patient;
+        clone.creationDate = this.creationDate;
+        clone.terminationDate = this.terminationDate;
+        clone.department = this.department;
+        return clone;
+    }
 }

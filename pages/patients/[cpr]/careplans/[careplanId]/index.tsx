@@ -126,7 +126,7 @@ async populateCareplans() {
                 </Grid>
 
                 <Grid item xs={9}>
-                    <Stack >
+                    <Stack spacing={1}>
                         
                         <CareplanCardSimple careplan={activeCareplan}/>
                         <CareplanUnreadResponse careplan={activeCareplan} />

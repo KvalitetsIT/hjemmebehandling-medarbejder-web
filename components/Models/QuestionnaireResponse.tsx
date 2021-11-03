@@ -12,6 +12,7 @@ export class QuestionnaireResponse {
     status! : QuestionnaireResponseStatus | undefined
     category! : CategoryEnum;
     patient! : PatientSimple
+
 }
 
 export enum  MeasurementType {
