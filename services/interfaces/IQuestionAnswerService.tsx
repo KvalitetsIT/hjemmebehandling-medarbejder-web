@@ -7,7 +7,7 @@ import { ThresholdOption } from "../../components/Models/ThresholdOption";
 
 
 
-export default interface QuestionAnswerService {
+export default interface IQuestionAnswerService {
     
     /**
      * Set the value of threshold number

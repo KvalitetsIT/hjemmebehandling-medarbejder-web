@@ -38,6 +38,7 @@ import ICareplanService from '../../../../../../services/interfaces/ICareplanSer
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import { ContactThumbnail } from '../../../../../../components/Cards/ContactThumbnail';
+import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQuestionnaireButton';
 
 interface State {
   loading: boolean
@@ -111,13 +112,12 @@ async populateCareplans() {
             tabIds={questionnaires.map(x=>x.id)}
             tabLabels={questionnaires.map(x=>x.name)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x.questionnaireResponses))}
-            />
+            >
+              <AddQuestionnaireButton careplan={currentCareplan!} afterAddingQuestionnaire={ () => this.forceUpdate()}/>
+          </BasicTabs>
         
         </CardContent>
         </Card>
-        
-        
-        
         
       </Stack>
 </>

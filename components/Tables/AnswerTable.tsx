@@ -109,12 +109,12 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-          <TableCell>{this.props.children}</TableCell>
+          <TableCell></TableCell>
           <TableCell></TableCell>
             {questionaireResponses.map(collection => {
                 return (
                     <TableCell>
-                    <Tooltip title={"jens"} placement="right">
+                    <Tooltip title={this.getDisplayNameFromCategory(collection.category)} placement="right">
                         <Badge color={this.getChipColorFromCategory(collection.category)}  badgeContent={<div></div>} >
                         
                             {collection.answeredTime ? collection.answeredTime.toDateString() : ""}

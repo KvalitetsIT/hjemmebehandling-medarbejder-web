@@ -8,6 +8,12 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export interface IBackendApi {
+    /**
+     * Add a questionnaire to the careplan
+     * @param careplan Careplan to add questionnaire to
+     * @param questionnaireToAdd Questionnaire to add to careplan
+     */
+    AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan>;
 
     /**
      * Change careplan

@@ -31,6 +31,9 @@ import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrappe
 import { Configuration } from "../generated";
 
 export class BffBackendApi implements IBackendApi {
+    AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
+        throw new Error("Method not implemented.");
+    }
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }

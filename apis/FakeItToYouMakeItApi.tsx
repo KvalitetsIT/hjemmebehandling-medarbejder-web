@@ -11,6 +11,7 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { QuestionnaireAlreadyOnCareplan } from "./Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
@@ -171,6 +172,17 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
+    }
+    async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
+        let questionnaireAlreadyInCareplan = careplan.questionnaires.find(x=>x.id ==questionnaireToAdd.id)
+        if(questionnaireAlreadyInCareplan){
+            throw new QuestionnaireAlreadyOnCareplan();
+        }
+
+        careplan.questionnaires.push(questionnaireToAdd);
+        return careplan;
+        
+        
     }
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         await new Promise(f => setTimeout(f, 1000));

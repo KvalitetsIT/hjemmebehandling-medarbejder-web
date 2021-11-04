@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { AddQuestionnaireButton } from '../Input/AddQuestionnaireButton';
 
 export interface TabPanelProps {
     children?: React.ReactNode;
@@ -42,12 +43,13 @@ constructor(props : BasicTabsProps){
         let indexTabPanelCounterContent = 0;
         return (
             <>
-                    <Tabs  value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
+                    <Tabs value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
                         {this.props.tabLabels.map(tabLabel => {
                             return (
                                 <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={tabLabel}  />
                             )
                         })}
+                        {this.props.children}
                     </Tabs>
             
                     {this.props.tabContent.map(content => {

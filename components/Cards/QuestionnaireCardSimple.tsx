@@ -31,7 +31,14 @@ export class QuestionnaireCardSimple extends Component<Props,State> {
 
   render () {
       let questionnaire = this.props.questionnaire;
-      let latestQuestionnaireResponse = questionnaire.questionnaireResponses.flatMap(x=>x.answeredTime).reduce((a,b) => a! > b! ? a : b);
+      
+      let questionnaireResponses = questionnaire?.questionnaireResponses
+      let answerTimeOnly = questionnaireResponses?.flatMap(x=>x.answeredTime);
+      let latestQuestionnaireResponse = null;
+
+      if(answerTimeOnly.length > 0)
+        latestQuestionnaireResponse = answerTimeOnly?.reduce((a,b) => a! > b! ? a : b);
+
     return (
         <Card>
          
@@ -44,11 +51,11 @@ export class QuestionnaireCardSimple extends Component<Props,State> {
                     
                     <Box>
                         <Typography variant="caption">Seneste besvarelse</Typography>
-                        <Typography>{latestQuestionnaireResponse?.toLocaleDateString()}</Typography>
+                        <Typography>{latestQuestionnaireResponse == null ? " - " : latestQuestionnaireResponse.toLocaleDateString()}</Typography>
                     </Box>
                     <Box>
                         <Typography variant="caption">Besvares</Typography>
-                        <Typography>{questionnaire.frequency.ToString()}</Typography>
+                        <Typography>{questionnaire.frequency ? questionnaire.frequency.ToString() : "N/A"}</Typography>
                     </Box>
                     
                     <Button component={Link} to={"/patients/"+this.props.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelse</Button>    

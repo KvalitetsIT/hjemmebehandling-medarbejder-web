@@ -36,17 +36,16 @@ toogleDrawer = () => {
     
   };
 
+  
+
+ 
   render () {
+    try{
     return (
 <>
         <Topbar />
-        
         <Router>
-            
-
         <Sidebar/>
-        
-       
         <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
         
             <AutoBreadcrumbs/> 
@@ -61,25 +60,20 @@ toogleDrawer = () => {
               <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>} />
               <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
               <Route path="/patients"><Patients/></Route>
-              
               <Route path="/newpatient" render={(props) => <NewPatient {...props}/>} />
-
-
-
-
-
               <Route path="/">
                 <h2>Home</h2>
               </Route>
             </Switch>
-
             </Box>
-            
-            
         </Box>
-
         </Router>
         </>
     );
+
+  } catch(error){
+    throw new Error("fejl")
   }
+  }
+
 }
