@@ -27,7 +27,7 @@ import { PatientDto } from "../generated/models/PatientDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
-import { QuestionnaireResponseDto } from "../generated/models/QuestionnaireResponseDto";
+import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
@@ -281,7 +281,7 @@ export class BffBackendApi implements IBackendApi {
         }
 
         response.answeredTime = questionnaireResponseDto.answered;
-        response.status = QuestionnaireResponseStatus.NotProcessed;
+        response.status = this.mapExaminationStatus(questionnaireResponseDto.examinationStatus!);
         response.category = CategoryEnum.RED;
         response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
 
@@ -334,6 +334,19 @@ export class BffBackendApi implements IBackendApi {
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined;
             default:
                 throw new Error('Could not map QuestionnaireResponseStatus ' + status);
+        }
+    }
+
+    private mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum) : QuestionnaireResponseStatus {
+        switch(status) {
+            case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
+                return QuestionnaireResponseStatus.NotProcessed;
+            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
+                return QuestionnaireResponseStatus.InProgress;
+            case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
+                return QuestionnaireResponseStatus.Processed;
+            default:
+                throw new Error('Could not map ExaminationStatus ' + status);
         }
     }
 }

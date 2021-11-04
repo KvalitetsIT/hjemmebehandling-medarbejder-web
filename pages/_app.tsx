@@ -13,8 +13,7 @@ import { BffBackendApi } from '../apis/BffBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  //let backendApi = new FakeItToYouMakeItApi()
-  let backendApi = new BffBackendApi()
+  let backendApi = new FakeItToYouMakeItApi()
   return (
     <>
     <div suppressHydrationWarning>
