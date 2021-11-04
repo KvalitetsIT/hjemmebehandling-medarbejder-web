@@ -5,6 +5,7 @@ import { Contact } from "../components/Models/Contact";
 import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequency";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
+import { PatientSimple } from "../components/Models/PatientSimple";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
@@ -193,6 +194,24 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async SearchPatient(searchstring: string) : Promise<PatientSimple[]>{
+        await new Promise(f => setTimeout(f, 1000));
+        
+        let allPatients = [this.patient1];
+        
+        let results : PatientSimple[] = [];
+        let allPatientsWithFirstName : PatientSimple[] = allPatients.filter(x=>x.firstname ? x.firstname.includes(searchstring) : false)
+        let allPatientsWithlastname : PatientSimple[] = allPatients.filter(x=>x.lastname ? x.lastname.includes(searchstring) : false)
+        let allPatientsWithCPR : PatientSimple[] = allPatients.filter(x=>x.cpr ? x.cpr.includes(searchstring) : false)
+
+        results = results.concat(allPatientsWithFirstName)
+        results = results.concat(allPatientsWithlastname)
+        results = results.concat(allPatientsWithCPR)
+
+        return results;
+
+    }
+
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
         return [this.planDefinition1]
     }
@@ -283,12 +302,12 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return toReturn;
     }
 
-    async GetPatient(cpr: string) : Promise<PatientDetail>{
-        return this.patient1;
+    async GetPatient(cpr: string) : Promise<PatientDetail | undefined>{
+        return this.patient1.cpr == cpr ? this.patient1 : undefined;
     }
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
         
-        return [this.careplan1,this.careplan2];
+        return [this.careplan1,this.careplan2].filter(x=>x.patient.cpr == cpr);
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{

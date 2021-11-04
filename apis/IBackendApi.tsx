@@ -13,7 +13,7 @@ export interface IBackendApi {
      * Returns all plandefinitions in system
      */
     GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
-    
+
     /**
      * Add a questionnaire to the careplan
      * @param careplan Careplan to add questionnaire to
@@ -38,7 +38,12 @@ export interface IBackendApi {
     /**
      * Returns one patient
      */
-    GetPatient : (cpr : string) => Promise<PatientDetail>
+    GetPatient : (cpr : string) => Promise<PatientDetail | undefined>
+
+    /**
+     * Returns all patients that either has match in name or CPR
+     */
+    SearchPatient : (searchstring : string) => Promise<PatientSimple[]>
 
     /**
      * Creates and returns patient
