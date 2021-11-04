@@ -2,7 +2,7 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
@@ -28,6 +28,13 @@ export interface IBackendApi {
      * @param careplan
      */
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
+
+    /**
+     * Update status on QuestionnaireResponse.
+     * @param id The id of the QuestionnaireResponse
+     * @param status The new status
+     */
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void>;
     
     /**
      * Return a list of Questionnaireresponse
