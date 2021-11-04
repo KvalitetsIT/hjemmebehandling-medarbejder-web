@@ -200,9 +200,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let allPatients = [this.patient1];
         
         let results : PatientSimple[] = [];
-        let allPatientsWithFirstName : PatientSimple[] = allPatients.filter(x=>x.firstname ? x.firstname.includes(searchstring) : false)
-        let allPatientsWithlastname : PatientSimple[] = allPatients.filter(x=>x.lastname ? x.lastname.includes(searchstring) : false)
-        let allPatientsWithCPR : PatientSimple[] = allPatients.filter(x=>x.cpr ? x.cpr.includes(searchstring) : false)
+        let allPatientsWithFirstName : PatientSimple[] = allPatients.filter(x=>x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithlastname : PatientSimple[] = allPatients.filter(x=>x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithCPR : PatientSimple[] = allPatients.filter(x=>x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
 
         results = results.concat(allPatientsWithFirstName)
         results = results.concat(allPatientsWithlastname)
