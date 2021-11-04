@@ -45,6 +45,7 @@ export class QuestionnaireListSimple extends Component<Props,State> {
                 }/>
             
             <CardContent>
+                {questionnairesFromPlandefinitions.length == 0 && extraQuestionnaries.length == 0? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
                 {questionnairesFromPlandefinitions.map(questionnaire => {
                     return (
                         <Stack direction="row" spacing={2}>
