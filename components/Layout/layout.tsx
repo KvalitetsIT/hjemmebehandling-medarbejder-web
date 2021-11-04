@@ -43,8 +43,9 @@ toogleDrawer = () => {
     try{
     return (
 <>
-        <Topbar />
+        
         <Router>
+        <Topbar />
         <Sidebar/>
         <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
         

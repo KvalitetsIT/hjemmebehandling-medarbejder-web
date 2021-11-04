@@ -87,8 +87,14 @@ getDisplayNameFromCategory(category : CategoryEnum){
 }
 
   renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
-        return (<>
 
+    if(questionaireResponses.length == 0){
+        return (
+            <Typography>Ingen besvarelser for spørgeskema endnu</Typography>
+        )
+    }
+    
+    return (<>
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
