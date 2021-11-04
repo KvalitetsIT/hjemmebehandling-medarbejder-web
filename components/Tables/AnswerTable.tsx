@@ -86,22 +86,6 @@ getDisplayNameFromCategory(category : CategoryEnum){
     return "Ukendt"
 }
 
-
-
-async updateNumberedThresholds(question : Question, threshold : ThresholdNumber){
-    let thresholdToChange = question.thresholdPoint.find(existingThreshold => existingThreshold.id == threshold.id);
-    thresholdToChange = threshold;
-    let responses = await this.questionAnswerService.SetThresholdNumber(threshold.id,threshold);
-    this.forceUpdate()
-}
-
-async updateOptionallyThresholds(question : Question, threshold : ThresholdOption){
-    let thresholdToChange = question.options.find(existingThreshold => existingThreshold.id == threshold.id);
-    thresholdToChange = threshold;
-    let responses = await this.questionAnswerService.SetThresholdOption(threshold.id,threshold);
-    this.forceUpdate()
-}
-
   renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
         return (<>
 
@@ -109,7 +93,6 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-          <TableCell></TableCell>
           <TableCell></TableCell>
             {questionaireResponses.map(collection => {
                 return (
@@ -135,14 +118,6 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
                             
                             <TableRow>
                                 <TableCell>
-                                    <Tooltip title="Se tærkselværdier">
-                                        <ThresholdModal 
-                                            onThresholdOptionChange={async (newThreshold) => await this.updateOptionallyThresholds(question, newThreshold)} 
-                                            onThresholdNumberChange={async (newThreshold) => await this.updateNumberedThresholds(question, newThreshold)} 
-                                            question={question} />
-                                    </Tooltip>
-                                </TableCell>
-                                <TableCell>
                                     {question.question}                                    
                                 </TableCell>
                                 
@@ -158,7 +133,6 @@ async updateOptionallyThresholds(question : Question, threshold : ThresholdOptio
                         )
                     })}
 <TableRow>
-<TableCell></TableCell>
 <TableCell></TableCell>
 
             {questionaireResponses.map(questionResponse => {
