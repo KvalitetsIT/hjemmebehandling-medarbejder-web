@@ -29,8 +29,12 @@ import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto
 import { QuestionnaireResponseDto } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export class BffBackendApi implements IBackendApi {
+    GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+        throw new Error("Method not implemented.");
+    }
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
@@ -162,7 +166,7 @@ export class BffBackendApi implements IBackendApi {
     private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
         let carePlan = new PatientCareplan();
 
-        let planDefinition = { name: "plandefinition-1", id : "p1" };
+        let planDefinition = { name: "plandefinition-1", id : "p1", questionnaires : [] };
 
         carePlan.id = carePlanDto.id;
         carePlan.planDefinitions = [planDefinition]; // TODO - PlanDefinition is not included in the api response ...

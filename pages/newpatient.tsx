@@ -13,12 +13,17 @@ import ApiContext from './_context';
 import IPatientService from '../services/interfaces/IPatientService';
 import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { LoadingComponent } from '../components/Layout/LoadingComponent';
+import { CareplanCardSimple } from '../components/Cards/CareplanCardSimple';
+import { PatientCareplan } from '../components/Models/PatientCareplan';
+import { QuestionnaireCardSimple } from '../components/Cards/QuestionnaireCardSimple';
+import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 
 
 export interface Props {
 }
 export interface State {
     patient : PatientDetail;
+    careplan : PatientCareplan;
     loading: boolean;
 }
 
@@ -34,6 +39,7 @@ constructor(props : Props){
     super(props);
 
     this.modifyPatient = this.modifyPatient.bind(this);
+    this.SaveCareplan = this.SaveCareplan.bind(this);
 
     let relativeContact = new Contact();
     relativeContact.favContact = true;
@@ -44,14 +50,24 @@ constructor(props : Props){
     newPatient.lastname = "";
     newPatient.patientContact = new Contact();
     newPatient.contacts = [relativeContact]
+    
+    let newCareplan = new PatientCareplan();
+    newCareplan.patient = newPatient;
+    
     this.state = {
       patient : newPatient,
-      loading : false
+      loading : false,
+      careplan : newCareplan
     }
 
 }
 InitializeServices(){
   this.patientService = this.context.patientService;
+}
+
+SaveCareplan(editedCareplan : PatientCareplan){
+  this.setState({careplan : editedCareplan})
+  this.forceUpdate();
 }
 
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
@@ -61,6 +77,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
 }
 
 async submitPatient(){
+  console.log(this.state.careplan)
   try{
     this.setState({
       loading: true
@@ -125,12 +142,26 @@ async submitPatient(){
                   <TextField id="outlined-basic" label="Telefonnummer" onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
                   <TextField id="outlined-basic" label="Email" onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
                 </Stack>
-                <Button variant="contained" onClick={async ()=>await this.submitPatient()}>Submit</Button>
+                
+                
               </Stack>
+
+              
             </CardContent>
         </Card>
-        <PatientCard patient={this.state.patient}/>
+        <Card>
+          <CardContent>
+          <Stack spacing={2}>
+          <CareplanCardSimple specialSaveFunc={this.SaveCareplan} careplan={new PatientCareplan()} />
+          <QuestionnaireListSimple careplan={this.state.careplan} />
         </Stack>
+          </CardContent>
+        </Card>
+        
+        
+        </Stack>
+        <br/>
+        <Button variant="contained" color="inherit" onClick={async ()=>await this.submitPatient()}>Opret patient</Button>
         {this.state.loading ? <LoadingComponent /> : ""}
         </>
         

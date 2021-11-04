@@ -6,8 +6,14 @@ import { QuestionnaireResponse } from "../components/Models/QuestionnaireRespons
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export interface IBackendApi {
+    /**
+     * Returns all plandefinitions in system
+     */
+    GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
+    
     /**
      * Add a questionnaire to the careplan
      * @param careplan Careplan to add questionnaire to

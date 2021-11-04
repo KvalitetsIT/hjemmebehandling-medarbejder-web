@@ -22,6 +22,8 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     planDefinition1 : PlanDefinition = new PlanDefinition();
     
     questionnaire1 : Questionnaire = new Questionnaire();
+    questionnaire2 : Questionnaire = new Questionnaire();
+    questionnaire3 : Questionnaire = new Questionnaire();
 
     //Response1
     questionnaireResponse1 : QuestionnaireResponse = new QuestionnaireResponse();
@@ -59,8 +61,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         relativeContact.address.zipCode = "8000"
         this.patient1.contacts = [relativeContact];
 
-        this.planDefinition1.name = "Imundefekt"
-        this.planDefinition1.id = "def1"
+        
         //======================================= Questions
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.options = [
@@ -149,13 +150,32 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
         //======================================= questionnaire
         this.questionnaire1.id = "q1"
-        this.questionnaire1.name = "Imundefekt spørgeskema"
+        this.questionnaire1.name = "Imundefekt alm"
         let frequency = new Frequency();
-        frequency.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+        frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
         frequency.repeated = FrequencyEnum.WEEKLY;
         this.questionnaire1.frequency = frequency;
         this.questionnaire1.questionnaireResponses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
 
+        this.questionnaire2.id = "q2"
+        this.questionnaire2.name = "Imundefekt medium"
+        let frequency2 = new Frequency();
+        frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+        frequency2.repeated = FrequencyEnum.WEEKLY;
+        this.questionnaire2.frequency = frequency2;
+
+        this.questionnaire3.id = "q3"
+        this.questionnaire3.name = "Imundefekt voldsom"
+        let frequency3 = new Frequency();
+        frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
+        frequency3.repeated = FrequencyEnum.WEEKLY;
+        this.questionnaire3.frequency = frequency3;
+
+
+        this.planDefinition1.name = "Imundefekt"
+        this.planDefinition1.id = "def1"
+
+        this.planDefinition1.questionnaires = [this.questionnaire1,this.questionnaire2]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -172,6 +192,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
+    }
+    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+        return [this.planDefinition1]
     }
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         let questionnaireAlreadyInCareplan = careplan.questionnaires.find(x=>x.id ==questionnaireToAdd.id)

@@ -23,6 +23,7 @@ import { Stack } from '@mui/material';
 
 export interface Props {
     careplan : PatientCareplan
+    specialSaveFunc? : (careplan : PatientCareplan) => void
 }
 
 export interface State {
@@ -73,7 +74,16 @@ initializeServices(){
 
   
   async saveInformation(){
-      this.setState({saving_loading : true})
+
+    this.setState({saving_loading : true})
+
+    if(this.props.specialSaveFunc){
+        this.props.specialSaveFunc(this.state.editableCareplan);
+        this.setState({editMode : false,saving_loading : false})
+        return;
+    }
+    
+    
     await this.savePlandefinition();
 
     this.setState({editMode : false,saving_loading : false})
@@ -96,14 +106,14 @@ initializeServices(){
     return (
         <>
         {this.state.saving_loading ? <LoadingComponent/> : ""}
-        <Card component={Box} minWidth={100}>
+        <Card component={Box} minWidth={600}>
             {careplan.terminationDate ? 
-                <CardHeader title={<Typography variant="h6">Inaktiv monitoreringsplan</Typography>}/> :
-                <CardHeader title={
+                <CardHeader subheader={<div>Inaktiv monitoreringsplan</div>}/> :
+                <CardHeader subheader={
                     <>
                     <Stack direction="row">
                     
-                    <Typography variant="h6">Igangværende monitoreringsplan</Typography>
+                    <div >Igangværende monitoreringsplan</div>
                     <Box textAlign="right">{this.state.editMode ? "" : <Button onClick={ () => this.setState({editMode : true})}>Ændr<ModeEditOutlineIcon fontSize="inherit"/></Button>}</Box>
                     </Stack>
                     </>
@@ -129,7 +139,7 @@ initializeServices(){
                 </Grid>
                 <Grid item xs={3}>
                     <Typography variant="caption">Opstart</Typography>
-                   <Typography>{careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString()}</Typography>
+                   <Typography>{careplan.creationDate ? careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString() : "N/A"}</Typography>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography variant="caption">Stoppet</Typography>

@@ -16,6 +16,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { PlanDefinition } from '../Models/PlanDefinition';
+import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
     careplan : PatientCareplan
@@ -24,6 +25,7 @@ export interface Props {
 
 export interface State {
     editedCareplan : PatientCareplan
+    allPlanDefinitions : PlanDefinition[]
     
 }
 
@@ -31,20 +33,26 @@ export interface State {
 export class PlanDefinitionSelect extends Component<Props,State> {
   static displayName = PlanDefinitionSelect.name;
   static contextType = ApiContext
-
+    questionnaireService! : IQuestionnaireService;
+    
   constructor(props : Props){
       super(props);
       this.state = {
-        editedCareplan : props.careplan.clone()
+        editedCareplan : props.careplan.clone(),
+        allPlanDefinitions : []
           }
       this.handleChange = this.handleChange.bind(this);
       
   }
 
+  InitializeServices(){
+    this.questionnaireService = this.context.questionnaireService;
+  }
+
   handleChange(e: SelectChangeEvent<string>) {
     let clicked = e.target.value as unknown as string[]
 
-    let plandefinitions = clicked.map(id => this.GetPlanDefinitions().find(x=>x.id == id)) 
+    let plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id == id)) 
     let careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
 
@@ -53,32 +61,25 @@ export class PlanDefinitionSelect extends Component<Props,State> {
     this.props.SetEditedCareplan(careplan);
   };
 
+  async componentDidMount(){
+    this.populatePlanDefinitions();
+  }
   //TODO: CALL SERVICE INSTED
-  GetPlanDefinitions() : PlanDefinition[] {
-    let def1 = new PlanDefinition();
-    def1.id = "def1"
-    def1.name = "Imundefekt"
+  async populatePlanDefinitions() {
+      
+    let planDefinitions =  await this.questionnaireService.GetAllPlanDefinitions();
 
-    let def2 = new PlanDefinition();
-    def2.id = "def2"
-    def2.name = "Smerter"
-
-    let def3 = new PlanDefinition();
-    def3.id = "def3"
-    def3.name = "Alm infektion"
-
-    let def4 = new PlanDefinition();
-    def4.id = "def4"
-    def4.name = "Svær infektion"
-
-    return [def1, def2,def3,def4]
+    this.setState({
+        allPlanDefinitions : planDefinitions
+    })
 }
 
 
   render () {
+      this.InitializeServices();
     return (
         <Select multiple value={this.state.editedCareplan.planDefinitions.map(x=>x.id) as unknown as string}  onChange={this.handleChange}>
-        {this.GetPlanDefinitions().map(patientGroup => {
+        {this.state.allPlanDefinitions.map(patientGroup => {
             return (
                 <MenuItem key={patientGroup.name} value={patientGroup.id}>{patientGroup.name}</MenuItem>
             )

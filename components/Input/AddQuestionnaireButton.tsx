@@ -22,6 +22,7 @@ import { Questionnaire } from '../Models/Questionnaire';
 import CloseIcon from '@mui/icons-material/Close';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { QuestionnaireAlreadyOnCareplan } from '../../apis/Errors/QuestionnaireAlreadyOnCareplan';
+import { PlanDefinition } from '../Models/PlanDefinition';
 
 export interface Props {
     careplan : PatientCareplan
@@ -30,7 +31,7 @@ export interface Props {
 
 export interface State {
     AddQuestionnaireBool : boolean
-    allquestionnaires : Array<Questionnaire>
+    allPlanDefinitions : Array<PlanDefinition>
 
     snackbarOpen : boolean
     snackbarColor: AlertColor
@@ -49,7 +50,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
       super(props);
       this.state= {
             AddQuestionnaireBool : false,
-            allquestionnaires : [],
+            allPlanDefinitions : [],
             snackbarOpen : false,
             snackbarColor: "info",
             snackbarText : "",
@@ -83,19 +84,24 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   render () {
       this.InitializeServices();
       
+      let plandefinitions = this.state.allPlanDefinitions;
+
+      
+    let options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = this.GetQuestionnairePlanDefinitionRelations(plandefinitions);
+
     return (<>
     {this.state.AddQuestionnaireBool ? 
         <>
             <Autocomplete
             autoComplete
-            groupBy={(option) => option.name+""}
-            getOptionLabel={(option) => option.name}
-            options={this.state.allquestionnaires}
+            groupBy={(option) => option.planDefinition.name}
+            getOptionLabel={(option) => option.questionnaire.name}
+            options={options}
             
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label={<Typography><AddIcon fontSize="inherit"/> Tilføj spørgeskema</Typography>} />}
             onLostPointerCapture={()=>this.setState({AddQuestionnaireBool : false})}
-            onChange={(event, value) => value ? this.AddQuestionnaire(value) : ""}
+            onChange={(event, value) => value ? this.AddQuestionnaire(value.questionnaire) : ""}
             />
             <Button onClick={()=>this.setState({AddQuestionnaireBool : false})}> <CloseIcon fontSize="inherit"/> </Button>   
         </>
@@ -116,6 +122,30 @@ export class AddQuestionnaireButton extends Component<Props,State> {
     )
   }
 
+  /**
+   * This method wil return a list of one-to-one relations between plandefinitions and questionnaires
+   * Main purpose is to group questionnaires by their related plandefinition
+   * @param plandefinitions 
+   * @returns Object with questionnaire and planDefinition
+   */
+    GetQuestionnairePlanDefinitionRelations(plandefinitions: PlanDefinition[]) : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> {
+        let options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = []
+        
+        for(let pdefinitionIndex = 0; pdefinitionIndex<plandefinitions.length; pdefinitionIndex++){
+            let currentPlanDefinition = plandefinitions[pdefinitionIndex];
+            
+            for(let questionnaireIndex = 0; questionnaireIndex < currentPlanDefinition.questionnaires?.length; questionnaireIndex++){
+                let currentQuestionnaire = currentPlanDefinition.questionnaires[questionnaireIndex]
+                
+                options.push({
+                    questionnaire : currentQuestionnaire,
+                    planDefinition : currentPlanDefinition
+                })
+            }
+        }
+        return options;
+    }
+
   closeSnackbar = (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => {
     this.setState({snackbarOpen : false})
   };
@@ -125,9 +155,9 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   }
 
   async populateQuestionnairesList(){
-    let allquestionnaires = await this.questionnaireService.GetQuestionnairesList()
+    let allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions()
     this.setState({
-        allquestionnaires : allquestionnaires
+        allPlanDefinitions : allPlanDefinitions ?? []
     })
   }
  
