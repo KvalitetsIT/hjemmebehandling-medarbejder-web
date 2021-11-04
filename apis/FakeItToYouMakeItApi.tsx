@@ -230,6 +230,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         await new Promise(f => setTimeout(f, 1000));
         return careplan;
     }
+
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        await new Promise(f => setTimeout(f, 1000))
+    }
+
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, 1000));
         throw new Error("Method not implemented.");

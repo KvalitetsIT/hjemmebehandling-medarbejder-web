@@ -9,10 +9,12 @@ import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
+import { BffBackendApi } from '../apis/BffBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  let backendApi = new FakeItToYouMakeItApi()
+  //let backendApi = new FakeItToYouMakeItApi()
+  let backendApi = new BffBackendApi()
   return (
     <>
     <div suppressHydrationWarning>

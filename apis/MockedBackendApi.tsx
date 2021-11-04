@@ -26,6 +26,9 @@ export class MockedBackendApi implements IBackendApi {
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         throw new Error("Method not implemented.");
     }

@@ -5,8 +5,7 @@ import { PatientCareplan } from "../../components/Models/PatientCareplan";
 import { PlanDefinition } from "../../components/Models/PlanDefinition";
 import { Question } from "../../components/Models/Question";
 import { Questionnaire } from "../../components/Models/Questionnaire";
-import { QuestionnaireResponse } from "../../components/Models/QuestionnaireResponse";
-
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
 
 export default interface IQuestionnaireService {
     
@@ -21,5 +20,6 @@ export default interface IQuestionnaireService {
     //SET
     SetQuestionaireResponse : (id : string, questionnaireResponses : QuestionnaireResponse) => Promise<void>;
     AddQuestionnaireToCareplan : (careplan: PatientCareplan, questionnaireToAdd: Questionnaire) => Promise<PatientCareplan>
+    UpdateQuestionnaireResponseStatus : (id : string, status : QuestionnaireResponseStatus) => Promise<void>;
 }
   

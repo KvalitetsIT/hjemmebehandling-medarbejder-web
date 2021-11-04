@@ -6,7 +6,7 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService implements IQuestionnaireService {
@@ -28,6 +28,10 @@ export default class QuestionnaireService implements IQuestionnaireService {
     }
     SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{
         return this.backendApi.SetQuestionaireResponse(id,questionnaireResponses)
+    }
+
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        return this.backendApi.UpdateQuestionnaireResponseStatus(id, status)
     }
     
     findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {

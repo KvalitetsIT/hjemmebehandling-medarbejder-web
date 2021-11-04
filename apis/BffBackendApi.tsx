@@ -26,6 +26,7 @@ import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/Frequ
 import { PatientDto } from "../generated/models/PatientDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
+import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
@@ -37,7 +38,7 @@ export class BffBackendApi implements IBackendApi {
     }
     
     GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-        throw new Error("Method not implemented.");
+        return new FakeItToYouMakeItApi().GetAllPlanDefinitions();
     }
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
@@ -45,6 +46,16 @@ export class BffBackendApi implements IBackendApi {
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
+
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
+
+        let api = new QuestionnaireResponseApi();
+        // TODO - solve the 'slash problem'!
+        let request = { id: id.replace("QuestionnaireResponse/", ""), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
+        await api.patchQuestionnaireResponse(request)
+    }
+
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         throw new Error("Method not implemented.");
     }
@@ -305,39 +316,6 @@ export class BffBackendApi implements IBackendApi {
         return answer;
     }
 
-    private getQuestionnaireResponse() : QuestionnaireResponse {
-        let question1 = new Question();
-        question1.question = "Jeg har det bedre i dag"
-        question1.options = [
-            this.CreateOption("1", "Korekt", CategoryEnum.GREEN),
-            this.CreateOption("2", "Ved ikke", CategoryEnum.YELLOW),
-            this.CreateOption("3", "Ikke Korekt", CategoryEnum.RED),
-        ]
-
-        let question2 = new Question()
-        question2.question = "Hvad er din temperatur idag?"
-        question2.thresholdPoint = [
-            this.CreateThreshold("1",44,100,CategoryEnum.RED),
-            this.CreateThreshold("2",38,44,CategoryEnum.YELLOW),
-            this.CreateThreshold("3",0,37,CategoryEnum.GREEN),
-        ]
-
-        let response1 = new QuestionnaireResponse();
-
-        response1.id = "qr1"
-        //response1.patient = this.patient1;
-        response1.category = CategoryEnum.RED;
-        response1.answeredTime = new Date();
-        response1.status = QuestionnaireResponseStatus.NotProcessed;
-
-        let questionAnswerMap1 = new Map<Question,Answer>();
-        questionAnswerMap1.set(question1, this.CreateStringAnswer(question1.options[0].option));
-        questionAnswerMap1.set(question2 ,this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
-        response1.questions = questionAnswerMap1;
-
-        return response1;
-    }
-
     private CreateOption(id : string, value : string,category : CategoryEnum) : ThresholdOption{
         let option = new ThresholdOption();
         option.option = value;
@@ -346,25 +324,16 @@ export class BffBackendApi implements IBackendApi {
         return option;
     }
 
-    private CreateThreshold(id : string, from : number,to : number, category : CategoryEnum) : ThresholdNumber{
-        let option = new ThresholdNumber();
-        option.category = category;
-        option.id = id
-        option.to = to;
-        option.from = from;
-        return option;
-    }
-
-    private CreateStringAnswer(value : string){
-        let answer = new StringAnswer();
-        answer.answer = value;
-        return answer;
-    }
-
-    private CreateNumberAnswer(value : number,unit : UnitType){
-        let answer = new NumberAnswer();
-        answer.answer = value;
-        answer.unit = unit;
-        return answer;
+    private mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus) : PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
+        switch(status) {
+            case QuestionnaireResponseStatus.NotProcessed:
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined;
+            case QuestionnaireResponseStatus.InProgress:
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination;
+            case QuestionnaireResponseStatus.Processed:
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined;
+            default:
+                throw new Error('Could not map QuestionnaireResponseStatus ' + status);
+        }
     }
 }
