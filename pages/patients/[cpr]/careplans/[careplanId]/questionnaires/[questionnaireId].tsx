@@ -102,7 +102,7 @@ async populateCareplans() {
       <Stack display="inline-flex" spacing={2}>
         <Stack direction="row" spacing={2}>
         <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
-        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contacts.find(x=>x.favContact)}></ContactThumbnail>
+        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contact}></ContactThumbnail>
         </Stack>
         
         <Card>
@@ -111,7 +111,7 @@ async populateCareplans() {
             idOfStartTab={this.props.match.params.questionnaireId}
             tabIds={questionnaires.map(x=>x.id)}
             tabLabels={questionnaires.map(x=>x.name)}
-            tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x.questionnaireResponses))}
+            tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x))}
             >
               <AddQuestionnaireButton careplan={currentCareplan!} afterAddingQuestionnaire={ () => this.forceUpdate()}/>
           </BasicTabs>
@@ -128,9 +128,9 @@ async populateCareplans() {
 
   //=====================TABS===============================
 
-  renderQuestionnaireResponseTab(questionnaireResponses : QuestionnaireResponse[]){
+  renderQuestionnaireResponseTab(questionnaire : Questionnaire){
     return (
-      <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaireResponses={questionnaireResponses} >
+      <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaires={questionnaire} >
     
     </AnswerTable>
     )

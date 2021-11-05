@@ -20,6 +20,7 @@ import { NumberedChartCard } from './NumberedChartCard';
 export interface Props {
     questionnaire : Questionnaire
     cpr : string;
+    hideChart? : boolean;
 }
 
 export interface State {
@@ -46,7 +47,9 @@ export class QuestionnaireCardSimple extends Component<Props,State> {
             
             <CardContent>
                 <Stack spacing={3} direction="row">
-                <NumberedChartCard questionnaire={questionnaire}/>
+                {this.props.hideChart ? "" : 
+                <NumberedChartCard questionnaire={questionnaire}/>}
+                
                 <Stack spacing={3}>
                     
                     <Box>

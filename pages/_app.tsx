@@ -10,6 +10,7 @@ import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
 import PersonService from '../services/PersonService';
+import { BffBackendApi } from '../apis/BffBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) {

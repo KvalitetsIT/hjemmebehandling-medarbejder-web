@@ -25,10 +25,12 @@ import { ThresholdOption } from '../Models/ThresholdOption';
 import QuestionAnswerService from '../../services/QuestionAnswerService';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import { Questionnaire } from '../Models/Questionnaire';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export interface Props {
     typesToShow : MeasurementType[]
-    questionnaireResponses : Array<QuestionnaireResponse>
+    questionnaires : Questionnaire
 }
 
 export interface State {
@@ -51,7 +53,7 @@ constructor(props : Props){
 
   render () {
     this.InitializeServices();
-    let contents = this.renderTableData(this.props.questionnaireResponses);
+    let contents = this.renderTableData(this.props.questionnaires);
     return contents;
   }
 
@@ -86,14 +88,27 @@ getDisplayNameFromCategory(category : CategoryEnum){
     return "Ukendt"
 }
 
-  renderTableData(questionaireResponses : Array<QuestionnaireResponse>){
-        return (<>
-
+  renderTableData(questionaire : Questionnaire){
+    let questionaireResponses = questionaire.questionnaireResponses;
+    if(questionaireResponses.length == 0){
+        return (
+            <>
+            <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>
+            <Typography variant="caption">Spørgeskemaet besvares {questionaire.frequency.ToString()}</Typography>
+            </>
+        )
+    }
+    
+    return (<>
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-          <TableCell></TableCell>
+          <TableCell>
+          <Tooltip placement="top" title="Besvarelses frekvens for spørgeskema">
+              <Typography variant="caption"> <CalendarTodayIcon fontSize="inherit"/> {questionaire.frequency.ToString()}</Typography>
+            </Tooltip>
+            </TableCell>
             {questionaireResponses.map(collection => {
                 return (
                     <TableCell>

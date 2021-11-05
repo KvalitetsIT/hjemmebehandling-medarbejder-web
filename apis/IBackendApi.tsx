@@ -3,12 +3,21 @@ import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Person } from "../components/Models/Person";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export interface IBackendApi {
+    EditPatient(patient: PatientDetail): Promise<PatientDetail>;
+    /**
+     * Returns all plandefinitions in system
+     */
+    GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
+
+
+
     /**
      * Add a questionnaire to the careplan
      * @param careplan Careplan to add questionnaire to
@@ -23,6 +32,13 @@ export interface IBackendApi {
      * @param careplan
      */
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
+
+    /**
+     * Update status on QuestionnaireResponse.
+     * @param id The id of the QuestionnaireResponse
+     * @param status The new status
+     */
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void>;
     
     /**
      * Return a list of Questionnaireresponse
@@ -34,6 +50,11 @@ export interface IBackendApi {
      * Returns one patient
      */
     GetPatient : (cpr : string) => Promise<PatientDetail>
+
+    /**
+     * Returns all patients that either has match in name or CPR
+     */
+    SearchPatient : (searchstring : string) => Promise<PatientDetail[]>
 
     /**
      * Creates and returns patient

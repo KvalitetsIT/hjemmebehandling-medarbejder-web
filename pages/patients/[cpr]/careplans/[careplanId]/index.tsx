@@ -111,7 +111,7 @@ async populateCareplans() {
         <Grid item xs={12}>
         <Stack direction="row" spacing={2}>
             <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={activeCareplan?.patient.patientContact}></ContactThumbnail>
-            <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={activeCareplan?.patient.contacts.find(x=>x.favContact)}></ContactThumbnail>
+            <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={activeCareplan?.patient.contact}></ContactThumbnail>
         </Stack>
         </Grid>
         </Grid>

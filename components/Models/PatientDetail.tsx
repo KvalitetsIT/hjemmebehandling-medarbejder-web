@@ -7,5 +7,5 @@ import { PatientSimple } from "./PatientSimple";
 //-patient-details
 export class PatientDetail extends PatientSimple {
     patientContact! : Contact; // Contactinfo for the patient
-    contacts : Contact[] = []
+    contact : Contact = new Contact();
 }

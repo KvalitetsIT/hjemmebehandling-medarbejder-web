@@ -5,6 +5,7 @@ import { ListItemButton } from '@mui/material';
 import { withThemeCreator } from '@material-ui/styles';
 import MenuIcon from "@mui/icons-material/Menu"
 import { Sidebar } from './Sidebar';
+import { SearchPatientInput } from '../Input/SearchPatientInput';
 
 export interface Props {
 }
@@ -26,7 +27,9 @@ toogleDrawer = () => {
         <Box padding={3}>
             <Grid container>
                 <Grid item xs={6}>
-                <Box paddingLeft={30}><TextField id="outlined-basic" size="small" label="Søg" variant="outlined" /></Box>
+                <Box paddingLeft={30}>
+                  <SearchPatientInput />
+                </Box>
                 </Grid>
                 <Grid item xs={6}>
                 <Typography align="right">

@@ -23,6 +23,7 @@ import { Stack } from '@mui/material';
 
 export interface Props {
     careplan : PatientCareplan
+    specialSaveFunc? : (careplan : PatientCareplan) => void
 }
 
 export interface State {
@@ -73,7 +74,16 @@ initializeServices(){
 
   
   async saveInformation(){
-      this.setState({saving_loading : true})
+
+    this.setState({saving_loading : true})
+
+    if(this.props.specialSaveFunc){
+        this.props.specialSaveFunc(this.state.editableCareplan);
+        this.setState({editMode : false,saving_loading : false})
+        return;
+    }
+    
+    
     await this.savePlandefinition();
 
     this.setState({editMode : false,saving_loading : false})
@@ -96,28 +106,27 @@ initializeServices(){
     return (
         <>
         {this.state.saving_loading ? <LoadingComponent/> : ""}
-        <Card component={Box} minWidth={100}>
+        <Card component={Box} minWidth={600}>
             {careplan.terminationDate ? 
-                <CardHeader title={<Typography variant="h6">Inaktiv monitoreringsplan</Typography>}/> :
-                <CardHeader title={
+                <CardHeader subheader={<div>Inaktiv monitoreringsplan</div>}/> :
+                <CardHeader subheader={
                     <>
                     <Stack direction="row">
                     
-                    <Typography variant="h6">Igangværende monitoreringsplan</Typography>
-                    <Box textAlign="right">{this.state.editMode ? "" : <Button onClick={ () => this.setState({editMode : true})}>Ændr<ModeEditOutlineIcon fontSize="inherit"/></Button>}</Box>
+                    <div >Igangværende monitoreringsplan</div>
                     </Stack>
                     </>
                     }
            /> }
             
             <CardContent>
-            
-            <Grid container spacing={2}>
-                <Grid item xs={3}>
+
+            <Stack direction="row" spacing={10}>
+                <Stack>
                    <Typography variant="caption">Adeling</Typography>
                    <Typography>{this.props.careplan.department}</Typography>
-                </Grid>
-                <Grid item xs={3}>
+                </Stack>
+                <Stack >
                     <Typography variant="caption">Patientgrupper</Typography>
                     {this.state.editMode ? 
                         <Typography><PlanDefinitionSelect SetEditedCareplan={this.setEditedCareplan} careplan={careplan}/></Typography>
@@ -126,31 +135,35 @@ initializeServices(){
                     }
                    
                    
-                </Grid>
-                <Grid item xs={3}>
+                </Stack>
+                <Stack >
                     <Typography variant="caption">Opstart</Typography>
-                   <Typography>{careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString()}</Typography>
-                </Grid>
-                <Grid item xs={3}>
+                   <Typography>{careplan.creationDate ? careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString() : "N/A"}</Typography>
+                </Stack>
+                <Stack>
                     <Typography variant="caption">Stoppet</Typography>
                     {!careplan.terminationDate ? 
                     <Typography> - </Typography> : 
                     <Typography>{careplan.terminationDate?.toLocaleDateString()+" "+careplan.terminationDate?.toLocaleTimeString()}</Typography>
                     }
                    
-                </Grid>
-            </Grid>
+                </Stack>
+            </Stack>
             
+            
+            
+            </CardContent>
+            <CardActions>
             {this.state.editMode ? 
                 <Box textAlign="left">
                     <Button onClick={async ()=>await this.saveInformation()} variant="outlined" color="success">
                         Gem
                     </Button>
                     <Button onClick={async ()=>await this.resetInformation()} color="info">Fortryd</Button>
-                </Box> : ""
+                </Box> : <Button onClick={ () => this.setState({editMode : true})}>Ændr<ModeEditOutlineIcon fontSize="inherit"/></Button>
             }
             
-            </CardContent>
+            </CardActions>
         </Card>
         
         </>

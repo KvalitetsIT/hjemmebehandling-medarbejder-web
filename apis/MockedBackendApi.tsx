@@ -15,10 +15,22 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export class MockedBackendApi implements IBackendApi {
+    EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        throw new Error("Method not implemented.");
+    }
+    async SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
+        return [];
+    }
+    GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+        throw new Error("Method not implemented.");
+    }
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        throw new Error("Method not implemented.");
+    }
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
         throw new Error("Method not implemented.");
     }
     CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
@@ -136,20 +148,8 @@ export class MockedBackendApi implements IBackendApi {
         primaryContact.emailAddress = "GitteAndersen@mail.dk";
         primaryContact.fullname = "Gitte Andersen";
         primaryContact.primaryPhone = "+4592039485"
-        primaryContact.favContact = true;
         
-        
-        let secondaryContact = new Contact();
-        secondaryContact.address.country = "Danmark";
-        secondaryContact.address.road = "Petersgade 66";
-        secondaryContact.address.zipCode = "8210 Aarhus V";
-        secondaryContact.emailAddress = "TimJensen@mail.dk";
-        secondaryContact.fullname = "Tim Jensen";
-        secondaryContact.primaryPhone = "+4538475920"
-        secondaryContact.favContact = false;
-        
-        patient.contacts.push(primaryContact)
-        patient.contacts.push(secondaryContact)
+        patient.contact = primaryContact;
         
         return patient;
     }

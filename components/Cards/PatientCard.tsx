@@ -6,7 +6,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { PatientDetail } from '../../components/Models/PatientDetail';
 import { Contact } from '../Models/Contact';
@@ -20,6 +20,7 @@ import { ContactCard } from './ContactCard';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 export interface Props {
     patient : PatientDetail
@@ -48,12 +49,19 @@ export class PatientCard extends Component<Props,State> {
 }
 
   renderCard(){
+    let contact = this.props.patient.contact
     return (
-        <Card padding={4} component={Stack}>
-            <CardHeader component={Typography} align="left" title={this.props.patient.firstname + " " +this.props.patient.lastname}/>
+        <Card>
+          
+
+            <CardHeader component={Typography} align="left" title={
+              <div>
+                {this.props.patient.firstname + " " +this.props.patient.lastname} 
+              </div>}/>
+
           <CardContent>
           
-            <Stack spacing={0} >
+            <Stack spacing={0} padding={2} >
 
             <Typography variant="subtitle2">
             {this.props.patient.cpr}
@@ -70,27 +78,9 @@ export class PatientCard extends Component<Props,State> {
           <Typography variant="button">
             Pårørende:
             </Typography>
-            
-     
-        {this.props.patient.contacts.map(contact => {
-                let badge = (<div></div>)
-                let borderPixels = 0;
-
-                if(contact.favContact){
-                    borderPixels = 1;
-                    badge = (
-                      <Tooltip title="Primær kontakt" placement="right">
-                        <Badge color="info"  badgeContent={<LocalPhoneOutlinedIcon/>} ></Badge>
-                      </Tooltip>)
-                }
-
-                return (
-                    <>
-                    {badge}
-                    <Box component="span" color="info" sx={{ p: 2, border: borderPixels+'px dashed grey' }}>
+                    <Box component="span" color="info" sx={{ p: 2, border: '1px dashed grey' }}>
                     
                     <Typography variant="subtitle2">
-                    
                         {contact.fullname}
                         <br/>
                         {contact.address.road}<br/>
@@ -98,18 +88,12 @@ export class PatientCard extends Component<Props,State> {
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                         {contact.emailAddress}<br/>
                     </Typography>
-                    </Box>
-                    
-                    <br/>
-                    </>
-                )
-            })}
-
-      
-            
-           
+                    </Box>           
             </Stack>
           </CardContent>
+          <CardActions>
+          <Button component={Link} to={"/patients/"+this.props.patient.cpr+"/edit"}>Ændr <ModeEditOutlineIcon fontSize="inherit"/> </Button>
+          </CardActions>
         </Card>
     )
   }

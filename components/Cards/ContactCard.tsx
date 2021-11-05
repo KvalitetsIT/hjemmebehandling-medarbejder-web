@@ -34,7 +34,6 @@ export class ContactCard extends Component<Props,State> {
             <CardContent>
                 <Box position="static" color={this.props.iconTopLeftColor} >
                 {this.props.iconTopLeft}
-                {contact.favContact ? <Tooltip title="Favorit kontaktperson"><StarIcon color="info"/></Tooltip> : "" }
                 </Box>
               <Box textAlign="center">
                 {contact.fullname} 

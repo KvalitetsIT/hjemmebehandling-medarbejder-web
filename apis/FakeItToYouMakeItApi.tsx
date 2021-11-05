@@ -6,12 +6,14 @@ import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { Person } from "../components/Models/Person";
+import { PatientSimple } from "../components/Models/PatientSimple";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { NoPatientFround } from "./Errors/NoPatientFountError";
 import { QuestionnaireAlreadyOnCareplan } from "./Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 
@@ -24,6 +26,8 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     planDefinition1 : PlanDefinition = new PlanDefinition();
     
     questionnaire1 : Questionnaire = new Questionnaire();
+    questionnaire2 : Questionnaire = new Questionnaire();
+    questionnaire3 : Questionnaire = new Questionnaire();
 
     //Response1
     questionnaireResponse1 : QuestionnaireResponse = new QuestionnaireResponse();
@@ -52,14 +56,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
         relativeContact.primaryPhone = "27384910"
-        relativeContact.favContact = true;
         relativeContact.emailAddress = "johannepetersen@mail.dk"
         relativeContact.address = new Address();
         relativeContact.address.city = "Aarhus C"
         relativeContact.address.country = "Danmark"
         relativeContact.address.road = "Fiskergade 66"
         relativeContact.address.zipCode = "8000"
-        this.patient1.contacts = [relativeContact];
+        this.patient1.contact = relativeContact;
 
 		this.person1.cpr = "2512489996"
         this.person1.givenName = "Nancy Ann"
@@ -164,13 +167,32 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
         //======================================= questionnaire
         this.questionnaire1.id = "q1"
-        this.questionnaire1.name = "Imundefekt spørgeskema"
+        this.questionnaire1.name = "Imundefekt alm"
         let frequency = new Frequency();
-        frequency.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+        frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
         frequency.repeated = FrequencyEnum.WEEKLY;
         this.questionnaire1.frequency = frequency;
         this.questionnaire1.questionnaireResponses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
 
+        this.questionnaire2.id = "q2"
+        this.questionnaire2.name = "Imundefekt medium"
+        let frequency2 = new Frequency();
+        frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+        frequency2.repeated = FrequencyEnum.WEEKLY;
+        this.questionnaire2.frequency = frequency2;
+
+        this.questionnaire3.id = "q3"
+        this.questionnaire3.name = "Imundefekt voldsom"
+        let frequency3 = new Frequency();
+        frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
+        frequency3.repeated = FrequencyEnum.WEEKLY;
+        this.questionnaire3.frequency = frequency3;
+
+
+        this.planDefinition1.name = "Imundefekt"
+        this.planDefinition1.id = "def1"
+
+        this.planDefinition1.questionnaires = [this.questionnaire1,this.questionnaire2]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -188,6 +210,31 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        await new Promise(f => setTimeout(f, 1000));
+        return patient;
+    }
+    async SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
+        await new Promise(f => setTimeout(f, 1000));
+        
+        let allPatients = [this.patient1];
+        
+        let results : PatientDetail[] = [];
+        let allPatientsWithFirstName : PatientDetail[] = allPatients.filter(x=>x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithlastname : PatientDetail[] = allPatients.filter(x=>x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithCPR : PatientDetail[] = allPatients.filter(x=>x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
+
+        results = results.concat(allPatientsWithFirstName)
+        results = results.concat(allPatientsWithlastname)
+        results = results.concat(allPatientsWithCPR)
+
+        return results;
+
+    }
+
+    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+        return [this.planDefinition1]
+    }
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         let questionnaireAlreadyInCareplan = careplan.questionnaires.find(x=>x.id ==questionnaireToAdd.id)
         if(questionnaireAlreadyInCareplan){
@@ -203,6 +250,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         await new Promise(f => setTimeout(f, 1000));
         return careplan;
     }
+
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        await new Promise(f => setTimeout(f, 1000))
+    }
+
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, 1000));
         throw new Error("Method not implemented.");
@@ -276,7 +328,12 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail>{
-        return this.patient1;
+        await new Promise(f => setTimeout(f, 1000));
+        if(this.patient1.cpr == cpr){
+            return this.patient1;
+        }
+
+        throw new NoPatientFround();
     }
     
     async GetPerson(cpr: string) : Promise<Person>{
@@ -285,7 +342,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
         
-        return [this.careplan1,this.careplan2];
+        return [this.careplan1,this.careplan2].filter(x=>x.patient.cpr == cpr);
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{

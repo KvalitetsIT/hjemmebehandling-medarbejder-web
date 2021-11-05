@@ -3,9 +3,10 @@ import { IBackendApi } from "../apis/IBackendApi";
 import { Answer } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService implements IQuestionnaireService {
@@ -18,16 +19,8 @@ export default class QuestionnaireService implements IQuestionnaireService {
         return this.backendApi.AddQuestionnaireToCareplan(careplan,questionnaireToAdd);
     }
 
-    async GetQuestionnairesList() : Promise<Questionnaire[]>{
-        let q1 = new Questionnaire();
-        q1.id = "q1"
-        q1.name = "Immundefekt"
-
-        let q2 = new Questionnaire();
-        q2.id = "q2"
-        q2.name = "Alm helbredsnedbrydelse"
-
-        return [q1,q2]
+    GetAllPlanDefinitions() : Promise<PlanDefinition[]>{
+        return this.backendApi.GetAllPlanDefinitions();
     }
 
     GetTasklist(categories: CategoryEnum[], page: number, pagesize: number) : Promise<Questionnaire[]>{
@@ -35,6 +28,10 @@ export default class QuestionnaireService implements IQuestionnaireService {
     }
     SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{
         return this.backendApi.SetQuestionaireResponse(id,questionnaireResponses)
+    }
+
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        return this.backendApi.UpdateQuestionnaireResponseStatus(id, status)
     }
     
     findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {

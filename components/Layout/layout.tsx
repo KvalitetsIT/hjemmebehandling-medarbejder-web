@@ -14,6 +14,7 @@ import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 import NewPatient from '../../pages/newpatient';
+import EditPatient from '../../pages/patients/[cpr]/edit';
 
 
 export interface Props {
@@ -43,8 +44,9 @@ toogleDrawer = () => {
     try{
     return (
 <>
-        <Topbar />
+        
         <Router>
+        <Topbar />
         <Sidebar/>
         <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
         
@@ -58,6 +60,7 @@ toogleDrawer = () => {
               <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props}/>} />
               <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv/questionnaires/"+props.match.params.questionnaireId}/>} />
               <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>} />
+              <Route path="/patients/:cpr/edit" render={(props) => <EditPatient {...props}/>} />
               <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
               <Route path="/patients"><Patients/></Route>
               <Route path="/newpatient" render={(props) => <NewPatient {...props}/>} />
