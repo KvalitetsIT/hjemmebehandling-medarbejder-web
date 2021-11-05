@@ -9,6 +9,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { IBackendApi } from '../../apis/IBackendApi';
 import { CategoryEnum } from '../Models/CategoryEnum';
+import { TaskType } from '../Models/TaskType';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import { LoadingComponent } from '../Layout/LoadingComponent';
@@ -18,7 +19,7 @@ import { Questionnaire } from '../Models/Questionnaire';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
-    categories : Array<CategoryEnum>
+    taskType : TaskType
     pageSize : number
 }
 
@@ -57,8 +58,14 @@ export class Tasklist extends Component<Props,State> {
   }
 
   async  populateQuestionnaireResponses() {
+    let responses: Questionnaire[] = []
+    if(this.props.taskType == TaskType.UNFINISHED_RESPONSE) {
+      responses = await this.questionnaireService.GetUnfinishedQuestionnaireResponses(1, this.props.pageSize)
+    }
+    if(this.props.taskType == TaskType.UNANSWERED_QUESTIONNAIRE) {
+      responses = await this.questionnaireService.GetUnansweredQuestionnaires(1, this.props.pageSize)
+    }
 
-    let responses = await this.questionnaireService.GetTasklist(this.props.categories,1,this.props.pageSize);
     this.setState({
         questionnaires : responses,
         loading : false

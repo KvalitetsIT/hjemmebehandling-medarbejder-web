@@ -327,6 +327,14 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return toReturn;
     }
 
+    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        return this.GetTasklist([CategoryEnum.RED, CategoryEnum.YELLOW, CategoryEnum.GREEN], page, pagesize)
+    }
+
+    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        return []
+    }
+
     async GetPatient(cpr: string) : Promise<PatientDetail>{
         await new Promise(f => setTimeout(f, 1000));
         if(this.patient1.cpr == cpr){

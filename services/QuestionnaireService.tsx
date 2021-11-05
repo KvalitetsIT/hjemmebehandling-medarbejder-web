@@ -26,6 +26,15 @@ export default class QuestionnaireService implements IQuestionnaireService {
     GetTasklist(categories: CategoryEnum[], page: number, pagesize: number) : Promise<Questionnaire[]>{
         return this.backendApi.GetTasklist(categories,page,pagesize);
     }
+
+    GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        return this.backendApi.GetUnfinishedQuestionnaireResponses(page, pagesize)
+    }
+
+    GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+      return this.backendApi.GetUnansweredQuestionnaires(page, pagesize)
+    }
+
     SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{
         return this.backendApi.SetQuestionaireResponse(id,questionnaireResponses)
     }

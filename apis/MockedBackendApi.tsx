@@ -43,6 +43,14 @@ export class MockedBackendApi implements IBackendApi {
 
     }
 
+    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
+    }
+
+    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
+    }
+
     questionnaireNames = ["Generelt infektionssygdomme spørgeskema","IVF til immundefekt","HIV Hjemmebehandling"];
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]>{

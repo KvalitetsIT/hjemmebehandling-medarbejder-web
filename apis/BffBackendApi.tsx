@@ -67,6 +67,14 @@ export class BffBackendApi implements IBackendApi {
         return new MockedBackendApi().GetTasklist(categories, page, pagesize);
     }
 
+    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
+    }
+
+    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
+    }
+
     async GetPatient(cpr: string) : Promise<PatientDetail> {
         var status = -1;
         var body = null;
