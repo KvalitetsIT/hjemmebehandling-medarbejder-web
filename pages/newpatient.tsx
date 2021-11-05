@@ -96,8 +96,7 @@ async submitPatient(){
   render () {
     this.InitializeServices();
     return (
-      <>
-      
+      <form onSubmit={async ()=>await this.submitPatient()}> 
       <Stack direction="row" spacing={3}>
          
         <PatientEditCard initialPatient={this.state.patient} />
@@ -113,9 +112,9 @@ async submitPatient(){
         
         </Stack>
         <br/>
-        <Button variant="contained" color="inherit" onClick={async ()=>await this.submitPatient()}>Opret patient</Button>
+        <Button type="submit" variant="contained" color="inherit" >Opret patient</Button>
         {this.state.loading ? <LoadingComponent /> : ""}
-        </>
+        </form>
         
     )
   }

@@ -88,17 +88,15 @@ async populatePatient(){
 
   RenderEditPage(){
     return (
-        <>
-        
+        <form onSubmit={async ()=>await this.submitPatient()}>
         <Stack direction="row" spacing={3}>
            
         <PatientEditCard initialPatient={this.state.patient} />
           </Stack>
           <br/>
-          <Button variant="contained" color="inherit" onClick={async ()=>await this.submitPatient()}>Opret patient</Button>
+          <Button variant="contained" color="inherit" type="submit">Opret patient</Button>
           {this.state.loading ? <LoadingComponent /> : ""}
-          </>
-          
+          </form>
       )
   }
 
