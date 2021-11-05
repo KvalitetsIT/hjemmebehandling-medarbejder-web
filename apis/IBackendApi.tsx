@@ -2,6 +2,7 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
+import { Person } from "../components/Models/Person";
 import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
@@ -39,6 +40,13 @@ export interface IBackendApi {
      * @param patient 
      */
     CreatePatient(patient: PatientDetail): Promise<PatientDetail>;
+
+    /**
+     * Creates and returns patient
+     * @param patient 
+     */
+    GetPerson(cpr: string): Promise<Person>;
+
 
     /**
      * Returns all patient careplans for one patient

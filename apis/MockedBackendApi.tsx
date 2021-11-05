@@ -5,6 +5,7 @@ import { Contact } from "../components/Models/Contact";
 import { QuestionnaireResponseStatus, MeasurementType, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
+import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { IBackendApi } from "./IBackendApi";
@@ -91,6 +92,24 @@ export class MockedBackendApi implements IBackendApi {
         return [collection1,collection2,collection3,collection4,collection5].sort( (a,b) => a.answeredTime!.getTime() - b.answeredTime!.getTime() );
     }
 
+
+     async GetPerson(cpr: string) : Promise<Person> {
+        await new Promise(f => setTimeout(f, this.waitTimeMS));
+
+        let questionaireResponse = this.createQuestionnaireResponse(CategoryEnum.RED);
+        let person : Person = new Person();
+        person.cpr = cpr;
+        person.givenName = questionaireResponse.patient.firstname;
+        person.familyName = questionaireResponse.patient.lastname;
+
+        let patientContact = new Contact();
+        patientContact.address.country = "Danmark";
+        patientContact.address.road = "Fiskergade 66";
+        patientContact.address.zipCode = "8000";
+        patientContact.address.city ="Aarhus C"
+
+        return person;
+    }
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, this.waitTimeMS));

@@ -5,6 +5,7 @@ import { Contact } from "../components/Models/Contact";
 import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequency";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
+import { Person } from "../components/Models/Person";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
@@ -17,6 +18,7 @@ import { IBackendApi } from "./IBackendApi";
 export class FakeItToYouMakeItApi implements IBackendApi {
 
     patient1 : PatientDetail = new PatientDetail();
+    person1 : Person = new Person();
     careplan1 : PatientCareplan = new PatientCareplan();
     careplan2 : PatientCareplan = new PatientCareplan();
     planDefinition1 : PlanDefinition = new PlanDefinition();
@@ -58,6 +60,19 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         relativeContact.address.road = "Fiskergade 66"
         relativeContact.address.zipCode = "8000"
         this.patient1.contacts = [relativeContact];
+
+		this.person1.cpr = "2512489996"
+        this.person1.givenName = "Nancy Ann"
+        this.person1.familyName = "Berggren"
+        let personContact = new Contact();
+        personContact.fullname = this.person1.givenName+" "+this.person1.familyName
+        personContact.primaryPhone = "29483749"
+        personContact.address = new Address();
+        personContact.address.city = "Aarhus C"
+        personContact.address.country = "Danmark"
+        personContact.address.road = "Fiskergade 66"
+        personContact.address.zipCode = "8000"
+        this.person1.patientContactDetails = personContact;
 
         this.planDefinition1.name = "Imundefekt"
         this.planDefinition1.id = "def1"
@@ -263,6 +278,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     async GetPatient(cpr: string) : Promise<PatientDetail>{
         return this.patient1;
     }
+    
+    async GetPerson(cpr: string) : Promise<Person>{
+        return this.person1;
+    }
+    
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
         
         return [this.careplan1,this.careplan2];

@@ -11,6 +11,8 @@ import { PatientCard } from '../components/Cards/PatientCard';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
 import IPatientService from '../services/interfaces/IPatientService';
+import IPersonService from '../services/interfaces/IPersonService';
+import { Person } from '../components/Models/Person';
 import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { LoadingComponent } from '../components/Layout/LoadingComponent';
 
@@ -28,6 +30,7 @@ export default class NewPatient extends Component<Props,State> {
   static contextType = ApiContext
   static displayName = NewPatient.name;
   patientService!: IPatientService;
+  personService!: IPersonService;
 
 constructor(props : Props){
   
@@ -43,6 +46,10 @@ constructor(props : Props){
     newPatient.firstname = "";
     newPatient.lastname = "";
     newPatient.patientContact = new Contact();
+    newPatient.patientContact.address.city ="";
+    newPatient.patientContact.address.zipCode ="";
+    newPatient.patientContact.address.road ="";
+    
     newPatient.contacts = [relativeContact]
     this.state = {
       patient : newPatient,
@@ -52,6 +59,7 @@ constructor(props : Props){
 }
 InitializeServices(){
   this.patientService = this.context.patientService;
+  this.personService = this.context.personService;
 }
 
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
@@ -78,6 +86,39 @@ async submitPatient(){
   
 }
 
+async getPerson(){
+  try{
+    if (this.state.patient.cpr == null || this.state.patient.cpr==""){
+	  return;
+    }
+    
+    this.setState({
+      loading: true
+    })
+    let newPerson = await this.personService.GetPerson(this.state.patient.cpr);
+    
+    let p = this.state.patient;
+    p.firstname = newPerson.givenName;
+    p.lastname = newPerson.familyName;
+    p.patientContact.address.city = newPerson.patientContactDetails.address.city;
+    p.patientContact.address.zipCode = newPerson.patientContactDetails.address.zipCode;
+    p.patientContact.address.road = newPerson.patientContactDetails.address.road;    
+    this.setState({patient : p});
+    
+
+    this.setState({
+      loading: false
+    })
+    
+  } catch(error){
+    this.setState({
+      loading: false
+    })
+    throw error;
+  }
+  
+}
+
 
   render () {
     this.InitializeServices();
@@ -93,17 +134,18 @@ async submitPatient(){
               <Typography variant="inherit">
               Patient
           </Typography>
-                <Stack direction="row">
-                  <TextField id="outlined-basic" label="CPR" onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
+                <Stack spacing={3} direction="row">
+                  <TextField size="small" color="primary" id="outlined-basic" label="CPR" onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
+                  <Button size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</Button>
                 </Stack>
                 <Stack spacing={3} direction="row">
-                  <TextField id="outlined-basic" label="Fornavn" onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
-                  <TextField id="outlined-basic" label="Efternavn" onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
+                  <TextField disabled id="outlined-basic" value={this.state.patient.firstname} label="Fornavn" onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
+                  <TextField disabled id="outlined-basic" value={this.state.patient.lastname} label="Efternavn" onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
                 </Stack>
                 <Stack spacing={3} direction="row">
-                  <TextField id="outlined-basic" label="Addresse" onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
-                  <TextField id="outlined-basic" label="Postnummer" onChange={input => this.modifyPatient(this.setZipcode,input) }  variant="outlined" />
-                  <TextField id="outlined-basic" label="By" onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
+                  <TextField disabled id="outlined-basic" value={this.state.patient.patientContact.address.road} label="Addresse" onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
+                  <TextField disabled id="outlined-basic" value={this.state.patient.patientContact.address.zipCode} label="Postnummer" onChange={input => this.modifyPatient(this.setZipcode,input) }  variant="outlined" />
+                  <TextField disabled id="outlined-basic" value={this.state.patient.patientContact.address.city} label="By" onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
                 </Stack>
                 <Stack spacing={3} direction="row">
                   <TextField id="outlined-basic" label="Telefonnummer" onChange={input => this.modifyPatient(this.setPhonenumber,input) } variant="outlined" />

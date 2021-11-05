@@ -9,6 +9,7 @@ import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
+import PersonService from '../services/PersonService';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -21,7 +22,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         questionnaireService : new QuestionnaireService(backendApi),
         questionAnswerService : new QuestionAnswerService(backendApi),
         careplanService : new CareplanService(backendApi),
-        patientService : new PatientService(backendApi)
+        patientService : new PatientService(backendApi),
+        personService : new PersonService(backendApi)
       }}
     >
         {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}

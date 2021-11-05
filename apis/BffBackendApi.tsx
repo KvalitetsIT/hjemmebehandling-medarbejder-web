@@ -6,6 +6,7 @@ import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
+import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
@@ -80,6 +81,10 @@ export class BffBackendApi implements IBackendApi {
         patient.patientContact = patientContact;
 
         return patient;
+    }
+    
+    async GetPerson(cpr: string) : Promise<Person> {
+        return new MockedBackendApi().GetPerson(cpr);
     }
 
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{
