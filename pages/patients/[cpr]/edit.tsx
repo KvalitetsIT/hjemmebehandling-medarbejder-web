@@ -94,7 +94,7 @@ async populatePatient(){
         <PatientEditCard initialPatient={this.state.patient} />
           </Stack>
           <br/>
-          <Button variant="contained" color="inherit" type="submit">Opret patient</Button>
+          <Button variant="contained" color="inherit" type="submit">Gem</Button>
           {this.state.loading ? <LoadingComponent /> : ""}
           </form>
       )
