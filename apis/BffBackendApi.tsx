@@ -18,7 +18,7 @@ import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesRequest } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -166,7 +166,7 @@ export class BffBackendApi implements IBackendApi {
 
         let api = new QuestionnaireResponseApi();
         let request = { cpr: cpr, questionnaireIds: questionnaireIds };
-        let questionnaireResponses = await api.getQuestionnaireResponses(request);
+        let questionnaireResponses = await api.getQuestionnaireResponsesByCpr(request);
         if(!questionnaireResponses) {
             throw new Error('Could not retrieve questionnaireResponses!');
         }
