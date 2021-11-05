@@ -9,6 +9,7 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export interface IBackendApi {
+    EditPatient(patient: PatientDetail): Promise<PatientDetail>;
     /**
      * Returns all plandefinitions in system
      */
@@ -45,7 +46,7 @@ export interface IBackendApi {
     /**
      * Returns one patient
      */
-    GetPatient : (cpr : string) => Promise<PatientDetail | undefined>
+    GetPatient : (cpr : string) => Promise<PatientDetail>
 
     /**
      * Returns all patients that either has match in name or CPR

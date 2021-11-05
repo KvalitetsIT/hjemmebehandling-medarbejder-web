@@ -12,6 +12,7 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { NoPatientFround } from "./Errors/NoPatientFountError";
 import { QuestionnaireAlreadyOnCareplan } from "./Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 
@@ -193,6 +194,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        await new Promise(f => setTimeout(f, 1000));
+        return patient;
+    }
     async SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
         await new Promise(f => setTimeout(f, 1000));
         
@@ -306,8 +311,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return toReturn;
     }
 
-    async GetPatient(cpr: string) : Promise<PatientDetail | undefined>{
-        return this.patient1.cpr == cpr ? this.patient1 : undefined;
+    async GetPatient(cpr: string) : Promise<PatientDetail>{
+        await new Promise(f => setTimeout(f, 1000));
+        if(this.patient1.cpr == cpr){
+            return this.patient1;
+        }
+
+        throw new NoPatientFround();
     }
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
         

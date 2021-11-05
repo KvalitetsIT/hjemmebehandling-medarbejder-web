@@ -11,6 +11,7 @@ import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { PatientDetail } from '../Models/PatientDetail';
 
 
+
 export interface Props {
     initialPatient : PatientDetail
 }
@@ -55,36 +56,36 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           Patient
       </Typography>
             <Stack direction="row">
-              <TextField id="outlined-basic" label="CPR" onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="CPR" value={this.state.patient.cpr} onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Fornavn" onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="Efternavn" onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
+              <TextField id="outlined-basic" label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Addresse" onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="Postnummer" onChange={input => this.modifyPatient(this.setZipcode,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="By" onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Addresse" value={this.state.patient.patientContact.address.road} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Postnummer" value={this.state.patient.patientContact.address.zipCode} onChange={input => this.modifyPatient(this.setZipcode,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="By" value={this.state.patient.patientContact.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Telefonnummer" onChange={input => this.modifyPatient(this.setPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" label="Email" onChange={input => this.modifyPatient(this.setEmail,input) } variant="outlined" />
+              <TextField id="outlined-basic" label="Telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPhonenumber,input) } variant="outlined" />
+              <TextField id="outlined-basic" label="Email" value={this.state.patient.patientContact.emailAddress} onChange={input => this.modifyPatient(this.setEmail,input) } variant="outlined" />
             </Stack>
             <Divider/>
             <Typography variant="inherit">
           Pårørede
       </Typography>
       <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Fornavn" onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Fornavn" value={this.state.patient.contact.fullname} onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Addresse" onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="Postnummer" onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="By" onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Addresse" value={this.state.patient.contact.address.road} onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="Postnummer" value={this.state.patient.contact.address.zipCode} onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  variant="outlined" />
+              <TextField id="outlined-basic" label="By" value={this.state.patient.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Telefonnummer" onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" label="Email" onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
+              <TextField id="outlined-basic" label="Telefonnummer" value={this.state.patient.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
+              <TextField id="outlined-basic" label="Email" value={this.state.patient.contact.emailAddress} onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
             </Stack>
             
             

@@ -114,7 +114,6 @@ initializeServices(){
                     <Stack direction="row">
                     
                     <div >Igangværende monitoreringsplan</div>
-                    <Box textAlign="right">{this.state.editMode ? "" : <Button onClick={ () => this.setState({editMode : true})}>Ændr<ModeEditOutlineIcon fontSize="inherit"/></Button>}</Box>
                     </Stack>
                     </>
                     }
@@ -151,16 +150,20 @@ initializeServices(){
                 </Grid>
             </Grid>
             
+            
+            
+            </CardContent>
+            <CardActions>
             {this.state.editMode ? 
                 <Box textAlign="left">
                     <Button onClick={async ()=>await this.saveInformation()} variant="outlined" color="success">
                         Gem
                     </Button>
                     <Button onClick={async ()=>await this.resetInformation()} color="info">Fortryd</Button>
-                </Box> : ""
+                </Box> : <Button onClick={ () => this.setState({editMode : true})}>Ændr<ModeEditOutlineIcon fontSize="inherit"/></Button>
             }
             
-            </CardContent>
+            </CardActions>
         </Card>
         
         </>

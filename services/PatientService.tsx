@@ -20,6 +20,9 @@ export default class PatientService implements IPatientService {
     constructor(backendApi : IBackendApi){
         this.backendApi = backendApi;
     }
+    EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        return this.backendApi.EditPatient(patient);
+    }
     SearchPatient(searchString: string) : Promise<PatientDetail[]>{
         return this.backendApi.SearchPatient(searchString);
     }
@@ -28,7 +31,7 @@ export default class PatientService implements IPatientService {
         return this.backendApi.CreatePatient(patient);
     }
 
-    GetPatient(cpr: string) : Promise<PatientDetail | undefined>{
+    GetPatient(cpr: string) : Promise<PatientDetail>{
         return this.backendApi.GetPatient(cpr);
     }
     

@@ -6,7 +6,10 @@ import { PatientSimple } from "../../components/Models/PatientSimple";
 
 
 export default interface IPatientService {
-    CreatePatient : (patient : PatientDetail) => Promise<PatientDetail>
     SearchPatient : (searchString : string) => Promise<PatientDetail[]>
+    GetPatient : (cpr : string) => Promise<PatientDetail>
+
+    EditPatient : (patient: PatientDetail) => Promise<PatientDetail>
+    CreatePatient : (patient : PatientDetail) => Promise<PatientDetail>
 }
   

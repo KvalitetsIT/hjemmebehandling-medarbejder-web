@@ -33,6 +33,9 @@ import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export class BffBackendApi implements IBackendApi {
+    EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        throw new Error("Method not implemented.");
+    }
     SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
         throw new Error("Method not implemented.");
     }
