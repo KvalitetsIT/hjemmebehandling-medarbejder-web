@@ -48,8 +48,6 @@ export class PatientCard extends Component<Props,State> {
 }
 
   renderCard(){
-    let badge = (<div></div>)
-    let borderPixels = 0;
     let contact = this.props.patient.contact
     return (
         <Card padding={4} component={Stack}>
@@ -73,13 +71,7 @@ export class PatientCard extends Component<Props,State> {
           <Typography variant="button">
             Pårørende:
             </Typography>
-            
-     
-        
-       
-
-                    {badge}
-                    <Box component="span" color="info" sx={{ p: 2, border: borderPixels+'px dashed grey' }}>
+                    <Box component="span" color="info" sx={{ p: 2, border: '1px dashed grey' }}>
                     
                     <Typography variant="subtitle2">
                     
@@ -90,14 +82,7 @@ export class PatientCard extends Component<Props,State> {
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                         {contact.emailAddress}<br/>
                     </Typography>
-                    </Box>
-                    
-                    <br/>
-           
-
-      
-            
-           
+                    </Box>           
             </Stack>
           </CardContent>
         </Card>
