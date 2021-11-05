@@ -36,13 +36,17 @@ import { PatientSimple } from '../../../../../../components/Models/PatientSimple
 import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import { ContactThumbnail } from '../../../../../../components/Cards/ContactThumbnail';
 import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQuestionnaireButton';
+import { FrequencyTableRow } from '../../../../../../components/Input/FrequencyTableRow';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 interface State {
   loading: boolean
   careplans : Array<PatientCareplan>
+  editMode : boolean
 }
 interface Props {
   match : { params : {cpr : string, questionnaireId? : string,careplanId? : string} }
@@ -55,7 +59,8 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
     super(props);
     this.state = {
         loading : true,
-        careplans : []
+        careplans : [],
+        editMode : false
     }
 }
 
@@ -130,9 +135,22 @@ async populateCareplans() {
 
   renderQuestionnaireResponseTab(questionnaire : Questionnaire){
     return (
+      <>
+        {this.state.editMode ? 
+        <FrequencyTableRow firstCell={<CalendarTodayIcon fontSize="inherit"/>} afterChange={()=>this.forceUpdate()} questionnaire={questionnaire}>
+          <Button onClick={()=>this.setState({editMode:false})}>Gem</Button>
+        </FrequencyTableRow> :  
+        <Tooltip placement="top" title="Besvarelses frekvens for spørgeskema">
+          <Typography variant="caption"> <CalendarTodayIcon fontSize="inherit"/> {questionnaire.frequency.ToString()}<Button onClick={()=>this.setState({editMode:true})} size="small"><ModeEditOutlineIcon fontSize="inherit"/></Button> </Typography>
+        </Tooltip>
+      }
+          
+
+      
       <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaires={questionnaire} >
     
     </AnswerTable>
+    </>
     )
   }
 

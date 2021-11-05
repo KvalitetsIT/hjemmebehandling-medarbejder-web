@@ -26,7 +26,7 @@ import QuestionAnswerService from '../../services/QuestionAnswerService';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '../Models/Questionnaire';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
 
 export interface Props {
     typesToShow : MeasurementType[]
@@ -105,9 +105,7 @@ getDisplayNameFromCategory(category : CategoryEnum){
         <TableHead>
           <TableRow>
           <TableCell>
-          <Tooltip placement="top" title="Besvarelses frekvens for spørgeskema">
-              <Typography variant="caption"> <CalendarTodayIcon fontSize="inherit"/> {questionaire.frequency.ToString()}</Typography>
-            </Tooltip>
+          
             </TableCell>
             {questionaireResponses.map(collection => {
                 return (

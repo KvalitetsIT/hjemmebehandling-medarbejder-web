@@ -1,4 +1,4 @@
-import { CardHeader, CircularProgress, Divider, Grid, Tooltip, Typography } from '@material-ui/core';
+import { CardHeader, CircularProgress, Divider, Grid, Table, Tooltip, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -17,6 +17,7 @@ import { Questionnaire } from '../Models/Questionnaire';
 import { Stack } from '@mui/material';
 import { NumberedChartCard } from './NumberedChartCard';
 import { AddQuestionnaireButton } from '../Input/AddQuestionnaireButton';
+import { FrequencyTableRow } from '../Input/FrequencyTableRow';
 
 export interface Props {
     careplan : PatientCareplan
@@ -45,25 +46,22 @@ export class QuestionnaireListSimple extends Component<Props,State> {
                 }/>
             
             <CardContent>
+                <Table>
+
+                
                 {questionnairesFromPlandefinitions.length == 0 && extraQuestionnaries.length == 0? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
                 {questionnairesFromPlandefinitions.map(questionnaire => {
                     return (
-                        <Stack direction="row" spacing={2}>
-                            <Typography variant="inherit">{questionnaire.name}</Typography>
-                            <Typography variant="caption">{questionnaire.frequency.ToString()}</Typography>
-                        </Stack>
+                            <FrequencyTableRow firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
                     )
                 })}
                 {extraQuestionnaries.map(questionnaire => {
                     return (
-                        <Stack direction="row" spacing={2}>
-                            <Typography variant="caption">+</Typography>
-                            <Typography variant="inherit">{questionnaire.name}</Typography>
-                            <Typography variant="caption">{questionnaire.frequency.ToString()}</Typography>
-                        </Stack>
+                        <FrequencyTableRow firstCell={<div>+ {questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
                     )
                 })}
-                
+                </Table>
+
             </CardContent>
         </Card>
     );
