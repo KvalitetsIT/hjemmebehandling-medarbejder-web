@@ -12,13 +12,15 @@ import IPatientService from '../services/interfaces/IPatientService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import QuestionnaireService from '../services/QuestionnaireService';
 import PatientService from '../services/PatientService';
-
+import PersonService from '../services/PersonService';
+import IPersonService from '../services/interfaces/IPersonService';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
     questionAnswerService : IQuestionAnswerService
     careplanService : ICareplanService,
     patientService : IPatientService,
+    personService : IPersonService
 }
 
 const ApiContext = createContext<IApiContext>(
@@ -27,6 +29,7 @@ const ApiContext = createContext<IApiContext>(
         questionAnswerService : new QuestionAnswerService(new FakeItToYouMakeItApi()),
         careplanService : new CareplanService(new FakeItToYouMakeItApi()),
         patientService : new PatientService(new FakeItToYouMakeItApi()),
+        personService : new PersonService(new FakeItToYouMakeItApi())
     }
     ); //Default value
 
