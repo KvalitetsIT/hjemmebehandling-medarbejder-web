@@ -6,5 +6,4 @@ export class Contact {
     primaryPhone! : string
     secondaryPhone! : string
     emailAddress! : string
-    favContact : boolean = false
 }

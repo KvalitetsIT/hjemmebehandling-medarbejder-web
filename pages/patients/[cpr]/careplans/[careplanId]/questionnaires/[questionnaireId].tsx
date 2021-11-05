@@ -102,7 +102,7 @@ async populateCareplans() {
       <Stack display="inline-flex" spacing={2}>
         <Stack direction="row" spacing={2}>
         <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
-        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contacts.find(x=>x.favContact)}></ContactThumbnail>
+        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contact}></ContactThumbnail>
         </Stack>
         
         <Card>

@@ -50,7 +50,7 @@ export interface IBackendApi {
     /**
      * Returns all patients that either has match in name or CPR
      */
-    SearchPatient : (searchstring : string) => Promise<PatientSimple[]>
+    SearchPatient : (searchstring : string) => Promise<PatientDetail[]>
 
     /**
      * Creates and returns patient

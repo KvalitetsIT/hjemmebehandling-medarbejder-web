@@ -48,6 +48,9 @@ export class PatientCard extends Component<Props,State> {
 }
 
   renderCard(){
+    let badge = (<div></div>)
+    let borderPixels = 0;
+    let contact = this.props.patient.contact
     return (
         <Card padding={4} component={Stack}>
             <CardHeader component={Typography} align="left" title={this.props.patient.firstname + " " +this.props.patient.lastname}/>
@@ -72,20 +75,9 @@ export class PatientCard extends Component<Props,State> {
             </Typography>
             
      
-        {this.props.patient.contacts.map(contact => {
-                let badge = (<div></div>)
-                let borderPixels = 0;
+        
+       
 
-                if(contact.favContact){
-                    borderPixels = 1;
-                    badge = (
-                      <Tooltip title="Primær kontakt" placement="right">
-                        <Badge color="info"  badgeContent={<LocalPhoneOutlinedIcon/>} ></Badge>
-                      </Tooltip>)
-                }
-
-                return (
-                    <>
                     {badge}
                     <Box component="span" color="info" sx={{ p: 2, border: borderPixels+'px dashed grey' }}>
                     
@@ -101,9 +93,7 @@ export class PatientCard extends Component<Props,State> {
                     </Box>
                     
                     <br/>
-                    </>
-                )
-            })}
+           
 
       
             

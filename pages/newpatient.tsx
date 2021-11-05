@@ -42,14 +42,12 @@ constructor(props : Props){
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
     let relativeContact = new Contact();
-    relativeContact.favContact = true;
-
 
     let newPatient = new PatientDetail();
     newPatient.firstname = "";
     newPatient.lastname = "";
     newPatient.patientContact = new Contact();
-    newPatient.contacts = [relativeContact]
+    newPatient.contact = relativeContact
     
     let newCareplan = new PatientCareplan();
     newCareplan.patient = newPatient;
@@ -216,33 +214,33 @@ async submitPatient(){
 
   setRelativeContactsName(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].fullname = newValue;
+    modifiedPatient.contact.fullname = newValue;
     return modifiedPatient;
   }
   setRelativeContactsPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].primaryPhone = newValue;
+    modifiedPatient.contact.primaryPhone = newValue;
     return modifiedPatient;
   }
 
   setRelativeContactsEmail(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].emailAddress = newValue;
+    modifiedPatient.contact.emailAddress = newValue;
     return modifiedPatient;
   }
   setRelativeContactsCity(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].address.city = newValue;
+    modifiedPatient.contact.address.city = newValue;
     return modifiedPatient;
   }
   setRelativeContactsRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].address.road = newValue;
+    modifiedPatient.contact.address.road = newValue;
     return modifiedPatient;
   }
   setRelativeContactsZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     let modifiedPatient = oldPatient;
-    modifiedPatient.contacts[0].address.zipCode = newValue;
+    modifiedPatient.contact.address.zipCode = newValue;
     return modifiedPatient;
   }
 }

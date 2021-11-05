@@ -53,14 +53,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
         relativeContact.primaryPhone = "27384910"
-        relativeContact.favContact = true;
         relativeContact.emailAddress = "johannepetersen@mail.dk"
         relativeContact.address = new Address();
         relativeContact.address.city = "Aarhus C"
         relativeContact.address.country = "Danmark"
         relativeContact.address.road = "Fiskergade 66"
         relativeContact.address.zipCode = "8000"
-        this.patient1.contacts = [relativeContact];
+        this.patient1.contact = relativeContact;
 
         
         //======================================= Questions
@@ -194,15 +193,15 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
-    async SearchPatient(searchstring: string) : Promise<PatientSimple[]>{
+    async SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
         await new Promise(f => setTimeout(f, 1000));
         
         let allPatients = [this.patient1];
         
-        let results : PatientSimple[] = [];
-        let allPatientsWithFirstName : PatientSimple[] = allPatients.filter(x=>x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
-        let allPatientsWithlastname : PatientSimple[] = allPatients.filter(x=>x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
-        let allPatientsWithCPR : PatientSimple[] = allPatients.filter(x=>x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let results : PatientDetail[] = [];
+        let allPatientsWithFirstName : PatientDetail[] = allPatients.filter(x=>x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithlastname : PatientDetail[] = allPatients.filter(x=>x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        let allPatientsWithCPR : PatientDetail[] = allPatients.filter(x=>x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
 
         results = results.concat(allPatientsWithFirstName)
         results = results.concat(allPatientsWithlastname)
