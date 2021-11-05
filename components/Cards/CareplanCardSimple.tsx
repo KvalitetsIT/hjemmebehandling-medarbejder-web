@@ -120,13 +120,13 @@ initializeServices(){
            /> }
             
             <CardContent>
-            
-            <Grid container spacing={2}>
-                <Grid item xs={3}>
+
+            <Stack direction="row" spacing={10}>
+                <Stack>
                    <Typography variant="caption">Adeling</Typography>
                    <Typography>{this.props.careplan.department}</Typography>
-                </Grid>
-                <Grid item xs={3}>
+                </Stack>
+                <Stack >
                     <Typography variant="caption">Patientgrupper</Typography>
                     {this.state.editMode ? 
                         <Typography><PlanDefinitionSelect SetEditedCareplan={this.setEditedCareplan} careplan={careplan}/></Typography>
@@ -135,20 +135,20 @@ initializeServices(){
                     }
                    
                    
-                </Grid>
-                <Grid item xs={3}>
+                </Stack>
+                <Stack >
                     <Typography variant="caption">Opstart</Typography>
                    <Typography>{careplan.creationDate ? careplan.creationDate.toLocaleDateString()+" "+careplan.creationDate.toLocaleTimeString() : "N/A"}</Typography>
-                </Grid>
-                <Grid item xs={3}>
+                </Stack>
+                <Stack>
                     <Typography variant="caption">Stoppet</Typography>
                     {!careplan.terminationDate ? 
                     <Typography> - </Typography> : 
                     <Typography>{careplan.terminationDate?.toLocaleDateString()+" "+careplan.terminationDate?.toLocaleTimeString()}</Typography>
                     }
                    
-                </Grid>
-            </Grid>
+                </Stack>
+            </Stack>
             
             
             
