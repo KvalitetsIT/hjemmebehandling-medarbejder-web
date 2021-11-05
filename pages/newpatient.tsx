@@ -11,7 +11,6 @@ import { PatientCard } from '../components/Cards/PatientCard';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
 import IPatientService from '../services/interfaces/IPatientService';
-import IPersonService from '../services/interfaces/IPersonService';
 import { Person } from '../components/Models/Person';
 import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { LoadingComponent } from '../components/Layout/LoadingComponent';
@@ -33,7 +32,7 @@ export interface State {
 
 
 export default class NewPatient extends Component<Props,State> {
-  static contextType = ApiContext
+  static contextType = ApiContext;
   static displayName = NewPatient.name;
   patientService!: IPatientService;
 

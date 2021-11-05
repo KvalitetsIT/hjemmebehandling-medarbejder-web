@@ -9,10 +9,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { PatientDetail } from '../Models/PatientDetail';
-
-import PersonService from '../../services/PersonService';
+import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
-import { FakeItToYouMakeItApi } from '../../apis/FakeItToYouMakeItApi';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -24,6 +22,7 @@ export interface State {
 }
 
 export class PatientEditCard extends Component<Props,State> {
+  static contextType = ApiContext;
   static displayName = PatientEditCard.name;
   personService!: IPersonService;
 
@@ -40,6 +39,10 @@ export class PatientEditCard extends Component<Props,State> {
 
   componentDidMount(){
       this.setState({loading:false})
+}
+
+InitializeServices(){
+  this.personService = this.context.personService;
 }
 
 async getPerson(){
@@ -75,10 +78,6 @@ async getPerson(){
   
 }
 
-InitializeServices(){
-  this.personService = new PersonService(new FakeItToYouMakeItApi());
-}
-
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
     let valueFromInput = input.currentTarget.value;
     let modifiedPatient = patientModifier(this.state.patient,valueFromInput);
@@ -86,7 +85,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   }
 
   renderCard(){
-    this.InitializeServices();
+	this.InitializeServices();
     return (
         <Card>
         <CardContent>
