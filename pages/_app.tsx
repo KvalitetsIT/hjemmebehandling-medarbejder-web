@@ -24,7 +24,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         questionAnswerService : new QuestionAnswerService(backendApi),
         careplanService : new CareplanService(backendApi),
         patientService : new PatientService(backendApi),
-        personService : new PersonService(backendApi)
       }}
     >
         {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}

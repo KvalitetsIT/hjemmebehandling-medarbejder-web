@@ -10,7 +10,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { PatientDetail } from '../Models/PatientDetail';
 
-
+import PersonService from '../../services/PersonService';
+import IPersonService from '../../services/interfaces/IPersonService';
+import { FakeItToYouMakeItApi } from '../../apis/FakeItToYouMakeItApi';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -23,6 +25,7 @@ export interface State {
 
 export class PatientEditCard extends Component<Props,State> {
   static displayName = PatientEditCard.name;
+  personService!: IPersonService;
 
   constructor(props : Props){
       super(props);
@@ -39,6 +42,43 @@ export class PatientEditCard extends Component<Props,State> {
       this.setState({loading:false})
 }
 
+async getPerson(){
+  try{
+    if (this.state.patient.cpr == null || this.state.patient.cpr==""){
+	  return;
+    }
+    
+    this.setState({
+      loading: true
+    })
+    let newPerson = await this.personService.GetPerson(this.state.patient.cpr);
+    
+    let p = this.state.patient;
+    p.firstname = newPerson.givenName;
+    p.lastname = newPerson.familyName;
+    p.patientContact.address.city = newPerson.patientContactDetails.address.city;
+    p.patientContact.address.zipCode = newPerson.patientContactDetails.address.zipCode;
+    p.patientContact.address.road = newPerson.patientContactDetails.address.road;    
+    this.setState({patient : p});
+    
+
+    this.setState({
+      loading: false
+    })
+    
+  } catch(error){
+    this.setState({
+      loading: false
+    })
+    throw error;
+  }
+  
+}
+
+InitializeServices(){
+  this.personService = new PersonService(new FakeItToYouMakeItApi());
+}
+
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
     let valueFromInput = input.currentTarget.value;
     let modifiedPatient = patientModifier(this.state.patient,valueFromInput);
@@ -46,7 +86,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   }
 
   renderCard(){
-    
+    this.InitializeServices();
     return (
         <Card>
         <CardContent>

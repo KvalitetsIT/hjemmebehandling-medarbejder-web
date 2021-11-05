@@ -36,7 +36,6 @@ export default class NewPatient extends Component<Props,State> {
   static contextType = ApiContext
   static displayName = NewPatient.name;
   patientService!: IPatientService;
-  personService!: IPersonService;
 
 constructor(props : Props){
   
@@ -68,7 +67,6 @@ constructor(props : Props){
 }
 InitializeServices(){
   this.patientService = this.context.patientService;
-  this.personService = this.context.personService;
 }
 
 SaveCareplan(editedCareplan : PatientCareplan){
@@ -98,40 +96,6 @@ async submitPatient(){
   }
   
 }
-
-async getPerson(){
-  try{
-    if (this.state.patient.cpr == null || this.state.patient.cpr==""){
-	  return;
-    }
-    
-    this.setState({
-      loading: true
-    })
-    let newPerson = await this.personService.GetPerson(this.state.patient.cpr);
-    
-    let p = this.state.patient;
-    p.firstname = newPerson.givenName;
-    p.lastname = newPerson.familyName;
-    p.patientContact.address.city = newPerson.patientContactDetails.address.city;
-    p.patientContact.address.zipCode = newPerson.patientContactDetails.address.zipCode;
-    p.patientContact.address.road = newPerson.patientContactDetails.address.road;    
-    this.setState({patient : p});
-    
-
-    this.setState({
-      loading: false
-    })
-    
-  } catch(error){
-    this.setState({
-      loading: false
-    })
-    throw error;
-  }
-  
-}
-
 
   render () {
     this.InitializeServices();
