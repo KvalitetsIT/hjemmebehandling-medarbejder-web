@@ -47,6 +47,16 @@ export interface IBackendApi {
     GetTasklist : (categories : Array<CategoryEnum>, page : number, pagesize : number) => Promise<Array<Questionnaire>>
 
     /**
+     * Return a list of Questionnaireresponses that have not yet finished processing.
+     */
+    GetUnfinishedQuestionnaireResponses : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
+
+    /**
+     * Return a list of Questionnaires that are overdue.
+     */
+    GetUnansweredQuestionnaires : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
+
+    /**
      * Returns one patient
      */
     GetPatient : (cpr : string) => Promise<PatientDetail>

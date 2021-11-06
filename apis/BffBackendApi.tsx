@@ -18,7 +18,7 @@ import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesRequest } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -65,6 +65,14 @@ export class BffBackendApi implements IBackendApi {
     }
     async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
         return new MockedBackendApi().GetTasklist(categories, page, pagesize);
+    }
+
+    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
+    }
+
+    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+        throw new Error("Method not implemented.");
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
@@ -173,7 +181,7 @@ export class BffBackendApi implements IBackendApi {
 
         let api = new QuestionnaireResponseApi();
         let request = { cpr: cpr, questionnaireIds: questionnaireIds };
-        let questionnaireResponses = await api.getQuestionnaireResponses(request);
+        let questionnaireResponses = await api.getQuestionnaireResponsesByCpr(request);
         if(!questionnaireResponses) {
             throw new Error('Could not retrieve questionnaireResponses!');
         }
