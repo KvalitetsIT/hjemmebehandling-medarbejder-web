@@ -106,7 +106,14 @@ export class BffBackendApi implements IBackendApi {
     }
     
     async GetPerson(cpr: string) : Promise<Person> {
-        return new MockedBackendApi().GetPerson(cpr);
+	
+	    var result = null;
+	    const response = await fetch("http://localhost:8080/api/v1/person?cpr="+cpr);
+	    const body = await response.json();
+	    
+        let person = new Person();
+	    Object.assign(person, body);
+        return person;	
     }
 
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{

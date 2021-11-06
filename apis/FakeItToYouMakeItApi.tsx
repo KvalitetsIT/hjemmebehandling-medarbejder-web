@@ -6,6 +6,7 @@ import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { Person } from "../components/Models/Person";
+import { PersonContact } from "../components/Models/PersonContact";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
@@ -67,14 +68,12 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 		this.person1.cpr = "2512489996"
         this.person1.givenName = "Nancy Ann"
         this.person1.familyName = "Berggren"
-        let personContact = new Contact();
-        personContact.fullname = this.person1.givenName+" "+this.person1.familyName
+        let personContact = new PersonContact();
+        personContact.city = "Aarhus C";
+        personContact.postalCode ="8000";
+        personContact.street = "Fiskergade 66"
         personContact.primaryPhone = "29483749"
-        personContact.address = new Address();
-        personContact.address.city = "Aarhus C"
-        personContact.address.country = "Danmark"
-        personContact.address.road = "Fiskergade 66"
-        personContact.address.zipCode = "8000"
+        
         this.person1.patientContactDetails = personContact;
 
         this.planDefinition1.name = "Imundefekt"

@@ -59,9 +59,9 @@ async getPerson(){
     let p = this.state.patient;
     p.firstname = newPerson.givenName;
     p.lastname = newPerson.familyName;
-    p.patientContact.address.city = newPerson.patientContactDetails.address.city;
-    p.patientContact.address.zipCode = newPerson.patientContactDetails.address.zipCode;
-    p.patientContact.address.road = newPerson.patientContactDetails.address.road;    
+    p.patientContact.address.city = newPerson.patientContactDetails.city;
+    p.patientContact.address.zipCode = newPerson.patientContactDetails.postalCode;
+    p.patientContact.address.road = newPerson.patientContactDetails.street;    
     this.setState({patient : p});
     
 

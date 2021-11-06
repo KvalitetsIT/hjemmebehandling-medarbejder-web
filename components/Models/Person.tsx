@@ -1,4 +1,4 @@
-import { Contact } from "./Contact";
+import { PersonContact } from "./PersonContact";
 
 export class Person {
 
@@ -9,6 +9,6 @@ export class Person {
     birthDate?: string;
     deceasedBoolean?: boolean;
 
-    patientContactDetails! : Contact; // Contactinfo for the patient
+    patientContactDetails! : PersonContact; // Contactinfo for the patient
 
 }

@@ -14,6 +14,7 @@ import QuestionnaireService from '../services/QuestionnaireService';
 import PatientService from '../services/PatientService';
 import PersonService from '../services/PersonService';
 import IPersonService from '../services/interfaces/IPersonService';
+import { BffBackendApi } from '../apis/BffBackendApi';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
@@ -29,7 +30,7 @@ const ApiContext = createContext<IApiContext>(
         questionAnswerService : new QuestionAnswerService(new FakeItToYouMakeItApi()),
         careplanService : new CareplanService(new FakeItToYouMakeItApi()),
         patientService : new PatientService(new FakeItToYouMakeItApi()),
-        personService : new PersonService(new FakeItToYouMakeItApi())
+        personService : new PersonService(new BffBackendApi())
     }
     ); //Default value
 

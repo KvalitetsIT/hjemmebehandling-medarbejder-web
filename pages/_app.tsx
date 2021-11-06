@@ -14,16 +14,17 @@ import { BffBackendApi } from '../apis/BffBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  let backendApi = new FakeItToYouMakeItApi()
+  let mockApi = new FakeItToYouMakeItApi()
+  let backendApi=new BffBackendApi();
   return (
     <>
     <div suppressHydrationWarning>
     <ApiContext.Provider
       value={{
-        questionnaireService : new QuestionnaireService(backendApi),
-        questionAnswerService : new QuestionAnswerService(backendApi),
-        careplanService : new CareplanService(backendApi),
-        patientService : new PatientService(backendApi),
+        questionnaireService : new QuestionnaireService(mockApi),
+        questionAnswerService : new QuestionAnswerService(mockApi),
+        careplanService : new CareplanService(mockApi),
+        patientService : new PatientService(mockApi),
         personService : new PersonService(backendApi)
       }}
     >
