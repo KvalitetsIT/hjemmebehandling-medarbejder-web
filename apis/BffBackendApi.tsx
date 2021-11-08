@@ -70,8 +70,7 @@ export class BffBackendApi implements IBackendApi {
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         let api = new QuestionnaireResponseApi();
-        //let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination] };
-        let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined] };
+        let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination] };
 
         let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
@@ -86,8 +85,8 @@ export class BffBackendApi implements IBackendApi {
         task.firstname = questionnaireResponse.patient!.givenName
         task.lastname = questionnaireResponse.patient!.familyName
         task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
-        task.questionnaireName = "Det store spørgeskema"
         task.questionnaireId = questionnaireResponse.questionnaireId!
+        task.questionnaireName = questionnaireResponse.questionnaireName!
         task.answeredTime = questionnaireResponse.answered!
         task.responseLinkEnabled = true
 
