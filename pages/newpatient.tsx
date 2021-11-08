@@ -12,9 +12,6 @@ import { PatientCareplan } from '../components/Models/PatientCareplan';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 import { PatientEditCard } from '../components/Cards/PatientEditCard';
 
-
-export interface Props {
-}
 export interface State {
     patient : PatientDetail;
     careplan : PatientCareplan;
@@ -23,20 +20,20 @@ export interface State {
 
 
 
-export default class NewPatient extends Component<Props,State> {
+export default class NewPatient extends Component<{},State> {
   static contextType = ApiContext;
   static displayName = NewPatient.name;
   patientService!: IPatientService;
 
-constructor(props : Props){
+constructor(props : {}){
   
     super(props);
 
     
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
-    let relativeContact = new Contact();
-    let newPatient = new PatientDetail();
+    const relativeContact = new Contact();
+    const newPatient = new PatientDetail();
     newPatient.firstname = "";
     newPatient.lastname = "";
     newPatient.patientContact = new Contact();
@@ -46,7 +43,7 @@ constructor(props : Props){
     
     newPatient.contact = relativeContact
     
-    let newCareplan = new PatientCareplan();
+    const newCareplan = new PatientCareplan();
     newCareplan.patient = newPatient;
     
     this.state = {
@@ -56,18 +53,18 @@ constructor(props : Props){
     }
 
 }
-InitializeServices(){
+InitializeServices() : void{
   this.patientService = this.context.patientService;
 }
 
-SaveCareplan(editedCareplan : PatientCareplan){
+SaveCareplan(editedCareplan : PatientCareplan) : void{
   this.setState({careplan : editedCareplan})
   this.forceUpdate();
 }
 
 
 
-async submitPatient(){
+async submitPatient() : Promise<void>{
   this.state.careplan.patient = this.state.patient;
   
   console.log(this.state.careplan)
@@ -75,7 +72,7 @@ async submitPatient(){
     this.setState({
       loading: true
     })
-    let newPatient = await this.patientService.CreatePatient(this.state.patient)
+    const newPatient = await this.patientService.CreatePatient(this.state.patient)
     this.setState({
       patient : newPatient
     })
@@ -88,7 +85,7 @@ async submitPatient(){
   
 }
 
-  render () {
+  render () : JSX.Element{
     this.InitializeServices();
     return (
       <form onSubmit={async ()=>await this.submitPatient()}> 

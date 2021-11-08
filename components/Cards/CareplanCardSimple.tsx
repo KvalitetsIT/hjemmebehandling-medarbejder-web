@@ -41,32 +41,28 @@ export class CareplanCardSimple extends Component<Props,State> {
     this.setEditedCareplan = this.setEditedCareplan.bind(this);
 }
 
-initializeServices(){
+initializeServices() : void {
     
     this.careplanService = this.context.careplanService
-    console.log("ini!")
-    console.log(this.careplanService)
+
   }
  
-  async savePlandefinition(){
-    console.log("saving!!")
-    console.log(this.careplanService)
-
-    let newCareplan = await this.careplanService.SetPlanDefinitionsOnCareplan(this.state.editableCareplan);
+  async savePlandefinition() : Promise<void>{
+    const newCareplan = await this.careplanService.SetPlanDefinitionsOnCareplan(this.state.editableCareplan);
     this.props.careplan.planDefinitions = newCareplan.planDefinitions;
 
   }
 
-  async resetPatientCareplan(){
+  async resetPatientCareplan(): Promise<void>{
     this.state.editableCareplan.planDefinitions = this.props.careplan.planDefinitions;
 }
 
-  setEditedCareplan(careplan : PatientCareplan){
+  setEditedCareplan(careplan : PatientCareplan): void{
     this.setState({editableCareplan : careplan})
   }
 
   
-  async saveInformation(){
+  async saveInformation() : Promise<void>{
 
     this.setState({saving_loading : true})
 
@@ -83,7 +79,7 @@ initializeServices(){
     this.forceUpdate();
   }
 
-  async resetInformation(){
+  async resetInformation(): Promise<void>{
     this.setState({
         editableCareplan : this.props.careplan
     })
@@ -93,9 +89,9 @@ initializeServices(){
     this.forceUpdate();
   }
 
-  render () {
+  render () : JSX.Element{
       this.initializeServices();
-      let careplan = this.state.editableCareplan
+      const careplan = this.state.editableCareplan
     return (
         <>
         {this.state.saving_loading ? <LoadingComponent/> : ""}

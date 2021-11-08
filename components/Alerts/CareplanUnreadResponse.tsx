@@ -10,22 +10,18 @@ export interface Props {
     careplan : PatientCareplan
 }
 
-export interface State {
-    
-}
-
-export class CareplanUnreadResponse extends Component<Props,State> {
+export class CareplanUnreadResponse extends Component<Props,{}> {
   static displayName = CareplanUnreadResponse.name;
 
-  render () {
-      let careplan = this.props.careplan
+  render () : JSX.Element{
+    const careplan = this.props.careplan
 
-      let statuses : QuestionnaireResponse[] = [];
+    const statuses : QuestionnaireResponse[] = [];
       
       for(let questionnaireIndex = 0; questionnaireIndex<careplan.questionnaires.length;questionnaireIndex++){
-          let questionnaire = careplan.questionnaires[questionnaireIndex];
+        const questionnaire = careplan.questionnaires[questionnaireIndex];
         for(let responseIndex = 0; responseIndex<careplan.questionnaires[questionnaireIndex].questionnaireResponses.length;responseIndex++){
-            let response = questionnaire.questionnaireResponses[responseIndex];
+            const response = questionnaire.questionnaireResponses[responseIndex];
             if(response.status !== QuestionnaireResponseStatus.Processed){
                 statuses.push(response)
             }

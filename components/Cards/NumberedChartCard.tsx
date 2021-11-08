@@ -13,9 +13,6 @@ export interface Props {
     questionnaire : Questionnaire;
 }
 
-export interface State {
-    
-}
 class dataset{
     label : string = "";
     data: number[] = [];
@@ -28,11 +25,11 @@ class chartData {
     datasets : dataset[] = []
 }
 
-export class NumberedChartCard extends Component<Props,State> {
+export class NumberedChartCard extends Component<Props,{}> {
   static displayName = NumberedChartCard.name;
   
 
-getChipColorFromCategory(category : CategoryEnum){
+getChipColorFromCategory(category : CategoryEnum) : string {
     if(category === CategoryEnum.RED)
         return "red"
     if(category === CategoryEnum.YELLOW)
@@ -44,27 +41,28 @@ getChipColorFromCategory(category : CategoryEnum){
 
 }
 
-  render () {
+  render () : JSX.Element {
     
-    let data = new chartData();
-    let questionToData = new Map<string, [dataset, ThresholdNumber[]]>();
+    const data = new chartData();
+    const questionToData = new Map<string, [dataset, ThresholdNumber[]]>();
     //let questionToThreshold = new Map<string, ThresholdNumber[]>();
     
     for(let responseIndex = 0; responseIndex < this.props.questionnaire.questionnaireResponses.length; responseIndex++){
-        let response = this.props.questionnaire.questionnaireResponses[responseIndex];
-        data.labels.push(response.answeredTime?.toLocaleDateString()!)
+        const response = this.props.questionnaire.questionnaireResponses[responseIndex];
+        if(response && response.answeredTime)
+            data.labels.push(response.answeredTime.toLocaleDateString())
 
         response.questions.forEach( (a,q) => {
             
-            let numberedAnswer = a as NumberAnswer;
+            const numberedAnswer = a as NumberAnswer;
             if(typeof numberedAnswer.answer === 'number') {
                 if(!questionToData.has(q.question!)){
-                    let set = new dataset();
+                    const set = new dataset();
                     set.label = q.question.slice(0,30);
                     questionToData.set(q.question!, [set, q.thresholdPoint!])
                 }
 
-                let ds: dataset = questionToData.get(q.question!)![0]
+                const ds: dataset = questionToData.get(q.question!)![0]
                 ds.data.push(numberedAnswer.answer)
             }
             
@@ -72,23 +70,23 @@ getChipColorFromCategory(category : CategoryEnum){
         
     }
 
-    questionToData.forEach( (d, q) => {
-        let ds: dataset = d[0]
-        let thresholds: ThresholdNumber[] = d[1]
+    questionToData.forEach( (d) => {
+        const ds: dataset = d[0]
+        const thresholds: ThresholdNumber[] = d[1]
         
         
         for(let i = 0; i < ds.data.length; i++){
-            let answerValue = ds.data[i];
-            let threshold = thresholds.find(x=>x.from <= answerValue && answerValue <= x.to)
-
-            ds.backgroundColor.push(this.getChipColorFromCategory(threshold?.category!));
+            const answerValue = ds.data[i];
+            const threshold = thresholds.find(x=>x.from <= answerValue && answerValue <= x.to)
+            if(threshold && threshold.category)
+                ds.backgroundColor.push(this.getChipColorFromCategory(threshold.category));
         }
         data.datasets.push(ds)
     } )
 
       
       
-    let options = {
+    const options = {
         plugins: {
             legend: {
               display: false

@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { Component } from 'react';
-import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
@@ -38,15 +38,15 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
       }
   }
 
-  closeSnackbar = (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => {
+  closeSnackbar = () : void => {
     this.setState({snackbarOpen : false})
   };
-InitializeServices(){
+InitializeServices() : void{
   this.questionnaireService = this.context.questionnaireService;
 }
-  handleChange = async (event: SelectChangeEvent) => {
-    let collectionStatus = event.target.value as QuestionnaireResponseStatus;
-    let changes = new QuestionnaireResponse();
+  handleChange = async (event: SelectChangeEvent) : Promise<void> => {
+    const collectionStatus = event.target.value as QuestionnaireResponseStatus;
+    const changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
     this.setState({snackbarColor : "info",snackbarOpen : true,snackbarTitle: "Opdaterer ...", snackbarText: "Ændrer status til: " + changes.status , status : collectionStatus})
@@ -65,7 +65,7 @@ InitializeServices(){
     
   };
   
-  render () {
+  render () : JSX.Element {
     this.InitializeServices()
     return ( <>
 <FormControl fullWidth>

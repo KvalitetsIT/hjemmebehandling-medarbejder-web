@@ -34,18 +34,18 @@ constructor(props : Props){
     }
 }
 
-  render () {
+  render () : JSX.Element{
     this.InitializeServices();
-    let contents = this.renderTableData(this.props.questionnaires);
+    const contents = this.renderTableData(this.props.questionnaires);
     return contents;
   }
 
-  InitializeServices(){
+  InitializeServices() : void{
     this.questionAnswerService = this.context.questionAnswerService;
     this.questionnaireService = this.context.questionnaireService;
   }
 
-getChipColorFromCategory(category : CategoryEnum){
+getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -58,7 +58,7 @@ getChipColorFromCategory(category : CategoryEnum){
     return "default"
 }
 
-getDisplayNameFromCategory(category : CategoryEnum){
+getDisplayNameFromCategory(category : CategoryEnum) : string {
     if(category === CategoryEnum.RED)
         return "Rød"
     if(category === CategoryEnum.YELLOW)
@@ -71,8 +71,8 @@ getDisplayNameFromCategory(category : CategoryEnum){
     return "Ukendt"
 }
 
-  renderTableData(questionaire : Questionnaire){
-    let questionaireResponses = questionaire.questionnaireResponses;
+  renderTableData(questionaire : Questionnaire) : JSX.Element{
+    const questionaireResponses = questionaire.questionnaireResponses;
     if(questionaireResponses.length === 0){
         return (
             <>
@@ -118,8 +118,8 @@ getDisplayNameFromCategory(category : CategoryEnum){
                                 </TableCell>
                                 
                                 {questionaireResponses.map(questionResponse => {
-                                    let answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    let category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
+                                    const answer = this.questionnaireService.findAnswer(question,questionResponse);
+                                    const category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )

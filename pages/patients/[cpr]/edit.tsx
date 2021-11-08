@@ -34,18 +34,18 @@ constructor(props : Props){
     }
 
 }
-InitializeServices(){
+InitializeServices() : void{
   this.patientService = this.context.patientService;
 }
 
 
-async submitPatient(){
+async submitPatient():Promise<void>{
   
   try{
     this.setState({
       loading: true
     })
-    let newPatient = await this.patientService.EditPatient(this.state.patient)
+    const newPatient = await this.patientService.EditPatient(this.state.patient)
     this.setState({
       patient : newPatient
     })
@@ -58,27 +58,27 @@ async submitPatient(){
   
 }
 
-async componentDidMount(){
+async componentDidMount():Promise<void>{
     this.setState({loading : true})
     await this.populatePatient();
     this.setState({loading : false})
 }
 
-async populatePatient(){
-    let patient = await this.patientService.GetPatient(this.props.match.params.cpr)
+async populatePatient():Promise<void>{
+  const patient = await this.patientService.GetPatient(this.props.match.params.cpr)
     this.setState({
         patient : patient
     })
 }
 
-  render () {
+  render () : JSX.Element{
     this.InitializeServices();
 
     return this.state.loading ? <LoadingComponent/> : this.RenderEditPage();
 
   }
 
-  RenderEditPage(){
+  RenderEditPage() : JSX.Element{
     return (
         <form onSubmit={async ()=>await this.submitPatient()}>
         <Stack direction="row" spacing={3}>

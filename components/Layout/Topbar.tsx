@@ -2,20 +2,15 @@ import { Box, Grid, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 
-export interface Props {
-}
 export interface State {
   drawerIsOpen: boolean
 }
 
-export class Topbar extends Component<Props,State> {
+export class Topbar extends Component<{},State> {
   static displayName = Topbar.name;
 
-toogleDrawer = () => {
-    
-  };
 
-  render () {
+  render () : JSX.Element {
     return (
         <>
         

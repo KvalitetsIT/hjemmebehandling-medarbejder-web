@@ -13,15 +13,12 @@ export interface Props {
 
 }
 
-export interface State {
-    
-}
 
-export class ContactCard extends Component<Props,State> {
+export class ContactCard extends Component<Props,{}> {
   static displayName = ContactCard.name;
 
-  render () {
-      let contact = this.props.contact;
+  render ()  : JSX.Element{
+    const contact = this.props.contact;
     return (
         <Card component={Box} minWidth={100}>
             <CardContent>

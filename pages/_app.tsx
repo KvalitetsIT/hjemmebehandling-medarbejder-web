@@ -11,9 +11,9 @@ import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
 
 
-function MyApp({ Component, pageProps }: AppProps) {
-  let mockApi = new FakeItToYouMakeItApi()
-  let backendApi=new BffBackendApi();
+function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
+  const mockApi = new FakeItToYouMakeItApi()
+  const backendApi=new BffBackendApi();
   return (
     <>
     <div suppressHydrationWarning>

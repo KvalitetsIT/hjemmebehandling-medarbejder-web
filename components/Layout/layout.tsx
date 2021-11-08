@@ -10,26 +10,14 @@ import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]'
 import NewPatient from '../../pages/newpatient';
 import EditPatient from '../../pages/patients/[cpr]/edit';
 
-
-export interface Props {
-}
 export interface State {
   drawerIsOpen: boolean
 }
 
-
-
-export class Layout extends Component<Props,State> {
+export class Layout extends Component<{},State> {
   static displayName = Layout.name;
-
-toogleDrawer = () => {
-    
-  };
-
-  
-
  
-  render () {
+  render () : JSX.Element{
     try{
     return (
 <>

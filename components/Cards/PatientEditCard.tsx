@@ -26,20 +26,20 @@ export class PatientEditCard extends Component<Props,State> {
       this.modifyPatient = this.modifyPatient.bind(this);
   }
 
-  render () {
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
+  render () : JSX.Element{
+    const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
     return contents;
   }
 
-  componentDidMount(){
+  componentDidMount() : void {
       this.setState({loading:false})
 }
 
-InitializeServices(){
+InitializeServices() : void{
   this.personService = this.context.personService;
 }
 
-async getPerson(){
+async getPerson() : Promise<void>{
   try{
     if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
 	  return;
@@ -48,9 +48,9 @@ async getPerson(){
     this.setState({
       loading: true
     })
-    let newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
+    const newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
     
-    let p = this.state.patient;
+    const p = this.state.patient;
     p.firstname = newPerson.givenName;
     p.lastname = newPerson.familyName;
     p.patientContact.address.city = newPerson.patientContactDetails.city;
@@ -72,13 +72,13 @@ async getPerson(){
   
 }
 
-modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ){
-    let valueFromInput = input.currentTarget.value;
-    let modifiedPatient = patientModifier(this.state.patient,valueFromInput);
+modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) : void{
+  const valueFromInput = input.currentTarget.value;
+    const modifiedPatient = patientModifier(this.state.patient,valueFromInput);
     this.setState({patient : modifiedPatient  })
   }
 
-  renderCard(){
+  renderCard() : JSX.Element{
 	this.InitializeServices();
     return (
         <Card>
@@ -132,79 +132,79 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   
 
   setLastname(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.lastname = newValue;
     return modifiedPatient;
   }
   setFirstname(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.firstname = newValue;
     return modifiedPatient;
   }
   setCpr(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.cpr = newValue;
     return modifiedPatient;
   }
   
   setRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.address.road = newValue;
     return modifiedPatient;
   }
   setZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.address.zipCode = newValue;
     return modifiedPatient;
   }
   
   setCiy(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.address.city = newValue;
     return modifiedPatient;
   }
   
   setPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.primaryPhone = newValue;
     return modifiedPatient;
   }
   
   setEmail(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.emailAddress = newValue;
     return modifiedPatient;
   }
 
 
   setRelativeContactsName(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.fullname = newValue;
     return modifiedPatient;
   }
   setRelativeContactsPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.primaryPhone = newValue;
     return modifiedPatient;
   }
 
   setRelativeContactsEmail(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.emailAddress = newValue;
     return modifiedPatient;
   }
   setRelativeContactsCity(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.address.city = newValue;
     return modifiedPatient;
   }
   setRelativeContactsRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.address.road = newValue;
     return modifiedPatient;
   }
   setRelativeContactsZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    let modifiedPatient = oldPatient;
+    const modifiedPatient = oldPatient;
     modifiedPatient.contact.address.zipCode = newValue;
     return modifiedPatient;
   }

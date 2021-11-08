@@ -36,7 +36,7 @@ export class ThresholdModal extends Component<Props,State> {
     }
 }
 
-getChipColorFromCategory(category : CategoryEnum){
+getChipColorFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -50,7 +50,7 @@ getChipColorFromCategory(category : CategoryEnum){
 
 }
 
-getDanishColornameFromCategory(category : CategoryEnum){
+getDanishColornameFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
         return "Rød"
     if(category === CategoryEnum.YELLOW)
@@ -63,35 +63,35 @@ getDanishColornameFromCategory(category : CategoryEnum){
     return "Ukendt"
 }
 
-SliderThresholdNumberChange(threshold : ThresholdNumber){
+SliderThresholdNumberChange(threshold : ThresholdNumber) :  (newValues : number[]) => void {
     return (newValues : number[]) => {
-        let sortedNumbers = newValues.sort( (a,b) => a - b );
+        const sortedNumbers = newValues.sort( (a,b) => a - b );
         threshold.from = sortedNumbers[0];
         threshold.to = sortedNumbers[1];
         this.state.onThresholdNumberChange(threshold)
     }
 }
 
-SelectThresholdOptionChange(threshold : ThresholdOption){
+SelectThresholdOptionChange(threshold : ThresholdOption) : (newCategory : CategoryEnum) => void {
     return (newCategory : CategoryEnum) => {
         threshold.category = newCategory;
         this.state.onThresholdOptionChange(threshold)
     }
 }
 
-  render () {
-    let hasNumberenThresholds = this.props.question.thresholdPoint.length > 0
-    let hasOptionThresholds = this.props.question.options.length > 0
+  render () : JSX.Element {
+    const hasNumberenThresholds = this.props.question.thresholdPoint.length > 0
+    const hasOptionThresholds = this.props.question.options.length > 0
 
-    let hasThreshold = hasNumberenThresholds || hasOptionThresholds;
+    const hasThreshold = hasNumberenThresholds || hasOptionThresholds;
       
     if(!hasThreshold)
-        return ("")
+        return (<div></div>)
 
     return (
         <>
         <Modal disableEnforceFocus open={this.state.modalIsOpen} onClose={()=>this.setState({modalIsOpen : false})}>
-            <Box top={200} right={500}  sx={{ width: 400 , position: 'absolute' as 'absolute'}}>
+            <Box top={200} right={500} >
                 <Card>
                     <CardHeader title="Tærskelværdier" subheader={this.props.question.question}/>
                     <CardContent>

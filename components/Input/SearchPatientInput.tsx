@@ -7,21 +7,18 @@ import { PatientSimple } from '../Models/PatientSimple';
 import IPatientService from '../../services/interfaces/IPatientService';
 import { Link } from 'react-router-dom';
 
-export interface Props {
-}
-
 export interface State {
     patientResults : PatientSimple[]
     loading : boolean
 }
 
 
-export class SearchPatientInput extends Component<Props,State> {
+export class SearchPatientInput extends Component<{},State> {
   static displayName = SearchPatientInput.name;
   static contextType = ApiContext
   patientService! : IPatientService
 
-  constructor(props : Props){
+  constructor(props : {}){
       super(props);
       this.state = {
           patientResults : [],
@@ -30,11 +27,11 @@ export class SearchPatientInput extends Component<Props,State> {
       
   }
 
-InitialiseServices(){
+InitialiseServices() : void{
     this.patientService= this.context.patientService;
 }
 
-async searchForPatient(searchString : string){
+async searchForPatient(searchString : string) : Promise<void>{
     this.setState({loading:true})
 
     if(searchString.length < 3){
@@ -44,12 +41,12 @@ async searchForPatient(searchString : string){
         
 
     
-    let patientSearchResults = await this.patientService.SearchPatient(searchString);
+    const patientSearchResults = await this.patientService.SearchPatient(searchString);
     console.log(patientSearchResults)
     this.setState({patientResults : patientSearchResults, loading : false});
     this.forceUpdate();
 }
-  render () {
+  render () : JSX.Element{
       this.InitialiseServices();
     return (
         <Autocomplete

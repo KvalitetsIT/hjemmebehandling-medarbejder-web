@@ -34,21 +34,21 @@ export class Tasklist extends Component<Props,State> {
     
 }
 
-  render () {
+  render () : JSX.Element{
     this.InitializeServices();
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaires);
+    const contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaires);
     return contents;
   }
 
-  InitializeServices(){
+  InitializeServices() : void{
     this.questionnaireService = this.context.questionnaireService;
   }
-  componentDidMount(){
+  componentDidMount() : void{
     
       this.populateQuestionnaireResponses()
   }
 
-  async  populateQuestionnaireResponses() {
+  async  populateQuestionnaireResponses() : Promise<void> {
     let responses: Questionnaire[] = []
     if(this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
       responses = await this.questionnaireService.GetUnfinishedQuestionnaireResponses(1, this.props.pageSize)
@@ -63,7 +63,7 @@ export class Tasklist extends Component<Props,State> {
     });
 }
 
-getChipColorFromCategory(category : CategoryEnum){
+getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -77,7 +77,7 @@ getChipColorFromCategory(category : CategoryEnum){
 
 }
 
-getDanishColornameFromCategory(category : CategoryEnum){
+getDanishColornameFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
         return "Rød"
     if(category === CategoryEnum.YELLOW)
@@ -89,7 +89,7 @@ getDanishColornameFromCategory(category : CategoryEnum){
 
     return "Ukendt"
 }
-  renderTableData(questionnaireResponses : Array<Questionnaire>){
+  renderTableData(questionnaireResponses : Array<Questionnaire>) : JSX.Element{
         return (
             
             <TableContainer component={Paper}>

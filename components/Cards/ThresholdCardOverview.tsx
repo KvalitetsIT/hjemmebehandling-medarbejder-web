@@ -13,15 +13,12 @@ export interface Props {
     questionnaire : Questionnaire;
 }
 
-export interface State {
-    
-}
 
-export class ThresholdCardOverview extends Component<Props,State> {
+export class ThresholdCardOverview extends Component<Props,{}> {
     static contextType = ApiContext
   static displayName = ThresholdCardOverview.name;
 
-  getChipColorFromCategory(category : CategoryEnum){
+  getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -34,8 +31,8 @@ export class ThresholdCardOverview extends Component<Props,State> {
     return "default"
 }
 
-  render () {
-    let allQuestions : Question[] = this.context.questionnaireService.findAllQuestions(this.props.questionnaire.questionnaireResponses)
+  render () : JSX.Element{
+    const allQuestions : Question[] = this.context.questionnaireService.findAllQuestions(this.props.questionnaire.questionnaireResponses)
     return (
         <Card component={Box} minWidth={100}>
             <CardContent>

@@ -2,9 +2,6 @@ import { Breadcrumbs } from '@material-ui/core';
 import React, { Component } from 'react';
 import { Link,RouteComponentProps, withRouter } from 'react-router-dom';
 
-export interface State {
-    
-}
 
 interface Props {
   match : { params : {cpr : string} }
@@ -15,7 +12,7 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
   static displayName = AutoBreadcrumbs.name;
 
   render () {
-    let urlSegmentToDisplayName: any = { };
+    const urlSegmentToDisplayName: any = { };
 
     urlSegmentToDisplayName["patients"] = {displayName: "Patienter"}
     urlSegmentToDisplayName["questionnaires"] = {displayName: "Spørgeskemaer"}
@@ -25,7 +22,7 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
 
 
     
-    let urlSegments = this.props.location.pathname.split("/")
+    const urlSegments = this.props.location.pathname.split("/")
     console.log(urlSegments);
     let totalUrlIncremental = "";
   return (

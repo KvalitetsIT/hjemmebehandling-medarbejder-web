@@ -3,7 +3,7 @@ export class Frequency {
     days: DayEnum[] = [];
     
 
-    ToString(){
+    ToString() : string{
         let toReturn = "";
         for(let i = 0;i<this.days.length; i++){
             if(i !== 0)

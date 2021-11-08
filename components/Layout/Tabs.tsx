@@ -27,17 +27,17 @@ export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
 
 constructor(props : BasicTabsProps){
     super(props);
-    let startTabIndex = props.idOfStartTab !== undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
+    const startTabIndex = props.idOfStartTab !== undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
     this.state = {
         value : startTabIndex
     }
 }
 
-  handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  handleChange = (event: React.SyntheticEvent, newValue: number) : void => {
     this.setState({value : newValue})
   };
 
-  render () {
+  render () : JSX.Element{
         let indexTabPanelCounterLabel = 0;
         let indexTabPanelCounterContent = 0;
         return (
@@ -64,7 +64,7 @@ constructor(props : BasicTabsProps){
   }
 
 
-  TabPanel(props: TabPanelProps) {
+  TabPanel(props: TabPanelProps) : JSX.Element{
   
     return (
       <div

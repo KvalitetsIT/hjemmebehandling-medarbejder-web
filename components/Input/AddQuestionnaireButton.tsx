@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Alert, AlertColor, Button, Snackbar, SnackbarCloseReason, Tooltip } from '@mui/material';
+import { Alert, AlertColor, Button, Snackbar, Tooltip } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { Typography } from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
@@ -46,11 +46,11 @@ export class AddQuestionnaireButton extends Component<Props,State> {
             snackbarTitle : ""
       }
   }
-  InitializeServices(){
+  InitializeServices() : void{
     this.questionnaireService = this.context.questionnaireService;
   }
 
-  async AddQuestionnaire(questionnaireToAdd : Questionnaire){
+  async AddQuestionnaire(questionnaireToAdd : Questionnaire) : Promise<void>{
       try{
             await this.questionnaireService.AddQuestionnaireToCareplan(this.props.careplan, questionnaireToAdd);
             this.setState({AddQuestionnaireBool : false})
@@ -70,13 +70,13 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   }
   
 
-  render () {
+  render () : JSX.Element {
       this.InitializeServices();
       
-      let plandefinitions = this.state.allPlanDefinitions;
+      const plandefinitions = this.state.allPlanDefinitions;
 
       
-    let options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = this.GetQuestionnairePlanDefinitionRelations(plandefinitions);
+    const options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = this.GetQuestionnairePlanDefinitionRelations(plandefinitions);
 
     return (<>
     {this.state.AddQuestionnaireBool ? 
@@ -118,13 +118,13 @@ export class AddQuestionnaireButton extends Component<Props,State> {
    * @returns Object with questionnaire and planDefinition
    */
     GetQuestionnairePlanDefinitionRelations(plandefinitions: PlanDefinition[]) : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> {
-        let options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = []
+        const options : Array<{planDefinition : PlanDefinition, questionnaire : Questionnaire}> = []
         
         for(let pdefinitionIndex = 0; pdefinitionIndex<plandefinitions.length; pdefinitionIndex++){
-            let currentPlanDefinition = plandefinitions[pdefinitionIndex];
+            const currentPlanDefinition = plandefinitions[pdefinitionIndex];
             
             for(let questionnaireIndex = 0; questionnaireIndex < currentPlanDefinition.questionnaires?.length; questionnaireIndex++){
-                let currentQuestionnaire = currentPlanDefinition.questionnaires[questionnaireIndex]
+                const currentQuestionnaire = currentPlanDefinition.questionnaires[questionnaireIndex]
                 
                 options.push({
                     questionnaire : currentQuestionnaire,
@@ -135,16 +135,16 @@ export class AddQuestionnaireButton extends Component<Props,State> {
         return options;
     }
 
-  closeSnackbar = (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => {
+  closeSnackbar = () : void => {
     this.setState({snackbarOpen : false})
   };
 
-  componentDidMount(){
+  componentDidMount() : void{
     this.populateQuestionnairesList();
   }
 
-  async populateQuestionnairesList(){
-    let allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions()
+  async populateQuestionnairesList() : Promise<void>{
+    const allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions()
     this.setState({
         allPlanDefinitions : allPlanDefinitions ?? []
     })

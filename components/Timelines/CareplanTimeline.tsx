@@ -28,15 +28,15 @@ constructor(props : Props){
     })
 }
 
-clickedButton(careplan : PatientCareplan){
+clickedButton(careplan : PatientCareplan) : void{
     this.setState({
         activeCareplan : careplan
     })
     this.props.careplanClicked(careplan)
 }
 
-  render () {
-      let activeCareplan : PatientCareplan = this.state.activeCareplan;
+  render () : JSX.Element {
+      const activeCareplan : PatientCareplan = this.state.activeCareplan;
 
     return (
         <Stepper activeStep={1} alternativeLabel>

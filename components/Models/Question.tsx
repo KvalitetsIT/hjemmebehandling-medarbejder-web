@@ -3,7 +3,7 @@ import { ThresholdNumber } from "./ThresholdNumber";
 import { ThresholdOption } from "./ThresholdOption";
 
 export class Question implements IComparable<Question>{
-    isEqual(other: Question){
+    isEqual(other: Question) : boolean{
         return this.question === other.question;
     }
     

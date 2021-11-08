@@ -34,29 +34,28 @@ export class PlanDefinitionSelect extends Component<Props,State> {
       
   }
 
-  InitializeServices(){
+  InitializeServices() : void{
     this.questionnaireService = this.context.questionnaireService;
   }
 
-  handleChange(e: SelectChangeEvent<string>) {
-    let clicked = e.target.value as unknown as string[]
+  handleChange(e: SelectChangeEvent<string>) : void {
+    const clicked = e.target.value as unknown as string[]
 
-    let plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id === id)) 
-    let careplan = this.state.editedCareplan;
+    const plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id === id)) 
+    const careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
 
 
     this.setState({editedCareplan : careplan})
     this.props.SetEditedCareplan(careplan);
-  };
+  }
 
-  async componentDidMount(){
+  async componentDidMount() : Promise<void>{
     this.populatePlanDefinitions();
   }
-  //TODO: CALL SERVICE INSTED
-  async populatePlanDefinitions() {
+  async populatePlanDefinitions() : Promise<void>{
       
-    let planDefinitions =  await this.questionnaireService.GetAllPlanDefinitions();
+    const planDefinitions =  await this.questionnaireService.GetAllPlanDefinitions();
 
     this.setState({
         allPlanDefinitions : planDefinitions
@@ -64,7 +63,7 @@ export class PlanDefinitionSelect extends Component<Props,State> {
 }
 
 
-  render () {
+  render () : JSX.Element {
       this.InitializeServices();
     return (
         <Select multiple value={this.state.editedCareplan.planDefinitions.map(x=>x.id) as unknown as string}  onChange={this.handleChange}>

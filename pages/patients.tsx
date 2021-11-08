@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { Box } from '@mui/system';
 import { TaskType } from '../components/Models/TaskType';
 import { Tasklist } from '../components/Tables/Tasklist';
-function Patients() {
+function Patients() : JSX.Element{
   
     return (
       <>

@@ -30,17 +30,17 @@ export class PatientCard extends Component<Props,State> {
       this.state = {loading : true}
   }
 
-  render () {
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
+  render () : JSX.Element{
+    const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
     return contents;
   }
 
-  componentDidMount(){
+  componentDidMount() : void{
     this.setState({loading : false})
 }
 
-  renderCard(){
-    let contact = this.props.patient.contact
+  renderCard() :JSX.Element{
+    const contact = this.props.patient.contact
     return (
         <Card>
           

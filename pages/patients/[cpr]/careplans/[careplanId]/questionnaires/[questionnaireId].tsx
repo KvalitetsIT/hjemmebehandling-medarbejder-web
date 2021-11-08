@@ -44,31 +44,31 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
     }
 }
 
-  render () {
+  render () : JSX.Element {
     this.InitializeServices();
-    let contents = this.state.loading ? <LoadingComponent/> : this.renderTabs();
+    const contents = this.state.loading ? <LoadingComponent/> : this.renderTabs();
     return contents;
   }
 
-  InitializeServices(){
+  InitializeServices() : void {
     this.careplanService = this.context.careplanService;
     this.questionnaireService = this.context.questionnaireService;
   }
 
-  componentDidMount(){
+  componentDidMount() : void {
     
     this.populateCareplans()
 }
 
-SetQuestionnaireFrequency(questionnaire : Questionnaire){
+SetQuestionnaireFrequency(questionnaire : Questionnaire) : void{
   this.setState({editMode:false})
   this.questionnaireService.SetQuestionnaireFrequency(questionnaire);
 }
 
-async populateCareplans() {
+async populateCareplans() : Promise<void> {
   
-  let { cpr } = this.props.match.params;
-  let responses = await this.careplanService.GetPatientCareplans(cpr)
+  const { cpr } = this.props.match.params;
+  const responses = await this.careplanService.GetPatientCareplans(cpr)
   this.setState({
       careplans : responses,
       loading : false
@@ -76,7 +76,7 @@ async populateCareplans() {
 }
 
 
-  renderTabs() {
+  renderTabs() : JSX.Element {
     
     let questionnaires : Questionnaire[] = []
     let currentCareplan = this.state.careplans.find(x=>x.id === this.props.match.params.careplanId);
@@ -119,7 +119,7 @@ async populateCareplans() {
 
   //=====================TABS===============================
 
-  renderQuestionnaireResponseTab(questionnaire : Questionnaire){
+  renderQuestionnaireResponseTab(questionnaire : Questionnaire) : JSX.Element{
     return (
       <>
         {this.state.editMode ? 
@@ -140,7 +140,7 @@ async populateCareplans() {
     )
   }
 
-  renderChartsTab(){
+  renderChartsTab() : JSX.Element {
     return (
       <div>charts</div>
     )

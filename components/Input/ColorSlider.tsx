@@ -19,7 +19,7 @@ export class ColorSlider extends Component<Props,State> {
   static displayName = ColorSlider.name;
   static contextType = ApiContext
 
-  getChipColorFromCategory(category : CategoryEnum){
+  getChipColorFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
         return "red"
     if(category === CategoryEnum.YELLOW)
@@ -42,12 +42,12 @@ export class ColorSlider extends Component<Props,State> {
       
   }
 
-  handleChange (event: React.ChangeEvent<{}>, newValue: number | number[]) {
+  handleChange (event: React.ChangeEvent<{}>, newValue: number | number[]) : void{
     this.setState({values : newValue as number[]})
     this.props.onChange(newValue as number[])
-  };
+  }
 
-  render () {
+  render () :JSX.Element{
     return (
             <Slider
             onChange={this.handleChange}

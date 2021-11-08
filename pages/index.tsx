@@ -13,7 +13,7 @@ import React from 'react';
     .then(res => console.log(res));
   }
   
-  function App() {
+  function App() : JSX.Element {
     console.log('Calling foo. Result: ' + foo(4));
   
     return (

@@ -29,7 +29,7 @@ export class CategorySelect extends Component<Props,State> {
     }
     
 }
-getChipColorFromCategory(category : CategoryEnum){
+getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -45,7 +45,7 @@ getChipColorFromCategory(category : CategoryEnum){
 getAllCategories() : CategoryEnum[]{
     return [CategoryEnum.BLUE,CategoryEnum.GREEN,CategoryEnum.YELLOW,CategoryEnum.RED]
 }
-getDanishColornameFromCategory(category : CategoryEnum){
+getDanishColornameFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
         return "Rød"
     if(category === CategoryEnum.YELLOW)
@@ -60,13 +60,13 @@ getDanishColornameFromCategory(category : CategoryEnum){
 
  
 
-  handleChange (event: SelectChangeEvent) {
-    let newValue = this.getAllCategories().find(x=>x.toString() === event.target.value.toString())
+  handleChange (event: SelectChangeEvent) : void {
+    const newValue = this.getAllCategories().find(x=>x.toString() === event.target.value.toString())
     this.setState({category : newValue as CategoryEnum})
     this.props.onChange(newValue as CategoryEnum)
-  };
+  }
 
-  render () {
+  render () : JSX.Element{
     return (
         <Select
         labelId="demo-multiple-name-label"

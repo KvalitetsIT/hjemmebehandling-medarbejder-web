@@ -21,7 +21,7 @@ export interface State {
 export class CareplanSelectorCard extends Component<Props,State> {
   static displayName = CareplanSelectorCard.name;
 
-  render () {
+  render () :JSX.Element {
     return (
         <Card component={Box} minWidth={100}>
             <CardHeader subheader="Behandlingsplaner"/>

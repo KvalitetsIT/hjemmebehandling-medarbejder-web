@@ -38,24 +38,24 @@ class PatientCareplans extends React.Component<Props,State> {
     
 }
 
-  render () {
+  render () : JSX.Element{
       this.InitializeServices();
-    let contents = this.state.loading ? <LoadingComponent/> : this.renderCareplanTab();
+    const contents = this.state.loading ? <LoadingComponent/> : this.renderCareplanTab();
     return contents;
   }
-  InitializeServices(){
+  InitializeServices():void{
     this.careplanService = this.context.careplanService;
   }
 
-  componentDidMount(){
+  componentDidMount():void{
     this.populateCareplans()
 }
 
 
-async populateCareplans() {
-  let cpr = this.props.match.params.cpr;
+async populateCareplans() : Promise<void>{
+  const cpr = this.props.match.params.cpr;
 
-  let responses : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
+  const responses : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
   console.log(responses)
   this.setState({
       careplans : responses,
@@ -67,15 +67,15 @@ async populateCareplans() {
 
   //=====================TABS===============================
 
-  renderCareplanTab(){
+  renderCareplanTab() : JSX.Element{
     
-    let careplans = this.state.careplans;
+    const careplans = this.state.careplans;
     if(careplans.length === 0)
         return (
             <div>Ingen behandlingsplaner fundet :-(</div>
         )
 
-    let activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
+    const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
         <>
         <Grid container spacing={2}>

@@ -13,7 +13,7 @@ export class PatientCareplan {
     department!: string;
 
     clone() : PatientCareplan{
-        let clone = new PatientCareplan();
+        const clone = new PatientCareplan();
         clone.id = this.id;
         clone.planDefinitions = this.planDefinitions;
         clone.questionnaires = this.questionnaires;

@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { CSSProperties } from 'react';
 
-export interface Props {
-}
 export interface State {
   drawerIsOpen: boolean
 }
 
-export class Sidebar extends Component<Props,State> {
+export class Sidebar extends Component<{},State> {
   static displayName = Sidebar.name;
 
   style = {
@@ -29,18 +27,18 @@ bottomPush : CSSProperties = {
   marginLeft : 30,
 }
 
-constructor(props : Props){
+constructor(props : {}){
     super(props);
     this.state = {
         drawerIsOpen : false
     }
 }
 
-toogleDrawer = () => {
+toogleDrawer = () : void => {
     this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
   };
 
-  render () {
+  render () : JSX.Element{
     return (
 <>
             

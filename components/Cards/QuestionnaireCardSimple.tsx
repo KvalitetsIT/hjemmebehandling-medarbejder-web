@@ -16,18 +16,15 @@ export interface Props {
     hideChart? : boolean;
 }
 
-export interface State {
-    
-}
 
-export class QuestionnaireCardSimple extends Component<Props,State> {
+export class QuestionnaireCardSimple extends Component<Props,{}> {
   static displayName = QuestionnaireCardSimple.name;
 
-  render () {
-      let questionnaire = this.props.questionnaire;
+  render () : JSX.Element{
+      const questionnaire = this.props.questionnaire;
       
-      let questionnaireResponses = questionnaire?.questionnaireResponses
-      let answerTimeOnly = questionnaireResponses?.flatMap(x=>x.answeredTime);
+      const questionnaireResponses = questionnaire?.questionnaireResponses
+      const answerTimeOnly = questionnaireResponses?.flatMap(x=>x.answeredTime);
       let latestQuestionnaireResponse = null;
 
       if(answerTimeOnly.length > 0)

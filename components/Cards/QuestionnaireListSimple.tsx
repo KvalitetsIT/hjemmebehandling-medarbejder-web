@@ -13,16 +13,13 @@ export interface Props {
     specialSave? : (editedCareplan : PatientCareplan) => void
 }
 
-export interface State {
-    
-}
 
-export class QuestionnaireListSimple extends Component<Props,State> {
+export class QuestionnaireListSimple extends Component<Props,{}> {
   static displayName = QuestionnaireListSimple.name;
 
-  render () {
-     let questionnairesFromPlandefinitions : Questionnaire[] = this.props.careplan.planDefinitions.flatMap(x=>x.questionnaires);
-     let extraQuestionnaries : Questionnaire[] = this.props.careplan.questionnaires;
+  render () : JSX.Element {
+     const questionnairesFromPlandefinitions : Questionnaire[] = this.props.careplan.planDefinitions.flatMap(x=>x.questionnaires);
+     const extraQuestionnaries : Questionnaire[] = this.props.careplan.questionnaires;
 
     return (
         <Card>
