@@ -33,3 +33,7 @@ npm run dev
 ```
 
 The app should now be available at http://localhost:3000
+
+```
+npm run lint
+```

@@ -5,6 +5,7 @@ import { PatientSimple } from "../components/Models/PatientSimple";
 import { Person } from "../components/Models/Person";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
+import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
@@ -52,12 +53,12 @@ export interface IBackendApi {
     /**
      * Return a list of Questionnaireresponses that have not yet finished processing.
      */
-    GetUnfinishedQuestionnaireResponses : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
+    GetUnfinishedQuestionnaireResponseTasks : (page : number, pagesize : number) => Promise<Array<Task>>
 
     /**
      * Return a list of Questionnaires that are overdue.
      */
-    GetUnansweredQuestionnaires : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
+    GetUnansweredQuestionnaireTasks : (page : number, pagesize : number) => Promise<Array<Task>>
 
     /**
      * Returns one patient

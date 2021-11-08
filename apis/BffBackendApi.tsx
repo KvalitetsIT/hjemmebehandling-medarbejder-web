@@ -10,6 +10,7 @@ import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
@@ -18,7 +19,7 @@ import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -28,7 +29,7 @@ import { PatientDto } from "../generated/models/PatientDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
-import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum } from "../generated/models/QuestionnaireResponseDto";
+import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
@@ -66,16 +67,34 @@ export class BffBackendApi implements IBackendApi {
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         throw new Error("Method not implemented.");
     }
-    async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        return new MockedBackendApi().GetTasklist(categories, page, pagesize);
+
+    async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        let api = new QuestionnaireResponseApi();
+        let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination] };
+
+        let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
+
+        return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
     }
 
-    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        throw new Error("Method not implemented.");
+    private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto) : Task {
+        let task = new Task()
+
+        task.cpr = questionnaireResponse.patient!.cpr!
+        task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
+        task.firstname = questionnaireResponse.patient!.givenName
+        task.lastname = questionnaireResponse.patient!.familyName
+        task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
+        task.questionnaireId = questionnaireResponse.questionnaireId!
+        task.questionnaireName = questionnaireResponse.questionnaireName!
+        task.answeredTime = questionnaireResponse.answered!
+        task.responseLinkEnabled = true
+
+        return task
     }
 
-    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        throw new Error("Method not implemented.");
+    async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        return []
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
@@ -353,26 +372,39 @@ export class BffBackendApi implements IBackendApi {
     private mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus) : PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
         switch(status) {
             case QuestionnaireResponseStatus.NotProcessed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
             case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
             case QuestionnaireResponseStatus.Processed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
             default:
-                throw new Error('Could not map QuestionnaireResponseStatus ' + status);
+                throw new Error('Could not map QuestionnaireResponseStatus ' + status)
         }
     }
 
     private mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum) : QuestionnaireResponseStatus {
         switch(status) {
             case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
-                return QuestionnaireResponseStatus.NotProcessed;
+                return QuestionnaireResponseStatus.NotProcessed
             case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
-                return QuestionnaireResponseStatus.InProgress;
+                return QuestionnaireResponseStatus.InProgress
             case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
-                return QuestionnaireResponseStatus.Processed;
+                return QuestionnaireResponseStatus.Processed
             default:
-                throw new Error('Could not map ExaminationStatus ' + status);
+                throw new Error('Could not map ExaminationStatus ' + status)
         }
     }
+
+    private mapTriagingCategory(category: QuestionnaireResponseDtoTriagingCategoryEnum) : CategoryEnum {
+        switch(category) {
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Green:
+                return CategoryEnum.GREEN
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Yellow:
+                return CategoryEnum.YELLOW
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Red:
+                return CategoryEnum.RED
+            default:
+                throw new Error('Could not map category ' + category);
+        }
+    } 
 }
