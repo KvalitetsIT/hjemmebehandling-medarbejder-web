@@ -1,20 +1,10 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
-import { Component, useContext } from 'react';
-import { IBackendApi } from '../../apis/IBackendApi';
-import { Alert, AlertColor, Snackbar, SnackbarCloseReason, Table } from '@mui/material';
+import Select from '@mui/material/Select';
+import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Slider, TableCell, TableRow, Typography, withStyles } from '@material-ui/core';
-import { Question } from '../Models/Question';
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { CategoryEnum } from '../Models/CategoryEnum';
-import { DayEnum, Frequency, FrequencyEnum } from '../Models/Frequency';
+import { TableCell, TableRow, Typography } from '@material-ui/core';
+import { DayEnum, FrequencyEnum } from '../Models/Frequency';
 import { Questionnaire } from '../Models/Questionnaire';
 
 export interface Props {
