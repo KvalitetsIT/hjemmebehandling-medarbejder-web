@@ -165,32 +165,6 @@ export class MockedBackendApi implements IBackendApi {
         
         return patient;
     }
-    
-    static results: Questionnaire[] = [];
-    async GetTasklist(categories : Array<CategoryEnum>, page : number, pagesize : number) : Promise<Array<Questionnaire>>{
-        await new Promise(f => setTimeout(f, this.waitTimeMS));
-        let allCategories = [CategoryEnum.RED,CategoryEnum.YELLOW,CategoryEnum.GREEN,CategoryEnum.BLUE]
-
-        let array: Questionnaire[] = [];
-        if(MockedBackendApi.results.length == 0){
-            let numberOfPatients = pagesize;
-            for(let i = 0; i < numberOfPatients; i++ ){
-                let category = allCategories[this.getRandomInt(0,allCategories.length-1)]
-                let questionnaire = new Questionnaire();
-                let questionnaireName = this.questionnaireNames[this.getRandomInt(0,this.questionnaireNames.length-1)]
-                questionnaire.name = questionnaireName;
-                questionnaire.id = this.questionnaireNames.indexOf(questionnaire.name)+""
-                questionnaire.questionnaireResponses = [this.createQuestionnaireResponse(category),this.createQuestionnaireResponse(category)];
-                array.push(questionnaire);
-            }
-            MockedBackendApi.results = array;
-        }
-
-
-
-        return MockedBackendApi.results
-                .filter(questionnaire => questionnaire.questionnaireResponses.some(resp => categories.some(cat => cat == resp.category)));
-    }
 
     createRandomMeasurementCollection(){
         let collection =  new QuestionnaireResponse();

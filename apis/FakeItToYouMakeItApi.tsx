@@ -299,20 +299,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return option;
     }
 
-    async GetTasklist(categories: CategoryEnum[], page: number, pagesize: number) : Promise<Questionnaire[]>{
-        
-        if(categories.some(x=>x == CategoryEnum.RED)){
-            let questionnaireWithUniquePatients = new Questionnaire();
-            questionnaireWithUniquePatients.name = this.questionnaire1.name;
-            questionnaireWithUniquePatients.id = this.questionnaire1.id;
-            questionnaireWithUniquePatients.frequency = this.questionnaire1.frequency;
-            questionnaireWithUniquePatients.questionnaireResponses = this.GetUniqueList(this.questionnaire1.questionnaireResponses)
-            return [questionnaireWithUniquePatients]
-        }
-            
-        
-        return [];
-    }
     private GetUniqueList(questionnaireresponses : QuestionnaireResponse[]) : QuestionnaireResponse[]{
         let toReturn : QuestionnaireResponse[] = [];
 
