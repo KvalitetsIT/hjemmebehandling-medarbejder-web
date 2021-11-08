@@ -1,8 +1,6 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Layout } from '../components/Layout/layout'
-import { Container } from '@material-ui/core'
-import { MockedBackendApi } from '../apis/MockedBackendApi';
 import ApiContext from './_context';
 import { FakeItToYouMakeItApi } from '../apis/FakeItToYouMakeItApi';
 import QuestionnaireService from '../services/QuestionnaireService';

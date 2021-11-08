@@ -1,13 +1,7 @@
-import { AppBar, Box, Breadcrumbs, Button, CardContent, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
+import { Button, CardContent, Divider, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Backdrop, Card, ListItemButton, Skeleton, TextField } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-
-import { FamilyRestroomTwoTone } from '@mui/icons-material';
+import { Card, Skeleton, TextField } from '@mui/material';
 import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
@@ -47,14 +41,14 @@ InitializeServices(){
 
 async getPerson(){
   try{
-    if (this.state.patient.cpr == null || this.state.patient.cpr==""){
+    if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
 	  return;
     }
     
     this.setState({
       loading: true
     })
-    let newPerson = await this.personService.GetPerson(this.state.patient.cpr);
+    let newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
     
     let p = this.state.patient;
     p.firstname = newPerson.givenName;

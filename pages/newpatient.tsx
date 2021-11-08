@@ -1,22 +1,14 @@
-import { AppBar, Box, Breadcrumbs, Button, CardContent, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
+import { Button, CardContent } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Backdrop, Card, ListItemButton, TextField } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Card } from '@mui/material';
 import { PatientDetail } from '../components/Models/PatientDetail';
-import { PatientCard } from '../components/Cards/PatientCard';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
 import IPatientService from '../services/interfaces/IPatientService';
-import { Person } from '../components/Models/Person';
-import { FamilyRestroomTwoTone } from '@mui/icons-material';
 import { LoadingComponent } from '../components/Layout/LoadingComponent';
 import { CareplanCardSimple } from '../components/Cards/CareplanCardSimple';
 import { PatientCareplan } from '../components/Models/PatientCareplan';
-import { QuestionnaireCardSimple } from '../components/Cards/QuestionnaireCardSimple';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 import { PatientEditCard } from '../components/Cards/PatientEditCard';
 

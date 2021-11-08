@@ -1,20 +1,11 @@
-import { AppBar, Box, Button, CircularProgress, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
-import React, { Component, useContext } from 'react';
-import Stack from '@mui/material/Stack';
-import { Alert, ListItemButton, Skeleton } from '@mui/material';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
-import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
-import { IBackendApi } from '../../apis/IBackendApi';
+import React, { Component } from 'react';
+import { Skeleton } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { TaskType } from '../Models/TaskType';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Backdrop from '@mui/material/Backdrop';
-import { LoadingComponent } from '../Layout/LoadingComponent';
+import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
-import { isContext } from 'vm';
 import { Questionnaire } from '../Models/Questionnaire';
 import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
@@ -60,10 +51,10 @@ export class Tasklist extends Component<Props,State> {
 
   async  populateQuestionnaireResponses() {
     let tasks: Task[] = []
-    if(this.props.taskType == TaskType.UNFINISHED_RESPONSE) {
+    if(this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
       tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(1, this.props.pageSize)
     }
-    if(this.props.taskType == TaskType.UNANSWERED_QUESTIONNAIRE) {
+    if(this.props.taskType === TaskType.UNANSWERED_QUESTIONNAIRE) {
       tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(1, this.props.pageSize)
     }
 
@@ -74,13 +65,13 @@ export class Tasklist extends Component<Props,State> {
 }
 
 getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "error"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "warning"
-    if(category == CategoryEnum.GREEN)
+    if(category === CategoryEnum.GREEN)
         return "success"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "primary"
 
     return "default"
@@ -88,13 +79,13 @@ getChipColorFromCategory(category : CategoryEnum){
 }
 
 getDanishColornameFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "Rød"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "Gul"
-    if(category == CategoryEnum.GREEN)
+    if(category === CategoryEnum.GREEN)
         return "Grøn"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "Blå"
 
     return "Ukendt"

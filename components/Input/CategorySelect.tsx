@@ -1,18 +1,9 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
-import { Component, useContext } from 'react';
-import { IBackendApi } from '../../apis/IBackendApi';
-import { Alert, AlertColor, Chip, Snackbar, SnackbarCloseReason } from '@mui/material';
+import { Component } from 'react';
+import { Chip } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { Slider, Typography, withStyles } from '@material-ui/core';
-import { Question } from '../Models/Question';
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
 import { CategoryEnum } from '../Models/CategoryEnum';
 
 export interface Props {
@@ -39,13 +30,13 @@ export class CategorySelect extends Component<Props,State> {
     
 }
 getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "error"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "warning"
-    //if(category == CategoryEnum.GREEN)
+    //if(category === CategoryEnum.GREEN)
       //  return "success"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "primary"
 
     return "default"
@@ -55,13 +46,13 @@ getAllCategories() : CategoryEnum[]{
     return [CategoryEnum.BLUE,CategoryEnum.GREEN,CategoryEnum.YELLOW,CategoryEnum.RED]
 }
 getDanishColornameFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "Rød"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "Gul"
-    if(category == CategoryEnum.GREEN)
+    if(category === CategoryEnum.GREEN)
         return "Grøn"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "Blå"
 
     return "Ukendt"
@@ -70,8 +61,7 @@ getDanishColornameFromCategory(category : CategoryEnum){
  
 
   handleChange (event: SelectChangeEvent) {
-    let newValue = this.getAllCategories().find(x=>x.toString() == event.target.value.toString())
-    console.log("new val: "+newValue)
+    let newValue = this.getAllCategories().find(x=>x.toString() === event.target.value.toString())
     this.setState({category : newValue as CategoryEnum})
     this.props.onChange(newValue as CategoryEnum)
   };

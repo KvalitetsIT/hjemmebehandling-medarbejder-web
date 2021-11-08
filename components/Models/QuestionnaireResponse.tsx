@@ -2,7 +2,6 @@ import { Answer } from "./Answer";
 import { CategoryEnum } from "./CategoryEnum";
 import { PatientSimple } from "./PatientSimple";
 import { Question } from "./Question";
-import { Questionnaire } from "./Questionnaire";
 
 export class QuestionnaireResponse {
     id! : string

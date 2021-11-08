@@ -1,4 +1,4 @@
-import { CircularProgress, Divider, emphasize, Grid, Tooltip, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -6,20 +6,11 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { useParams, Link } from 'react-router-dom';
-import { IBackendApi } from '../../apis/IBackendApi';
+import { Link } from 'react-router-dom';
 import { PatientDetail } from '../../components/Models/PatientDetail';
-import { Contact } from '../Models/Contact';
 import { Component } from 'react';
-import StarIcon from '@mui/icons-material/Star';
-import ContactPageIcon from '@mui/icons-material/ContactPage';
-import { PatientSimple } from '../Models/PatientSimple';
-import { Accordion, AccordionDetails, AccordionSummary, Badge, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
-import { ContactCard } from './ContactCard';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 export interface Props {
