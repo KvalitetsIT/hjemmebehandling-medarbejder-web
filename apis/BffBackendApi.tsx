@@ -10,6 +10,7 @@ import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
@@ -18,7 +19,7 @@ import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -70,12 +71,35 @@ export class BffBackendApi implements IBackendApi {
         return new MockedBackendApi().GetTasklist(categories, page, pagesize);
     }
 
-    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        throw new Error("Method not implemented.");
+    async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        let api = new QuestionnaireResponseApi();
+        //let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination] };
+        let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined] };
+
+        let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
+        //return api.getQuestionnaireResponsesByStatus 
+
+        return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
     }
 
-    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        throw new Error("Method not implemented.");
+    private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto) : Task {
+        let task = new Task()
+
+        task.cpr = questionnaireResponse.patient!.cpr!
+        task.category = CategoryEnum.RED
+        task.firstname = "Bertel"
+        task.lastname = "Bertelsen"
+        task.questionnaireResponseStatus = undefined
+        task.questionnaireName = "Det store spørgeskema"
+        task.questionnaireId = questionnaireResponse.questionnaireId!
+        task.answeredTime = questionnaireResponse.answered!
+        task.responseLinkEnabled = true
+
+        return task
+    }
+
+    async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        return []
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {

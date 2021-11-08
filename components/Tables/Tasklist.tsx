@@ -16,6 +16,7 @@ import { LoadingComponent } from '../Layout/LoadingComponent';
 import ApiContext from '../../pages/_context';
 import { isContext } from 'vm';
 import { Questionnaire } from '../Models/Questionnaire';
+import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 export interface Props {
@@ -24,7 +25,7 @@ export interface Props {
 }
 
 export interface State {
-  questionnaires : Array<Questionnaire>
+  tasks : Array<Task>
   loading : boolean
 }
 
@@ -37,7 +38,7 @@ export class Tasklist extends Component<Props,State> {
     super(props);
 
     this.state = {
-        questionnaires : [],
+        tasks : [],
         loading : true
     }
     
@@ -45,7 +46,7 @@ export class Tasklist extends Component<Props,State> {
 
   render () {
     this.InitializeServices();
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.questionnaires);
+    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.tasks);
     return contents;
   }
 
@@ -58,16 +59,16 @@ export class Tasklist extends Component<Props,State> {
   }
 
   async  populateQuestionnaireResponses() {
-    let responses: Questionnaire[] = []
+    let tasks: Task[] = []
     if(this.props.taskType == TaskType.UNFINISHED_RESPONSE) {
-      responses = await this.questionnaireService.GetUnfinishedQuestionnaireResponses(1, this.props.pageSize)
+      tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(1, this.props.pageSize)
     }
     if(this.props.taskType == TaskType.UNANSWERED_QUESTIONNAIRE) {
-      responses = await this.questionnaireService.GetUnansweredQuestionnaires(1, this.props.pageSize)
+      tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(1, this.props.pageSize)
     }
 
     this.setState({
-        questionnaires : responses,
+        tasks : tasks,
         loading : false
     });
 }
@@ -98,7 +99,7 @@ getDanishColornameFromCategory(category : CategoryEnum){
 
     return "Ukendt"
 }
-  renderTableData(questionnaireResponses : Array<Questionnaire>){
+  renderTableData(tasks : Array<Task>){
         return (
             
             <TableContainer component={Paper}>
@@ -114,32 +115,27 @@ getDanishColornameFromCategory(category : CategoryEnum){
             <TableCell align="left"></TableCell>
             
           </TableRow>
-                    {questionnaireResponses.map((questionnaire) => ( 
-                        <>
-                        {questionnaire.questionnaireResponses.map((questionnaireResponse) => {
-                            return (
-                              <TableRow
-                                key={questionnaireResponse.patient.cpr}>
-                                <TableCell component="th" scope="row">
-                                  <Chip color={this.getChipColorFromCategory(questionnaireResponse.category)} label={this.getDanishColornameFromCategory(questionnaireResponse.category)} />
-                                </TableCell>
-                                <TableCell align="left">
-                                  <Button  component={Link} to={"/patients/"+questionnaireResponse.patient.cpr} variant="text">{questionnaireResponse.patient.firstname + " " + questionnaireResponse.patient.lastname}</Button>
-                                </TableCell>
-                                <TableCell align="left">{questionnaireResponse.patient.cpr}</TableCell>
-                                <TableCell align="left">{questionnaireResponse.status ? questionnaireResponse.status : "-" }</TableCell>
-                                <TableCell align="left">{questionnaire.name}</TableCell>
-                                <TableCell align="left">{questionnaireResponse.answeredTime ? questionnaireResponse.answeredTime.toLocaleDateString()+" "+questionnaireResponse.answeredTime.toLocaleTimeString() : "Ikke besvaret"}</TableCell>
-                                <TableCell align="left">
-                                  <Button component={Link} disabled={questionnaireResponse.status ? false : true} to={"/patients/"+questionnaireResponse.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelse</Button>
-                              </TableCell>
-                              </TableRow>
-                            )
-                        })}
-                        </>
-                      
-                
-              ))}
+
+        {tasks.map((task) => (
+          <>
+            <TableRow key={task.cpr}>
+              <TableCell component="th" scope="row">
+                <Chip color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
+              </TableCell>
+              <TableCell align="left">
+                <Button  component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
+              </TableCell>
+              <TableCell align="left">{task.cpr}</TableCell>
+              <TableCell align="left">{task?.questionnaireResponseStatus ?? "-"}</TableCell>
+              <TableCell align="left">{task.questionnaireName}</TableCell>
+              <TableCell align="left">{task?.answeredTime?.toLocaleDateString() ?? "Ikke besvaret"}</TableCell>
+              <TableCell align="left">
+                <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/"+task.cpr+"/questionnaires/"+task.questionnaireId} variant="contained">Se besvarelse</Button>
+              </TableCell>
+            </TableRow>
+          </>
+        ))}
+
         </TableHead>
         <TableBody>
           

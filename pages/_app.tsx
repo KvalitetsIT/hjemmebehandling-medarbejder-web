@@ -15,7 +15,7 @@ import { BffBackendApi } from '../apis/BffBackendApi';
 
 function MyApp({ Component, pageProps }: AppProps) {
   let mockApi = new FakeItToYouMakeItApi()
-  let backendApi=new BffBackendApi();
+  let backendApi = new BffBackendApi()
   return (
     <>
     <div suppressHydrationWarning>

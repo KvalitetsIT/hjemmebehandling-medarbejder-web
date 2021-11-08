@@ -13,6 +13,7 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { Task } from "../components/Models/Task";
 
 export class MockedBackendApi implements IBackendApi {
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
@@ -46,11 +47,11 @@ export class MockedBackendApi implements IBackendApi {
 
     }
 
-    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+    async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         throw new Error("Method not implemented.");
     }
 
-    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+    async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         throw new Error("Method not implemented.");
     }
 

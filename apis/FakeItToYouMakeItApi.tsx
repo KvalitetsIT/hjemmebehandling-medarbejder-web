@@ -12,6 +12,7 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { NoPatientFround } from "./Errors/NoPatientFountError";
@@ -329,11 +330,23 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return toReturn;
     }
 
-    async GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        return this.GetTasklist([CategoryEnum.RED, CategoryEnum.YELLOW, CategoryEnum.GREEN], page, pagesize)
+    async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        let task = new Task()
+
+        task.cpr = "0101010101"
+        task.category = CategoryEnum.GREEN
+        task.firstname = this.patient1.firstname
+        task.lastname = this.patient1.lastname
+        task.questionnaireResponseStatus = this.questionnaireResponse1.status
+        task.questionnaireName = this.questionnaire1.name
+        task.questionnaireId = this.questionnaire1.id
+        task.answeredTime = this.CreateDate()
+        task.responseLinkEnabled = true
+
+        return [task]
     }
 
-    async GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
+    async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         return []
     }
 

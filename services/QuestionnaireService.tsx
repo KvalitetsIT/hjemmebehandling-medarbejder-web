@@ -7,6 +7,7 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService implements IQuestionnaireService {
@@ -15,6 +16,7 @@ export default class QuestionnaireService implements IQuestionnaireService {
     constructor(backendapi : IBackendApi){
         this.backendApi = backendapi;
     }
+
     SetQuestionnaireFrequency(questionnaire: Questionnaire) : Promise<void>{
         let questionnaireEdit = new Questionnaire();
         questionnaireEdit.id = questionnaire.id;
@@ -30,12 +32,12 @@ export default class QuestionnaireService implements IQuestionnaireService {
         return this.backendApi.GetAllPlanDefinitions();
     }
 
-    GetUnfinishedQuestionnaireResponses(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-        return this.backendApi.GetUnfinishedQuestionnaireResponses(page, pagesize)
+    GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        return this.backendApi.GetUnfinishedQuestionnaireResponseTasks(page, pagesize)
     }
 
-    GetUnansweredQuestionnaires(page : number, pagesize : number) : Promise<Array<Questionnaire>> {
-      return this.backendApi.GetUnansweredQuestionnaires(page, pagesize)
+    GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+      return this.backendApi.GetUnansweredQuestionnaireTasks(page, pagesize)
     }
 
     SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{

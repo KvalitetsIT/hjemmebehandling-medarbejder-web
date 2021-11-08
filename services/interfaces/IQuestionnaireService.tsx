@@ -6,6 +6,7 @@ import { PlanDefinition } from "../../components/Models/PlanDefinition";
 import { Question } from "../../components/Models/Question";
 import { Questionnaire } from "../../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
+import { Task } from "../../components/Models/Task";
 
 export default interface IQuestionnaireService {
     
@@ -14,8 +15,8 @@ export default interface IQuestionnaireService {
     findAnswer : (desiredQuestion : Question, questionResponses : QuestionnaireResponse) => Answer | undefined;
     
     //GET
-    GetUnfinishedQuestionnaireResponses : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
-    GetUnansweredQuestionnaires : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
+    GetUnfinishedQuestionnaireResponseTasks : (page : number, pagesize : number) => Promise<Array<Task>>
+    GetUnansweredQuestionnaireTasks : (page : number, pagesize : number) => Promise<Array<Task>>
     GetAllPlanDefinitions : () => Promise<Array<PlanDefinition>>
 
     //SET
