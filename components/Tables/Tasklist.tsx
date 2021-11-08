@@ -6,7 +6,6 @@ import { CategoryEnum } from '../Models/CategoryEnum';
 import { TaskType } from '../Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
-import { Questionnaire } from '../Models/Questionnaire';
 import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
@@ -37,7 +36,7 @@ export class Tasklist extends Component<Props,State> {
 
   render () : JSX.Element{
     this.InitializeServices();
-    let contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.tasks);
+    const contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.tasks);
     return contents;
   }
 
@@ -49,7 +48,7 @@ export class Tasklist extends Component<Props,State> {
       this.populateQuestionnaireResponses()
   }
 
-  async  populateQuestionnaireResponses() {
+  async  populateQuestionnaireResponses() : Promise<void>{
     let tasks: Task[] = []
     if(this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
       tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(1, this.props.pageSize)
@@ -64,7 +63,7 @@ export class Tasklist extends Component<Props,State> {
     });
 }
 
-getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default"{
+getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default" {
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -90,7 +89,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
 
     return "Ukendt"
 }
-  renderTableData(tasks : Array<Task>){
+  renderTableData(tasks : Array<Task>) : JSX.Element{
         return (
             
             <TableContainer component={Paper}>
