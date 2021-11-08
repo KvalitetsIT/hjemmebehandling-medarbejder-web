@@ -29,7 +29,7 @@ import { PatientDto } from "../generated/models/PatientDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
-import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum } from "../generated/models/QuestionnaireResponseDto";
+import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
@@ -74,7 +74,6 @@ export class BffBackendApi implements IBackendApi {
         let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined] };
 
         let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
-        //return api.getQuestionnaireResponsesByStatus 
 
         return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
     }
@@ -83,10 +82,10 @@ export class BffBackendApi implements IBackendApi {
         let task = new Task()
 
         task.cpr = questionnaireResponse.patient!.cpr!
-        task.category = CategoryEnum.RED
-        task.firstname = "Bertel"
-        task.lastname = "Bertelsen"
-        task.questionnaireResponseStatus = undefined
+        task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
+        task.firstname = questionnaireResponse.patient!.givenName
+        task.lastname = questionnaireResponse.patient!.familyName
+        task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
         task.questionnaireName = "Det store spørgeskema"
         task.questionnaireId = questionnaireResponse.questionnaireId!
         task.answeredTime = questionnaireResponse.answered!
@@ -374,26 +373,39 @@ export class BffBackendApi implements IBackendApi {
     private mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus) : PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
         switch(status) {
             case QuestionnaireResponseStatus.NotProcessed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
             case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
             case QuestionnaireResponseStatus.Processed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined;
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
             default:
-                throw new Error('Could not map QuestionnaireResponseStatus ' + status);
+                throw new Error('Could not map QuestionnaireResponseStatus ' + status)
         }
     }
 
     private mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum) : QuestionnaireResponseStatus {
         switch(status) {
             case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
-                return QuestionnaireResponseStatus.NotProcessed;
+                return QuestionnaireResponseStatus.NotProcessed
             case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
-                return QuestionnaireResponseStatus.InProgress;
+                return QuestionnaireResponseStatus.InProgress
             case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
-                return QuestionnaireResponseStatus.Processed;
+                return QuestionnaireResponseStatus.Processed
             default:
-                throw new Error('Could not map ExaminationStatus ' + status);
+                throw new Error('Could not map ExaminationStatus ' + status)
         }
     }
+
+    private mapTriagingCategory(category: QuestionnaireResponseDtoTriagingCategoryEnum) : CategoryEnum {
+        switch(category) {
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Green:
+                return CategoryEnum.GREEN
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Yellow:
+                return CategoryEnum.YELLOW
+            case QuestionnaireResponseDtoTriagingCategoryEnum.Red:
+                return CategoryEnum.RED
+            default:
+                throw new Error('Could not map category ' + category);
+        }
+    } 
 }
