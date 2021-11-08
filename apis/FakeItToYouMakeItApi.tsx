@@ -333,7 +333,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         let task = new Task()
 
-        task.cpr = "0101010101"
+        task.cpr = this.patient1.cpr!
         task.category = CategoryEnum.GREEN
         task.firstname = this.patient1.firstname
         task.lastname = this.patient1.lastname
