@@ -1,6 +1,5 @@
 import { Typography } from '@material-ui/core';
 import { Box } from '@mui/system';
-import { CategoryEnum } from '../components/Models/CategoryEnum';
 import { TaskType } from '../components/Models/TaskType';
 import { Tasklist } from '../components/Tables/Tasklist';
 function Patients() {

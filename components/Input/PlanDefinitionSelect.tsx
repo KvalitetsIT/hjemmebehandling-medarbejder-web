@@ -1,19 +1,8 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
-import { Component, useContext } from 'react';
-import { IBackendApi } from '../../apis/IBackendApi';
-import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material';
+import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Slider, Typography, withStyles } from '@material-ui/core';
-import { Question } from '../Models/Question';
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { CategoryEnum } from '../Models/CategoryEnum';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { PlanDefinition } from '../Models/PlanDefinition';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
@@ -52,7 +41,7 @@ export class PlanDefinitionSelect extends Component<Props,State> {
   handleChange(e: SelectChangeEvent<string>) {
     let clicked = e.target.value as unknown as string[]
 
-    let plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id == id)) 
+    let plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id === id)) 
     let careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
 

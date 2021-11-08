@@ -1,28 +1,11 @@
-import { AppBar, Box, Button, CircularProgress, Tooltip,Container, Divider, Drawer, Fab, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemText, ListSubheader, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography, Modal } from '@material-ui/core';
+import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
-import React, { Component, useContext } from 'react';
-import Stack from '@mui/material/Stack';
-import { Alert, Badge, Card, CardContent, ListItemButton, SelectChangeEvent, Skeleton } from '@mui/material';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
-import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
-import { IBackendApi } from '../../apis/IBackendApi';
+import React, { Component } from 'react';
+import { Badge } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { QuestionnaireResponseStatus, MeasurementType } from '../Models/QuestionnaireResponse';
+import { MeasurementType } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
-import { Question } from '../Models/Question';
-import { Answer, NumberAnswer, StringAnswer } from '../Models/Answer';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import DeviceThermostatOutlinedIcon from '@mui/icons-material/DeviceThermostatOutlined';
-import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
-import { width } from '@mui/system';
-import { ThresholdModal } from '../Modals/ThresholdModal';
-import { ThresholdNumber } from '../Models/ThresholdNumber';
-import { ThresholdOption } from '../Models/ThresholdOption';
-import QuestionAnswerService from '../../services/QuestionAnswerService';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '../Models/Questionnaire';
@@ -63,26 +46,26 @@ constructor(props : Props){
   }
 
 getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "error"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "warning"
-    //if(category == CategoryEnum.GREEN)
+    //if(category === CategoryEnum.GREEN)
       //  return "success"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "primary"
 
     return "default"
 }
 
 getDisplayNameFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "Rød"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "Gul"
-    if(category == CategoryEnum.GREEN)
+    if(category === CategoryEnum.GREEN)
         return "Grøn"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "Blå"
 
     return "Ukendt"
@@ -90,7 +73,7 @@ getDisplayNameFromCategory(category : CategoryEnum){
 
   renderTableData(questionaire : Questionnaire){
     let questionaireResponses = questionaire.questionnaireResponses;
-    if(questionaireResponses.length == 0){
+    if(questionaireResponses.length === 0){
         return (
             <>
             <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>

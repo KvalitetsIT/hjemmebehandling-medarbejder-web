@@ -1,10 +1,5 @@
-import { AppBar, Box, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, TextField, Toolbar, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
-import Stack from '@mui/material/Stack';
-import { ListItemButton } from '@mui/material';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
-import { Sidebar } from './Sidebar';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 
 export interface Props {

@@ -41,14 +41,14 @@ InitializeServices(){
 
 async getPerson(){
   try{
-    if (this.state.patient.cpr == null || this.state.patient.cpr==""){
+    if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
 	  return;
     }
     
     this.setState({
       loading: true
     })
-    let newPerson = await this.personService.GetPerson(this.state.patient.cpr);
+    let newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
     
     let p = this.state.patient;
     p.firstname = newPerson.givenName;

@@ -38,7 +38,7 @@ export class QuestionnaireListSimple extends Component<Props,State> {
                 <Table>
 
                 
-                {questionnairesFromPlandefinitions.length == 0 && extraQuestionnaries.length == 0? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
+                {questionnairesFromPlandefinitions.length === 0 && extraQuestionnaries.length === 0? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
                 {questionnairesFromPlandefinitions.map(questionnaire => {
                     return (
                             <FrequencyTableRow firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>

@@ -22,13 +22,13 @@ export class ThresholdCardOverview extends Component<Props,State> {
   static displayName = ThresholdCardOverview.name;
 
   getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "error"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "warning"
-    //if(category == CategoryEnum.GREEN)
+    //if(category === CategoryEnum.GREEN)
       //  return "success"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "primary"
 
     return "default"

@@ -26,7 +26,7 @@ export class CareplanUnreadResponse extends Component<Props,State> {
           let questionnaire = careplan.questionnaires[questionnaireIndex];
         for(let responseIndex = 0; responseIndex<careplan.questionnaires[questionnaireIndex].questionnaireResponses.length;responseIndex++){
             let response = questionnaire.questionnaireResponses[responseIndex];
-            if(response.status != QuestionnaireResponseStatus.Processed){
+            if(response.status !== QuestionnaireResponseStatus.Processed){
                 statuses.push(response)
             }
         }
@@ -36,14 +36,14 @@ export class CareplanUnreadResponse extends Component<Props,State> {
         {statuses.map(x=>{
             return (
                 <>
-                {x.status == QuestionnaireResponseStatus.NotProcessed ? 
+                {x.status === QuestionnaireResponseStatus.NotProcessed ? 
                     <Alert severity="warning" action={
                         <Button component={Link} to={"/patients/"+careplan.patient.cpr+"/questionnaires/a"} color="inherit" variant="text">Se besvarelse</Button>        
                     }>
                         Der er en ulæste besvarelse fra {x.answeredTime?.toLocaleDateString()}
                     </Alert> : ""
                 }
-                {x.status == QuestionnaireResponseStatus.InProgress ? 
+                {x.status === QuestionnaireResponseStatus.InProgress ? 
                     <Alert severity="error">
                         Der er en besvarelse under processering
                     </Alert> : ""

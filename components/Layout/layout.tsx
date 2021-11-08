@@ -1,15 +1,9 @@
-import { AppBar, Box, Breadcrumbs, Chip, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar, Typography } from '@material-ui/core';
-import React, { Component, useContext } from 'react';
-import Stack from '@mui/material/Stack';
-import { ListItemButton } from '@mui/material';
-import { withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
+import { Box } from '@material-ui/core';
+import React, { Component } from 'react';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
-import App from '../../pages';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
-import ApiContext from '../../pages/_context';
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
@@ -27,11 +21,6 @@ export interface State {
 
 export class Layout extends Component<Props,State> {
   static displayName = Layout.name;
-
-constructor(props : Props){
-    super(props);
-
-}
 
 toogleDrawer = () => {
     
@@ -78,5 +67,4 @@ toogleDrawer = () => {
     throw new Error("fejl")
   }
   }
-
 }

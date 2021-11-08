@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { AddQuestionnaireButton } from '../Input/AddQuestionnaireButton';
 
 export interface TabPanelProps {
     children?: React.ReactNode;
@@ -28,7 +27,7 @@ export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
 
 constructor(props : BasicTabsProps){
     super(props);
-    let startTabIndex = props.idOfStartTab != undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
+    let startTabIndex = props.idOfStartTab !== undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
     this.state = {
         value : startTabIndex
     }

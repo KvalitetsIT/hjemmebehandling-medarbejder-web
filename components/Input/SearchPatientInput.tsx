@@ -1,23 +1,10 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
-import { Component, useContext } from 'react';
-import { IBackendApi } from '../../apis/IBackendApi';
-import { Alert, AlertColor, Autocomplete, Button, CircularProgress, InputAdornment, Snackbar, SnackbarCloseReason, Stack, TextField } from '@mui/material';
+import { Component } from 'react';
+import { Autocomplete, Button, CircularProgress, InputAdornment, Stack, TextField } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { Slider, Typography, withStyles } from '@material-ui/core';
-import { Question } from '../Models/Question';
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { CategoryEnum } from '../Models/CategoryEnum';
-import { PatientDetail } from '../Models/PatientDetail';
+import { Typography } from '@material-ui/core';
 import { PatientSimple } from '../Models/PatientSimple';
 import IPatientService from '../../services/interfaces/IPatientService';
-import { breakpoints } from '@mui/system';
 import { Link } from 'react-router-dom';
 
 export interface Props {

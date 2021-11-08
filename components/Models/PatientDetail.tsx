@@ -1,5 +1,4 @@
 import { Contact } from "./Contact";
-import { PatientCareplan } from "./PatientCareplan";
 import { PatientSimple } from "./PatientSimple";
 
 //When we want to display all info about a patient

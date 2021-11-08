@@ -33,11 +33,11 @@ export class NumberedChartCard extends Component<Props,State> {
   
 
 getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "red"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "yellow"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "blue"
 
     return "green"

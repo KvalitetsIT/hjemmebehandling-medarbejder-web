@@ -1,19 +1,11 @@
-import { Avatar, CircularProgress, Divider, Grid, Tooltip, Typography } from '@material-ui/core';
+import { Avatar, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import { useParams } from 'react-router-dom';
-import { IBackendApi } from '../../apis/IBackendApi';
-import { PatientDetail } from '../Models/PatientDetail';
 import { Contact } from '../Models/Contact';
 import { Component } from 'react';
-import StarIcon from '@mui/icons-material/Star';
-import ContactPageIcon from '@mui/icons-material/ContactPage';
 import Stack from '@mui/material/Stack';
-import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 
 
 export interface Props {

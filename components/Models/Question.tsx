@@ -4,7 +4,7 @@ import { ThresholdOption } from "./ThresholdOption";
 
 export class Question implements IComparable<Question>{
     isEqual(other: Question){
-        return this.question == other.question;
+        return this.question === other.question;
     }
     
     question! : string

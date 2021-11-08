@@ -1,9 +1,7 @@
-import { AppBar, Box, CardHeader, Container, Divider, Drawer, Fab, Grid, IconButton, List, ListItem, ListItemText, ListSubheader, Modal, Paper, TableRow, TextField, Toolbar, Typography } from '@material-ui/core';
+import { Box, CardHeader, Modal, TableRow, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Button, Card, CardContent, Chip, ListItemButton, MenuItem, OutlinedInput, Select, Slider, Table, TableCell, TableHead } from '@mui/material';
-import { withStyles, withThemeCreator } from '@material-ui/styles';
-import MenuIcon from "@mui/icons-material/Menu"
+import { Button, Card, CardContent, Table, TableCell, TableHead } from '@mui/material';
 import { Question } from '../Models/Question';
 import TuneIcon from '@mui/icons-material/Tune';
 import { CategoryEnum } from '../Models/CategoryEnum';
@@ -39,13 +37,13 @@ export class ThresholdModal extends Component<Props,State> {
 }
 
 getChipColorFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "error"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "warning"
     //if(category == CategoryEnum.GREEN)
       //  return "success"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "primary"
 
     return "default"
@@ -53,13 +51,13 @@ getChipColorFromCategory(category : CategoryEnum){
 }
 
 getDanishColornameFromCategory(category : CategoryEnum){
-    if(category == CategoryEnum.RED)
+    if(category === CategoryEnum.RED)
         return "Rød"
-    if(category == CategoryEnum.YELLOW)
+    if(category === CategoryEnum.YELLOW)
         return "Gul"
-    if(category == CategoryEnum.GREEN)
+    if(category === CategoryEnum.GREEN)
         return "Grøn"
-    if(category == CategoryEnum.BLUE)
+    if(category === CategoryEnum.BLUE)
         return "Blå"
 
     return "Ukendt"

@@ -1,12 +1,12 @@
 export class Frequency {
-    repeated: FrequencyEnum = FrequencyEnum.Never;
+    repeated!: FrequencyEnum;
     days: DayEnum[] = [];
     
 
     ToString(){
         let toReturn = "";
         for(let i = 0;i<this.days.length; i++){
-            if(i != 0)
+            if(i !== 0)
             toReturn += ", "    
             toReturn += this.days[i].slice(0,3) + ""
         }
