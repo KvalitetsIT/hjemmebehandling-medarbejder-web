@@ -42,7 +42,7 @@ export class FrequencyTableRow extends Component<Props,State> {
         DayEnum.Saturday,
         DayEnum.Sunday
     ]
-  }
+  } 
 
   getAllRepeated() : FrequencyEnum[]{
     return [
@@ -67,14 +67,16 @@ export class FrequencyTableRow extends Component<Props,State> {
       oldFre.frequency.days = daysSelected as DayEnum[];
         
       this.setState({questionnaire : oldFre})
-      this.props.afterChange ? this.props.afterChange() :""
+      if(this.props.afterChange)
+        this.props.afterChange()
   }
   SetFrequency(frequencySelected : string | FrequencyEnum){
     let oldFre = this.state.questionnaire
     oldFre.frequency.repeated = frequencySelected as FrequencyEnum;
       
     this.setState({questionnaire : oldFre})
-    this.props.afterChange ? this.props.afterChange() :""
+    if(this.props.afterChange)
+     this.props.afterChange()
 }
 
   render () {
