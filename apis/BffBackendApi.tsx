@@ -245,26 +245,27 @@ export class BffBackendApi implements IBackendApi {
         patient.firstname = patientDto.givenName;
         patient.lastname = patientDto.familyName;
         patient.cpr = patientDto.cpr;
-        patient.patientContact = this.mapPatientContactDetails(patientDto.patientContactDetails!);
+        patient.patientContact = this.mapContactDetails(patientDto.patientContactDetails!);
+        patient.contact = this.mapContactDetails(patientDto.primaryRelativeContactDetails!)
         // TODO - map additional contact details.
 
         return patient;
     }
 
-    private mapPatientContactDetails(patientContactDetails: ContactDetailsDto) : Contact {
+    private mapContactDetails(patientContactDetails: ContactDetailsDto) : Contact {
         let contact = new Contact();
 
         let address = new Address();
         console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-        address.road = patientContactDetails.street ?? 'Fiskergade 66';
-        address.zipCode = patientContactDetails.postalCode ?? '8000';
+        address.road = patientContactDetails?.street ?? 'Fiskergade 66';
+        address.zipCode = patientContactDetails?.postalCode ?? '8000';
         address.city = "Aarhus";
-        address.country = patientContactDetails.country ?? 'Danmark';
+        address.country = patientContactDetails?.country ?? 'Danmark';
         contact.address = address;
 
-        contact.primaryPhone = patientContactDetails.primaryPhone!;
-        contact.secondaryPhone = patientContactDetails.secondaryPhone!;
-        contact.emailAddress = patientContactDetails.emailAddress!;
+        contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
+        contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
+        contact.emailAddress = patientContactDetails?.emailAddress ?? "mail@tele.dk";
 
         return contact;
     }
