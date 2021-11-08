@@ -34,6 +34,9 @@ import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export class BffBackendApi implements IBackendApi {
+    SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         throw new Error("Method not implemented.");
     }

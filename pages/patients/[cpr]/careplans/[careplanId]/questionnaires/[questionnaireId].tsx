@@ -42,6 +42,8 @@ import { ContactThumbnail } from '../../../../../../components/Cards/ContactThum
 import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQuestionnaireButton';
 import { FrequencyTableRow } from '../../../../../../components/Input/FrequencyTableRow';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import { Frequency } from '../../../../../../components/Models/Frequency';
+import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
 
 interface State {
   loading: boolean
@@ -54,6 +56,7 @@ interface Props {
 export default class QuestionnaireResponseDetails extends React.Component<Props,State> {
   static contextType = ApiContext
   careplanService! : ICareplanService
+  questionnaireService! : IQuestionnaireService;
 
   constructor(props : Props){
     super(props);
@@ -72,11 +75,17 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
   InitializeServices(){
     this.careplanService = this.context.careplanService;
+    this.questionnaireService = this.context.questionnaireService;
   }
 
   componentDidMount(){
     
     this.populateCareplans()
+}
+
+SetQuestionnaireFrequency(questionnaire : Questionnaire){
+  this.setState({editMode:false})
+  this.questionnaireService.SetQuestionnaireFrequency(questionnaire);
 }
 
 async populateCareplans() {
@@ -138,7 +147,7 @@ async populateCareplans() {
       <>
         {this.state.editMode ? 
         <FrequencyTableRow firstCell={<CalendarTodayIcon fontSize="inherit"/>} afterChange={()=>this.forceUpdate()} questionnaire={questionnaire}>
-          <Button onClick={()=>this.setState({editMode:false})}>Gem</Button>
+          <Button onClick={()=>this.SetQuestionnaireFrequency(questionnaire)}>Gem</Button>
         </FrequencyTableRow> :  
         <Tooltip placement="top" title="Besvarelses frekvens for spørgeskema">
           <Typography variant="caption"> <CalendarTodayIcon fontSize="inherit"/> {questionnaire.frequency.ToString()}<Button onClick={()=>this.setState({editMode:true})} size="small"><ModeEditOutlineIcon fontSize="inherit"/></Button> </Typography>

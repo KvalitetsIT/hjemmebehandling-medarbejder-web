@@ -5,5 +5,5 @@ export class Questionnaire {
     id! : string;
     name!: string;
     frequency!: Frequency;
-    questionnaireResponses : QuestionnaireResponse[] = []
+    questionnaireResponses! : QuestionnaireResponse[];
 }

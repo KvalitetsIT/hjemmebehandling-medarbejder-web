@@ -15,6 +15,13 @@ export default class QuestionnaireService implements IQuestionnaireService {
     constructor(backendapi : IBackendApi){
         this.backendApi = backendapi;
     }
+    SetQuestionnaireFrequency(questionnaire: Questionnaire) : Promise<void>{
+        let questionnaireEdit = new Questionnaire();
+        questionnaireEdit.id = questionnaire.id;
+        questionnaireEdit.frequency = questionnaire.frequency
+        return this.backendApi.SetQuestionnaire(questionnaireEdit)
+    }
+
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire) : Promise<PatientCareplan>{
         return this.backendApi.AddQuestionnaireToCareplan(careplan,questionnaireToAdd);
     }

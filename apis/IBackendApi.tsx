@@ -10,6 +10,7 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 export interface IBackendApi {
+    
     EditPatient(patient: PatientDetail): Promise<PatientDetail>;
     /**
      * Returns all plandefinitions in system
@@ -26,6 +27,14 @@ export interface IBackendApi {
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan>;
 
     /**
+     * Change questionnaire
+     * Id should always be provided
+     * To change the frequency fx, provide only frequency and id - Everything else will stay the same
+     * @param questionnaireEdit 
+     */
+    SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void>;
+
+    /**
      * Change careplan
      * Id should always be provided
      * To change the terminationdate fx, provide only terminationdate and id - Everything else will stay the same
@@ -39,7 +48,7 @@ export interface IBackendApi {
      * @param status The new status
      */
     UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void>;
-    
+
     /**
      * Return a list of Questionnaireresponses that have not yet finished processing.
      */

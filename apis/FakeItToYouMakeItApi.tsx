@@ -209,6 +209,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
+    }
+
     async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         await new Promise(f => setTimeout(f, 1000));
         return patient;

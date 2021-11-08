@@ -15,6 +15,9 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export class MockedBackendApi implements IBackendApi {
+    SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         throw new Error("Method not implemented.");
     }

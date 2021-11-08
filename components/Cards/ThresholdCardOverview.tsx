@@ -53,7 +53,7 @@ export class ThresholdCardOverview extends Component<Props,State> {
                 return (
                      <>
                      <Stack direction="row" spacing={2}>
-                        <Typography> {x.question}</Typography>
+                        {x.question}
                         {x.options.map(op =>{
                             return (
                                 <Chip color={this.getChipColorFromCategory(op.category)} label={op.option} />
