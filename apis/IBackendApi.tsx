@@ -41,12 +41,6 @@ export interface IBackendApi {
     UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void>;
     
     /**
-     * Return a list of Questionnaireresponse
-     * One patient can at most be represented once in the list - The answer with highest categori is shown 
-     */
-    GetTasklist : (categories : Array<CategoryEnum>, page : number, pagesize : number) => Promise<Array<Questionnaire>>
-
-    /**
      * Return a list of Questionnaireresponses that have not yet finished processing.
      */
     GetUnfinishedQuestionnaireResponses : (page : number, pagesize : number) => Promise<Array<Questionnaire>>

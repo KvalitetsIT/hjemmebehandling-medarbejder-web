@@ -14,7 +14,6 @@ export default interface IQuestionnaireService {
     findAnswer : (desiredQuestion : Question, questionResponses : QuestionnaireResponse) => Answer | undefined;
     
     //GET
-    GetTasklist : (categories : Array<CategoryEnum>, page : number, pagesize : number) => Promise<Array<Questionnaire>>
     GetUnfinishedQuestionnaireResponses : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
     GetUnansweredQuestionnaires : (page : number, pagesize : number) => Promise<Array<Questionnaire>>
     GetAllPlanDefinitions : () => Promise<Array<PlanDefinition>>
