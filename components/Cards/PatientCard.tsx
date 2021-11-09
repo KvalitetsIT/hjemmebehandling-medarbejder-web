@@ -74,8 +74,8 @@ export class PatientCard extends Component<Props,State> {
                     <Typography variant="subtitle2">
                         {contact.fullname}
                         <br/>
-                        {contact.address.road}<br/>
-                        {contact.address.zipCode}<br/>
+                        {contact.address?.road}<br/>
+                        {contact.address?.zipCode}<br/>
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                         {contact.emailAddress}<br/>
                     </Typography>

@@ -7,8 +7,8 @@ import AutoBreadcrumbs from './AutoBreadcrumbs';
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
-import NewPatient from '../../pages/newpatient';
 import EditPatient from '../../pages/patients/[cpr]/edit';
+import CreatePatient from '../../pages/createpatient';
 
 export interface State {
   drawerIsOpen: boolean
@@ -19,6 +19,12 @@ export class Layout extends Component<{},State> {
  
   render () : JSX.Element{
     try{
+
+      const openAccoridansAtCreatePatient = {
+        PatientIsOpen : true,
+        RelativeContactIsOpen : false,
+        PlanDefinitionIsOpen : false
+      }
     return (
 <>
         
@@ -40,7 +46,7 @@ export class Layout extends Component<{},State> {
               <Route path="/patients/:cpr/edit" render={(props) => <EditPatient {...props}/>} />
               <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
               <Route path="/patients"><Patients/></Route>
-              <Route path="/newpatient" render={(props) => <NewPatient {...props}/>} />
+              <Route path="/newpatient" render={(props) => <CreatePatient openAccordians={openAccoridansAtCreatePatient} {...props}/>} />
               <Route path="/">
                 <h2>Home</h2>
               </Route>

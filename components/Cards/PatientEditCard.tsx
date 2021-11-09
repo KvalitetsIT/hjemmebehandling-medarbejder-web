@@ -1,4 +1,4 @@
-import { Button, CardContent, Divider, Typography } from '@material-ui/core';
+import { Button, CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, Skeleton, TextField } from '@mui/material';
@@ -104,25 +104,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
               <TextField id="outlined-basic" type="tel" label="Telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPhonenumber,input) } variant="outlined" />
               <TextField id="outlined-basic" type="email" label="Email" value={this.state.patient.patientContact.emailAddress} onChange={input => this.modifyPatient(this.setEmail,input) } variant="outlined" />
             </Stack>
-            <Divider/>
-            <Typography variant="inherit">
-          Pårørede
-      </Typography>
-      <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Fornavn" value={this.state.patient.contact.fullname} onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  variant="outlined" />
-            </Stack>
-            <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Addresse" value={this.state.patient.contact.address.road} onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="Postnummer" value={this.state.patient.contact.address.zipCode} onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="By" value={this.state.patient.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  variant="outlined" />
-            </Stack>
-            <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" type="tel" label="Telefonnummer" value={this.state.patient.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="email" label="Email" value={this.state.patient.contact.emailAddress} onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
-            </Stack>
-            
-            
-          </Stack>
+         </Stack>
 
           
         </CardContent>
@@ -175,39 +157,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     modifiedPatient.patientContact.emailAddress = newValue;
     return modifiedPatient;
   }
-
-
-  setRelativeContactsName(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.fullname = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.primaryPhone = newValue;
-    return modifiedPatient;
-  }
-
-  setRelativeContactsEmail(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.emailAddress = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsCity(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.address.city = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.address.road = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.contact.address.zipCode = newValue;
-    return modifiedPatient;
-  }
+  
 
 
 }

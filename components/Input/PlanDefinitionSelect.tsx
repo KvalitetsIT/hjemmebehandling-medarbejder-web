@@ -6,10 +6,11 @@ import ApiContext from '../../pages/_context';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { PlanDefinition } from '../Models/PlanDefinition';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import { FormControl, InputLabel } from '@mui/material';
 
 export interface Props {
     careplan : PatientCareplan
-    SetEditedCareplan : (careplan : PatientCareplan) => void;
+    SetEditedCareplan? : (careplan : PatientCareplan) => void;
 }
 
 export interface State {
@@ -47,7 +48,8 @@ export class PlanDefinitionSelect extends Component<Props,State> {
 
 
     this.setState({editedCareplan : careplan})
-    this.props.SetEditedCareplan(careplan);
+    if(this.props.SetEditedCareplan)
+      this.props.SetEditedCareplan(careplan);
   }
 
   async componentDidMount() : Promise<void>{
@@ -66,13 +68,16 @@ export class PlanDefinitionSelect extends Component<Props,State> {
   render () : JSX.Element {
       this.InitializeServices();
     return (
-        <Select multiple value={this.state.editedCareplan.planDefinitions.map(x=>x.id) as unknown as string}  onChange={this.handleChange}>
+      <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">Vælg patientgrupper</InputLabel>
+        <Select label="Vælg patientgrupper" multiple value={this.state.editedCareplan.planDefinitions.map(x=>x.id) as unknown as string}  onChange={this.handleChange}>
         {this.state.allPlanDefinitions.map(patientGroup => {
             return (
                 <MenuItem key={patientGroup.name} value={patientGroup.id}>{patientGroup.name}</MenuItem>
             )
         })}
     </Select>
+    </FormControl>
     )
   }
 
