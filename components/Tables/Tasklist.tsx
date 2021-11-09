@@ -9,6 +9,8 @@ import ApiContext from '../../pages/_context';
 import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
+import FhirUtils from '../../util/FhirUtils';
+
 export interface Props {
     taskType : TaskType
     pageSize : number
@@ -120,7 +122,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell align="left">{task.questionnaireName}</TableCell>
               <TableCell align="left">{task?.answeredTime?.toLocaleDateString() ?? "Ikke besvaret"}</TableCell>
               <TableCell align="left">
-                <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/"+task.cpr+"/questionnaires/"+task.questionnaireId} variant="contained">Se besvarelse</Button>
+                <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
               </TableCell>
             </TableRow>
           </>

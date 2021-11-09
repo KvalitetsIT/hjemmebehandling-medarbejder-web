@@ -34,6 +34,8 @@ import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrappe
 import { Configuration } from "../generated";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 
+import FhirUtils from "../util/FhirUtils";
+
 export class BffBackendApi implements IBackendApi {
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         throw new Error("Method not implemented.");
@@ -59,8 +61,7 @@ export class BffBackendApi implements IBackendApi {
         console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
 
         let api = new QuestionnaireResponseApi();
-        // TODO - solve the 'slash problem'!
-        let request = { id: id.replace("QuestionnaireResponse/", ""), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
+        let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
         await api.patchQuestionnaireResponse(request)
     }
 
@@ -210,12 +211,13 @@ export class BffBackendApi implements IBackendApi {
         console.log('questionnaireResponses: ' + JSON.stringify(questionnaireResponses));
 
         for(var response of questionnaireResponses) {
-            console.log('Mapping response for ' + response.questionnaireId);
-            // TODO - id's containing slashes must be handled properly!
-            if(!responses.get(response.questionnaireId!.replace("Questionnaire/", ""))) {
-                responses.set(response.questionnaireId!.replace("Questionnaire/", ""), []);
+            var questionnaireId = FhirUtils.unqualifyId(response.questionnaireId!)
+
+            console.log('Mapping response for ' + questionnaireId);
+            if(!responses.get(questionnaireId)) {
+                responses.set(questionnaireId, []);
             }
-            responses.get(response.questionnaireId!.replace("Questionnaire/", ""))!.push(this.mapQuestionnaireResponseDto(response));
+            responses.get(questionnaireId)!.push(this.mapQuestionnaireResponseDto(response));
 
         }
 
@@ -245,26 +247,27 @@ export class BffBackendApi implements IBackendApi {
         patient.firstname = patientDto.givenName;
         patient.lastname = patientDto.familyName;
         patient.cpr = patientDto.cpr;
-        patient.patientContact = this.mapPatientContactDetails(patientDto.patientContactDetails!);
+        patient.patientContact = this.mapContactDetails(patientDto.patientContactDetails!);
+        patient.contact = this.mapContactDetails(patientDto.primaryRelativeContactDetails!)
         // TODO - map additional contact details.
 
         return patient;
     }
 
-    private mapPatientContactDetails(patientContactDetails: ContactDetailsDto) : Contact {
+    private mapContactDetails(patientContactDetails: ContactDetailsDto) : Contact {
         let contact = new Contact();
 
         let address = new Address();
         console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-        address.road = patientContactDetails.street ?? 'Fiskergade 66';
-        address.zipCode = patientContactDetails.postalCode ?? '8000';
+        address.road = patientContactDetails?.street ?? 'Fiskergade 66';
+        address.zipCode = patientContactDetails?.postalCode ?? '8000';
         address.city = "Aarhus";
-        address.country = patientContactDetails.country ?? 'Danmark';
+        address.country = patientContactDetails?.country ?? 'Danmark';
         contact.address = address;
 
-        contact.primaryPhone = patientContactDetails.primaryPhone!;
-        contact.secondaryPhone = patientContactDetails.secondaryPhone!;
-        contact.emailAddress = patientContactDetails.emailAddress!;
+        contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
+        contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
+        contact.emailAddress = patientContactDetails?.emailAddress ?? "mail@tele.dk";
 
         return contact;
     }
@@ -282,9 +285,7 @@ export class BffBackendApi implements IBackendApi {
     private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
         let questionnaire = new Questionnaire();
 
-        questionnaire.id = wrapper.questionnaire!.id!.replace("Questionnaire/", "");
-
-
+        questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
 
         questionnaire.name = wrapper.questionnaire!.title!;
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
