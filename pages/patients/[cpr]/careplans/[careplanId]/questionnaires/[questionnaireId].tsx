@@ -21,6 +21,7 @@ import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQu
 import { FrequencyTableRow } from '../../../../../../components/Input/FrequencyTableRow';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
+import { PatientAvatar } from '../../../../../../components/Avatars/PatientAvatar';
 
 interface State {
   loading: boolean
@@ -92,7 +93,7 @@ async populateCareplans() : Promise<void> {
 <>
       <Stack display="inline-flex" spacing={2}>
         <Stack direction="row" spacing={2}>
-        <ContactThumbnail color="palevioletred" headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
+        <ContactThumbnail avatar={<PatientAvatar size={80} patient={currentCareplan!.patient}/>} headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
         <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contact}></ContactThumbnail>
         </Stack>
         

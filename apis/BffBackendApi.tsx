@@ -5,7 +5,7 @@ import { Contact } from "../components/Models/Contact";
 import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequency";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
-import { PatientSimple } from "../components/Models/PatientSimple";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
@@ -28,18 +28,21 @@ import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
 import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/FrequencyDto";
 import { PatientDto } from "../generated/models/PatientDto";
 import { PersonDto } from "../generated/models/PersonDto";
+import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration } from "../generated";
-import { PlanDefinition } from "../components/Models/PlanDefinition";
 
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
 	conf : Configuration = new Configuration({ basePath: process.env.NEXT_PUBLIC_API_URL });
 	
+    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        throw new Error("Method not implemented.");
+    }
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -74,7 +77,11 @@ export class BffBackendApi implements IBackendApi {
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
         let api = new QuestionnaireResponseApi();
-        let request = { status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination] };
+        let request = { 
+            status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
+            pageNumber: page,
+            pageSize: pagesize
+        };
 
         let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
@@ -238,10 +245,8 @@ export class BffBackendApi implements IBackendApi {
     private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
         let carePlan = new PatientCareplan();
 
-        let planDefinition = { name: "plandefinition-1", id : "p1", questionnaires : [] };
-
         carePlan.id = carePlanDto.id;
-        carePlan.planDefinitions = [planDefinition]; // TODO - PlanDefinition is not included in the api response ...
+        carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
         carePlan.questionnaires = this.mapQuestionnaireDtos(carePlanDto.questionnaires!, questionnaireResponses)
         carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
         carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
@@ -249,6 +254,16 @@ export class BffBackendApi implements IBackendApi {
         carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
 
         return carePlan;
+    }
+
+    private mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {
+        let planDefinition = new PlanDefinition()
+
+        planDefinition.id = planDefinitionDto.id!
+        planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
+        planDefinition.questionnaires = [] // TODO - include questionnaires
+
+        return planDefinition
     }
 
     private mapPatientDto(patientDto: PatientDto) : PatientDetail {
@@ -384,8 +399,6 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseStatus.NotProcessed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
-            case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
             case QuestionnaireResponseStatus.Processed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
             default:
@@ -397,8 +410,6 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
                 return QuestionnaireResponseStatus.NotProcessed
-            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
-                return QuestionnaireResponseStatus.InProgress
             case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
                 return QuestionnaireResponseStatus.Processed
             default:

@@ -17,6 +17,9 @@ export default class CareplanService implements ICareplanService {
     constructor(backendApi : IBackendApi){
         this.backendApi = backendApi;
     }
+    TerminateCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
+        return this.backendApi.TerminateCareplan(careplan);
+    }
     
     SetPlanDefinitionsOnCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
 
