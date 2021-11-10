@@ -19,7 +19,7 @@ export interface Props {
 export class CareplanQuestionnaireSummary extends Component<Props,{}> {
   static displayName = CareplanQuestionnaireSummary.name;
   static contextType = ApiContext;
-  dateHelper : IDateHelper
+  dateHelper! : IDateHelper
   InitialiseServices(){
       this.dateHelper = this.context.dateHelper;
   }

@@ -1,7 +1,7 @@
 import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Badge, Box, Card, CardContent, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { MeasurementType } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -9,7 +9,6 @@ import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '../Models/Questionnaire';
-import { width } from '@mui/system';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 
 

@@ -1,8 +1,6 @@
-import { Tooltip, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 
 import { Stack } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
@@ -14,12 +12,9 @@ import { PatientCareplan } from '../../../../../../components/Models/PatientCare
 import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import { ContactThumbnail } from '../../../../../../components/Cards/ContactThumbnail';
 import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQuestionnaireButton';
-import { FrequencyTableRow } from '../../../../../../components/Input/FrequencyTableRow';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
 import { PatientAvatar } from '../../../../../../components/Avatars/PatientAvatar';
 

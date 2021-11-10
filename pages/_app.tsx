@@ -8,7 +8,6 @@ import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
 
-import { BffBackendApi } from '../apis/BffBackendApi';
 import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
