@@ -7,7 +7,6 @@ import ApiContext from '../../../../_context';
 import { LoadingComponent } from '../../../../../components/Layout/LoadingComponent';
 import ICareplanService from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
-import { FinishCareplanButton } from '../../../../../components/Input/FinishCareplanButton';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
@@ -78,7 +77,6 @@ async populateCareplans() : Promise<void>{
                 <CareplanUnreadResponse careplan={activeCareplan}/>
                 <PatientCard patient={this.state.careplans[0].patient}></PatientCard>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
-                <FinishCareplanButton careplan={activeCareplan}/>
             </Stack>
             <Stack spacing={3}>
                 <CareplanQuestionnaireSummary careplan={activeCareplan}/>
