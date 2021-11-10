@@ -9,30 +9,48 @@ import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
+import { IBackendApi } from '../apis/IBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
-  const mockApi = new FakeItToYouMakeItApi()
-  const backendApi=new BffBackendApi();
+  const mockApi : IBackendApi = new FakeItToYouMakeItApi();
+  const backendApi : IBackendApi =new BffBackendApi();
   
+  let questionnaireBackend = backendApi
+    , questionAnswerBackend = backendApi
+    , careplanBackend = backendApi
+    , patientBackend = backendApi
+    , personBackend = backendApi
+    ;
 
-  // let careplanService = new CareplanService(backendApi);
-  // if (process && process.env.NODE_ENV === 'development') {
-  //   if (process.env.MOCK_CAREPLAN_SERVICE === 'true') {
-  //     console.log("Mocking careplan backend")
-  //     careplanService = new CareplanService(mockApi);
-  //   }
-  // }
+  if (process?.env.NODE_ENV === 'development') {
+    if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE) {
+      questionnaireBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE) {
+      questionAnswerBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE) {
+      careplanBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_PATIENT_SERVICE) {
+      patientBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_PERSON_SERVICE) {
+      personBackend = mockApi;
+    }
+  }
+
   return (
     <>
     <div suppressHydrationWarning>
     <ApiContext.Provider
       value={{
-        questionnaireService : new QuestionnaireService(mockApi),
-        questionAnswerService : new QuestionAnswerService(mockApi),
-        careplanService : new CareplanService(backendApi),
-        patientService : new PatientService(mockApi),
-        personService : new PersonService(backendApi)
+        questionnaireService : new QuestionnaireService(questionnaireBackend),
+        questionAnswerService : new QuestionAnswerService(questionAnswerBackend),
+        careplanService : new CareplanService(careplanBackend),
+        patientService : new PatientService(patientBackend),
+        personService : new PersonService(personBackend)
       }}
     >
         {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}
@@ -43,10 +61,5 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     )
   
 }
-// MyApp.getInitialProps = async (ctx : AppContext ) => {
-//   //const res = await fetch('https://api.github.com/repos/vercel/next.js')
-//   //const json = await res.json()
-//   //return { stars: json.stargazers_count }
-//   return {}
-// }
+
 export default MyApp
