@@ -35,7 +35,9 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
       
       for(let questionnaireIndex = 0; questionnaireIndex<careplan.questionnaires.length;questionnaireIndex++){
         const questionnaire = careplan.questionnaires[questionnaireIndex];
-        for(let responseIndex = 0; responseIndex<careplan.questionnaires[questionnaireIndex].questionnaireResponses.length;responseIndex++){
+        if(!questionnaire.questionnaireResponses)
+            continue;
+        for(let responseIndex = 0; responseIndex<questionnaire.questionnaireResponses.length;responseIndex++){
             const response = questionnaire.questionnaireResponses[responseIndex];
             if(response.status !== QuestionnaireResponseStatus.Processed){
                 responses.push(response)

@@ -10,8 +10,9 @@ import Stack from '@mui/material/Stack';
 
 export interface Props {
     contact? : Contact;
+    avatar? : JSX.Element
     headline : string;
-    color : string;
+    color? : string;
     boxContent : JSX.Element
 }
 
@@ -24,9 +25,11 @@ export class ContactThumbnail extends Component<Props,{}> {
         <Card component={Box} minWidth={100}>
             <CardContent>
                <Stack direction="row" spacing={3}>
-                    <Avatar component={Box} padding={5} bgcolor={this.props.color} variant="rounded">
+                   {this.props.avatar ? this.props.avatar :
+                   
+                    <Avatar component={Box} padding={5} bgcolor={this.props.color ? this.props.color : "red" } variant="square">
                         {this.props.boxContent}
-                    </Avatar>
+                    </Avatar>}
                     <Stack spacing={1}>
                         <Typography variant="inherit">{this.props.headline}</Typography>
                         <Typography variant="subtitle2">{contact?.fullname}</Typography>

@@ -73,7 +73,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 
   renderTableData(questionaire : Questionnaire) : JSX.Element{
     const questionaireResponses = questionaire.questionnaireResponses;
-    if(questionaireResponses.length === 0){
+    if(!questionaireResponses || questionaireResponses.length === 0){
         return (
             <>
             <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>
