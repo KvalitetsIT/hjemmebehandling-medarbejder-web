@@ -101,7 +101,6 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
             <TableCell>Kategori</TableCell>
             <TableCell align="left">Navn</TableCell>
             <TableCell align="left">CPR</TableCell>
-            <TableCell align="left">Status</TableCell>
             <TableCell align="left">Spørgeskema</TableCell>
             <TableCell align="left">Besvaret</TableCell>
             <TableCell align="left"></TableCell>
@@ -118,7 +117,6 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
                 <Button  component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
               </TableCell>
               <TableCell align="left">{task.cpr}</TableCell>
-              <TableCell align="left">{task?.questionnaireResponseStatus ?? "-"}</TableCell>
               <TableCell align="left">{task.questionnaireName}</TableCell>
               <TableCell align="left">{task?.answeredTime?.toLocaleDateString() ?? "Ikke besvaret"}</TableCell>
               <TableCell align="left">

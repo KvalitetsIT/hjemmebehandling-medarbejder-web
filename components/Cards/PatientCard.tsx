@@ -70,16 +70,13 @@ export class PatientCard extends Component<Props,State> {
                 
                 
             </Typography>
-            <Typography variant="overline">
+            <Typography variant="button">
                         Kontakt
                     </Typography>
             <Typography variant="subtitle2">
                         {contact.fullname}
                         <br/>
-                        {contact.address?.road}<br/>
-                        {contact.address?.zipCode}<br/>
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
-                        {contact.emailAddress}<br/>
                     </Typography>
             </Stack>
           </CardContent>
