@@ -1,8 +1,8 @@
 import React from "react";
-import { Person } from "../../components/Models/Person";
+import { PersonDto } from "../../generated/models/PersonDto";
 
 export default interface IPersonService {
-    GetPerson : (cpr : string) => Promise<Person>
+    GetPerson : (cpr : string) => Promise<PersonDto>
     
 }
   

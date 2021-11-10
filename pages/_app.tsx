@@ -11,21 +11,49 @@ import PatientService from '../services/PatientService';
 import { BffBackendApi } from '../apis/BffBackendApi';
 import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
+import { BffBackendApi } from '../apis/BffBackendApi';
+import { IBackendApi } from '../apis/IBackendApi';
 
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
-  const mockApi = new FakeItToYouMakeItApi()
-  const backendApi=new BffBackendApi();
+  const mockApi : IBackendApi = new FakeItToYouMakeItApi();
+  const backendApi : IBackendApi =new BffBackendApi();
+  
+  let questionnaireBackend = backendApi
+    , questionAnswerBackend = backendApi
+    , careplanBackend = backendApi
+    , patientBackend = backendApi
+    , personBackend = backendApi
+    ;
+
+  if (process?.env.NODE_ENV === 'development') {
+    if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE) {
+      questionnaireBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE) {
+      questionAnswerBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE) {
+      careplanBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_PATIENT_SERVICE) {
+      patientBackend = mockApi;
+    }
+    if (process.env.NEXT_PUBLIC_MOCK_PERSON_SERVICE) {
+      personBackend = mockApi;
+    }
+  }
+
   return (
     <>
     <div suppressHydrationWarning>
     <ApiContext.Provider
       value={{
-        questionnaireService : new QuestionnaireService(mockApi),
-        questionAnswerService : new QuestionAnswerService(mockApi),
-        careplanService : new CareplanService(mockApi),
-        patientService : new PatientService(mockApi),
-        personService : new PersonService(backendApi),
+        questionnaireService : new QuestionnaireService(questionnaireBackend),
+        questionAnswerService : new QuestionAnswerService(questionAnswerBackend),
+        careplanService : new CareplanService(careplanBackend),
+        patientService : new PatientService(patientBackend),
+        personService : new PersonService(personBackend),
         dateHelper : new DanishDateHelper()
       }}
     >
@@ -37,4 +65,5 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     )
   
 }
+
 export default MyApp

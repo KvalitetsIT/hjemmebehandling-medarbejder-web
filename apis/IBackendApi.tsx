@@ -2,7 +2,7 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
-import { Person } from "../components/Models/Person";
+import { PersonDto } from "../generated/models/PersonDto";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { Task } from "../components/Models/Task";
@@ -86,7 +86,7 @@ export interface IBackendApi {
      * Creates and returns patient
      * @param patient 
      */
-    GetPerson(cpr: string): Promise<Person>;
+    GetPerson(cpr: string): Promise<PersonDto>;
 
 
     /**

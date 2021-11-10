@@ -5,6 +5,7 @@ import { Card, Skeleton, TextField } from '@mui/material';
 import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -12,19 +13,33 @@ export interface Props {
 
 export interface State {
     loading : boolean;
-    patient : PatientDetail
+    patient : PatientDetail;
+    
+    snackbarOpen : boolean;
+    snackbarColor: AlertColor;
+    snackbarText : string;
+    snackbarTitle : string;
 }
 
 export class PatientEditCard extends Component<Props,State> {
   static contextType = ApiContext;
-  static displayName = PatientEditCard.name;
+  static displayName = PatientEditCard.name; 
   personService!: IPersonService;
 
   constructor(props : Props){
       super(props);
-      this.state = {loading : true, patient : props.initialPatient}
+      this.state = {
+	      loading : true,
+	      patient : props.initialPatient,
+	      snackbarOpen : false,
+          snackbarColor: "info",
+          snackbarText : "",
+          snackbarTitle : "" }
       this.modifyPatient = this.modifyPatient.bind(this);
   }
+  closeSnackbar = () : void => {
+    this.setState({snackbarOpen : false})
+  };
 
   render () : JSX.Element{
     const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
@@ -48,14 +63,17 @@ async getPerson() : Promise<void>{
     this.setState({
       loading: true
     })
+    
     const newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
     
     const p = this.state.patient;
     p.firstname = newPerson.givenName;
     p.lastname = newPerson.familyName;
-    p.patientContact.address.city = newPerson.patientContactDetails.city;
-    p.patientContact.address.zipCode = newPerson.patientContactDetails.postalCode;
-    p.patientContact.address.road = newPerson.patientContactDetails.street;    
+    
+    p.patientContact.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
+    p.patientContact.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
+    p.patientContact.address.road = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
+    
     this.setState({patient : p});
     
 
@@ -64,12 +82,35 @@ async getPerson() : Promise<void>{
     })
     
   } catch(error){
-    this.setState({
+	this.setState({
       loading: false
     })
+    
+    if (error instanceof Response){
+	   const response = error as Response;
+    
+      if (response.status == 404){
+	     console.log("Ingen borger fundet");
+	     this.setState({snackbarColor : "warning",snackbarOpen : true,snackbarTitle: "Person kan ikke fremsøges", snackbarText: "Cprnummer skal skrives uden bindestreg og være 10 cifre langt"})
+         this.clearPersonFields();
+         return;
+	  }
+    }
     throw error;
   }
   
+}
+
+clearPersonFields(){
+	const p = this.state.patient;
+    p.firstname = "";
+    p.lastname = "";
+    
+    p.patientContact.address.city = "";
+    p.patientContact.address.zipCode =  "";
+    p.patientContact.address.road = "";
+    
+    this.setState({patient : p});
 }
 
 modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) : void{
@@ -80,7 +121,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
 
   renderCard() : JSX.Element{
 	this.InitializeServices();
-    return (
+    return ( <>
         <Card>
         <CardContent>
           <Stack spacing={3}>
@@ -88,7 +129,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           Patient
       </Typography>
             <Stack direction="row">
-              <TextField size="small" id="outlined-basic" required type="number" label="CPR" value={this.state.patient.cpr} onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
+              <TextField size="small" id="outlined-basic" required label="CPR" value={this.state.patient.cpr} onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
               <Button size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</Button>
             </Stack>
             <Stack spacing={3} direction="row">
@@ -109,6 +150,13 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           
         </CardContent>
     </Card>
+                        <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
+                        <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
+                            <h5>{this.state.snackbarTitle}</h5>
+                            {this.state.snackbarText}
+                        </Alert>
+                    </Snackbar>
+                    </>
     )
   }
   
