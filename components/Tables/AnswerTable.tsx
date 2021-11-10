@@ -1,9 +1,9 @@
 import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Alert, AlertColor, Box, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { MeasurementType } from '../Models/QuestionnaireResponse';
+import { MeasurementType, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
@@ -48,7 +48,7 @@ constructor(props : Props){
     this.datehelper = this.context.dateHelper;
   }
 
-getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default"| "success"{
+getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default" | "success"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
@@ -85,6 +85,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
             </>
         )
     }
+ 
     
     return (<>
     <TableContainer component={Paper}>
@@ -95,16 +96,22 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
           
             </TableCell>
             {questionaireResponses.map(collection => {
+
+                let severity = this.getChipColorFromCategory(collection.category) as string
+                if(collection.status === QuestionnaireResponseStatus.Processed)
+                    severity = "info"
+
                 return (
                     <TableCell >
      
                     <Tooltip title={this.getDisplayNameFromCategory(collection.category)} placement="right">
-                       <Stack spacing={1}>
-                            <Typography>{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
-                            <Typography variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                        <Alert icon={false} severity={severity as AlertColor}>
+                       <Stack spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center">
+                            <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
+                            <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
                             <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
                         </Stack>
-                     
+                     </Alert>
                       </Tooltip>
        
                       </TableCell>
@@ -126,7 +133,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 
                                 {questionaireResponses.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    const category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
+                                    const category = answer ? this.questionAnswerService.FindCategory (question,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
