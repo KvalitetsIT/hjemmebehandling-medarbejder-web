@@ -11,6 +11,7 @@ import { CareplanCardSimple } from '../components/Cards/CareplanCardSimple';
 import { PatientCareplan } from '../components/Models/PatientCareplan';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 import { PatientEditCard } from '../components/Cards/PatientEditCard';
+import { Address } from '../components/Models/Address';
 
 export interface State {
     patient : PatientDetail;
@@ -37,6 +38,7 @@ constructor(props : {}){
     newPatient.firstname = "";
     newPatient.lastname = "";
     newPatient.patientContact = new Contact();
+    newPatient.patientContact.address = new Address();
     newPatient.patientContact.address.city ="";
     newPatient.patientContact.address.zipCode ="";
     newPatient.patientContact.address.road ="";

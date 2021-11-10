@@ -19,6 +19,7 @@ import { MockedBackendApi } from "./MockedBackendApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
+import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
@@ -26,8 +27,8 @@ import { CarePlanDto } from "../generated/models/CarePlanDto";
 import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
 import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/FrequencyDto";
 import { PatientDto } from "../generated/models/PatientDto";
+import { PersonDto } from "../generated/models/PersonDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
-import { QuestionAnswerPairDto } from "../generated/models/QuestionAnswerPairDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
@@ -37,6 +38,8 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
+	conf : Configuration = new Configuration({ basePath: process.env.NEXT_PUBLIC_API_URL });
+	
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -136,15 +139,22 @@ export class BffBackendApi implements IBackendApi {
         return patient;
     }
     
-    async GetPerson(cpr: string) : Promise<Person> {
+    async GetPerson(cpr: string) : Promise<PersonDto> {
 	
-	    var result = null;
-	    const response = await fetch("http://localhost:8080/api/v1/person?cpr="+cpr);
-	    const body = await response.json();
+        let api = new PersonApi(this.conf);
+	    let request = { cpr: cpr };
+	    let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
+	    return person;
+	
 	    
-        let person = new Person();
-	    Object.assign(person, body);
-        return person;	
+	   // const response = await fetch("http://localhost:8080/api/v1/person?cpr="+cpr);
+	   // const body = await response.json();
+	    
+       // let person = new Person();
+	   //Object.assign(oldperson, person);
+       // return person;
+       
+       //return oldperson;	
     }
 
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{
