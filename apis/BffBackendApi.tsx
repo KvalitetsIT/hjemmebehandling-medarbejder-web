@@ -37,6 +37,9 @@ import { Configuration } from "../generated";
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
+    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        throw new Error("Method not implemented.");
+    }
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         throw new Error("Method not implemented.");
     }

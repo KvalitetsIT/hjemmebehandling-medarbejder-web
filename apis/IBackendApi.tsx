@@ -44,6 +44,12 @@ export interface IBackendApi {
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
 
     /**
+     * Is used to terminate a careplan
+     * @param careplan careplan to terminate
+     */
+    TerminateCareplan(careplan : PatientCareplan) : Promise<PatientCareplan>;
+
+    /**
      * Update status on QuestionnaireResponse.
      * @param id The id of the QuestionnaireResponse
      * @param status The new status

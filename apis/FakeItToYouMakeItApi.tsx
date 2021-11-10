@@ -210,6 +210,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        throw new Error("Method not implemented.");
+    }
     async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
     }
 
