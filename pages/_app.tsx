@@ -14,6 +14,15 @@ import { BffBackendApi } from '../apis/BffBackendApi';
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi = new FakeItToYouMakeItApi()
   const backendApi=new BffBackendApi();
+  
+
+  // let careplanService = new CareplanService(backendApi);
+  // if (process && process.env.NODE_ENV === 'development') {
+  //   if (process.env.MOCK_CAREPLAN_SERVICE === 'true') {
+  //     console.log("Mocking careplan backend")
+  //     careplanService = new CareplanService(mockApi);
+  //   }
+  // }
   return (
     <>
     <div suppressHydrationWarning>
@@ -21,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
       value={{
         questionnaireService : new QuestionnaireService(mockApi),
         questionAnswerService : new QuestionAnswerService(mockApi),
-        careplanService : new CareplanService(mockApi),
+        careplanService : new CareplanService(backendApi),
         patientService : new PatientService(mockApi),
         personService : new PersonService(backendApi)
       }}
@@ -34,4 +43,10 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     )
   
 }
+// MyApp.getInitialProps = async (ctx : AppContext ) => {
+//   //const res = await fetch('https://api.github.com/repos/vercel/next.js')
+//   //const json = await res.json()
+//   //return { stars: json.stargazers_count }
+//   return {}
+// }
 export default MyApp

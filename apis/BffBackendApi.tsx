@@ -38,7 +38,7 @@ import { Configuration } from "../generated";
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
-	conf : Configuration = new Configuration({ basePath: process.env.NEXT_PUBLIC_API_URL });
+	conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 	
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
@@ -168,8 +168,7 @@ export class BffBackendApi implements IBackendApi {
         console.log('Inside BffBackendApi.GetPatientCareplans !');
 
         // Retrieve the careplans
-        let conf : Configuration = new Configuration({ basePath: process.env.NEXT_PUBLIC_API_URL });
-        let api = new CarePlanApi(conf);
+        let api = new CarePlanApi(this.conf);
         let request = { cpr: cpr };
         let carePlans = await api.getCarePlansByCpr(request);
         if(!carePlans) {
