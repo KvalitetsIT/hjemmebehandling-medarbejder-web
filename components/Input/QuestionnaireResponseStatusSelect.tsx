@@ -78,7 +78,6 @@ InitializeServices() : void{
                         onChange={this.handleChange}
                     >
                         <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
-                        <MenuItem value={QuestionnaireResponseStatus.InProgress}>{QuestionnaireResponseStatus.InProgress}</MenuItem>
                         <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
                     </Select>
                     </FormControl>

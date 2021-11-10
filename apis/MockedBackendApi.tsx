@@ -240,7 +240,7 @@ export class MockedBackendApi implements IBackendApi {
         questionnaireResponse.status = QuestionnaireResponseStatus.NotProcessed
         questionnaireResponse.answeredTime = new Date();
         if(category == CategoryEnum.BLUE){
-            questionnaireResponse.status = undefined;
+            questionnaireResponse.status = QuestionnaireResponseStatus.NotAnswered;
             questionnaireResponse.answeredTime = undefined;
         }
             

@@ -386,8 +386,6 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseStatus.NotProcessed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
-            case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
             case QuestionnaireResponseStatus.Processed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
             default:
@@ -399,8 +397,6 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
                 return QuestionnaireResponseStatus.NotProcessed
-            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
-                return QuestionnaireResponseStatus.InProgress
             case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
                 return QuestionnaireResponseStatus.Processed
             default:
