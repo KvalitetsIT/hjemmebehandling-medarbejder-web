@@ -123,14 +123,6 @@ async populateCareplans() : Promise<void> {
   renderQuestionnaireResponseTab(questionnaire : Questionnaire) : JSX.Element{
     return (
       <>
-        {this.state.editMode ? 
-        <FrequencyTableRow firstCell={<CalendarTodayIcon fontSize="inherit"/>} afterChange={()=>this.forceUpdate()} questionnaire={questionnaire}>
-          <Button onClick={()=>this.SetQuestionnaireFrequency(questionnaire)}>Gem</Button>
-        </FrequencyTableRow> :  
-        <Tooltip placement="top" title="Besvarelses frekvens for spørgeskema">
-          <Typography variant="caption"> <CalendarTodayIcon fontSize="inherit"/> {questionnaire.frequency.ToString()}<Button onClick={()=>this.setState({editMode:true})} size="small"><ModeEditOutlineIcon fontSize="inherit"/></Button> </Typography>
-        </Tooltip>
-      }
           
 
       

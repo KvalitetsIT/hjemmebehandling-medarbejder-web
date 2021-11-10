@@ -7,8 +7,10 @@ import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
-import PersonService from '../services/PersonService';
+
 import { BffBackendApi } from '../apis/BffBackendApi';
+import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
+import PersonService from '../services/PersonService';
 
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
@@ -23,7 +25,8 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         questionAnswerService : new QuestionAnswerService(mockApi),
         careplanService : new CareplanService(mockApi),
         patientService : new PatientService(mockApi),
-        personService : new PersonService(backendApi)
+        personService : new PersonService(backendApi),
+        dateHelper : new DanishDateHelper()
       }}
     >
         {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}

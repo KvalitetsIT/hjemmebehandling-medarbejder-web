@@ -6,6 +6,8 @@ import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { CardHeader, Typography } from '@mui/material';
 import { FinishCareplanButton } from '../Input/FinishCareplanButton';
+import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import ApiContext from '../../pages/_context';
 
 export interface Props {
     careplan : PatientCareplan
@@ -14,8 +16,14 @@ export interface Props {
 
 export class CareplanSummary extends Component<Props,{}> {
   static displayName = CareplanSummary.name;
+  static contextType = ApiContext;
+  dateHelper! : IDateHelper
 
+  InitialiseServices(){
+      this.dateHelper = this.context.dateHelper;
+  }
   render ()  : JSX.Element{
+      this.InitialiseServices()
       const careplan = this.props.careplan;
     return (
         <Card component={Box} minWidth={100}>
@@ -39,7 +47,7 @@ export class CareplanSummary extends Component<Props,{}> {
                     Opstart
                 </Typography>
                 <Typography>
-                    {careplan.creationDate.toLocaleString()}
+                    {this.dateHelper.DateToString( careplan.creationDate)}
                 </Typography>
                 <br/>
                 <FinishCareplanButton careplan={careplan}/>

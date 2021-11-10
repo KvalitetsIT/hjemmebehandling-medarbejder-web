@@ -11,16 +11,20 @@ import IPatientService from '../services/interfaces/IPatientService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import QuestionnaireService from '../services/QuestionnaireService';
 import PatientService from '../services/PatientService';
-import PersonService from '../services/PersonService';
-import IPersonService from '../services/interfaces/IPersonService';
+import IDateHelper from '../globalHelpers/interfaces/IDateHelper';
 import { BffBackendApi } from '../apis/BffBackendApi';
+import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
+import IPersonService from '../services/interfaces/IPersonService';
+import PersonService from '../services/PersonService';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
     questionAnswerService : IQuestionAnswerService
     careplanService : ICareplanService,
     patientService : IPatientService,
-    personService : IPersonService
+    personService : IPersonService,
+
+    dateHelper : IDateHelper
 }
 
 const ApiContext = createContext<IApiContext>(
@@ -29,7 +33,8 @@ const ApiContext = createContext<IApiContext>(
         questionAnswerService : new QuestionAnswerService(new FakeItToYouMakeItApi()),
         careplanService : new CareplanService(new FakeItToYouMakeItApi()),
         patientService : new PatientService(new FakeItToYouMakeItApi()),
-        personService : new PersonService(new BffBackendApi())
+        personService : new PersonService(new BffBackendApi()),
+        dateHelper : new DanishDateHelper()
     }
     ); //Default value
 

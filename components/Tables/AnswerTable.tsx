@@ -1,7 +1,7 @@
 import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Badge } from '@mui/material';
+import { Badge, Box, Card, CardContent, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { MeasurementType } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -9,6 +9,8 @@ import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '../Models/Questionnaire';
+import { width } from '@mui/system';
+import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 
 
 export interface Props {
@@ -26,6 +28,7 @@ export class AnswerTable extends Component<Props,State> {
 
   questionAnswerService! : IQuestionAnswerService;
   questionnaireService! : IQuestionnaireService;
+  datehelper! : IDateHelper
 
 constructor(props : Props){
     super(props);
@@ -43,15 +46,16 @@ constructor(props : Props){
   InitializeServices() : void{
     this.questionAnswerService = this.context.questionAnswerService;
     this.questionnaireService = this.context.questionnaireService;
+    this.datehelper = this.context.dateHelper;
   }
 
-getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default"{
+getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default"| "success"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)
         return "warning"
-    //if(category === CategoryEnum.GREEN)
-      //  return "success"
+    if(category === CategoryEnum.GREEN)
+        return "success"
     if(category === CategoryEnum.BLUE)
         return "primary"
 
@@ -70,6 +74,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 
     return "Ukendt"
 }
+
 
   renderTableData(questionaire : Questionnaire) : JSX.Element{
     const questionaireResponses = questionaire.questionnaireResponses;
@@ -92,14 +97,17 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
             </TableCell>
             {questionaireResponses.map(collection => {
                 return (
-                    <TableCell>
+                    <TableCell >
+     
                     <Tooltip title={this.getDisplayNameFromCategory(collection.category)} placement="right">
-                        <Badge color={this.getChipColorFromCategory(collection.category)}  badgeContent={<div></div>} >
-                        
-                            {collection.answeredTime ? collection.answeredTime.toDateString() : ""}
-                        
-                        </Badge>
+                       <Stack spacing={1}>
+                            <Typography>{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
+                            <Typography variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                            <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                        </Stack>
+                     
                       </Tooltip>
+       
                       </TableCell>
                     
                 )
@@ -121,7 +129,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
                                     const category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
-                                        <TableCell> <Chip color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
+                                        <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
                                 })}
                             </TableRow>
@@ -131,15 +139,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 <TableRow>
 <TableCell></TableCell>
 
-            {questionaireResponses.map(questionResponse => {
-                return (
-                    
-                    <TableCell>
-                        <QuestionnaireResponseStatusSelect questionnaireResponse={questionResponse} />
-                    </TableCell>
-                )
-                
-            })}
+           
              </TableRow>         
         </TableBody>
       </Table>

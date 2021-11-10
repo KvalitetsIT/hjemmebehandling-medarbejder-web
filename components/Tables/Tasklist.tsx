@@ -10,6 +10,7 @@ import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 
 import FhirUtils from '../../util/FhirUtils';
+import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 
 export interface Props {
     taskType : TaskType
@@ -25,6 +26,7 @@ export class Tasklist extends Component<Props,State> {
   static displayName = Tasklist.name;
   static contextType = ApiContext
   questionnaireService! : IQuestionnaireService;
+  dateHelper! : IDateHelper
 
   constructor(props : Props){
     super(props);
@@ -44,6 +46,7 @@ export class Tasklist extends Component<Props,State> {
 
   InitializeServices() : void{
     this.questionnaireService = this.context.questionnaireService;
+    this.dateHelper = this.context.dateHelper;
   }
   componentDidMount() : void{
     
@@ -118,7 +121,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               </TableCell>
               <TableCell align="left">{task.cpr}</TableCell>
               <TableCell align="left">{task.questionnaireName}</TableCell>
-              <TableCell align="left">{task?.answeredTime?.toLocaleDateString() ?? "Ikke besvaret"}</TableCell>
+              <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
               <TableCell align="left">
                 <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
               </TableCell>

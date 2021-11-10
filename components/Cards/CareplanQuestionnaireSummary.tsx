@@ -8,6 +8,8 @@ import { Questionnaire } from '../Models/Questionnaire';
 import { Button, Stack, Typography } from '@mui/material';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
+import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import ApiContext from '../../pages/_context';
 
 export interface Props {
     careplan : PatientCareplan
@@ -16,9 +18,14 @@ export interface Props {
 
 export class CareplanQuestionnaireSummary extends Component<Props,{}> {
   static displayName = CareplanQuestionnaireSummary.name;
-
+  static contextType = ApiContext;
+  dateHelper : IDateHelper
+  InitialiseServices(){
+      this.dateHelper = this.context.dateHelper;
+  }
 
   render ()  : JSX.Element {
+      this.InitialiseServices()
     const questionnaires = this.props.careplan.questionnaires;
     return (
         <Card>
@@ -49,7 +56,7 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
                 Seneste besvarelse
             </Typography>
             <Typography>
-                {latestResponse ? latestResponse.answeredTime?.toLocaleString() : "-"}
+                {latestResponse && latestResponse.answeredTime ? this.dateHelper.DateToString(latestResponse.answeredTime) : "-"}
             </Typography>
            </Stack>
 
