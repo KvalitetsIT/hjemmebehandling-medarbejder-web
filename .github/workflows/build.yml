@@ -15,8 +15,8 @@ jobs:
 # Set docker image names.
     - name: Setup env variables
       run: |
-        echo "DOCKER_SERVICE=kvalitetsit/rim-medarbejder-web" >> $GITHUB_ENV
-        echo "DOCKER_DOCUMENTATION=kvalitetsit/rim-medarbejder-web-documentation" >> $GITHUB_ENV
+        echo "DOCKER_SERVICE=kvalitetsit/hjemmebehandling-medarbejder-web" >> $GITHUB_ENV
+        echo "DOCKER_DOCUMENTATION=kvalitetsit/hjemmebehandling-medarbejder-web-documentation" >> $GITHUB_ENV
 
 # Checkout source code
     - uses: actions/checkout@v2

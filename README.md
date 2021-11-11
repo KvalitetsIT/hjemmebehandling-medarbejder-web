@@ -1,5 +1,5 @@
-![Build Status](https://github.com/KvalitetsIT/rim-medarbejder-web/workflows/CICD/badge.svg)
-# rim-medarbejder-web
+![Build Status](https://github.com/KvalitetsIT/hjemmebehandling-medarbejder-web/workflows/CICD/badge.svg)
+# hjemmebehandling-medarbejder-web
 
 Created using the following command:
 
