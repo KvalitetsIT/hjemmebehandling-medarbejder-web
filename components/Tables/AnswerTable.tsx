@@ -58,25 +58,19 @@ constructor(props : Props){
   }
 
   async componentDidMount(){
-      await this.populateData()
+      await this.populateData(this.state.page)
   }
-    async populateData() {
+    async populateData(page : number) {
         const careplan = this.props.careplan
-        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],this.state.page,this.state.pagesize)
-
-        this.setState({questionnaireResponses : questionnaireResponses})
+        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],page,this.state.pagesize)
+        this.setState({questionnaireResponses : questionnaireResponses,page : page})
 
     }
 
  async NextPage(){
     const currenpage = this.state.page;
     const nextPage =currenpage+1
-    console.log("from page " +currenpage + " to page: "+nextPage)
-
-    const careplan = this.props.careplan
-    const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],nextPage,this.state.pagesize)
-    this.setState({questionnaireResponses : questionnaireResponses, page : nextPage})
-
+    await this.populateData(nextPage)
 
     this.forceUpdate()
 }
@@ -84,12 +78,7 @@ constructor(props : Props){
  async PreviousPage(){
      const currenpage = this.state.page;
      const nextPage = currenpage-1
-     console.log("from page " +currenpage + " to page: "+nextPage)
-     const careplan = this.props.careplan
-     const questionnaireIds = careplan.questionnaires.map(x=>x.id)
-     const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,questionnaireIds,nextPage,this.state.pagesize)
-
-     this.setState({questionnaireResponses : questionnaireResponses, page : nextPage})
+     await this.populateData(nextPage)
 
     this.forceUpdate()
 }
