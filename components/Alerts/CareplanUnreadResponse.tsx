@@ -6,11 +6,11 @@ import { PatientCareplan } from '../Models/PatientCareplan';
 import Alert from '@mui/material/Alert';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { Questionnaire } from '../Models/Questionnaire';
 import { Card, CardContent } from '@mui/material';
 
 export interface Props {
     careplan : PatientCareplan
+    questionnaireResponses : QuestionnaireResponse[]
 }
 
 export class CareplanUnreadResponse extends Component<Props,{}> {
@@ -28,23 +28,17 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
   }
 
   render () : JSX.Element{
-    const careplan = this.props.careplan
-
     const responses : QuestionnaireResponse[] = [];
-    const responseToQuestionnaire : Map<QuestionnaireResponse,Questionnaire> = new Map<QuestionnaireResponse, Questionnaire>();
-      
-      for(let questionnaireIndex = 0; questionnaireIndex<careplan.questionnaires.length;questionnaireIndex++){
-        const questionnaire = careplan.questionnaires[questionnaireIndex];
-        if(!questionnaire.questionnaireResponses)
-            continue;
-        for(let responseIndex = 0; responseIndex<questionnaire.questionnaireResponses.length;responseIndex++){
-            const response = questionnaire.questionnaireResponses[responseIndex];
-            if(response.status !== QuestionnaireResponseStatus.Processed){
-                responses.push(response)
-                responseToQuestionnaire.set(response,questionnaire)
-            }
+
+    const questionnaireResponses = this.props.questionnaireResponses ? this.props.questionnaireResponses : [];
+    for(let responseIndex = 0; responseIndex<questionnaireResponses.length;responseIndex++){
+        const response = questionnaireResponses[responseIndex];
+        if(response.status !== QuestionnaireResponseStatus.Processed){
+            responses.push(response)
+
         }
-      }
+    }
+  
 
       if(responses.length == 0)
         return (<></>);
@@ -55,7 +49,7 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
             <CardContent>
                     {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ? 
                         <Alert severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
-                            <Button component={Link} to={"/patients/"+careplan.patient.cpr+"/questionnaires/"+responseToQuestionnaire.get(latestUnansweredAnswer)?.id} color="inherit" variant="text">Ulæst besvarelse</Button>        
+                            <Button component={Link} to={"./../questionnaires/"+latestUnansweredAnswer.questionnaireId} color="inherit" variant="text">Ulæst besvarelse</Button>        
                         </Alert> : ""
                     }
             </CardContent>

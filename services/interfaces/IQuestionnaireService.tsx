@@ -18,6 +18,7 @@ export default interface IQuestionnaireService {
     GetUnfinishedQuestionnaireResponseTasks : (page : number, pagesize : number) => Promise<Array<Task>>
     GetUnansweredQuestionnaireTasks : (page : number, pagesize : number) => Promise<Array<Task>>
     GetAllPlanDefinitions : () => Promise<Array<PlanDefinition>>
+    GetQuestionnaireResponses : (careplanId : string, questionnaireIds : string[], page : number, pagesize : number) => Promise<QuestionnaireResponse[]>
 
     //SET
     SetQuestionaireResponse : (id : string, questionnaireResponses : QuestionnaireResponse) => Promise<void>;

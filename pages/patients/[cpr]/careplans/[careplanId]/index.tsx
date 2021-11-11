@@ -10,25 +10,31 @@ import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
+import { QuestionnaireResponse } from '../../../../../components/Models/QuestionnaireResponse';
+import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
 
 interface State {
   
   loading: boolean
   careplans : PatientCareplan[]
+  questionnaireResponses : QuestionnaireResponse[]
 }
+
 interface Props {
     match : { params : {cpr : string, careplanId : string} }
-
 }
+
 class PatientCareplans extends React.Component<Props,State> {
   static contextType = ApiContext
   careplanService! : ICareplanService
+  questionnaireService! : IQuestionnaireService
 
   constructor(props : Props){
     super(props);
     this.state = {
         loading : true,
-        careplans : []
+        careplans : [],
+        questionnaireResponses : []
     }
     
 }
@@ -40,20 +46,24 @@ class PatientCareplans extends React.Component<Props,State> {
   }
   InitializeServices():void{
     this.careplanService = this.context.careplanService;
+    this.questionnaireService = this.context.questionnaireService;
   }
 
   componentDidMount():void{
     this.populateCareplans()
 }
 
-
 async populateCareplans() : Promise<void>{
   const cpr = this.props.match.params.cpr;
+  const activeCareplanId = this.props.match.params.careplanId
 
-  const responses : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
-  console.log(responses)
+  const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
+  const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
+  const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
+
   this.setState({
-      careplans : responses,
+      careplans : careplans,
+      questionnaireResponses : questionnaireResponses,
       loading : false,
 
   });
@@ -74,12 +84,12 @@ async populateCareplans() : Promise<void>{
     return (
         <Stack direction="row" spacing={3}>
             <Stack spacing={3}>
-                <CareplanUnreadResponse careplan={activeCareplan}/>
+                <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
                 <PatientCard patient={this.state.careplans[0].patient}></PatientCard>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
             </Stack>
             <Stack spacing={3}>
-                <CareplanQuestionnaireSummary careplan={activeCareplan}/>
+                <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
                 <ObservationCard careplan={activeCareplan}/>
             </Stack>
         </Stack>

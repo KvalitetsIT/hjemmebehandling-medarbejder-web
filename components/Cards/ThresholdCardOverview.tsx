@@ -8,9 +8,11 @@ import { Question } from '../Models/Question';
 import ApiContext from '../../pages/_context';
 import { Chip, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
+import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 
 export interface Props {
     questionnaire : Questionnaire;
+    questoinnaireResponses : QuestionnaireResponse[]
 }
 
 
@@ -32,7 +34,7 @@ export class ThresholdCardOverview extends Component<Props,{}> {
 }
 
   render () : JSX.Element{
-    const allQuestions : Question[] = this.context.questionnaireService.findAllQuestions(this.props.questionnaire.questionnaireResponses)
+    const allQuestions : Question[] = this.context.questionnaireService.findAllQuestions(this.props.questoinnaireResponses)
     return (
         <Card component={Box} minWidth={100}>
             <CardContent>

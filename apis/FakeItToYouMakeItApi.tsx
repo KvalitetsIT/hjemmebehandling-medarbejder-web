@@ -101,8 +101,38 @@ export class FakeItToYouMakeItApi implements IBackendApi {
             this.CreateThreshold("1",44,100,CategoryEnum.GREEN),
         ]
 
+         //======================================= questionnaire
+         this.questionnaire1.id = "q1"
+         this.questionnaire1.name = "Imundefekt alm"
+         let frequency = new Frequency();
+         frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
+         frequency.repeated = FrequencyEnum.WEEKLY;
+         this.questionnaire1.frequency = frequency;
+         
+ 
+         this.questionnaire2.id = "q2"
+         this.questionnaire2.name = "Imundefekt medium"
+         let frequency2 = new Frequency();
+         frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
+         frequency2.repeated = FrequencyEnum.WEEKLY;
+         this.questionnaire2.frequency = frequency2;
+ 
+         this.questionnaire3.id = "q3"
+         this.questionnaire3.name = "Imundefekt voldsom"
+         let frequency3 = new Frequency();
+         frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
+         frequency3.repeated = FrequencyEnum.WEEKLY;
+         this.questionnaire3.frequency = frequency3;
+ 
+ 
+         this.planDefinition1.name = "Imundefekt"
+         this.planDefinition1.id = "def1"
+ 
+         this.planDefinition1.questionnaires = [this.questionnaire1,this.questionnaire2]
+
         //======================================= Response // QuestionResponse1
         this.questionnaireResponse1.id = "qr1"
+        this.questionnaireResponse1.questionnaireId = this.questionnaire1.id
         this.questionnaireResponse1.patient = this.patient1;
         this.questionnaireResponse1.category = CategoryEnum.GREEN;
         this.questionnaireResponse1.answeredTime = this.CreateDate()
@@ -117,6 +147,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
          //======================================= Response // QuestionResponse2
          this.questionnaireResponse2.id = "qr2"
+         this.questionnaireResponse2.questionnaireId = this.questionnaire1.id
          this.questionnaireResponse2.patient = this.patient1;
          this.questionnaireResponse2.category = CategoryEnum.RED;
          this.questionnaireResponse2.answeredTime = this.CreateDate()
@@ -130,6 +161,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
          //======================================= Response // QuestionResponse3
          this.questionnaireResponse3.id = "qr3"
+         this.questionnaireResponse3.questionnaireId = this.questionnaire1.id
          this.questionnaireResponse3.patient = this.patient1;
          this.questionnaireResponse3.category = CategoryEnum.YELLOW;
          this.questionnaireResponse3.answeredTime = this.CreateDate()
@@ -142,6 +174,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          this.questionnaireResponse3.questions = questionAnswerMap3;
          //======================================= Response // QuestionResponse4
          this.questionnaireResponse4.id = "qr3"
+         this.questionnaireResponse4.questionnaireId = this.questionnaire1.id
          this.questionnaireResponse4.patient = this.patient1;
          this.questionnaireResponse4.category = CategoryEnum.RED;
          this.questionnaireResponse4.answeredTime = this.CreateDate()
@@ -154,6 +187,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          this.questionnaireResponse4.questions = questionAnswerMap4;
          //======================================= Response // QuestionResponse5
          this.questionnaireResponse5.id = "qr3"
+         this.questionnaireResponse5.questionnaireId = this.questionnaire1.id
          this.questionnaireResponse5.patient = this.patient1;
          this.questionnaireResponse5.category = CategoryEnum.RED;
          this.questionnaireResponse5.answeredTime = this.CreateDate()
@@ -165,34 +199,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          questionAnswerMap5.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
          this.questionnaireResponse5.questions = questionAnswerMap5;
 
-        //======================================= questionnaire
-        this.questionnaire1.id = "q1"
-        this.questionnaire1.name = "Imundefekt alm"
-        let frequency = new Frequency();
-        frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
-        frequency.repeated = FrequencyEnum.WEEKLY;
-        this.questionnaire1.frequency = frequency;
-        this.questionnaire1.questionnaireResponses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
-
-        this.questionnaire2.id = "q2"
-        this.questionnaire2.name = "Imundefekt medium"
-        let frequency2 = new Frequency();
-        frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
-        frequency2.repeated = FrequencyEnum.WEEKLY;
-        this.questionnaire2.frequency = frequency2;
-
-        this.questionnaire3.id = "q3"
-        this.questionnaire3.name = "Imundefekt voldsom"
-        let frequency3 = new Frequency();
-        frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
-        frequency3.repeated = FrequencyEnum.WEEKLY;
-        this.questionnaire3.frequency = frequency3;
-
-
-        this.planDefinition1.name = "Imundefekt"
-        this.planDefinition1.id = "def1"
-
-        this.planDefinition1.questionnaires = [this.questionnaire1,this.questionnaire2]
+       
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -210,6 +217,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
     }
+    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
+        let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
+        let start = (page-1) * pagesize
+        let end = page * pagesize
+        return responses.filter(x=>questionnaireIds.includes(x.questionnaireId)).slice(start,end)
+    }
+
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }

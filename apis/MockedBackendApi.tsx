@@ -16,6 +16,9 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { Task } from "../components/Models/Task";
 
 export class MockedBackendApi implements IBackendApi {
+    GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]>{
+        throw new Error("Method not implemented.");
+    }
     
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
@@ -82,14 +85,14 @@ export class MockedBackendApi implements IBackendApi {
 
   
         questionnaire.id = this.questionnaireNames.indexOf(questionnaire.name)+""
-        questionnaire.questionnaireResponses = await this.GetMeasurements(cpr);
+        
 
         let questionnaire2 = new Questionnaire();
 
 
         questionnaire2.name = this.questionnaireNames[1];
         questionnaire2.id = this.questionnaireNames.indexOf(questionnaire2.name)+""
-        questionnaire2.questionnaireResponses = await this.GetMeasurements(cpr);
+        
 
 
         careplan.questionnaires = [questionnaire,questionnaire2]

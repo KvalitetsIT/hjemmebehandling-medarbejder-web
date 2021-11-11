@@ -38,6 +38,9 @@ import { Configuration } from "../generated";
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
+    GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
+        throw new Error("Method not implemented.");
+    }
 	conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 	
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
@@ -319,7 +322,7 @@ export class BffBackendApi implements IBackendApi {
             console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
             responses = questionnaireResponses?.get(questionnaire.id) ?? [];
         }
-        questionnaire.questionnaireResponses = responses;
+        //questionnaire.questionnaireResponses = responses;
 
         return questionnaire;
     }

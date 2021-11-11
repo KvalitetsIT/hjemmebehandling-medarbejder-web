@@ -13,6 +13,7 @@ import ApiContext from '../../pages/_context';
 
 export interface Props {
     careplan : PatientCareplan
+    questionnaireResponses : QuestionnaireResponse[]
 }
 
 
@@ -45,7 +46,7 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
 
   renderQuestionnaireResponseTab(questionnaire : Questionnaire) : JSX.Element{
       let latestResponse : QuestionnaireResponse | null = null;
-      const responsesFromNewToOld = questionnaire.questionnaireResponses?.sort( (a,b) => a.answeredTime!.getTime() - b.answeredTime!.getTime());
+      const responsesFromNewToOld = this.props.questionnaireResponses.filter(x=>x.questionnaireId == questionnaire.id)?.sort( (a,b) => a.answeredTime!.getTime() - b.answeredTime!.getTime());
         if(responsesFromNewToOld?.length > 0)
             latestResponse = responsesFromNewToOld[0]
     return (

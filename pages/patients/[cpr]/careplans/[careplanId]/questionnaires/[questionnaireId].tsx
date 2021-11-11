@@ -98,7 +98,7 @@ async populateCareplans() : Promise<void> {
             idOfStartTab={this.props.match.params.questionnaireId}
             tabIds={questionnaires.map(x=>x.id)}
             tabLabels={questionnaires.map(x=>x.name)}
-            tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x))}
+            tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(currentCareplan!,x))}
             >
               <AddQuestionnaireButton careplan={currentCareplan!} afterAddingQuestionnaire={ () => this.forceUpdate()}/>
           </BasicTabs>
@@ -115,13 +115,13 @@ async populateCareplans() : Promise<void> {
 
   //=====================TABS===============================
 
-  renderQuestionnaireResponseTab(questionnaire : Questionnaire) : JSX.Element{
+  renderQuestionnaireResponseTab(careplan : PatientCareplan, questionnaire : Questionnaire) : JSX.Element{
     return (
       <>
           
 
       
-      <AnswerTable typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaires={questionnaire} >
+      <AnswerTable careplan={careplan} typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaires={questionnaire} >
     
     </AnswerTable>
     </>

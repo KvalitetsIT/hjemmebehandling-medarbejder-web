@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { MeasurementType, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
+import { MeasurementType, QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
@@ -12,15 +12,17 @@ import { Questionnaire } from '../Models/Questionnaire';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { PatientCareplan } from '../Models/PatientCareplan';
 
 export interface Props {
     typesToShow : MeasurementType[]
     questionnaires : Questionnaire
-    
+    careplan : PatientCareplan
 }
 
 export interface State {
   thresholdModalOpen : boolean
+  questionnaireResponses : QuestionnaireResponse[]
   pagesize : number
     page : number
 }
@@ -37,7 +39,8 @@ constructor(props : Props){
     super(props);
     this.state = {
         thresholdModalOpen : false,
-        pagesize : 5,
+        questionnaireResponses : [],
+        pagesize : 3,
         page : 1
     }
 }
@@ -53,6 +56,43 @@ constructor(props : Props){
     this.questionnaireService = this.context.questionnaireService;
     this.datehelper = this.context.dateHelper;
   }
+
+  async componentDidMount(){
+      await this.populateData()
+  }
+    async populateData() {
+        const careplan = this.props.careplan
+        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],this.state.page,this.state.pagesize)
+
+        this.setState({questionnaireResponses : questionnaireResponses})
+
+    }
+
+ async NextPage(){
+    const currenpage = this.state.page;
+    const nextPage =currenpage+1
+    console.log("from page " +currenpage + " to page: "+nextPage)
+
+    const careplan = this.props.careplan
+    const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],nextPage,this.state.pagesize)
+    this.setState({questionnaireResponses : questionnaireResponses, page : nextPage})
+
+
+    this.forceUpdate()
+}
+
+ async PreviousPage(){
+     const currenpage = this.state.page;
+     const nextPage = currenpage-1
+     console.log("from page " +currenpage + " to page: "+nextPage)
+     const careplan = this.props.careplan
+     const questionnaireIds = careplan.questionnaires.map(x=>x.id)
+     const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,questionnaireIds,nextPage,this.state.pagesize)
+
+     this.setState({questionnaireResponses : questionnaireResponses, page : nextPage})
+
+    this.forceUpdate()
+}
 
 getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary" | "default" | "success"{
     if(category === CategoryEnum.RED)
@@ -82,8 +122,8 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 
 
   renderTableData(questionaire : Questionnaire) : JSX.Element{
-    const questionaireResponses = questionaire.questionnaireResponses;
-    if(!questionaireResponses || questionaireResponses.length === 0){
+    const questionaireResponses = this.state.questionnaireResponses;
+    if(!questionaireResponses || questionaireResponses.length === 0 && this.state.page == 1){
         return (
             <>
             <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>
@@ -92,22 +132,21 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
         )
     }
 
-    const start = this.state.pagesize * (this.state.page-1);
-    const end = this.state.pagesize * this.state.page; 
+    
     let hasMorePages = false;
 
-    let questionnairesResponsesToShow = questionaireResponses.slice(start,end+1) //We take one more than we need, to know if there are a next page
+    
 
-    if(questionnairesResponsesToShow.length > this.state.pagesize)
-      hasMorePages = true;
+    if(this.state.questionnaireResponses.length === this.state.pagesize)
+        hasMorePages = true;
 
-    questionnairesResponsesToShow = questionnairesResponsesToShow.slice(0,this.state.pagesize)
+    const questionnairesResponsesToShow = this.state.questionnaireResponses.slice(0,this.state.pagesize)
  
     
     return (<>
     <Box textAlign="right">
-    <Button disabled={this.state.page <= 1} onClick={()=>this.setState({page : this.state.page-1})}>Senere <NavigateBeforeIcon  /></Button>
-    <Button disabled={!hasMorePages} onClick={()=>this.setState({page : this.state.page+1})}>Tidligere <NavigateNextIcon/> </Button>
+    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()}>Senere <NavigateBeforeIcon  /></Button>
+    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()}>Tidligere <NavigateNextIcon/> </Button>
             
               
             </Box>
@@ -123,9 +162,10 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
             {questionnairesResponsesToShow.map(collection => {
 
                 let severity = this.getChipColorFromCategory(collection.category) as string
+               
                 if(collection.status === QuestionnaireResponseStatus.Processed)
                     severity = "info"
-
+                    
                 return (
                     <TableCell >
      
