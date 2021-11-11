@@ -1,7 +1,7 @@
 export class Frequency {
     repeated!: FrequencyEnum;
     days: DayEnum[] = [];
-    
+    deadline! : Date;
 
     ToString() : string{
         let toReturn = "";

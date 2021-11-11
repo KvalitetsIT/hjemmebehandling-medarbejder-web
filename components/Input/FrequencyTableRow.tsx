@@ -6,6 +6,11 @@ import ApiContext from '../../pages/_context';
 import { TableCell, TableRow, Typography } from '@material-ui/core';
 import { DayEnum, FrequencyEnum } from '../Models/Frequency';
 import { Questionnaire } from '../Models/Questionnaire';
+import TimePicker from '@mui/lab/TimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { TextField } from '@mui/material';
+import daLocale from 'date-fns/locale/da';
 
 export interface Props {
     questionnaire : Questionnaire
@@ -60,6 +65,16 @@ export class FrequencyTableRow extends Component<Props,State> {
       if(this.props.afterChange)
         this.props.afterChange()
   }
+
+  SetFrequencyTime(time : Date){
+    const oldFre = this.state.questionnaire;
+    oldFre.frequency.deadline = time;
+    console.log(time)
+    this.setState({questionnaire : oldFre})
+      if(this.props.afterChange)
+        this.props.afterChange()
+  }
+
   SetFrequency(frequencySelected : string | FrequencyEnum):void{
     const oldFre = this.state.questionnaire
     oldFre.frequency.repeated = frequencySelected as FrequencyEnum;
@@ -90,6 +105,16 @@ export class FrequencyTableRow extends Component<Props,State> {
                   return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
           </Select>
+                </TableCell>
+                <TableCell>
+                <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
+                <TimePicker
+                  label="Seneste besvarelses tidspunkt"
+                  value={this.state.questionnaire.frequency.deadline}
+                  onChange={(newValue) => this.SetFrequencyTime(newValue as Date)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                </LocalizationProvider>
                 </TableCell>
                 <TableCell>
                   {this.props.children}
