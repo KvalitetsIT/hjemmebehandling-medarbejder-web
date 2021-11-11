@@ -33,7 +33,7 @@ import { QuestionDto } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
-import { Configuration } from "../generated";
+import { Configuration, PlanDefinitionApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 
@@ -53,12 +53,19 @@ export class BffBackendApi implements IBackendApi {
         throw new Error("Method not implemented.");
     }
     
-    GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-        return new FakeItToYouMakeItApi().GetAllPlanDefinitions();
+    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+        console.log('inside BffBackendApi.GetAllPlanDefinitions!')
+
+        let api = new PlanDefinitionApi()
+        let planDefinitions = await api.getPlanDefinitions()
+
+        return planDefinitions.map(pd => this.mapPlanDefinitionDto(pd))
     }
+
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
+
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
@@ -260,7 +267,7 @@ export class BffBackendApi implements IBackendApi {
 
         planDefinition.id = planDefinitionDto.id!
         planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
-        planDefinition.questionnaires = [] // TODO - include questionnaires
+        planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
 
         return planDefinition
     }
@@ -300,13 +307,17 @@ export class BffBackendApi implements IBackendApi {
         let questionnaires = [];
 
         for(var wrapper of questionnaireDtos) {
-            questionnaires.push(this.mapQuestionnaireDto(wrapper, questionnaireResponses));
+            questionnaires.push(this.mapQuestionnaireDtoWithResponses(wrapper, questionnaireResponses));
         }
 
         return questionnaires;
     }
 
-    private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
+    private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto) : Questionnaire {
+        return this.mapQuestionnaireDtoWithResponses(wrapper, undefined)
+    }
+
+    private mapQuestionnaireDtoWithResponses(wrapper: QuestionnaireWrapperDto, questionnaireResponses?: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
         let questionnaire = new Questionnaire();
 
         questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
@@ -315,7 +326,7 @@ export class BffBackendApi implements IBackendApi {
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
 
         let responses: QuestionnaireResponse[] = [];
-        if(questionnaireResponses.get(questionnaire.id)) {
+        if(questionnaireResponses?.get(questionnaire.id)) {
             console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
             responses = questionnaireResponses?.get(questionnaire.id) ?? [];
         }
