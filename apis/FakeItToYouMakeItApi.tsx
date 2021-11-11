@@ -266,6 +266,12 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         
         
     }
+
+    async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
+        await new Promise(f => setTimeout(f, 1000))
+        return carePlan
+    }
+
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         await new Promise(f => setTimeout(f, 1000));
         return careplan;

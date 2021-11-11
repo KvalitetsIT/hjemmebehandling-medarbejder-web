@@ -69,6 +69,19 @@ export class BffBackendApi implements IBackendApi {
         throw new Error("Method not implemented.");
     }
 
+    async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
+        let api = new CarePlanApi()
+        let request = {
+            createCarePlanRequest: {
+                carePlan: this.mapCarePlan(carePlan)
+            }
+        }
+
+        await api.createCarePlan(request)
+
+        return carePlan
+    }
+
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
@@ -251,6 +264,18 @@ export class BffBackendApi implements IBackendApi {
         //return new Map<string, Array<QuestionnaireResponse>>();
     }
 
+    private mapCarePlan(carePlan: PatientCareplan) : CarePlanDto {
+        let carePlanDto = {
+            id: "dummy",
+            title: "Ny behandlingsplan", // TODO - set a title ...
+            patientDto: this.mapPatient(carePlan.patient),
+            questionnaires: [], // TODO
+            planDefinitions: [] // TODO
+        }
+
+        return carePlanDto
+    }
+
     private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
         let carePlan = new PatientCareplan();
 
@@ -273,6 +298,15 @@ export class BffBackendApi implements IBackendApi {
         planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
 
         return planDefinition
+    }
+
+    private mapPatient(patient: PatientDetail) : PatientDto {
+        return {
+            cpr: patient.cpr,
+            givenName: patient.firstname,
+            familyName: patient.lastname
+            // TODO - map contact details
+        }
     }
 
     private mapPatientDto(patientDto: PatientDto) : PatientDetail {

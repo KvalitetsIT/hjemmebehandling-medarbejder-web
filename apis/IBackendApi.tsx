@@ -36,6 +36,12 @@ export interface IBackendApi {
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void>;
 
     /**
+     * Creates and returns careplan
+     * @param carePlan
+     */
+    CreateCarePlan(CarePlan: PatientCareplan): Promise<PatientCareplan>;
+
+    /**
      * Change careplan
      * Id should always be provided
      * To change the terminationdate fx, provide only terminationdate and id - Everything else will stay the same

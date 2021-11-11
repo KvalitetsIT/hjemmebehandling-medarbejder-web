@@ -17,6 +17,7 @@ import { Address } from '../components/Models/Address';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
+import ICareplanService from '../services/interfaces/ICareplanService';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -39,6 +40,7 @@ export interface State {
 export default class CreatePatient extends Component<Props,State> {
   static contextType = ApiContext;
   static displayName = CreatePatient.name;
+  careplanService!: ICareplanService;
   patientService!: IPatientService;
 
 constructor(props : Props){
@@ -72,6 +74,7 @@ constructor(props : Props){
 
 }
 InitializeServices() : void{
+  this.careplanService = this.context.careplanService;
   this.patientService = this.context.patientService;
 }
 
@@ -83,9 +86,10 @@ async submitPatient() : Promise<void>{
     this.setState({
       loading: true
     })
-    const newPatient = await this.patientService.CreatePatient(this.state.patient)
+    const newCarePlan = await this.careplanService.CreateCarePlan(this.state.careplan)
     this.setState({
-      patient : newPatient
+      careplan: newCarePlan,
+      patient : newCarePlan.patient
     })
   } catch(error){
     this.setState({
