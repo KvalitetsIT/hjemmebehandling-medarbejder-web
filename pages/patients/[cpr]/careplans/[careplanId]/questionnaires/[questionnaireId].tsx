@@ -11,12 +11,10 @@ import { BasicTabs } from '../../../../../../components/Layout/Tabs';
 import { PatientCareplan } from '../../../../../../components/Models/PatientCareplan';
 import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
-import { ContactThumbnail } from '../../../../../../components/Cards/ContactThumbnail';
+import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
 import { AddQuestionnaireButton } from '../../../../../../components/Input/AddQuestionnaireButton';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
-import { PatientAvatar } from '../../../../../../components/Avatars/PatientAvatar';
+
 
 interface State {
   loading: boolean
@@ -30,6 +28,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   static contextType = ApiContext
   careplanService! : ICareplanService
   questionnaireService! : IQuestionnaireService;
+  
 
   constructor(props : Props){
     super(props);
@@ -87,10 +86,7 @@ async populateCareplans() : Promise<void> {
     return (
 <>
       <Stack display="inline-flex" spacing={2}>
-        <Stack direction="row" spacing={2}>
-        <ContactThumbnail avatar={<PatientAvatar size={80} patient={currentCareplan!.patient}/>} headline="Patient" boxContent={<HealingOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.patientContact}></ContactThumbnail>
-        <ContactThumbnail color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>} contact={currentCareplan?.patient.contact}></ContactThumbnail>
-        </Stack>
+        <PatientContextThumbnails currentCareplan={currentCareplan!}/>
         
         <Card>
         <CardContent>
