@@ -1,5 +1,5 @@
-![Build Status](https://github.com/KvalitetsIT/rim-medarbejder-web/workflows/CICD/badge.svg)
-# rim-medarbejder-web
+![Build Status](https://github.com/KvalitetsIT/hjemmebehandling-medarbejder-web/workflows/CICD/badge.svg)
+# hjemmebehandling-medarbejder-web
 
 Created using the following command:
 
@@ -37,3 +37,9 @@ The app should now be available at http://localhost:3000
 ```
 npm run lint
 ```
+
+## Configuration
+
+| Environment variable | Description | Required |
+|----------------------|-------------|---------- |
+| BFF_BASE_URL | Base URL for Backend API server. | Yes |

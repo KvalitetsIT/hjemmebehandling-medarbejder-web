@@ -4,7 +4,7 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig }= getConfig();
 // Create proxy instance outside of request handler function to avoid unnecessary re-creation
 const apiProxy = createProxyMiddleware({
-  target: publicRuntimeConfig.BFF_API_URL,
+  target: publicRuntimeConfig.BFF_BASE_URL,
   changeOrigin: true,
   pathRewrite: { [`^/api/proxy`]: '/api/' },
   secure: false,
