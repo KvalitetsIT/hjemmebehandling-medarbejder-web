@@ -59,7 +59,7 @@ export class BffBackendApi implements IBackendApi {
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
         console.log('inside BffBackendApi.GetAllPlanDefinitions!')
 
-        let api = new PlanDefinitionApi()
+        let api = new PlanDefinitionApi(this.conf)
         let planDefinitions = await api.getPlanDefinitions()
 
         return planDefinitions.map(pd => this.mapPlanDefinitionDto(pd))
@@ -76,7 +76,7 @@ export class BffBackendApi implements IBackendApi {
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
         console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
 
-        let api = new QuestionnaireResponseApi();
+        let api = new QuestionnaireResponseApi(this.conf);
         let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
         await api.patchQuestionnaireResponse(request)
     }
@@ -86,7 +86,7 @@ export class BffBackendApi implements IBackendApi {
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        let api = new QuestionnaireResponseApi();
+        let api = new QuestionnaireResponseApi(this.conf);
         let request = { 
             status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
             pageNumber: page,
@@ -228,7 +228,7 @@ export class BffBackendApi implements IBackendApi {
 
         let responses: Map<string, Array<QuestionnaireResponse>> = new Map<string, Array<QuestionnaireResponse>>();
 
-        let api = new QuestionnaireResponseApi();
+        let api = new QuestionnaireResponseApi(this.conf);
         let request = { cpr: cpr, questionnaireIds: questionnaireIds };
         let questionnaireResponses = await api.getQuestionnaireResponsesByCpr(request);
         if(!questionnaireResponses) {
