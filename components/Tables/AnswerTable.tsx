@@ -1,7 +1,7 @@
 import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Alert, AlertColor, Box, Stack } from '@mui/material';
+import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { MeasurementType, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -10,15 +10,19 @@ import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerSer
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '../Models/Questionnaire';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
-
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 export interface Props {
     typesToShow : MeasurementType[]
     questionnaires : Questionnaire
+    
 }
 
 export interface State {
   thresholdModalOpen : boolean
+  pagesize : number
+    page : number
 }
 
 export class AnswerTable extends Component<Props,State> {
@@ -32,7 +36,9 @@ export class AnswerTable extends Component<Props,State> {
 constructor(props : Props){
     super(props);
     this.state = {
-        thresholdModalOpen : false
+        thresholdModalOpen : false,
+        pagesize : 5,
+        page : 1
     }
 }
 
@@ -85,17 +91,36 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
             </>
         )
     }
+
+    const start = this.state.pagesize * (this.state.page-1);
+    const end = this.state.pagesize * this.state.page; 
+    let hasMorePages = false;
+
+    let questionnairesResponsesToShow = questionaireResponses.slice(start,end+1) //We take one more than we need, to know if there are a next page
+
+    if(questionnairesResponsesToShow.length > this.state.pagesize)
+      hasMorePages = true;
+
+    questionnairesResponsesToShow = questionnairesResponsesToShow.slice(0,this.state.pagesize)
  
     
     return (<>
+    <Box textAlign="right">
+    <Button disabled={this.state.page <= 1} onClick={()=>this.setState({page : this.state.page-1})}>Senere <NavigateBeforeIcon  /></Button>
+    <Button disabled={!hasMorePages} onClick={()=>this.setState({page : this.state.page+1})}>Tidligere <NavigateNextIcon/> </Button>
+            
+              
+            </Box>
     <TableContainer component={Paper}>
+    
       <Table aria-label="simple table">
         <TableHead>
+            
           <TableRow>
           <TableCell>
-          
+         
             </TableCell>
-            {questionaireResponses.map(collection => {
+            {questionnairesResponsesToShow.map(collection => {
 
                 let severity = this.getChipColorFromCategory(collection.category) as string
                 if(collection.status === QuestionnaireResponseStatus.Processed)
@@ -118,11 +143,12 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                     
                 )
             })}
+            
           </TableRow>
             
         </TableHead>
         <TableBody>
-                    {this.questionnaireService.findAllQuestions(questionaireResponses).map(question => {
+                    {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
                         return (
                             <>
                             
@@ -131,7 +157,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                     {question.question}                                    
                                 </TableCell>
                                 
-                                {questionaireResponses.map(questionResponse => {
+                                {questionnairesResponsesToShow.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
                                     const category = answer ? this.questionAnswerService.FindCategory (question,answer) : CategoryEnum.GREEN;
                                     return (
