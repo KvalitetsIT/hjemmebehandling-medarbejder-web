@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     , careplanBackend = backendApi
     , patientBackend = backendApi
     , personBackend = backendApi
-    ;
+  ;
 
   if (process?.env.NODE_ENV === 'development') {
     if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE) {

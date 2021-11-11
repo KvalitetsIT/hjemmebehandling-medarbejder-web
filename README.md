@@ -37,3 +37,9 @@ The app should now be available at http://localhost:3000
 ```
 npm run lint
 ```
+
+## Configuration
+
+| Environment variable | Description | Required |
+|----------------------|-------------|---------- |
+| BFF_BASE_URL | Base URL for Backend API server. | Yes |
