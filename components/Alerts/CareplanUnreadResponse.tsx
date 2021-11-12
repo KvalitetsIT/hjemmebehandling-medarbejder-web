@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { Card, CardContent } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
 
 export interface Props {
     careplan : PatientCareplan
@@ -45,15 +46,20 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
 
       const latestUnansweredAnswer = responses.sort((a,b) =>b.answeredTime!.getTime() - a.answeredTime!.getTime())[0]
     return (
-        <Card>
-            <CardContent>
+<>
+<Card>
+  <CardContent>
+                <Link to={"./../questionnaires/"+latestUnansweredAnswer.questionnaireId} color="inherit" >
                     {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ? 
-                        <Alert severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
-                            <Button component={Link} to={"./../questionnaires/"+latestUnansweredAnswer.questionnaireId} color="inherit" variant="text">Ulæst besvarelse</Button>        
+                        <Alert variant="filled" icon={<ErrorIcon/>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
+                            Ulæst besvarelse     
                         </Alert> : ""
                     }
-            </CardContent>
-        </Card>
+                    </Link>   
+                    </CardContent>
+                    </Card>
+                    
+</>
     );
   }
 
