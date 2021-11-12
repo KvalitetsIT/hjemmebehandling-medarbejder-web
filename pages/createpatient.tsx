@@ -191,7 +191,7 @@ async componentDidMount(){
           <Button component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
-      <Button type="submit" variant="contained">Opret patient</Button>
+      <Button type="submit" variant="contained">{ this.props.match.params.cpr ? "Gem patient" : "Opret patient"}</Button>
         </Stack>
         <div>
         <Card>
