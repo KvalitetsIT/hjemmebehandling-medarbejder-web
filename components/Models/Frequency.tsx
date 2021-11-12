@@ -11,6 +11,8 @@ export class Frequency {
             toReturn += this.days[i].slice(0,3) + ""
         }
         toReturn += " ("+this.repeated+")"
+        toReturn += this.deadline ? " kl " :  ""
+        toReturn += this.deadline ? this.deadline.toLocaleTimeString() : ""
         return toReturn;
         
     }
