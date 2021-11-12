@@ -26,12 +26,13 @@ export interface Accordians{
 }
 export interface Props{
   openAccordians : Accordians
+  match : { params : {cpr? : string, questionnaireId? : string,careplanId? : string} }
 }
 
 export interface State {
-    accordians : Accordians
-    patient : PatientDetail;
-    careplan : PatientCareplan;
+    accordians : Accordians;
+    patient? : PatientDetail;
+    careplan? : PatientCareplan;
     loading: boolean;
 }
 
@@ -48,27 +49,9 @@ constructor(props : Props){
     super(props);
 
     this.SaveCareplan = this.SaveCareplan.bind(this);
-
-    const relativeContact = new Contact();
-    const newPatient = new PatientDetail();
-    newPatient.firstname = "";
-    newPatient.lastname = "";
-    newPatient.patientContact = new Contact();
-    newPatient.patientContact.address = new Address()
-    newPatient.patientContact.address.city ="";
-    newPatient.patientContact.address.zipCode ="";
-    newPatient.patientContact.address.road ="";
-    
-    newPatient.contact = relativeContact
-    newPatient.contact.address = new Address();
-    
-    const newCareplan = new PatientCareplan();
-    newCareplan.patient = newPatient;
     
     this.state = {
-      patient : newPatient,
-      loading : false,
-      careplan : newCareplan,
+      loading : true,
       accordians : props.openAccordians
     }
 
@@ -78,8 +61,26 @@ InitializeServices() : void{
   this.patientService = this.context.patientService;
 }
 
+createNewEmptyCareplan(){
+  const relativeContact = new Contact();
+  const newPatient = new PatientDetail();
+  newPatient.patientContact = new Contact();
+  newPatient.patientContact.address = new Address()
+
+  newPatient.contact = relativeContact
+  newPatient.contact.address = new Address();
+  
+  const newCareplan = new PatientCareplan();
+  newCareplan.patient = newPatient;
+  return newCareplan;
+}
+
 async submitPatient() : Promise<void>{
-  this.state.careplan.patient = this.state.patient;
+  if(!(this.state.careplan && this.state.careplan.patient)){
+    return;
+  }
+
+  this.state.careplan.patient = this.state.patient!;
   
   console.log(this.state.careplan)
   try{
@@ -105,51 +106,28 @@ SaveCareplan(editedCareplan : PatientCareplan) : void{
   this.forceUpdate();
 }
 
-getActiveStep() : number{
-  if(this.state.accordians.PatientIsOpen)
-    return 0
-
-  if(this.state.accordians.RelativeContactIsOpen)
-    return 1
-
-  if(this.state.accordians.PlanDefinitionIsOpen)
-    return 2
-
-  return 3;
-}
-
-getAllClosedAccordian() : Accordians{
-  return {
-    PatientIsOpen : false,
-    RelativeContactIsOpen : false,
-    PlanDefinitionIsOpen : false,
+async componentDidMount(){
+  const cpr = this.props.match.params.cpr;
+  let careplanToEdit : PatientCareplan | undefined = this.createNewEmptyCareplan()
+  if(cpr){
+    const careplansForPatient = await this.careplanService.GetPatientCareplans(cpr)
+    careplanToEdit = careplansForPatient.find(x=>!x.terminationDate);
   }
-}
-goToPatientIsOpen() : void{
-  const accordians = this.getAllClosedAccordian();
-  accordians.PatientIsOpen = !this.state.accordians.PatientIsOpen;
-  this.setState({accordians : accordians})
-}
-
-goToPlanDefinitionIsOpen() : void{
-  const accordians = this.getAllClosedAccordian();
-  accordians.PlanDefinitionIsOpen = !this.state.accordians.PlanDefinitionIsOpen;
-  this.setState({accordians : accordians})
-}
-
-goToRelativeContactIsOpen() : void{
-  const accordians = this.getAllClosedAccordian();
-  accordians.RelativeContactIsOpen = !this.state.accordians.RelativeContactIsOpen;
-  this.setState({accordians : accordians})
-}
-
-goToSave() : void{
-  const accordians = this.getAllClosedAccordian();
-  this.setState({accordians : accordians})
+  
+  this.setState({loading : false,careplan : careplanToEdit, patient : careplanToEdit ? careplanToEdit.patient : undefined})
 }
 
   render () : JSX.Element{
+
+
     this.InitializeServices();
+
+    if(this.state.loading)
+      return (<LoadingComponent />)
+
+    if(!(this.state.patient && this.state.careplan) )
+      return (<div>Fandt ikke patienten</div>)
+
     return (
       <form onSubmit={async ()=>await this.submitPatient()}> 
         <Stack direction="row" spacing={3}> 
@@ -242,6 +220,49 @@ goToSave() : void{
         </form>
         
     )
+  }
+
+  getActiveStep() : number{
+    if(this.state.accordians.PatientIsOpen)
+      return 0
+  
+    if(this.state.accordians.RelativeContactIsOpen)
+      return 1
+  
+    if(this.state.accordians.PlanDefinitionIsOpen)
+      return 2
+  
+    return 3;
+  }
+  
+  getAllClosedAccordian() : Accordians{
+    return {
+      PatientIsOpen : false,
+      RelativeContactIsOpen : false,
+      PlanDefinitionIsOpen : false,
+    }
+  }
+  goToPatientIsOpen() : void{
+    const accordians = this.getAllClosedAccordian();
+    accordians.PatientIsOpen = !this.state.accordians.PatientIsOpen;
+    this.setState({accordians : accordians})
+  }
+  
+  goToPlanDefinitionIsOpen() : void{
+    const accordians = this.getAllClosedAccordian();
+    accordians.PlanDefinitionIsOpen = !this.state.accordians.PlanDefinitionIsOpen;
+    this.setState({accordians : accordians})
+  }
+  
+  goToRelativeContactIsOpen() : void{
+    const accordians = this.getAllClosedAccordian();
+    accordians.RelativeContactIsOpen = !this.state.accordians.RelativeContactIsOpen;
+    this.setState({accordians : accordians})
+  }
+  
+  goToSave() : void{
+    const accordians = this.getAllClosedAccordian();
+    this.setState({accordians : accordians})
   }
 
   
