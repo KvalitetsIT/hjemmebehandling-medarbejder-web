@@ -96,9 +96,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
         this.question3.question = "Hvor frisk føler du dig i dag (Fra 0-100, hvor 100 er det højeste)?"
         this.question3.thresholdPoint = [
-            this.CreateThreshold("3",0,37,CategoryEnum.RED),
+            this.CreateThreshold("1",0,37,CategoryEnum.RED),
             this.CreateThreshold("2",37,44,CategoryEnum.YELLOW),
-            this.CreateThreshold("1",44,100,CategoryEnum.GREEN),
+            this.CreateThreshold("3",44,100,CategoryEnum.GREEN),
         ]
 
          //======================================= questionnaire
@@ -219,6 +219,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
+        return responses;
         let start = (page-1) * pagesize
         let end = page * pagesize
         return responses.filter(x=>questionnaireIds.includes(x.questionnaireId)).slice(start,end)

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
-import { Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
 import { LoadingComponent } from '../../../../../../components/Layout/LoadingComponent';
 import ApiContext from '../../../../../_context';
@@ -84,7 +84,9 @@ async populateCareplans() : Promise<void> {
 
     return (
 <>
-      <Stack display="inline-flex" spacing={2}>
+<Grid container>
+  <Grid xs={12}>
+<Stack spacing={2}>
         <PatientContextThumbnails currentCareplan={currentCareplan!}/>
         
         <Card>
@@ -102,6 +104,9 @@ async populateCareplans() : Promise<void> {
         </Card>
         
       </Stack>
+  </Grid>
+</Grid>
+      
 </>
 
       

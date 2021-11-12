@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { PatientCard } from '../../../../../components/Cards/PatientCard';
 import { PatientCareplan } from '../../../../../components/Models/PatientCareplan';
 import ApiContext from '../../../../_context';
@@ -82,17 +82,22 @@ async populateCareplans() : Promise<void>{
 
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
-        <Stack direction="row" spacing={3}>
-            <Stack spacing={3}>
+      <Grid container spacing={3}>
+        <Grid item xs={2}>
+          <Stack spacing={3}>
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
                 <PatientCard patient={this.state.careplans[0].patient}></PatientCard>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
             </Stack>
-            <Stack spacing={3}>
+        </Grid>
+        <Grid item xs={10}>
+        <Stack spacing={3}>
                 <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
-                <ObservationCard careplan={activeCareplan}/>
+                <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>
             </Stack>
-        </Stack>
+        </Grid>
+      </Grid>
+
     )
   }
 

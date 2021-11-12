@@ -118,17 +118,18 @@ async componentDidMount(){
 }
 
   render () : JSX.Element{
-
-
     this.InitializeServices();
+    console.log("new render!")
 
     if(this.state.loading)
       return (<LoadingComponent />)
 
     if(!(this.state.patient && this.state.careplan) )
       return (<div>Fandt ikke patienten</div>)
-
+    
+    
     return (
+      
       <form onSubmit={async ()=>await this.submitPatient()}> 
         <Stack direction="row" spacing={3}> 
         
