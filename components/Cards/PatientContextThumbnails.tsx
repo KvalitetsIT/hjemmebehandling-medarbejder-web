@@ -10,6 +10,7 @@ import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ApiContext from '../../pages/_context';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import { Link } from 'react-router-dom';
 
 export interface Props {
     currentCareplan : PatientCareplan
@@ -28,6 +29,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
     const currentCareplan = this.props.currentCareplan;
     const patient = currentCareplan.patient;
     return (
+      <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <Stack direction="row" spacing={2}>
         <ThumbnailCard avatar={<PatientAvatar size={80} patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
           <Typography variant="subtitle2">{currentCareplan?.patient.cpr}</Typography>
@@ -42,6 +44,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
           <Typography variant="subtitle1">Startet: {this.dateHelper.DateToString(currentCareplan?.creationDate)}</Typography>
         </ThumbnailCard>
         </Stack>
+        </Link>
     );
   }
 }
