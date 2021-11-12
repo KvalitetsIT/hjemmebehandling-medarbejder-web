@@ -28,6 +28,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
   questionnaireService! : IQuestionnaireService
 
   constructor(props : Props){
+    
       super(props);
       this.state = {
           status : props.questionnaireResponse.status,
@@ -36,6 +37,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
             snackbarText : "",
             snackbarTitle : ""
       }
+      console.log("New year, new me!")
   }
 
   closeSnackbar = () : void => {

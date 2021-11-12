@@ -3,27 +3,24 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Contact } from '../Models/Contact';
 import { Component } from 'react';
 import Stack from '@mui/material/Stack';
 
 
 export interface Props {
-    contact? : Contact;
     avatar? : JSX.Element
     headline : string;
     color? : string;
     boxContent : JSX.Element
 }
 
-export class ContactThumbnail extends Component<Props,{}> {
-  static displayName = ContactThumbnail.name;
+export class ThumbnailCard extends Component<Props,{}> {
+  static displayName = ThumbnailCard.name;
 
   render ()  : JSX.Element{
-    const contact = this.props.contact;
     return (
         <Card component={Box} minWidth={100}>
-            <CardContent>
+         <CardContent>
                <Stack direction="row" spacing={3}>
                    {this.props.avatar ? this.props.avatar :
                    
@@ -31,9 +28,8 @@ export class ContactThumbnail extends Component<Props,{}> {
                         {this.props.boxContent}
                     </Avatar>}
                     <Stack spacing={1}>
-                        <Typography variant="inherit">{this.props.headline}</Typography>
-                        <Typography variant="subtitle2">{contact?.fullname}</Typography>
-                        <Typography variant="subtitle1">{contact?.primaryPhone}</Typography>
+                    <Typography variant="inherit">{this.props.headline}</Typography>
+                       {this.props.children}
                     </Stack>
                </Stack>
             </CardContent>

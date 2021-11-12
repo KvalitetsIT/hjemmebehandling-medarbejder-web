@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { MeasurementType, QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
@@ -15,7 +15,6 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '../Models/PatientCareplan';
 
 export interface Props {
-    typesToShow : MeasurementType[]
     questionnaires : Questionnaire
     careplan : PatientCareplan
 }
@@ -63,6 +62,7 @@ constructor(props : Props){
     async populateData(page : number) {
         const careplan = this.props.careplan
         const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],page,this.state.pagesize)
+        this.setState({questionnaireResponses : []}) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
         this.setState({questionnaireResponses : questionnaireResponses,page : page})
 
     }
@@ -188,7 +188,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 
                                 {questionnairesResponsesToShow.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    const category = answer ? this.questionAnswerService.FindCategory (question,answer) : CategoryEnum.GREEN;
+                                    const category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
@@ -197,8 +197,8 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                             </>
                         )
                     })}
-<TableRow>
-<TableCell></TableCell>
+        <TableRow>
+        <TableCell></TableCell>
 
            
              </TableRow>         
