@@ -42,9 +42,8 @@ export class BffBackendApi implements IBackendApi {
     GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
         throw new Error("Method not implemented.");
     }
-	//conf : Configuration = new Configuration({ basePath: '/api/proxy' });
-    conf : Configuration = new Configuration();
-	
+	conf : Configuration = new Configuration({ basePath: '/api/proxy' });
+
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
     }
