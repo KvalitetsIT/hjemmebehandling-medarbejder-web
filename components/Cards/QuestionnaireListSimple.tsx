@@ -18,8 +18,7 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
   static displayName = QuestionnaireListSimple.name;
 
   render () : JSX.Element {
-     const questionnairesFromPlandefinitions : Questionnaire[] = this.props.careplan.planDefinitions.flatMap(x=>x.questionnaires);
-     const extraQuestionnaries : Questionnaire[] = this.props.careplan.questionnaires;
+    const questionnaries : Questionnaire[] = this.props.careplan.questionnaires;
 
     return (
         <Card>
@@ -33,17 +32,10 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
             
             <CardContent>
                 <Table>
-
-                
-                {questionnairesFromPlandefinitions.length === 0 && extraQuestionnaries.length === 0? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
-                {questionnairesFromPlandefinitions.map(questionnaire => {
+                {questionnaries.length === 0 ? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
+                {questionnaries.map(questionnaire => {
                     return (
-                            <FrequencyTableRow firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
-                    )
-                })}
-                {extraQuestionnaries.map(questionnaire => {
-                    return (
-                        <FrequencyTableRow firstCell={<div>+ {questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
+                        <FrequencyTableRow firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
                     )
                 })}
                 </Table>
