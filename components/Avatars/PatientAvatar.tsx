@@ -30,7 +30,7 @@ export class PatientAvatar extends Component<Props,{}> {
       const width = this.props.size ? this.props.size : 50
       const height = this.props.size ? this.props.size : 50
     return (
-        <Avatar sx={{ bgcolor: "red",width:width, height:height }} variant="square">
+        <Avatar sx={{ bgcolor: "green",width:width, height:height }} variant="square">
         {initials}
       </Avatar>
     )

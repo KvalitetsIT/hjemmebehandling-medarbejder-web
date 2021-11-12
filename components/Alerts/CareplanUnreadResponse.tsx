@@ -58,7 +58,6 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
                     </Link>   
                     </CardContent>
                     </Card>
-                    
 </>
     );
   }

@@ -134,8 +134,9 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
     
     return (<>
     <Box textAlign="right">
-    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()}>Senere <NavigateBeforeIcon  /></Button>
-    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()}>Tidligere <NavigateNextIcon/> </Button>
+    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()}>Tidligere <NavigateBeforeIcon/> </Button>
+    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()}>Senere <NavigateNextIcon  /></Button>
+    
             
               
             </Box>
