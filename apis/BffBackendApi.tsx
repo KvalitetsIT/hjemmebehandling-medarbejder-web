@@ -32,6 +32,7 @@ import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
+import { QuestionnaireDto } from "../generated/models/QuestionnaireDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration, PlanDefinitionApi } from "../generated";
 
@@ -41,7 +42,8 @@ export class BffBackendApi implements IBackendApi {
     GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
         throw new Error("Method not implemented.");
     }
-	conf : Configuration = new Configuration({ basePath: '/api/proxy' });
+	//conf : Configuration = new Configuration({ basePath: '/api/proxy' });
+    conf : Configuration = new Configuration();
 	
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
@@ -269,8 +271,8 @@ export class BffBackendApi implements IBackendApi {
             id: "dummy",
             title: "Ny behandlingsplan", // TODO - set a title ...
             patientDto: this.mapPatient(carePlan.patient),
-            questionnaires: [], // TODO
-            planDefinitions: [] // TODO
+            questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
+            planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
         }
 
         return carePlanDto
@@ -288,6 +290,14 @@ export class BffBackendApi implements IBackendApi {
         carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
 
         return carePlan;
+    }
+
+    private mapPlanDefinition(planDefinition: PlanDefinition) : PlanDefinitionDto {
+        return {
+            id: planDefinition.id,
+            name: planDefinition.name,
+            questionnaires: planDefinition.questionnaires.map(q => this.mapQuestionnaire(q))
+        }
     }
 
     private mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {
@@ -350,6 +360,16 @@ export class BffBackendApi implements IBackendApi {
         return questionnaires;
     }
 
+    private mapQuestionnaire(questionnaire: Questionnaire) : QuestionnaireWrapperDto {
+        return { 
+            questionnaire: {
+                id: questionnaire.id,
+                title: questionnaire.name
+            },
+            frequency: this.mapFrequency(questionnaire.frequency)
+        }
+    }
+
     private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto) : Questionnaire {
         return this.mapQuestionnaireDtoWithResponses(wrapper, undefined)
     }
@@ -372,16 +392,26 @@ export class BffBackendApi implements IBackendApi {
         return questionnaire;
     }
 
+    private mapFrequency(frequency: Frequency) : FrequencyDto {
+        return {
+            weekday: this.mapWeekday(frequency.days[0]) // TODO - handle multiple days ...
+        }
+    }
+
     private mapFrequencyDto(frequencyDto: FrequencyDto) : Frequency {
         let frequency = new Frequency();
 
         frequency.repeated = FrequencyEnum.WEEKLY;
-        frequency.days = [this.mapWeekday(frequencyDto.weekday!)];
+        frequency.days = [this.mapWeekdayDto(frequencyDto.weekday!)];
 
         return frequency;
     }
 
-    private mapWeekday(weekday: FrequencyDtoWeekdayEnum) : DayEnum {
+    private mapWeekday(weekday: DayEnum) : FrequencyDtoWeekdayEnum {
+        return FrequencyDtoWeekdayEnum.Mon;
+    }
+
+    private mapWeekdayDto(weekday: FrequencyDtoWeekdayEnum) : DayEnum {
         return DayEnum.Monday;
     }
 

@@ -45,7 +45,7 @@ export class PlanDefinitionSelect extends Component<Props,State> {
     const plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x=>x.id === id)) 
     const careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
-
+    careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
 
     this.setState({editedCareplan : careplan})
     if(this.props.SetEditedCareplan)
