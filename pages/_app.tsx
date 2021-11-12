@@ -18,10 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
   const backendApi : IBackendApi =new BffBackendApi();
   
-  let questionnaireBackend = backendApi
-    , questionAnswerBackend = backendApi
-    , careplanBackend = backendApi
-    , patientBackend = backendApi
+  let questionnaireBackend = mockApi
+    , questionAnswerBackend = mockApi
+    , careplanBackend = mockApi
+    , patientBackend = mockApi
     , personBackend = backendApi
   ;
 
