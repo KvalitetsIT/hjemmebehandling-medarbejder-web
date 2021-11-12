@@ -20,7 +20,7 @@ import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCprRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCarePlanIdRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -39,10 +39,7 @@ import { Configuration, PlanDefinitionApi } from "../generated";
 import FhirUtils from "../util/FhirUtils";
 
 export class BffBackendApi implements IBackendApi {
-    GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
-        throw new Error("Method not implemented.");
-    }
-	conf : Configuration = new Configuration({ basePath: '/api/proxy' });
+    conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         throw new Error("Method not implemented.");
@@ -198,15 +195,16 @@ export class BffBackendApi implements IBackendApi {
         if(!carePlans) {
             throw new Error('Could not retrieve careplans!');
         }
+        
+        return carePlans.map(cp => this.mapCarePlanDto(cp));
+    }
 
-        // Extract the questionnaire id's.
-        let questionnaireIds = this.getQuestionnaireIds(carePlans);
-        console.log('questionnaireIds: ' + JSON.stringify(questionnaireIds));
+    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
+        let api = new QuestionnaireResponseApi(this.conf)
+        let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
+        let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
 
-        // Retrieve responses for the questionnaires.
-        let questionnaireResponses = await this.getQuestionnaireResponses(cpr, questionnaireIds);
-
-        return carePlans.map(cp => this.mapCarePlanDto(cp, questionnaireResponses));
+        return questionnaireResponses.map(qr => this.mapQuestionnaireResponseDto(qr))
     }
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
@@ -237,34 +235,6 @@ export class BffBackendApi implements IBackendApi {
         return questionnaireIds;
     }
 
-    private async getQuestionnaireResponses(cpr: string, questionnaireIds: Array<string>) : Promise<Map<string, Array<QuestionnaireResponse>>> {
-        console.log('Inside BffBackendApi.getQuestionnaireResponses ! questionnaireIds: ' + questionnaireIds);
-
-        let responses: Map<string, Array<QuestionnaireResponse>> = new Map<string, Array<QuestionnaireResponse>>();
-
-        let api = new QuestionnaireResponseApi(this.conf);
-        let request = { cpr: cpr, questionnaireIds: questionnaireIds };
-        let questionnaireResponses = await api.getQuestionnaireResponsesByCpr(request);
-        if(!questionnaireResponses) {
-            throw new Error('Could not retrieve questionnaireResponses!');
-        }
-        console.log('questionnaireResponses: ' + JSON.stringify(questionnaireResponses));
-
-        for(var response of questionnaireResponses) {
-            var questionnaireId = FhirUtils.unqualifyId(response.questionnaireId!)
-
-            console.log('Mapping response for ' + questionnaireId);
-            if(!responses.get(questionnaireId)) {
-                responses.set(questionnaireId, []);
-            }
-            responses.get(questionnaireId)!.push(this.mapQuestionnaireResponseDto(response));
-
-        }
-
-        return responses;
-        //return new Map<string, Array<QuestionnaireResponse>>();
-    }
-
     private mapCarePlan(carePlan: PatientCareplan) : CarePlanDto {
         let carePlanDto = {
             id: "dummy",
@@ -277,12 +247,12 @@ export class BffBackendApi implements IBackendApi {
         return carePlanDto
     }
 
-    private mapCarePlanDto(carePlanDto: CarePlanDto, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : PatientCareplan {
+    private mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
         let carePlan = new PatientCareplan();
 
-        carePlan.id = carePlanDto.id;
+        carePlan.id = FhirUtils.unqualifyId(carePlanDto.id);
         carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
-        carePlan.questionnaires = this.mapQuestionnaireDtos(carePlanDto.questionnaires!, questionnaireResponses)
+        carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
         carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
         carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
         //carePlan.terminationDate = undefined; // TODO
@@ -362,16 +332,6 @@ export class BffBackendApi implements IBackendApi {
         return contact;
     }
 
-    private mapQuestionnaireDtos(questionnaireDtos: Array<QuestionnaireWrapperDto>, questionnaireResponses: Map<string, Array<QuestionnaireResponse>>) : Array<Questionnaire> {
-        let questionnaires = [];
-
-        for(var wrapper of questionnaireDtos) {
-            questionnaires.push(this.mapQuestionnaireDtoWithResponses(wrapper, questionnaireResponses));
-        }
-
-        return questionnaires;
-    }
-
     private mapQuestionnaire(questionnaire: Questionnaire) : QuestionnaireWrapperDto {
         return { 
             questionnaire: {
@@ -383,23 +343,11 @@ export class BffBackendApi implements IBackendApi {
     }
 
     private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto) : Questionnaire {
-        return this.mapQuestionnaireDtoWithResponses(wrapper, undefined)
-    }
-
-    private mapQuestionnaireDtoWithResponses(wrapper: QuestionnaireWrapperDto, questionnaireResponses?: Map<string, Array<QuestionnaireResponse>>) : Questionnaire {
         let questionnaire = new Questionnaire();
 
         questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
-
         questionnaire.name = wrapper.questionnaire!.title!;
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
-
-        let responses: QuestionnaireResponse[] = [];
-        if(questionnaireResponses?.get(questionnaire.id)) {
-            console.log('Got questionnaireResponses: ' + questionnaireResponses.get(questionnaire.id));
-            responses = questionnaireResponses?.get(questionnaire.id) ?? [];
-        }
-        //questionnaire.questionnaireResponses = responses;
 
         return questionnaire;
     }
@@ -488,6 +436,8 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseStatus.NotProcessed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
+            case QuestionnaireResponseStatus.InProgress:
+                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
             case QuestionnaireResponseStatus.Processed:
                 return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
             default:
@@ -499,6 +449,8 @@ export class BffBackendApi implements IBackendApi {
         switch(status) {
             case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
                 return QuestionnaireResponseStatus.NotProcessed
+            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
+                return QuestionnaireResponseStatus.InProgress
             case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
                 return QuestionnaireResponseStatus.Processed
             default:

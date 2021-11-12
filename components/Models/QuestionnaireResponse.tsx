@@ -23,6 +23,7 @@ export enum  MeasurementType {
 
 export enum  QuestionnaireResponseStatus {
     Processed = "Behandlet",
+    InProgress = "Under behandling",
     NotProcessed = "Ikke behandlet",
     NotAnswered = "Ikke besvaret"
 }
