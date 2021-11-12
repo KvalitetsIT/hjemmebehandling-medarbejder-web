@@ -31,6 +31,10 @@ Track changes and recompile for each new change (suitable for local development)
 ```
 npm run dev
 ```
+If you use backend api (not mock). This example is the bff is at localhost:8000 
+```
+BFF_BASE_URL=http://localhost:8080/ npm run dev
+```
 
 The app should now be available at http://localhost:3000
 
