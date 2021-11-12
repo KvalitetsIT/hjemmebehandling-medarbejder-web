@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 
 import { Stack } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
-import { MeasurementType } from '../../../../../../components/Models/QuestionnaireResponse';
 import { LoadingComponent } from '../../../../../../components/Layout/LoadingComponent';
 import ApiContext from '../../../../../_context';
 import { BasicTabs } from '../../../../../../components/Layout/Tabs';
@@ -117,7 +116,7 @@ async populateCareplans() : Promise<void> {
           
 
       
-      <AnswerTable careplan={careplan} typesToShow={[MeasurementType.CRP, MeasurementType.WEIGHT, MeasurementType.TEMPERATURE]} questionnaires={questionnaire} >
+      <AnswerTable careplan={careplan} questionnaires={questionnaire} >
     
     </AnswerTable>
     </>

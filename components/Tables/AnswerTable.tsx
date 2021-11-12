@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { MeasurementType, QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
@@ -15,7 +15,6 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '../Models/PatientCareplan';
 
 export interface Props {
-    typesToShow : MeasurementType[]
     questionnaires : Questionnaire
     careplan : PatientCareplan
 }
