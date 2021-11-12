@@ -313,8 +313,9 @@ export class BffBackendApi implements IBackendApi {
         return {
             cpr: patient.cpr,
             givenName: patient.firstname,
-            familyName: patient.lastname
-            // TODO - map contact details
+            familyName: patient.lastname,
+            patientContactDetails: this.mapContactDetails(patient.patientContact),
+            primaryRelativeContactDetails: this.mapContactDetails(patient.contact)
         }
     }
 
@@ -324,14 +325,26 @@ export class BffBackendApi implements IBackendApi {
         patient.firstname = patientDto.givenName;
         patient.lastname = patientDto.familyName;
         patient.cpr = patientDto.cpr;
-        patient.patientContact = this.mapContactDetails(patientDto.patientContactDetails!);
-        patient.contact = this.mapContactDetails(patientDto.primaryRelativeContactDetails!)
+        patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+        patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
         // TODO - map additional contact details.
 
         return patient;
     }
 
-    private mapContactDetails(patientContactDetails: ContactDetailsDto) : Contact {
+    private mapContactDetails(contactDetails: Contact) : ContactDetailsDto {
+        return {
+            street: contactDetails.address.road,
+            postalCode: contactDetails.address.zipCode,
+            country: contactDetails.address.country,
+            city: contactDetails.address.city,
+            primaryPhone: contactDetails.primaryPhone,
+            secondaryPhone: contactDetails.secondaryPhone,
+            emailAddress: contactDetails.emailAddress
+        }
+    }
+
+    private mapContactDetailsDto(patientContactDetails: ContactDetailsDto) : Contact {
         let contact = new Contact();
 
         let address = new Address();
