@@ -19,11 +19,11 @@ export class FinishCareplanButton extends Component<Props,{}> {
   constructor(props : Props){
       super(props);
   }
-  InitializeServices(){
+  InitializeServices() : void{
     this.careplanService = this.context.careplanService
   }
 
-  async finishCareplan(){
+  async finishCareplan() :  Promise<void>{
     await this.careplanService.TerminateCareplan(this.props.careplan)
   }
 

@@ -61,7 +61,7 @@ InitializeServices() : void{
   this.patientService = this.context.patientService;
 }
 
-createNewEmptyCareplan(){
+createNewEmptyCareplan() : PatientCareplan{
   const relativeContact = new Contact();
   const newPatient = new PatientDetail();
   newPatient.patientContact = new Contact();
@@ -106,7 +106,7 @@ SaveCareplan(editedCareplan : PatientCareplan) : void{
   this.forceUpdate();
 }
 
-async componentDidMount(){
+async componentDidMount() :  Promise<void> {
   const cpr = this.props.match.params.cpr;
   let careplanToEdit : PatientCareplan | undefined = this.createNewEmptyCareplan()
   if(cpr){

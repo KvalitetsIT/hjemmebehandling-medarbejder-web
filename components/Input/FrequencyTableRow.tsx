@@ -66,7 +66,7 @@ export class FrequencyTableRow extends Component<Props,State> {
         this.props.afterChange()
   }
 
-  SetFrequencyTime(time : Date){
+  SetFrequencyTime(time : Date) : void {
     const oldFre = this.state.questionnaire;
     oldFre.frequency.deadline = time;
     console.log(time)

@@ -56,10 +56,10 @@ constructor(props : Props){
     this.datehelper = this.context.dateHelper;
   }
 
-  async componentDidMount(){
+  async componentDidMount() :  Promise<void>{
       await this.populateData(this.state.page)
   }
-    async populateData(page : number) {
+    async populateData(page : number) :  Promise<void> {
         const careplan = this.props.careplan
         const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],page,this.state.pagesize)
         this.setState({questionnaireResponses : []}) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
@@ -67,7 +67,7 @@ constructor(props : Props){
 
     }
 
- async NextPage(){
+ async NextPage() :  Promise<void>{
     const currenpage = this.state.page;
     const nextPage =currenpage+1
     await this.populateData(nextPage)
@@ -75,7 +75,7 @@ constructor(props : Props){
     this.forceUpdate()
 }
 
- async PreviousPage(){
+ async PreviousPage() : Promise<void> {
      const currenpage = this.state.page;
      const nextPage = currenpage-1
      await this.populateData(nextPage)

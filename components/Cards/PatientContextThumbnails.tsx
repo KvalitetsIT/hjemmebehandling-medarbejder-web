@@ -21,7 +21,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
   static contextType = ApiContext
   dateHelper! : IDateHelper
 
-  initialiseServices(){
+  initialiseServices() : void {
       this.dateHelper = this.context.dateHelper
   }
   render ()  : JSX.Element{

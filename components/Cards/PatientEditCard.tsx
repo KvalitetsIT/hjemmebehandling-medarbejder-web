@@ -101,7 +101,7 @@ async getPerson() : Promise<void>{
   
 }
 
-clearPersonFields(){
+clearPersonFields() : void {
 	const p = this.state.patient;
     p.firstname = "";
     p.lastname = "";

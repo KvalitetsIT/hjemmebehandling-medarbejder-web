@@ -16,7 +16,7 @@ export interface Props {
 export class CareplanUnreadResponse extends Component<Props,{}> {
   static displayName = CareplanUnreadResponse.name;
 
-  getAlarmSeverityFromCategory(category : CategoryEnum){
+  getAlarmSeverityFromCategory(category : CategoryEnum) : "error" | "warning"|"success"|"info"{
     if(category === CategoryEnum.RED)
         return "error"
     if(category === CategoryEnum.YELLOW)

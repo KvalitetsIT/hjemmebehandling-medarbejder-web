@@ -19,7 +19,7 @@ export class CareplanSummary extends Component<Props,{}> {
   static contextType = ApiContext;
   dateHelper! : IDateHelper
 
-  InitialiseServices(){
+  InitialiseServices() : void {
       this.dateHelper = this.context.dateHelper;
   }
   render ()  : JSX.Element{

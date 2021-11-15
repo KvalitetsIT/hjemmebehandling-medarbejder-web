@@ -51,7 +51,7 @@ class PatientCareplans extends React.Component<Props,State> {
     console.log(this.questionnaireService)
   }
 
-  componentDidMount() {
+  componentDidMount() : void {
     this.populateCareplans()
 }
 

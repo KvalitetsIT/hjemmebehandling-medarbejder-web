@@ -22,7 +22,7 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
   static displayName = CareplanQuestionnaireSummary.name;
   static contextType = ApiContext;
   dateHelper! : IDateHelper
-  InitialiseServices(){
+  InitialiseServices() : void {
       this.dateHelper = this.context.dateHelper;
   }
 

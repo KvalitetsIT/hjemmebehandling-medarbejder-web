@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import getConfig from 'next/config';
 
@@ -10,7 +12,7 @@ const apiProxy = createProxyMiddleware({
   secure: false,
 });
 
-export default function (req, res) {
+export default function (req, res)  {
   apiProxy(req, res, (result) => {
       if (result instanceof Error) {
           throw result;
@@ -19,3 +21,5 @@ export default function (req, res) {
       throw new Error(`Request '${req.url}' is not proxied! We should never reach here!`);
   });
 }
+
+/* eslint-enable */

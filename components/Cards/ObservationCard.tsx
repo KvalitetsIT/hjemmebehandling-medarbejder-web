@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
-import { Grid } from '@mui/material';
+import { Grid, GridSize } from '@mui/material';
 import { Questionnaire } from '../Models/Questionnaire';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
@@ -38,12 +38,12 @@ export class ObservationCard extends Component<Props,State> {
           loading : true
       }
   }
-  initialiseServices(){
+  initialiseServices() : void {
     this.questionnaireService = this.context.questionnaireService;
     this.dateHelper = this.context.dateHelper;
   }
 
-  async componentDidMount(){
+  async componentDidMount() :  Promise<void> {
     const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],1,5)
     console.log(responses)
     this.setState({questionnaireResponses : responses, loading : false})
@@ -61,7 +61,7 @@ export class ObservationCard extends Component<Props,State> {
     return questions;
   }
 
-  getColumnSize(elementsInArray : number){
+  getColumnSize(elementsInArray : number) : GridSize{
 
     if(elementsInArray == 1)
         return 12;
