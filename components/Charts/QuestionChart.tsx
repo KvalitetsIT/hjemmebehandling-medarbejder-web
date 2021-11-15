@@ -27,7 +27,7 @@ export class QuestionChart extends Component<Props,{}> {
 }
 
 getChipColorFromCategory(category : CategoryEnum) : string {
-    const transparency = 0.4
+    const transparency = 0.6
     if(category === CategoryEnum.RED)
         return "rgba(215,11,4,"+transparency+")"
     if(category === CategoryEnum.YELLOW)
@@ -64,6 +64,9 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
                 dataTo.push(threshold.to)
         }
 
+        //For each threshold, we add two lines; from and to
+
+        //First create the from-line
         const fromDataset = {
               label: this.getDisplayNameFromCategory(threshold.category) + " (min)",
               data: dataFrom,
@@ -76,7 +79,10 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
               backgroundColor: this.getChipColorFromCategory(threshold.category),
               borderColor: this.getChipColorFromCategory(threshold.category)
             }
+
             datasets.push(fromDataset)
+            
+        //Then create the to-line
         const toDataset = {
             label: this.getDisplayNameFromCategory(threshold.category) + " (max)",
             data: dataTo,
@@ -92,6 +98,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
             datasets.push(toDataset)
     })
     
+    //Return the from and to line
       return datasets
 }
 
@@ -121,8 +128,8 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
         fill: false,
         datalabels: {
             align: "start",
-            offset: 10,
-            clip : true
+            offset: 10, //space between point (the dot) and the number
+            clip : false //if true, data will be removed if outside the chart-area
           },
         pointRadius: 5,
         backgroundColor: "rgba(0,100,200,1)", // point color
