@@ -39,7 +39,7 @@ constructor(props : Props){
     this.state = {
         thresholdModalOpen : false,
         questionnaireResponses : [],
-        pagesize : 3,
+        pagesize : 6,
         page : 1
     }
 }
@@ -136,8 +136,6 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
     <Box textAlign="right">
     <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()}>Tidligere <NavigateBeforeIcon/> </Button>
     <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()}>Senere <NavigateNextIcon  /></Button>
-    
-            
               
             </Box>
     <TableContainer component={Paper}>
