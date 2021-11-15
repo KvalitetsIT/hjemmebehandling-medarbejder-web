@@ -7,14 +7,24 @@ import { Question } from '../Models/Question';
 import { Line } from 'react-chartjs-2';
 import { NumberAnswer } from '../Models/Answer';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Button, Table, TableCell, TableRow } from '@mui/material';
+
+export enum DisplayModeEnum{
+  GRAPH = "Graf",
+  TABLE = "Tabel"
+}
 
 export interface Props {
     question : Question
     questionnaireResponses : QuestionnaireResponse[]
 }
 
+export interface State {
+  displayMode : DisplayModeEnum
+}
 
-export class QuestionChart extends Component<Props,{}> {
+
+export class QuestionChart extends Component<Props,State> {
   static displayName = QuestionChart.name;
   static contextType = ApiContext
 
@@ -22,6 +32,7 @@ export class QuestionChart extends Component<Props,{}> {
   constructor(props : Props){
     super(props);
     this.state = {
+      displayMode : DisplayModeEnum.GRAPH
     }
     
 }
@@ -102,6 +113,47 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
       return datasets
 }
 
+  renderGraph( data : {labels : (string | undefined)[], datasets : {} } ) : JSX.Element{
+    //Remove all the legends for the thresholdvalues (since we are only interested in the question being a legend)
+    const q = this.props.question.question
+    const options = {
+        plugins : {
+            legend: {
+              labels: {
+                  filter: function( item : {text : string}){                   
+                    return item.text === q 
+                  }
+                }
+              }
+          }
+      }
+
+    return (<Line plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
+  }
+  renderTable(answerLabels : (string | undefined)[],datasets : Array<{data : number[]}>, question : Question) : JSX.Element {
+    return (
+      <>
+          <Table>
+              <TableRow>
+                <TableCell>
+  
+                </TableCell>
+                {answerLabels.map(label => {
+                  return (<TableCell>{label}</TableCell>)
+                })}
+              </TableRow>
+              <TableRow>
+              <TableCell>
+                  {question.question}
+                </TableCell>
+                {datasets[0].data.map(label => {
+                  return (<TableCell>{label}</TableCell>)
+                })}
+              </TableRow>
+          </Table>
+      </>
+      )
+  }
   render () : JSX.Element{
 
     const questionnaireResponses = this.props.questionnaireResponses;
@@ -144,25 +196,18 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
         datasets: dataSets,
       };
 
-      //Remove all the legends for the thresholdvalues (since we are only interested in the question being a legend)
-      const q = this.props.question.question
-      const options = {
-          plugins : {
-              legend: {
-                labels: {
-                    filter: function( item : {text : string}){                   
-                      return item.text === q 
-                    }
-                  }
-                }
-            }
-        }
-
       
-
-    return (
-        <Line plugins={[ChartDataLabels as any]} options={options} data={data as any} />
+    const button = (
+      <>
+      <Button onClick={()=>this.setState({displayMode : DisplayModeEnum.GRAPH })}>{DisplayModeEnum.GRAPH.toString()}</Button>
+      <Button onClick={()=>this.setState({displayMode : DisplayModeEnum.TABLE })}>{DisplayModeEnum.TABLE.toString()}</Button>
+      </>
     )
+      
+    if(this.state.displayMode === DisplayModeEnum.TABLE)
+      return (<>{button} {this.renderTable(answersLabels,dataSets,question)}</>)
+
+    return (<>{button} {this.renderGraph(data)} </>);
   }
 
 
