@@ -18,6 +18,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
+import { Redirect } from 'react-router-dom';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -34,6 +35,7 @@ export interface State {
     patient? : PatientDetail;
     careplan? : PatientCareplan;
     loading: boolean;
+    submitted : boolean
 }
 
 
@@ -52,6 +54,7 @@ constructor(props : Props){
     
     this.state = {
       loading : true,
+      submitted : false,
       accordians : props.openAccordians
     }
 
@@ -90,8 +93,10 @@ async submitPatient() : Promise<void>{
     const newCarePlan = await this.careplanService.CreateCarePlan(this.state.careplan)
     this.setState({
       careplan: newCarePlan,
-      patient : newCarePlan.patient
+      patient : newCarePlan.patient,
+      submitted : true
     })
+
   } catch(error){
     this.setState({
       loading: false
@@ -119,7 +124,9 @@ async componentDidMount() :  Promise<void> {
 
   render () : JSX.Element{
     this.InitializeServices();
-    console.log("new render!")
+
+    if(this.state.submitted)
+      return (<Redirect push to={"/patients/"+this.state.patient?.cpr}/>)
 
     if(this.state.loading)
       return (<LoadingComponent />)
