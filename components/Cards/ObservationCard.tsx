@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
-import { Grid, GridSize } from '@mui/material';
+import { CardHeader, Grid, GridSize } from '@mui/material';
 import { Questionnaire } from '../Models/Questionnaire';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
@@ -14,6 +14,7 @@ import IQuestionnaireService from '../../services/interfaces/IQuestionnaireServi
 import { NumberAnswer } from '../Models/Answer';
 import { Question } from '../Models/Question';
 import { QuestionChart } from '../Charts/QuestionChart';
+import { ThresholdSlider } from './ThresholdSlider';
 
 export interface Props {
     careplan : PatientCareplan;
@@ -96,14 +97,16 @@ export class ObservationCard extends Component<Props,State> {
         {allQuestions.map(question => {
                 return (
                 <Grid item xs={this.getColumnSize(allQuestions.length)}>
-                    <Card component={Box}>
+                    <Card>
+                        <CardHeader subheader={question.question}/>
                         <CardContent>
                                 <QuestionChart question={question} questionnaireResponses={this.state.questionnaireResponses} /> 
                         </CardContent>
                     </Card>
-                    <Card marginTop={3} component={Box}>
+                    <Card  marginTop={3} component={Box}>
+                        <CardHeader subheader={question.question + " - Alarmgrænser"}/>
                         <CardContent>
-                            Alarm-grænser
+                            <ThresholdSlider question={question}/>
                         </CardContent>
                     </Card>
                 </Grid>
