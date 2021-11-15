@@ -97,7 +97,6 @@ async populateCareplans() : Promise<void> {
             tabLabels={questionnaires.map(x=>x.name)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(currentCareplan!,x))}
             >
-              <AddQuestionnaireButton careplan={currentCareplan!} afterAddingQuestionnaire={ () => this.forceUpdate()}/>
           </BasicTabs>
         
         </CardContent>
