@@ -1,4 +1,4 @@
-import { Tooltip,Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
@@ -157,9 +157,8 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                     severity = "info"
                     
                 return (
-                    <TableCell >
+                    <TableCell align="center">
      
-                    <Tooltip title={this.getDisplayNameFromCategory(collection.category)} placement="right">
                         <Alert icon={false} severity={severity as AlertColor}>
                        <Stack spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center">
                             <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
@@ -167,7 +166,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                             <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
                         </Stack>
                      </Alert>
-                      </Tooltip>
+                      
        
                       </TableCell>
                     

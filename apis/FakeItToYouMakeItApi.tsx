@@ -219,7 +219,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
-        return responses;
         let start = (page-1) * pagesize
         let end = page * pagesize
         return responses.filter(x=>questionnaireIds.includes(x.questionnaireId)).slice(start,end)

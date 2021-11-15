@@ -44,16 +44,19 @@ class PatientCareplans extends React.Component<Props,State> {
     const contents = this.state.loading ? <LoadingComponent/> : this.renderCareplanTab();
     return contents;
   }
-  InitializeServices():void{
+  InitializeServices(): void{
     this.careplanService = this.context.careplanService;
     this.questionnaireService = this.context.questionnaireService;
+    console.log(this.careplanService)
+    console.log(this.questionnaireService)
   }
 
-  componentDidMount():void{
+  componentDidMount() {
     this.populateCareplans()
 }
 
 async populateCareplans() : Promise<void>{
+  
   const cpr = this.props.match.params.cpr;
   const activeCareplanId = this.props.match.params.careplanId
 
@@ -62,11 +65,14 @@ async populateCareplans() : Promise<void>{
   const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
 
   this.setState({
-      careplans : careplans,
-      questionnaireResponses : questionnaireResponses,
-      loading : false,
+    loading : false,  
+    careplans : careplans,
+    questionnaireResponses : questionnaireResponses
+      
 
   });
+
+  console.log("Status set!")
 }
 
 
@@ -92,8 +98,8 @@ async populateCareplans() : Promise<void>{
         </Grid>
         <Grid item xs={10}>
         <Stack spacing={3}>
-                <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
-                <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>
+            <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
+            <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>    
             </Stack>
         </Grid>
       </Grid>

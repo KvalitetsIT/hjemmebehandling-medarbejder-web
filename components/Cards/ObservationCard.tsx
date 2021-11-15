@@ -22,6 +22,7 @@ export interface Props {
 
 export interface State {
     questionnaireResponses : QuestionnaireResponse[]
+    loading : boolean
 }
 
 export class ObservationCard extends Component<Props,State> {
@@ -33,7 +34,8 @@ export class ObservationCard extends Component<Props,State> {
   constructor(props : Props){
       super(props);
       this.state = {
-          questionnaireResponses : []
+          questionnaireResponses : [],
+          loading : true
       }
   }
   initialiseServices(){
@@ -42,9 +44,9 @@ export class ObservationCard extends Component<Props,State> {
   }
 
   async componentDidMount(){
-    const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],0,5)
+    const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],1,5)
     console.log(responses)
-    this.setState({questionnaireResponses : responses})
+    this.setState({questionnaireResponses : responses, loading : false})
   }
 
   findObservationQuestions(questionnaireResponse : QuestionnaireResponse) : Question[] {
@@ -68,15 +70,21 @@ export class ObservationCard extends Component<Props,State> {
 
     return 4
   }
+
   render () : JSX.Element {
     this.initialiseServices()
 
-    if(this.state.questionnaireResponses.length === 0)
+    if(this.state.loading)
         return (<LoadingComponent/>)
 
-        const allQuestions : Question[] = [];
-        const questionIterator = this.state.questionnaireResponses[0].questions.keys()
+    if(this.state.questionnaireResponses.length == 0){
+        return (<></>)
+    }
+
+    const allQuestions : Question[] = [];
+    const questionIterator = this.state.questionnaireResponses[0].questions.keys()
     let question = questionIterator.next()
+    
     while(!question.done){
         allQuestions.push(question.value)
         question = questionIterator.next()
@@ -105,4 +113,3 @@ export class ObservationCard extends Component<Props,State> {
     );
   }
 }
-//npm install --save react-chartjs-2 chart.js

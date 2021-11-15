@@ -8,16 +8,20 @@ import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
+import BaseService from "./BaseService";
+import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
-export default class QuestionnaireService implements IQuestionnaireService {
+export default class QuestionnaireService extends BaseService implements IQuestionnaireService {
     backendApi : IBackendApi;
 
     constructor(backendapi : IBackendApi){
-        this.backendApi = backendapi;
+      super();
+      this.backendApi = backendapi;
     }
 
   GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
+    this.ValidatePagination(page,pagesize);
     return this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
   }
 
@@ -37,10 +41,12 @@ export default class QuestionnaireService implements IQuestionnaireService {
     }
 
     GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+      this.ValidatePagination(page,pagesize);
         return this.backendApi.GetUnfinishedQuestionnaireResponseTasks(page, pagesize)
     }
 
     GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+      this.ValidatePagination(page,pagesize);
       return this.backendApi.GetUnansweredQuestionnaireTasks(page, pagesize)
     }
 
