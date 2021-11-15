@@ -9,15 +9,17 @@ import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { Question } from "../components/Models/Question";
 import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import BaseService from "./BaseService";
 import ICareplanService from "./interfaces/ICareplanService";
 import IPatientService from "./interfaces/IPatientService";
 import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
-export default class PatientService implements IPatientService {
+export default class PatientService extends BaseService implements IPatientService {
     backendApi : IBackendApi
     
     constructor(backendApi : IBackendApi){
+        super()
         this.backendApi = backendApi;
     }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {

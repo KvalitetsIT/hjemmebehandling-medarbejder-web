@@ -7,14 +7,16 @@ import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { Question } from "../components/Models/Question";
 import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import BaseService from "./BaseService";
 import ICareplanService from "./interfaces/ICareplanService";
 import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
-export default class CareplanService implements ICareplanService {
+export default class CareplanService extends BaseService implements ICareplanService {
     backendApi : IBackendApi
     
     constructor(backendApi : IBackendApi){
+        super()
         this.backendApi = backendApi;
     }
 
