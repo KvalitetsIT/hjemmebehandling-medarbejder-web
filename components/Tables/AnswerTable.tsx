@@ -159,13 +159,12 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                 return (
                     <TableCell align="center">
      
-                        <Alert icon={false} severity={severity as AlertColor}>
-                       <Stack spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center">
-                            <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
-                            <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
-                            <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
-                        </Stack>
-                     </Alert>
+                            <Stack component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
+                                <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
+                                <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                                <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                            </Stack>
+                     
                       
        
                       </TableCell>
