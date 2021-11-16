@@ -64,8 +64,9 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
               <TextField id="outlined-basic" label="By" value={this.state.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" type="tel" label="Telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="email" label="Email" value={this.state.contact.emailAddress} onChange={input => this.modifyPatient(this.setRelativeContactsEmail,input) } variant="outlined" />
+              <TextField id="outlined-basic" type="tel" label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber,input) } variant="outlined" />
+              <TextField id="outlined-basic" type="tel" label="Sekundær telefonnummer" value={this.state.contact.secondaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber,input) } variant="outlined" />
+
             </Stack>
             
             
@@ -82,17 +83,17 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
     modifiedPatient.fullname = newValue;
     return modifiedPatient;
   }
-  setRelativeContactsPhonenumber(oldPatient : Contact, newValue : string ) : Contact {
+  setRelativeContactsPrimaryPhonenumber(oldPatient : Contact, newValue : string ) : Contact {
     const modifiedPatient = oldPatient;
     modifiedPatient.primaryPhone = newValue;
     return modifiedPatient;
   }
-
-  setRelativeContactsEmail(oldPatient : Contact, newValue : string ) : Contact {
+  setRelativeContactsSecondaryPhonenumber(oldPatient : Contact, newValue : string ) : Contact {
     const modifiedPatient = oldPatient;
-    modifiedPatient.emailAddress = newValue;
+    modifiedPatient.secondaryPhone = newValue;
     return modifiedPatient;
   }
+
   setRelativeContactsCity(oldPatient : Contact, newValue : string ) : Contact {
     const modifiedPatient = oldPatient;
     modifiedPatient.address.city = newValue;

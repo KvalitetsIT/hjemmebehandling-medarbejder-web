@@ -142,8 +142,8 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
               <TextField disabled id="outlined-basic" label="By" value={this.state.patient.patientContact.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" type="tel" label="Telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="email" label="Email" value={this.state.patient.patientContact.emailAddress} onChange={input => this.modifyPatient(this.setEmail,input) } variant="outlined" />
+              <TextField id="outlined-basic" type="tel" label="Primært telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } variant="outlined" />
+              <TextField id="outlined-basic" type="email" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
             </Stack>
          </Stack>
 
@@ -194,15 +194,15 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     return modifiedPatient;
   }
   
-  setPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+  setPrimaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.patientContact.primaryPhone = newValue;
     return modifiedPatient;
   }
   
-  setEmail(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+  setSecondaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.emailAddress = newValue;
+    modifiedPatient.patientContact.secondaryPhone = newValue;
     return modifiedPatient;
   }
   

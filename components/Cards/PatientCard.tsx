@@ -52,7 +52,7 @@ export class PatientCard extends Component<Props,State> {
               <Stack>
               <Typography>
                 {this.props.patient.firstname} {this.props.patient.lastname} <br/>
-                {this.props.patient.cpr}
+                {this.props.patient.cpr?.slice(0,6)}-{this.props.patient.cpr?.slice(6)}
               </Typography>
               <Typography variant="subtitle2">
               {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}
@@ -65,10 +65,7 @@ export class PatientCard extends Component<Props,State> {
             <Typography variant="subtitle2">
                 {this.props.patient.patientContact?.address.road}<br/>
                 {this.props.patient.patientContact?.address.zipCode}, {this.props.patient.patientContact?.address.city}<br/>
-                {this.props.patient.patientContact?.address.country}<br/>
-                {this.props.patient.patientContact?.emailAddress}
-                
-                
+                {this.props.patient.patientContact?.address.country}
             </Typography>
             <Typography variant="button">
                         Kontakt

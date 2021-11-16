@@ -159,7 +159,6 @@ export class BffBackendApi implements IBackendApi {
         patientContact.address.country = "Danmark";
         patientContact.address.road = "Fiskergade 66";
         patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.emailAddress = body['patientContactDetails']['emailAddress'];
         patientContact.fullname = name;
         patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
         patient.patientContact = patientContact;
@@ -310,7 +309,6 @@ export class BffBackendApi implements IBackendApi {
             city: contactDetails.address.city,
             primaryPhone: contactDetails.primaryPhone,
             secondaryPhone: contactDetails.secondaryPhone,
-            emailAddress: contactDetails.emailAddress
         }
     }
 
@@ -327,7 +325,6 @@ export class BffBackendApi implements IBackendApi {
 
         contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
         contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
-        contact.emailAddress = patientContactDetails?.emailAddress ?? "mail@tele.dk";
 
         return contact;
     }
