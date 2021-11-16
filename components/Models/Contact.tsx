@@ -5,5 +5,4 @@ export class Contact {
     address! : Address;
     primaryPhone! : string
     secondaryPhone! : string
-    emailAddress! : string
 }

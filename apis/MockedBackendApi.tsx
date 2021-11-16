@@ -158,7 +158,6 @@ export class MockedBackendApi implements IBackendApi {
         patientContact.address.country = "Danmark";
         patientContact.address.road = "Fiskergade 66";
         patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.emailAddress = patient.firstname + "@mail.dk";
         patientContact.fullname = patient.firstname +" "+ patient.lastname;
         patientContact.primaryPhone = "+4528395028"
         patient.patientContact = patientContact;
@@ -167,7 +166,6 @@ export class MockedBackendApi implements IBackendApi {
         primaryContact.address.country = "Danmark";
         primaryContact.address.road = "Jensgade 66";
         primaryContact.address.zipCode = "8200 Aarhus C";
-        primaryContact.emailAddress = "GitteAndersen@mail.dk";
         primaryContact.fullname = "Gitte Andersen";
         primaryContact.primaryPhone = "+4592039485"
         

@@ -58,7 +58,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
         relativeContact.primaryPhone = "27384910"
-        relativeContact.emailAddress = "johannepetersen@mail.dk"
         relativeContact.address = new Address();
         relativeContact.address.city = "Aarhus C"
         relativeContact.address.country = "Danmark"

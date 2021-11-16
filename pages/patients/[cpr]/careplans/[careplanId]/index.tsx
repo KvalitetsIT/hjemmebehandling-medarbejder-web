@@ -71,8 +71,6 @@ async populateCareplans() : Promise<void>{
       
 
   });
-
-  console.log("Status set!")
 }
 
 
@@ -89,14 +87,14 @@ async populateCareplans() : Promise<void>{
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
       <Grid container spacing={3}>
-        <Grid item xs={2}>
-          <Stack spacing={3}>
+        <Grid item xs={3}>
+          <Stack spacing={3} >
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
-                <PatientCard patient={this.state.careplans[0].patient}></PatientCard>
+                <PatientCard patient={activeCareplan.patient}></PatientCard>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
             </Stack>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={9}>
         <Stack spacing={3}>
             <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
             <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>    
