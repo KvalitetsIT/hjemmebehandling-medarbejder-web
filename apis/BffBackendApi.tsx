@@ -68,7 +68,7 @@ export class BffBackendApi implements IBackendApi {
     }
 
     async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
-        let api = new CarePlanApi()
+        let api = new CarePlanApi(this.conf)
         let request = {
             createCarePlanRequest: {
                 carePlan: this.mapCarePlan(carePlan)
