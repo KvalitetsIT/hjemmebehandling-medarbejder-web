@@ -3,6 +3,12 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import getConfig from 'next/config';
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
+
 const { publicRuntimeConfig }= getConfig();
 // Create proxy instance outside of request handler function to avoid unnecessary re-creation
 const apiProxy = createProxyMiddleware({
