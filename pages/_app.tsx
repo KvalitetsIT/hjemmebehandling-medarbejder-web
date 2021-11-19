@@ -10,19 +10,21 @@ import PatientService from '../services/PatientService';
 
 import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
-//import { BffBackendApi } from '../apis/BffBackendApi';
+import { BffBackendApi } from '../apis/BffBackendApi';
 import { IBackendApi } from '../apis/IBackendApi';
 import React from 'react';
+import UserService from '../services/UserService';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
-  //const backendApi : IBackendApi =new BffBackendApi();
+  const backendApi : IBackendApi =new BffBackendApi();
   
-  let questionnaireBackend = mockApi
-    , questionAnswerBackend = mockApi
-    , careplanBackend = mockApi
-    , patientBackend = mockApi
-    , personBackend = mockApi
+  let questionnaireBackend = backendApi
+    , questionAnswerBackend = backendApi
+    , careplanBackend = backendApi
+    , patientBackend = backendApi
+    , userBackend = backendApi
+    , personBackend = backendApi
   ;
 
   if (process?.env.NODE_ENV === 'development') {
@@ -41,6 +43,9 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     if (process.env.NEXT_PUBLIC_MOCK_PERSON_SERVICE === "true") {
       personBackend = mockApi;
     }
+    if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
+      userBackend = mockApi;
+    }
   }
 
   return (
@@ -52,6 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         questionAnswerService : new QuestionAnswerService(questionAnswerBackend),
         careplanService : new CareplanService(careplanBackend),
         patientService : new PatientService(patientBackend),
+        userService : new UserService(userBackend),
         personService : new PersonService(personBackend),
         dateHelper : new DanishDateHelper()
       }}

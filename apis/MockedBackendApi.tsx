@@ -14,8 +14,12 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { Task } from "../components/Models/Task";
+import { UserContext } from "../generated";
 
 export class MockedBackendApi implements IBackendApi {
+    GetUser(): Promise<UserContext> {
+        throw new Error("Method not implemented.");
+    }
     GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]>{
         throw new Error("Method not implemented.");
     }

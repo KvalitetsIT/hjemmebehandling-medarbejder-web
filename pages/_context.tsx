@@ -15,6 +15,8 @@ import IDateHelper from '../globalHelpers/interfaces/IDateHelper';
 import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
 import IPersonService from '../services/interfaces/IPersonService';
 import PersonService from '../services/PersonService';
+import UserService from '../services/UserService';
+import IUserService from '../services/interfaces/IUserService';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
@@ -22,7 +24,7 @@ interface IApiContext {
     careplanService : ICareplanService,
     patientService : IPatientService,
     personService : IPersonService,
-
+    userService : IUserService,
     dateHelper : IDateHelper
 }
 
@@ -32,6 +34,7 @@ const ApiContext = createContext<IApiContext>(
         questionAnswerService : new QuestionAnswerService(new FakeItToYouMakeItApi()),
         careplanService : new CareplanService(new FakeItToYouMakeItApi()),
         patientService : new PatientService(new FakeItToYouMakeItApi()),
+        userService : new UserService(new FakeItToYouMakeItApi()),
         personService : new PersonService(new FakeItToYouMakeItApi()),
         dateHelper : new DanishDateHelper()
     }

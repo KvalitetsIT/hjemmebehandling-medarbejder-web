@@ -9,6 +9,7 @@ import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
+import { UserContext } from "../generated";
 
 export interface IBackendApi {
     
@@ -89,11 +90,16 @@ export interface IBackendApi {
     CreatePatient(patient: PatientDetail): Promise<PatientDetail>;
 
     /**
-     * Creates and returns patient
-     * @param patient 
+     * Returns person
+     * @param person 
      */
     GetPerson(cpr: string): Promise<PersonDto>;
 
+
+    /**
+     * Returns usercontext 
+     */
+    GetUser(): Promise<UserContext>;
 
     /**
      * Returns all patient careplans for one patient
