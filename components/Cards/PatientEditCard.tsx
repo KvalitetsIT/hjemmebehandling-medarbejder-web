@@ -1,4 +1,4 @@
-import { Button, CardContent, Typography } from '@material-ui/core';
+import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, Skeleton, TextField } from '@mui/material';
@@ -6,13 +6,15 @@ import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 export interface Props {
     initialPatient : PatientDetail
 }
 
 export interface State {
-    loading : boolean;
+    loadingCprButton : boolean;
+    loadingPage : boolean
     patient : PatientDetail;
     
     snackbarOpen : boolean;
@@ -29,7 +31,8 @@ export class PatientEditCard extends Component<Props,State> {
   constructor(props : Props){
       super(props);
       this.state = {
-	      loading : true,
+	      loadingCprButton : false,
+        loadingPage : true,
 	      patient : props.initialPatient,
 	      snackbarOpen : false,
           snackbarColor: "info",
@@ -42,12 +45,12 @@ export class PatientEditCard extends Component<Props,State> {
   };
 
   render () : JSX.Element{
-    const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
+    const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
     return contents;
   }
 
   componentDidMount() : void {
-      this.setState({loading:false})
+      this.setState({loadingPage:false})
 }
 
 InitializeServices() : void{
@@ -61,7 +64,7 @@ async getPerson() : Promise<void>{
     }
     
     this.setState({
-      loading: true
+      loadingCprButton: true
     })
     
     const newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
@@ -78,12 +81,12 @@ async getPerson() : Promise<void>{
     
 
     this.setState({
-      loading: false
+      loadingCprButton: false
     })
     
   } catch(error){
 	this.setState({
-      loading: false
+    loadingCprButton: false
     })
     
     if (error instanceof Response){
@@ -130,7 +133,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
       </Typography>
             <Stack direction="row">
               <TextField size="small" id="outlined-basic" required label="CPR" value={this.state.patient.cpr} onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
-              <Button size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</Button>
+              <LoadingButton loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
             </Stack>
             <Stack spacing={3} direction="row">
               <TextField disabled id="outlined-basic" label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
@@ -143,7 +146,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
             </Stack>
             <Stack spacing={3} direction="row">
               <TextField id="outlined-basic" type="tel" label="Primært telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="email" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
+              <TextField id="outlined-basic" type="tel" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
             </Stack>
          </Stack>
 

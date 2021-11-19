@@ -40,11 +40,15 @@ async searchForPatient(searchString : string) : Promise<void>{
     }
         
 
-    
+    try{
     const patientSearchResults = await this.patientService.SearchPatient(searchString);
+  
     console.log(patientSearchResults)
     this.setState({patientResults : patientSearchResults, loading : false});
     this.forceUpdate();
+  }  catch(error : any){
+    this.setState(()=>{throw error})
+  }  
 }
   render () : JSX.Element{
       this.InitialiseServices();

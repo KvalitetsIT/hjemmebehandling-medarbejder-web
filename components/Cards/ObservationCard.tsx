@@ -8,13 +8,13 @@ import { CardHeader, Grid, GridSize } from '@mui/material';
 import { Questionnaire } from '../Models/Questionnaire';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
-import { LoadingComponent } from '../Layout/LoadingComponent';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '../Models/Answer';
 import { Question } from '../Models/Question';
 import { QuestionChart } from '../Charts/QuestionChart';
 import { ThresholdSlider } from './ThresholdSlider';
+import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
     careplan : PatientCareplan;
@@ -45,9 +45,13 @@ export class ObservationCard extends Component<Props,State> {
   }
 
   async componentDidMount() :  Promise<void> {
+      try{
     const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],1,5)
     console.log(responses)
     this.setState({questionnaireResponses : responses, loading : false})
+}  catch(error : any){
+    this.setState(()=>{throw error})
+  }  
   }
 
   findObservationQuestions(questionnaireResponse : QuestionnaireResponse) : Question[] {
@@ -69,14 +73,14 @@ export class ObservationCard extends Component<Props,State> {
     if(elementsInArray == 2)
         return 6;
 
-    return 4
+    return 6
   }
 
   render () : JSX.Element {
     this.initialiseServices()
 
     if(this.state.loading)
-        return (<LoadingComponent/>)
+        return (<LoadingSmallComponent/>)
 
     if(this.state.questionnaireResponses.length == 0){
         return (<></>)
@@ -96,7 +100,7 @@ export class ObservationCard extends Component<Props,State> {
         <Grid container>
         {allQuestions.map(question => {
                 return (
-                <Grid item xs={this.getColumnSize(allQuestions.length)}>
+                <Grid paddingRight={2} item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>

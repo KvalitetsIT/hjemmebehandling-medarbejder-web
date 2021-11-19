@@ -5,7 +5,7 @@ import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { BasicTabs } from '../Layout/Tabs';
 import { Questionnaire } from '../Models/Questionnaire';
-import { Button, CardActions, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
@@ -31,6 +31,7 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
     const questionnaires = this.props.careplan.questionnaires;
     return (
         <Card>
+        
         <CardContent>
         <BasicTabs 
             idOfStartTab={questionnaires[0].id}
@@ -38,12 +39,13 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
             tabLabels={questionnaires.map(x=>x.name)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x))}
             >
+            <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/edit/plandefinition"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
+
+            
           </BasicTabs>
         
         </CardContent>
-        <CardActions>
-        <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/edit/plandefinition"}>Ændr <ModeEditOutlineIcon fontSize="inherit"/> </Button>
-        </CardActions>
+        
         </Card>
     );
   }

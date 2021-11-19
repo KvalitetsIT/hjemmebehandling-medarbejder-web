@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Backdrop } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export class LoadingComponent extends Component<{},{}> {
-  static displayName = LoadingComponent.name;
+export class LoadingBackdropComponent extends Component<{},{}> {
+  static displayName = LoadingBackdropComponent.name;
 
   render () : JSX.Element{
     return (

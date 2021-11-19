@@ -39,7 +39,9 @@ export class Tasklist extends Component<Props,State> {
 }
 
   render () : JSX.Element{
+      
     this.InitializeServices();
+
     const contents = this.state.loading ? <Skeleton variant="rectangular" height={400} /> : this.renderTableData(this.state.tasks);
     return contents;
   }
@@ -48,19 +50,27 @@ export class Tasklist extends Component<Props,State> {
     this.questionnaireService = this.context.questionnaireService;
     this.dateHelper = this.context.dateHelper;
   }
-  componentDidMount() : void{
-    
-      this.populateQuestionnaireResponses()
+  async componentDidMount() : Promise<void>{
+    try{
+      await this.populateQuestionnaireResponses();
+    }  catch(error : any){
+      this.setState(()=>{throw error})
+    }    
   }
 
   async  populateQuestionnaireResponses() : Promise<void>{
+    this.setState({
+      loading : true
+    });
+
     let tasks: Task[] = []
-    if(this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
-      tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(1, this.props.pageSize)
-    }
-    if(this.props.taskType === TaskType.UNANSWERED_QUESTIONNAIRE) {
-      tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(1, this.props.pageSize)
-    }
+
+      if(this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
+        tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(1, this.props.pageSize)
+      }
+      if(this.props.taskType === TaskType.UNANSWERED_QUESTIONNAIRE) {
+        tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(1, this.props.pageSize)
+      }
 
     this.setState({
         tasks : tasks,
@@ -95,8 +105,8 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
     return "Ukendt"
 }
   renderTableData(tasks : Array<Task>) : JSX.Element{
-        return (
-            
+    return (
+
             <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
@@ -109,8 +119,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
             <TableCell align="left"></TableCell>
             
           </TableRow>
-
-        {tasks.map((task) => (
+        {!tasks ? <></> : tasks.map((task) => (
           <>
             <TableRow key={task.cpr}>
               <TableCell component="th" scope="row">

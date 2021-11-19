@@ -9,7 +9,7 @@ import { PatientDetail } from '../components/Models/PatientDetail';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
 import IPatientService from '../services/interfaces/IPatientService';
-import { LoadingComponent } from '../components/Layout/LoadingComponent';
+import { LoadingBackdropComponent } from '../components/Layout/LoadingBackdropComponent';
 import { PatientCareplan } from '../components/Models/PatientCareplan';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 import { PatientEditCard } from '../components/Cards/PatientEditCard';
@@ -129,7 +129,7 @@ async componentDidMount() :  Promise<void> {
       return (<Redirect push to={"/patients/"+this.state.patient?.cpr}/>)
 
     if(this.state.loading)
-      return (<LoadingComponent />)
+      return (<LoadingBackdropComponent />)
 
     if(!(this.state.patient && this.state.careplan) )
       return (<div>Fandt ikke patienten</div>)
@@ -224,7 +224,6 @@ async componentDidMount() :  Promise<void> {
         </div>
         </Stack>
         
-        {this.state.loading ? <LoadingComponent /> : ""}
         </form>
         
     )

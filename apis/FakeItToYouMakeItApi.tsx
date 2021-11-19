@@ -219,6 +219,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.questionnaires = [this.questionnaire1]
     }
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
+        await new Promise(f => setTimeout(f, 3000));
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
         let start = (page-1) * pagesize
         let end = page * pagesize
@@ -370,6 +371,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
     
     async GetPerson(cpr: string) : Promise<Person>{
+        await new Promise(f => setTimeout(f, 3000));
         return this.person1;
     }
     

@@ -53,7 +53,11 @@ export class PlanDefinitionSelect extends Component<Props,State> {
   }
 
   async componentDidMount() : Promise<void>{
+    try{
     this.populatePlanDefinitions();
+  }  catch(error : any){
+    this.setState(()=>{throw error})
+  }  
   }
   async populatePlanDefinitions() : Promise<void>{
       

@@ -4,7 +4,7 @@ import { Grid, Stack } from '@mui/material';
 import { PatientCard } from '../../../../../components/Cards/PatientCard';
 import { PatientCareplan } from '../../../../../components/Models/PatientCareplan';
 import ApiContext from '../../../../_context';
-import { LoadingComponent } from '../../../../../components/Layout/LoadingComponent';
+import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
 import ICareplanService from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
@@ -41,7 +41,7 @@ class PatientCareplans extends React.Component<Props,State> {
 
   render () : JSX.Element{
       this.InitializeServices();
-    const contents = this.state.loading ? <LoadingComponent/> : this.renderCareplanTab();
+    const contents = this.state.loading ? <LoadingBackdropComponent/> : this.renderCareplanTab();
     return contents;
   }
   InitializeServices(): void{

@@ -7,6 +7,11 @@ export class InvalidInputError extends Error implements BaseServiceError  {
         this.propErrors = propErrors;
         this.message = this.displayMessage();
     }
+    displayTitle () : string{
+        let message = "";
+        message += "Indtastningsfejl"
+        return message; 
+    }
 
     displayMessage() : string {
         let message = "";
