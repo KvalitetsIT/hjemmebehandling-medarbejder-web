@@ -19,6 +19,7 @@ import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
+import { ValidateCareplanHidden } from '../components/Input/ValidateCareplanHidden';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -35,6 +36,7 @@ export interface State {
     patient? : PatientDetail;
     careplan? : PatientCareplan;
     loading: boolean;
+    canSubmit : boolean;
     submitted : boolean
 }
 
@@ -55,6 +57,7 @@ constructor(props : Props){
     this.state = {
       loading : true,
       submitted : false,
+      canSubmit : false,
       accordians : props.openAccordians
     }
 
@@ -133,14 +136,20 @@ async componentDidMount() :  Promise<void> {
 
     if(!(this.state.patient && this.state.careplan) )
       return (<div>Fandt ikke patienten</div>)
-    
-    
+
     return (
-      
-      <form onSubmit={async ()=>await this.submitPatient()}> 
+     
+
+      <form onBlur={()=>this.forceUpdate()} onSubmit={async ()=>await this.submitPatient()}> 
+       
+
         <Stack direction="row" spacing={3}> 
         
       <Stack spacing={3}>
+<ValidateCareplanHidden 
+          patient={this.state.patient} 
+          careplan={this.state.careplan} > 
+       
 
       <Accordion expanded={this.state.accordians.PatientIsOpen} onChange={()=>this.goToPatientIsOpen()}>
         <AccordionSummary
@@ -199,7 +208,11 @@ async componentDidMount() :  Promise<void> {
           <Button component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
-      <Button type="submit" variant="contained">{ this.props.match.params.cpr ? "Gem patient" : "Opret patient"}</Button>
+        
+     
+      
+        
+      </ValidateCareplanHidden>
         </Stack>
         <div>
         <Card>
@@ -224,7 +237,10 @@ async componentDidMount() :  Promise<void> {
         </div>
         </Stack>
         
+        
         </form>
+
+        
         
     )
   }

@@ -18,6 +18,11 @@ export class ToastError extends Component<Props,{}>{
     render() : JSX.Element{
         return (<>
             {[this.props.error].map(e => {
+                const eIsBaseError = e instanceof BaseServiceError
+                if(!eIsBaseError ){
+                    throw e;
+                }
+                
                 const error = e as BaseServiceError
                 return (
                     <Snackbar open={true} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>

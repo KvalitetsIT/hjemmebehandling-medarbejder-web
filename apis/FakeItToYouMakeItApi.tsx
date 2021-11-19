@@ -379,7 +379,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{
-
+        throw new NoPatientFround();
     }
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) : Promise<void>{
 

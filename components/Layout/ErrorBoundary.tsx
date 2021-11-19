@@ -2,12 +2,19 @@
 import React, { ErrorInfo } from "react";
 import { ToastError } from "../Alerts/ToastError";
 
+export interface Props {
+    rerenderChildren : boolean
+}
 export interface State{
     error? : Error
 }
 
-export class ErrorBoundary extends React.Component<{},State> {
-    constructor(props : {}) {
+export class ErrorBoundary extends React.Component<Props,State> {
+    public static defaultProps = {
+        rerenderChildren : false
+    };
+
+    constructor(props : Props) {
       super(props);
       this.state = { error: undefined };
     }
@@ -28,7 +35,10 @@ export class ErrorBoundary extends React.Component<{},State> {
     render() : JSX.Element{
       if (this.state.error) {
         // You can render any custom fallback UI
-        return (<ToastError error={this.state.error}></ToastError>)
+        return (<>
+        {this.props.rerenderChildren ? this.props.children : <></>}
+        <ToastError error={this.state.error}></ToastError>
+        </>)
       }
   
       return (<>{this.props.children}</>);

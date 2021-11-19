@@ -12,6 +12,7 @@ import { ObservationCard } from '../../../../../components/Cards/ObservationCard
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
 import { QuestionnaireResponse } from '../../../../../components/Models/QuestionnaireResponse';
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
+import { ErrorBoundary } from '../../../../../components/Layout/ErrorBoundary';
 
 interface State {
   
@@ -88,18 +89,24 @@ async populateCareplans() : Promise<void>{
     return (
       <Grid container spacing={3}>
         <Grid item xs={3}>
+          <ErrorBoundary>
           <Stack spacing={3} >
+            
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
                 <PatientCard patient={activeCareplan.patient}></PatientCard>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
             </Stack>
+            </ErrorBoundary>
         </Grid>
         <Grid item xs={9}>
+        <ErrorBoundary>
         <Stack spacing={3}>
             <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
             <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>    
             </Stack>
+            </ErrorBoundary>
         </Grid>
+        
       </Grid>
 
     )
