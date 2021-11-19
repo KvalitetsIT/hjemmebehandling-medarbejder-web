@@ -73,7 +73,7 @@ export class ObservationCard extends Component<Props,State> {
     if(elementsInArray == 2)
         return 6;
 
-    return 4
+    return 6
   }
 
   render () : JSX.Element {
@@ -100,7 +100,7 @@ export class ObservationCard extends Component<Props,State> {
         <Grid container>
         {allQuestions.map(question => {
                 return (
-                <Grid item xs={this.getColumnSize(allQuestions.length)}>
+                <Grid paddingRight={2} item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>

@@ -23,7 +23,6 @@ export interface State {
   displayMode : DisplayModeEnum
 }
 
-
 export class QuestionChart extends Component<Props,State> {
   static displayName = QuestionChart.name;
   static contextType = ApiContext
@@ -128,9 +127,9 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
           }
       }
 
-    return (<Line plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
+    return (<Line height={300} plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
   }
-  renderTable(answerLabels : (string | undefined)[],datasets : Array<{data : number[]}>, question : Question) : JSX.Element {
+  renderTable(answerLabels : (string | undefined)[],datasets : Array<{data : number[]}>) : JSX.Element {
     return (
       <>
           <Table>
@@ -144,7 +143,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
               </TableRow>
               <TableRow>
               <TableCell>
-                  {question.question}
+                  
                 </TableCell>
                 {datasets[0].data.map(label => {
                   return (<TableCell>{label}</TableCell>)
@@ -205,7 +204,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
     )
       
     if(this.state.displayMode === DisplayModeEnum.TABLE)
-      return (<>{button} {this.renderTable(answersLabels,dataSets,question)}</>)
+      return (<>{button} {this.renderTable(answersLabels,dataSets)}</>)
 
     return (<>{button} {this.renderGraph(data)} </>);
   }

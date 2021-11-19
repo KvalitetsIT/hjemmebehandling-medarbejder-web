@@ -1,8 +1,6 @@
 import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
@@ -43,7 +41,6 @@ export class PatientCard extends Component<Props,State> {
     const contact = this.props.patient.contact
     return (
         <Card>
-            <CardHeader component={Typography} align="left"/>
 
           <CardContent>
             <Stack spacing={2}>
@@ -58,7 +55,7 @@ export class PatientCard extends Component<Props,State> {
               {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}
               </Typography>
               </Stack>
-              
+              <Button component={Link} to={"/patients/"+this.props.patient.cpr+"/edit"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
             </Stack>
             <Divider/>
 
@@ -77,9 +74,6 @@ export class PatientCard extends Component<Props,State> {
                     </Typography>
             </Stack>
           </CardContent>
-          <CardActions>
-          <Button component={Link} to={"/patients/"+this.props.patient.cpr+"/edit"}>Ændr <ModeEditOutlineIcon fontSize="inherit"/> </Button>
-          </CardActions>
         </Card>
     )
   }
