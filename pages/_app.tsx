@@ -12,16 +12,16 @@ import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
 import { IBackendApi } from '../apis/IBackendApi';
-
+import React from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
   const backendApi : IBackendApi =new BffBackendApi();
   
-  let questionnaireBackend = mockApi
-    , questionAnswerBackend = mockApi
-    , careplanBackend = mockApi
-    , patientBackend = mockApi
+  let questionnaireBackend = backendApi
+    , questionAnswerBackend = backendApi
+    , careplanBackend = backendApi
+    , patientBackend = backendApi
     , personBackend = backendApi
   ;
 
@@ -56,7 +56,10 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         dateHelper : new DanishDateHelper()
       }}
     >
-        {typeof window === 'undefined' ? null : <Layout><Component {...pageProps} /></Layout>}
+        {typeof window === 'undefined' ? null : 
+          <Layout>
+              <Component {...pageProps} />
+            </Layout>}
         </ApiContext.Provider>
     
     </div>

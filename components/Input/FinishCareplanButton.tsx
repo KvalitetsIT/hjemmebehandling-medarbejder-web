@@ -24,7 +24,11 @@ export class FinishCareplanButton extends Component<Props,{}> {
   }
 
   async finishCareplan() :  Promise<void>{
+try{
     await this.careplanService.TerminateCareplan(this.props.careplan)
+  }  catch(error : any){
+    this.setState(()=>{throw error})
+  }  
   }
 
   render () :JSX.Element{

@@ -1,3 +1,3 @@
-export interface BaseApiError {
-    displayMessage : () => string
+export class BaseApiError {
+    displayMessage! : () => string
 }

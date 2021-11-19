@@ -21,23 +21,39 @@ export default class CareplanService extends BaseService implements ICareplanSer
     }
 
     async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
+        try{
         return this.backendApi.CreateCarePlan(carePlan)
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
 
     TerminateCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
+        try{
         return this.backendApi.TerminateCareplan(careplan);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
     
     SetPlanDefinitionsOnCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
+        try{
 
         let careplanOnlyChangedValues = new PatientCareplan();
         careplanOnlyChangedValues.id = careplan.id;
         careplanOnlyChangedValues.planDefinitions = careplan.planDefinitions
         return this.backendApi.SetCareplan(careplanOnlyChangedValues);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
 
     GetPatientCareplans(cpr: string) : Promise<Array<PatientCareplan>>{
+        try{
         return this.backendApi.GetPatientCareplans(cpr);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
     
     

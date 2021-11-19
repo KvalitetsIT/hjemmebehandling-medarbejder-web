@@ -18,7 +18,11 @@ export default class PersonService extends BaseService implements IPersonService
     }
     
     GetPerson(cpr : string) : Promise<PersonDto>{
+        try{
         return this.backendApi.GetPerson(cpr);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
 
 }

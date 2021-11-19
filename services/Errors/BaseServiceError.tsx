@@ -1,4 +1,5 @@
 
-export interface BaseServiceError {
-    displayMessage : () => string
+export class BaseServiceError {
+    displayMessage!: () => string
+    displayTitle!: () => string
 }

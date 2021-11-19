@@ -8,6 +8,8 @@ import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 import CreatePatient from '../../pages/createpatient';
+import { ErrorBoundary } from './ErrorBoundary';
+
 
 export interface State {
   drawerIsOpen: boolean
@@ -15,10 +17,15 @@ export interface State {
 
 export class Layout extends Component<{},State> {
   static displayName = Layout.name;
- 
-  render () : JSX.Element{
-    try{
 
+constructor(props : {}){
+  super(props);
+  this.state = {
+    drawerIsOpen : true
+  }
+}
+
+  render () : JSX.Element{
       const accoridansPatient = {
         PatientIsOpen : true,
         RelativeContactIsOpen : false,
@@ -38,16 +45,16 @@ export class Layout extends Component<{},State> {
       }
     return (
 <>
-        
         <Router>
         <Topbar />
         <Sidebar/>
-        <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
         
+        <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
+            
             <AutoBreadcrumbs/> 
             
             <Box paddingTop={5} >
-        
+            <ErrorBoundary>
             <Switch>              
               <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv/questionnaires/"+props.match.params.questionnaireId}/>} />
               
@@ -65,18 +72,14 @@ export class Layout extends Component<{},State> {
               <Route path="/patients"><Patients/></Route>
 
               <Route path="/newpatient" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props}/>} />
-              <Route path="/">
-                <h2>Home</h2>
-              </Route>
+              <Route path="/"><Patients/></Route>
             </Switch>
+            </ErrorBoundary>
             </Box>
         </Box>
+        
         </Router>
         </>
     );
-
-  } catch(error){
-    throw new Error("fejl")
-  }
   }
 }

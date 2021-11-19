@@ -13,6 +13,7 @@ import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '../Models/PatientCareplan';
+import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
     questionnaires : Questionnaire
@@ -22,6 +23,7 @@ export interface Props {
 export interface State {
   thresholdModalOpen : boolean
   questionnaireResponses : QuestionnaireResponse[]
+loading: boolean
   pagesize : number
     page : number
 }
@@ -39,6 +41,7 @@ constructor(props : Props){
     this.state = {
         thresholdModalOpen : false,
         questionnaireResponses : [],
+        loading: true,
         pagesize : 6,
         page : 1
     }
@@ -57,13 +60,18 @@ constructor(props : Props){
   }
 
   async componentDidMount() :  Promise<void>{
+      try{
       await this.populateData(this.state.page)
+    }  catch(error : any){
+        this.setState(()=>{throw error})
+      }  
   }
     async populateData(page : number) :  Promise<void> {
+        this.setState({loading: true})
         const careplan = this.props.careplan
         const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id,[this.props.questionnaires.id],page,this.state.pagesize)
         this.setState({questionnaireResponses : []}) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
-        this.setState({questionnaireResponses : questionnaireResponses,page : page})
+        this.setState({questionnaireResponses : questionnaireResponses,page : page, loading: false})
 
     }
 
@@ -111,6 +119,9 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 
 
   renderTableData(questionaire : Questionnaire) : JSX.Element{
+    if(this.state.loading)
+        return (<LoadingSmallComponent/>)
+
     const questionaireResponses = this.state.questionnaireResponses;
     if(!questionaireResponses || questionaireResponses.length === 0 && this.state.page == 1){
         return (
@@ -131,6 +142,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 
     const questionnairesResponsesToShow = this.state.questionnaireResponses.slice(0,this.state.pagesize)
  
+    
     
     return (<>
     <Box textAlign="right">

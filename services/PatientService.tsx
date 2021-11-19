@@ -23,18 +23,34 @@ export default class PatientService extends BaseService implements IPatientServi
         this.backendApi = backendApi;
     }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+        try{
         return this.backendApi.EditPatient(patient);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
     SearchPatient(searchString: string) : Promise<PatientDetail[]>{
+        try{
         return this.backendApi.SearchPatient(searchString);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
     
     CreatePatient(patient : PatientDetail) : Promise<PatientDetail>{
+        try{
         return this.backendApi.CreatePatient(patient);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
 
     GetPatient(cpr: string) : Promise<PatientDetail>{
+        try{
         return this.backendApi.GetPatient(cpr);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     }
     
     

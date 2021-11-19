@@ -139,8 +139,12 @@ export class AddQuestionnaireButton extends Component<Props,State> {
     this.setState({snackbarOpen : false})
   };
 
-  componentDidMount() : void{
-    this.populateQuestionnairesList();
+  async componentDidMount() : Promise<void>{
+      try{
+    await this.populateQuestionnairesList();
+}  catch(error : any){
+    this.setState(()=>{throw error})
+  }  
   }
 
   async populateQuestionnairesList() : Promise<void>{

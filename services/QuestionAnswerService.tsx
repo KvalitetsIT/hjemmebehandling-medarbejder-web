@@ -17,13 +17,22 @@ export default class QuestionAnswerService extends BaseService implements IQuest
         this.backendApi = backendApi;
     }
     SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) : Promise<void>{
+        try{
         return this.backendApi.SetThresholdNumber(thresholdId,threshold);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     };
     SetThresholdOption(thresholdId: string, threshold: ThresholdOption) : Promise<void>{
+        try{
         return this.backendApi.SetThresholdOption(thresholdId,threshold);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
     };
 
     FindCategory(question: Question, answer: Answer) : CategoryEnum {
+
         
         if(answer instanceof NumberAnswer){
             let answerAsNumber = answer as NumberAnswer;

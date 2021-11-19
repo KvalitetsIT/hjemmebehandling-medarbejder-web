@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 
 import { Grid, Stack } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
-import { LoadingComponent } from '../../../../../../components/Layout/LoadingComponent';
+import { LoadingBackdropComponent } from '../../../../../../components/Layout/LoadingBackdropComponent';
 import ApiContext from '../../../../../_context';
 import { BasicTabs } from '../../../../../../components/Layout/Tabs';
 import { PatientCareplan } from '../../../../../../components/Models/PatientCareplan';
@@ -39,7 +39,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
   render () : JSX.Element {
     this.InitializeServices();
-    const contents = this.state.loading ? <LoadingComponent/> : this.renderTabs();
+    const contents = this.state.loading ? <LoadingBackdropComponent/> : this.renderTabs();
     return contents;
   }
 
