@@ -34,7 +34,7 @@ import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireDto } from "../generated/models/QuestionnaireDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
-import { Configuration, PlanDefinitionApi } from "../generated";
+import { Configuration, PlanDefinitionApi, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 
@@ -167,21 +167,17 @@ export class BffBackendApi implements IBackendApi {
     }
     
     async GetPerson(cpr: string) : Promise<PersonDto> {
-	
         let api = new PersonApi(this.conf);
 	    let request = { cpr: cpr };
 	    let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
 	    return person;
-	
-	    
-	   // const response = await fetch("http://localhost:8080/api/v1/person?cpr="+cpr);
-	   // const body = await response.json();
-	    
-       // let person = new Person();
-	   //Object.assign(oldperson, person);
-       // return person;
-       
-       //return oldperson;	
+    }
+    
+    async GetUser() : Promise<UserContext> {
+        let api = new UserApi(this.conf);
+	    let request = {};
+	    let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
+	    return user;
     }
 
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{

@@ -18,6 +18,8 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { NoPatientFround } from "./Errors/NoPatientFountError";
 import { QuestionnaireAlreadyOnCareplan } from "./Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
+import { UserContext } from "../generated";
+import { User } from "../components/Models/User";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
@@ -369,6 +371,19 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     
     async GetPerson(cpr: string) : Promise<Person>{
         return this.person1;
+    }
+    
+    async GetUser() : Promise<UserContext>{
+	    let user = new User();
+	    user.userId = "TESTES";
+	    user.firstName = "Test";
+	    user.lastName = "Testsen";
+        user.fullName = "Test Testsen";
+        user.orgId = "453071000016001";
+	    user.email = "test@rm.dk"
+	    user.entitlements = ["DIAS_HJEMMEBEHANDLING_Sygeplejerske"];
+	    user.autorisationsids = [""];
+        return user;
     }
     
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
