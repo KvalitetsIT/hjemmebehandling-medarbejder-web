@@ -1,12 +1,11 @@
 import { Address } from "../components/Models/Address";
-import { Answer, NumberAnswer, StringAnswer, UnitType } from "../components/Models/Answer";
+import { Answer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Contact } from "../components/Models/Contact";
 import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequency";
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Person } from "../components/Models/Person";
 import { Question } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
@@ -16,11 +15,10 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 import { IBackendApi } from "./IBackendApi";
 import { MockedBackendApi } from "./MockedBackendApi";
-import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
-import { CarePlanApi, GetCarePlansByCprRequest } from "../generated/apis/CarePlanApi";
+import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesByCarePlanIdRequest, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
+import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
@@ -32,336 +30,480 @@ import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
 import { QuestionDto } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
-import { QuestionnaireDto } from "../generated/models/QuestionnaireDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
 import { Configuration, PlanDefinitionApi, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
+import BaseApi from "./BaseApi";
 
-export class BffBackendApi implements IBackendApi {
+export class BffBackendApi extends BaseApi implements IBackendApi {
     conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+        
     }
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
     SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
     
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-        console.log('inside BffBackendApi.GetAllPlanDefinitions!')
-
-        let api = new PlanDefinitionApi(this.conf)
-        let planDefinitions = await api.getPlanDefinitions()
-
-        return planDefinitions.map(pd => this.mapPlanDefinitionDto(pd))
+        try{
+            console.log('inside BffBackendApi.GetAllPlanDefinitions!')
+    
+            let api = new PlanDefinitionApi(this.conf)
+            let planDefinitions = await api.getPlanDefinitions()
+    
+            return planDefinitions.map(pd => this.mapPlanDefinitionDto(pd))
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+        
     }
 
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
-        let api = new CarePlanApi(this.conf)
-        let request = {
-            createCarePlanRequest: {
-                carePlan: this.mapCarePlan(carePlan)
+        try{
+            let api = new CarePlanApi(this.conf)
+            let request = {
+                createCarePlanRequest: {
+                    carePlan: this.mapCarePlan(carePlan)
+                }
             }
+    
+            await api.createCarePlan(request)
+    
+            return carePlan
+        } catch(error : any){
+            return this.HandleError(error)
         }
-
-        await api.createCarePlan(request)
-
-        return carePlan
     }
 
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
-        console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
-
-        let api = new QuestionnaireResponseApi(this.conf);
-        let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
-        await api.patchQuestionnaireResponse(request)
+        try{
+            console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
+    
+            let api = new QuestionnaireResponseApi(this.conf);
+            let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
+            await api.patchQuestionnaireResponse(request)
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
-        throw new Error("Method not implemented.");
+        try{
+            throw new Error("Method not implemented.");
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        let api = new QuestionnaireResponseApi(this.conf);
-        let request = { 
-            status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
-            pageNumber: page,
-            pageSize: pagesize
-        };
-
-        let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
-
-        return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
+        try{
+            let api = new QuestionnaireResponseApi(this.conf);
+            let request = { 
+                status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
+                pageNumber: page,
+                pageSize: pagesize
+            };
+    
+            let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
+    
+            return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto) : Task {
-        let task = new Task()
-
-        task.cpr = questionnaireResponse.patient!.cpr!
-        task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
-        task.firstname = questionnaireResponse.patient!.givenName
-        task.lastname = questionnaireResponse.patient!.familyName
-        task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
-        task.questionnaireId = questionnaireResponse.questionnaireId!
-        task.questionnaireName = questionnaireResponse.questionnaireName!
-        task.answeredTime = questionnaireResponse.answered!
-        task.responseLinkEnabled = true
-
-        return task
+        try{
+            let task = new Task()
+    
+            task.cpr = questionnaireResponse.patient!.cpr!
+            task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
+            task.firstname = questionnaireResponse.patient!.givenName
+            task.lastname = questionnaireResponse.patient!.familyName
+            task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
+            task.questionnaireId = questionnaireResponse.questionnaireId!
+            task.questionnaireName = questionnaireResponse.questionnaireName!
+            task.answeredTime = questionnaireResponse.answered!
+            task.responseLinkEnabled = true
+    
+            return task
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+        
     }
 
     async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        return []
+        try{
+            return []
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
-        var status = -1;
-        var body = null;
-        await fetch(
-            'http://localhost:8080/api/v1/patient',
-            {
-                'method': 'POST',
-                'body': '{"cpr": "' + cpr + '"}',
-                'headers': new Headers({'Content-Type': 'application/json'})
-            })
-            .then(res => res.json())
-            .then(res => { body = res; })
-            .catch(err => { console.log(err); });
-
-        if(!body) {
-            return new MockedBackendApi().GetPatient(cpr);
+        try{
+            var status = -1;
+            var body = null;
+            await fetch(
+                'http://localhost:8080/api/v1/patient',
+                {
+                    'method': 'POST',
+                    'body': '{"cpr": "' + cpr + '"}',
+                    'headers': new Headers({'Content-Type': 'application/json'})
+                })
+                .then(res => res.json())
+                .then(res => { body = res; })
+                .catch(err => { console.log(err); });
+    
+            if(!body) {
+                return new MockedBackendApi().GetPatient(cpr);
+            }
+    
+            // Map the body to a PatientDetail object
+    
+            var name = body['familyName'] + ', ' + body['givenName'];
+            let patient : PatientDetail = new PatientDetail();
+            patient.firstname = body['familyName'];
+            patient.lastname = body['givenName'];
+            patient.cpr = cpr;
+    
+            let patientContact = new Contact();
+            patientContact.address.country = "Danmark";
+            patientContact.address.road = "Fiskergade 66";
+            patientContact.address.zipCode = "8200 Aarhus C";
+            patientContact.fullname = name;
+            patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
+            patient.patientContact = patientContact;
+    
+            return patient;
+        } catch(error : any){
+            return this.HandleError(error)
         }
-
-        // Map the body to a PatientDetail object
-
-        var name = body['familyName'] + ', ' + body['givenName'];
-        let patient : PatientDetail = new PatientDetail();
-        patient.firstname = body['familyName'];
-        patient.lastname = body['givenName'];
-        patient.cpr = cpr;
-
-        let patientContact = new Contact();
-        patientContact.address.country = "Danmark";
-        patientContact.address.road = "Fiskergade 66";
-        patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.fullname = name;
-        patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
-        patient.patientContact = patientContact;
-
-        return patient;
     }
     
     async GetPerson(cpr: string) : Promise<PersonDto> {
-        let api = new PersonApi(this.conf);
-	    let request = { cpr: cpr };
-	    let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
-	    return person;
+        try{
+            let api = new PersonApi(this.conf);
+            let request = { cpr: cpr };
+            let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
+            return person;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
     
     async GetUser() : Promise<UserContext> {
-        let api = new UserApi(this.conf);
-	    let request = {};
-	    let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
-	    return user;
+        try{
+            let api = new UserApi(this.conf);
+            let request = {};
+            let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
+            return user;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{
-        console.log('Inside BffBackendApi.GetPatientCareplans !');
-
-        // Retrieve the careplans
-        let api = new CarePlanApi(this.conf);
-        let request = { cpr: cpr };
-        let carePlans = await api.getCarePlansByCpr(request);
-        if(!carePlans) {
-            throw new Error('Could not retrieve careplans!');
+        try{
+            console.log('Inside BffBackendApi.GetPatientCareplans !');
+    
+            // Retrieve the careplans
+            let api = new CarePlanApi(this.conf);
+            let request = { cpr: cpr };
+            let carePlans = await api.getCarePlansByCpr(request);
+            if(!carePlans) {
+                throw new Error('Could not retrieve careplans!');
+            }
+            
+            return carePlans.map(cp => this.mapCarePlanDto(cp));
+        } catch(error : any){
+            return this.HandleError(error)
         }
-        
-        return carePlans.map(cp => this.mapCarePlanDto(cp));
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
-        let api = new QuestionnaireResponseApi(this.conf)
-        let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
-        let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
+        try{
+            let api = new QuestionnaireResponseApi(this.conf)
+            let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
+            let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
+    
+            return questionnaireResponses.map(qr => this.mapQuestionnaireResponseDto(qr))
+        } catch(error : any){
+            return this.HandleError(error)
+        }
 
-        return questionnaireResponses.map(qr => this.mapQuestionnaireResponseDto(qr))
     }
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
-        return new MockedBackendApi().SetQuestionaireResponse(id, measurementCollection);
+        try{
+            return new MockedBackendApi().SetQuestionaireResponse(id, measurementCollection);
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
-        return await new MockedBackendApi().SetThresholdNumber(thresholdId,threshold);
+        try{
+            return await new MockedBackendApi().SetThresholdNumber(thresholdId,threshold);
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
-        return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
+        try{
+            return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private getQuestionnaireIds(carePlanDtos: Array<CarePlanDto>) : Array<string> {
-        let questionnaireIds: string[] = [];
-
-        for(var carePlanDto of carePlanDtos) {
-            let ids = carePlanDto.questionnaires?.map(function(wrapper: QuestionnaireWrapperDto) {
-                console.log('Extracting id from ' + JSON.stringify(wrapper));
-                return wrapper.questionnaire?.id ?? '';
-            }) ?? [];
-            questionnaireIds = questionnaireIds.concat(ids);
+        try{
+            let questionnaireIds: string[] = [];
+    
+            for(var carePlanDto of carePlanDtos) {
+                let ids = carePlanDto.questionnaires?.map(function(wrapper: QuestionnaireWrapperDto) {
+                    console.log('Extracting id from ' + JSON.stringify(wrapper));
+                    return wrapper.questionnaire?.id ?? '';
+                }) ?? [];
+                questionnaireIds = questionnaireIds.concat(ids);
+            }
+            console.log('Got questionnaireIds: ' + questionnaireIds);
+    
+            //return Array.from(new Set(questionnaireIds));
+            return questionnaireIds;
+        } catch(error : any){
+            return this.HandleError(error)
         }
-        console.log('Got questionnaireIds: ' + questionnaireIds);
-
-        //return Array.from(new Set(questionnaireIds));
-        return questionnaireIds;
     }
 
     private mapCarePlan(carePlan: PatientCareplan) : CarePlanDto {
-        let carePlanDto = {
-            id: "dummy",
-            title: "Ny behandlingsplan", // TODO - set a title ...
-            patientDto: this.mapPatient(carePlan.patient),
-            questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
-            planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
+        try{
+            let carePlanDto = {
+                id: "dummy",
+                title: "Ny behandlingsplan", // TODO - set a title ...
+                patientDto: this.mapPatient(carePlan.patient),
+                questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
+                planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
+            }
+    
+            return carePlanDto
+        } catch(error : any){
+            return this.HandleError(error)
         }
-
-        return carePlanDto
     }
 
     private mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
-        let carePlan = new PatientCareplan();
-
-        carePlan.id = FhirUtils.unqualifyId(carePlanDto.id);
-        carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
-        carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-        carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
-        carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
-        //carePlan.terminationDate = undefined; // TODO
-        carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
-
-        return carePlan;
+        try{
+            let carePlan = new PatientCareplan();
+    
+            carePlan.id = FhirUtils.unqualifyId(carePlanDto.id);
+            carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
+            carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
+            carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
+            carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
+            //carePlan.terminationDate = undefined; // TODO
+            carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
+    
+            return carePlan;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapPlanDefinition(planDefinition: PlanDefinition) : PlanDefinitionDto {
-        return {
-            id: planDefinition.id,
-            name: planDefinition.name,
-            questionnaires: planDefinition.questionnaires.map(q => this.mapQuestionnaire(q))
+        try{
+            return {
+                id: planDefinition.id,
+                name: planDefinition.name,
+                questionnaires: planDefinition.questionnaires.map(q => this.mapQuestionnaire(q))
+            }
+        } catch(error : any){
+            return this.HandleError(error)
         }
     }
 
     private mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {
-        let planDefinition = new PlanDefinition()
-
-        planDefinition.id = planDefinitionDto.id!
-        planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
-        planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-
-        return planDefinition
+        try{
+            let planDefinition = new PlanDefinition()
+    
+            planDefinition.id = planDefinitionDto.id!
+            planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
+            planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
+    
+            return planDefinition
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapPatient(patient: PatientDetail) : PatientDto {
-        return {
-            cpr: patient.cpr,
-            givenName: patient.firstname,
-            familyName: patient.lastname,
-            patientContactDetails: this.mapContactDetails(patient.patientContact),
-            primaryRelativeContactDetails: this.mapContactDetails(patient.contact)
+        try{
+            return {
+                cpr: patient.cpr,
+                givenName: patient.firstname,
+                familyName: patient.lastname,
+                patientContactDetails: this.mapContactDetails(patient.patientContact),
+                primaryRelativeContactDetails: this.mapContactDetails(patient.contact)
+            }
+        } catch(error : any){
+            return this.HandleError(error)
         }
     }
 
     private mapPatientDto(patientDto: PatientDto) : PatientDetail {
-        let patient = new PatientDetail();
-
-        patient.firstname = patientDto.givenName;
-        patient.lastname = patientDto.familyName;
-        patient.cpr = patientDto.cpr;
-        patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
-        patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
-        // TODO - map additional contact details.
-
-        return patient;
+        try{
+            let patient = new PatientDetail();
+    
+            patient.firstname = patientDto.givenName;
+            patient.lastname = patientDto.familyName;
+            patient.cpr = patientDto.cpr;
+            patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+            patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
+            // TODO - map additional contact details.
+    
+            return patient;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapContactDetails(contactDetails: Contact) : ContactDetailsDto {
-        return {
-            street: contactDetails.address.road,
-            postalCode: contactDetails.address.zipCode,
-            country: contactDetails.address.country,
-            city: contactDetails.address.city,
-            primaryPhone: contactDetails.primaryPhone,
-            secondaryPhone: contactDetails.secondaryPhone,
+        try{
+            return {
+                street: contactDetails.address.road,
+                postalCode: contactDetails.address.zipCode,
+                country: contactDetails.address.country,
+                city: contactDetails.address.city,
+                primaryPhone: contactDetails.primaryPhone,
+                secondaryPhone: contactDetails.secondaryPhone,
+            }
+        } catch(error : any){
+            return this.HandleError(error)
         }
     }
 
     private mapContactDetailsDto(patientContactDetails: ContactDetailsDto) : Contact {
-        let contact = new Contact();
-
-        let address = new Address();
-        console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-        address.road = patientContactDetails?.street ?? 'Fiskergade 66';
-        address.zipCode = patientContactDetails?.postalCode ?? '8000';
-        address.city = "Aarhus";
-        address.country = patientContactDetails?.country ?? 'Danmark';
-        contact.address = address;
-
-        contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
-        contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
-
-        return contact;
+        try{
+            let contact = new Contact();
+    
+            let address = new Address();
+            console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
+            address.road = patientContactDetails?.street ?? 'Fiskergade 66';
+            address.zipCode = patientContactDetails?.postalCode ?? '8000';
+            address.city = "Aarhus";
+            address.country = patientContactDetails?.country ?? 'Danmark';
+            contact.address = address;
+    
+            contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
+            contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
+    
+            return contact;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapQuestionnaire(questionnaire: Questionnaire) : QuestionnaireWrapperDto {
-        return { 
-            questionnaire: {
-                id: questionnaire.id,
-                title: questionnaire.name
-            },
-            frequency: this.mapFrequency(questionnaire.frequency)
+        try{
+            return { 
+                questionnaire: {
+                    id: questionnaire.id,
+                    title: questionnaire.name
+                },
+                frequency: this.mapFrequency(questionnaire.frequency)
+            }
+        } catch(error : any){
+            return this.HandleError(error)
         }
     }
 
     private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto) : Questionnaire {
-        let questionnaire = new Questionnaire();
-
-        questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
-        questionnaire.name = wrapper.questionnaire!.title!;
-        questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
-
-        return questionnaire;
+        try{
+            let questionnaire = new Questionnaire();
+    
+            questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
+            questionnaire.name = wrapper.questionnaire!.title!;
+            questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
+    
+            return questionnaire;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapFrequency(frequency: Frequency) : FrequencyDto {
-        return {
-            weekday: this.mapWeekday(frequency.days[0]) // TODO - handle multiple days ...
+        try{
+            return {
+                weekday: this.mapWeekday(frequency.days[0]) // TODO - handle multiple days ...
+            }
+        } catch(error : any){
+            return this.HandleError(error)
         }
     }
 
     private mapFrequencyDto(frequencyDto: FrequencyDto) : Frequency {
-        let frequency = new Frequency();
-
-        frequency.repeated = FrequencyEnum.WEEKLY;
-        frequency.days = [this.mapWeekdayDto(frequencyDto.weekday!)];
-
-        return frequency;
+        try{
+            let frequency = new Frequency();
+    
+            frequency.repeated = FrequencyEnum.WEEKLY;
+            frequency.days = [this.mapWeekdayDto(frequencyDto.weekday!)];
+    
+            return frequency;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapWeekday(weekday: DayEnum) : FrequencyDtoWeekdayEnum {
-        return FrequencyDtoWeekdayEnum.Mon;
+        try{
+            return FrequencyDtoWeekdayEnum.Mon;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
     }
 
     private mapWeekdayDto(weekday: FrequencyDtoWeekdayEnum) : DayEnum {

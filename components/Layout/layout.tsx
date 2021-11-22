@@ -46,9 +46,12 @@ constructor(props : {}){
     return (
 <>
         <Router>
-        <Topbar />
-        <Sidebar/>
-        
+           <Topbar />
+
+        <ErrorBoundary>
+            <Sidebar/>
+        </ErrorBoundary>
+
         <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
             
             <AutoBreadcrumbs/> 

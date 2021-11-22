@@ -1,8 +1,16 @@
 export class BaseApiError extends Error {
+    response : Response;
+
+    constructor(response : Response){
+        super();
+        this.response = response;
+        this.message = "("+this.response.status + ") " + this.response.statusText;
+    }
+
     displayMessage() : string{
-        return "";
+        return this.message
     }
     displayTitle() : string{
-        return "";
+        return this.response.statusText;
     }
 }

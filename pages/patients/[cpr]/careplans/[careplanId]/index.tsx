@@ -48,8 +48,6 @@ class PatientCareplans extends React.Component<Props,State> {
   InitializeServices(): void{
     this.careplanService = this.context.careplanService;
     this.questionnaireService = this.context.questionnaireService;
-    console.log(this.careplanService)
-    console.log(this.questionnaireService)
   }
 
   componentDidMount() : void {
@@ -60,18 +58,20 @@ async populateCareplans() : Promise<void>{
   
   const cpr = this.props.match.params.cpr;
   const activeCareplanId = this.props.match.params.careplanId
-
-  const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
-  const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
-  const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
-
-  this.setState({
-    loading : false,  
-    careplans : careplans,
-    questionnaireResponses : questionnaireResponses
-      
-
-  });
+  
+  try{
+    const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
+    const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
+  
+    const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
+    this.setState({
+      loading : false,  
+      careplans : careplans,
+      questionnaireResponses : questionnaireResponses
+    });
+  } catch(error){
+    this.setState(()=>{throw error})
+  }
 }
 
 

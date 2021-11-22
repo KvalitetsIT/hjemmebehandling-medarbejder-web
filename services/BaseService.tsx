@@ -20,7 +20,7 @@ export default class BaseService {
         let errorIsServiceError = error instanceof BaseServiceError
 
         if(errorIsApiError)
-            throw null //Make this error to Service-error
+            throw error //Make this error to Service-error
             
         if(errorIsServiceError)
             throw error; //The error is ok and can be displayed nicely

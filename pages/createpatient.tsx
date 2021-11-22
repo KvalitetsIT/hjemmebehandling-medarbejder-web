@@ -19,6 +19,7 @@ import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
+import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -140,7 +141,7 @@ async componentDidMount() :  Promise<void> {
     canSubmit &&= this.state.careplan.planDefinitions.length === 0 ? false : true; //Plandefinition must be filled!
 
     return (
-     
+      <ErrorBoundary>
       <form onSubmit={(e)=>{e.preventDefault(); this.submitPatient()}} noValidate onBlur={()=>this.forceUpdate()}  > 
        
       <Stack direction="row" spacing={3}> 
@@ -204,15 +205,17 @@ async componentDidMount() :  Promise<void> {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-           <PlanDefinitionSelect onValidation={(errors) => this.setState({planDefinitionError : errors?.length == 0 ? undefined : errors[0].message})} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan}/>
+            
+            <PlanDefinitionSelect onValidation={(errors) => this.setState({planDefinitionError : errors?.length == 0 ? undefined : errors[0].message})} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan}/>
             <QuestionnaireListSimple careplan={this.state.careplan}/>
+      
           </Typography>
           <Button component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
         
       <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
-
+      
         </Stack>
         <div>
         <Card>
@@ -237,7 +240,7 @@ async componentDidMount() :  Promise<void> {
         </div>
         </Stack>
         </form>
-
+        </ErrorBoundary>
         
         
     )

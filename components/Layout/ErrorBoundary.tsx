@@ -1,4 +1,5 @@
 
+import { Alert } from "@mui/material";
 import React, { ErrorInfo } from "react";
 import { ToastError } from "../Alerts/ToastError";
 
@@ -36,12 +37,17 @@ export class ErrorBoundary extends React.Component<Props,State> {
       if (this.state.error) {
         // You can render any custom fallback UI
         return (<>
+        <Alert severity="error" >Der er opstået en fejl</Alert>
         {this.props.rerenderChildren ? this.props.children : <></>}
         <ToastError error={this.state.error}></ToastError>
         </>)
       }
   
-      return (<>{this.props.children}</>);
+      return (
+      <>
+      
+      {this.props.children}
+      </>);
 
     }
   }

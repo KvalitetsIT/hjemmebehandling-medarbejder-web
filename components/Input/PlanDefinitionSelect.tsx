@@ -68,11 +68,16 @@ export class PlanDefinitionSelect extends Component<Props,State> {
   }
   async populatePlanDefinitions() : Promise<void>{
       
-    const planDefinitions =  await this.questionnaireService.GetAllPlanDefinitions();
+    try{
 
-    this.setState({
+      const planDefinitions =  await this.questionnaireService.GetAllPlanDefinitions();
+      
+      this.setState({
         allPlanDefinitions : planDefinitions
-    })
+      })
+    } catch(error){
+      this.setState(()=>{throw error});
+    }
 }
 
 
