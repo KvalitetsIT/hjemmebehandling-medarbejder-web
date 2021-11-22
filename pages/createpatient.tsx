@@ -133,10 +133,11 @@ async componentDidMount() :  Promise<void> {
       return (<div>Fandt ikke patienten</div>)
 
     let canSubmit : boolean = true;
-    canSubmit &&= this.state.patient.cpr ? true : false;
-    canSubmit &&= !this.state.patientError ? true : false;
-    canSubmit &&= !this.state.contactError ? true : false
-    canSubmit &&= !this.state.planDefinitionError ? true : false
+    canSubmit &&= this.state.patient.cpr ? true : false; //CPR Must be filled
+    canSubmit &&= !this.state.patientError ? true : false; //No errors in patient section
+    canSubmit &&= !this.state.contactError ? true : false //No errors in contact section
+    canSubmit &&= !this.state.planDefinitionError ? true : false //No errors in planDefinitionSection
+    canSubmit &&= this.state.careplan.planDefinitions.length === 0 ? false : true; //Plandefinition must be filled!
 
     return (
      
@@ -146,7 +147,7 @@ async componentDidMount() :  Promise<void> {
         
       <Stack spacing={3}>
        
-
+      
       <Accordion expanded={this.state.accordians.PatientIsOpen} onChange={()=>this.goToPatientIsOpen()}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -154,7 +155,7 @@ async componentDidMount() :  Promise<void> {
           id="panel1bh-header"
         >
           <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Patient
+            Patient *
           </Typography>
           <Typography sx={{ color: 'text.secondary' }}>Tilret patient</Typography>
         </AccordionSummary>
@@ -168,7 +169,7 @@ async componentDidMount() :  Promise<void> {
           <Button component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
-        
+   
       <Accordion expanded={this.state.accordians.RelativeContactIsOpen} onChange={()=>this.goToRelativeContactIsOpen()}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -197,7 +198,7 @@ async componentDidMount() :  Promise<void> {
           id="panel1bh-header"
         >
           <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Patientgruppe
+            Patientgruppe *
           </Typography>
           <Typography sx={{ color: 'text.secondary' }}>Tilret patientgrupper</Typography>
         </AccordionSummary>
@@ -218,7 +219,7 @@ async componentDidMount() :  Promise<void> {
           <CardContent>
         <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
           <Step key="patient">
-          <StepLabel optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient</StepLabel>
+          <StepLabel optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
 
           </Step>
           <Step key="relativecontact">
@@ -227,7 +228,7 @@ async componentDidMount() :  Promise<void> {
 
           </Step>
           <Step key="plandefinition">
-          <StepLabel optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe</StepLabel>
+          <StepLabel optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
           </Step>
           
         </Stepper>

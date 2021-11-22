@@ -119,7 +119,7 @@ async populateCareplans() : Promise<void> {
       <>
           
 
-      <ErrorBoundary rerenderChildren={true}>
+      <ErrorBoundary rerenderChildren={false}>
       <AnswerTable careplan={careplan} questionnaires={questionnaire} />
       </ErrorBoundary>
     </>

@@ -1,13 +1,13 @@
 import { BaseServiceError } from "./BaseServiceError";
 
-export class InvalidInputError extends Error implements BaseServiceError  {
+export class InvalidInputError extends BaseServiceError  {
     public propErrors : InvalidInputModel[]
     constructor(propErrors : InvalidInputModel[]){
         super()
         this.propErrors = propErrors;
         this.message = this.displayMessage();
     }
-    displayTitle () : string{
+    displayTitle() : string{
         let message = "";
         message += "Indtastningsfejl"
         return message; 

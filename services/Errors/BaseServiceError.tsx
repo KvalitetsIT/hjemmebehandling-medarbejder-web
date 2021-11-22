@@ -1,5 +1,9 @@
 
-export class BaseServiceError {
-    displayMessage!: () => string
-    displayTitle!: () => string
+export class BaseServiceError extends Error {
+    displayMessage() : string{
+        return "";
+    }
+    displayTitle() : string{
+        return "";
+    }
 }

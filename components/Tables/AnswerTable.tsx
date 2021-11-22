@@ -14,6 +14,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
+import { ErrorBoundary } from '../Layout/ErrorBoundary';
 
 export interface Props {
     questionnaires : Questionnaire
@@ -172,7 +173,9 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                             <Stack component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
                                 <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
                                 <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
-                                <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                                <ErrorBoundary rerenderChildren={true}>
+                                    <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                                </ErrorBoundary>
                             </Stack>
                      
                       

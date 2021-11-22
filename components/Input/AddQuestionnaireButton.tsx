@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Alert, AlertColor, Button, Snackbar, Tooltip } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { Typography } from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,7 +10,6 @@ import IQuestionnaireService from '../../services/interfaces/IQuestionnaireServi
 import { Questionnaire } from '../Models/Questionnaire';
 import CloseIcon from '@mui/icons-material/Close';
 import { PatientCareplan } from '../Models/PatientCareplan';
-import { QuestionnaireAlreadyOnCareplan } from '../../apis/Errors/QuestionnaireAlreadyOnCareplan';
 import { PlanDefinition } from '../Models/PlanDefinition';
 
 export interface Props {
@@ -21,11 +20,6 @@ export interface Props {
 export interface State {
     AddQuestionnaireBool : boolean
     allPlanDefinitions : Array<PlanDefinition>
-
-    snackbarOpen : boolean
-    snackbarColor: AlertColor
-    snackbarText : string
-    snackbarTitle : string
 }
 
 
@@ -40,10 +34,6 @@ export class AddQuestionnaireButton extends Component<Props,State> {
       this.state= {
             AddQuestionnaireBool : false,
             allPlanDefinitions : [],
-            snackbarOpen : false,
-            snackbarColor: "info",
-            snackbarText : "",
-            snackbarTitle : ""
       }
   }
   InitializeServices() : void{
@@ -58,13 +48,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
             if(this.props.afterAddingQuestionnaire)
             this.props.afterAddingQuestionnaire();
         } catch(error : unknown){
-            if(!(error instanceof QuestionnaireAlreadyOnCareplan)) { throw error; }
-            this.setState({
-                snackbarColor : "error",
-                snackbarOpen : true,
-                snackbarTitle : "Fejl",
-                snackbarText : error.displayMessage()
-            })
+            this.setState(()=>{throw error});
       }
     
   }
@@ -100,13 +84,6 @@ export class AddQuestionnaireButton extends Component<Props,State> {
         </Tooltip> 
         
 }       
-        <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
-            <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
-                <h5>{this.state.snackbarTitle}</h5>
-                
-                {this.state.snackbarText}
-            </Alert>
-        </Snackbar>
 </>
     )
   }
@@ -134,10 +111,6 @@ export class AddQuestionnaireButton extends Component<Props,State> {
         }
         return options;
     }
-
-  closeSnackbar = () : void => {
-    this.setState({snackbarOpen : false})
-  };
 
   async componentDidMount() : Promise<void>{
       try{

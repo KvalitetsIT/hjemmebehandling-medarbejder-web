@@ -51,6 +51,12 @@ export default class ValidationService extends BaseService implements IValidatio
             const error = new InvalidInputModel(propName,"Telefonnummer skal indeholde landekode")
             errors.push(error)
         }
+
+        if(phoneNumber.length != 11){
+            const error = new InvalidInputModel(propName,"Telefonnummer skal være 11 karakter (inkl landekode)")
+            errors.push(error)
+        }
+
         return errors;
     }
 

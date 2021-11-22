@@ -15,11 +15,13 @@ import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../component
 import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
-import { NoPatientFround } from "./Errors/NoPatientFountError";
-import { QuestionnaireAlreadyOnCareplan } from "./Errors/QuestionnaireAlreadyOnCareplan";
+import { QuestionnaireAlreadyOnCareplan } from "../services/Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 import { UserContext } from "../generated";
 import { User } from "../components/Models/User";
+import { BaseServiceError } from "../services/Errors/BaseServiceError";
+import { BaseApiError } from "./Errors/BaseApiError";
+import { NoPatientFround } from "../services/Errors/NoPatientFountError";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
@@ -394,7 +396,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{
-        throw new NoPatientFround();
+        let newEror = new NoPatientFround();
+        console.log(newEror instanceof BaseApiError)
+        throw newEror;
     }
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) : Promise<void>{
 

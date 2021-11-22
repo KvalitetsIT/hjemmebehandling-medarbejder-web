@@ -7,6 +7,7 @@ import { PatientCareplan } from '../Models/PatientCareplan';
 import { Questionnaire } from '../Models/Questionnaire';
 import { AddQuestionnaireButton } from '../Input/AddQuestionnaireButton';
 import { FrequencyTableRow } from '../Input/FrequencyTableRow';
+import { ErrorBoundary } from '../Layout/ErrorBoundary';
 
 export interface Props {
     careplan : PatientCareplan
@@ -26,7 +27,9 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
                 <CardHeader subheader={
                     <>
                     Spørgeskemaer
+                    <ErrorBoundary rerenderChildren={true}>
                     <AddQuestionnaireButton afterAddingQuestionnaire={()=>this.forceUpdate()} careplan={this.props.careplan} />
+                    </ErrorBoundary>
                     </>
                 }/>
             

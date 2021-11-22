@@ -93,7 +93,7 @@ async validate() : Promise<void>{
       }
 
     return (
-      <FormControl fullWidth>
+      <FormControl fullWidth required>
       <InputLabel error={this.state.errors.length !== 0} id="demo-simple-select-label">Vælg patientgrupper</InputLabel>
         <Select onClose={()=>this.validate()} label="Vælg patientgrupper" multiple value={this.state.editedCareplan.planDefinitions.map(x=>x.id) as unknown as string}  onChange={this.handleChange}>
         {this.state.allPlanDefinitions.map(patientGroup => {

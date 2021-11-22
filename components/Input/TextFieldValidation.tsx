@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { TextField } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
 
 export interface Props {
@@ -14,6 +14,7 @@ export interface Props {
     variant : "outlined";
     size : "small" | "medium";
     type : string
+
 
     onChange : (input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate? : (value : string) => Promise<InvalidInputModel[]>
@@ -63,8 +64,9 @@ async validate(input : string) : Promise<void>{
 
 
     return (
+        <FormControl>
             <TextField 
-            onBlur={input => this.validate(input.target.value)}
+            onInput={(e : React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
             InputLabelProps={{ shrink: this.props.value ? true : false }} 
             label={this.props.label} 
             variant={this.props.variant} 
@@ -77,6 +79,7 @@ async validate(input : string) : Promise<void>{
             type={this.props.type}
             value={this.props.value}>
             </TextField>
+        </FormControl>
     )
   }
 }
