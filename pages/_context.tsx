@@ -17,6 +17,8 @@ import IPersonService from '../services/interfaces/IPersonService';
 import PersonService from '../services/PersonService';
 import UserService from '../services/UserService';
 import IUserService from '../services/interfaces/IUserService';
+import ValidationService from '../services/ValidationService';
+import IValidationService from '../services/interfaces/IValidationService';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
@@ -25,6 +27,7 @@ interface IApiContext {
     patientService : IPatientService,
     personService : IPersonService,
     userService : IUserService,
+    validationService : IValidationService,
     dateHelper : IDateHelper
 }
 
@@ -36,6 +39,7 @@ const ApiContext = createContext<IApiContext>(
         patientService : new PatientService(new FakeItToYouMakeItApi()),
         userService : new UserService(new FakeItToYouMakeItApi()),
         personService : new PersonService(new FakeItToYouMakeItApi()),
+        validationService : new ValidationService(),
         dateHelper : new DanishDateHelper()
     }
     ); //Default value

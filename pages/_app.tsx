@@ -14,6 +14,7 @@ import { BffBackendApi } from '../apis/BffBackendApi';
 import { IBackendApi } from '../apis/IBackendApi';
 import React from 'react';
 import UserService from '../services/UserService';
+import ValidationService from '../services/ValidationService';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -59,6 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         patientService : new PatientService(patientBackend),
         userService : new UserService(userBackend),
         personService : new PersonService(personBackend),
+        validationService : new ValidationService(),
         dateHelper : new DanishDateHelper()
       }}
     >

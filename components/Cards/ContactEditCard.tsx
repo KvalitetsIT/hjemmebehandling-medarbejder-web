@@ -1,13 +1,17 @@
 import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton, TextField } from '@mui/material';
+import { Card, Skeleton } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { Contact } from '../Models/Contact';
+import { TextFieldValidation } from '../Input/TextFieldValidation';
+import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import IValidationService from '../../services/interfaces/IValidationService';
 
 export interface Props {
     initialContact : Contact
+    onValidation? : (error : InvalidInputModel[]) => void
 }
 
 export interface State {
@@ -19,6 +23,7 @@ export class ContactEditCard extends Component<Props,State> {
   static contextType = ApiContext;
   static displayName = ContactEditCard.name;
   personService!: IPersonService;
+  validationService!: IValidationService;
 
   constructor(props : Props){
       super(props);
@@ -37,6 +42,7 @@ export class ContactEditCard extends Component<Props,State> {
 
 InitializeServices() : void{
   this.personService = this.context.personService;
+  this.validationService = this.context.validationService;
 }
 
 modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contact, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) : void{
@@ -45,8 +51,29 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
     this.setState({contact : modifiedPatient  })
   }
 
+  errorArray : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
+  onValidation(from : number, invalid : InvalidInputModel[]) : void{
+    console.log("from : " + from)  
+    this.errorArray.set(from,invalid);
+      
+      const allErrors : InvalidInputModel[] = [];
+      const iterator = this.errorArray.entries();
+      let next = iterator.next();
+      while(next == undefined || !next.done){
+        
+        next.value[1].forEach(invalid => allErrors.push(invalid))  
+        next = iterator.next();
+      }
+
+      if(this.props.onValidation)
+        this.props.onValidation(allErrors);
+
+        console.log(this.errorArray)
+  }
+
   renderCard() : JSX.Element{
 	this.InitializeServices();
+  let inputId = 0;
     return (
         <Card>
         <CardContent>
@@ -56,16 +83,53 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
           Pårørede
       </Typography>
       <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Fornavn" value={this.state.contact.fullname} onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  label="Fornavn" 
+                  value={this.state.contact.fullname} 
+                  onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  
+                  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" label="Addresse" value={this.state.contact.address.road} onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="Postnummer" value={this.state.contact.address.zipCode} onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  variant="outlined" />
-              <TextField id="outlined-basic" label="By" value={this.state.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  label="Addresse" 
+                  value={this.state.contact.address.road} 
+                  onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  
+                  variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  validate={(number) => this.validationService.ValidateZipCode(number)}
+                  label="Postnummer"
+                  value={this.state.contact.address.zipCode} onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  
+                  variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  label="By"
+                  value={this.state.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  
+                  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" type="tel" label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="tel" label="Sekundær telefonnummer" value={this.state.contact.secondaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber,input) } variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  type="tel"      
+                  label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber,input) } 
+                  validate={(input)=>this.validationService.ValidatePhonenumber(input)}
+                  variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  type="tel"
+                  label="Sekundær telefonnummer" 
+                  validate={(input)=>this.validationService.ValidatePhonenumber(input)}
+                  value={this.state.contact.secondaryPhone} 
+                  onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber,input) } 
+                  variant="outlined" />
 
             </Stack>
             

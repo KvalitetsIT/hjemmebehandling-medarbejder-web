@@ -19,7 +19,6 @@ import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
-import { ValidateCareplanHidden } from '../components/Input/ValidateCareplanHidden';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -38,6 +37,11 @@ export interface State {
     loading: boolean;
     canSubmit : boolean;
     submitted : boolean
+    
+    patientError? : string;
+    contactError? : string;
+    planDefinitionError? : string
+
 }
 
 
@@ -89,7 +93,6 @@ async submitPatient() : Promise<void>{
   this.state.careplan.patient = this.state.patient!;
   
   console.log(this.state.careplan)
-  try{
     this.setState({
       loading: true
     })
@@ -99,14 +102,6 @@ async submitPatient() : Promise<void>{
       patient : newCarePlan.patient,
       submitted : true
     })
-
-  } catch(error){
-    this.setState({
-      loading: false
-    })
-    throw error;
-  }
-  
 }
 
 SaveCareplan(editedCareplan : PatientCareplan) : void{
@@ -137,18 +132,19 @@ async componentDidMount() :  Promise<void> {
     if(!(this.state.patient && this.state.careplan) )
       return (<div>Fandt ikke patienten</div>)
 
+    let canSubmit : boolean = true;
+    canSubmit &&= this.state.patient.cpr ? true : false;
+    canSubmit &&= !this.state.patientError ? true : false;
+    canSubmit &&= !this.state.contactError ? true : false
+    canSubmit &&= !this.state.planDefinitionError ? true : false
+
     return (
      
-
-      <form onBlur={()=>this.forceUpdate()} onSubmit={async ()=>await this.submitPatient()}> 
+      <form noValidate onBlur={()=>this.forceUpdate()}  > 
        
-
-        <Stack direction="row" spacing={3}> 
+      <Stack direction="row" spacing={3}> 
         
       <Stack spacing={3}>
-<ValidateCareplanHidden 
-          patient={this.state.patient} 
-          careplan={this.state.careplan} > 
        
 
       <Accordion expanded={this.state.accordians.PatientIsOpen} onChange={()=>this.goToPatientIsOpen()}>
@@ -164,7 +160,10 @@ async componentDidMount() :  Promise<void> {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            <PatientEditCard initialPatient={this.state.patient}/>
+            <PatientEditCard 
+              onValidation={(errors) => this.setState({patientError : errors?.length == 0 ? undefined : errors[0].message})}
+              initialPatient={this.state.patient}
+            />
           </Typography>
           <Button component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
@@ -183,7 +182,9 @@ async componentDidMount() :  Promise<void> {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            <ContactEditCard initialContact={this.state.patient.contact}/>
+            <ContactEditCard 
+              onValidation={(errors) => this.setState({contactError : errors?.length == 0 ? undefined : errors[0].message})}
+              initialContact={this.state.patient.contact}/>
           </Typography>
           <Button component={Box} marginTop={2} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
@@ -202,33 +203,31 @@ async componentDidMount() :  Promise<void> {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-           <PlanDefinitionSelect SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan}/>
+           <PlanDefinitionSelect onValidation={(errors) => this.setState({planDefinitionError : errors?.length == 0 ? undefined : errors[0].message})} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan}/>
             <QuestionnaireListSimple careplan={this.state.careplan}/>
           </Typography>
           <Button component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
         
-     
-      
-        
-      </ValidateCareplanHidden>
+      <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
+
         </Stack>
         <div>
         <Card>
           <CardContent>
         <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
           <Step key="patient">
-          <StepLabel>Patient</StepLabel>
+          <StepLabel optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient</StepLabel>
 
           </Step>
           <Step key="relativecontact">
           
-          <StepLabel>Pårørende</StepLabel>
+          <StepLabel optional={this.state.contactError} error={this.state.contactError ? true : false}>Pårørende</StepLabel>
 
           </Step>
           <Step key="plandefinition">
-          <StepLabel>Patientgruppe</StepLabel>
+          <StepLabel optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe</StepLabel>
           </Step>
           
         </Stepper>
@@ -236,8 +235,6 @@ async componentDidMount() :  Promise<void> {
         </Card>
         </div>
         </Stack>
-        
-        
         </form>
 
         

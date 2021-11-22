@@ -1,48 +1,41 @@
 import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton, TextField } from '@mui/material';
+import { Card, Skeleton } from '@mui/material';
 import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
-import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { TextFieldValidation } from '../Input/TextFieldValidation';
+import IValidationService from '../../services/interfaces/IValidationService';
+import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
 
 export interface Props {
     initialPatient : PatientDetail
+    onValidation? : (error : InvalidInputModel[]) => void
 }
 
 export interface State {
     loadingCprButton : boolean;
     loadingPage : boolean
     patient : PatientDetail;
-    
-    snackbarOpen : boolean;
-    snackbarColor: AlertColor;
-    snackbarText : string;
-    snackbarTitle : string;
 }
 
 export class PatientEditCard extends Component<Props,State> {
   static contextType = ApiContext;
   static displayName = PatientEditCard.name; 
   personService!: IPersonService;
+  validationService!: IValidationService;
 
   constructor(props : Props){
       super(props);
       this.state = {
 	      loadingCprButton : false,
         loadingPage : true,
-	      patient : props.initialPatient,
-	      snackbarOpen : false,
-          snackbarColor: "info",
-          snackbarText : "",
-          snackbarTitle : "" }
+	      patient : props.initialPatient
+      }
       this.modifyPatient = this.modifyPatient.bind(this);
   }
-  closeSnackbar = () : void => {
-    this.setState({snackbarOpen : false})
-  };
 
   render () : JSX.Element{
     const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
@@ -55,6 +48,7 @@ export class PatientEditCard extends Component<Props,State> {
 
 InitializeServices() : void{
   this.personService = this.context.personService;
+  this.validationService = this.context.validationService;
 }
 
 async getPerson() : Promise<void>{
@@ -94,7 +88,6 @@ async getPerson() : Promise<void>{
     
       if (response.status == 404){
 	     console.log("Ingen borger fundet");
-	     this.setState({snackbarColor : "warning",snackbarOpen : true,snackbarTitle: "Person kan ikke fremsøges", snackbarText: "Cprnummer skal skrives uden bindestreg og være 10 cifre langt"})
          this.clearPersonFields();
          return;
 	  }
@@ -122,8 +115,29 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     this.setState({patient : modifiedPatient  })
   }
 
+  errorArray : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
+  onValidation(from : number, invalid : InvalidInputModel[]) : void{
+    console.log("from : " + from)  
+    this.errorArray.set(from,invalid);
+      
+      const allErrors : InvalidInputModel[] = [];
+      const iterator = this.errorArray.entries();
+      let next = iterator.next();
+      while(next == undefined || !next.done){
+        
+        next.value[1].forEach(invalid => allErrors.push(invalid))  
+        next = iterator.next();
+      }
+
+      if(this.props.onValidation)
+        this.props.onValidation(allErrors);
+
+        console.log(this.errorArray)
+  }
+
   renderCard() : JSX.Element{
 	this.InitializeServices();
+  let inputId = 0;
     return ( <>
         <Card>
         <CardContent>
@@ -131,35 +145,57 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           <Typography variant="inherit">
           Patient
       </Typography>
-            <Stack direction="row">
-              <TextField size="small" id="outlined-basic" required label="CPR" value={this.state.patient.cpr} onChange={input => this.modifyPatient(this.setCpr,input) }  variant="outlined" />
-              <LoadingButton loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+            <Stack direction="row" spacing={3}>
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  validate={(cpr) => this.validationService.ValidateCPR(cpr) } 
+                  required={true} 
+                  label="CPR" 
+                  value={this.state.patient.cpr} 
+                  onChange={input => this.modifyPatient(this.setCpr,input) } />
+                  <Stack>
+                  <LoadingButton loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+                  </Stack>
+                
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField disabled id="outlined-basic" label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
-              <TextField disabled id="outlined-basic" label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++}disabled label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField disabled id="outlined-basic" label="Addresse" value={this.state.patient.patientContact.address.road} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
-              <TextField disabled id="outlined-basic" label="Postnummer" value={this.state.patient.patientContact.address.zipCode} onChange={input => this.modifyPatient(this.setZipcode,input) }  variant="outlined" />
-              <TextField disabled id="outlined-basic" label="By" value={this.state.patient.patientContact.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.patientContact.address.road} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
+              <TextFieldValidation disabled  
+                    onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                    uniqueId={inputId++}
+                    label="Postnummer" 
+                    value={this.state.patient.patientContact.address.zipCode} 
+                    onChange={input => this.modifyPatient(this.setZipcode,input) }  
+                    variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.patientContact.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextField id="outlined-basic" type="tel" label="Primært telefonnummer" value={this.state.patient.patientContact.primaryPhone} onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } variant="outlined" />
-              <TextField id="outlined-basic" type="tel" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
+              <TextFieldValidation 
+                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  uniqueId={inputId++}
+                  validate={(phone) => this.validationService.ValidatePhonenumber(phone) } 
+                  type="tel" 
+                  label="Primært telefonnummer" 
+                  value={this.state.patient.patientContact.primaryPhone} 
+                  onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } 
+                  variant="outlined" />
+              <TextFieldValidation 
+                    onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                    uniqueId={inputId++}
+                    validate={(phone) => this.validationService.ValidatePhonenumber(phone) }
+                    type="tel" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
             </Stack>
          </Stack>
 
           
         </CardContent>
     </Card>
-                        <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
-                        <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
-                            <h5>{this.state.snackbarTitle}</h5>
-                            {this.state.snackbarText}
-                        </Alert>
-                    </Snackbar>
-                    </>
+    </>
     )
   }
   
