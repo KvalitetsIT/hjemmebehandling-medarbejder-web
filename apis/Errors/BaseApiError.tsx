@@ -8,9 +8,9 @@ export class BaseApiError extends Error {
     }
 
     displayMessage() : string{
-        return this.message
+        return this.response.url.includes("?") ? this.response.url.split("?")[0] : this.response.url
     }
     displayTitle() : string{
-        return this.response.statusText;
+        return "("+this.response.status + ") " + this.response.statusText;
     }
 }
