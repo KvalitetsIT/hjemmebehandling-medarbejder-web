@@ -12,6 +12,7 @@ import { Questionnaire } from '../../../../../../components/Models/Questionnaire
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
 import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
+import { ErrorBoundary } from '../../../../../../components/Layout/ErrorBoundary';
 
 
 interface State {
@@ -118,10 +119,9 @@ async populateCareplans() : Promise<void> {
       <>
           
 
-      
-      <AnswerTable careplan={careplan} questionnaires={questionnaire} >
-    
-    </AnswerTable>
+      <ErrorBoundary rerenderChildren={true}>
+      <AnswerTable careplan={careplan} questionnaires={questionnaire} />
+      </ErrorBoundary>
     </>
     )
   }
