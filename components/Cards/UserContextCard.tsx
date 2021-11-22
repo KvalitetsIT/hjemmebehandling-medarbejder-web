@@ -4,12 +4,11 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import Stack from '@mui/material/Stack';
 import IUserService from '../../services/interfaces/IUserService';
 import { User } from '../Models/User';
 import UserService from '../../services/UserService';
 import { FakeItToYouMakeItApi } from '../../apis/FakeItToYouMakeItApi';
-import { Button } from '@mui/material';
+import { Button, CardActionArea, CardActions, Collapse } from '@mui/material';
 
 
 export interface Props {
@@ -19,6 +18,7 @@ export interface Props {
 export interface State {
     loadingUserContextButton : boolean;
     user: User;
+    expand: boolean
 }
 
 export class UserContextCard extends Component<Props,State> {
@@ -29,7 +29,8 @@ export class UserContextCard extends Component<Props,State> {
       super(props);
       this.state = {
 	      loadingUserContextButton : false,
-	      user: new User()
+	      user: new User(),
+	      expand: false
       }
 
   }
@@ -55,6 +56,12 @@ async getUser() : Promise<void>{
     const u = this.state.user;
     u.userId = user.userId ?user.userId:"";
     u.fullName = user.fullName ?user.fullName:"";
+    u.orgId = user.orgId ?user.orgId:"";
+    u.email = user.email ?user.email:"";
+    u.entitlements = user.entitlements ?user.entitlements:[];
+    u.autorisationsids = user.autorisationsids ?user.autorisationsids:[];
+    u.firstName = user.firstName ?user.firstName:"";
+    u.lastName = user.lastName ?user.lastName:"";
     
     this.setState({
       user: u
@@ -74,18 +81,26 @@ async getUser() : Promise<void>{
 }
 
   render ()  : JSX.Element{
+
     return (<>
-        <Card component={Box} minWidth={200} maxWidth={200} >
-         <CardContent >
-               <Stack spacing={3} alignContent="right">
-                    <Stack backgroud-color="blue" spacing={1} alignContent="right">
-                    <Typography align="right" variant="body2">{this.state.user.fullName}</Typography>
-                    <Typography align="right" variant="caption">{this.state.user.userId}</Typography>
-                    <Button>Logout</Button>
-                    </Stack>
-               </Stack>
-            </CardContent>
+        <Card component={Box} minWidth={200} maxWidth={250} align-items= "right" style={{backgroundColor: "#f8f8f8"}}>
+        <CardActionArea onClick={()=>this.setState({ expand:!this.state.expand})} align-items= "right">
+          <CardContent >
+                    <Typography align="right" variant="body2">{this.state.user.fullName} ({this.state.user.userId})</Typography>
+          </CardContent>
+         </CardActionArea>
+         <Collapse in={this.state.expand}>
+              <CardContent >
+                    <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button style={{ width: '100%', color: 'red' }}>
+                logud
+                </Button>
+              </CardActions>
+            </Collapse>
         </Card></>
     );
   }
 }
+

@@ -2,7 +2,6 @@ import { Box, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 import { UserContextCard } from '../Cards/UserContextCard';
-import { Toolbar } from '@mui/material';
 export interface State {
   drawerIsOpen: boolean
 }
@@ -14,7 +13,6 @@ export class Topbar extends Component<{},State> {
   render () : JSX.Element {
     return (
         <>
-<Toolbar>
     <Grid justify="space-between" container>
       <Grid item >
          <Box paddingLeft={30}>
@@ -22,17 +20,11 @@ export class Topbar extends Component<{},State> {
          </Box>
       </Grid>
       <Grid>
-        <Box paddingRight={2}>
+        <Box paddingRight={5} >
             <UserContextCard />
         </Box>
       </Grid>
     </Grid>
-  </Toolbar>
-
-
-
-
-
 
         </>
     );
