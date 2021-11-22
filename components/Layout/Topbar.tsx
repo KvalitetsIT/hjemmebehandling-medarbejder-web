@@ -1,7 +1,8 @@
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
-
+import { UserContextCard } from '../Cards/UserContextCard';
+import { Toolbar } from '@mui/material';
 export interface State {
   drawerIsOpen: boolean
 }
@@ -13,25 +14,26 @@ export class Topbar extends Component<{},State> {
   render () : JSX.Element {
     return (
         <>
-        
-        <Box padding={3}>
-            <Grid container>
-                <Grid item xs={6}>
-                <Box paddingLeft={30}>
-                  <SearchPatientInput />
-                </Box>
-                </Grid>
-                <Grid item xs={6}>
-                <Typography align="right">
-                    Susanne Jensen
-            </Typography>
-            <Typography variant="subtitle2" align="right">
-                    Kliniker
-            </Typography>
-                </Grid>
-            </Grid>
-            </Box>
-        
+<Toolbar>
+    <Grid justify="space-between" container>
+      <Grid item >
+         <Box paddingLeft={30}>
+            <SearchPatientInput />
+         </Box>
+      </Grid>
+      <Grid>
+        <Box paddingRight={2}>
+            <UserContextCard />
+        </Box>
+      </Grid>
+    </Grid>
+  </Toolbar>
+
+
+
+
+
+
         </>
     );
   }
