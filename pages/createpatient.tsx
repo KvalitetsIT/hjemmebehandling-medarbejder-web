@@ -140,7 +140,7 @@ async componentDidMount() :  Promise<void> {
 
     return (
      
-      <form noValidate onBlur={()=>this.forceUpdate()}  > 
+      <form onSubmit={(e)=>{e.preventDefault(); this.submitPatient()}} noValidate onBlur={()=>this.forceUpdate()}  > 
        
       <Stack direction="row" spacing={3}> 
         
