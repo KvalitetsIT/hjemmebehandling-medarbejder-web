@@ -94,7 +94,9 @@ async populateCareplans() : Promise<void>{
             
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
                 <PatientCard patient={activeCareplan.patient}></PatientCard>
-                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+                <ErrorBoundary>
+                  <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+                </ErrorBoundary>
             </Stack>
             </ErrorBoundary>
         </Grid>

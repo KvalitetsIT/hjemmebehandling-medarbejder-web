@@ -11,6 +11,7 @@ import IQuestionnaireService from '../../services/interfaces/IQuestionnaireServi
 
 import FhirUtils from '../../util/FhirUtils';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import { ConfirmationButton } from '../Input/ConfirmationButton';
 
 export interface Props {
     taskType : TaskType
@@ -115,8 +116,12 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
     
   }
 
+  async openRemoveAlarmConfirmationBox(task : Task) : Promise<void>{
+    await this.removeAlarm(task);
+  }
+
   renderTableData(tasks : Array<Task>) : JSX.Element{
-    return (
+    return (<>
 
             <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -144,7 +149,9 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
               <TableCell align="left">
                 {task.category == CategoryEnum.BLUE ? 
-              <Button color="primary" onClick={async ()=>await this.removeAlarm(task)} variant="contained">Fjern alarm</Button>  
+                <ConfirmationButton variant="contained" color="primary" title="Fjern alarm?" buttonText="Fjern alarm" action={async () => await this.removeAlarm(task)}>
+                  Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
+                </ConfirmationButton>
               :
               <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
               }
@@ -160,6 +167,8 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
         </TableBody>
       </Table>
     </TableContainer>
+
+    </>
         )
   }
 }
