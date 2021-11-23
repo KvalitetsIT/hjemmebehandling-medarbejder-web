@@ -120,7 +120,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
   onValidation(from : number, invalid : InvalidInputModel[]) : void{
       console.log("from : " + from)  
-      let errorMap = this.errorMap;
+      const errorMap = this.errorMap;
       errorMap.set(from,invalid);
       
       const allErrors : InvalidInputModel[] = [];

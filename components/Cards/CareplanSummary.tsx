@@ -8,6 +8,7 @@ import { CardHeader, Typography } from '@mui/material';
 import { FinishCareplanButton } from '../Input/FinishCareplanButton';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
+import { ErrorBoundary } from '../Layout/ErrorBoundary';
 
 export interface Props {
     careplan : PatientCareplan
@@ -50,7 +51,9 @@ export class CareplanSummary extends Component<Props,{}> {
                     {this.dateHelper.DateToString( careplan.creationDate)}
                 </Typography>
                 <br/>
+                <ErrorBoundary>
                 <FinishCareplanButton careplan={careplan}/>
+                </ErrorBoundary>
             </CardContent>
         </Card>
     );
