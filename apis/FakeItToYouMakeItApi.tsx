@@ -25,6 +25,8 @@ import { NoPatientFround } from "../services/Errors/NoPatientFountError";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
+    timeToWait : number = 0;
+
     patient1 : PatientDetail = new PatientDetail();
     person1 : Person = new Person();
     careplan1 : PatientCareplan = new PatientCareplan();
@@ -221,7 +223,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.questionnaires = [this.questionnaire1]
     }
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
-        await new Promise(f => setTimeout(f, 3000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
         let start = (page-1) * pagesize
         let end = page * pagesize
@@ -235,11 +237,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         return patient;
     }
     async SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         
         let allPatients = [this.patient1];
         
@@ -272,21 +274,21 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
-        await new Promise(f => setTimeout(f, 1000))
+        await new Promise(f => setTimeout(f, this.timeToWait))
         return carePlan
     }
 
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         return careplan;
     }
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
-        await new Promise(f => setTimeout(f, 1000))
+        await new Promise(f => setTimeout(f, this.timeToWait))
     }
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         throw new Error("Method not implemented.");
     }
 
@@ -364,7 +366,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail>{
-        await new Promise(f => setTimeout(f, 1000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         if(this.patient1.cpr == cpr){
             return this.patient1;
         }
@@ -373,7 +375,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
     
     async GetPerson(cpr: string) : Promise<Person>{
-        await new Promise(f => setTimeout(f, 3000));
+        await new Promise(f => setTimeout(f, this.timeToWait));
         return this.person1;
     }
     
