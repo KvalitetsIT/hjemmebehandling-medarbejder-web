@@ -19,6 +19,7 @@ export interface State {
     loadingCprButton : boolean;
     loadingPage : boolean
     patient : PatientDetail;
+    errorArray : InvalidInputModel[];
 }
 
 export class PatientEditCard extends Component<Props,State> {
@@ -32,7 +33,8 @@ export class PatientEditCard extends Component<Props,State> {
       this.state = {
 	      loadingCprButton : false,
         loadingPage : true,
-	      patient : props.initialPatient
+	      patient : props.initialPatient,
+        errorArray : [new InvalidInputModel("","")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
       this.modifyPatient = this.modifyPatient.bind(this);
   }
@@ -115,13 +117,14 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     this.setState({patient : modifiedPatient  })
   }
 
-  errorArray : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
+  errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
   onValidation(from : number, invalid : InvalidInputModel[]) : void{
-    console.log("from : " + from)  
-    this.errorArray.set(from,invalid);
+      console.log("from : " + from)  
+      let errorMap = this.errorMap;
+      errorMap.set(from,invalid);
       
       const allErrors : InvalidInputModel[] = [];
-      const iterator = this.errorArray.entries();
+      const iterator = errorMap.entries();
       let next = iterator.next();
       while(next == undefined || !next.done){
         
@@ -129,10 +132,11 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
         next = iterator.next();
       }
 
-      if(this.props.onValidation)
+      if(this.props.onValidation){
         this.props.onValidation(allErrors);
+      }
 
-        console.log(this.errorArray)
+      this.setState({errorArray  : allErrors})
   }
 
   renderCard() : JSX.Element{
@@ -155,7 +159,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
                   value={this.state.patient.cpr} 
                   onChange={input => this.modifyPatient(this.setCpr,input) } />
                   <Stack>
-                  <LoadingButton loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+                  <LoadingButton disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
                   </Stack>
                 
             </Stack>
