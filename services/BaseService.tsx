@@ -2,6 +2,7 @@ import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError
 import {BaseApiError} from "./../apis/Errors/BaseApiError"
 import {BaseServiceError} from "./Errors/BaseServiceError"
 import { UnknownServiceError } from "./Errors/UnknownServiceError";
+import { NotCorrectRightsError } from "./Errors/NotCorrectRightsError";
 
 export default class BaseService {
     ValidatePagination(page : number, pageSize : number) : void {
@@ -21,12 +22,22 @@ export default class BaseService {
         let errorIsServiceError = error instanceof BaseServiceError
 
         if(errorIsApiError)
-            throw error //Make this error to Service-error
+            throw this.FromApiToServiceError(error) //Make this error to Service-error
             
         if(errorIsServiceError)
             throw error; //The error is ok and can be displayed nicely
         
         throw new UnknownServiceError(error)
+    }
+
+    FromApiToServiceError(apiError : BaseApiError){
+        if(apiError.response.status === 403)
+            return new NotCorrectRightsError();
+            
+        if(apiError.response.status === 401)
+            return new NotCorrectRightsError();
+
+        return apiError;
     }
 }
   
