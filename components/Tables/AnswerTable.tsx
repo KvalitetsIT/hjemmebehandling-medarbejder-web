@@ -174,7 +174,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
                                 <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
                                 <ErrorBoundary rerenderChildren={true}>
-                                    <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                                    <QuestionnaireResponseStatusSelect onUpdate={()=>this.forceUpdate()} questionnaireResponse={collection} />  
                                 </ErrorBoundary>
                             </Stack>
                      

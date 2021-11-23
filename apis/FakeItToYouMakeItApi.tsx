@@ -313,7 +313,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+        let allQuestionnaireResponses : QuestionnaireResponse[] = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5];
         await new Promise(f => setTimeout(f, this.timeToWait))
+        let response = allQuestionnaireResponses.find(x=>x.id == id);
+        if(response)
+            response.status = status;
     }
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {

@@ -11,6 +11,7 @@ import IQuestionnaireService from '../../services/interfaces/IQuestionnaireServi
 
 export interface Props {
     questionnaireResponse : QuestionnaireResponse
+    onUpdate : () => void;
 }
 
 export interface State {
@@ -61,6 +62,9 @@ InitializeServices() : void{
     } catch(error : unknown){
         this.setState(()=>{throw error})
     }
+
+    if(this.props.onUpdate)
+       this.props.onUpdate();
     
 
     
