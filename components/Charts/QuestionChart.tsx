@@ -7,7 +7,9 @@ import { Question } from '../Models/Question';
 import { Line } from 'react-chartjs-2';
 import { NumberAnswer } from '../Models/Answer';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Button, Table, TableCell, TableRow } from '@mui/material';
+import { Button, ButtonGroup, Table, TableCell, TableRow, Tooltip } from '@mui/material';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 
 export enum DisplayModeEnum{
   GRAPH = "Graf",
@@ -198,15 +200,21 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
       
     const button = (
       <>
-      <Button onClick={()=>this.setState({displayMode : DisplayModeEnum.GRAPH })}>{DisplayModeEnum.GRAPH.toString()}</Button>
-      <Button onClick={()=>this.setState({displayMode : DisplayModeEnum.TABLE })}>{DisplayModeEnum.TABLE.toString()}</Button>
+      <ButtonGroup sx={{paddingTop:5}} variant="outlined">
+      <Tooltip title="Vis i graf">
+        <Button disabled={this.state.displayMode == DisplayModeEnum.GRAPH } onClick={()=>this.setState({displayMode : DisplayModeEnum.GRAPH })}><InsertChartIcon/></Button>
+      </Tooltip>
+      <Tooltip title="Vis i tabel">
+        <Button disabled={this.state.displayMode == DisplayModeEnum.TABLE } onClick={()=>this.setState({displayMode : DisplayModeEnum.TABLE })}><TableRowsIcon/></Button>
+      </Tooltip>
+      </ButtonGroup>
       </>
     )
       
     if(this.state.displayMode === DisplayModeEnum.TABLE)
-      return (<>{button} {this.renderTable(answersLabels,dataSets)}</>)
+      return (<>{this.renderTable(answersLabels,dataSets)}{button}</>)
 
-    return (<>{button} {this.renderGraph(data)} </>);
+    return (<>{this.renderGraph(data)}{button}</>);
   }
 
 

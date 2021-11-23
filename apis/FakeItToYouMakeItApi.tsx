@@ -92,8 +92,8 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.thresholdPoint = [
-            this.CreateThreshold("1",44,100,CategoryEnum.RED),
-            this.CreateThreshold("2",38,44,CategoryEnum.YELLOW),
+            this.CreateThreshold("1",120,135,CategoryEnum.RED),
+            this.CreateThreshold("2",37,120,CategoryEnum.YELLOW),
             this.CreateThreshold("3",0,37,CategoryEnum.GREEN),
         ]
 

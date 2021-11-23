@@ -34,7 +34,7 @@ export class PatientEditCard extends Component<Props,State> {
 	      loadingCprButton : false,
         loadingPage : true,
 	      patient : props.initialPatient,
-        errorArray : [new InvalidInputModel("","")] //Dont validate at start, but dont allow cpr-button to be pressed
+        errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
       this.modifyPatient = this.modifyPatient.bind(this);
   }
