@@ -27,10 +27,8 @@ export class PatientAvatar extends Component<Props,{}> {
       initials += patient.firstname ? patient.firstname[0] : ""
       initials += patient.lastname ? patient.lastname[0] : ""
 
-      const width = this.props.size ? this.props.size : 50
-      const height = this.props.size ? this.props.size : 50
     return (
-        <Avatar sx={{ bgcolor: "green",width:width, height:height }} variant="square">
+        <Avatar sx={{ bgcolor: "green", width:'100%', height:'100%' }} variant="square">
         {initials}
       </Avatar>
     )

@@ -11,7 +11,7 @@ import ApiContext from '../../pages/_context';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '../Models/Answer';
-import { Question } from '../Models/Question';
+import { Question, QuestionTypeEnum } from '../Models/Question';
 import { QuestionChart } from '../Charts/QuestionChart';
 import { ThresholdSlider } from './ThresholdSlider';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
@@ -91,17 +91,18 @@ export class ObservationCard extends Component<Props,State> {
     let question = questionIterator.next()
     
     while(!question.done){
-        allQuestions.push(question.value)
+        if(question.value.type === QuestionTypeEnum.OBSERVATION)
+            allQuestions.push(question.value)
         question = questionIterator.next()
     }
         
     let counter = 0
     return (
-        <Grid container>
+        <Grid container >
         {allQuestions.map(question => {
             const isFirst = counter++ == 0;
                 return (
-                <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
+                <Grid paddingLeft={isFirst ? 0 : 2}  item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>

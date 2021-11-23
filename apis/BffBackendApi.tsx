@@ -6,7 +6,7 @@ import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Question } from "../components/Models/Question";
+import { Question, QuestionTypeEnum } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
@@ -27,7 +27,7 @@ import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/Frequ
 import { PatientDto } from "../generated/models/PatientDto";
 import { PersonDto } from "../generated/models/PersonDto";
 import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
-import { QuestionDto } from "../generated/models/QuestionDto";
+import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
@@ -516,7 +516,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     private mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto) : QuestionnaireResponse {
         let response = new QuestionnaireResponse();
         //let response = this.getQuestionnaireResponse();
-
         response.id = questionnaireResponseDto.id!;
         response.questions = new Map<Question, Answer>();
 
@@ -536,6 +535,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapQuestionDto(questionDto: QuestionDto) : Question {
         let question = new Question();
+        
+        switch(questionDto.questionType){
+            case QuestionDtoQuestionTypeEnum.Choice: 
+                question.type = QuestionTypeEnum.CHOICE;
+            break;
+            case QuestionDtoQuestionTypeEnum.Integer: 
+                question.type = QuestionTypeEnum.INTEGER;
+            break;
+            case QuestionDtoQuestionTypeEnum.Quantity: 
+                question.type = QuestionTypeEnum.OBSERVATION;
+            break;
+            case QuestionDtoQuestionTypeEnum.String: 
+                question.type = QuestionTypeEnum.STRING;
+            break;
+        }
 
         question.question = questionDto.text!
         // TODO - handle options properly (there must be at least one option for the answer table to render).

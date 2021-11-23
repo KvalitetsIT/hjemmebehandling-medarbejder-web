@@ -31,7 +31,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
     return (
       <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <Stack direction="row" spacing={2}>
-        <ThumbnailCard avatar={<PatientAvatar size={80} patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
+        <ThumbnailCard avatar={<PatientAvatar patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
           <Typography variant="subtitle2">{currentCareplan?.patient.cpr}</Typography>
           <Typography variant="subtitle1">{currentCareplan?.patient.patientContact.primaryPhone}</Typography>
         </ThumbnailCard>

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
-import { CardHeader, Typography } from '@mui/material';
+import { CardHeader, Grid, Typography } from '@mui/material';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import ICareplanService from '../../services/interfaces/ICareplanService';
@@ -38,33 +37,38 @@ export class CareplanSummary extends Component<Props,{}> {
       this.InitialiseServices()
       const careplan = this.props.careplan;
     return (
-        <Card component={Box} minWidth={100}>
+        <Card>
             <CardHeader subheader="Monitoreringsplan"/>
             <CardContent>
-                <Typography variant="caption">
-                    Afdeling
-                </Typography>
-                <Typography>
-                    {careplan.department}
-                </Typography>
-                <br/>
-                <Typography variant="caption">
-                    Patientgrupper
-                </Typography>
-                <Typography>
-                {careplan.planDefinitions.map(x=>x.name).join(", ")}
-                </Typography>
-                <br/>
-                <Typography variant="caption">
-                    Opstart
-                </Typography>
-                <Typography>
-                    {this.dateHelper.DateToString( careplan.creationDate)}
-                </Typography>
-                <br/>
-                    <ConfirmationButton color="error" title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
-                    Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
-                    </ConfirmationButton>
+                <Grid container>
+                    <Grid item xs={12}>
+                            <Typography variant="caption">
+                            Afdeling
+                        </Typography>
+                        <Typography>
+                            {careplan.department}
+                        </Typography>
+                        <br/>
+                        <Typography variant="caption">
+                            Patientgrupper
+                        </Typography>
+                        <Typography>
+                        {careplan.planDefinitions.map(x=>x.name).join(", ")}
+                        </Typography>
+                        <br/>
+                        <Typography variant="caption">
+                            Opstart
+                        </Typography>
+                        <Typography>
+                            {this.dateHelper.DateToString( careplan.creationDate)}
+                        </Typography>
+                        <br/>
+                            <ConfirmationButton color="error" title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
+                            Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
+                            </ConfirmationButton>
+                    </Grid>
+                </Grid>
+                
             </CardContent>
         </Card>
     );

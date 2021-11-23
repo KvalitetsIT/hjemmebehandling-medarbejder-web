@@ -129,7 +129,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
           }
       }
 
-    return (<Line height={200} plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
+    return (<Line height={100} plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
   }
   renderTable(answerLabels : (string | undefined)[],datasets : Array<{data : number[]}>) : JSX.Element {
     return (

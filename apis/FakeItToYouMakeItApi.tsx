@@ -9,7 +9,7 @@ import { Person } from "../components/Models/Person";
 import { PersonContact } from "../components/Models/PersonContact";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Question } from "../components/Models/Question";
+import { Question, QuestionTypeEnum } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
@@ -90,6 +90,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.planDefinition1.id = "def1"
         //======================================= Questions
         this.question1.question = "Jeg har det bedre i dag"
+        this.question1.type = QuestionTypeEnum.CHOICE;
         this.question1.options = [
             this.CreateOption("1","Korekt",CategoryEnum.GREEN),
             this.CreateOption("2","Ved ikke",CategoryEnum.YELLOW),
@@ -97,6 +98,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         ]
 
         this.question2.question = "Hvad er din temperatur idag?"
+        this.question2.type = QuestionTypeEnum.OBSERVATION;
         this.question2.thresholdPoint = [
             this.CreateThreshold("1",120,135,CategoryEnum.RED),
             this.CreateThreshold("2",37,120,CategoryEnum.YELLOW),
@@ -104,6 +106,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         ]
 
         this.question3.question = "Hvor frisk føler du dig i dag (Fra 0-100, hvor 100 er det højeste)?"
+        this.question3.type = QuestionTypeEnum.INTEGER;
         this.question3.thresholdPoint = [
             this.CreateThreshold("1",0,37,CategoryEnum.RED),
             this.CreateThreshold("2",37,44,CategoryEnum.YELLOW),

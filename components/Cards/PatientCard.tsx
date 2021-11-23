@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { PatientDetail } from '../../components/Models/PatientDetail';
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
-import { Divider, Stack } from '@mui/material';
+import { Divider, Grid, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
@@ -43,27 +43,35 @@ export class PatientCard extends Component<Props,State> {
         <Card>
 
           <CardContent>
-            <Stack spacing={2}>
-            <Stack direction="row" spacing={3}>
-              <PatientAvatar size={80} patient={this.props.patient} />
-              <Stack>
-              <Typography>
-                {this.props.patient.firstname} {this.props.patient.lastname} <br/>
-                {this.props.patient.cpr?.slice(0,6)}-{this.props.patient.cpr?.slice(6)}
-              </Typography>
-              <Typography variant="subtitle2">
-              {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}
-              </Typography>
-              </Stack>
+            <Grid container padding={2}>
+              <Grid item xs={4} paddingRight={2}>
+                <PatientAvatar patient={this.props.patient} />
+              </Grid>
+              <Grid item xs={7}>
+                <Stack>
+                  <Typography>
+                    {this.props.patient.firstname} {this.props.patient.lastname} <br/>
+                    {this.props.patient.cpr?.slice(0,6)}-{this.props.patient.cpr?.slice(6)}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                  {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={1}>
               <Button component={Link} to={"/patients/"+this.props.patient.cpr+"/edit"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
-            </Stack>
-            <Divider/>
-
-            <Typography variant="subtitle2">
+              </Grid>
+            </Grid>
+            
+            <Divider />
+            <Grid container padding={2}>
+              <Grid item xs={12}>
+              <Typography variant="subtitle2">
                 {this.props.patient.patientContact?.address.road}<br/>
                 {this.props.patient.patientContact?.address.zipCode}, {this.props.patient.patientContact?.address.city}<br/>
                 {this.props.patient.patientContact?.address.country}
             </Typography>
+            <br/>
             <Typography variant="button">
                         Kontakt
                     </Typography>
@@ -72,7 +80,11 @@ export class PatientCard extends Component<Props,State> {
                         <br/>
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                     </Typography>
-            </Stack>
+              </Grid>
+            </Grid>
+            
+
+            
           </CardContent>
         </Card>
     )

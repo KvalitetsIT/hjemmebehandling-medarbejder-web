@@ -8,7 +8,14 @@ export class Question implements IComparable<Question>{
     }
     
     question! : string
-    
+    type! : QuestionTypeEnum
     options : ThresholdOption[] = []
     thresholdPoint : ThresholdNumber[] = []
+}
+
+export enum QuestionTypeEnum{
+    CHOICE = 'CHOICE',
+    INTEGER = 'INTEGER',
+    OBSERVATION = 'Måling', // Måling/Observation etc!
+    STRING = 'STRING'
 }

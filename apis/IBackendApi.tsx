@@ -115,6 +115,9 @@ export interface IBackendApi {
      */
     GetPatientCareplans : (cpr: string) => Promise<Array<PatientCareplan>>
     
+    /**
+     * 
+     */
     GetQuestionnaireResponses : (careplanId : string, questionnaireIds : string[], page : number, pagesize : number) => Promise<QuestionnaireResponse[]>
     /**
      * Change questionnaireResponse
