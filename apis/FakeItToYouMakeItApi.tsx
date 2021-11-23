@@ -246,7 +246,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.task2.questionnaireId = this.questionnaire1.id
         this.task2.responseLinkEnabled = true
     }
-    
+
     async RemoveAlarm(task: Task): Promise<void> {
         this.taskRemovedFromMissingOverview.push(task)
     }
@@ -415,9 +415,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{
-        let newEror = new NoPatientFround();
-        console.log(newEror instanceof BaseApiError)
-        throw newEror;
+        
     }
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) : Promise<void>{
 
