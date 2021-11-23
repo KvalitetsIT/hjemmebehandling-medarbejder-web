@@ -2,6 +2,7 @@ import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError
 import {BaseApiError} from "./../apis/Errors/BaseApiError"
 import {BaseServiceError} from "./Errors/BaseServiceError"
 import { UnknownServiceError } from "./Errors/UnknownServiceError";
+
 export default class BaseService {
     ValidatePagination(page : number, pageSize : number) : void {
         let errors : InvalidInputModel[] = [];
@@ -24,10 +25,8 @@ export default class BaseService {
             
         if(errorIsServiceError)
             throw error; //The error is ok and can be displayed nicely
-
+        
         throw new UnknownServiceError(error)
     }
-
-
 }
   

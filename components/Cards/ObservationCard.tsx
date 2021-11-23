@@ -73,7 +73,7 @@ export class ObservationCard extends Component<Props,State> {
     if(elementsInArray == 2)
         return 6;
 
-    return 6
+    return 4
   }
 
   render () : JSX.Element {
@@ -95,12 +95,13 @@ export class ObservationCard extends Component<Props,State> {
         question = questionIterator.next()
     }
         
-
+    let counter = 0
     return (
         <Grid container>
         {allQuestions.map(question => {
+            const isFirst = counter++ == 0;
                 return (
-                <Grid paddingRight={2} item xs={this.getColumnSize(allQuestions.length)}>
+                <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>
