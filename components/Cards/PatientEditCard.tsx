@@ -1,7 +1,7 @@
 import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton } from '@mui/material';
+import { Card, Skeleton, Tooltip } from '@mui/material';
 import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
@@ -34,7 +34,7 @@ export class PatientEditCard extends Component<Props,State> {
 	      loadingCprButton : false,
         loadingPage : true,
 	      patient : props.initialPatient,
-        errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","")] //Dont validate at start, but dont allow cpr-button to be pressed
+        errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
       this.modifyPatient = this.modifyPatient.bind(this);
   }
@@ -159,7 +159,11 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
                   value={this.state.patient.cpr} 
                   onChange={input => this.modifyPatient(this.setCpr,input) } />
                   <Stack>
+                    <Tooltip title={this.state.errorArray.length > 0 ? this.state.errorArray[0].message : "Hent informationer"}>
+                      <div>
                   <LoadingButton disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+                    </div>
+                  </Tooltip>
                   </Stack>
                 
             </Stack>
