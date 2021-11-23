@@ -200,7 +200,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
       
     const button = (
       <>
-      <ButtonGroup sx={{paddingTop:5}} variant="outlined">
+      <ButtonGroup sx={{paddingTop:2}} variant="text">
       <Tooltip title="Vis i graf">
         <Button disabled={this.state.displayMode == DisplayModeEnum.GRAPH } onClick={()=>this.setState({displayMode : DisplayModeEnum.GRAPH })}><InsertChartIcon/></Button>
       </Tooltip>
