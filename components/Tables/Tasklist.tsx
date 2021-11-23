@@ -104,6 +104,17 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
 
     return "Ukendt"
 }
+
+  async removeAlarm(task : Task) : Promise<void>{
+    try{
+      await this.questionnaireService.RemoveAlarm(task)
+      await this.populateQuestionnaireResponses();
+    } catch(error){
+      this.setState(()=>{throw error})
+    }
+    
+  }
+
   renderTableData(tasks : Array<Task>) : JSX.Element{
     return (
 
@@ -132,7 +143,12 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell align="left">{task.questionnaireName}</TableCell>
               <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
               <TableCell align="left">
-                <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
+                {task.category == CategoryEnum.BLUE ? 
+              <Button color="primary" onClick={async ()=>await this.removeAlarm(task)} variant="contained">Fjern alarm</Button>  
+              :
+              <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
+              }
+                
               </TableCell>
             </TableRow>
           </>

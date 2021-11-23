@@ -17,6 +17,9 @@ import { Task } from "../components/Models/Task";
 import { UserContext } from "../generated";
 
 export class MockedBackendApi implements IBackendApi {
+    RemoveAlarm(task: Task): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     GetUser(): Promise<UserContext> {
         throw new Error("Method not implemented.");
     }

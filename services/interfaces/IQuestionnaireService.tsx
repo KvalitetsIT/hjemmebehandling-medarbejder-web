@@ -25,5 +25,6 @@ export default interface IQuestionnaireService {
     AddQuestionnaireToCareplan : (careplan: PatientCareplan, questionnaireToAdd: Questionnaire) => Promise<PatientCareplan>
     UpdateQuestionnaireResponseStatus : (id : string, status : QuestionnaireResponseStatus) => Promise<void>;
     SetQuestionnaireFrequency : (questionnaire : Questionnaire) => Promise<void>;
+    RemoveAlarm : (task : Task) => Promise<void>;
 }
   

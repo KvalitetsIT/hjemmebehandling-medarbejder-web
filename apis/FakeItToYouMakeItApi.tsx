@@ -27,6 +27,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
     timeToWait : number = 0;
 
+    taskRemovedFromMissingOverview : Task[] = [];
     patient1 : PatientDetail = new PatientDetail();
     person1 : Person = new Person();
     careplan1 : PatientCareplan = new PatientCareplan();
@@ -46,6 +47,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     question1 : Question = new Question();
     question2 : Question = new Question();
     question3 : Question = new Question();
+
+    task1 : Task = new Task();
+    task2 : Task = new Task();
 
     constructor(){
         //======================================= Patient
@@ -221,7 +225,32 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
+
+        //======================================= tasks
+        this.task1.cpr = this.patient1.cpr!
+        this.task1.category = CategoryEnum.GREEN
+        this.task1.firstname = this.patient1.firstname
+        this.task1.lastname = this.patient1.lastname
+        this.task1.questionnaireResponseStatus = this.questionnaireResponse1.status
+        this.task1.questionnaireName = this.questionnaire1.name
+        this.task1.questionnaireId = this.questionnaire1.id
+        this.task1.answeredTime = this.CreateDate()
+        this.task1.responseLinkEnabled = true
+
+        this.task2.cpr = this.patient1.cpr!
+        this.task2.category = CategoryEnum.BLUE
+        this.task2.firstname = this.patient1.firstname
+        this.task2.lastname = this.patient1.lastname
+        this.task2.questionnaireResponseStatus = this.questionnaireResponse1.status
+        this.task2.questionnaireName = this.questionnaire1.name
+        this.task2.questionnaireId = this.questionnaire1.id
+        this.task2.responseLinkEnabled = true
     }
+    
+    async RemoveAlarm(task: Task): Promise<void> {
+        this.taskRemovedFromMissingOverview.push(task)
+    }
+
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page : number, pagesize : number) : Promise<QuestionnaireResponse[]> { 
         await new Promise(f => setTimeout(f, this.timeToWait));
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
@@ -346,23 +375,11 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        let task = new Task()
-
-        task.cpr = this.patient1.cpr!
-        task.category = CategoryEnum.GREEN
-        task.firstname = this.patient1.firstname
-        task.lastname = this.patient1.lastname
-        task.questionnaireResponseStatus = this.questionnaireResponse1.status
-        task.questionnaireName = this.questionnaire1.name
-        task.questionnaireId = this.questionnaire1.id
-        task.answeredTime = this.CreateDate()
-        task.responseLinkEnabled = true
-
-        return [task]
+        return [this.task1,this.task2].filter(x=>x.category != CategoryEnum.BLUE)
     }
 
     async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        return []
+        return [this.task1,this.task2].filter(x=>x.category == CategoryEnum.BLUE).filter(x=>!this.taskRemovedFromMissingOverview.includes(x))
     }
 
     async GetPatient(cpr: string) : Promise<PatientDetail>{

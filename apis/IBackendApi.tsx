@@ -12,13 +12,23 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { UserContext } from "../generated";
 
 export interface IBackendApi {
+
+    /**
+     * Remove task from missing-answer-overview
+     * @param task task to remove from overview
+     */
+    RemoveAlarm(task: Task): Promise<void>;
     
+    /**
+     * Edit patient
+     * @param patient patient to be edited
+     */
     EditPatient(patient: PatientDetail): Promise<PatientDetail>;
+
     /**
      * Returns all plandefinitions in system
      */
     GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
-
 
 
     /**
@@ -94,7 +104,6 @@ export interface IBackendApi {
      * @param person 
      */
     GetPerson(cpr: string): Promise<PersonDto>;
-
 
     /**
      * Returns usercontext 

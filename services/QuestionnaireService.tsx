@@ -75,6 +75,14 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       
     }
 
+    async RemoveAlarm(task : Task) : Promise<void> {
+      try{
+        return await this.backendApi.RemoveAlarm(task);
+      } catch(error : any){
+        return this.HandleError(error);
+      }
+    }
+
     async SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{
       try{
         return await this.backendApi.SetQuestionaireResponse(id,questionnaireResponses)

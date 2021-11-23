@@ -37,6 +37,9 @@ import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
+    RemoveAlarm(task: Task): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
