@@ -15,7 +15,7 @@ export interface Props {
     size : "small" | "medium";
     type : string
 
-
+    onWheel? : () => void;
     onChange : (input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate? : (value : string) => Promise<InvalidInputModel[]>
     onValidation? : (uniqueId : number, error : InvalidInputModel[]) => void
@@ -61,7 +61,7 @@ async validate(input : string) : Promise<void>{
         firstError = this.state.errors[0].message;
         hasError = true;
     }
-
+    
 
     return (
         <FormControl>
@@ -71,6 +71,7 @@ async validate(input : string) : Promise<void>{
             label={this.props.label} 
             variant={this.props.variant} 
             error={hasError}
+            onWheel={()=> this.props.onWheel ? this.props.onWheel() : {} }
             helperText={firstError}
             disabled={this.props.disabled}
             onChange={ (input) => this.props.onChange(input)} 

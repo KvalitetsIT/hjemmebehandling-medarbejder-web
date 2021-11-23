@@ -25,7 +25,7 @@ export default class ValidationService extends BaseService implements IValidatio
         return erorrs;
     }
 
-    async ValidateCPR(cpr: string) : Promise<InvalidInputModel[]>{
+    async ValidateCPR(cpr: string, validateHard : boolean = true) : Promise<InvalidInputModel[]>{
         const erorrs : InvalidInputModel[] = []
         let propName = "CPR"
     
@@ -38,7 +38,7 @@ export default class ValidationService extends BaseService implements IValidatio
             const error = new InvalidInputModel(propName,"skal være 10 tegn")
             erorrs.push(error)
         }
-        if(cpr?.length == 10 && !this.CalculateCPR(cpr)){
+        if(validateHard && cpr?.length == 10 && !this.CalculateCPR(cpr)){
             const error = new InvalidInputModel(propName,"Ikke korrekt CPR")
             erorrs.push(error)
         }
@@ -82,7 +82,7 @@ export default class ValidationService extends BaseService implements IValidatio
         //http://kode.tingeling.dk/cpr_fix/
         if(cpr.length != 10)
             return false;
-            
+
         const cprNumbers = cpr.split("").map(x=>x as unknown as number);
         const controlNumber = [4,3,2,7,6,5,4,3,2]
         const constant = 11;
