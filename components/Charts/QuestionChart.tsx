@@ -10,6 +10,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Button, ButtonGroup, Table, TableCell, TableRow, Tooltip } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
+import { ThresholdNumber } from '../Models/ThresholdNumber';
 
 export enum DisplayModeEnum{
   GRAPH = "Graf",
@@ -19,6 +20,7 @@ export enum DisplayModeEnum{
 export interface Props {
     question : Question
     questionnaireResponses : QuestionnaireResponse[]
+    thresholds : ThresholdNumber[]
 }
 
 export interface State {
@@ -67,7 +69,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 createThresholdDataset(question : Question, length : number) : Array<{label : string, data : number[],fill : boolean, backgroundColor : string, borderColor : string}> {
 
     const datasets: { label: string; data: number[]; fill: boolean; backgroundColor: string; borderColor: string; }[] = [];
-    question.thresholdPoint.forEach(threshold => {
+    this.props.thresholds.forEach(threshold => {
         const dataFrom = [];
         const dataTo = [];
         

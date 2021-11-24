@@ -22,6 +22,7 @@ import { User } from "../components/Models/User";
 import { BaseServiceError } from "../services/Errors/BaseServiceError";
 import { BaseApiError } from "./Errors/BaseApiError";
 import { NoPatientFround } from "../services/Errors/NoPatientFountError";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
@@ -47,6 +48,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     question1 : Question = new Question();
     question2 : Question = new Question();
     question3 : Question = new Question();
+
+    tc1 = new ThresholdCollection();
+    tc2 = new ThresholdCollection();
+    tc3 = new ThresholdCollection();
 
     task1 : Task = new Task();
     task2 : Task = new Task();
@@ -84,32 +89,20 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.planDefinition1.name = "Imundefekt"
         this.planDefinition1.id = "def1"
         //======================================= Questions
+        this.question1.Id = "q1";
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.type = QuestionTypeEnum.CHOICE;
-        this.question1.options = [
-            this.CreateOption("1","Korekt",CategoryEnum.GREEN),
-            this.CreateOption("2","Ved ikke",CategoryEnum.YELLOW),
-            this.CreateOption("3","Ikke Korekt",CategoryEnum.RED),
-        ]
 
+        this.question2.Id = "q2";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
-        this.question2.thresholdPoint = [
-            this.CreateThreshold("1",120,135,CategoryEnum.RED),
-            this.CreateThreshold("2",37,120,CategoryEnum.YELLOW),
-            this.CreateThreshold("3",0,37,CategoryEnum.GREEN),
-        ]
 
+        this.question3.Id = "q3";
         this.question3.question = "Hvor frisk føler du dig i dag (Fra 0-100, hvor 100 er det højeste)?"
         this.question3.type = QuestionTypeEnum.INTEGER;
-        this.question3.thresholdPoint = [
-            this.CreateThreshold("1",0,37,CategoryEnum.RED),
-            this.CreateThreshold("2",37,44,CategoryEnum.YELLOW),
-            this.CreateThreshold("3",44,100,CategoryEnum.GREEN),
-        ]
 
          //======================================= questionnaire
-         this.questionnaire1.id = "q1"
+         this.questionnaire1.id = "qn1"
          this.questionnaire1.name = "Imundefekt alm"
          let frequency = new Frequency();
          frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
@@ -117,14 +110,14 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          this.questionnaire1.frequency = frequency;
          
  
-         this.questionnaire2.id = "q2"
+         this.questionnaire2.id = "qn2"
          this.questionnaire2.name = "Imundefekt medium"
          let frequency2 = new Frequency();
          frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
          frequency2.repeated = FrequencyEnum.WEEKLY;
          this.questionnaire2.frequency = frequency2;
  
-         this.questionnaire3.id = "q3"
+         this.questionnaire3.id = "qn3"
          this.questionnaire3.name = "Imundefekt voldsom"
          let frequency3 = new Frequency();
          frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
@@ -137,76 +130,30 @@ export class FakeItToYouMakeItApi implements IBackendApi {
  
          this.planDefinition1.questionnaires = [this.questionnaire1,this.questionnaire2]
 
-        //======================================= Response // QuestionResponse1
-        this.questionnaireResponse1.id = "qr1"
-        this.questionnaireResponse1.questionnaireId = this.questionnaire1.id
-        this.questionnaireResponse1.patient = this.patient1;
-        this.questionnaireResponse1.category = CategoryEnum.GREEN;
-        this.questionnaireResponse1.answeredTime = this.CreateDate()
-        this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
-        
-        let questionAnswerMap1 = new Map<Question,Answer>();
-         questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.question1.options[0].option));        
-         questionAnswerMap1.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
-         questionAnswerMap1.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
-         this.questionnaireResponse1.questions = questionAnswerMap1;
-       
+         //====================================== Thresholds
+        this.tc1.questionId = "q1";
+        this.tc1.quesitonnaireId = "qn1"
+        this.tc1.thresholdOptions = [
+            this.CreateOption("1","Korekt",CategoryEnum.GREEN),
+            this.CreateOption("2","Ved ikke",CategoryEnum.YELLOW),
+            this.CreateOption("3","Ikke Korekt",CategoryEnum.RED),
+        ]
 
-         //======================================= Response // QuestionResponse2
-         this.questionnaireResponse2.id = "qr2"
-         this.questionnaireResponse2.questionnaireId = this.questionnaire1.id
-         this.questionnaireResponse2.patient = this.patient1;
-         this.questionnaireResponse2.category = CategoryEnum.RED;
-         this.questionnaireResponse2.answeredTime = this.CreateDate()
-         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
-         
-         let questionAnswerMap2 = new Map<Question,Answer>();
-         questionAnswerMap2.set(this.question1,this.CreateStringAnswer(this.question1.options[0].option));        
-         questionAnswerMap2.set(this.question2,this.CreateNumberAnswer(35,UnitType.DEGREASE_CELSIUS));
-         questionAnswerMap2.set(this.question3,this.CreateNumberAnswer(10,UnitType.NOUNIT));
-         this.questionnaireResponse2.questions = questionAnswerMap2;
+        this.tc2.questionId="q2"
+        this.tc2.quesitonnaireId = "qn1"
+        this.tc2.thresholdNumbers = [
+            this.CreateThreshold("1",120,135,CategoryEnum.RED),
+            this.CreateThreshold("2",37,120,CategoryEnum.YELLOW),
+            this.CreateThreshold("3",0,37,CategoryEnum.GREEN),
+        ]
 
-         //======================================= Response // QuestionResponse3
-         this.questionnaireResponse3.id = "qr3"
-         this.questionnaireResponse3.questionnaireId = this.questionnaire1.id
-         this.questionnaireResponse3.patient = this.patient1;
-         this.questionnaireResponse3.category = CategoryEnum.YELLOW;
-         this.questionnaireResponse3.answeredTime = this.CreateDate()
-         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
-         
-         let questionAnswerMap3 = new Map<Question,Answer>();
-         questionAnswerMap3.set(this.question1,this.CreateStringAnswer(this.question1.options[1].option));        
-         questionAnswerMap3.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
-         questionAnswerMap3.set(this.question3,this.CreateNumberAnswer(90,UnitType.NOUNIT));
-         this.questionnaireResponse3.questions = questionAnswerMap3;
-         //======================================= Response // QuestionResponse4
-         this.questionnaireResponse4.id = "qr3"
-         this.questionnaireResponse4.questionnaireId = this.questionnaire1.id
-         this.questionnaireResponse4.patient = this.patient1;
-         this.questionnaireResponse4.category = CategoryEnum.RED;
-         this.questionnaireResponse4.answeredTime = this.CreateDate()
-         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
-         
-         let questionAnswerMap4 = new Map<Question,Answer>();
-         questionAnswerMap4.set(this.question1,this.CreateStringAnswer(this.question1.options[2].option));        
-         questionAnswerMap4.set(this.question2,this.CreateNumberAnswer(42,UnitType.DEGREASE_CELSIUS));
-         questionAnswerMap4.set(this.question3,this.CreateNumberAnswer(100,UnitType.NOUNIT));
-         this.questionnaireResponse4.questions = questionAnswerMap4;
-         //======================================= Response // QuestionResponse5
-         this.questionnaireResponse5.id = "qr3"
-         this.questionnaireResponse5.questionnaireId = this.questionnaire1.id
-         this.questionnaireResponse5.patient = this.patient1;
-         this.questionnaireResponse5.category = CategoryEnum.RED;
-         this.questionnaireResponse5.answeredTime = this.CreateDate()
-         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
-         
-         let questionAnswerMap5 = new Map<Question,Answer>();
-         questionAnswerMap5.set(this.question1,this.CreateStringAnswer(this.question1.options[2].option));        
-         questionAnswerMap5.set(this.question2,this.CreateNumberAnswer(44,UnitType.DEGREASE_CELSIUS));
-         questionAnswerMap5.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
-         this.questionnaireResponse5.questions = questionAnswerMap5;
-
-       
+        this.tc3.questionId="q3"
+        this.tc3.quesitonnaireId = "qn1"
+        this.tc3.thresholdNumbers = [
+            this.CreateThreshold("1",0,37,CategoryEnum.RED),
+            this.CreateThreshold("2",37,44,CategoryEnum.YELLOW),
+            this.CreateThreshold("3",44,100,CategoryEnum.GREEN),
+        ]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -214,6 +161,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan1.planDefinitions = [this.planDefinition1]
         this.careplan1.creationDate = this.CreateDate()
         this.careplan1.questionnaires = [this.questionnaire1]
+        this.careplan1.thresholdCollections = [this.tc1,this.tc2,this.tc3]
 
         //======================================= careplan1
         this.careplan2.id = "plan2"
@@ -224,6 +172,76 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
 
+        //======================================= Response // QuestionResponse1
+        this.questionnaireResponse1.id = "qr1"
+        this.questionnaireResponse1.questionnaireId = this.questionnaire1.id
+        this.questionnaireResponse1.patient = this.patient1;
+        this.questionnaireResponse1.category = CategoryEnum.GREEN;
+        this.questionnaireResponse1.answeredTime = this.CreateDate()
+        this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
+        
+        let questionAnswerMap1 = new Map<Question,Answer>();
+        questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
+        questionAnswerMap1.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap1.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
+        this.questionnaireResponse1.questions = questionAnswerMap1;
+       
+
+        //======================================= Response // QuestionResponse2
+        this.questionnaireResponse2.id = "qr2"
+        this.questionnaireResponse2.questionnaireId = this.questionnaire1.id
+        this.questionnaireResponse2.patient = this.patient1;
+        this.questionnaireResponse2.category = CategoryEnum.RED;
+        this.questionnaireResponse2.answeredTime = this.CreateDate()
+        this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
+        
+        let questionAnswerMap2 = new Map<Question,Answer>();
+        questionAnswerMap2.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
+        questionAnswerMap2.set(this.question2,this.CreateNumberAnswer(35,UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap2.set(this.question3,this.CreateNumberAnswer(10,UnitType.NOUNIT));
+        this.questionnaireResponse2.questions = questionAnswerMap2;
+
+        //======================================= Response // QuestionResponse3
+        this.questionnaireResponse3.id = "qr3"
+        this.questionnaireResponse3.questionnaireId = this.questionnaire1.id
+        this.questionnaireResponse3.patient = this.patient1;
+        this.questionnaireResponse3.category = CategoryEnum.YELLOW;
+        this.questionnaireResponse3.answeredTime = this.CreateDate()
+        this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
+        
+        let questionAnswerMap3 = new Map<Question,Answer>();
+        questionAnswerMap3.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[1].option));        
+        questionAnswerMap3.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap3.set(this.question3,this.CreateNumberAnswer(90,UnitType.NOUNIT));
+        this.questionnaireResponse3.questions = questionAnswerMap3;
+        //======================================= Response // QuestionResponse4
+        this.questionnaireResponse4.id = "qr3"
+        this.questionnaireResponse4.questionnaireId = this.questionnaire1.id
+        this.questionnaireResponse4.patient = this.patient1;
+        this.questionnaireResponse4.category = CategoryEnum.RED;
+        this.questionnaireResponse4.answeredTime = this.CreateDate()
+        this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
+        
+        let questionAnswerMap4 = new Map<Question,Answer>();
+        questionAnswerMap4.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
+        questionAnswerMap4.set(this.question2,this.CreateNumberAnswer(42,UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap4.set(this.question3,this.CreateNumberAnswer(100,UnitType.NOUNIT));
+        this.questionnaireResponse4.questions = questionAnswerMap4;
+        //======================================= Response // QuestionResponse5
+        this.questionnaireResponse5.id = "qr3"
+        this.questionnaireResponse5.questionnaireId = this.questionnaire1.id
+        this.questionnaireResponse5.patient = this.patient1;
+        this.questionnaireResponse5.category = CategoryEnum.RED;
+        this.questionnaireResponse5.answeredTime = this.CreateDate()
+        this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
+        
+        let questionAnswerMap5 = new Map<Question,Answer>();
+        questionAnswerMap5.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
+        questionAnswerMap5.set(this.question2,this.CreateNumberAnswer(44,UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap5.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
+        this.questionnaireResponse5.questions = questionAnswerMap5;
+
+        
         //======================================= tasks
         this.task1.cpr = this.patient1.cpr!
         this.task1.category = CategoryEnum.GREEN

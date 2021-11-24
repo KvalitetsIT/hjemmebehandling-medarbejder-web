@@ -4,6 +4,7 @@ import { IBackendApi } from "../apis/IBackendApi";
 import { Answer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { Question } from "../components/Models/Question";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import BaseService from "./BaseService";
@@ -31,17 +32,17 @@ export default class QuestionAnswerService extends BaseService implements IQuest
       }
     };
 
-    FindCategory(question: Question, answer: Answer) : CategoryEnum {
+    FindCategory(thresholdCollection : ThresholdCollection,question: Question, answer: Answer) : CategoryEnum {
 
         
         if(answer instanceof NumberAnswer){
             let answerAsNumber = answer as NumberAnswer;
-            let thresholdPoint = question.thresholdPoint.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
+            let thresholdPoint = thresholdCollection.thresholdNumbers.find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to);
             return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
         }
         if(answer instanceof StringAnswer){
             let answerAsString = answer as StringAnswer;
-            let thresholdPoint = question.options.find(x=>x.option == answerAsString.answer);
+            let thresholdPoint = thresholdCollection.thresholdOptions .find(x=>x.option == answerAsString.answer);
             return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
         }
     

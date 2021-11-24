@@ -97,22 +97,24 @@ export class ObservationCard extends Component<Props,State> {
     }
         
     let counter = 0
+    
     return (
         <Grid container >
         {allQuestions.map(question => {
             const isFirst = counter++ == 0;
+            const threshold = this.props.careplan.thresholdCollections.find(x=>x.questionId == question.Id)
                 return (
                 <Grid paddingLeft={isFirst ? 0 : 2}  item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>
-                                <QuestionChart question={question} questionnaireResponses={this.state.questionnaireResponses} /> 
+                                {threshold ? <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> : <></>}
                         </CardContent>
                     </Card>
                     <Card  marginTop={3} component={Box}>
                         <CardHeader subheader={question.question + " - Alarmgrænser"}/>
                         <CardContent>
-                            <ThresholdSlider question={question}/>
+                            {threshold ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
                         </CardContent>
                     </Card>
                 </Grid>

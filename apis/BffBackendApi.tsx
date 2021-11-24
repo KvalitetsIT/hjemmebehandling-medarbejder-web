@@ -14,7 +14,6 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 import { IBackendApi } from "./IBackendApi";
-import { MockedBackendApi } from "./MockedBackendApi";
 
 import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
@@ -35,6 +34,7 @@ import { Configuration, PlanDefinitionApi, UserApi, UserContext } from "../gener
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
+import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
     RemoveAlarm(task: Task): Promise<void> {
@@ -201,7 +201,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 .catch(err => { console.log(err); });
     
             if(!body) {
-                return new MockedBackendApi().GetPatient(cpr);
+                return new FakeItToYouMakeItApi().GetPatient(cpr);
             }
     
             // Map the body to a PatientDetail object
@@ -278,7 +278,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         try{
-            return new MockedBackendApi().SetQuestionaireResponse(id, measurementCollection);
+            return new FakeItToYouMakeItApi().SetQuestionaireResponse(id, measurementCollection);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -286,7 +286,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
         try{
-            return await new MockedBackendApi().SetThresholdNumber(thresholdId,threshold);
+            return await new FakeItToYouMakeItApi().SetThresholdNumber(thresholdId,threshold);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -294,7 +294,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
         try{
-            return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
+            return await new FakeItToYouMakeItApi().SetThresholdOption(thresholdId,threshold);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -386,6 +386,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 cpr: patient.cpr,
                 givenName: patient.firstname,
                 familyName: patient.lastname,
+                patientContactDetails : new Contact()
                 //TODO : patientContactDetails: this.mapContactDetails(patient),
                 //TODO : primaryRelativeContactDetails: this.mapContactDetails(patient)
             }
@@ -545,7 +546,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
         question.question = questionDto.text!
         // TODO - handle options properly (there must be at least one option for the answer table to render).
-        question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
+        //TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
     }
