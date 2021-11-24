@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -20,7 +21,6 @@ export interface State {
     loadingPage : boolean
     patient : PatientDetail;
     errorArray : InvalidInputModel[];
-    validateCprHard : boolean;
 }
 
 export class PatientEditCard extends Component<Props,State> {
@@ -28,13 +28,13 @@ export class PatientEditCard extends Component<Props,State> {
   static displayName = PatientEditCard.name; 
   personService!: IPersonService;
   validationService!: IValidationService;
+  collectionHelper!: ICollectionHelper;
 
   constructor(props : Props){
       super(props);
       this.state = {
 	      loadingCprButton : false,
         loadingPage : true,
-        validateCprHard : true,
 	      patient : props.initialPatient,
         errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
@@ -53,6 +53,7 @@ export class PatientEditCard extends Component<Props,State> {
 InitializeServices() : void{
   this.personService = this.context.personService;
   this.validationService = this.context.validationService;
+  this.collectionHelper = this.context.collectionHelper;
 }
 
 async getPerson() : Promise<void>{
@@ -119,20 +120,21 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     this.setState({patient : modifiedPatient  })
   }
 
+  getFirstError() : string | undefined {
+    if(this.state.errorArray.length > 0)
+      return this.state.errorArray[0].message;
+    
+    return undefined;
+  }
+
   errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
   onValidation(from : number, invalid : InvalidInputModel[]) : void{
       console.log("from : " + from)  
       const errorMap = this.errorMap;
       errorMap.set(from,invalid);
       
-      const allErrors : InvalidInputModel[] = [];
-      const iterator = errorMap.entries();
-      let next = iterator.next();
-      while(next == undefined || !next.done){
-        
-        next.value[1].forEach(invalid => allErrors.push(invalid))  
-        next = iterator.next();
-      }
+      const allErrors : InvalidInputModel[] = 
+              this.collectionHelper.MapValueCollectionToArray<number,InvalidInputModel>(errorMap);
 
       if(this.props.onValidation){
         this.props.onValidation(allErrors);
@@ -154,18 +156,17 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
       </Typography>
             <Stack direction="row" spacing={3}>
               <TextFieldValidation 
-                  onWheel={()=>this.setState({validateCprHard : !this.state.validateCprHard})}
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
-                  validate={(cpr) => this.validationService.ValidateCPR(cpr, this.state.validateCprHard) } 
+                  validate={(cpr) => this.validationService.ValidateCPR(cpr) } 
                   required={true} 
                   label="CPR" 
                   value={this.state.patient.cpr} 
                   onChange={input => this.modifyPatient(this.setCpr,input) } />
                   <Stack>
-                    <Tooltip title={this.state.errorArray.length > 0 ? this.state.errorArray[0].message : "Hent informationer"}>
+                    <Tooltip title={this.getFirstError() ?? "Hent fra CPR!"}>
                       <div>
-                  <LoadingButton color={this.state.validateCprHard ? "primary" : "secondary"} disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>{this.state.validateCprHard ? "Fremsøg" : "Fremsøg (uden validering)"}</LoadingButton>
+                  <LoadingButton disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
                     </div>
                   </Tooltip>
                   </Stack>

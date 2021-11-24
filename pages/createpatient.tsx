@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import {Box, Card, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import {Box, Card, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import { PatientDetail } from '../components/Models/PatientDetail';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
@@ -121,6 +121,19 @@ async componentDidMount() :  Promise<void> {
   this.setState({loading : false,careplan : careplanToEdit, patient : careplanToEdit ? careplanToEdit.patient : undefined})
 }
 
+getFirstError() : string{
+  if(this.state.patientError)
+    return "Fejl i Patient-sektion"
+
+  if(this.state.contactError)
+    return "Fejl i Pårørende-sektion"
+
+  if(this.state.planDefinitionError)
+    return "Fejl i Patientgruppe-sektion"
+
+  return "";
+}
+
   render () : JSX.Element{
     this.InitializeServices();
 
@@ -167,7 +180,7 @@ async componentDidMount() :  Promise<void> {
               initialPatient={this.state.patient}
             />
           </Typography>
-          <Button component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
+          <Button disabled={this.state.patientError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
    
@@ -188,7 +201,7 @@ async componentDidMount() :  Promise<void> {
               onValidation={(errors) => this.setState({contactError : errors?.length == 0 ? undefined : errors[0].message})}
               initialContact={this.state.patient.contact}/>
           </Typography>
-          <Button component={Box} marginTop={2} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
+          <Button disabled={this.state.contactError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
 
@@ -210,11 +223,15 @@ async componentDidMount() :  Promise<void> {
             <QuestionnaireListSimple careplan={this.state.careplan}/>
       
           </Typography>
-          <Button component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
+          <Button disabled={this.state.planDefinitionError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
         
+      <Tooltip title={this.getFirstError()}>
+        <Stack>
       <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
+      </Stack>
+      </Tooltip>
       
         </Stack>
         <div>

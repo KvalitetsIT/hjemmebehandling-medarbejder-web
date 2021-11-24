@@ -8,6 +8,7 @@ import { Contact } from '../Models/Contact';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
 import IValidationService from '../../services/interfaces/IValidationService';
+import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
 
 export interface Props {
     initialContact : Contact
@@ -24,6 +25,7 @@ export class ContactEditCard extends Component<Props,State> {
   static displayName = ContactEditCard.name;
   personService!: IPersonService;
   validationService!: IValidationService;
+  collectionHelper!: ICollectionHelper;
 
   constructor(props : Props){
       super(props);
@@ -43,6 +45,7 @@ export class ContactEditCard extends Component<Props,State> {
 InitializeServices() : void{
   this.personService = this.context.personService;
   this.validationService = this.context.validationService;
+  this.collectionHelper = this.context.collectionHelper
 }
 
 modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contact, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) : void{
@@ -56,14 +59,8 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
     console.log("from : " + from)  
     this.errorArray.set(from,invalid);
       
-      const allErrors : InvalidInputModel[] = [];
-      const iterator = this.errorArray.entries();
-      let next = iterator.next();
-      while(next == undefined || !next.done){
-        
-        next.value[1].forEach(invalid => allErrors.push(invalid))  
-        next = iterator.next();
-      }
+      const allErrors : InvalidInputModel[] = 
+          this.collectionHelper.MapValueCollectionToArray<number,InvalidInputModel>(this.errorArray)
 
       if(this.props.onValidation)
         this.props.onValidation(allErrors);

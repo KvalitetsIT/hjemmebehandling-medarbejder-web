@@ -9,7 +9,7 @@ import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { UserContext } from "../generated";
 import { PersonDto } from "../generated/models/PersonDto";
 import BaseService from "./BaseService";
-import { InvalidInputModel } from "./Errors/InvalidInputError";
+import { CriticalLevelEnum, InvalidInputModel } from "./Errors/InvalidInputError";
 import IPersonService from "./interfaces/IPersonService";
 import IUserService from "./interfaces/IUserService";
 import IValidationService from "./interfaces/IValidationService";
@@ -25,21 +25,21 @@ export default class ValidationService extends BaseService implements IValidatio
         return erorrs;
     }
 
-    async ValidateCPR(cpr: string, validateHard : boolean = true) : Promise<InvalidInputModel[]>{
+    async ValidateCPR(cpr: string) : Promise<InvalidInputModel[]>{
         const erorrs : InvalidInputModel[] = []
         let propName = "CPR"
     
         if(!cpr){
-            const error = new InvalidInputModel(propName,"ikke udfyldt")
+            const error = new InvalidInputModel(propName,"CPR ikke udfyldt")
             erorrs.push(error)
         }
             
         if(cpr && cpr?.length != 10){
-            const error = new InvalidInputModel(propName,"skal være 10 tegn")
+            const error = new InvalidInputModel(propName,"CPR skal være 10 tegn")
             erorrs.push(error)
         }
-        if(validateHard && cpr?.length == 10 && !this.CalculateCPR(cpr)){
-            const error = new InvalidInputModel(propName,"Ikke korrekt CPR")
+        if(cpr?.length == 10 && !this.CalculateCPR(cpr)){
+            const error = new InvalidInputModel(propName,"Muligvis ikke korrekt CPR", CriticalLevelEnum.WARNING)
             erorrs.push(error)
         }
 
