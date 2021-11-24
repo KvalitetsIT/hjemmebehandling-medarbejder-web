@@ -1,8 +1,7 @@
-import { Address } from "./Address";
-
 export class Contact {
     fullname! : string;
-    address! : Address;
     primaryPhone! : string
     secondaryPhone! : string
+    primaryContact! : boolean;
+    affiliation! : string; // f.eks. "kone", "ven", "far" etc
 }

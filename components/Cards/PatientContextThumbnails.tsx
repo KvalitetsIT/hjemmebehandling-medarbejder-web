@@ -33,12 +33,14 @@ export class PatientContextThumbnails extends Component<Props,{}> {
         <Stack direction="row" spacing={2}>
         <ThumbnailCard avatar={<PatientAvatar patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
           <Typography variant="subtitle2">{currentCareplan?.patient.cpr}</Typography>
-          <Typography variant="subtitle1">{currentCareplan?.patient.patientContact.primaryPhone}</Typography>
+          <Typography variant="subtitle1">{currentCareplan?.patient.primaryPhone}</Typography>
         </ThumbnailCard>
+        {currentCareplan.patient.contact.primaryContact ? 
         <ThumbnailCard color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>}>
           <Typography variant="subtitle2">{currentCareplan.patient.contact.fullname}</Typography>
           <Typography variant="subtitle1">{currentCareplan.patient.contact.primaryPhone}</Typography>
         </ThumbnailCard>
+        : <></>}
         <ThumbnailCard color="lightblue" headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large"/>}>
           <Typography variant="subtitle2">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
           <Typography variant="subtitle1">Startet: {this.dateHelper.DateToString(currentCareplan?.creationDate)}</Typography>

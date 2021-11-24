@@ -1,7 +1,7 @@
 import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton } from '@mui/material';
+import { Card, Checkbox, Skeleton } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { Contact } from '../Models/Contact';
@@ -83,32 +83,23 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
               <TextFieldValidation 
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
-                  label="Fornavn" 
+                  label="Navn" 
                   value={this.state.contact.fullname} 
                   onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  
                   variant="outlined" />
-            </Stack>
-            <Stack spacing={3} direction="row">
               <TextFieldValidation 
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
-                  label="Addresse" 
-                  value={this.state.contact.address.road} 
-                  onChange={input => this.modifyPatient(this.setRelativeContactsRoad,input) }  
+                  label="Tilhørsforhold" 
+                  value={this.state.contact.affiliation} 
+                  onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  
                   variant="outlined" />
-              <TextFieldValidation 
-                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
-                  uniqueId={inputId++}
-                  validate={(number) => this.validationService.ValidateZipCode(number)}
-                  label="Postnummer"
-                  value={this.state.contact.address.zipCode} onChange={input => this.modifyPatient(this.setRelativeContactsZipcode,input) }  
-                  variant="outlined" />
-              <TextFieldValidation 
-                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
-                  uniqueId={inputId++}
-                  label="By"
-                  value={this.state.contact.address.city} onChange={input => this.modifyPatient(this.setRelativeContactsCity,input) }  
-                  variant="outlined" />
+
+              <span>
+                Primær
+                <Checkbox checked={this.state.contact.primaryContact} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryContact,input) } title="Primær kontakt"/>
+              </span>
+                  
             </Stack>
             <Stack spacing={3} direction="row">
               <TextFieldValidation 
@@ -127,7 +118,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
                   value={this.state.contact.secondaryPhone} 
                   onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber,input) } 
                   variant="outlined" />
-
             </Stack>
             
             
@@ -137,6 +127,12 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
         </CardContent>
     </Card>
     )
+  }
+  setRelativeContactsPrimaryContact(oldPatient: Contact, newValue: string): Contact {
+    const modifiedPatient = oldPatient;
+    modifiedPatient.primaryContact = !modifiedPatient.primaryContact
+    console.log(newValue)
+    return modifiedPatient;
   }
 
   setRelativeContactsName(oldPatient : Contact, newValue : string ) : Contact {
@@ -152,22 +148,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
   setRelativeContactsSecondaryPhonenumber(oldPatient : Contact, newValue : string ) : Contact {
     const modifiedPatient = oldPatient;
     modifiedPatient.secondaryPhone = newValue;
-    return modifiedPatient;
-  }
-
-  setRelativeContactsCity(oldPatient : Contact, newValue : string ) : Contact {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.address.city = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsRoad(oldPatient : Contact, newValue : string ) : Contact {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.address.road = newValue;
-    return modifiedPatient;
-  }
-  setRelativeContactsZipcode(oldPatient : Contact, newValue : string ) : Contact {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.address.zipCode = newValue;
     return modifiedPatient;
   }
 

@@ -143,12 +143,6 @@ export class MockedBackendApi implements IBackendApi {
         person.givenName = questionaireResponse.patient.firstname;
         person.familyName = questionaireResponse.patient.lastname;
 
-        let patientContact = new Contact();
-        patientContact.address.country = "Danmark";
-        patientContact.address.road = "Fiskergade 66";
-        patientContact.address.zipCode = "8000";
-        patientContact.address.city ="Aarhus C"
-
         return person;
     }
 
@@ -161,18 +155,12 @@ export class MockedBackendApi implements IBackendApi {
         patient.firstname = questionaireResponse.patient.firstname;
         patient.lastname = questionaireResponse.patient.lastname;
 
-        let patientContact = new Contact();
-        patientContact.address.country = "Danmark";
-        patientContact.address.road = "Fiskergade 66";
-        patientContact.address.zipCode = "8200 Aarhus C";
-        patientContact.fullname = patient.firstname +" "+ patient.lastname;
-        patientContact.primaryPhone = "+4528395028"
-        patient.patientContact = patientContact;
+        patient.address.country = "Danmark";
+        patient.address.street = "Fiskergade 66";
+        patient.address.zipCode = "8200 Aarhus C";
+        patient.primaryPhone = "+4528395028"
 
         let primaryContact = new Contact();
-        primaryContact.address.country = "Danmark";
-        primaryContact.address.road = "Jensgade 66";
-        primaryContact.address.zipCode = "8200 Aarhus C";
         primaryContact.fullname = "Gitte Andersen";
         primaryContact.primaryPhone = "+4592039485"
         

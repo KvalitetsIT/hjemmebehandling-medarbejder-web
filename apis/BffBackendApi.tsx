@@ -212,13 +212,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             patient.lastname = body['givenName'];
             patient.cpr = cpr;
     
-            let patientContact = new Contact();
-            patientContact.address.country = "Danmark";
-            patientContact.address.road = "Fiskergade 66";
-            patientContact.address.zipCode = "8200 Aarhus C";
-            patientContact.fullname = name;
-            patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
-            patient.patientContact = patientContact;
+            patient.address.country = "Danmark";
+            patient.address.street = "Fiskergade 66";
+            patient.address.zipCode = "8200 Aarhus C";
+            patient.primaryPhone = body['patientContactDetails']['primaryPhone'];
     
             return patient;
         } catch(error : any){
@@ -389,8 +386,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 cpr: patient.cpr,
                 givenName: patient.firstname,
                 familyName: patient.lastname,
-                patientContactDetails: this.mapContactDetails(patient.patientContact),
-                primaryRelativeContactDetails: this.mapContactDetails(patient.contact)
+                //TODO : patientContactDetails: this.mapContactDetails(patient),
+                //TODO : primaryRelativeContactDetails: this.mapContactDetails(patient)
             }
         } catch(error : any){
             return this.HandleError(error)
@@ -404,7 +401,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             patient.firstname = patientDto.givenName;
             patient.lastname = patientDto.familyName;
             patient.cpr = patientDto.cpr;
-            patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+            //TODO : patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
             patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
             // TODO - map additional contact details.
     
@@ -417,10 +414,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     private mapContactDetails(contactDetails: Contact) : ContactDetailsDto {
         try{
             return {
-                street: contactDetails.address.road,
-                postalCode: contactDetails.address.zipCode,
-                country: contactDetails.address.country,
-                city: contactDetails.address.city,
                 primaryPhone: contactDetails.primaryPhone,
                 secondaryPhone: contactDetails.secondaryPhone,
             }
@@ -435,11 +428,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     
             let address = new Address();
             console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-            address.road = patientContactDetails?.street ?? 'Fiskergade 66';
+            address.street = patientContactDetails?.street ?? 'Fiskergade 66';
             address.zipCode = patientContactDetails?.postalCode ?? '8000';
             address.city = "Aarhus";
             address.country = patientContactDetails?.country ?? 'Danmark';
-            contact.address = address;
     
             contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
             contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";

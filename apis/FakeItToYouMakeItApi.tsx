@@ -56,23 +56,18 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
-        let patientContact = new Contact();
-        patientContact.fullname = this.patient1.firstname+" "+this.patient1.lastname
-        patientContact.primaryPhone = "29483749"
-        patientContact.address = new Address();
-        patientContact.address.city = "Aarhus C"
-        patientContact.address.country = "Danmark"
-        patientContact.address.road = "Fiskergade 66"
-        patientContact.address.zipCode = "8000"
-        this.patient1.patientContact = patientContact;
+
+        this.patient1.primaryPhone = "29483749"
+        this.patient1.address = new Address();
+        this.patient1.address.city = "Aarhus C"
+        this.patient1.address.country = "Danmark"
+        this.patient1.address.street = "Fiskergade 66"
+        this.patient1.address.zipCode = "8000"
+
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
+        relativeContact.affiliation = "Kone"
         relativeContact.primaryPhone = "27384910"
-        relativeContact.address = new Address();
-        relativeContact.address.city = "Aarhus C"
-        relativeContact.address.country = "Danmark"
-        relativeContact.address.road = "Fiskergade 66"
-        relativeContact.address.zipCode = "8000"
         this.patient1.contact = relativeContact;
 
 		this.person1.cpr = "2512489996"

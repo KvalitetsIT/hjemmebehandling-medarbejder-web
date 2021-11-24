@@ -54,7 +54,7 @@ export class PatientCard extends Component<Props,State> {
                     {this.props.patient.cpr?.slice(0,6)}-{this.props.patient.cpr?.slice(6)}
                   </Typography>
                   <Typography variant="subtitle2">
-                  {this.props.patient.patientContact?.primaryPhone} {this.props.patient.patientContact?.secondaryPhone ? "("+this.props.patient.patientContact?.secondaryPhone+")" : ""}
+                  {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "("+this.props.patient.secondaryPhone+")" : ""}
                   </Typography>
                 </Stack>
               </Grid>
@@ -67,16 +67,16 @@ export class PatientCard extends Component<Props,State> {
             <Grid container padding={2}>
               <Grid item xs={12}>
               <Typography variant="subtitle2">
-                {this.props.patient.patientContact?.address.road}<br/>
-                {this.props.patient.patientContact?.address.zipCode}, {this.props.patient.patientContact?.address.city}<br/>
-                {this.props.patient.patientContact?.address.country}
+                {this.props.patient.address?.street}<br/>
+                {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br/>
+                {this.props.patient.address?.country}
             </Typography>
             <br/>
             <Typography variant="button">
                         Kontakt
                     </Typography>
             <Typography variant="subtitle2">
-                        {contact.fullname}
+                        {contact.fullname} {contact.affiliation ? "("+contact.affiliation+")" : ""}
                         <br/>
                         {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
                     </Typography>

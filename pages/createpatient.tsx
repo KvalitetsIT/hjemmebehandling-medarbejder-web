@@ -75,11 +75,9 @@ InitializeServices() : void{
 createNewEmptyCareplan() : PatientCareplan{
   const relativeContact = new Contact();
   const newPatient = new PatientDetail();
-  newPatient.patientContact = new Contact();
-  newPatient.patientContact.address = new Address()
+  newPatient.address = new Address()
 
   newPatient.contact = relativeContact
-  newPatient.contact.address = new Address();
   
   const newCareplan = new PatientCareplan();
   newCareplan.patient = newPatient;
