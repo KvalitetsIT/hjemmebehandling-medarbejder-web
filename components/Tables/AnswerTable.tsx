@@ -201,7 +201,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 {questionnairesResponsesToShow.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
                                     const thresholdCollection = this.props.careplan.thresholdCollections.find(x=>x.questionId == question.Id);
-                                    const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, question,answer) : CategoryEnum.GREEN;
+                                    const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )

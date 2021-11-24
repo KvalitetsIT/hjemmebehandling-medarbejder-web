@@ -23,6 +23,6 @@ export default interface IQuestionAnswerService {
      /**
       * Finds the answers risk-value (category)
       */
-     FindCategory : (thresholdCollection : ThresholdCollection, question: Question, answer: Answer) => CategoryEnum
+     FindCategory : (thresholdCollection : ThresholdCollection, answer: Answer) => CategoryEnum
 }
   

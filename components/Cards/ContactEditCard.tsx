@@ -92,7 +92,7 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
                   uniqueId={inputId++}
                   label="Tilhørsforhold" 
                   value={this.state.contact.affiliation} 
-                  onChange={input => this.modifyPatient(this.setRelativeContactsName,input) }  
+                  onChange={input => this.modifyPatient(this.setRelativeContactsAffiliation,input) }  
                   variant="outlined" />
 
               <span>
@@ -140,6 +140,13 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
     modifiedPatient.fullname = newValue;
     return modifiedPatient;
   }
+
+  setRelativeContactsAffiliation(oldPatient : Contact, newValue : string ) : Contact {
+    const modifiedPatient = oldPatient;
+    modifiedPatient.affiliation = newValue;
+    return modifiedPatient;
+  }
+
   setRelativeContactsPrimaryPhonenumber(oldPatient : Contact, newValue : string ) : Contact {
     const modifiedPatient = oldPatient;
     modifiedPatient.primaryPhone = newValue;
