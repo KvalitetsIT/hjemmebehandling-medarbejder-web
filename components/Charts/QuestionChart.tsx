@@ -41,11 +41,11 @@ export class QuestionChart extends Component<Props,State> {
 }
 
 getChipColorFromCategory(category : CategoryEnum) : string {
-    const transparency = 0.6
+    const transparency = 1
     if(category === CategoryEnum.RED)
         return "rgba(215,11,4,"+transparency+")"
     if(category === CategoryEnum.YELLOW)
-        return "rgba(225,237,65,"+transparency+")"
+        return "rgba(255, 255, 0,"+transparency+")"
     if(category === CategoryEnum.BLUE)
         return "rgba(75,192,192,"+transparency+")"
 
