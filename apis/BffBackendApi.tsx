@@ -37,6 +37,9 @@ import BaseApi from "./BaseApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
+    GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+        throw new Error("Method not implemented.");
+    }
     RemoveAlarm(task: Task): Promise<void> {
         throw new Error("Method not implemented.");
     }

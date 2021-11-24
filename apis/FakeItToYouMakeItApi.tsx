@@ -26,7 +26,7 @@ import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
-    timeToWait : number = 0;
+    timeToWait : number = 1000;
 
     taskRemovedFromMissingOverview : Task[] = [];
     patient1 : PatientDetail = new PatientDetail();
@@ -261,6 +261,16 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.task2.questionnaireName = this.questionnaire1.name
         this.task2.questionnaireId = this.questionnaire1.id
         this.task2.responseLinkEnabled = true
+    }
+    async GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+        await new Promise(f => setTimeout(f, this.timeToWait));
+        if(includeInactive)
+            return [];
+        let toReturn = [];
+        for(let i = 0; i < pageSize; i++){
+            toReturn.push(this.patient1);
+        }
+        return toReturn;
     }
 
     async RemoveAlarm(task: Task): Promise<void> {

@@ -72,10 +72,10 @@ toogleDrawer = () : void => {
             <ListItem button component={Link} color="inherit" to="/patients">
                 <ListItemText>Opgaveliste</ListItemText>
             </ListItem>
-            <ListItem button component={Link} color="inherit"  to="/patients/2329657870">                
+            <ListItem button component={Link} color="inherit"  to="/active/1">                
                 <ListItemText primary="Aktive patienter" />
             </ListItem>
-            <ListItem button>                
+            <ListItem button component={Link} color="inherit"  to="/inactive/1">                
                 <ListItemText primary="Inaktive patienter" />
             </ListItem>
         </List>
