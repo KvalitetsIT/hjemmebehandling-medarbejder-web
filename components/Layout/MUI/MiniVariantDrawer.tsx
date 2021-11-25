@@ -8,7 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Fab } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
@@ -34,7 +33,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(9)} + 1px)`,
+    width: `calc(${theme.spacing(7)} + 1px)`,
   },
 });
 
@@ -66,11 +65,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const bottomPush : CSSProperties  = {
-  position: "fixed",
-  bottom: 0,
-  textAlign: "center",
-  paddingBottom: 20,
+  marginTop: "auto",
+  marginRight:5,
+  marginLeft:5
+}
 
+const newPatientButton : CSSProperties = {
+  backgroundColor : "#1976d2",
+  borderRadius:200,
+  color: "white"
 }
 
 export default function MiniDrawer() : JSX.Element {
@@ -90,7 +93,7 @@ export default function MiniDrawer() : JSX.Element {
       
       <Drawer variant="permanent" open={open}>
     
-        <List>
+        <List >
         <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
               <MenuIcon/>
@@ -119,14 +122,19 @@ export default function MiniDrawer() : JSX.Element {
             </ListItemIcon>               
                 <ListItemText primary="Inaktive patienter" />
             </ListItem>
-            <ListItem >
-            <div style={bottomPush}>
-          <Fab color="primary" component={Link} to="/newpatient" variant="extended">
-            {open ? "Opret patient" : <AddIcon fontSize="small"/>}
-          </Fab>
-        </div>
-        </ListItem>
+            
         </List>
+
+          <List style={bottomPush}>
+          <ListItem style={newPatientButton} button component={Link} color="inherit"  to="/newpatient">
+            <ListItemIcon>
+              <AddIcon style={{color:"white"}}/>
+            </ListItemIcon>               
+              <ListItemText primary="Opret patient" />
+            
+        </ListItem>
+          </List>
+       
         
       </Drawer>
       
