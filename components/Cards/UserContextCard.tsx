@@ -83,7 +83,7 @@ async getUser() : Promise<void>{
   render ()  : JSX.Element{
 
     return (<>
-        <Card component={Box} minWidth={200} maxWidth={250} align-items= "right" style={{backgroundColor: "#f8f8f8"}}>
+        <Card component={Box}  align-items= "right" style={{backgroundColor: "#f8f8f8"}}>
         <CardActionArea onClick={()=>this.setState({ expand:!this.state.expand})} align-items= "right">
           <CardContent >
                     <Typography align="right" variant="body2">{this.state.user.fullName} ({this.state.user.userId})</Typography>

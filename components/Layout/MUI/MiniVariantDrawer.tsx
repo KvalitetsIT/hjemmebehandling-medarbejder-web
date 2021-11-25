@@ -1,0 +1,136 @@
+import * as React from 'react';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import MenuIcon from '@mui/icons-material/Menu';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Fab } from '@mui/material';
+import { Link } from 'react-router-dom';
+import HistoryIcon from '@mui/icons-material/History';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import AddIcon from '@mui/icons-material/Add';
+
+const drawerWidth = 240;
+
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(9)} + 1px)`,
+  },
+});
+
+export const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
+
+const bottomPush : CSSProperties  = {
+  position: "fixed",
+  bottom: 0,
+  textAlign: "center",
+  paddingBottom: 20,
+
+}
+
+export default function MiniDrawer() : JSX.Element {
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+<>
+      
+      
+      <Drawer variant="permanent" open={open}>
+    
+        <List>
+        <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
+            <ListItemIcon>
+              <MenuIcon/>
+            </ListItemIcon>
+            <ListItemText  style={{fontWeight:"bold", paddingTop:20, paddingBottom:20}} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
+            </ListItem>
+
+        
+        <Divider />
+
+            <ListItem button component={Link} color="inherit" to="/patients">
+            <ListItemIcon>
+              <AssignmentIcon/>
+            </ListItemIcon>
+                <ListItemText>Opgaveliste</ListItemText>
+            </ListItem>
+            <ListItem button component={Link} color="inherit"  to="/active/1"> 
+            <ListItemIcon>
+              <SupervisedUserCircleIcon/>
+            </ListItemIcon>               
+                <ListItemText primary="Aktive patienter" />
+            </ListItem>
+            <ListItem button component={Link} color="inherit"  to="/inactive/1"> 
+            <ListItemIcon>
+              <HistoryIcon/>
+            </ListItemIcon>               
+                <ListItemText primary="Inaktive patienter" />
+            </ListItem>
+            <ListItem >
+            <div style={bottomPush}>
+          <Fab color="primary" component={Link} to="/newpatient" variant="extended">
+            {open ? "Opret patient" : <AddIcon fontSize="small"/>}
+          </Fab>
+        </div>
+        </ListItem>
+        </List>
+        
+      </Drawer>
+      
+      </>
+
+  );
+}

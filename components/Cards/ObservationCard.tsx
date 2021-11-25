@@ -114,7 +114,7 @@ export class ObservationCard extends Component<Props,State> {
                     <Card  marginTop={3} component={Box}>
                         <CardHeader subheader={question.question + " - Alarmgrænser"}/>
                         <CardContent>
-                            {threshold ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
+                        {threshold ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
                         </CardContent>
                     </Card>
                 </Grid>

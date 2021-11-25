@@ -50,7 +50,7 @@ export class ThresholdSlider extends Component<Props,{}> {
                     <>
                     {shouldShowNewFrom ? <Typography variant="caption" padding={1}>{x.from}</Typography> : <></>  }
                     
-                    <Chip width={(x.to - x.from)*100} component={Box} sx={{height:10}} color={this.getColorFromCategory(x.category)}/>
+                    <Chip width={(x.to - x.from)*100+"%"} component={Box} sx={{height:10}} color={this.getColorFromCategory(x.category)}/>
                     <Typography variant="caption" padding={1}>{x.to}</Typography>
                     </>
                 )
