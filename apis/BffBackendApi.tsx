@@ -30,11 +30,12 @@ import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/Qu
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
-import { Configuration, PlanDefinitionApi, UserApi, UserContext } from "../generated";
+import { Configuration, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
     GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
@@ -467,6 +468,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
             questionnaire.name = wrapper.questionnaire!.title!;
             questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
+            questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
     
             return questionnaire;
         } catch(error : any){
@@ -492,6 +494,30 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             frequency.days = [this.mapWeekdayDto(frequencyDto.weekday!)];
     
             return frequency;
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+    }
+
+    private mapThresholdDtos(thresholdDtos: Array<ThresholdDto>) : Array<ThresholdCollection> {
+        try{
+            let thresholds: ThresholdCollection[] = [];
+            
+            for(var thresholdDto of thresholdDtos) {
+                let threshold = new ThresholdCollection();
+                threshold.questionId = thresholdDto.questionId!;
+                if (thresholdDto.valueBoolean) {
+
+                    let thresholdOption = this.CreateOption(
+                        thresholdDto.questionId!,
+                        String(thresholdDto.valueBoolean!),
+                        this.mapTresholdCategory(thresholdDto.type!)
+                    );
+                    thresholds.push(threshold);
+                }
+            }
+    
+            return thresholds;
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -618,4 +644,17 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 throw new Error('Could not map category ' + category);
         }
     } 
+
+    private mapTresholdCategory(category: ThresholdDtoTypeEnum) : CategoryEnum {
+        switch(category) {
+            case ThresholdDtoTypeEnum.Normal:
+                return CategoryEnum.GREEN
+            case ThresholdDtoTypeEnum.Abnormal:
+                return CategoryEnum.YELLOW
+            case ThresholdDtoTypeEnum.Critical:
+                return CategoryEnum.RED
+            default:
+                throw new Error('Could not map category ' + category);
+        }
+    }
 }
