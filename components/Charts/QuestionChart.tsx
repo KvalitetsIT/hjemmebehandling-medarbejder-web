@@ -11,6 +11,7 @@ import { Button, ButtonGroup, Table, TableCell, TableRow, Tooltip } from '@mui/m
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import { ThresholdNumber } from '../Models/ThresholdNumber';
+import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 
 export enum DisplayModeEnum{
   GRAPH = "Graf",
@@ -30,7 +31,7 @@ export interface State {
 export class QuestionChart extends Component<Props,State> {
   static displayName = QuestionChart.name;
   static contextType = ApiContext
-
+  dateHelper! : IDateHelper
 
   constructor(props : Props){
     super(props);
@@ -38,6 +39,9 @@ export class QuestionChart extends Component<Props,State> {
       displayMode : DisplayModeEnum.GRAPH
     }
     
+}
+initialiszeServices() : void{
+  this.dateHelper = this.context.dateHelper;
 }
 
 getChipColorFromCategory(category : CategoryEnum) : string {
@@ -159,6 +163,8 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
   }
   render () : JSX.Element{
 
+    this.initialiszeServices();
+
     const questionnaireResponses = this.props.questionnaireResponses;
     const question = this.props.question;
     
@@ -170,7 +176,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
         const response = questionnaireResponses[responseIndex];
         const answer = response.questions.get(question) as NumberAnswer
         answersData.push(answer.answer)
-        answersLabels.push(response.answeredTime?.toLocaleDateString())
+        answersLabels.push(this.dateHelper.DateToString(response.answeredTime!))
     }
 
     
