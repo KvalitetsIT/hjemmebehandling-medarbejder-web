@@ -9,6 +9,7 @@ import { User } from '../Models/User';
 import UserService from '../../services/UserService';
 import { FakeItToYouMakeItApi } from '../../apis/FakeItToYouMakeItApi';
 import { Button, CardActionArea, CardActions, Collapse } from '@mui/material';
+import { BffBackendApi } from '../../apis/BffBackendApi';
 
 
 export interface Props {
@@ -41,8 +42,13 @@ export class UserContextCard extends Component<Props,State> {
   }
 
   InitializeServices() : void{
-    //how can we load this from context 
-	this.userService  = new UserService(new FakeItToYouMakeItApi());
+	// context not set
+     this.userService  = new UserService(new BffBackendApi());
+     if (process?.env.NODE_ENV === 'development') {
+       if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
+        this.userService = new FakeItToYouMakeItApi();
+       }
+     }
   }
 
 async getUser() : Promise<void>{
