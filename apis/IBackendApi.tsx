@@ -115,6 +115,9 @@ export interface IBackendApi {
      */
     GetPatientCareplans : (cpr: string) => Promise<Array<PatientCareplan>>
     
+    /**
+     * 
+     */
     GetQuestionnaireResponses : (careplanId : string, questionnaireIds : string[], page : number, pagesize : number) => Promise<QuestionnaireResponse[]>
     /**
      * Change questionnaireResponse
@@ -130,5 +133,11 @@ export interface IBackendApi {
      * Set the value of threshold option
      */
     SetThresholdOption : (thresholdId : string, threshold : ThresholdOption) => Promise<void>
+
+
+    /**
+     * Returns patients based on paramaters
+     */
+    GetPatients : (includeActive : boolean, includeInactive : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
 }
 

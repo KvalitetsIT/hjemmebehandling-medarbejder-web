@@ -33,9 +33,6 @@ export class ContactCard extends Component<Props,{}> {
               <br/>
               <Divider/>
               <br/>
-              <Typography>
-                {contact.address.road}, {contact.address.zipCode}
-              </Typography>
               
               <Typography>
                 {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}

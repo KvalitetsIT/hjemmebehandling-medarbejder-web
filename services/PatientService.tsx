@@ -22,32 +22,41 @@ export default class PatientService extends BaseService implements IPatientServi
         super()
         this.backendApi = backendApi;
     }
-    EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+    async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         try{
-        return this.backendApi.EditPatient(patient);
+        return await this.backendApi.EditPatient(patient);
     } catch(error : any){
         return this.HandleError(error);
       }
     }
-    SearchPatient(searchString: string) : Promise<PatientDetail[]>{
+    async SearchPatient(searchString: string) : Promise<PatientDetail[]>{
         try{
-        return this.backendApi.SearchPatient(searchString);
+        return await this.backendApi.SearchPatient(searchString);
     } catch(error : any){
         return this.HandleError(error);
       }
     }
     
-    CreatePatient(patient : PatientDetail) : Promise<PatientDetail>{
+    async CreatePatient(patient : PatientDetail) : Promise<PatientDetail>{
         try{
-        return this.backendApi.CreatePatient(patient);
+        return await this.backendApi.CreatePatient(patient);
     } catch(error : any){
         return this.HandleError(error);
       }
     }
 
-    GetPatient(cpr: string) : Promise<PatientDetail>{
+    async GetPatient(cpr: string) : Promise<PatientDetail>{
         try{
-        return this.backendApi.GetPatient(cpr);
+        return await this.backendApi.GetPatient(cpr);
+    } catch(error : any){
+        return this.HandleError(error);
+      }
+    }
+
+    async GetPatients(includeActive : boolean, includeInactive : boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+      try{
+        this.ValidatePagination(page,pageSize);
+        return await this.backendApi.GetPatients(includeActive,includeInactive,page,pageSize)
     } catch(error : any){
         return this.HandleError(error);
       }

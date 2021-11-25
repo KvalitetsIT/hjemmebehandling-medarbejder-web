@@ -2,6 +2,7 @@ import React from "react";
 import { Answer } from "../../components/Models/Answer";
 import { CategoryEnum } from "../../components/Models/CategoryEnum";
 import { Question } from "../../components/Models/Question";
+import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
 import { ThresholdNumber } from "../../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../../components/Models/ThresholdOption";
 
@@ -22,6 +23,6 @@ export default interface IQuestionAnswerService {
      /**
       * Finds the answers risk-value (category)
       */
-     FindCategory : (question: Question, answer: Answer) => CategoryEnum
+     FindCategory : (thresholdCollection : ThresholdCollection, answer: Answer) => CategoryEnum
 }
   

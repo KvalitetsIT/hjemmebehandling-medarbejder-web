@@ -1,3 +1,4 @@
+import { Address } from "./Address";
 import { Contact } from "./Contact";
 import { PatientSimple } from "./PatientSimple";
 
@@ -5,6 +6,8 @@ import { PatientSimple } from "./PatientSimple";
 //Used in 
 //-patient-details
 export class PatientDetail extends PatientSimple {
-    patientContact! : Contact; // Contactinfo for the patient
+    primaryPhone! : string
+    secondaryPhone! : string
+    address! : Address
     contact : Contact = new Contact();
 }

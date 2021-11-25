@@ -88,13 +88,15 @@ async populateCareplans() : Promise<void>{
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
       <Grid container spacing={3}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <ErrorBoundary>
           <Stack spacing={3} >
             
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
                 <PatientCard patient={activeCareplan.patient}></PatientCard>
-                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+                <ErrorBoundary>
+                  <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+                </ErrorBoundary>
             </Stack>
             </ErrorBoundary>
         </Grid>

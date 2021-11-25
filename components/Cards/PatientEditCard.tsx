@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -27,6 +28,7 @@ export class PatientEditCard extends Component<Props,State> {
   static displayName = PatientEditCard.name; 
   personService!: IPersonService;
   validationService!: IValidationService;
+  collectionHelper!: ICollectionHelper;
 
   constructor(props : Props){
       super(props);
@@ -51,6 +53,7 @@ export class PatientEditCard extends Component<Props,State> {
 InitializeServices() : void{
   this.personService = this.context.personService;
   this.validationService = this.context.validationService;
+  this.collectionHelper = this.context.collectionHelper;
 }
 
 async getPerson() : Promise<void>{
@@ -69,9 +72,9 @@ async getPerson() : Promise<void>{
     p.firstname = newPerson.givenName;
     p.lastname = newPerson.familyName;
     
-    p.patientContact.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
-    p.patientContact.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
-    p.patientContact.address.road = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
+    p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
+    p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
+    p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
     
     this.setState({patient : p});
     
@@ -104,9 +107,9 @@ clearPersonFields() : void {
     p.firstname = "";
     p.lastname = "";
     
-    p.patientContact.address.city = "";
-    p.patientContact.address.zipCode =  "";
-    p.patientContact.address.road = "";
+    p.address.city = "";
+    p.address.zipCode =  "";
+    p.address.street = "";
     
     this.setState({patient : p});
 }
@@ -117,20 +120,21 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
     this.setState({patient : modifiedPatient  })
   }
 
+  getFirstError() : string | undefined {
+    if(this.state.errorArray.length > 0)
+      return this.state.errorArray[0].message;
+    
+    return undefined;
+  }
+
   errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
   onValidation(from : number, invalid : InvalidInputModel[]) : void{
       console.log("from : " + from)  
       const errorMap = this.errorMap;
       errorMap.set(from,invalid);
       
-      const allErrors : InvalidInputModel[] = [];
-      const iterator = errorMap.entries();
-      let next = iterator.next();
-      while(next == undefined || !next.done){
-        
-        next.value[1].forEach(invalid => allErrors.push(invalid))  
-        next = iterator.next();
-      }
+      const allErrors : InvalidInputModel[] = 
+              this.collectionHelper.MapValueCollectionToArray<number,InvalidInputModel>(errorMap);
 
       if(this.props.onValidation){
         this.props.onValidation(allErrors);
@@ -138,6 +142,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
 
       this.setState({errorArray  : allErrors})
   }
+
 
   renderCard() : JSX.Element{
 	this.InitializeServices();
@@ -159,7 +164,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
                   value={this.state.patient.cpr} 
                   onChange={input => this.modifyPatient(this.setCpr,input) } />
                   <Stack>
-                    <Tooltip title={this.state.errorArray.length > 0 ? this.state.errorArray[0].message : "Hent informationer"}>
+                    <Tooltip title={this.getFirstError() ?? "Hent fra CPR!"}>
                       <div>
                   <LoadingButton disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
                     </div>
@@ -172,15 +177,15 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
               <TextFieldValidation uniqueId={inputId++} disabled label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.patientContact.address.road} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.address.street} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
               <TextFieldValidation disabled  
                     onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                     uniqueId={inputId++}
                     label="Postnummer" 
-                    value={this.state.patient.patientContact.address.zipCode} 
+                    value={this.state.patient.address.zipCode} 
                     onChange={input => this.modifyPatient(this.setZipcode,input) }  
                     variant="outlined" />
-              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.patientContact.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
               <TextFieldValidation 
@@ -189,14 +194,14 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
                   validate={(phone) => this.validationService.ValidatePhonenumber(phone) } 
                   type="tel" 
                   label="Primært telefonnummer" 
-                  value={this.state.patient.patientContact.primaryPhone} 
+                  value={this.state.patient.primaryPhone} 
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } 
                   variant="outlined" />
               <TextFieldValidation 
                     onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                     uniqueId={inputId++}
                     validate={(phone) => this.validationService.ValidatePhonenumber(phone) }
-                    type="tel" label="sekundært telefonnummer" value={this.state.patient.patientContact.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
+                    type="tel" label="sekundært telefonnummer" value={this.state.patient.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
             </Stack>
          </Stack>
 
@@ -226,30 +231,30 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   
   setRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.address.road = newValue;
+    modifiedPatient.address.street = newValue;
     return modifiedPatient;
   }
   setZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.address.zipCode = newValue;
+    modifiedPatient.address.zipCode = newValue;
     return modifiedPatient;
   }
   
   setCiy(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.address.city = newValue;
+    modifiedPatient.address.city = newValue;
     return modifiedPatient;
   }
   
   setPrimaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.primaryPhone = newValue;
+    modifiedPatient.primaryPhone = newValue;
     return modifiedPatient;
   }
   
   setSecondaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.patientContact.secondaryPhone = newValue;
+    modifiedPatient.secondaryPhone = newValue;
     return modifiedPatient;
   }
   

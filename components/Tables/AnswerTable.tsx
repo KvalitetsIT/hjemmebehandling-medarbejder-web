@@ -174,7 +174,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
                                 <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
                                 <ErrorBoundary rerenderChildren={true}>
-                                    <QuestionnaireResponseStatusSelect questionnaireResponse={collection} />  
+                                    <QuestionnaireResponseStatusSelect onUpdate={()=>this.forceUpdate()} questionnaireResponse={collection} />  
                                 </ErrorBoundary>
                             </Stack>
                      
@@ -200,7 +200,8 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 
                                 {questionnairesResponsesToShow.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    const category = answer ? this.questionAnswerService.FindCategory(question,answer) : CategoryEnum.GREEN;
+                                    const thresholdCollection = this.props.careplan.thresholdCollections.find(x=>x.questionId == question.Id);
+                                    const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )

@@ -9,6 +9,8 @@ import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 import CreatePatient from '../../pages/createpatient';
 import { ErrorBoundary } from './ErrorBoundary';
+import ActivePatients from '../../pages/active/[pagenr]';
+import InactivePatients from '../../pages/inactive/[pagenr]';
 
 
 export interface State {
@@ -70,11 +72,17 @@ constructor(props : {}){
               <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient openAccordians={accoridansContact} {...props}/>} />
               <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient openAccordians={accoridansPlanDefinition} {...props}/>} />
               <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props}/>} />
-             
               <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv"}/>}/>
+              
+              
+              <Route path="/active/:pagenr" render={(props) => <ActivePatients {...props}/>} />
+              <Route path="/inactive/:pagenr" render={(props) => <InactivePatients {...props}/>} />
+              <Route path="/active" render={(props) => <Redirect to={"/active/1"} {...props}/>}/>
+              <Route path="/inactive" render={(props) => <Redirect to={"/inactive/1"} {...props}/>}/>
+              
               <Route path="/patients"><Patients/></Route>
-
               <Route path="/newpatient" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props}/>} />
+
               <Route path="/"><Patients/></Route>
             </Switch>
             </ErrorBoundary>

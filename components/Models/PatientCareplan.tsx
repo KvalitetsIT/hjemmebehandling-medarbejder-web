@@ -1,6 +1,7 @@
 import { PatientDetail } from "./PatientDetail";
 import { PlanDefinition } from "./PlanDefinition";
 import { Questionnaire } from "./Questionnaire";
+import { ThresholdCollection } from "./ThresholdCollection";
 
 
 export class PatientCareplan {
@@ -10,6 +11,7 @@ export class PatientCareplan {
     patient! : PatientDetail
     creationDate! : Date;
     terminationDate! : Date;
+    thresholdCollections! : ThresholdCollection[]
     department!: string;
 
     clone() : PatientCareplan{

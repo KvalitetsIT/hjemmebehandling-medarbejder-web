@@ -1,14 +1,17 @@
 import { IComparable } from "./Interfaces/IComparable";
-import { ThresholdNumber } from "./ThresholdNumber";
-import { ThresholdOption } from "./ThresholdOption";
 
 export class Question implements IComparable<Question>{
     isEqual(other: Question) : boolean{
         return this.question === other.question;
     }
-    
+    Id! : string
     question! : string
-    
-    options : ThresholdOption[] = []
-    thresholdPoint : ThresholdNumber[] = []
+    type! : QuestionTypeEnum
+}
+
+export enum QuestionTypeEnum{
+    CHOICE = 'CHOICE',
+    INTEGER = 'INTEGER',
+    OBSERVATION = 'Måling', // Måling/Observation etc!
+    STRING = 'STRING'
 }

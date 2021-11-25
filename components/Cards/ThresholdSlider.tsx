@@ -5,9 +5,11 @@ import { Chip, Stack, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { Question } from '../Models/Question';
 import { CategoryEnum } from '../Models/CategoryEnum';
+import { ThresholdNumber } from '../Models/ThresholdNumber';
 
 export interface Props {
     question : Question
+    threshold : ThresholdNumber[]
 }
 
 
@@ -39,7 +41,7 @@ export class ThresholdSlider extends Component<Props,{}> {
     let oldTo : number | undefined = undefined;
     return (
         <Stack direction="row">
-            {this.props.question.thresholdPoint.sort((a,b) => a.from - b.from).map(x=>{
+            {this.props.threshold.sort((a,b) => a.from - b.from).map(x=>{
                 const shouldShowNewFrom = oldTo !== x.from;
 
                 oldTo = x.to;

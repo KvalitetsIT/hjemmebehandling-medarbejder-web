@@ -19,6 +19,8 @@ import UserService from '../services/UserService';
 import IUserService from '../services/interfaces/IUserService';
 import ValidationService from '../services/ValidationService';
 import IValidationService from '../services/interfaces/IValidationService';
+import { ICollectionHelper } from '../globalHelpers/interfaces/ICollectionHelper';
+import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService
@@ -28,7 +30,9 @@ interface IApiContext {
     personService : IPersonService,
     userService : IUserService,
     validationService : IValidationService,
+
     dateHelper : IDateHelper
+    collectionHelper : ICollectionHelper
 }
 
 const ApiContext = createContext<IApiContext>(
@@ -40,7 +44,9 @@ const ApiContext = createContext<IApiContext>(
         userService : new UserService(new FakeItToYouMakeItApi()),
         personService : new PersonService(new FakeItToYouMakeItApi()),
         validationService : new ValidationService(),
-        dateHelper : new DanishDateHelper()
+
+        dateHelper : new DanishDateHelper(),
+        collectionHelper : new CollectionHelper()
     }
     ); //Default value
 

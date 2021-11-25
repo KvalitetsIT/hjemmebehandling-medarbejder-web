@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { FormControl, TextField } from '@mui/material';
-import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { CriticalLevelEnum, InvalidInputModel } from '../../services/Errors/InvalidInputError';
 
 export interface Props {
     value? : string;
@@ -15,7 +15,7 @@ export interface Props {
     size : "small" | "medium";
     type : string
 
-
+    onWheel? : () => void;
     onChange : (input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate? : (value : string) => Promise<InvalidInputModel[]>
     onValidation? : (uniqueId : number, error : InvalidInputModel[]) => void
@@ -50,18 +50,24 @@ async validate(input : string) : Promise<void>{
     const errors = await this.props.validate(input);
     this.setState({errors : errors})
     if(this.props.onValidation){
-        this.props.onValidation(this.props.uniqueId, errors);
+        this.props.onValidation(this.props.uniqueId, errors.filter(x=>x.criticalLevel == CriticalLevelEnum.ERROR));
     }
 }  
 
   render () : JSX.Element{
-    let firstError = ""
+    let firstError : InvalidInputModel | undefined = undefined
     let hasError = false
+    let color : 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' = "primary"
     if(this.state.errors && this.state.errors.length !== 0){
-        firstError = this.state.errors[0].message;
-        hasError = true;
-    }
+        firstError = this.state.errors[0];
 
+        if(firstError.criticalLevel == CriticalLevelEnum.ERROR){
+            hasError = true;
+        }
+        if(firstError.criticalLevel == CriticalLevelEnum.WARNING){
+            color = "warning"    
+        }            
+    }
 
     return (
         <FormControl>
@@ -71,7 +77,9 @@ async validate(input : string) : Promise<void>{
             label={this.props.label} 
             variant={this.props.variant} 
             error={hasError}
-            helperText={firstError}
+            color={color}
+            onWheel={()=> this.props.onWheel ? this.props.onWheel() : {} }
+            helperText={firstError?.message}
             disabled={this.props.disabled}
             onChange={ (input) => this.props.onChange(input)} 
             required={this.props.required} 

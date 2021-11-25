@@ -1,10 +1,11 @@
-import { Avatar, Typography } from '@material-ui/core';
+import {Typography } from '@material-ui/core';
+import { Avatar } from '@mui/material';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import Stack from '@mui/material/Stack';
+import { Grid } from '@mui/material';
 
 
 export interface Props {
@@ -16,22 +17,25 @@ export interface Props {
 
 export class ThumbnailCard extends Component<Props,{}> {
   static displayName = ThumbnailCard.name;
-
+  
   render ()  : JSX.Element{
+
+    const backgroundColor = this.props.color ? this.props.color : "red";
     return (
-        <Card component={Box} minWidth={100}>
+        <Card component={Box} minWidth={300}>
          <CardContent>
-               <Stack direction="row" spacing={3}>
-                   {this.props.avatar ? this.props.avatar :
-                   
-                    <Avatar component={Box} padding={5} bgcolor={this.props.color ? this.props.color : "red" } variant="square">
-                        {this.props.boxContent}
-                    </Avatar>}
-                    <Stack spacing={1}>
-                    <Typography variant="inherit">{this.props.headline}</Typography>
-                       {this.props.children}
-                    </Stack>
-               </Stack>
+           <Grid container>
+             <Grid item xs={4}>
+                  {this.props.avatar ? this.props.avatar :
+                   <Avatar sx={{ bgcolor: backgroundColor, width:'100%', height:'100%' }} variant="square">
+                       {this.props.boxContent}
+                   </Avatar>}
+             </Grid>
+             <Grid item xs={8} paddingLeft={2}>
+             <Typography variant="inherit">{this.props.headline}</Typography>
+             {this.props.children}
+             </Grid>
+             </Grid>
             </CardContent>
         </Card>
     );

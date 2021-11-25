@@ -10,6 +10,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Button, ButtonGroup, Table, TableCell, TableRow, Tooltip } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
+import { ThresholdNumber } from '../Models/ThresholdNumber';
 
 export enum DisplayModeEnum{
   GRAPH = "Graf",
@@ -19,6 +20,7 @@ export enum DisplayModeEnum{
 export interface Props {
     question : Question
     questionnaireResponses : QuestionnaireResponse[]
+    thresholds : ThresholdNumber[]
 }
 
 export interface State {
@@ -39,11 +41,11 @@ export class QuestionChart extends Component<Props,State> {
 }
 
 getChipColorFromCategory(category : CategoryEnum) : string {
-    const transparency = 0.6
+    const transparency = 1
     if(category === CategoryEnum.RED)
         return "rgba(215,11,4,"+transparency+")"
     if(category === CategoryEnum.YELLOW)
-        return "rgba(225,237,65,"+transparency+")"
+        return "rgba(255, 255, 0,"+transparency+")"
     if(category === CategoryEnum.BLUE)
         return "rgba(75,192,192,"+transparency+")"
 
@@ -67,7 +69,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
 createThresholdDataset(question : Question, length : number) : Array<{label : string, data : number[],fill : boolean, backgroundColor : string, borderColor : string}> {
 
     const datasets: { label: string; data: number[]; fill: boolean; backgroundColor: string; borderColor: string; }[] = [];
-    question.thresholdPoint.forEach(threshold => {
+    this.props.thresholds.forEach(threshold => {
         const dataFrom = [];
         const dataTo = [];
         
@@ -129,7 +131,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
           }
       }
 
-    return (<Line height={200} plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
+    return (<Line height={100} plugins={[ChartDataLabels as any]} options={options} data={data as any} />)
   }
   renderTable(answerLabels : (string | undefined)[],datasets : Array<{data : number[]}>) : JSX.Element {
     return (

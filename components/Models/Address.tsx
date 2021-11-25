@@ -1,5 +1,5 @@
 export class Address {
-    road! : string;
+    street! : string;
     zipCode! : string;
     city! : string;
     country! : string;

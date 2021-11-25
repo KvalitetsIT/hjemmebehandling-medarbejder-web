@@ -24,13 +24,20 @@ export class InvalidInputError extends BaseServiceError  {
 export class InvalidInputModel{
     propName : string
     message : string
+    criticalLevel : CriticalLevelEnum
 
-    constructor(propName : string, message : string){
+    constructor(propName : string, message : string, criticalLevel : CriticalLevelEnum = CriticalLevelEnum.ERROR){
         this.message = message;
         this.propName = propName;
+        this.criticalLevel = criticalLevel;
     }
 
     ToString() : string {
         return this.propName + " ("+ this.message +")"
     }
+}
+
+export enum CriticalLevelEnum {
+    ERROR,
+    WARNING
 }

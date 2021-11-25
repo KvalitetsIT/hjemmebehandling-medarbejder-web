@@ -15,6 +15,7 @@ import { IBackendApi } from '../apis/IBackendApi';
 import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
+import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -54,6 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
     <div suppressHydrationWarning>
     <ApiContext.Provider
       value={{
+        //Services
         questionnaireService : new QuestionnaireService(questionnaireBackend),
         questionAnswerService : new QuestionAnswerService(questionAnswerBackend),
         careplanService : new CareplanService(careplanBackend),
@@ -61,7 +63,10 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         userService : new UserService(userBackend),
         personService : new PersonService(personBackend),
         validationService : new ValidationService(),
-        dateHelper : new DanishDateHelper()
+        
+        //Helpers
+        dateHelper : new DanishDateHelper(),
+        collectionHelper : new CollectionHelper()
       }}
     >
         {typeof window === 'undefined' ? null : 

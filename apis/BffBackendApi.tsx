@@ -6,7 +6,7 @@ import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Question } from "../components/Models/Question";
+import { Question, QuestionTypeEnum } from "../components/Models/Question";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
@@ -14,7 +14,6 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 import { IBackendApi } from "./IBackendApi";
-import { MockedBackendApi } from "./MockedBackendApi";
 
 import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
@@ -27,7 +26,7 @@ import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/Frequ
 import { PatientDto } from "../generated/models/PatientDto";
 import { PersonDto } from "../generated/models/PersonDto";
 import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
-import { QuestionDto } from "../generated/models/QuestionDto";
+import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
@@ -35,8 +34,12 @@ import { Configuration, PlanDefinitionApi, UserApi, UserContext } from "../gener
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
+import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
+    GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+        throw new Error("Method not implemented.");
+    }
     RemoveAlarm(task: Task): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -201,7 +204,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 .catch(err => { console.log(err); });
     
             if(!body) {
-                return new MockedBackendApi().GetPatient(cpr);
+                return new FakeItToYouMakeItApi().GetPatient(cpr);
             }
     
             // Map the body to a PatientDetail object
@@ -212,13 +215,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             patient.lastname = body['givenName'];
             patient.cpr = cpr;
     
-            let patientContact = new Contact();
-            patientContact.address.country = "Danmark";
-            patientContact.address.road = "Fiskergade 66";
-            patientContact.address.zipCode = "8200 Aarhus C";
-            patientContact.fullname = name;
-            patientContact.primaryPhone = body['patientContactDetails']['primaryPhone'];
-            patient.patientContact = patientContact;
+            patient.address.country = "Danmark";
+            patient.address.street = "Fiskergade 66";
+            patient.address.zipCode = "8200 Aarhus C";
+            patient.primaryPhone = body['patientContactDetails']['primaryPhone'];
     
             return patient;
         } catch(error : any){
@@ -281,7 +281,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         try{
-            return new MockedBackendApi().SetQuestionaireResponse(id, measurementCollection);
+            return new FakeItToYouMakeItApi().SetQuestionaireResponse(id, measurementCollection);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -289,7 +289,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
         try{
-            return await new MockedBackendApi().SetThresholdNumber(thresholdId,threshold);
+            return await new FakeItToYouMakeItApi().SetThresholdNumber(thresholdId,threshold);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -297,7 +297,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
         try{
-            return await new MockedBackendApi().SetThresholdOption(thresholdId,threshold);
+            return await new FakeItToYouMakeItApi().SetThresholdOption(thresholdId,threshold);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -389,8 +389,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 cpr: patient.cpr,
                 givenName: patient.firstname,
                 familyName: patient.lastname,
-                patientContactDetails: this.mapContactDetails(patient.patientContact),
-                primaryRelativeContactDetails: this.mapContactDetails(patient.contact)
+                patientContactDetails : new Contact()
+                //TODO : patientContactDetails: this.mapContactDetails(patient),
+                //TODO : primaryRelativeContactDetails: this.mapContactDetails(patient)
             }
         } catch(error : any){
             return this.HandleError(error)
@@ -404,7 +405,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             patient.firstname = patientDto.givenName;
             patient.lastname = patientDto.familyName;
             patient.cpr = patientDto.cpr;
-            patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+            //TODO : patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
             patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
             // TODO - map additional contact details.
     
@@ -417,10 +418,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     private mapContactDetails(contactDetails: Contact) : ContactDetailsDto {
         try{
             return {
-                street: contactDetails.address.road,
-                postalCode: contactDetails.address.zipCode,
-                country: contactDetails.address.country,
-                city: contactDetails.address.city,
                 primaryPhone: contactDetails.primaryPhone,
                 secondaryPhone: contactDetails.secondaryPhone,
             }
@@ -435,11 +432,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     
             let address = new Address();
             console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-            address.road = patientContactDetails?.street ?? 'Fiskergade 66';
+            address.street = patientContactDetails?.street ?? 'Fiskergade 66';
             address.zipCode = patientContactDetails?.postalCode ?? '8000';
             address.city = "Aarhus";
             address.country = patientContactDetails?.country ?? 'Danmark';
-            contact.address = address;
     
             contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
             contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
@@ -516,7 +512,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     private mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto) : QuestionnaireResponse {
         let response = new QuestionnaireResponse();
         //let response = this.getQuestionnaireResponse();
-
         response.id = questionnaireResponseDto.id!;
         response.questions = new Map<Question, Answer>();
 
@@ -536,10 +531,25 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapQuestionDto(questionDto: QuestionDto) : Question {
         let question = new Question();
+        
+        switch(questionDto.questionType){
+            case QuestionDtoQuestionTypeEnum.Choice: 
+                question.type = QuestionTypeEnum.CHOICE;
+            break;
+            case QuestionDtoQuestionTypeEnum.Integer: 
+                question.type = QuestionTypeEnum.INTEGER;
+            break;
+            case QuestionDtoQuestionTypeEnum.Quantity: 
+                question.type = QuestionTypeEnum.OBSERVATION;
+            break;
+            case QuestionDtoQuestionTypeEnum.String: 
+                question.type = QuestionTypeEnum.STRING;
+            break;
+        }
 
         question.question = questionDto.text!
         // TODO - handle options properly (there must be at least one option for the answer table to render).
-        question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
+        //TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
     }

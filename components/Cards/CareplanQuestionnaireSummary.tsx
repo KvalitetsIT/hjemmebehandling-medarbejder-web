@@ -5,7 +5,7 @@ import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { BasicTabs } from '../Layout/Tabs';
 import { Questionnaire } from '../Models/Questionnaire';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
@@ -57,8 +57,9 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
             latestResponse = responsesFromNewToOld[0]
     return (
       <>
-       <Stack spacing={20} direction="row">
-           <Stack>
+      <Grid container>
+        <Grid item xs={4}>
+        <Stack>
            <Typography variant="caption">
                 Seneste besvarelse
             </Typography>
@@ -66,8 +67,9 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
                 {latestResponse && latestResponse.answeredTime ? this.dateHelper.DateToString(latestResponse.answeredTime) : "-"}
             </Typography>
            </Stack>
-
-           <Stack>
+        </Grid>
+        <Grid item xs={4}>
+        <Stack>
            <Typography variant="caption">
                 Frekvens
             </Typography>
@@ -75,11 +77,14 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
             {questionnaire.frequency.ToString()}
             </Typography>
            </Stack>
-
-           <Stack>
+        </Grid>
+        <Grid item xs={2}>
+        <Stack>
            <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelser</Button>        
            </Stack>
-       </Stack>
+        </Grid>
+      </Grid>
+
     </>
     )
   }
