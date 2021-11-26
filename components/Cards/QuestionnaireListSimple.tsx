@@ -26,7 +26,7 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
                 <CardHeader subheader={
                     <>
                     Spørgeskemaer
-                    <ErrorBoundary rerenderChildren={true}>
+                    <ErrorBoundary rerenderChildren={false}>
                     </ErrorBoundary>
                     </>
                 }/>
