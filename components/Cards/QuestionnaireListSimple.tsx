@@ -27,7 +27,7 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
                 <CardHeader subheader={
                     <>
                     Spørgeskemaer
-                    <ErrorBoundary rerenderChildren={true}>
+                    <ErrorBoundary rerenderChildren={false}>
                     <AddQuestionnaireButton afterAddingQuestionnaire={()=>this.forceUpdate()} careplan={this.props.careplan} />
                     </ErrorBoundary>
                     </>
