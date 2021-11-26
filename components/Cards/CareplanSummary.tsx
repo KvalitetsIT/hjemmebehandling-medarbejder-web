@@ -1,11 +1,14 @@
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
+import Button from '@mui/material/Button';
 import { CardHeader, Grid, Typography } from '@mui/material';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
+import { Link } from 'react-router-dom';
 import ICareplanService from '../../services/interfaces/ICareplanService';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 
@@ -38,10 +41,17 @@ export class CareplanSummary extends Component<Props,{}> {
       const careplan = this.props.careplan;
     return (
         <Card>
-            <CardHeader subheader="Monitoreringsplan"/>
+            <CardHeader subheader={
+            <>
+            Monitoreringsplan 
+            <Button component={Link} to={"/patients/"+careplan.patient.cpr+"/edit/plandefinition"}>
+                <ModeEditOutlineIcon fontSize="inherit"/> 
+            </Button>
+            </>
+            }/>
             <CardContent>
                 <Grid container>
-                    <Grid item xs={12}>
+                    <Grid item xs={10}>
                             <Typography variant="caption">
                             Afdeling
                         </Typography>
@@ -66,6 +76,9 @@ export class CareplanSummary extends Component<Props,{}> {
                             <ConfirmationButton color="error" title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
                             Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
                             </ConfirmationButton>
+                    </Grid>
+                    <Grid item xs={2}>
+
                     </Grid>
                 </Grid>
                 
