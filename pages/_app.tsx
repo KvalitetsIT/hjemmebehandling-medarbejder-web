@@ -16,6 +16,9 @@ import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -53,6 +56,8 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   return (
     <>
     <div suppressHydrationWarning>
+    <MuiThemeProvider theme={THEME}>
+    <CssBaseline />
     <ApiContext.Provider
       value={{
         //Services
@@ -74,11 +79,17 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
               <Component {...pageProps} />
             </Layout>}
         </ApiContext.Provider>
-    
+    </MuiThemeProvider>
     </div>
     </>
     )
   
 }
+
+const THEME = createTheme({
+  typography: {
+   "fontFamily": "verdana"
+  }
+});
 
 export default MyApp
