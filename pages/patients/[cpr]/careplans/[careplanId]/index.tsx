@@ -100,11 +100,11 @@ async populateCareplans() : Promise<void>{
             </Stack>
             </ErrorBoundary>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
         <ErrorBoundary>
         <Stack spacing={3}>
             <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
-            <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>    
+            <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan}/>
             </Stack>
             </ErrorBoundary>
         </Grid>

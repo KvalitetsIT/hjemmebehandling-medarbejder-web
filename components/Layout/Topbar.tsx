@@ -13,21 +13,24 @@ export class Topbar extends Component<{},State> {
 
   render () : JSX.Element {
     return (
-        <>
-    <Grid justify="space-between" container>
-      <Grid item >
-         <Box paddingLeft={30}>
+        <>  
+        
+    <Grid component={Box} paddingRight={2} paddingBottom={3} container>
+      <Grid item xs={2}>
+     
            <ErrorBoundary>
             <SearchPatientInput />
             </ErrorBoundary>
-         </Box>
+ 
+      
       </Grid>
-      <Grid>
-        <Box paddingRight={5} >
+      <Grid item xs={8}></Grid>
+      <Grid item xs={2}>
+    
         <ErrorBoundary>
             <UserContextCard />
             </ErrorBoundary>
-        </Box>
+  
       </Grid>
     </Grid>
 

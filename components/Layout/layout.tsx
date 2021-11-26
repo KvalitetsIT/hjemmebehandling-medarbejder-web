@@ -1,6 +1,5 @@
 import { Box } from '@material-ui/core';
 import React, { Component } from 'react';
-import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import AutoBreadcrumbs from './AutoBreadcrumbs';
@@ -8,9 +7,9 @@ import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
 import CreatePatient from '../../pages/createpatient';
-import { ErrorBoundary } from './ErrorBoundary';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
+import MiniDrawer from './MUI/MiniVariantDrawer';
 
 
 export interface State {
@@ -47,19 +46,23 @@ constructor(props : {}){
       }
     return (
 <>
+
+
+<Box sx={{ display: 'flex' }}>
+      
+
         <Router>
-           <Topbar />
 
-        <ErrorBoundary>
-            <Sidebar/>
-        </ErrorBoundary>
+        <MiniDrawer/>
 
-        <Box paddingLeft={35} paddingRight={5} paddingTop={1}>
-            
-            <AutoBreadcrumbs/> 
-            
-            <Box paddingTop={5} >
-            <ErrorBoundary>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        
+          <Topbar/>
+          
+          <Box paddingBottom={3}>
+          <AutoBreadcrumbs /> 
+          </Box>
+          
             <Switch>              
               <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/"+props.match.params.cpr+"/careplans/Aktiv/questionnaires/"+props.match.params.questionnaireId}/>} />
               
@@ -85,11 +88,9 @@ constructor(props : {}){
 
               <Route path="/"><Patients/></Route>
             </Switch>
-            </ErrorBoundary>
             </Box>
-        </Box>
-        
         </Router>
+        </Box>
         </>
     );
   }

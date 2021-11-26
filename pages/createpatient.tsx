@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import {Box, Card, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
+import {Box, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import { PatientDetail } from '../components/Models/PatientDetail';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
@@ -152,14 +152,14 @@ getFirstError() : string{
     canSubmit &&= this.state.careplan.planDefinitions.length === 0 ? false : true; //Plandefinition must be filled!
 
     return (
-      <ErrorBoundary>
       <form onSubmit={(e)=>{e.preventDefault(); this.submitPatient()}} noValidate onBlur={()=>this.forceUpdate()}  > 
-       
-      <Stack direction="row" spacing={3}> 
-        
-      <Stack spacing={3}>
-       
+      <Grid container>
+
       
+      <Grid item spacing={5} xs={7}  >
+      
+       
+      <ErrorBoundary>
       <Accordion expanded={this.state.accordians.PatientIsOpen} onChange={()=>this.goToPatientIsOpen()}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -181,7 +181,9 @@ getFirstError() : string{
           <Button disabled={this.state.patientError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
-   
+      </ErrorBoundary>
+
+      <ErrorBoundary>
       <Accordion expanded={this.state.accordians.RelativeContactIsOpen} onChange={()=>this.goToRelativeContactIsOpen()}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -202,7 +204,9 @@ getFirstError() : string{
           <Button disabled={this.state.contactError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
+      </ErrorBoundary>
 
+      <ErrorBoundary>
       <Accordion expanded={this.state.accordians.PlanDefinitionIsOpen} onChange={()=>this.goToPlanDefinitionIsOpen()}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -224,14 +228,18 @@ getFirstError() : string{
           <Button disabled={this.state.planDefinitionError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
-        
+      
+      </ErrorBoundary>
+
       <Tooltip title={this.getFirstError()}>
-        <Stack>
+        <Stack paddingTop={5}>
       <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
       </Stack>
       </Tooltip>
+   
       
-        </Stack>
+      </Grid>
+       <Grid paddingLeft={3} xs={2}>
         <div>
         <Card>
           <CardContent>
@@ -253,9 +261,10 @@ getFirstError() : string{
         </CardContent>
         </Card>
         </div>
-        </Stack>
+        </Grid>
+
+        </Grid>
         </form>
-        </ErrorBoundary>
         
         
     )

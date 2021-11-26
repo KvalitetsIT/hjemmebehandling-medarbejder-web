@@ -107,6 +107,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          let frequency = new Frequency();
          frequency.days = [DayEnum.Monday,DayEnum.Wednesday];
          frequency.repeated = FrequencyEnum.WEEKLY;
+         frequency.deadline = new Date(0,0,0,11,0)
          this.questionnaire1.frequency = frequency;
          
  
@@ -115,6 +116,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          let frequency2 = new Frequency();
          frequency2.days = [DayEnum.Monday,DayEnum.Wednesday,DayEnum.Friday];
          frequency2.repeated = FrequencyEnum.WEEKLY;
+         frequency2.deadline = new Date(0,0,0,11,0)
          this.questionnaire2.frequency = frequency2;
  
          this.questionnaire3.id = "qn3"
@@ -122,6 +124,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          let frequency3 = new Frequency();
          frequency3.days = [DayEnum.Monday,DayEnum.Tuesday,DayEnum.Wednesday,DayEnum.Thursday,DayEnum.Friday];
          frequency3.repeated = FrequencyEnum.WEEKLY;
+         frequency3.deadline = new Date(0,0,0,11,0)
          this.questionnaire3.frequency = frequency3;
  
  

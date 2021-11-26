@@ -5,7 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { Questionnaire } from '../Models/Questionnaire';
-import { AddQuestionnaireButton } from '../Input/AddQuestionnaireButton';
 import { FrequencyTableRow } from '../Input/FrequencyTableRow';
 import { ErrorBoundary } from '../Layout/ErrorBoundary';
 
@@ -28,7 +27,6 @@ export class QuestionnaireListSimple extends Component<Props,{}> {
                     <>
                     Spørgeskemaer
                     <ErrorBoundary rerenderChildren={false}>
-                    <AddQuestionnaireButton afterAddingQuestionnaire={()=>this.forceUpdate()} careplan={this.props.careplan} />
                     </ErrorBoundary>
                     </>
                 }/>

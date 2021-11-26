@@ -59,7 +59,6 @@ async searchForPatient(searchString : string) : Promise<void>{
         options={this.state.patientResults}
         onInputChange={async (a,b)=>await this.searchForPatient(b)}
         renderOption={(a,b) => (<Stack><Button component={Link} to={"/patients/"+b.cpr}>{b.firstname + " " + b.lastname + " (" + b.cpr + ")"}</Button></Stack>)}
-        sx={{ width: 300 }}
         renderInput={(params) => <TextField  {...params} InputProps={{ 
             ...params.InputProps,
             endAdornment: (
