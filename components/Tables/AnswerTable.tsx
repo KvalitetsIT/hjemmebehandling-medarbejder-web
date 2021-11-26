@@ -173,7 +173,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                             <Stack component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
                                 <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
                                 <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
-                                <ErrorBoundary rerenderChildren={true}>
+                                <ErrorBoundary rerenderChildren={false}>
                                     <QuestionnaireResponseStatusSelect onUpdate={()=>this.forceUpdate()} questionnaireResponse={collection} />  
                                 </ErrorBoundary>
                             </Stack>
@@ -200,7 +200,7 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                                 
                                 {questionnairesResponsesToShow.map(questionResponse => {
                                     const answer = this.questionnaireService.findAnswer(question,questionResponse);
-                                    const thresholdCollection = this.props.careplan.thresholdCollections.find(x=>x.questionId == question.Id);
+                                    const thresholdCollection = this.props.questionnaires.thresholds.find(x=>x.questionId == question.Id);
                                     const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection,answer) : CategoryEnum.GREEN;
                                     return (
                                         <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>

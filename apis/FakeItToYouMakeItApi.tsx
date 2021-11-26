@@ -109,6 +109,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
          frequency.repeated = FrequencyEnum.WEEKLY;
          frequency.deadline = new Date(0,0,0,11,0)
          this.questionnaire1.frequency = frequency;
+         this.questionnaire1.thresholds = [this.tc1,this.tc2,this.tc3]
          
  
          this.questionnaire2.id = "qn2"
@@ -135,7 +136,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 
          //====================================== Thresholds
         this.tc1.questionId = "q1";
-        this.tc1.quesitonnaireId = "qn1"
         this.tc1.thresholdOptions = [
             this.CreateOption("1","Korekt",CategoryEnum.GREEN),
             this.CreateOption("2","Ved ikke",CategoryEnum.YELLOW),
@@ -143,7 +143,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         ]
 
         this.tc2.questionId="q2"
-        this.tc2.quesitonnaireId = "qn1"
         this.tc2.thresholdNumbers = [
             this.CreateThreshold("1",120,135,CategoryEnum.RED),
             this.CreateThreshold("2",37,120,CategoryEnum.YELLOW),
@@ -151,7 +150,6 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         ]
 
         this.tc3.questionId="q3"
-        this.tc3.quesitonnaireId = "qn1"
         this.tc3.thresholdNumbers = [
             this.CreateThreshold("1",0,37,CategoryEnum.RED),
             this.CreateThreshold("2",37,44,CategoryEnum.YELLOW),
@@ -164,7 +162,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.careplan1.planDefinitions = [this.planDefinition1]
         this.careplan1.creationDate = this.CreateDate()
         this.careplan1.questionnaires = [this.questionnaire1]
-        this.careplan1.thresholdCollections = [this.tc1,this.tc2,this.tc3]
+        
 
         //======================================= careplan1
         this.careplan2.id = "plan2"
@@ -184,7 +182,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
         
         let questionAnswerMap1 = new Map<Question,Answer>();
-        questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
+        questionAnswerMap1.set(this.question1,this.CreateStringAnswer(this.questionnaire1.thresholds.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
         questionAnswerMap1.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
         this.questionnaireResponse1.questions = questionAnswerMap1;
@@ -199,7 +197,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
         
         let questionAnswerMap2 = new Map<Question,Answer>();
-        questionAnswerMap2.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
+        questionAnswerMap2.set(this.question1,this.CreateStringAnswer(this.questionnaire1.thresholds.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[0].option));        
         questionAnswerMap2.set(this.question2,this.CreateNumberAnswer(35,UnitType.DEGREASE_CELSIUS));
         questionAnswerMap2.set(this.question3,this.CreateNumberAnswer(10,UnitType.NOUNIT));
         this.questionnaireResponse2.questions = questionAnswerMap2;
@@ -213,7 +211,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
         
         let questionAnswerMap3 = new Map<Question,Answer>();
-        questionAnswerMap3.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[1].option));        
+        questionAnswerMap3.set(this.question1,this.CreateStringAnswer(this.questionnaire1.thresholds.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[1].option));        
         questionAnswerMap3.set(this.question2,this.CreateNumberAnswer(37,UnitType.DEGREASE_CELSIUS));
         questionAnswerMap3.set(this.question3,this.CreateNumberAnswer(90,UnitType.NOUNIT));
         this.questionnaireResponse3.questions = questionAnswerMap3;
@@ -226,7 +224,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
         
         let questionAnswerMap4 = new Map<Question,Answer>();
-        questionAnswerMap4.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
+        questionAnswerMap4.set(this.question1,this.CreateStringAnswer(this.questionnaire1.thresholds.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
         questionAnswerMap4.set(this.question2,this.CreateNumberAnswer(42,UnitType.DEGREASE_CELSIUS));
         questionAnswerMap4.set(this.question3,this.CreateNumberAnswer(100,UnitType.NOUNIT));
         this.questionnaireResponse4.questions = questionAnswerMap4;
@@ -239,7 +237,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
         
         let questionAnswerMap5 = new Map<Question,Answer>();
-        questionAnswerMap5.set(this.question1,this.CreateStringAnswer(this.careplan1.thresholdCollections.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
+        questionAnswerMap5.set(this.question1,this.CreateStringAnswer(this.questionnaire1.thresholds.find(x=>x.questionId == this.question1.Id)!.thresholdOptions[2].option));        
         questionAnswerMap5.set(this.question2,this.CreateNumberAnswer(44,UnitType.DEGREASE_CELSIUS));
         questionAnswerMap5.set(this.question3,this.CreateNumberAnswer(50,UnitType.NOUNIT));
         this.questionnaireResponse5.questions = questionAnswerMap5;

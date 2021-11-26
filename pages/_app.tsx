@@ -16,7 +16,7 @@ import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
-import { styled, useTheme, Theme, CSSObject, ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@material-ui/core';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
