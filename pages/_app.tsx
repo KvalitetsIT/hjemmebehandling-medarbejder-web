@@ -16,9 +16,8 @@ import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
-import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { styled, useTheme, Theme, CSSObject, ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@material-ui/core';
-
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -56,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   return (
     <>
     <div suppressHydrationWarning>
-    <MuiThemeProvider theme={THEME}>
+    <ThemeProvider theme={THEME}>
     <CssBaseline />
     <ApiContext.Provider
       value={{
@@ -79,7 +78,7 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
               <Component {...pageProps} />
             </Layout>}
         </ApiContext.Provider>
-    </MuiThemeProvider>
+    </ThemeProvider>
     </div>
     </>
     )
@@ -89,6 +88,25 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
 const THEME = createTheme({
   typography: {
    "fontFamily": "verdana"
+  },
+  components : {
+    MuiChip : {
+      variants : [
+        {
+          props: { variant: "filled", color: "warning" },
+          style: {
+            backgroundColor : "#ED6C0"
+          },
+        },
+      ]
+    },
+    MuiButton : {
+      styleOverrides : {
+        root : {
+          borderRadius : 28
+        }
+      }
+    }
   }
 });
 
