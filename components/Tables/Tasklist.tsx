@@ -1,7 +1,6 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Skeleton } from '@mui/material';
+import { Button, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { TaskType } from '../Models/TaskType';
 import { Link } from 'react-router-dom';
@@ -123,7 +122,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
   renderTableData(tasks : Array<Task>) : JSX.Element{
     return (<>
 
-            <TableContainer component={Paper}>
+          <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -135,6 +134,8 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
             <TableCell align="left"></TableCell>
             
           </TableRow>
+          </TableHead>
+          <TableBody>
         {!tasks ? <></> : tasks.map((task) => (
           <>
             <TableRow key={task.cpr}>
@@ -153,17 +154,13 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
                   Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
                 </ConfirmationButton>
               :
-              <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} variant="contained">Se besvarelse</Button>
+              <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>
               }
                 
               </TableCell>
             </TableRow>
           </>
         ))}
-
-        </TableHead>
-        <TableBody>
-          
         </TableBody>
       </Table>
     </TableContainer>

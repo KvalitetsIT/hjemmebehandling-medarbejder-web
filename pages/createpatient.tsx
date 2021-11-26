@@ -1,10 +1,9 @@
-import { Button, CardContent } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import {Box, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
+import {Button, CardContent, Box, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
 import { PatientDetail } from '../components/Models/PatientDetail';
 import { Contact } from '../components/Models/Contact';
 import ApiContext from './_context';
@@ -20,6 +19,7 @@ import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
+import { CSSProperties } from '@material-ui/styles';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -131,7 +131,9 @@ getFirstError() : string{
 
   return "";
 }
-
+continueButtonStyle : CSSProperties = {
+  marginTop : 2
+}
   render () : JSX.Element{
     this.InitializeServices();
 
@@ -178,7 +180,7 @@ getFirstError() : string{
               initialPatient={this.state.patient}
             />
           </Typography>
-          <Button disabled={this.state.patientError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
+          <Button sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
       </ErrorBoundary>
@@ -201,7 +203,7 @@ getFirstError() : string{
               onValidation={(errors) => this.setState({contactError : errors?.length == 0 ? undefined : errors[0].message})}
               initialContact={this.state.patient.contact}/>
           </Typography>
-          <Button disabled={this.state.contactError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
+          <Button disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
       </ErrorBoundary>
@@ -225,7 +227,7 @@ getFirstError() : string{
             <QuestionnaireListSimple careplan={this.state.careplan}/>
       
           </Typography>
-          <Button disabled={this.state.planDefinitionError ? true : false} component={Box} marginTop={2} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
+          <Button disabled={this.state.planDefinitionError ? true : false} sx={this.continueButtonStyle} component={Box} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
       </Accordion>
       
