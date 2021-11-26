@@ -22,7 +22,7 @@ import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum }
 import { AnswerDto } from "../generated/models/AnswerDto";
 import { CarePlanDto } from "../generated/models/CarePlanDto";
 import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
-import { FrequencyDto, FrequencyDtoWeekdayEnum } from "../generated/models/FrequencyDto";
+import { FrequencyDto, FrequencyDtoWeekdaysEnum } from "../generated/models/FrequencyDto";
 import { PatientDto } from "../generated/models/PatientDto";
 import { PersonDto } from "../generated/models/PersonDto";
 import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
@@ -256,7 +256,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             // Retrieve the careplans
             let api = new CarePlanApi(this.conf);
             let request = { cpr: cpr };
-            let carePlans = await api.getCarePlansByCpr(request);
+            let carePlans = await api.searchCarePlans(request);
             if(!carePlans) {
                 throw new Error('Could not retrieve careplans!');
             }
@@ -478,8 +478,12 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapFrequency(frequency: Frequency) : FrequencyDto {
         try{
+            let weekdays : FrequencyDtoWeekdaysEnum[] = [];
+            for (var day of frequency.days) {
+                weekdays.push( this.mapDayEnum(day) );
+            }
             return {
-                weekday: this.mapWeekday(frequency.days[0]) // TODO - handle multiple days ...
+                weekdays: weekdays,
             }
         } catch(error : any){
             return this.HandleError(error)
@@ -491,7 +495,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let frequency = new Frequency();
     
             frequency.repeated = FrequencyEnum.WEEKLY;
-            frequency.days = [this.mapWeekdayDto(frequencyDto.weekday!)];
+            frequency.days = this.mapWeekdayDto(frequencyDto.weekdays!);
     
             return frequency;
         } catch(error : any){
@@ -523,16 +527,20 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    private mapWeekday(weekday: DayEnum) : FrequencyDtoWeekdayEnum {
+    private mapWeekday(weekday: DayEnum) : FrequencyDtoWeekdaysEnum {
         try{
-            return FrequencyDtoWeekdayEnum.Mon;
+            return FrequencyDtoWeekdaysEnum.Mon;
         } catch(error : any){
             return this.HandleError(error)
         }
     }
 
-    private mapWeekdayDto(weekday: FrequencyDtoWeekdayEnum) : DayEnum {
-        return DayEnum.Monday;
+    private mapWeekdayDto(weekdays: FrequencyDtoWeekdaysEnum[]) : DayEnum[] {
+        let dayEnums : DayEnum[] = [];
+        for(var weekday of weekdays) {
+            dayEnums.push( this.mapFrequencyDtoWeekdaysEnum(weekday) );
+        }
+        return dayEnums;
     }
 
     private mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto) : QuestionnaireResponse {
@@ -655,6 +663,50 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 return CategoryEnum.RED
             default:
                 throw new Error('Could not map category ' + category);
+        }
+    }
+
+    private mapFrequencyDtoWeekdaysEnum(weekday: FrequencyDtoWeekdaysEnum) : DayEnum {
+        switch(weekday) {
+            case FrequencyDtoWeekdaysEnum.Mon:
+                return DayEnum.Monday;
+            case FrequencyDtoWeekdaysEnum.Tue:
+                return DayEnum.Tuesday;
+            case FrequencyDtoWeekdaysEnum.Wed:
+                return DayEnum.Wednesday;
+            case FrequencyDtoWeekdaysEnum.Thu:
+                return DayEnum.Thursday;
+            case FrequencyDtoWeekdaysEnum.Fri:
+                return DayEnum.Friday;
+            case FrequencyDtoWeekdaysEnum.Sat:
+                return DayEnum.Saturday;
+            case FrequencyDtoWeekdaysEnum.Sun:
+                return DayEnum.Sunday;
+            
+            default:
+                throw new Error('Could not map category ' + weekday);
+        }
+    }
+
+    private mapDayEnum(day: DayEnum) : FrequencyDtoWeekdaysEnum {
+        switch(day) {
+            case DayEnum.Monday:
+                return FrequencyDtoWeekdaysEnum.Mon
+            case DayEnum.Tuesday:
+                return FrequencyDtoWeekdaysEnum.Tue;
+            case DayEnum.Wednesday:
+                return FrequencyDtoWeekdaysEnum.Wed;
+            case DayEnum.Thursday:
+                return FrequencyDtoWeekdaysEnum.Thu;
+            case DayEnum.Friday:
+                return FrequencyDtoWeekdaysEnum.Fri;
+            case DayEnum.Saturday:
+                return FrequencyDtoWeekdaysEnum.Sat;
+            case DayEnum.Sunday:
+                return FrequencyDtoWeekdaysEnum.Sun;
+            
+            default:
+                throw new Error('Could not map category ' + day);
         }
     }
 }
