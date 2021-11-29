@@ -25,7 +25,6 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
 
     
     const urlSegments = this.props.location.pathname.split("/")
-    console.log(urlSegments);
     let totalUrlIncremental = "";
   return (
     
