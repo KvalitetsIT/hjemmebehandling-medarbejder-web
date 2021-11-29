@@ -140,7 +140,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
           <>
             <TableRow key={task.cpr}>
               <TableCell component="th" scope="row">
-                <Chip color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
+                <Chip className="round" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
               </TableCell>
               <TableCell align="left">
                 <Button  component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>

@@ -17,7 +17,7 @@ import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline } from '@material-ui/core';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -55,8 +55,9 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   return (
     <>
     <div suppressHydrationWarning>
+    
     <ThemeProvider theme={THEME}>
-    <CssBaseline />
+    
     <ApiContext.Provider
       value={{
         //Services
@@ -73,8 +74,11 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
         collectionHelper : new CollectionHelper()
       }}
     >
+      <CssBaseline />
         {typeof window === 'undefined' ? null : 
+          
           <Layout>
+            
               <Component {...pageProps} />
             </Layout>}
         </ApiContext.Provider>
@@ -97,9 +101,16 @@ const redText = "rgb(234,124,123)"
 const blueBg = "rgb(232,239,247)"
 const blueText = "rgb(133,135,138)"
 
+const mainBackground = "#F2F2F2"
+
 const THEME = createTheme({
   typography: {
    "fontFamily": "verdana"
+  },
+  palette : {
+    background : {
+      default : mainBackground,
+    }
   },
   components : {
     MuiAvatar : {
@@ -126,12 +137,24 @@ const THEME = createTheme({
     MuiChip : {
       styleOverrides : {
         root : {
-          borderRadius : 28
+          borderRadius : 28,
+        },
+        label : {
+          padding : 0
         }
       },
       variants : [
         {
-          props: { variant: "filled", color: "success" },
+          props: { className:"round" },
+          style: {
+            height : 50,
+            width : 50,
+            borderRadius : 100,
+            fontWeight : "bold",
+          },
+        },
+        {
+          props: { variant: "filled", color: "success", },
           style: {
             backgroundColor : greenBg,
             color : greenText

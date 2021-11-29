@@ -13,7 +13,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import AddIcon from '@mui/icons-material/Add';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
