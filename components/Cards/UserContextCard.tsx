@@ -12,6 +12,7 @@ import { Button, CardActionArea, CardActions, Collapse } from '@mui/material';
 import { BffBackendApi } from '../../apis/BffBackendApi';
 
 
+
 export interface Props {
     color? : string;
 }
@@ -50,6 +51,12 @@ export class UserContextCard extends Component<Props,State> {
        }
      }
   }
+  
+  logout() :void {
+ 	 window.location.href = "/oauth2/sign_out";
+  }
+  
+  
 
 async getUser() : Promise<void>{
   try{
@@ -100,7 +107,7 @@ async getUser() : Promise<void>{
                     <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
               </CardContent>
               <CardActions>
-                <Button style={{ width: '100%', color: 'red' }}>
+                <Button style={{ width: '100%', color: 'red' }} onClick={this.logout}>
                 logud
                 </Button>
               </CardActions>
