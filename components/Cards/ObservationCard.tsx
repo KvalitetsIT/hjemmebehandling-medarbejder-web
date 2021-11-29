@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
-import { CardHeader, Grid, GridSize } from '@mui/material';
+import { Alert, CardHeader, Grid, GridSize, Typography } from '@mui/material';
 import { Questionnaire } from '../Models/Questionnaire';
 import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
@@ -83,7 +83,11 @@ export class ObservationCard extends Component<Props,State> {
         return (<LoadingSmallComponent/>)
 
     if(this.state.questionnaireResponses.length == 0){
-        return (<></>)
+        return (
+        <Alert severity="info">
+            <Typography>Ingen tilgængelige målinger</Typography>
+        </Alert>
+        )
     }
 
     const allQuestions : Question[] = [];
