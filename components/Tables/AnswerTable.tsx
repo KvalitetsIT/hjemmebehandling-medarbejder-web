@@ -1,7 +1,6 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Alert, AlertColor, Box, Button, Stack } from '@mui/material';
+import { Alert, AlertColor, Box, Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -106,6 +105,7 @@ getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary
 }
 
 getDisplayNameFromCategory(category : CategoryEnum) : string {
+    
     if(category === CategoryEnum.RED)
         return "Rød"
     if(category === CategoryEnum.YELLOW)

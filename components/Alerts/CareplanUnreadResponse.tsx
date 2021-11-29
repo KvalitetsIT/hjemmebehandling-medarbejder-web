@@ -5,7 +5,7 @@ import { PatientCareplan } from '../Models/PatientCareplan';
 import Alert from '@mui/material/Alert';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { CategoryEnum } from '../Models/CategoryEnum';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 
 export interface Props {
@@ -38,26 +38,26 @@ export class CareplanUnreadResponse extends Component<Props,{}> {
 
         }
     }
-  
+    
+    if(responses.length == 0)
+      return (<></>);
 
-      if(responses.length == 0)
-        return (<></>);
-
-      const latestUnansweredAnswer = responses.sort((a,b) =>b.answeredTime!.getTime() - a.answeredTime!.getTime())[0]
+    const latestUnansweredAnswer = responses.sort((a,b) =>b.answeredTime!.getTime() - a.answeredTime!.getTime())[0]
     return (
-<>
-<Card>
-  <CardContent>
-                <Link to={"./../questionnaires/"+latestUnansweredAnswer.questionnaireId} color="inherit" >
-                    {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ? 
-                        <Alert variant="filled" icon={<ErrorIcon/>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
-                            Ulæst besvarelse     
-                        </Alert> : ""
-                    }
-                    </Link>   
-                    </CardContent>
-                    </Card>
-</>
+      <>
+        <Card>
+          <CardContent>
+              <Link to={"./../questionnaires/"+latestUnansweredAnswer.questionnaireId} color="inherit" >
+                  {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ? 
+                      <Alert variant="filled" icon={<ErrorIcon fontSize="large"/>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
+                          <Typography variant="subtitle2">Ulæst besvarelse</Typography>
+                          <Typography variant="caption">Se besvarelse</Typography>
+                      </Alert> : ""
+                  }
+                  </Link>   
+          </CardContent>
+        </Card>
+      </>
     );
   }
 

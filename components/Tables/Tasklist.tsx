@@ -1,6 +1,6 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Button, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { TaskType } from '../Models/TaskType';
 import { Link } from 'react-router-dom';
@@ -122,7 +122,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
   renderTableData(tasks : Array<Task>) : JSX.Element{
     return (<>
 
-          <TableContainer component={Paper}>
+          <TableContainer component={Card}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
