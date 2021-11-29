@@ -3,7 +3,6 @@ import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -96,7 +95,7 @@ export default function MiniDrawer() : JSX.Element {
         <List >
         <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
-              <MenuIcon/>
+            <img width={30} src="/assets/images/logo.svg" alt="An SVG of an eye" />
             </ListItemIcon>
             <ListItemText  style={{fontWeight:"bold", paddingTop:20, paddingBottom:20}} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
             </ListItem>
