@@ -178,12 +178,42 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         } catch(error : any){
             return this.HandleError(error)
         }
-        
     }
 
     async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+        try {
+            let api = new CarePlanApi(this.conf)
+            let request = {
+                onlyUnsatisfiedSchedules: true
+            }
+
+
+            let carePlans = await api.searchCarePlans(request)
+
+            return carePlans.map(cp => this.buildTaskFromCarePlan(cp))
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+    }
+
+    private buildTaskFromCarePlan(carePlan: CarePlanDto) : Task {
         try{
-            return []
+            let task = new Task()
+
+            task.cpr = carePlan.patientDto!.cpr!
+            task.category = CategoryEnum.BLUE
+            task.firstname = carePlan.patientDto!.givenName
+            task.lastname = carePlan.patientDto!.familyName
+            task.questionnaireResponseStatus = undefined
+
+            var questionnaire = carePlan.questionnaires![0].questionnaire!
+            task.questionnaireId = questionnaire.id!
+            task.questionnaireName = questionnaire.title!
+
+            task.answeredTime = undefined
+            task.responseLinkEnabled = false
+
+            return task
         } catch(error : any){
             return this.HandleError(error)
         }
