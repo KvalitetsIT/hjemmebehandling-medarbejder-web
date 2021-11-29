@@ -10,6 +10,7 @@ import UserService from '../../services/UserService';
 import { FakeItToYouMakeItApi } from '../../apis/FakeItToYouMakeItApi';
 import { Button, CardActionArea, CardActions, Collapse } from '@mui/material';
 import { BffBackendApi } from '../../apis/BffBackendApi';
+import ApiContext from '../../pages/_context';
 
 
 export interface Props {
@@ -24,6 +25,7 @@ export interface State {
 
 export class UserContextCard extends Component<Props,State> {
   static displayName = UserContextCard.name;
+  static contextType = ApiContext;
   userService!: IUserService;
 
   constructor(props : Props){
@@ -42,14 +44,14 @@ export class UserContextCard extends Component<Props,State> {
   }
 
   InitializeServices() : void{
-	// context not set
-     this.userService  = new UserService(new BffBackendApi());
-     if (process?.env.NODE_ENV === 'development') {
-       if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
-        this.userService = new FakeItToYouMakeItApi();
-       }
-     }
+	 this.userService = this.context.userService;
   }
+  
+  logout() :void {
+ 	 window.location.href = "/oauth2/sign_out";
+  }
+  
+  
 
 async getUser() : Promise<void>{
   try{
@@ -100,7 +102,7 @@ async getUser() : Promise<void>{
                     <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
               </CardContent>
               <CardActions>
-                <Button style={{ width: '100%', color: 'red' }}>
+                <Button style={{ width: '100%', color: 'red' }} onClick={this.logout}>
                 logud
                 </Button>
               </CardActions>
