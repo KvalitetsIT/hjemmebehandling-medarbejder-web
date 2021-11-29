@@ -216,7 +216,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         questionAnswerMap3.set(this.question3,this.CreateNumberAnswer(90,UnitType.NOUNIT));
         this.questionnaireResponse3.questions = questionAnswerMap3;
         //======================================= Response // QuestionResponse4
-        this.questionnaireResponse4.id = "qr3"
+        this.questionnaireResponse4.id = "qr4"
         this.questionnaireResponse4.questionnaireId = this.questionnaire1.id
         this.questionnaireResponse4.patient = this.patient1;
         this.questionnaireResponse4.category = CategoryEnum.RED;
@@ -229,7 +229,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         questionAnswerMap4.set(this.question3,this.CreateNumberAnswer(100,UnitType.NOUNIT));
         this.questionnaireResponse4.questions = questionAnswerMap4;
         //======================================= Response // QuestionResponse5
-        this.questionnaireResponse5.id = "qr3"
+        this.questionnaireResponse5.id = "qr5"
         this.questionnaireResponse5.questionnaireId = this.questionnaire1.id
         this.questionnaireResponse5.patient = this.patient1;
         this.questionnaireResponse5.category = CategoryEnum.RED;
