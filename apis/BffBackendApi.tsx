@@ -195,7 +195,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             let api = new CarePlanApi(this.conf)
             let request = {
-                onlyUnsatisfiedSchedules: true
+                onlyUnsatisfiedSchedules: true,
+                pageNumber: page,
+                pageSize: pagesize
             }
 
 
