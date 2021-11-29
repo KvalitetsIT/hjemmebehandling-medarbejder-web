@@ -127,7 +127,7 @@ export default function MiniDrawer() : JSX.Element {
           <List style={bottomPush}>
           <ListItem style={newPatientButton} button component={Link} color="inherit"  to="/newpatient">
             <ListItemIcon>
-              <AddIcon style={{color:"white"}}/>
+              <AddIcon fontSize="medium" style={{color:"white", marginLeft : -5}}/>
             </ListItemIcon>               
               <ListItemText primary="Opret patient" />
             
