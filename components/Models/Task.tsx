@@ -7,6 +7,7 @@ export class Task {
     lastname? : string
     questionnaireResponseStatus? : string
     questionnaireName! : string
+    carePlanId!: string
     questionnaireId! : string
     answeredTime? : Date
     responseLinkEnabled! : boolean

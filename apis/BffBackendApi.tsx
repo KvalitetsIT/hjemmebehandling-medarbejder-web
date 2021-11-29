@@ -41,9 +41,20 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
         throw new Error("Method not implemented.");
     }
-    RemoveAlarm(task: Task): Promise<void> {
-        throw new Error("Method not implemented.");
+
+    async RemoveAlarm(task: Task): Promise<void> {
+        try {
+            let api = new CarePlanApi(this.conf)
+            let request = {
+                id: FhirUtils.unqualifyId(task.carePlanId)
+            }
+
+            return await api.resolveAlarm(request)
+        } catch(error: any) {
+            return this.HandleError(error)
+        }
     }
+
     conf : Configuration = new Configuration({ basePath: '/api/proxy' });
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
@@ -205,6 +216,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             task.firstname = carePlan.patientDto!.givenName
             task.lastname = carePlan.patientDto!.familyName
             task.questionnaireResponseStatus = undefined
+            task.carePlanId = carePlan.id
 
             var questionnaire = carePlan.questionnaires![0].questionnaire!
             task.questionnaireId = questionnaire.id!
