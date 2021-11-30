@@ -105,7 +105,7 @@ const mainBackground = "#F2F2F2"
 
 const THEME = createTheme({
   typography: {
-   "fontFamily": "verdana"
+   "fontFamily": "verdana, sans-serif"
   },
   palette : {
     background : {
