@@ -38,7 +38,6 @@ export class ErrorBoundary extends React.Component<Props,State> {
         // You can render any custom fallback UI
         return (<>
         <Alert severity="error" >Der er opstået en fejl</Alert>
-        {this.props.rerenderChildren ? this.props.children : <></>}
         <ToastError error={this.state.error}></ToastError>
         </>)
       }
