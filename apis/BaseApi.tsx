@@ -7,9 +7,14 @@ export default class BaseApi {
      * @param error the thrown error from api-method (this should be of type response)
      */
     HandleError(error : any) : any{
-        let response = error as Response;
-        console.log(response)
-        throw new BaseApiError(response);
+        console.log(error)
+        if(error instanceof Response){
+            let response = error as Response;
+            throw new BaseApiError(response);
+        }
+        
+        throw error;
+        
     }
 
 

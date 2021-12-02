@@ -50,8 +50,8 @@ class PatientCareplans extends React.Component<Props,State> {
     this.questionnaireService = this.context.questionnaireService;
   }
 
-  componentDidMount() : void {
-    this.populateCareplans()
+  async componentDidMount() : Promise<void> {
+    await this.populateCareplans()
 }
 
 async populateCareplans() : Promise<void>{

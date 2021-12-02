@@ -17,7 +17,8 @@ export default class BaseService {
             throw new InvalidInputError(errors);
     }
 
-    HandleError(error : any) : any{
+    HandleError(error : any) : any {
+
         let errorIsApiError = error instanceof BaseApiError
         let errorIsServiceError = error instanceof BaseServiceError
 
@@ -26,11 +27,11 @@ export default class BaseService {
             
         if(errorIsServiceError)
             throw error; //The error is ok and can be displayed nicely
-        
+    
         throw new UnknownServiceError(error)
     }
 
-    FromApiToServiceError(apiError : BaseApiError){
+    private FromApiToServiceError(apiError : BaseApiError) : BaseServiceError {
         if(apiError.response.status === 403)
             return new NotCorrectRightsError();
             

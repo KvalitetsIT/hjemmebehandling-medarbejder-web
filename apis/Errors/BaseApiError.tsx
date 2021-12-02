@@ -4,13 +4,17 @@ export class BaseApiError extends Error {
     constructor(response : Response){
         super();
         this.response = response;
-        this.message = "("+this.response.status + ") " + this.response.statusText;
+        let responseStatus = this.response.status ?? "-1"
+        let responseText = this.response.statusText ?? "Ingen responsstatus"
+        this.message = "("+responseStatus + ") " + responseText;
     }
 
     displayMessage() : string{
         return this.response.url.includes("?") ? this.response.url.split("?")[0] : this.response.url
     }
     displayTitle() : string{
-        return "("+this.response.status + ") " + this.response.statusText;
+        let responseStatus = this.response.status ?? "-1"
+        let responseText = this.response.statusText ?? "Ingen responsstatus"
+        return "("+responseStatus + ") " + responseText;
     }
 }
