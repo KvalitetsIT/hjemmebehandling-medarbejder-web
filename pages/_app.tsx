@@ -78,11 +78,11 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
       <CssBaseline />
         {typeof window === 'undefined' ? null : 
           
-          <Layout>
               <ErrorBoundary>
+          <Layout>
                 <Component {...pageProps} />
-              </ErrorBoundary>
-            </Layout>}
+            </Layout>
+              </ErrorBoundary>}
         </ApiContext.Provider>
     </ThemeProvider>
     </div>

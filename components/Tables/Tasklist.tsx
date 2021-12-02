@@ -30,7 +30,6 @@ export class Tasklist extends Component<Props,State> {
 
   constructor(props : Props){
     super(props);
-
     this.state = {
         tasks : [],
         loading : true

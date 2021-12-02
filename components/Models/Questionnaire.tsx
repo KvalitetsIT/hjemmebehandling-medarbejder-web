@@ -6,4 +6,5 @@ export class Questionnaire {
     name!: string;
     frequency!: Frequency;
     thresholds!: ThresholdCollection[];
+    //TODO: Questions should be here
 }

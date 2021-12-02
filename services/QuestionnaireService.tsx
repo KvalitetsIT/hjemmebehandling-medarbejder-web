@@ -22,11 +22,11 @@ export default class QuestionnaireService extends BaseService implements IQuesti
 
   async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
     try{
-    this.ValidatePagination(page,pagesize);
-    return await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
-  } catch(error : any){
-    return this.HandleError(error);
-  }
+      this.ValidatePagination(page,pagesize);
+      return await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
+    } catch(error : any){
+      return this.HandleError(error);
+    }
   }
 
   async SetQuestionnaireFrequency(questionnaire: Questionnaire) : Promise<void>{

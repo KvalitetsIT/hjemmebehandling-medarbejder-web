@@ -10,6 +10,7 @@ import CreatePatient from '../../pages/createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
+import { ErrorBoundary } from './ErrorBoundary';
 
 
 export interface State {
@@ -50,7 +51,7 @@ constructor(props : {}){
 
 <Box sx={{ display: 'flex' }}>
       
-
+        <ErrorBoundary>
         <Router>
 
         <MiniDrawer/>
@@ -58,6 +59,7 @@ constructor(props : {}){
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         
           <Topbar/>
+          <ErrorBoundary>
           
           <Box paddingBottom={3}>
           <AutoBreadcrumbs /> 
@@ -88,8 +90,11 @@ constructor(props : {}){
 
               <Route path="/"><Patients/></Route>
             </Switch>
+            </ErrorBoundary>
             </Box>
+            
         </Router>
+        </ErrorBoundary>
         </Box>
         </>
     );
