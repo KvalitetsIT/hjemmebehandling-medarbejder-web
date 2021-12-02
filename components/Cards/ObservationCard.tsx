@@ -82,13 +82,7 @@ export class ObservationCard extends Component<Props,State> {
     if(this.state.loading)
         return (<LoadingSmallComponent/>)
 
-    if(this.state.questionnaireResponses.length == 0){
-        return (
-        <Alert severity="info">
-            <Typography>Ingen tilgængelige målinger</Typography>
-        </Alert>
-        )
-    }
+    
 
     const allQuestions : Question[] = [];
     const questionIterator = this.state.questionnaireResponses[0].questions.keys()
@@ -98,6 +92,14 @@ export class ObservationCard extends Component<Props,State> {
         if(question.value.type === QuestionTypeEnum.OBSERVATION)
             allQuestions.push(question.value)
         question = questionIterator.next()
+    }
+
+    if(allQuestions.length == 0){
+        return (
+        <Alert severity="info">
+            <Typography>Ingen tilgængelige målinger</Typography>
+        </Alert>
+        )
     }
         
     let counter = 0
