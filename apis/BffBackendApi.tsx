@@ -36,10 +36,11 @@ import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { NotImplementedError } from "./Errors/NotImplementedError";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
     GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
-        throw new Error("Method not implemented.");
+        throw new NotImplementedError();
     }
 
     async RemoveAlarm(task: Task): Promise<void> {
@@ -59,7 +60,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -67,21 +68,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
     }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
     }
     SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -103,7 +104,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -128,7 +129,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -148,7 +149,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
         try{
-            throw new Error("Method not implemented.");
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
