@@ -313,6 +313,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
+        console.log("cp-id: "+careplanId);
         try{
             let api = new QuestionnaireResponseApi(this.conf)
             let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
@@ -548,22 +549,39 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapThresholdDtos(thresholdDtos: Array<ThresholdDto>) : Array<ThresholdCollection> {
         try{
+            console.log(thresholdDtos)
             let thresholds: ThresholdCollection[] = [];
             
+            
             for(var thresholdDto of thresholdDtos) {
-                let threshold = new ThresholdCollection();
-                threshold.questionId = thresholdDto.questionId!;
-                if (thresholdDto.valueBoolean) {
-
+                let threshold = thresholds.find(x=>x.questionId == thresholdDto.questionId);
+                if (threshold === undefined) {
+                    threshold = new ThresholdCollection();
+                    threshold.questionId = thresholdDto.questionId!;
+                    thresholds.push(threshold);
+                }
+                
+                if (!(thresholdDto.valueBoolean === undefined)) {
+                    console.log(threshold.questionId +"=thresholdOption")
                     let thresholdOption = this.CreateOption(
                         thresholdDto.questionId!,
                         String(thresholdDto.valueBoolean!),
                         this.mapTresholdCategory(thresholdDto.type!)
                     );
-                    thresholds.push(threshold);
+                    threshold.thresholdOptions!.push(thresholdOption);
+                }
+                else {
+                    console.log(threshold.questionId +"=thresholdNumber")
+                    let thresholdNumber = this.createThresholdNumber(
+                        thresholdDto.questionId!,
+                        Number(thresholdDto.valueQuantityLow),
+                        Number(thresholdDto.valueQuantityHigh),
+                        this.mapTresholdCategory(thresholdDto.type!)
+                    );
+                    threshold.thresholdNumbers!.push(thresholdNumber);
                 }
             }
-    
+            console.log(thresholds)
             return thresholds;
         } catch(error : any){
             return this.HandleError(error)
@@ -608,6 +626,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapQuestionDto(questionDto: QuestionDto) : Question {
         let question = new Question();
+        question.Id = questionDto.linkId!;
         
         switch(questionDto.questionType){
             case QuestionDtoQuestionTypeEnum.Choice: 
@@ -635,9 +654,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         let answer: Answer = new StringAnswer();
 
         let value = answerDto.value!
-        if(Number.parseInt(value)) {
+        if(Number.parseFloat(value)) {
             let numberAnswer = new NumberAnswer()
-            numberAnswer.answer = Number.parseInt(value)
+            numberAnswer.answer = Number.parseFloat(value)
             answer = numberAnswer
         }
         else {
@@ -655,6 +674,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         option.category = category;
         option.id = id
         return option;
+    }
+
+    private createThresholdNumber(id : string, valueLow : number, valueHigh : number, category : CategoryEnum) : ThresholdNumber {
+        let number = new ThresholdNumber();
+        number.from = valueLow;
+        number.to = valueHigh;
+        number.category = category;
+        number.id = id
+        return number;
     }
 
     private mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus) : PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {

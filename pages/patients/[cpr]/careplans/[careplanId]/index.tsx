@@ -57,12 +57,14 @@ class PatientCareplans extends React.Component<Props,State> {
 async populateCareplans() : Promise<void>{
   
   const cpr = this.props.match.params.cpr;
-  const activeCareplanId = this.props.match.params.careplanId
+  let activeCareplanId = this.props.match.params.careplanId
   
   try{
     const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
     const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
   
+    let careplan = careplans.find(a => !a.terminationDate)!
+    activeCareplanId = careplan.id
     const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
     this.setState({
       loading : false,  
@@ -86,6 +88,7 @@ async populateCareplans() : Promise<void>{
         )
 
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
+    console.log(activeCareplan)
     return (
       <Grid container spacing={3}>
         <Grid item xs={2}>

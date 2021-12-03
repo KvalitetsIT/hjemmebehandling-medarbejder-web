@@ -166,7 +166,9 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
     this.initialiszeServices();
 
     const questionnaireResponses = this.props.questionnaireResponses;
+    console.log(questionnaireResponses)
     const question = this.props.question;
+    console.log(question)
     
     const answersData : number[] = [] //Contains all numbers that should be shown in chart
     const answersLabels = [] // Contains the x-axes values (dates)
@@ -174,7 +176,11 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
     //Go through all responses and push answers and dates to answerData, and answerLabels
     for(let responseIndex = 0 ; responseIndex < questionnaireResponses.length; responseIndex++){
         const response = questionnaireResponses[responseIndex];
-        const answer = response.questions.get(question) as NumberAnswer
+        let questionnaireQuestion = Array.from( response.questions.keys() ).find(x=>x.Id == question.Id);
+        const answer = response.questions.get(questionnaireQuestion!) as NumberAnswer
+        console.log("index=" + responseIndex + " -> " + response.id)
+        console.log("question.id: " + question.Id)
+        console.log("answer: " + answer)
         answersData.push(answer.answer)
         answersLabels.push(this.dateHelper.DateToString(response.answeredTime!))
     }

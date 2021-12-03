@@ -4,6 +4,6 @@ export class ThresholdNumber {
 
     id! : string
     category! : CategoryEnum
-    from! : number
-    to! : number
+    from? : number
+    to? : number
 }
