@@ -523,12 +523,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     private mapFrequency(frequency: Frequency) : FrequencyDto {
         try{
-            let weekdays : FrequencyDtoWeekdaysEnum[] = [];
-            for (var day of frequency.days) {
-                weekdays.push( this.mapDayEnum(day) );
-            }
             return {
-                weekdays: weekdays,
+                weekdays: frequency.days.map(d => this.mapDayEnum(d)),
+                timeOfDay: frequency.deadline
             }
         } catch(error : any){
             return this.HandleError(error)
@@ -539,8 +536,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try{
             let frequency = new Frequency();
     
-            frequency.repeated = FrequencyEnum.WEEKLY;
-            frequency.days = this.mapWeekdayDto(frequencyDto.weekdays!);
+            frequency.repeated = FrequencyEnum.WEEKLY
+            frequency.days = this.mapWeekdayDto(frequencyDto.weekdays!)
+            frequency.deadline = frequencyDto.timeOfDay!
     
             return frequency;
         } catch(error : any){

@@ -64,8 +64,13 @@ export class FrequencyTableRow extends Component<Props,State> {
   }
 
   SetFrequencyTime(time : Date) : void {
+    if(isNaN(time.getTime())) {
+      // Not a valid date, so we just return
+      return
+    }
+
     const oldFre = this.state.questionnaire;
-    oldFre.frequency.deadline = time;
+    oldFre.frequency.deadline = time.getHours() + ':' + time.getMinutes()
     console.log(time)
     this.setState({questionnaire : oldFre})
       if(this.props.afterChange)
@@ -108,7 +113,7 @@ export class FrequencyTableRow extends Component<Props,State> {
                 <TimePicker
                   label="Seneste besvarelses tidspunkt"
                   value={this.state.questionnaire.frequency.deadline}
-                  onChange={(newValue) => this.SetFrequencyTime(newValue as Date)}
+                  onChange={(newValue) => this.SetFrequencyTime(newValue)}
                   renderInput={(params) => <TextField {...params} />}
                 />
                 </LocalizationProvider>
