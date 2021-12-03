@@ -34,7 +34,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
           <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <ThumbnailCard avatar={<PatientAvatar patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
           <Typography variant="subtitle2">{currentCareplan?.patient.cpr}</Typography>
-          <Typography variant="subtitle1">{currentCareplan?.patient.primaryPhone}</Typography>
+          <Typography variant="subtitle1">{currentCareplan?.patient.primaryPhone ? currentCareplan?.patient.primaryPhone : "-"}</Typography>
         </ThumbnailCard>
         </Link>
         
@@ -42,7 +42,7 @@ export class PatientContextThumbnails extends Component<Props,{}> {
         <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <ThumbnailCard color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>}>
           <Typography variant="subtitle2">{currentCareplan.patient.contact.fullname}</Typography>
-          <Typography variant="subtitle1">{currentCareplan.patient.contact.primaryPhone}</Typography>
+          <Typography variant="subtitle1">{currentCareplan.patient.contact.primaryPhone ? currentCareplan.patient.contact.primaryPhone : "-"}</Typography>
         </ThumbnailCard>
         </Link>
         : <></>}
