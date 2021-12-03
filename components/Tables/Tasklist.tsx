@@ -1,13 +1,12 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Alert, Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { CategoryEnum } from '../Models/CategoryEnum';
 import { TaskType } from '../Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
 import { Task } from '../Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
-
 import FhirUtils from '../../util/FhirUtils';
 import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
@@ -119,6 +118,13 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
   }
 
   renderTableData(tasks : Array<Task>) : JSX.Element{
+    if(tasks.length <= 0){
+      return (
+        <Alert>
+        <Typography variant="inherit">Ingen besvarelser til rådighed</Typography>
+        </Alert>
+      )
+    }
     return (<>
 
           <TableContainer component={Card}>
