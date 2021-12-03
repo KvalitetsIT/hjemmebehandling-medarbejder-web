@@ -7,6 +7,7 @@ export default class BaseApi {
      * @param error the thrown error from api-method (this should be of type response)
      */
     HandleError(error : any) : any{
+        console.debug("Transforming error to ServiceError")
         console.log(error)
         if(error instanceof Response){
             let response = error as Response;

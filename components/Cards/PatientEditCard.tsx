@@ -10,6 +10,8 @@ import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
 import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
+import { ErrorBoundary } from '../Layout/ErrorBoundary';
+import { Address } from '../Models/Address';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -42,8 +44,11 @@ export class PatientEditCard extends Component<Props,State> {
   }
 
   render () : JSX.Element{
-    const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
-    return contents;
+
+      const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
+      return contents;
+
+    
   }
 
   componentDidMount() : void {
@@ -69,9 +74,12 @@ async getPerson() : Promise<void>{
     const newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
     
     const p = this.state.patient;
+      
+
     p.firstname = newPerson.givenName;
     p.lastname = newPerson.familyName;
     
+    p.address = new Address();
     p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
     p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
     p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
@@ -97,16 +105,17 @@ async getPerson() : Promise<void>{
          return;
 	  }
     }
-    throw error;
+    this.setState(()=>{throw error})
   }
   
 }
 
 clearPersonFields() : void {
 	const p = this.state.patient;
+  
     p.firstname = "";
     p.lastname = "";
-    
+    p.address = new Address();
     p.address.city = "";
     p.address.zipCode =  "";
     p.address.street = "";
@@ -148,6 +157,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
 	this.InitializeServices();
   let inputId = 0;
     return ( <>
+    <ErrorBoundary>
         <Card>
         <CardContent>
           <Stack spacing={3}>
@@ -177,15 +187,15 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
               <TextFieldValidation uniqueId={inputId++} disabled label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.address.street} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
               <TextFieldValidation disabled  
                     onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                     uniqueId={inputId++}
                     label="Postnummer" 
-                    value={this.state.patient.address.zipCode} 
+                    value={this.state.patient.address?.zipCode} 
                     onChange={input => this.modifyPatient(this.setZipcode,input) }  
                     variant="outlined" />
-              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.address.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
+              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
             </Stack>
             <Stack spacing={3} direction="row">
               <TextFieldValidation 
@@ -208,6 +218,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           
         </CardContent>
     </Card>
+    </ErrorBoundary>
     </>
     )
   }
