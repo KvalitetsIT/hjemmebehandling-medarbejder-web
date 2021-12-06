@@ -646,7 +646,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
         response.answeredTime = questionnaireResponseDto.answered;
         response.status = this.mapExaminationStatus(questionnaireResponseDto.examinationStatus!);
-        response.category = CategoryEnum.RED;
+        if(questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Red){
+	        response.category = CategoryEnum.RED; 
+        } else if (questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Yellow){
+	        response.category = CategoryEnum.YELLOW; 	
+        } else if (questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Green){
+	        response.category = CategoryEnum.GREEN; 	
+        } else {
+		    response.category = CategoryEnum.BLUE; 
+        }
         response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
 
         return response;
