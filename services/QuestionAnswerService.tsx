@@ -37,14 +37,20 @@ export default class QuestionAnswerService extends BaseService implements IQuest
         
         if(answer instanceof NumberAnswer){
             let answerAsNumber = answer as NumberAnswer;
-            let thresholdPoint = thresholdCollection.thresholdNumbers
-                                        .sort( (a,b) => b.category - a.category ) //Red wil be first, then yellow, then green and then blue
-                                        .find(x=>x.from <= answerAsNumber.answer && answerAsNumber.answer <= x.to); //Get the first and most critical threshold which matches our answer
+            let thresholdPoint : ThresholdNumber | undefined = undefined;
+            if ( !(thresholdCollection.thresholdNumbers === undefined) ) {
+                thresholdPoint = thresholdCollection.thresholdNumbers
+                    .sort( (a,b) => b.category - a.category ) //Red wil be first, then yellow, then green and then blue
+                    .find(x=> (x.from === undefined || x.from <= answerAsNumber.answer) && (x.to === undefined || answerAsNumber.answer <= x.to)); //Get the first and most critical threshold which matches our answer
+            }
             return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
         }
         if(answer instanceof StringAnswer){
             let answerAsString = answer as StringAnswer;
-            let thresholdPoint = thresholdCollection.thresholdOptions.find(x=>x.option == answerAsString.answer);
+            let thresholdPoint : ThresholdNumber | undefined = undefined;
+            if ( !(thresholdCollection.thresholdOptions === undefined) ) {
+                thresholdPoint = thresholdCollection.thresholdOptions.find(x=>x.option == answerAsString.answer);
+            }
             return thresholdPoint ? thresholdPoint.category : CategoryEnum.GREEN;
         }
     

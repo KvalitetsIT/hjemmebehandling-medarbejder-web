@@ -5,7 +5,7 @@ export class ThresholdCollection {
 
     questionId! : string;
 
-    thresholdNumbers? : ThresholdNumber[] = new Array();
-    thresholdOptions? : ThresholdOption[] = new Array();
+    thresholdNumbers? : ThresholdNumber[] = [];
+    thresholdOptions? : ThresholdOption[] = [];
     
 }

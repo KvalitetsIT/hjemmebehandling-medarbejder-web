@@ -39,9 +39,10 @@ export class ThresholdSlider extends Component<Props,{}> {
 
   render () : JSX.Element {
     let oldTo : number | undefined = undefined;
+    
     return (
         <Stack direction="row">
-            {this.props.threshold.sort((a,b) => a.from - b.from).map(x=>{
+            {this.props.threshold.sort().map(x=>{
                 const shouldShowNewFrom = oldTo !== x.from;
 
                 oldTo = x.to;
@@ -50,7 +51,7 @@ export class ThresholdSlider extends Component<Props,{}> {
                     <>
                     {shouldShowNewFrom ? <Typography variant="caption" padding={1}>{x.from}</Typography> : <></>  }
                     
-                    <Chip width={(x.to - x.from)*100+"%"} component={Box} sx={{height:10}} color={this.getColorFromCategory(x.category)}/>
+                    <Chip width={100/this.props.threshold.length+"%"} component={Box} sx={{height:10}} color={this.getColorFromCategory(x.category)}/>
                     <Typography variant="caption" padding={1}>{x.to}</Typography>
                     </>
                 )
