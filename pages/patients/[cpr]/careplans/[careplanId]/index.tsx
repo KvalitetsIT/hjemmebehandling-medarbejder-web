@@ -60,7 +60,15 @@ async populateCareplans() : Promise<void>{
   let activeCareplanId = this.props.match.params.careplanId
   
   try{
-    const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
+
+    let careplans : PatientCareplan[] = []
+    if(activeCareplanId === 'Aktiv') {
+      careplans = await this.careplanService.GetPatientCareplans(cpr);
+    }
+    else {
+      careplans = [ await this.careplanService.GetPatientCareplanById(activeCareplanId) ]
+    }
+
     const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
   
     const careplan = careplans.find(a => !a.terminationDate)!

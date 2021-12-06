@@ -47,10 +47,10 @@ export interface IBackendApi {
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void>;
 
     /**
-     * Creates and returns careplan
+     * Creates careplan and returns its id.
      * @param carePlan
      */
-    CreateCarePlan(CarePlan: PatientCareplan): Promise<PatientCareplan>;
+    CreateCarePlan(CarePlan: PatientCareplan): Promise<string>;
 
     /**
      * Change careplan
@@ -114,6 +114,11 @@ export interface IBackendApi {
      * Returns all patient careplans for one patient
      */
     GetPatientCareplans : (cpr: string) => Promise<Array<PatientCareplan>>
+
+    /**
+     * Returns patient careplans by id
+     */
+    GetPatientCareplanById : (id: string) => Promise<PatientCareplan>
     
     /**
      * 

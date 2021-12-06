@@ -110,7 +110,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
+    async CreateCarePlan(carePlan: PatientCareplan) : Promise<string> {
         try{
             let api = new CarePlanApi(this.conf)
             let request = {
@@ -119,9 +119,16 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 }
             }
     
-            await api.createCarePlan(request)
-    
-            return carePlan
+            var response = await api.createCarePlanRaw(request)
+
+            // Extract Location header, extract the id
+            var location = response.raw.headers?.get('Location')
+            if(!location) {
+                throw new Error('No Location header in CreateCarePlan response!')
+            }
+
+            var parts = location.split('/')
+            return parts[parts.length - 1]
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -311,6 +318,23 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
             
             return carePlans.map(cp => this.mapCarePlanDto(cp));
+        } catch(error : any){
+            return this.HandleError(error)
+        }
+    }
+
+    async GetPatientCareplanById(id: string) : Promise<PatientCareplan>{
+        try {
+            console.log('Inside BffBackendApi.GetPatientCareplanById !');
+
+            // Retrieve the careplan
+            let api = new CarePlanApi(this.conf);
+            let carePlan = await api.getCarePlanById({id: id})
+            if(!carePlan) {
+                throw new Error('Could not retrieve careplan!');
+            }
+
+            return this.mapCarePlanDto(carePlan);
         } catch(error : any){
             return this.HandleError(error)
         }

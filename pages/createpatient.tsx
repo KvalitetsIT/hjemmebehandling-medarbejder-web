@@ -35,6 +35,7 @@ export interface State {
     accordians : Accordians;
     patient? : PatientDetail;
     careplan? : PatientCareplan;
+    newCareplanId? : string;
     loading: boolean;
     canSubmit : boolean;
     submitted : boolean
@@ -95,10 +96,9 @@ async submitPatient() : Promise<void>{
     this.setState({
       loading: true
     })
-    const newCarePlan = await this.careplanService.CreateCarePlan(this.state.careplan)
+    const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
     this.setState({
-      careplan: newCarePlan,
-      patient : newCarePlan.patient,
+      newCareplanId : newCareplanId,
       submitted : true
     })
 }
@@ -138,7 +138,7 @@ continueButtonStyle : CSSProperties = {
     this.InitializeServices();
 
     if(this.state.submitted)
-      return (<Redirect push to={"/patients/"+this.state.patient?.cpr}/>)
+      return (<Redirect push to={"/patients/" + this.state.patient?.cpr + "/careplans/" + this.state.newCareplanId}/>)
 
     if(this.state.loading)
       return (<LoadingBackdropComponent />)

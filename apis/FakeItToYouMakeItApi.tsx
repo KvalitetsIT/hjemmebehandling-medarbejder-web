@@ -329,9 +329,9 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         
     }
 
-    async CreateCarePlan(carePlan: PatientCareplan) : Promise<PatientCareplan> {
+    async CreateCarePlan(carePlan: PatientCareplan) : Promise<string> {
         await new Promise(f => setTimeout(f, this.timeToWait))
-        return carePlan
+        return carePlan.id
     }
 
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
@@ -444,6 +444,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     async GetPatientCareplans(cpr: string) : Promise<PatientCareplan[]>{
         
         return [this.careplan1,this.careplan2].filter(x=>x.patient.cpr == cpr);
+    }
+
+    async GetPatientCareplanById(id: string) : Promise<PatientCareplan>{
+        return this.careplan1
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse) : Promise<void>{
