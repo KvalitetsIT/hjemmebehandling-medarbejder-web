@@ -1,12 +1,9 @@
 import { Typography } from '@material-ui/core';
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import IUserService from '../../services/interfaces/IUserService';
 import { User } from '../Models/User';
-import { Button, CardActionArea, CardActions, Collapse } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import ApiContext from '../../pages/_context';
 
 
@@ -18,6 +15,7 @@ export interface State {
     loadingUserContextButton : boolean;
     user: User;
     expand: boolean
+    ancherEl : any
 }
 
 export class UserContextCard extends Component<Props,State> {
@@ -30,8 +28,12 @@ export class UserContextCard extends Component<Props,State> {
       this.state = {
 	      loadingUserContextButton : false,
 	      user: new User(),
-	      expand: false
+	      expand: false,
+        ancherEl : null
       }
+
+      this.handleClick = this.handleClick.bind(this);
+      this.handleClose = this.handleClose.bind(this);
 
   }
 
@@ -84,27 +86,49 @@ async getUser() : Promise<void>{
   }
   
 }
+handleClick(event: React.MouseEvent<HTMLButtonElement>) : void {
+  this.setState({ancherEl : event.currentTarget});
+};
+
+handleClose() : void {
+  this.setState({ancherEl : null});
+};
 
   render ()  : JSX.Element{
 
     return (<>
-        <Card component={Box}  align-items= "right" style={{backgroundColor: "#f8f8f8"}}>
-        <CardActionArea onClick={()=>this.setState({ expand:!this.state.expand})} align-items= "right">
-          <CardContent >
-                    <Typography align="right" variant="body2">{this.state.user.fullName} ({this.state.user.userId})</Typography>
-          </CardContent>
-         </CardActionArea>
-         <Collapse in={this.state.expand}>
-              <CardContent >
-                    <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button style={{ width: '100%', color: 'red' }} onClick={this.logout}>
-                logud
-                </Button>
-              </CardActions>
-            </Collapse>
-        </Card></>
+         <div>
+          <Button
+            className="profileButton"
+            id="basic-button"
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            onClick={this.handleClick}
+            variant="text"
+            color="inherit"
+          >
+            <div>
+             <Typography align="right" variant="body2">{this.state.user.fullName} ({this.state.user.userId})</Typography>
+             <Typography align="right" variant="body2">{this.state.user.email}</Typography>
+             </div>
+          </Button>
+          <Menu
+            anchorEl={this.state.ancherEl}
+            id="basic-menu"
+            open={this.state.ancherEl}
+            onClose={this.handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem disabled>
+              <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
+            </MenuItem>
+            <MenuItem onClick={this.logout}>Log ud</MenuItem>
+          </Menu>
+        </div>
+    
+        </>
     );
   }
 }

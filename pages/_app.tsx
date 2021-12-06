@@ -190,7 +190,16 @@ const THEME = createTheme({
         root : {
           borderRadius : 28
         }
-      }
+      },
+      variants : [
+        {
+          props : {className : "profileButton"},
+          style : {
+            textTransform : "none"
+          }
+        }
+        
+      ]
     }
   }
 });

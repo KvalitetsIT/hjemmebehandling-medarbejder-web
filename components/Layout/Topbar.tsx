@@ -27,9 +27,8 @@ export class Topbar extends Component<{},State> {
       <Grid item xs={8}></Grid>
       <Grid item xs={2}>
     
-        <ErrorBoundary>
+        
             <UserContextCard />
-            </ErrorBoundary>
   
       </Grid>
     </Grid>
