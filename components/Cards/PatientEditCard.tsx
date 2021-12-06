@@ -74,7 +74,7 @@ async getPerson() : Promise<void>{
       loadingCprButton: true
     })
     
-    const newPerson = await this.personService.GetPerson(this.state.patient.cpr!);
+    const newPerson = await this.personService.GetPerson(tempCpr!);
     
     const p = this.state.patient;
       
