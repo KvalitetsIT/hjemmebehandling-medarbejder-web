@@ -434,6 +434,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
 	    user.lastName = "Testsen";
         user.fullName = "Test Testsen";
         user.orgId = "453071000016001";
+        user.orgName = "Infektionsmedicinsk Afdeling";
 	    user.email = "test@rm.dk"
 	    user.entitlements = ["DIAS_HJEMMEBEHANDLING_Sygeplejerske"];
 	    user.autorisationsids = [""];

@@ -10,5 +10,5 @@ export class User implements UserContext{
 	email?: string;
 	entitlements?: string[];
 	autorisationsids?: string[];
-	
+	orgName?: string;
 }

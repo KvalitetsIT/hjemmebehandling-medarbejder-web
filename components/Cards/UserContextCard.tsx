@@ -64,6 +64,7 @@ async getUser() : Promise<void>{
     u.userId = user.userId ?user.userId:"";
     u.fullName = user.fullName ?user.fullName:"";
     u.orgId = user.orgId ?user.orgId:"";
+    u.orgName = user.orgName ?user.orgName:"";
     u.email = user.email ?user.email:"";
     u.entitlements = user.entitlements ?user.entitlements:[];
     u.autorisationsids = user.autorisationsids ?user.autorisationsids:[];
@@ -122,7 +123,7 @@ handleClose() : void {
             }}
           >
             <MenuItem disabled>
-              <Typography align="right" variant="body2">{this.state.user.orgId}</Typography>
+              <Typography align="right" variant="body2">{this.state.user.orgName}</Typography>
             </MenuItem>
             <MenuItem onClick={this.logout}>Log ud</MenuItem>
           </Menu>
