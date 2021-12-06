@@ -78,8 +78,12 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
         const dataTo = [];
         
         for(let i = 0; i<length;i++){
-                dataFrom.push(threshold.from)
-                dataTo.push(threshold.to)
+          if (!(threshold.from === undefined)) {
+            dataFrom.push(threshold.from)
+          }
+          if (!(threshold.to === undefined)) {
+            dataTo.push(threshold.to)
+          }
         }
 
         //For each threshold, we add two lines; from and to
@@ -176,7 +180,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
     //Go through all responses and push answers and dates to answerData, and answerLabels
     for(let responseIndex = 0 ; responseIndex < questionnaireResponses.length; responseIndex++){
         const response = questionnaireResponses[responseIndex];
-        let questionnaireQuestion = Array.from( response.questions.keys() ).find(x=>x.Id == question.Id);
+        const questionnaireQuestion = Array.from( response.questions.keys() ).find(x=>x.Id == question.Id);
         const answer = response.questions.get(questionnaireQuestion!) as NumberAnswer
         console.log("index=" + responseIndex + " -> " + response.id)
         console.log("question.id: " + question.Id)
