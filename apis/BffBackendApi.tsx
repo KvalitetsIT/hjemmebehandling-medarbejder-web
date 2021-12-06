@@ -197,6 +197,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let api = new CarePlanApi(this.conf)
             let request = {
                 onlyUnsatisfiedSchedules: true,
+                onlyActiveCareplans: true,
                 pageNumber: page,
                 pageSize: pagesize
             }
@@ -300,7 +301,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     
             // Retrieve the careplans
             let api = new CarePlanApi(this.conf);
-            let request = { cpr: cpr };
+            let request = {
+                cpr: cpr,
+                onlyActiveCareplans: true
+            };
             let carePlans = await api.searchCarePlans(request);
             if(!carePlans) {
                 throw new Error('Could not retrieve careplans!');

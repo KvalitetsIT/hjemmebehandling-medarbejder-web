@@ -86,13 +86,16 @@ export class ObservationCard extends Component<Props,State> {
     
 
     const allQuestions : Question[] = [];
-    const questionIterator = this.state.questionnaireResponses[0].questions.keys()
-    let question = questionIterator.next()
-    
-    while(!question.done){
-        if(question.value.type === QuestionTypeEnum.OBSERVATION)
-            allQuestions.push(question.value)
-        question = questionIterator.next()
+
+    if(this.state.questionnaireResponses.length > 0) {
+        const questionIterator = this.state.questionnaireResponses[0].questions.keys()
+        let question = questionIterator.next()
+
+        while(!question.done){
+            if(question.value.type === QuestionTypeEnum.OBSERVATION)
+                allQuestions.push(question.value)
+            question = questionIterator.next()
+        }
     }
 
     if(allQuestions.length == 0){
