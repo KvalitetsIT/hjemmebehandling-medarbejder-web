@@ -47,7 +47,8 @@ export class ObservationCard extends Component<Props,State> {
   async componentDidMount() :  Promise<void> {
       try{
     const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],1,5)
-    console.log(responses)
+    //console.log(responses)
+    //console.log(this.props.questionnaire.thresholds)
     this.setState({questionnaireResponses : responses, loading : false})
 }  catch(error : any){
     this.setState(()=>{throw error})
@@ -55,10 +56,10 @@ export class ObservationCard extends Component<Props,State> {
   }
 
   findObservationQuestions(questionnaireResponse : QuestionnaireResponse) : Question[] {
-    
+    console.log(questionnaireResponse)
     const questions : Question[] = [];
     questionnaireResponse.questions.forEach( (answer,question) =>{
-        const numberAnswer : NumberAnswer = answer as NumberAnswer;
+        const numberAnswer : boolean = answer instanceof NumberAnswer;
         if(numberAnswer){
             questions.push(question)
         }
@@ -109,18 +110,20 @@ export class ObservationCard extends Component<Props,State> {
         {allQuestions.map(question => {
             const isFirst = counter++ == 0;
             const threshold = this.props.questionnaire.thresholds.find(x=>x.questionId == question.Id)
+            console.log(question.Id)
+            console.log(threshold)
                 return (
                 <Grid paddingLeft={isFirst ? 0 : 2}  item xs={this.getColumnSize(allQuestions.length)}>
                     <Card>
                         <CardHeader subheader={question.question}/>
                         <CardContent>
-                                {threshold ? <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> : <></>}
+                                {threshold && threshold.thresholdNumbers ? <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> : <></>}
                         </CardContent>
                     </Card>
                     <Card  marginTop={3} component={Box}>
                         <CardHeader subheader={question.question + " - Alarmgrænser"}/>
                         <CardContent>
-                        {threshold ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
+                        {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
                         </CardContent>
                     </Card>
                 </Grid>
