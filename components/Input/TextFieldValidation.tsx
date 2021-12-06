@@ -6,6 +6,7 @@ import { CriticalLevelEnum, InvalidInputModel } from '../../services/Errors/Inva
 
 export interface Props {
     value? : string;
+    id? : string;
     required : boolean;
     disabled : boolean;
     uniqueId : number;
@@ -72,6 +73,7 @@ async validate(input : string) : Promise<void>{
     return (
         <FormControl>
             <TextField 
+            id={this.props.id}
             onInput={(e : React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
             InputLabelProps={{ shrink: this.props.value ? true : false }} 
             label={this.props.label} 

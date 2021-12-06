@@ -8,7 +8,7 @@ import IPersonService from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
-import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { CriticalLevelEnum, InvalidInputModel } from '../../services/Errors/InvalidInputError';
 import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
 import { ErrorBoundary } from '../Layout/ErrorBoundary';
 import { Address } from '../Models/Address';
@@ -21,6 +21,7 @@ export interface Props {
 export interface State {
     loadingCprButton : boolean;
     loadingPage : boolean
+    tempCpr? : string;
     patient : PatientDetail;
     errorArray : InvalidInputModel[];
 }
@@ -37,6 +38,7 @@ export class PatientEditCard extends Component<Props,State> {
       this.state = {
 	      loadingCprButton : false,
         loadingPage : true,
+        tempCpr : props.initialPatient.cpr,
 	      patient : props.initialPatient,
         errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
@@ -63,6 +65,7 @@ InitializeServices() : void{
 
 async getPerson() : Promise<void>{
   try{
+    let tempCpr = this.state.tempCpr;
     if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
 	  return;
     }
@@ -83,7 +86,7 @@ async getPerson() : Promise<void>{
     p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
     p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
     p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
-    
+    p.cpr = tempCpr;
     this.setState({patient : p});
     
 
@@ -92,21 +95,15 @@ async getPerson() : Promise<void>{
     })
     
   } catch(error){
-	this.setState({
+	  this.setState(()=>{throw error})
+  }
+
+  this.setState({
     loadingCprButton: false
     })
-    
-    if (error instanceof Response){
-	   const response = error as Response;
-    
-      if (response.status == 404){
-	     console.log("Ingen borger fundet");
-         this.clearPersonFields();
-         return;
-	  }
-    }
-    this.setState(()=>{throw error})
-  }
+
+    this.triggerOnChangeEvent("cprInput")
+  
   
 }
 
@@ -130,10 +127,17 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   }
 
   getFirstError() : string | undefined {
-    if(this.state.errorArray.length > 0)
+    const errors = this.state.errorArray.filter(x=>x.criticalLevel == CriticalLevelEnum.ERROR)
+    if(errors.length > 0)
       return this.state.errorArray[0].message;
     
     return undefined;
+  }
+
+  triggerOnChangeEvent(id : string) : void {
+    const input = document.getElementById(id);
+    const event = new Event("input",{bubbles : true});
+    input!.dispatchEvent(event)
   }
 
   errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
@@ -145,16 +149,22 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
       const allErrors : InvalidInputModel[] = 
               this.collectionHelper.MapValueCollectionToArray<number,InvalidInputModel>(errorMap);
 
+      if(this.state.tempCpr !== this.state.patient.cpr){
+        console.log("Der er indtastet nyt cpr uden at trykke fremsøg ("+this.state.tempCpr + " != "+this.state.patient.cpr+")")
+        allErrors.push(new InvalidInputModel("cpr","Der er indtastet nyt cpr uden at trykke fremsøg",CriticalLevelEnum.WARNING))
+      }
+      
+
       if(this.props.onValidation){
         this.props.onValidation(allErrors);
       }
-
       this.setState({errorArray  : allErrors})
   }
 
 
   renderCard() : JSX.Element{
 	this.InitializeServices();
+  const firstError = this.getFirstError();
   let inputId = 0;
     return ( <>
     <ErrorBoundary>
@@ -166,17 +176,18 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
       </Typography>
             <Stack direction="row" spacing={3}>
               <TextFieldValidation 
+                  id="cprInput"
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
                   validate={(cpr) => this.validationService.ValidateCPR(cpr) } 
                   required={true} 
                   label="CPR" 
-                  value={this.state.patient.cpr} 
-                  onChange={input => this.modifyPatient(this.setCpr,input) } />
+                  value={this.state.tempCpr} 
+                  onChange={input => this.setState({tempCpr : input.target.value}) } />
                   <Stack>
-                    <Tooltip title={this.getFirstError() ?? "Hent fra CPR!"}>
+                    <Tooltip title={firstError ?? "Hent fra CPR!"}>
                       <div>
-                  <LoadingButton disabled={this.state.errorArray.length > 0} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+                  <LoadingButton disabled={firstError !== undefined} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
                     </div>
                   </Tooltip>
                   </Stack>

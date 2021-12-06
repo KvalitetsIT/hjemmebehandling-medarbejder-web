@@ -64,7 +64,7 @@ async populateCareplans() : Promise<void>{
     const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
   
     let careplan = careplans.find(a => !a.terminationDate)!
-    activeCareplanId = careplan.id
+    activeCareplanId = careplan?.id
     const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
     this.setState({
       loading : false,  
@@ -81,10 +81,10 @@ async populateCareplans() : Promise<void>{
 
   renderCareplanTab() : JSX.Element{
     
-    const careplans = this.state.careplans;
-    if(careplans.length === 0)
+    const careplans = this.state.careplans.find(a => !a.terminationDate)!
+    if(!careplans)
         return (
-            <div>Ingen behandlingsplaner fundet :-(</div>
+            <div>Ingen aktive behandlingsplaner fundet :-(</div>
         )
 
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
