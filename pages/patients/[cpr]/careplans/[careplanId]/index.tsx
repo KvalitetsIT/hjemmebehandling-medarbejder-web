@@ -63,7 +63,7 @@ async populateCareplans() : Promise<void>{
     const careplans : PatientCareplan[] = await this.careplanService.GetPatientCareplans(cpr);
     const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
   
-    let careplan = careplans.find(a => !a.terminationDate)!
+    const careplan = careplans.find(a => !a.terminationDate)!
     activeCareplanId = careplan?.id
     const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
     this.setState({

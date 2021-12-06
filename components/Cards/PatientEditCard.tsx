@@ -65,7 +65,7 @@ InitializeServices() : void{
 
 async getPerson() : Promise<void>{
   try{
-    let tempCpr = this.state.tempCpr;
+    const tempCpr = this.state.tempCpr;
     if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
 	  return;
     }
