@@ -145,15 +145,22 @@
           "required": true
         },
         "responses": {
-          "500": {
-            "description": "Error during creation of CarePlan."
-          },
           "201": {
             "description": "Successful operation.",
             "headers": {
               "Location": {
                 "description": "URL pointing to the created CarePlan.",
                 "style": "simple"
+              }
+            }
+          },
+          "500": {
+            "description": "Error during creation of CarePlan.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
               }
             }
           }
@@ -943,6 +950,35 @@
         "properties": {
           "carePlan": {
             "$ref": "#/components/schemas/CarePlanDto"
+          }
+        }
+      },
+      "ErrorDto": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errorText": {
+            "type": "string"
           }
         }
       },
