@@ -40,8 +40,18 @@ import { Person } from "../components/Models/Person";
 import { User } from "../components/Models/User";
 import PersonContact from "../components/Models/PersonContact";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
+import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
+import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
+
+    toInternal : ExternalToInternalMapper;
+    toExternal : InternalToExternalMapper;
+    constructor(){
+        super();
+        this.toInternal = new ExternalToInternalMapper();
+        this.toExternal = new InternalToExternalMapper();
+    }
     GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
         throw new NotImplementedError();
     }
@@ -98,7 +108,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let api = new PlanDefinitionApi(this.conf)
             let planDefinitions = await api.getPlanDefinitions()
     
-            return planDefinitions.map(pd => this.mapPlanDefinitionDto(pd))
+            return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -118,7 +128,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let api = new CarePlanApi(this.conf)
             let request = {
                 createCarePlanRequest: {
-                    carePlan: this.mapCarePlan(carePlan)
+                    carePlan: this.toExternal.mapCarePlan(carePlan)
                 }
             }
     
@@ -150,7 +160,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
     
             let api = new QuestionnaireResponseApi(this.conf);
-            let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.mapQuestionnaireResponseStatus(status) } };
+            let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
         } catch(error : any){
             return this.HandleError(error)
@@ -187,10 +197,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let task = new Task()
     
             task.cpr = questionnaireResponse.patient!.cpr!
-            task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
+            task.category = this.toInternal.mapTriagingCategory(questionnaireResponse.triagingCategory!)
             task.firstname = questionnaireResponse.patient!.givenName
             task.lastname = questionnaireResponse.patient!.familyName
-            task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
+            task.questionnaireResponseStatus = this.toInternal.mapExaminationStatus(questionnaireResponse.examinationStatus!)
             task.questionnaireId = questionnaireResponse.questionnaireId!
             task.questionnaireName = questionnaireResponse.questionnaireName!
             task.answeredTime = questionnaireResponse.answered!
@@ -288,40 +298,19 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let api = new PersonApi(this.conf);
             let request = { cpr: cpr };
             let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
-            return this.mapPersonFromExternalToInternal(person);
+            return this.toInternal.mapPersonFromExternalToInternal(person);
         } catch(error : any){
             return this.HandleError(error)
         }
     }
-    mapPersonFromExternalToInternal(person: PersonDto): Person {
-        const internalPerson = new Person();
-        internalPerson.birthDate = person.birthDate;
-        internalPerson.cpr = person.cpr!;
-        internalPerson.deceasedBoolean = person.deceasedBoolean;
-        internalPerson.familyName = person.familyName;
-        internalPerson.gender = person.gender;
-        internalPerson.givenName = person.givenName;
-        internalPerson.patientContactDetails = this.mapPersonContactFromExternalToInternal(person.patientContactDetails);
-        return internalPerson;
-    }
-    mapPersonContactFromExternalToInternal(externalPersonContact: ContactDetailsDto | undefined): PersonContact {
-        const internalPersonContact = new PersonContact();
-        internalPersonContact.city = externalPersonContact?.city;
-        internalPersonContact.country = externalPersonContact?.country;
-        internalPersonContact.postalCode = externalPersonContact?.postalCode;
-        internalPersonContact.primaryPhone = externalPersonContact?.primaryPhone;
-        internalPersonContact.secondaryPhone = externalPersonContact?.secondaryPhone;
-        internalPersonContact.street = externalPersonContact?.street;
-        
-        return internalPersonContact;
-    }
+    
     
     async GetUser() : Promise<User> {
         try{
             let api = new UserApi(this.conf);
             let request = {};
             let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
-            return this.mapUserFromExternalToInternal(user);
+            return this.toInternal.mapUserFromExternalToInternal(user);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -342,7 +331,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 throw new Error('Could not retrieve careplans!');
             }
             
-            return carePlans.map(cp => this.mapCarePlanDto(cp));
+            return carePlans.map(cp => this.toInternal.mapCarePlanDto(cp));
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -359,7 +348,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 throw new Error('Could not retrieve careplan!');
             }
 
-            return this.mapCarePlanDto(carePlan);
+            return this.toInternal.mapCarePlanDto(carePlan);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -372,7 +361,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
             let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
     
-            return questionnaireResponses.map(qr => this.mapQuestionnaireResponseDto(qr))
+            return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -381,7 +370,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
         try{
-            return new FakeItToYouMakeItApi().SetQuestionaireResponse(id, measurementCollection);
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -389,7 +378,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
         try{
-            return await new FakeItToYouMakeItApi().SetThresholdNumber(thresholdId,threshold);
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -397,7 +386,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
         try{
-            return await new FakeItToYouMakeItApi().SetThresholdOption(thresholdId,threshold);
+            throw new NotImplementedError();
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -423,437 +412,14 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    private mapCarePlan(carePlan: PatientCareplan) : CarePlanDto {
-        try{
-            let carePlanDto = {
-                id: "dummy",
-                title: "Ny behandlingsplan", // TODO - set a title ...
-                patientDto: this.mapPatient(carePlan.patient),
-                questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
-                planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
-            }
+  
+
+   
+
+   
+
     
-            return carePlanDto
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
-        try{
-            let carePlan = new PatientCareplan();
-    
-            carePlan.id = FhirUtils.unqualifyId(carePlanDto.id);
-            carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
-            carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-            carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
-            carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
-            //carePlan.terminationDate = undefined; // TODO
-            carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
-    
-            return carePlan;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapPlanDefinition(planDefinition: PlanDefinition) : PlanDefinitionDto {
-        try{
-            return {
-                id: planDefinition.id,
-                name: planDefinition.name,
-                questionnaires: planDefinition.questionnaires.map(q => this.mapQuestionnaire(q))
-            }
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {
-        try{
-            let planDefinition = new PlanDefinition()
-    
-            planDefinition.id = planDefinitionDto.id!
-            planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
-            planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-    
-            return planDefinition
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapPatient(patient: PatientDetail) : PatientDto {
-        try{
-            return {
-                cpr: patient.cpr,
-                givenName: patient.firstname,
-                familyName: patient.lastname,
-                patientContactDetails : new Contact()
-                //TODO : patientContactDetails: this.mapContactDetails(patient),
-                //TODO : primaryRelativeContactDetails: this.mapContactDetails(patient)
-            }
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapPatientDto(patientDto: PatientDto) : PatientDetail {
-        try{
-            let patient = new PatientDetail();
-    
-            patient.firstname = patientDto.givenName;
-            patient.lastname = patientDto.familyName;
-            patient.cpr = patientDto.cpr;
-            //TODO : patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
-            patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
-            // TODO - map additional contact details.
-    
-            return patient;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapContactDetails(contactDetails: Contact) : ContactDetailsDto {
-        try{
-            return {
-                primaryPhone: contactDetails.primaryPhone,
-                secondaryPhone: contactDetails.secondaryPhone,
-            }
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapContactDetailsDto(patientContactDetails: ContactDetailsDto) : Contact {
-        try{
-            let contact = new Contact();
-    
-            let address = new Address();
-            console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-            address.street = patientContactDetails?.street ?? 'Fiskergade 66';
-            address.zipCode = patientContactDetails?.postalCode ?? '8000';
-            address.city = "Aarhus";
-            address.country = patientContactDetails?.country ?? 'Danmark';
-    
-            contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
-            contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
-    
-            return contact;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapQuestionnaire(questionnaire: Questionnaire) : QuestionnaireWrapperDto {
-        try{
-            return { 
-                questionnaire: {
-                    id: questionnaire.id,
-                    title: questionnaire.name
-                },
-                frequency: this.mapFrequency(questionnaire.frequency)
-            }
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto) : Questionnaire {
-        try{
-            let questionnaire = new Questionnaire();
-    
-            questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
-            questionnaire.name = wrapper.questionnaire!.title!;
-            questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
-            questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
-    
-            return questionnaire;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapFrequency(frequency: Frequency) : FrequencyDto {
-        try{
-            return {
-                weekdays: frequency.days.map(d => this.mapDayEnum(d)),
-                timeOfDay: frequency.deadline
-            }
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapFrequencyDto(frequencyDto: FrequencyDto) : Frequency {
-        try{
-            let frequency = new Frequency();
-    
-            frequency.repeated = FrequencyEnum.WEEKLY
-            frequency.days = this.mapWeekdayDto(frequencyDto.weekdays!)
-            frequency.deadline = frequencyDto.timeOfDay!
-    
-            return frequency;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapThresholdDtos(thresholdDtos: Array<ThresholdDto>) : Array<ThresholdCollection> {
-        try{
-            console.log(thresholdDtos)
-            let thresholds: ThresholdCollection[] = [];
-            
-            
-            for(var thresholdDto of thresholdDtos) {
-                let threshold = thresholds.find(x=>x.questionId == thresholdDto.questionId);
-                if (threshold === undefined) {
-                    threshold = new ThresholdCollection();
-                    threshold.questionId = thresholdDto.questionId!;
-                    thresholds.push(threshold);
-                }
-                
-                if (!(thresholdDto.valueBoolean === undefined)) {
-                    console.log(threshold.questionId +"=thresholdOption")
-                    let thresholdOption = this.CreateOption(
-                        thresholdDto.questionId!,
-                        String(thresholdDto.valueBoolean!),
-                        this.mapTresholdCategory(thresholdDto.type!)
-                    );
-                    threshold.thresholdOptions!.push(thresholdOption);
-                }
-                else {
-                    console.log(threshold.questionId +"=thresholdNumber")
-                    let thresholdNumber = this.createThresholdNumber(
-                        thresholdDto.questionId!,
-                        Number(thresholdDto.valueQuantityLow),
-                        Number(thresholdDto.valueQuantityHigh),
-                        this.mapTresholdCategory(thresholdDto.type!)
-                    );
-                    threshold.thresholdNumbers!.push(thresholdNumber);
-                }
-            }
-            console.log(thresholds)
-            return thresholds;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapWeekday(weekday: DayEnum) : FrequencyDtoWeekdaysEnum {
-        try{
-            return FrequencyDtoWeekdaysEnum.Mon;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-
-    private mapWeekdayDto(weekdays: FrequencyDtoWeekdaysEnum[]) : DayEnum[] {
-        let dayEnums : DayEnum[] = [];
-        for(var weekday of weekdays) {
-            dayEnums.push( this.mapFrequencyDtoWeekdaysEnum(weekday) );
-        }
-        return dayEnums;
-    }
-
-    private mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto) : QuestionnaireResponse {
-        let response = new QuestionnaireResponse();
-        //let response = this.getQuestionnaireResponse();
-        response.id = questionnaireResponseDto.id!;
-        response.questions = new Map<Question, Answer>();
-
-        for(var pair of questionnaireResponseDto.questionAnswerPairs!) {
-            var question = this.mapQuestionDto(pair.question!);
-            var answer = this.mapAnswerDto(pair.answer!);
-            response.questions.set(question, answer);
-        }
-
-        response.answeredTime = questionnaireResponseDto.answered;
-        response.status = this.mapExaminationStatus(questionnaireResponseDto.examinationStatus!);
-        if(questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Red){
-	        response.category = CategoryEnum.RED; 
-        } else if (questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Yellow){
-	        response.category = CategoryEnum.YELLOW; 	
-        } else if (questionnaireResponseDto.triagingCategory === QuestionnaireResponseDtoTriagingCategoryEnum.Green){
-	        response.category = CategoryEnum.GREEN; 	
-        } else {
-		    response.category = CategoryEnum.BLUE; 
-        }
-        response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
-
-        return response;
-    }
-
-    private mapQuestionDto(questionDto: QuestionDto) : Question {
-        let question = new Question();
-        question.Id = questionDto.linkId!;
-        
-        switch(questionDto.questionType){
-            case QuestionDtoQuestionTypeEnum.Choice: 
-                question.type = QuestionTypeEnum.CHOICE;
-            break;
-            case QuestionDtoQuestionTypeEnum.Integer: 
-                question.type = QuestionTypeEnum.INTEGER;
-            break;
-            case QuestionDtoQuestionTypeEnum.Quantity: 
-                question.type = QuestionTypeEnum.OBSERVATION;
-            break;
-            case QuestionDtoQuestionTypeEnum.String: 
-                question.type = QuestionTypeEnum.STRING;
-            break;
-        }
-
-        question.question = questionDto.text!
-        // TODO - handle options properly (there must be at least one option for the answer table to render).
-        //TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
-
-        return question;
-    }
-
-    private mapAnswerDto(answerDto: AnswerDto) : Answer {
-        let answer: Answer = new StringAnswer();
-
-        let value = answerDto.value!
-        if(Number.parseFloat(value)) {
-            let numberAnswer = new NumberAnswer()
-            numberAnswer.answer = Number.parseFloat(value)
-            answer = numberAnswer
-        }
-        else {
-            let stringAnswer = new StringAnswer()
-            stringAnswer.answer = value
-            answer = stringAnswer
-        }
-
-        return answer;
-    }
-
-    private CreateOption(id : string, value : string,category : CategoryEnum) : ThresholdOption{
-        let option = new ThresholdOption();
-        option.option = value;
-        option.category = category;
-        option.id = id
-        return option;
-    }
-
-    private createThresholdNumber(id : string, valueLow : number, valueHigh : number, category : CategoryEnum) : ThresholdNumber {
-        let number = new ThresholdNumber();
-        number.from = valueLow;
-        number.to = valueHigh;
-        number.category = category;
-        number.id = id
-        return number;
-    }
-
-    private mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus) : PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
-        switch(status) {
-            case QuestionnaireResponseStatus.NotProcessed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
-            case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
-            case QuestionnaireResponseStatus.Processed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
-            default:
-                throw new Error('Could not map QuestionnaireResponseStatus ' + status)
-        }
-    }
-
-    private mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum) : QuestionnaireResponseStatus {
-        switch(status) {
-            case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
-                return QuestionnaireResponseStatus.NotProcessed
-            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
-                return QuestionnaireResponseStatus.InProgress
-            case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
-                return QuestionnaireResponseStatus.Processed
-            default:
-                throw new Error('Could not map ExaminationStatus ' + status)
-        }
-    }
-
-    private mapTriagingCategory(category: QuestionnaireResponseDtoTriagingCategoryEnum) : CategoryEnum {
-        switch(category) {
-            case QuestionnaireResponseDtoTriagingCategoryEnum.Green:
-                return CategoryEnum.GREEN
-            case QuestionnaireResponseDtoTriagingCategoryEnum.Yellow:
-                return CategoryEnum.YELLOW
-            case QuestionnaireResponseDtoTriagingCategoryEnum.Red:
-                return CategoryEnum.RED
-            default:
-                throw new Error('Could not map category ' + category);
-        }
-    } 
-
-    private mapTresholdCategory(category: ThresholdDtoTypeEnum) : CategoryEnum {
-        switch(category) {
-            case ThresholdDtoTypeEnum.Normal:
-                return CategoryEnum.GREEN
-            case ThresholdDtoTypeEnum.Abnormal:
-                return CategoryEnum.YELLOW
-            case ThresholdDtoTypeEnum.Critical:
-                return CategoryEnum.RED
-            default:
-                throw new Error('Could not map category ' + category);
-        }
-    }
-
-    private mapFrequencyDtoWeekdaysEnum(weekday: FrequencyDtoWeekdaysEnum) : DayEnum {
-        switch(weekday) {
-            case FrequencyDtoWeekdaysEnum.Mon:
-                return DayEnum.Monday;
-            case FrequencyDtoWeekdaysEnum.Tue:
-                return DayEnum.Tuesday;
-            case FrequencyDtoWeekdaysEnum.Wed:
-                return DayEnum.Wednesday;
-            case FrequencyDtoWeekdaysEnum.Thu:
-                return DayEnum.Thursday;
-            case FrequencyDtoWeekdaysEnum.Fri:
-                return DayEnum.Friday;
-            case FrequencyDtoWeekdaysEnum.Sat:
-                return DayEnum.Saturday;
-            case FrequencyDtoWeekdaysEnum.Sun:
-                return DayEnum.Sunday;
-            
-            default:
-                throw new Error('Could not map category ' + weekday);
-        }
-    }
-    private mapUserFromExternalToInternal(user: UserContext): User {
-        const internalUser = new User();
-        internalUser.autorisationsids = user.autorisationsids;
-        internalUser.email = user.email;
-        internalUser.entitlements = user.entitlements;
-        internalUser.firstName = user.firstName;
-        internalUser.fullName = user.fullName;
-        internalUser.lastName = user.lastName;
-        internalUser.orgId = user.orgId;
-        internalUser.orgName = user.orgName;
-        internalUser.userId = user.userId!;
-        
-        return internalUser;
-    }
-    private mapDayEnum(day: DayEnum) : FrequencyDtoWeekdaysEnum {
-        switch(day) {
-            case DayEnum.Monday:
-                return FrequencyDtoWeekdaysEnum.Mon
-            case DayEnum.Tuesday:
-                return FrequencyDtoWeekdaysEnum.Tue;
-            case DayEnum.Wednesday:
-                return FrequencyDtoWeekdaysEnum.Wed;
-            case DayEnum.Thursday:
-                return FrequencyDtoWeekdaysEnum.Thu;
-            case DayEnum.Friday:
-                return FrequencyDtoWeekdaysEnum.Fri;
-            case DayEnum.Saturday:
-                return FrequencyDtoWeekdaysEnum.Sat;
-            case DayEnum.Sunday:
-                return FrequencyDtoWeekdaysEnum.Sun;
-            
-            default:
-                throw new Error('Could not map category ' + day);
-        }
-    }
+   
 }
 
 
