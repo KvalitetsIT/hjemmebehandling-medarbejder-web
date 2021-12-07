@@ -6,3 +6,39 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.MuiPaper-root.MuiDialog-paper {
+  border-radius: 20px;
+}
+
+.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+
+.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline:hover {
+  border-color: white;
+}
+
+.answer__header {
+  padding-bottom: 20px;
+}
+
+.MuiTypography-root.answer__headline {
+  color: #4a4848;
+  font-weight: bold;
+}
+
+.MuiTypography-root.answer__date {
+  color: #4a4848;
+}
+
+
+/*=========== User Context Card ===========*/
+.MuiTypography-root.user__card-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.MuiTypography-root.user__card-title {
+  color: #999;
+}

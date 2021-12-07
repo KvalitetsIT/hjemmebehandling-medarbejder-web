@@ -168,11 +168,14 @@ getDisplayNameFromCategory(category : CategoryEnum) : string {
                     severity = "info"
                     
                 return (
-                    <TableCell align="center">
+                    <TableCell className="answer__table-head" align="center">
      
                             <Stack component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
-                                <Typography align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
-                                <Typography align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                                <div className="answer__header">
+                                    <Typography className="answer__headline" align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
+                                    <Typography className="answer__date" align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                                </div>
+                                
                                 <ErrorBoundary rerenderChildren={false}>
                                     <QuestionnaireResponseStatusSelect onUpdate={()=>this.forceUpdate()} questionnaireResponse={collection} />  
                                 </ErrorBoundary>

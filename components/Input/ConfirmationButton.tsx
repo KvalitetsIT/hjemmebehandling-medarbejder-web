@@ -8,6 +8,7 @@ export interface Props {
     action : () => void
     title : string
     buttonText : string
+    className : string
 
     color : 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
     variant : "outlined" | "contained" | "text"
@@ -24,7 +25,8 @@ export class ConfirmationButton extends Component<Props,State> {
   
   public static defaultProps = {
     color : "inherit",
-    variant : "outlined"
+    variant : "outlined",
+    className : ""
   };
   
   constructor(props : Props){
@@ -53,7 +55,7 @@ export class ConfirmationButton extends Component<Props,State> {
   render () : JSX.Element{
     return (
       <>
-        <Button onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
+        <Button className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
       <Dialog
         open={this.state.openConfirmationBox}
         onClose={()=>this.CloseVerificationBox()}
@@ -69,8 +71,8 @@ export class ConfirmationButton extends Component<Props,State> {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>this.CloseVerificationBox()} autoFocus>Nej</Button>
-          <Button color="error" variant="contained" onClick={()=>this.doAction()} >
+          <Button className="decline__button" onClick={()=>this.CloseVerificationBox()} autoFocus>Nej</Button>
+          <Button className="accept__button" color="error" variant="contained" onClick={()=>this.doAction()} >
             Ja
           </Button>
         </DialogActions>

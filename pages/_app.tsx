@@ -91,37 +91,188 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   
 }
 
-const greenBg = "rgb(208,239,219)"
-const greenText = "green"
 
-const yellowBg = "rgb(253,239,208)"
-const yellowText = "rgb(224,158,70)"
+const black = '#4a4848'
+const greyLight = '#f2f2f2'
 
-const redBg = "rgb(247,216,216)"
-const redText = "rgb(234,124,123)"
+const green = '#61BD84'
 
-const blueBg = "rgb(232,239,247)"
-const blueText = "rgb(133,135,138)"
+const yellow = '#FFD78C'
+
+const red = '#EE6969'
+
+const blue = '#5D74AC'
+const blueDark = '#5D74AC'
+const blueLight = '#E8EFF7'
 
 const mainBackground = "#F2F2F2"
 
 const THEME = createTheme({
-  typography: {
-   "fontFamily": "verdana, sans-serif"
-  },
   palette : {
     background : {
       default : mainBackground,
+    },
+    text : {
+      primary : black
     }
   },
+  typography: {
+   "fontFamily": "verdana, sans-serif",
+   h6 : {
+     fontSize : 17,
+     fontWeight : "bold",
+     color : black
+   }
+  },
   components : {
-    MuiAvatar : {
+    //=========== Grid ===========//
+    MuiGrid : {
       styleOverrides : {
         root : {
-          borderRadius : 10
+          fontsize : 16,
+          ".grid__headline" : {
+            paddingBottom: 10
+          },
+          ".grid__table" : {
+            paddingTop : 0
+          }
+        }
+      },
+      variants : [
+        {
+          props: { className: 'thumbnail__icon' },
+          style: {
+            backgroundColor : '#333 !important',
+            borderRadius : 10,
+            flexBasis : 'initial',
+            width : 70,
+            height : 70
+          }
+        }
+      ]
+    },
+    MuiTabs : {
+      styleOverrides : {
+        root : {
+          borderBottom : '3px solid #f2f2f2', 
+          padding : 10
+
         }
       }
     },
+    //=========== Input ===========//
+    MuiFormControl : {
+      variants : [
+        {
+          props: { className: 'answer__status' },
+          style: {
+            backgroundColor : 'white',
+            borderRadius : 30,
+            padding : 10,
+            minWidth : 200
+          }
+        }
+      ]
+    },
+    MuiMenuItem : {
+      styleOverrides : {
+        root : {
+          borderRadius : 0
+        }
+      }
+    },
+    MuiInput : {
+      styleOverrides : {
+        root : {
+          "::before": {
+            border : 'none'
+          }
+        }
+      }
+
+    },
+    MuiOutlinedInput : {
+      styleOverrides : {
+        root : {
+          borderRadius : 30,
+          border : 'none'
+        }
+      }
+    },
+    MuiAutocomplete : {
+      variants : [
+        {
+          // Chip on tasklist (alarm)
+          props: { className: 'search' },
+          style: {
+            backgroundColor : 'white',
+            borderRadius : 30
+          }
+        }
+      ]
+    },
+    //=========== Avatar ===========//
+    MuiAvatar : {
+      styleOverrides : {
+        root : {
+          borderRadius : 10,
+          backgroundColor : blueDark,
+          height : 70,
+          width : 70
+        }
+      }
+    },
+    //=========== Paper ===========//
+    MuiPaper : {
+      styleOverrides : {
+        root : {
+          boxShadow: "none"
+        }
+      }
+    },
+    //=========== Table ===========//
+    MuiTable : {
+      styleOverrides : {
+        root : {
+          border: 'none'
+        }
+      }
+    },
+    MuiTableBody : {
+      styleOverrides : {
+        root : {
+          boxShadow: 'none'
+        }
+      }
+    },
+    MuiTableHead : {
+      styleOverrides : {
+        root : {
+          borderBottom : '3px solid #f2f2f2',
+          "& .MuiTableCell-head": {
+            fontWeight: 'bold'
+          }
+        }
+      }
+    },
+    MuiTableCell : {
+      styleOverrides : {
+        root : {
+          borderBottom: 'none'
+        }
+      },
+      // Answer table
+      variants : [
+        {
+          props: { className: 'answer__table-head' },
+          style: {
+            width : '15%',
+            padding : 20
+          }
+        }
+      ]
+    },
+    //=========== Alert ===========/
     MuiAlert : {
       styleOverrides : {
         root : {
@@ -129,17 +280,64 @@ const THEME = createTheme({
         }
       }
     },
+    //=========== Dialog ===========//
+    MuiDialogTitle : {
+      styleOverrides : {
+        root : {
+          borderBottom : "3px solid #f2f2f2",
+          marginBottom: 10,
+          padding : 20
+        }
+      }
+    },
+    MuiDialogContent : {
+      styleOverrides : {
+        root : {
+          padding : 20
+        }
+      }
+    },
+    MuiDialogActions : {
+      styleOverrides : {
+        root : {
+          borderTop : "3px solid #f2f2f2",
+          padding : 20
+        }
+      }
+    },
+    //=========== Card ===========//
     MuiCard : {
       styleOverrides : {
         root : {
           borderRadius : 20
         }
-      }
+      },
+      variants : [
+        {
+          props: { className: 'user' },
+          style: {
+            backgroundColor : 'transparent'
+          }
+        }
+      ]
     },
+    MuiCardActions : {
+      variants : [
+        {
+          props: { className: 'user__card-logout' },
+          style: {
+            justifyContent : 'flex-end'
+          }
+        }
+      ]
+    },
+    //=========== Chip ===========//
     MuiChip : {
       styleOverrides : {
         root : {
-          borderRadius : 28,
+          borderRadius : 30,
+          color : 'white',
+          fontsize : 11
         },
         label : {
           padding : 0
@@ -147,40 +345,70 @@ const THEME = createTheme({
       },
       variants : [
         {
-          props: { className:"round" },
+          // Chip on tasklist (alarm)
+          props: { className: 'chip__alarm' },
           style: {
-            height : 50,
-            width : 50,
-            borderRadius : 100,
-            fontWeight : "bold",
-          },
-        },
-        {
-          props: { variant: "filled", color: "success", },
-          style: {
-            backgroundColor : greenBg,
-            color : greenText
-          },
-        },
-        {
-          props : {variant: "filled", color : "warning"},
-          style : {
-            backgroundColor : yellowBg,
-            color : yellowText
+            borderRadius: '50%',
+            height: 47,
+            width: 47,
+            fontWeight: 'bold'
           }
         },
         {
-          props : {variant: "filled", color : "error"},
+          props: { variant: 'filled', color: 'success' },
+          style: {
+            backgroundColor : green
+          },
+        },
+        {
+          props : {variant: 'filled', color : 'warning'},
           style : {
-            backgroundColor : redBg,
-            color : redText
+            backgroundColor : yellow
           }
         },
         {
-          props : {variant: "filled", color : "primary"},
+          props : {variant: 'filled', color : 'error'},
           style : {
-            backgroundColor : blueBg,
-            color : blueText
+            backgroundColor : red
+          }
+        },
+        {
+          props : {variant: 'filled', color : 'primary'},
+          style : {
+            backgroundColor : blue
+          }
+        }
+      ]
+    },
+    //=========== Card ===========//
+    MuiCardContent : {
+      styleOverrides : {
+        root : {
+          padding : 20,
+          ":last-child" : {
+            paddingBottom : 20
+          }
+        }
+      }
+    },
+    //=========== Collapse ===========//
+    MuiCollapse : {
+      variants : [
+        {
+          props: { className: 'user__card-collapse' },
+          style: {
+            backgroundColor : 'white'
+          }
+        }
+      ]
+    },
+    //=========== Buttons ===========//
+    MuiButtonBase : {
+      variants : [
+        {
+          props: { className: 'user__card' },
+          style: {
+            backgroundColor : 'transparent'
           }
         }
       ]
@@ -188,19 +416,95 @@ const THEME = createTheme({
     MuiButton : {
       styleOverrides : {
         root : {
-          borderRadius : 28
+          borderRadius : 30,
+          textTransform : 'capitalize',
+          fontWeight : 'bold',
+          padding : 10,
+          boxShadow : 'none',
+          ":hover" : {
+            background : 'white',
+            boxShadow : 'none',
+          }
         }
       },
       variants : [
         {
-          props : {className : "profileButton"},
-          style : {
-            textTransform : "none"
+          // Logout
+          props: {className: "user__card-logout-button" },
+          style: {
+            color : red
+          }
+        },
+        {
+          // Patient name button
+          props: {className: "patient__button" },
+          style: {
+            backgroundColor: 'transparent',
+            color: black,
+            height : 47,
+            padding : '0 20px',
+            '&:hover' : {
+              background : blueLight,
+              opacity : '1'
+            }
+          }
+        },
+        {
+          // Patient name button
+          props: {className: "answer__button" },
+          style: {
+            backgroundColor : blueDark,
+            color : 'white',
+            height : 47,
+            padding : '0 20px',
+            ":hover" : {
+              backgroundColor : blueDark,
+              opacity : '0.7',
+              boxShadow : 'none',
+            }
+          }
+        },
+        {
+          props: {className:"remove-alarm__button" },
+          style: {
+            backgroundColor : blueDark,
+            color : 'white',
+            height : 47,
+            padding : '0 20px',
+            ":hover" : {
+              backgroundColor : blueDark,
+              opacity : '0.7',
+              boxShadow : 'none',
+            }
+          }
+        },
+        {
+          props: {className:"accept__button" },
+          style: {
+            backgroundColor : blueDark,
+            width : 120,
+            ":hover" : {
+              backgroundColor : blueDark,
+              opacity : '0.7',
+              boxShadow : 'none',
+            }
+          }
+        },
+        {
+          props: {className:"decline__button" },
+          style: {
+            outline : '3px solid #f2f2f2',
+            color : '#777777',
+            width : 120,
+            ":hover" : {
+              backgroundColor : greyLight,
+              opacity : '0.7',
+              boxShadow : 'none',
+            }
           }
         }
-        
-      ]
-    }
+      ],
+    },
   }
 });
 

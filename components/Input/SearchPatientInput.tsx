@@ -54,6 +54,7 @@ async searchForPatient(searchString : string) : Promise<void>{
       this.InitialiseServices();
     return (
         <Autocomplete
+        className="search"
         autoComplete
         getOptionLabel={(option) => option.firstname + " " + option.lastname + " ("+option.cpr+")"}
         options={this.state.patientResults}
@@ -62,11 +63,11 @@ async searchForPatient(searchString : string) : Promise<void>{
         renderInput={(params) => <TextField  {...params} InputProps={{ 
             ...params.InputProps,
             endAdornment: (
-              <InputAdornment position="end">
+              <InputAdornment position="end" variant="standard">
                 {this.state.loading ? <CircularProgress color="inherit" size={20} /> : ""}
               </InputAdornment>
             ),
-          }}  label={<Typography>Søg</Typography>} />}
+          }}  label={<Typography>Søg efter patient</Typography>} />}
         /> 
     )
   }

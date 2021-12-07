@@ -28,7 +28,7 @@ export class PatientAvatar extends Component<Props,{}> {
       initials += patient.lastname ? patient.lastname[0] : ""
 
     return (
-        <Avatar sx={{ bgcolor: "green", width:'100%', height:'100%' }} variant="square">
+        <Avatar variant="square">
         {initials}
       </Avatar>
     )
