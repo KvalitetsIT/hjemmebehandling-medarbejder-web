@@ -337,11 +337,21 @@ export default class ExternalToInternalMapper extends BaseMapper{
             patient.firstname = patientDto.givenName;
             patient.lastname = patientDto.familyName;
             patient.cpr = patientDto.cpr;
-            //TODO : patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+            patient.address = this.mapPatientContactDetails(patientDto.patientContactDetails)
             patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
-            // TODO - map additional contact details.
+            patient.primaryPhone = patientDto.primaryRelativeContactDetails?.primaryPhone;
+            patient.secondaryPhone = patientDto.primaryRelativeContactDetails?.secondaryPhone;
+
     
             return patient;
 
+    }
+    mapPatientContactDetails(patientContactDetails: ContactDetailsDto | undefined): Address {
+        const address = new Address();
+        address.city = patientContactDetails?.city;
+        address.country = patientContactDetails?.country;
+        address.zipCode = patientContactDetails?.postalCode;
+        address.street = patientContactDetails?.street;
+        return address;
     }
 }

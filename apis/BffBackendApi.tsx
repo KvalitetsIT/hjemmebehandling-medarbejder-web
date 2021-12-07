@@ -45,14 +45,14 @@ import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
-    toInternal : ExternalToInternalMapper;
-    toExternal : InternalToExternalMapper;
-    constructor(){
+    toInternal: ExternalToInternalMapper;
+    toExternal: InternalToExternalMapper;
+    constructor() {
         super();
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
-    GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+    GetPatients(includeActive: boolean, includeInactive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         throw new NotImplementedError();
     }
 
@@ -64,138 +64,138 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
 
             return await api.resolveAlarm(request)
-        } catch(error: any) {
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    conf : Configuration = new Configuration({ basePath: '/api/proxy' });
+    conf: Configuration = new Configuration({ basePath: '/api/proxy' });
 
     TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
-        
+
     }
     SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
     EditPatient(patient: PatientDetail): Promise<PatientDetail> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
-    SearchPatient(searchstring: string) : Promise<PatientDetail[]>{
-        try{
+    SearchPatient(searchstring: string): Promise<PatientDetail[]> {
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
-    
+
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-        try{
+        try {
             console.log('inside BffBackendApi.GetAllPlanDefinitions!')
-    
+
             let api = new PlanDefinitionApi(this.conf)
             let planDefinitions = await api.getPlanDefinitions()
-    
+
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
-        
+
     }
 
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async CreateCarePlan(carePlan: PatientCareplan) : Promise<string> {
-        try{
+    async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
+        try {
             let api = new CarePlanApi(this.conf)
             let request = {
                 createCarePlanRequest: {
                     carePlan: this.toExternal.mapCarePlan(carePlan)
                 }
             }
-    
+
             var response = await api.createCarePlanRaw(request)
 
             // Extract Location header, extract the id
             var location = response.raw.headers?.get('Location')
-            if(!location) {
+            if (!location) {
                 throw new Error('No Location header in CreateCarePlan response!')
             }
 
             var parts = location.split('/')
             return parts[parts.length - 1]
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
     SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
-        try{
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<void> {
+        try {
             console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
-    
+
             let api = new QuestionnaireResponseApi(this.conf);
             let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        try{
+    async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
+        try {
             let api = new QuestionnaireResponseApi(this.conf);
-            let request = { 
+            let request = {
                 status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
                 pageNumber: page,
                 pageSize: pagesize
             };
-    
+
             let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
-    
+
             return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto) : Task {
-        try{
+    private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
+        try {
             let task = new Task()
-    
+
             task.cpr = questionnaireResponse.patient!.cpr!
             task.category = this.toInternal.mapTriagingCategory(questionnaireResponse.triagingCategory!)
             task.firstname = questionnaireResponse.patient!.givenName
@@ -205,14 +205,14 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             task.questionnaireName = questionnaireResponse.questionnaireName!
             task.answeredTime = questionnaireResponse.answered!
             task.responseLinkEnabled = true
-    
+
             return task
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
+    async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
             let api = new CarePlanApi(this.conf)
             let request = {
@@ -226,15 +226,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let carePlans = await api.searchCarePlans(request)
 
             return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    
 
-    async GetPatient(cpr: string) : Promise<PatientDetail> {
-        try{
+
+    async GetPatient(cpr: string): Promise<PatientDetail> {
+        try {
             var status = -1;
             var body = null;
             await fetch(
@@ -242,62 +242,56 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 {
                     'method': 'POST',
                     'body': '{"cpr": "' + cpr + '"}',
-                    'headers': new Headers({'Content-Type': 'application/json'})
+                    'headers': new Headers({ 'Content-Type': 'application/json' })
                 })
                 .then(res => res.json())
-                .then(res => { body = res; })
-                .catch(err => { console.log(err); });
-    
-            if(!body) {
-                return new FakeItToYouMakeItApi().GetPatient(cpr);
+                .then(res => { body = res; });
+
+            let patient: PatientDetail = new PatientDetail();
+            if(body) {
+                // Map the body to a PatientDetail object
+                patient.firstname = body['familyName'];
+                patient.lastname = body['givenName'];
+                patient.cpr = cpr;
+                patient.address = new Address();
+                patient.address.country = "HardCodedCountry";
+                patient.address.street = "HardCodedStreet";
+                patient.address.zipCode = "HardcodedZip";
+                patient.primaryPhone = body['patientContactDetails']['primaryPhone'];
             }
-    
-            // Map the body to a PatientDetail object
-    
-            var name = body['familyName'] + ', ' + body['givenName'];
-            let patient : PatientDetail = new PatientDetail();
-            patient.firstname = body['familyName'];
-            patient.lastname = body['givenName'];
-            patient.cpr = cpr;
-    
-            patient.address.country = "Danmark";
-            patient.address.street = "Fiskergade 66";
-            patient.address.zipCode = "8200 Aarhus C";
-            patient.primaryPhone = body['patientContactDetails']['primaryPhone'];
-    
             return patient;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-    
-    async GetPerson(cpr: string) : Promise<Person> {
-        try{
-            let api = new PersonApi(this.conf);
-            let request = { cpr: cpr };
-            let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
-            return this.toInternal.mapPersonFromExternalToInternal(person);
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
-    
-    
-    async GetUser() : Promise<User> {
-        try{
-            let api = new UserApi(this.conf);
-            let request = {};
-            let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
-            return this.toInternal.mapUserFromExternalToInternal(user);
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async GetPatientCareplans (cpr: string) : Promise<PatientCareplan[]>{
-        try{
+    async GetPerson(cpr: string): Promise<Person> {
+        try {
+            let api = new PersonApi(this.conf);
+            let request = { cpr: cpr };
+            let person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
+            return this.toInternal.mapPersonFromExternalToInternal(person);
+        } catch (error: any) {
+            return this.HandleError(error)
+        }
+    }
+
+
+    async GetUser(): Promise<User> {
+        try {
+            let api = new UserApi(this.conf);
+            let request = {};
+            let user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
+            return this.toInternal.mapUserFromExternalToInternal(user);
+        } catch (error: any) {
+            return this.HandleError(error)
+        }
+    }
+
+    async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
+        try {
             console.log('Inside BffBackendApi.GetPatientCareplans !');
-    
+
             // Retrieve the careplans
             let api = new CarePlanApi(this.conf);
             let request = {
@@ -305,90 +299,70 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 onlyActiveCareplans: true
             };
             let carePlans = await api.searchCarePlans(request);
-            if(!carePlans) {
+            if (!carePlans) {
                 throw new Error('Could not retrieve careplans!');
             }
-            
+
             return carePlans.map(cp => this.toInternal.mapCarePlanDto(cp));
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async GetPatientCareplanById(id: string) : Promise<PatientCareplan>{
+    async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
         try {
             console.log('Inside BffBackendApi.GetPatientCareplanById !');
 
             // Retrieve the careplan
             let api = new CarePlanApi(this.conf);
-            let carePlan = await api.getCarePlanById({id: id})
-            if(!carePlan) {
+            let carePlan = await api.getCarePlanById({ id: id })
+            if (!carePlan) {
                 throw new Error('Could not retrieve careplan!');
             }
 
             return this.toInternal.mapCarePlanDto(carePlan);
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
-        console.log("cp-id: "+careplanId);
-        try{
+    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
+        console.log("cp-id: " + careplanId);
+        try {
             let api = new QuestionnaireResponseApi(this.conf)
             let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
             let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
-    
+
             return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
 
     }
 
     async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
-        try{
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber){
-        try{
+    async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) {
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
 
-    async SetThresholdOption(thresholdId: string, threshold: ThresholdOption){
-        try{
+    async SetThresholdOption(thresholdId: string, threshold: ThresholdOption) {
+        try {
             throw new NotImplementedError();
-        } catch(error : any){
+        } catch (error: any) {
             return this.HandleError(error)
         }
     }
-
-    private getQuestionnaireIds(carePlanDtos: Array<CarePlanDto>) : Array<string> {
-        try{
-            let questionnaireIds: string[] = [];
-    
-            for(var carePlanDto of carePlanDtos) {
-                let ids = carePlanDto.questionnaires?.map(function(wrapper: QuestionnaireWrapperDto) {
-                    console.log('Extracting id from ' + JSON.stringify(wrapper));
-                    return wrapper.questionnaire?.id ?? '';
-                }) ?? [];
-                questionnaireIds = questionnaireIds.concat(ids);
-            }
-            console.log('Got questionnaireIds: ' + questionnaireIds);
-    
-            //return Array.from(new Set(questionnaireIds));
-            return questionnaireIds;
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }   
 }
 
 

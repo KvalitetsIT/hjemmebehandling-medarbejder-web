@@ -6,8 +6,8 @@ import { PatientSimple } from "./PatientSimple";
 //Used in 
 //-patient-details
 export class PatientDetail extends PatientSimple {
-    primaryPhone! : string
-    secondaryPhone! : string
-    address! : Address
+    primaryPhone? : string
+    secondaryPhone? : string
+    address? : Address
     contact : Contact = new Contact();
 }

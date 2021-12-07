@@ -43,14 +43,12 @@ export class PatientEditCard extends Component<Props,State> {
         errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
       }
       this.modifyPatient = this.modifyPatient.bind(this);
+
   }
 
   render () : JSX.Element{
-
       const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
       return contents;
-
-    
   }
 
   componentDidMount() : void {
@@ -253,18 +251,18 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
   
   setRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.address.street = newValue;
+    modifiedPatient!.address!.street = newValue;
     return modifiedPatient;
   }
   setZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.address.zipCode = newValue;
+    modifiedPatient!.address!.zipCode = newValue;
     return modifiedPatient;
   }
   
   setCiy(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.address.city = newValue;
+    modifiedPatient!.address!.city = newValue;
     return modifiedPatient;
   }
   
