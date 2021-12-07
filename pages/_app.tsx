@@ -22,7 +22,7 @@ import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
-  const backendApi : IBackendApi =new BffBackendApi();
+  const backendApi : IBackendApi = new BffBackendApi();
   
   let questionnaireBackend = backendApi
     , questionAnswerBackend = backendApi

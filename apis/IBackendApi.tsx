@@ -2,14 +2,14 @@ import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { CategoryEnum } from "../components/Models/CategoryEnum";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { PatientSimple } from "../components/Models/PatientSimple";
-import { PersonDto } from "../generated/models/PersonDto";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Questionnaire } from "../components/Models/Questionnaire";
 import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
-import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { UserContext } from "../generated";
+import { Person } from "../components/Models/Person";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { User } from "../components/Models/User";
 
 export interface IBackendApi {
 
@@ -103,12 +103,12 @@ export interface IBackendApi {
      * Returns person
      * @param person 
      */
-    GetPerson(cpr: string): Promise<PersonDto>;
+    GetPerson(cpr: string): Promise<Person>;
 
     /**
      * Returns usercontext 
      */
-    GetUser(): Promise<UserContext>;
+    GetUser(): Promise<User>;
 
     /**
      * Returns all patient careplans for one patient

@@ -1,4 +1,4 @@
-import { PersonContact } from "./PersonContact";
+import PersonContact  from "./PersonContact";
 
 export class Person {
 

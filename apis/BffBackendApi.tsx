@@ -11,7 +11,6 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
-import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 import { IBackendApi } from "./IBackendApi";
 
@@ -37,6 +36,10 @@ import BaseApi from "./BaseApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { NotImplementedError } from "./Errors/NotImplementedError";
+import { Person } from "../components/Models/Person";
+import { User } from "../components/Models/User";
+import PersonContact from "../components/Models/PersonContact";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
     GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
@@ -280,23 +283,45 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
     
-    async GetPerson(cpr: string) : Promise<PersonDto> {
+    async GetPerson(cpr: string) : Promise<Person> {
         try{
             let api = new PersonApi(this.conf);
             let request = { cpr: cpr };
             let person = await api.getPerson(request).catch(err => { console.log(err); throw err;});;
-            return person;
+            return this.mapPersonFromExternalToInternal(person);
         } catch(error : any){
             return this.HandleError(error)
         }
     }
+    mapPersonFromExternalToInternal(person: PersonDto): Person {
+        const internalPerson = new Person();
+        internalPerson.birthDate = person.birthDate;
+        internalPerson.cpr = person.cpr!;
+        internalPerson.deceasedBoolean = person.deceasedBoolean;
+        internalPerson.familyName = person.familyName;
+        internalPerson.gender = person.gender;
+        internalPerson.givenName = person.givenName;
+        internalPerson.patientContactDetails = this.mapPersonContactFromExternalToInternal(person.patientContactDetails);
+        return internalPerson;
+    }
+    mapPersonContactFromExternalToInternal(externalPersonContact: ContactDetailsDto | undefined): PersonContact {
+        const internalPersonContact = new PersonContact();
+        internalPersonContact.city = externalPersonContact?.city;
+        internalPersonContact.country = externalPersonContact?.country;
+        internalPersonContact.postalCode = externalPersonContact?.postalCode;
+        internalPersonContact.primaryPhone = externalPersonContact?.primaryPhone;
+        internalPersonContact.secondaryPhone = externalPersonContact?.secondaryPhone;
+        internalPersonContact.street = externalPersonContact?.street;
+        
+        return internalPersonContact;
+    }
     
-    async GetUser() : Promise<UserContext> {
+    async GetUser() : Promise<User> {
         try{
             let api = new UserApi(this.conf);
             let request = {};
             let user = await api.getUser(request).catch(err => { console.log(err); throw err;});;
-            return user;
+            return this.mapUserFromExternalToInternal(user);
         } catch(error : any){
             return this.HandleError(error)
         }
@@ -794,7 +819,20 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 throw new Error('Could not map category ' + weekday);
         }
     }
-
+    private mapUserFromExternalToInternal(user: UserContext): User {
+        const internalUser = new User();
+        internalUser.autorisationsids = user.autorisationsids;
+        internalUser.email = user.email;
+        internalUser.entitlements = user.entitlements;
+        internalUser.firstName = user.firstName;
+        internalUser.fullName = user.fullName;
+        internalUser.lastName = user.lastName;
+        internalUser.orgId = user.orgId;
+        internalUser.orgName = user.orgName;
+        internalUser.userId = user.userId!;
+        
+        return internalUser;
+    }
     private mapDayEnum(day: DayEnum) : FrequencyDtoWeekdaysEnum {
         switch(day) {
             case DayEnum.Monday:
@@ -817,3 +855,5 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 }
+
+

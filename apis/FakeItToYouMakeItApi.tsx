@@ -6,7 +6,7 @@ import { DayEnum, Frequency, FrequencyEnum } from "../components/Models/Frequenc
 import { PatientCareplan } from "../components/Models/PatientCareplan";
 import { PatientDetail } from "../components/Models/PatientDetail";
 import { Person } from "../components/Models/Person";
-import { PersonContact } from "../components/Models/PersonContact";
+import PersonContact from "../components/Models/PersonContact";
 import { PatientSimple } from "../components/Models/PatientSimple";
 import { PlanDefinition } from "../components/Models/PlanDefinition";
 import { Question, QuestionTypeEnum } from "../components/Models/Question";
@@ -14,15 +14,17 @@ import { Questionnaire } from "../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
 import { ThresholdNumber } from "../components/Models/ThresholdNumber";
-import { ThresholdOption } from "../components/Models/ThresholdOption";
+
 import { QuestionnaireAlreadyOnCareplan } from "../services/Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 import { UserContext } from "../generated";
-import { User } from "../components/Models/User";
+
 import { BaseServiceError } from "../services/Errors/BaseServiceError";
 import { BaseApiError } from "./Errors/BaseApiError";
 import { NoPatientFround } from "../services/Errors/NoPatientFountError";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { User } from "../components/Models/User";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
@@ -427,7 +429,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return this.person1;
     }
     
-    async GetUser() : Promise<UserContext>{
+    async GetUser() : Promise<User>{
 	    let user = new User();
 	    user.userId = "TESTES";
 	    user.firstName = "Test";
