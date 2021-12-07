@@ -117,7 +117,7 @@ const THEME = createTheme({
     }
   },
   typography: {
-   "fontFamily": "verdana",
+   "fontFamily": "verdana, sans-serif",
    h6 : {
      fontSize : 17,
      fontWeight : "bold",
@@ -125,19 +125,11 @@ const THEME = createTheme({
    }
   },
   components : {
-    MuiTypography : {
-      styleOverrides : {
-        root : {
-          fontFamily : 'verdana'
-        }
-      }
-    },
     //=========== Grid ===========//
     MuiGrid : {
       styleOverrides : {
         root : {
           fontsize : 16,
-          fontFamily : "verdana",
           ".grid__headline" : {
             paddingBottom: 10
           },
