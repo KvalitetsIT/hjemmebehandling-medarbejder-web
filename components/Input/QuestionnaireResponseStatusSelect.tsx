@@ -73,11 +73,10 @@ InitializeServices() : void{
   render () : JSX.Element {
     this.InitializeServices()
     return ( <>
-<FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+<FormControl className="answer__status" variant="standard" fullWidth>
                         <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
                         value={this.state.status}
                         label="Status"
                         onChange={this.handleChange}

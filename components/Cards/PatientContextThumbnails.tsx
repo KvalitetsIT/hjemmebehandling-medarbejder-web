@@ -40,14 +40,14 @@ export class PatientContextThumbnails extends Component<Props,{}> {
         
         {currentCareplan.patient.contact.primaryContact ? 
         <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
-        <ThumbnailCard color="lightblue" headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>}>
+        <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>}>
           <Typography variant="subtitle2">{currentCareplan.patient.contact.fullname}</Typography>
           <Typography variant="subtitle1">{currentCareplan.patient.contact.primaryPhone ? currentCareplan.patient.contact.primaryPhone : "-"}</Typography>
         </ThumbnailCard>
         </Link>
         : <></>}
         <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
-        <ThumbnailCard color="lightblue" headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large"/>}>
+        <ThumbnailCard headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large"/>}>
           <Typography variant="subtitle2">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
           <Typography variant="subtitle1">Startet: {this.dateHelper.DateToString(currentCareplan?.creationDate)}</Typography>
         </ThumbnailCard>

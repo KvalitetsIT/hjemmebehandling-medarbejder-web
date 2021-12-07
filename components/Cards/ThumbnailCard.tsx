@@ -25,7 +25,7 @@ export class ThumbnailCard extends Component<Props,{}> {
         <Card component={Box} minWidth={300}>
          <CardContent>
            <Grid container>
-             <Grid item xs={4}>
+             <Grid className="thumbnail__icon" item xs={4}>
                   {this.props.avatar ? this.props.avatar :
                    <Avatar sx={{ bgcolor: backgroundColor, width:'100%', height:'100%' }} variant="square">
                        {this.props.boxContent}

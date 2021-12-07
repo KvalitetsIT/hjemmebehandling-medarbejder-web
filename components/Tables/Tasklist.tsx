@@ -127,41 +127,40 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
     }
     return (<>
 
-          <TableContainer component={Card}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Kategori</TableCell>
-            <TableCell align="left">Navn</TableCell>
-            <TableCell align="left">CPR</TableCell>
-            <TableCell align="left">Spørgeskema</TableCell>
-            <TableCell align="left">Besvaret</TableCell>
-            <TableCell align="left"></TableCell>
-            
-          </TableRow>
+      <TableContainer component={Card}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{width: '3%'}} >Alarm</TableCell>
+              <TableCell style={{width: '35%'}} align="left">Navn</TableCell>
+              <TableCell style={{width: '12%'}} align="left">CPR</TableCell>
+              <TableCell style={{width: '12%'}} align="left">Patientgruppe</TableCell>
+              <TableCell style={{width: '12%'}} align="left">Spørgeskema</TableCell>
+              <TableCell style={{width: '12%'}} align="left">Besvaret</TableCell>
+              <TableCell align="left"></TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
         {!tasks ? <></> : tasks.map((task) => (
           <>
             <TableRow key={task.cpr}>
               <TableCell component="th" scope="row">
-                <Chip className="round" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
+                  <Chip className="chip__alarm" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
               </TableCell>
               <TableCell align="left">
-                <Button  component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
+                  <Button className="patient__button" component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
               </TableCell>
               <TableCell align="left">{task.cpr}</TableCell>
               <TableCell align="left">{task.questionnaireName}</TableCell>
               <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
-              <TableCell align="left">
+                <TableCell className="action-button__cell" align="right">
                 {task.category == CategoryEnum.BLUE ? 
-                <ConfirmationButton variant="contained" color="primary" title="Fjern alarm?" buttonText="Fjern alarm" action={async () => await this.removeAlarm(task)}>
+                  <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" class="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
                   Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
                 </ConfirmationButton>
               :
-              <Button component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>
+                <Button className="answer__button" component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>
               }
-                
               </TableCell>
             </TableRow>
           </>
