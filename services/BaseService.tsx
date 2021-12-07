@@ -3,6 +3,7 @@ import {BaseApiError} from "./../apis/Errors/BaseApiError"
 import {BaseServiceError} from "./Errors/BaseServiceError"
 import { UnknownServiceError } from "./Errors/UnknownServiceError";
 import { NotCorrectRightsError } from "./Errors/NotCorrectRightsError";
+import { NotFoundError } from "./Errors/NotFoundError";
 
 export default class BaseService {
     ValidatePagination(page : number, pageSize : number) : void {
@@ -33,13 +34,17 @@ export default class BaseService {
     }
 
     private FromApiToServiceError(apiError : BaseApiError) : BaseServiceError {
-        if(apiError.response.status === 403)
-            return new NotCorrectRightsError();
-            
-        if(apiError.response.status === 401)
-            return new NotCorrectRightsError();
+        switch(apiError.response.status){
+            case 401 : 
+                return new NotCorrectRightsError();
+            case 403 : 
+                return new NotCorrectRightsError();
+            case 404 : 
+                return new NotFoundError();
 
-        return apiError;
+            default :
+                return apiError;
+        }
     }
 }
   

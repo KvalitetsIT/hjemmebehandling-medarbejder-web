@@ -12,6 +12,8 @@ import { CriticalLevelEnum, InvalidInputModel } from '../../services/Errors/Inva
 import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
 import { ErrorBoundary } from '../Layout/ErrorBoundary';
 import { Address } from '../Models/Address';
+import { NotFoundError } from '../../services/Errors/NotFoundError';
+import { ToastError } from '../Alerts/ToastError';
 
 export interface Props {
     initialPatient : PatientDetail
@@ -24,6 +26,7 @@ export interface State {
     tempCpr? : string;
     patient : PatientDetail;
     errorArray : InvalidInputModel[];
+    errorToast : JSX.Element
 }
 
 export class PatientEditCard extends Component<Props,State> {
@@ -37,6 +40,7 @@ export class PatientEditCard extends Component<Props,State> {
       super(props);
       this.state = {
 	      loadingCprButton : false,
+        errorToast : <></>,
         loadingPage : true,
         tempCpr : props.initialPatient.cpr,
 	      patient : props.initialPatient,
@@ -69,7 +73,8 @@ async getPerson() : Promise<void>{
     }
     
     this.setState({
-      loadingCprButton: true
+      loadingCprButton: true,
+      errorToast : <></>
     })
     
     const newPerson = await this.personService.GetPerson(tempCpr!);
@@ -86,14 +91,18 @@ async getPerson() : Promise<void>{
     p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
     p.cpr = tempCpr;
     this.setState({patient : p});
-    
-
     this.setState({
       loadingCprButton: false
     })
     
+
   } catch(error){
-	  this.setState(()=>{throw error})
+    if(error instanceof NotFoundError){
+      this.setState({errorToast : <ToastError severity="info" error={error} />})
+    } else {
+      this.setState(()=>{throw error})
+    }
+	  
   }
 
   this.setState({
@@ -227,6 +236,7 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
           
         </CardContent>
     </Card>
+    {this.state.errorToast ?? <></> }
     </ErrorBoundary>
     </>
     )

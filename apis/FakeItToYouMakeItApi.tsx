@@ -21,7 +21,7 @@ import { UserContext } from "../generated";
 
 import { BaseServiceError } from "../services/Errors/BaseServiceError";
 import { BaseApiError } from "./Errors/BaseApiError";
-import { NoPatientFround } from "../services/Errors/NoPatientFountError";
+import { NotFoundError } from "../services/Errors/NotFoundError";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { User } from "../components/Models/User";
@@ -421,7 +421,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
             return this.patient1;
         }
 
-        throw new NoPatientFround();
+        throw new NotFoundError();
     }
     
     async GetPerson(cpr: string) : Promise<Person>{

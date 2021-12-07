@@ -5,9 +5,14 @@ import Slide, { SlideProps } from '@mui/material/Slide';
 
 export interface Props {
     error : any
+    severity : "error" | "info"
 }
 
 export class ToastError extends Component<Props,{}>{
+    static defaultProps = {
+        severity : "error"
+    }
+
     constructor(props : Props){
         super(props);
     }
@@ -27,7 +32,7 @@ export class ToastError extends Component<Props,{}>{
                 const error = e as BaseServiceError
                 return (
                     <Snackbar TransitionComponent={this.TransitionUp} open={true} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
-                        <Alert severity="error" sx={{ width: '100%' }}>
+                        <Alert severity={this.props.severity} sx={{ width: '100%' }}>
                             <h5>{error.displayTitle()}</h5>
                             {error.displayMessage()}
                         </Alert>
