@@ -7,7 +7,7 @@ export class NotImplementedError extends BaseApiError {
     displayMessage() {
         return "Denne feature er endnu ikke klar";
     }
-    displayTitle(){
+    async displayTitle(){
         return "Ikke implementeret"
     }
 }
