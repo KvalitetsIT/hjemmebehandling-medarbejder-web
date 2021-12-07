@@ -225,35 +225,13 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             let carePlans = await api.searchCarePlans(request)
 
-            return carePlans.map(cp => this.buildTaskFromCarePlan(cp))
+            return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
         } catch(error : any){
             return this.HandleError(error)
         }
     }
 
-    private buildTaskFromCarePlan(carePlan: CarePlanDto) : Task {
-        try{
-            let task = new Task()
-
-            task.cpr = carePlan.patientDto!.cpr!
-            task.category = CategoryEnum.BLUE
-            task.firstname = carePlan.patientDto!.givenName
-            task.lastname = carePlan.patientDto!.familyName
-            task.questionnaireResponseStatus = undefined
-            task.carePlanId = carePlan.id
-
-            var questionnaire = carePlan.questionnaires![0].questionnaire!
-            task.questionnaireId = questionnaire.id!
-            task.questionnaireName = questionnaire.title!
-
-            task.answeredTime = undefined
-            task.responseLinkEnabled = false
-
-            return task
-        } catch(error : any){
-            return this.HandleError(error)
-        }
-    }
+    
 
     async GetPatient(cpr: string) : Promise<PatientDetail> {
         try{
@@ -410,16 +388,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         } catch(error : any){
             return this.HandleError(error)
         }
-    }
-
-  
-
-   
-
-   
-
-    
-   
+    }   
 }
 
 
