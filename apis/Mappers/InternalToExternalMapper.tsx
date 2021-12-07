@@ -8,7 +8,9 @@ import { QuestionnaireResponseStatus } from "../../components/Models/Questionnai
 import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionnaireWrapperDto } from "../../generated/models";
 import BaseMapper from "./BaseMapper";
 
-
+/**
+ * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
+ */
 export default class InternalToExternalMapper extends BaseMapper{
     mapCarePlan(carePlan: PatientCareplan) : CarePlanDto {
             let carePlanDto = {

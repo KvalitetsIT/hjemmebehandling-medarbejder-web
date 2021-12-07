@@ -20,7 +20,9 @@ import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
 
-
+/**
+ * This class maps from the external models (used in bff-api) to the internal models (used in frontend)
+ */
 export default class ExternalToInternalMapper extends BaseMapper{
     mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
 
