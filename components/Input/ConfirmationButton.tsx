@@ -8,7 +8,7 @@ export interface Props {
     action : () => void
     title : string
     buttonText : string
-    class : string
+    className : string
 
     color : 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
     variant : "outlined" | "contained" | "text"
@@ -25,7 +25,8 @@ export class ConfirmationButton extends Component<Props,State> {
   
   public static defaultProps = {
     color : "inherit",
-    variant : "outlined"
+    variant : "outlined",
+    className : ""
   };
   
   constructor(props : Props){
@@ -54,7 +55,7 @@ export class ConfirmationButton extends Component<Props,State> {
   render () : JSX.Element{
     return (
       <>
-        <Button className={this.props.class} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
+        <Button className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
       <Dialog
         open={this.state.openConfirmationBox}
         onClose={()=>this.CloseVerificationBox()}

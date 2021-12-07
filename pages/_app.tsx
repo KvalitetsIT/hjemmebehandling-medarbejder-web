@@ -18,8 +18,7 @@ import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import capitalize from '@mui/utils/capitalize';
-import { borderColor, fontWeight } from '@mui/system';
+import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 
 function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   const mockApi : IBackendApi = new FakeItToYouMakeItApi();
@@ -92,28 +91,27 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
   
 }
 
+
 const black = '#4a4848'
-const grey = '#999999'
 const greyLight = '#f2f2f2'
 
 const green = '#61BD84'
-const greenDark = '#4A6F58'
-const greenLight = '#D0EFDC'
 
 const yellow = '#FFD78C'
-const yellowDark = '#F4B156'
-const yellowLight = '#FFEFD0'
 
 const red = '#EE6969'
-const redDark = '#CD4141'
-const redLight = '#FAD8D7'
 
 const blue = '#5D74AC'
 const blueDark = '#5D74AC'
 const blueLight = '#E8EFF7'
 
+const mainBackground = "#F2F2F2"
+
 const THEME = createTheme({
   palette : {
+    background : {
+      default : mainBackground,
+    },
     text : {
       primary : black
     }
@@ -125,11 +123,6 @@ const THEME = createTheme({
      fontWeight : "bold",
      color : black
    }
-  },
-  palette : {
-    background : {
-      default : mainBackground,
-    }
   },
   components : {
     MuiTypography : {

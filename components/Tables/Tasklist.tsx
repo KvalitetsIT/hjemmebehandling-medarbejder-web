@@ -155,7 +155,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
                 <TableCell className="action-button__cell" align="right">
                 {task.category == CategoryEnum.BLUE ? 
-                  <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" class="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
+                  <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" className="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
                   Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
                 </ConfirmationButton>
               :
