@@ -12,6 +12,7 @@ import { PlanDefinition } from "../../components/Models/PlanDefinition";
 import { Question, QuestionTypeEnum } from "../../components/Models/Question";
 import { Questionnaire } from "../../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
+import { Task } from "../../components/Models/Task";
 import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
 import { User } from "../../components/Models/User";
 import { AnswerDto, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
@@ -19,7 +20,9 @@ import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
 
-
+/**
+ * This class maps from the external models (used in bff-api) to the internal models (used in frontend)
+ */
 export default class ExternalToInternalMapper extends BaseMapper{
     mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
 
@@ -35,6 +38,27 @@ export default class ExternalToInternalMapper extends BaseMapper{
     
             return carePlan;
 
+    }
+
+    buildTaskFromCarePlan(carePlan: CarePlanDto) : Task {
+    
+            let task = new Task()
+
+            task.cpr = carePlan.patientDto!.cpr!
+            task.category = CategoryEnum.BLUE
+            task.firstname = carePlan.patientDto!.givenName
+            task.lastname = carePlan.patientDto!.familyName
+            task.questionnaireResponseStatus = undefined
+            task.carePlanId = carePlan.id
+
+            var questionnaire = carePlan.questionnaires![0].questionnaire!
+            task.questionnaireId = questionnaire.id!
+            task.questionnaireName = questionnaire.title!
+
+            task.answeredTime = undefined
+            task.responseLinkEnabled = false
+
+            return task
     }
 
     mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {
@@ -313,11 +337,21 @@ export default class ExternalToInternalMapper extends BaseMapper{
             patient.firstname = patientDto.givenName;
             patient.lastname = patientDto.familyName;
             patient.cpr = patientDto.cpr;
-            //TODO : patient.patientContact = this.mapContactDetailsDto(patientDto.patientContactDetails!);
+            patient.address = this.mapPatientContactDetails(patientDto.patientContactDetails)
             patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
-            // TODO - map additional contact details.
+            patient.primaryPhone = patientDto.primaryRelativeContactDetails?.primaryPhone;
+            patient.secondaryPhone = patientDto.primaryRelativeContactDetails?.secondaryPhone;
+
     
             return patient;
 
+    }
+    mapPatientContactDetails(patientContactDetails: ContactDetailsDto | undefined): Address {
+        const address = new Address();
+        address.city = patientContactDetails?.city;
+        address.country = patientContactDetails?.country;
+        address.zipCode = patientContactDetails?.postalCode;
+        address.street = patientContactDetails?.street;
+        return address;
     }
 }
