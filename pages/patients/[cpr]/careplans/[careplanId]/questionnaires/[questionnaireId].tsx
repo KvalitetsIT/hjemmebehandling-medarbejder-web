@@ -50,13 +50,11 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   }
 
   componentDidMount() : void {
-    
-    this.populateCareplans()
-}
-
-SetQuestionnaireFrequency(questionnaire : Questionnaire) : void{
-  this.setState({editMode:false})
-  this.questionnaireService.SetQuestionnaireFrequency(questionnaire);
+    try{
+      this.populateCareplans()
+    } catch(error){
+      this.setState(()=>{throw error})
+    }
 }
 
 async populateCareplans() : Promise<void> {
