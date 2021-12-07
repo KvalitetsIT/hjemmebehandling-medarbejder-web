@@ -110,13 +110,18 @@ SaveCareplan(editedCareplan : PatientCareplan) : void{
 
 async componentDidMount() :  Promise<void> {
   const cpr = this.props.match.params.cpr;
-  let careplanToEdit : PatientCareplan | undefined = this.createNewEmptyCareplan()
-  if(cpr){
-    const careplansForPatient = await this.careplanService.GetPatientCareplans(cpr)
-    careplanToEdit = careplansForPatient.find(x=>!x.terminationDate);
+  try{
+    let careplanToEdit : PatientCareplan | undefined = this.createNewEmptyCareplan()
+    if(cpr){
+      const careplansForPatient = await this.careplanService.GetPatientCareplans(cpr)
+      careplanToEdit = careplansForPatient.find(x=>!x.terminationDate);
+    }
+    
+    this.setState({loading : false,careplan : careplanToEdit, patient : careplanToEdit ? careplanToEdit.patient : undefined})
+    
+  } catch(error){
+    this.setState(()=>{throw error})
   }
-  
-  this.setState({loading : false,careplan : careplanToEdit, patient : careplanToEdit ? careplanToEdit.patient : undefined})
 }
 
 getFirstError() : string{

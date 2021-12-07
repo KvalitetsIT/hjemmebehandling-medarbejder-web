@@ -1,9 +1,8 @@
-import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import { Component } from 'react';
 import IUserService from '../../services/interfaces/IUserService';
 import { User } from '../Models/User';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem,Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 
 

@@ -1,6 +1,4 @@
-import { UserContext } from "../../generated";
-
-export class User implements UserContext{
+export class User{
 
     userId!: string;
     firstName?: string;
