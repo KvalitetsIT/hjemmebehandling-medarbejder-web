@@ -104,21 +104,6 @@ getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary
     return "default"
 }
 
-getDisplayNameFromCategory(category : CategoryEnum) : string {
-    
-    if(category === CategoryEnum.RED)
-        return "Rød"
-    if(category === CategoryEnum.YELLOW)
-        return "Gul"
-    if(category === CategoryEnum.GREEN)
-        return "Grøn"
-    if(category === CategoryEnum.BLUE)
-        return "Blå"
-
-    return "Ukendt"
-}
-
-
   renderTableData(questionaire : Questionnaire) : JSX.Element{
     if(this.state.loading)
         return (<LoadingSmallComponent/>)

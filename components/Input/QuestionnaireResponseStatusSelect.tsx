@@ -55,8 +55,7 @@ InitializeServices() : void{
 
 
     try{
-        await this.questionnaireService.SetQuestionaireResponse(this.props.questionnaireResponse.id, changes)
-        await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
+         await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
         this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : collectionStatus})
     } catch(error : unknown){
         this.setState(()=>{throw error})
