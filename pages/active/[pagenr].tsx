@@ -39,7 +39,7 @@ componentDidMount() : void{
         </Typography>
         </Box>
 
-        <PatientsTable showActivePatients={true} showInactivePatients={false} pagenumber={currentPage}></PatientsTable>
+        <PatientsTable showActivePatients={true} pagenumber={currentPage}></PatientsTable>
 
          
         </>

@@ -143,6 +143,6 @@ export interface IBackendApi {
     /**
      * Returns patients based on paramaters
      */
-    GetPatients : (includeActive : boolean, includeInactive : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
+    GetPatients : (includeActive : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
 }
 

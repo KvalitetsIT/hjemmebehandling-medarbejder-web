@@ -265,10 +265,8 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.task2.questionnaireId = this.questionnaire1.id
         this.task2.responseLinkEnabled = true
     }
-    async GetPatients(includeActive: boolean, includeInactive: boolean,page : number, pageSize : number) : Promise<PatientDetail[]>{
+    async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
         await new Promise(f => setTimeout(f, this.timeToWait));
-        if(includeInactive)
-            return [];
         let toReturn = [];
         for(let i = 0; i < pageSize; i++){
             toReturn.push(this.patient1);
