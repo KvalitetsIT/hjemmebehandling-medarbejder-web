@@ -43,7 +43,7 @@ class InactivePatients extends React.Component<Props,State> {
           </Typography>
           </Box>
 
-          <PatientsTable showActivePatients={false} showInactivePatients={true} pagenumber={currentPage}></PatientsTable>
+          <PatientsTable showActivePatients={false} pagenumber={currentPage}></PatientsTable>
           </>
         )
     }

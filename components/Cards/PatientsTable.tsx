@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Paper, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, ButtonGroup, Card, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import * as React from 'react';
 import { LoadingBackdropComponent } from '../../components/Layout/LoadingBackdropComponent';
 import { PatientDetail } from '../../components/Models/PatientDetail';
@@ -18,7 +18,6 @@ interface State {
 
 interface Props {
     showActivePatients : boolean;
-    showInactivePatients : boolean;
     pagenumber : number;
 
 }
@@ -55,7 +54,7 @@ InitializeServices(): void {
 
       try{
         
-        const patients = await this.patientService.GetPatients(this.props.showActivePatients,this.props.showInactivePatients,this.props.pagenumber,this.state.pageSize);
+        const patients = await this.patientService.GetPatients(this.props.showActivePatients,this.props.pagenumber,this.state.pageSize);
         console.log(patients)
         this.setState({
             loadingTable : false,
@@ -89,7 +88,7 @@ InitializeServices(): void {
         return (
             <>
             
-            <TableContainer component={Paper}>
+            <TableContainer component={Card}>
                 <Table>
                     <TableHead>
                         <TableRow>

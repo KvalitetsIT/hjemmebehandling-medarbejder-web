@@ -52,8 +52,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
-    GetPatients(includeActive: boolean, includeInactive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
-        throw new NotImplementedError();
+    async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
+        try {
+            let api = new CarePlanApi(this.conf)
+            let request = {
+                onlyActiveCareplans: includeActive,
+                pageNumber: page,
+                pageSize: pageSize
+            }
+
+
+            let carePlans = await api.searchCarePlans(request)
+            return carePlans.map(cp => this.toInternal.mapPatientDto(cp.patientDto!));
+        } catch(error: any) {
+            return this.HandleError(error)
+        }
     }
 
     async RemoveAlarm(task: Task): Promise<void> {
