@@ -1,9 +1,10 @@
 import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError";
-import {BaseApiError} from "./../apis/Errors/BaseApiError"
-import {BaseServiceError} from "./Errors/BaseServiceError"
-import { UnknownServiceError } from "./Errors/UnknownServiceError";
+import { BaseApiError } from "./../apis/Errors/BaseApiError"
+import { BaseServiceError } from "./Errors/BaseServiceError";
+import { BadRequestError } from "./Errors/BadRequestError";
 import { NotCorrectRightsError } from "./Errors/NotCorrectRightsError";
 import { NotFoundError } from "./Errors/NotFoundError";
+import { UnknownServiceError } from "./Errors/UnknownServiceError";
 
 export default class BaseService {
     ValidatePagination(page : number, pageSize : number) : void {
@@ -34,7 +35,9 @@ export default class BaseService {
     }
 
     private FromApiToServiceError(apiError : BaseApiError) : BaseServiceError {
-        switch(apiError.response.status){
+        switch(apiError.response.status) {
+            case 400:
+                return new BadRequestError(apiError.errorMessage)
             case 401 : 
                 return new NotCorrectRightsError();
             case 403 : 

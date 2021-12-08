@@ -1,9 +1,15 @@
+import { ErrorDto } from "../../generated/models";
+
 export class BaseApiError extends Error {
     response : Response;
+    errorMessage : string;
+    errorCode: number;
 
-    constructor(response : Response){
+    constructor(response : Response, errorMessage: string, errorCode: number){
         super();
-        this.response = response;
+        this.response = response
+        this.errorMessage = errorMessage
+        this.errorCode = errorCode
         let responseStatus = this.response.status ?? "-1"
         let responseText = this.response.statusText ?? "Ingen responsstatus"
         this.message = "("+responseStatus + ") " + responseText;
@@ -15,6 +21,6 @@ export class BaseApiError extends Error {
     displayTitle() : string{
         let responseStatus = this.response.status ?? "-1"
         let responseText = this.response.statusText ?? "Ingen responsstatus"
-        return "("+responseStatus + ") " + responseText;
+        return "("+responseStatus + ") " + responseText + '. Detailed message: ' + this.errorMessage
     }
 }
