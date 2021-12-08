@@ -41,24 +41,39 @@ export default class ExternalToInternalMapper extends BaseMapper{
     }
 
     buildTaskFromCarePlan(carePlan: CarePlanDto) : Task {
-    
-            let task = new Task()
+        let task = new Task()
 
-            task.cpr = carePlan.patientDto!.cpr!
-            task.category = CategoryEnum.BLUE
-            task.firstname = carePlan.patientDto!.givenName
-            task.lastname = carePlan.patientDto!.familyName
-            task.questionnaireResponseStatus = undefined
-            task.carePlanId = carePlan.id
+        task.cpr = carePlan.patientDto!.cpr!
+        task.category = CategoryEnum.BLUE
+        task.firstname = carePlan.patientDto!.givenName
+        task.lastname = carePlan.patientDto!.familyName
+        task.questionnaireResponseStatus = undefined
+        task.carePlanId = carePlan.id
 
-            var questionnaire = carePlan.questionnaires![0].questionnaire!
-            task.questionnaireId = questionnaire.id!
-            task.questionnaireName = questionnaire.title!
+        var questionnaire = carePlan.questionnaires![0].questionnaire!
+        task.questionnaireId = questionnaire.id!
+        task.questionnaireName = questionnaire.title!
 
-            task.answeredTime = undefined
-            task.responseLinkEnabled = false
+        task.answeredTime = undefined
+        task.responseLinkEnabled = false
 
-            return task
+        return task
+    }
+
+    buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
+        let task = new Task()
+
+        task.cpr = questionnaireResponse.patient!.cpr!
+        task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
+        task.firstname = questionnaireResponse.patient!.givenName
+        task.lastname = questionnaireResponse.patient!.familyName
+        task.questionnaireResponseStatus = this.mapExaminationStatus(questionnaireResponse.examinationStatus!)
+        task.questionnaireId = questionnaireResponse.questionnaireId!
+        task.questionnaireName = questionnaireResponse.questionnaireName!
+        task.answeredTime = questionnaireResponse.answered!
+        task.responseLinkEnabled = true
+
+        return task
     }
 
     mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto) : PlanDefinition {

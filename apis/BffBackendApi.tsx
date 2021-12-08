@@ -186,27 +186,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
-            return questionnaireResponses.map(qr => this.buildTaskFromQuestionnaireResponse(qr))
-        } catch (error: any) {
-            return this.HandleError(error)
-        }
-    }
-
-    private buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
-        try {
-            let task = new Task()
-
-            task.cpr = questionnaireResponse.patient!.cpr!
-            task.category = this.toInternal.mapTriagingCategory(questionnaireResponse.triagingCategory!)
-            task.firstname = questionnaireResponse.patient!.givenName
-            task.lastname = questionnaireResponse.patient!.familyName
-            task.questionnaireResponseStatus = this.toInternal.mapExaminationStatus(questionnaireResponse.examinationStatus!)
-            task.questionnaireId = questionnaireResponse.questionnaireId!
-            task.questionnaireName = questionnaireResponse.questionnaireName!
-            task.answeredTime = questionnaireResponse.answered!
-            task.responseLinkEnabled = true
-
-            return task
+            return questionnaireResponses.map(qr => this.toInternal.buildTaskFromQuestionnaireResponse(qr))
         } catch (error: any) {
             return this.HandleError(error)
         }
@@ -230,7 +210,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return this.HandleError(error)
         }
     }
-
 
 
     async GetPatient(cpr: string): Promise<PatientDetail> {
