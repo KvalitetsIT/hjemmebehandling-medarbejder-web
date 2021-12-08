@@ -96,11 +96,16 @@ async submitPatient() : Promise<void>{
     this.setState({
       loading: true
     })
-    const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
-    this.setState({
-      newCareplanId : newCareplanId,
-      submitted : true
-    })
+    try {
+      const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
+      this.setState({
+        newCareplanId : newCareplanId,
+        submitted : true
+      })
+    }
+    catch(error) {
+      this.setState(() => { throw error })
+    }
 }
 
 SaveCareplan(editedCareplan : PatientCareplan) : void{
