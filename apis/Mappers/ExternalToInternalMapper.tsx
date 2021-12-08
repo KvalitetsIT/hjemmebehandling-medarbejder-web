@@ -301,6 +301,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
 		    response.category = CategoryEnum.BLUE; 
         }
         response.patient = this.mapPatientDto(questionnaireResponseDto.patient!);
+        response.questionnaireId = FhirUtils.unqualifyId(questionnaireResponseDto.questionnaireId!)
 
         return response;
     }
