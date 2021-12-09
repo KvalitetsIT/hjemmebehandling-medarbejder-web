@@ -36,7 +36,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
         }
         carePlan.creationDate = carePlanDto.created
         carePlan.terminationDate = carePlanDto.endDate
-        carePlan.department = "Umuliologisk Afdeling" // TODO - include Department in the api response ...
+        carePlan.department = carePlanDto?.departmentName ?? 'Ukendt afdeling'
 
         return carePlan
     }

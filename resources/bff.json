@@ -1389,6 +1389,9 @@
             "items": {
               "$ref": "#/components/schemas/PlanDefinitionDto"
             }
+          },
+          "departmentName": {
+            "type": "string"
           }
         }
       },
