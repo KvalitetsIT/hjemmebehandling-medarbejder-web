@@ -8,9 +8,7 @@ export class BaseApiError extends Error {
         this.response = response
         this.errorMessage = errorMessage
         this.errorCode = errorCode
-        let responseStatus = this.response.status ?? "-1"
-        let responseText = this.response.statusText ?? "Ingen responsstatus"
-        this.message = "("+responseStatus + ") " + responseText;
+        this.message = this.displayTitle() + ": " + errorMessage ;
     }
 
     displayUrl() : string{
@@ -21,7 +19,7 @@ export class BaseApiError extends Error {
     }
     displayTitle() : string{
         let responseStatus = this.response.status ?? "-1"
-        let responseText = this.response.statusText ?? "Ingen responsstatus"
-        return "("+responseStatus + ") " + responseText
+        let responseText = this.response.statusText ?? ""
+        return "("+responseStatus + ") " + responseText ;
     }
 }
