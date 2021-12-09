@@ -93,7 +93,6 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
 
 
 const black = '#4a4848'
-const greyLight = '#f2f2f2'
 
 const green = '#61BD84'
 
