@@ -65,7 +65,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let carePlans = await api.searchCarePlans(request)
             return carePlans.map(cp => this.toInternal.mapPatientDto(cp.patientDto!));
         } catch(error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -78,39 +78,39 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return await api.resolveAlarm(request)
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
     conf: Configuration = new Configuration({ basePath: '/api/proxy' });
 
-    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+    async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
 
     }
-    SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
+    async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
-    EditPatient(patient: PatientDetail): Promise<PatientDetail> {
+    async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
-    SearchPatient(searchstring: string): Promise<PatientDetail[]> {
+    async SearchPatient(searchstring: string): Promise<PatientDetail[]> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -123,16 +123,16 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
 
     }
 
-    AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
+    async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -156,15 +156,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             var parts = location.split('/')
             return parts[parts.length - 1]
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
-    SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+    async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -177,7 +177,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             await api.patchQuestionnaireResponse(request)
             return status;
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -185,7 +185,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -202,7 +202,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return questionnaireResponses.map(qr => this.toInternal.buildTaskFromQuestionnaireResponse(qr))
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -221,7 +221,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -254,7 +254,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
             return patient;
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -265,7 +265,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapPersonFromExternalToInternal(person);
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -277,7 +277,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapUserFromExternalToInternal(user);
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -298,7 +298,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return carePlans.map(cp => this.toInternal.mapCarePlanDto(cp));
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -315,7 +315,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return this.toInternal.mapCarePlanDto(carePlan);
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -328,7 +328,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
         } catch (error: any) {
-            return this.HandleError(error)
+            return await  this.HandleError(error)
         }
 
     }
@@ -337,7 +337,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -345,7 +345,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 
@@ -353,7 +353,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             throw new NotImplementedError();
         } catch (error: any) {
-            return this.HandleError(error)
+            return await this.HandleError(error)
         }
     }
 }

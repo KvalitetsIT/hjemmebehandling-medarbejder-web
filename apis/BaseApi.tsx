@@ -18,7 +18,7 @@ export default class BaseApi {
                 let bodyJson = JSON.parse(bodyText)
                 let errorDto = ErrorDtoFromJSON(bodyJson)
     
-                throw new BaseApiError(response, errorDto.errorText!, errorDto.errorCode!)
+                throw new BaseApiError(response, errorDto.errorText, errorDto.errorCode!)
             } catch(error){
                 //When json-parser tries to parse fx "" we end up here
                 throw new BaseApiError(response, bodyText,response.status!)
