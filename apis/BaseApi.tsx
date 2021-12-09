@@ -1,6 +1,5 @@
 import {BaseApiError} from "./../apis/Errors/BaseApiError"
 import { ErrorDtoFromJSON } from "../generated";
-import { UnknownError } from "./Errors/UnknownError";
 
 export default class BaseApi {
     
