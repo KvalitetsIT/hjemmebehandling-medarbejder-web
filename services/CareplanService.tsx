@@ -19,6 +19,13 @@ export default class CareplanService extends BaseService implements ICareplanSer
         super()
         this.backendApi = backendApi;
     }
+    async SetCareplan(careplan : PatientCareplan) : Promise<PatientCareplan>{
+      try{
+        return await this.backendApi.SetCareplan(careplan)
+      }catch(error){
+        return this.HandleError(error)
+      }
+    }
 
     async CreateCarePlan(carePlan: PatientCareplan) : Promise<string> {
         try{
@@ -31,18 +38,6 @@ export default class CareplanService extends BaseService implements ICareplanSer
     async TerminateCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
         try{
         return await this.backendApi.TerminateCareplan(careplan);
-    } catch(error : any){
-        return this.HandleError(error);
-      }
-    }
-    
-    async SetPlanDefinitionsOnCareplan(careplan: PatientCareplan) : Promise<PatientCareplan>{
-        try{
-
-        let careplanOnlyChangedValues = new PatientCareplan();
-        careplanOnlyChangedValues.id = careplan.id;
-        careplanOnlyChangedValues.planDefinitions = careplan.planDefinitions
-        return await this.backendApi.SetCareplan(careplanOnlyChangedValues);
     } catch(error : any){
         return this.HandleError(error);
       }

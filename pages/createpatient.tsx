@@ -27,6 +27,7 @@ export interface Accordians{
   PlanDefinitionIsOpen : boolean
 }
 export interface Props{
+  editmode : boolean,
   openAccordians : Accordians
   match : { params : {cpr? : string, questionnaireId? : string,careplanId? : string} }
 }
@@ -97,9 +98,18 @@ async submitPatient() : Promise<void>{
       loading: true
     })
     try {
-      const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
+      let careplanId! : string;
+
+      if(this.props.editmode){
+        const editedCareplan = await this.careplanService.SetCareplan(this.state.careplan)
+        careplanId = editedCareplan.id
+      } else {
+        const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
+        careplanId = newCareplanId
+      }
+      
       this.setState({
-        newCareplanId : newCareplanId,
+        newCareplanId : careplanId,
         submitted : true
       })
     }

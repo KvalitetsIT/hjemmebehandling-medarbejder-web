@@ -73,10 +73,10 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props} />} />
                     <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
-                    <Route path="/patients/:cpr/edit/patient" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props} />} />
-                    <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient openAccordians={accoridansContact} {...props} />} />
-                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient openAccordians={accoridansPlanDefinition} {...props} />} />
-                    <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/patient" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansContact} {...props} />} />
+                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
+                    <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPatient} {...props} />} />
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
 
@@ -86,7 +86,7 @@ export class Layout extends Component<{}, State> {
                     <Route path="/inactive" render={(props) => <Redirect to={"/inactive/1"} {...props} />} />
 
                     <Route path="/patients"><Patients /></Route>
-                    <Route path="/newpatient" render={(props) => <CreatePatient openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/newpatient" render={(props) => <CreatePatient editmode={false} openAccordians={accoridansPatient} {...props} />} />
 
                     <Route path="/"><Patients /></Route>
                   </Switch>
