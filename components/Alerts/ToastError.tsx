@@ -1,5 +1,5 @@
-import { Component } from "react";
-import { Alert, Snackbar } from '@mui/material';
+import React, { Component } from "react";
+import { Alert, Snackbar, Stack, Typography } from '@mui/material';
 import { BaseServiceError } from "../../services/Errors/BaseServiceError";
 import Slide, { SlideProps } from '@mui/material/Slide';
 
@@ -33,7 +33,10 @@ export class ToastError extends Component<Props,{}>{
                 return (
                     <Snackbar TransitionComponent={this.TransitionUp} open={true} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
                         <Alert severity={this.props.severity} sx={{ width: '100%' }}>
-                            <h5>{error.displayTitle()}</h5>
+                            <Stack>
+                                <Typography variant="subtitle1">{error.displayTitle()}</Typography>
+                                <Typography variant="caption">{error.displayUrl()}</Typography>
+                            </Stack>
                             {error.displayMessage()}
                         </Alert>
                     </Snackbar>
