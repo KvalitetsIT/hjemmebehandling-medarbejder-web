@@ -330,45 +330,43 @@ export default class ExternalToInternalMapper extends BaseMapper{
             return questionnaire;
     }
 
-    mapContactDetailsDto(patientContactDetails: ContactDetailsDto) : Contact {
-       
-            let contact = new Contact();
-    
-            let address = new Address();
-            console.log('ContactDetails: ' + JSON.stringify(patientContactDetails));
-            address.street = patientContactDetails?.street ?? 'Fiskergade 66';
-            address.zipCode = patientContactDetails?.postalCode ?? '8000';
-            address.city = "Aarhus";
-            address.country = patientContactDetails?.country ?? 'Danmark';
-    
-            contact.primaryPhone = patientContactDetails?.primaryPhone ?? "12345678";
-            contact.secondaryPhone = patientContactDetails?.secondaryPhone ?? "87654321";
-    
-            return contact;
-    }
-
     mapPatientDto(patientDto: PatientDto) : PatientDetail {
-       
-            let patient = new PatientDetail();
-    
-            patient.firstname = patientDto.givenName;
-            patient.lastname = patientDto.familyName;
-            patient.cpr = patientDto.cpr;
-            patient.address = this.mapPatientContactDetails(patientDto.patientContactDetails)
-            patient.contact = this.mapContactDetailsDto(patientDto.primaryRelativeContactDetails!)
-            patient.primaryPhone = patientDto.primaryRelativeContactDetails?.primaryPhone;
-            patient.secondaryPhone = patientDto.primaryRelativeContactDetails?.secondaryPhone;
+        let address : Address = {}
+        if(patientDto.patientContactDetails) {
+            address = this.buildAddress(patientDto.patientContactDetails)
+        }
 
-    
-            return patient;
+        let contactDetails = this.buildContactDetails(patientDto)
 
+        return {
+            firstname: patientDto.givenName,
+            lastname: patientDto.familyName,
+            cpr: patientDto.cpr,
+            primaryPhone: patientDto.patientContactDetails?.primaryPhone,
+            secondaryPhone: patientDto.patientContactDetails?.secondaryPhone,
+            address: address,
+            contact: contactDetails
+        }
     }
-    mapPatientContactDetails(patientContactDetails: ContactDetailsDto | undefined): Address {
-        const address = new Address();
-        address.city = patientContactDetails?.city;
-        address.country = patientContactDetails?.country;
-        address.zipCode = patientContactDetails?.postalCode;
-        address.street = patientContactDetails?.street;
+
+    buildContactDetails(patientDto: PatientDto) : Contact {
+        return {
+            fullname: patientDto?.primaryRelativeName ?? '',
+            affiliation: patientDto?.primaryRelativeAffiliation ?? '',
+            primaryContact: true,
+            primaryPhone: patientDto?.primaryRelativeContactDetails?.primaryPhone ?? '',
+            secondaryPhone: patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
+        }
+    }
+
+    buildAddress(contactDetails: ContactDetailsDto): Address {
+        let address = new Address();
+
+        address.city = contactDetails?.city;
+        address.country = contactDetails?.country;
+        address.zipCode = contactDetails?.postalCode;
+        address.street = contactDetails?.street;
+        
         return address;
     }
 }
