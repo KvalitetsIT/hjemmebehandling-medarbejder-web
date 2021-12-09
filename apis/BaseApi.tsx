@@ -12,15 +12,16 @@ export default class BaseApi {
         console.log(error)
         if(error instanceof Response){
             let response = error as Response
-            
+            let bodyText = "Fejl i data fra bagvedliggende api" // Bliver overskrevet såfremt vi godt kan få teksten ud fra response
             try{
-                let body = await response.json()
-                let errorDto = ErrorDtoFromJSON(body)
+                bodyText = await response.text() //Body can only be read once, and if it is not json, we want to display the non-json body
+                let bodyJson = JSON.parse(bodyText)
+                let errorDto = ErrorDtoFromJSON(bodyJson)
     
                 throw new BaseApiError(response, errorDto.errorText!, errorDto.errorCode!)
             } catch(error){
                 //When json-parser tries to parse fx "" we end up here
-                throw new BaseApiError(response, await response.text(),response.status!)
+                throw new BaseApiError(response, bodyText,response.status!)
             }
 
         }
