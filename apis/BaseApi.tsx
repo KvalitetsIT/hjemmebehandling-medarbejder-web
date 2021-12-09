@@ -12,7 +12,7 @@ export default class BaseApi {
         console.log(error)
         if(error instanceof Response){
             let response = error as Response
-            let body = await response.text()
+            let body = await response.text() //Body can only be read once, and if it is not json, we want to display the non-json body
             try{
                 let bodyJson = JSON.parse(body)
                 let errorDto = ErrorDtoFromJSON(bodyJson)
