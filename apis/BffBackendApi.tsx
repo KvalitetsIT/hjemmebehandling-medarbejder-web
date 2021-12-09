@@ -168,13 +168,14 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<void> {
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<QuestionnaireResponseStatus> {
         try {
             console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
 
             let api = new QuestionnaireResponseApi(this.conf);
             let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
+            return status;
         } catch (error: any) {
             return this.HandleError(error)
         }

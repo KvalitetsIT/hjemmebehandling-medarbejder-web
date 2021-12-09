@@ -25,6 +25,7 @@ import { NotFoundError } from "../services/Errors/NotFoundError";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { User } from "../components/Models/User";
+import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 
 export class FakeItToYouMakeItApi implements IBackendApi {
 
@@ -283,6 +284,10 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         let responses = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5]
         let start = (page-1) * pagesize
         let end = page * pagesize
+        responses.forEach(x=>{
+            const statusObject = this.statusChanges.reverse().find(y=>y.id == x.id)
+            x.status = statusObject?.status ?? x.status
+        })
         return responses.filter(x=>questionnaireIds.includes(x.questionnaireId)).slice(start,end)
     }
 
@@ -339,12 +344,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         return careplan;
     }
 
-    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+    statusChanges : Array<{id : string, status : QuestionnaireResponseStatus}> = [];
+
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<QuestionnaireResponseStatus> {
         let allQuestionnaireResponses : QuestionnaireResponse[] = [this.questionnaireResponse1,this.questionnaireResponse2,this.questionnaireResponse3,this.questionnaireResponse4,this.questionnaireResponse5];
         await new Promise(f => setTimeout(f, this.timeToWait))
-        let response = allQuestionnaireResponses.find(x=>x.id == id);
-        if(response)
-            response.status = status;
+        this.statusChanges.push({id : id, status : status})
+        return status;
     }
 
     async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {

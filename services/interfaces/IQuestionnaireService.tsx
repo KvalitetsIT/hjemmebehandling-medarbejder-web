@@ -23,7 +23,7 @@ export default interface IQuestionnaireService {
     //SET
     SetQuestionaireResponse : (id : string, questionnaireResponses : QuestionnaireResponse) => Promise<void>;
     AddQuestionnaireToCareplan : (careplan: PatientCareplan, questionnaireToAdd: Questionnaire) => Promise<PatientCareplan>
-    UpdateQuestionnaireResponseStatus : (id : string, status : QuestionnaireResponseStatus) => Promise<void>;
+    UpdateQuestionnaireResponseStatus : (id : string, status : QuestionnaireResponseStatus) => Promise<QuestionnaireResponseStatus>;
     SetQuestionnaireFrequency : (questionnaire : Questionnaire) => Promise<void>;
     RemoveAlarm : (task : Task) => Promise<void>;
 }

@@ -71,7 +71,7 @@ export interface IBackendApi {
      * @param id The id of the QuestionnaireResponse
      * @param status The new status
      */
-    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void>;
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<QuestionnaireResponseStatus>;
 
     /**
      * Return a list of Questionnaireresponses that have not yet finished processing.

@@ -104,6 +104,12 @@ getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary
     return "default"
 }
 
+statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : QuestionnaireResponse) : void {
+    questionnaireResponse.status = status;
+    this.forceUpdate();
+
+}
+
   renderTableData(questionaire : Questionnaire) : JSX.Element{
     if(this.state.loading)
         return (<LoadingSmallComponent/>)
@@ -162,7 +168,7 @@ getChipColorFromCategory(category : CategoryEnum) : "error" | "warning"|"primary
                                 </div>
                                 
                                 <ErrorBoundary rerenderChildren={false}>
-                                    <QuestionnaireResponseStatusSelect onUpdate={()=>this.forceUpdate()} questionnaireResponse={collection} />  
+                                    <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, collection)} questionnaireResponse={collection} />  
                                 </ErrorBoundary>
                             </Stack>
                      

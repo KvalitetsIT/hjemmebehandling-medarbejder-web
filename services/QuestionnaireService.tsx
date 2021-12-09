@@ -91,7 +91,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       }
     }
 
-    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<void> {
+    async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<QuestionnaireResponseStatus> {
       try{
         return await this.backendApi.UpdateQuestionnaireResponseStatus(id, status)
       } catch(error : any){

@@ -10,7 +10,7 @@ import IQuestionnaireService from '../../services/interfaces/IQuestionnaireServi
 
 export interface Props {
     questionnaireResponse : QuestionnaireResponse
-    onUpdate : () => void;
+    onUpdate : (newStatus : QuestionnaireResponseStatus) => void;
 }
 
 export interface State {
@@ -55,17 +55,14 @@ InitializeServices() : void{
 
 
     try{
-         await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
-        this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : collectionStatus})
+         const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
+        this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : newStatus})
     } catch(error : unknown){
         this.setState(()=>{throw error})
     }
 
     if(this.props.onUpdate)
-       this.props.onUpdate();
-    
-
-    
+       this.props.onUpdate(this.state.status!);
   };
   
   render () : JSX.Element {
