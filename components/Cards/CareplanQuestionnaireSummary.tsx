@@ -38,6 +38,7 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
             tabIds={questionnaires.map(x=>x.id)}
             tabLabels={questionnaires.map(x=>x.name)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x))}
+            class=""
             >
             <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/edit/plandefinition"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
 

@@ -11,14 +11,6 @@ a {
   border-radius: 20px;
 }
 
-.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-  border-color: white;
-}
-
-.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline:hover {
-  border-color: white;
-}
-
 .answer__header {
   padding-bottom: 20px;
 }
@@ -34,11 +26,53 @@ a {
 
 
 /*=========== User Context Card ===========*/
-.MuiTypography-root.user__card-name {
+.MuiTypography-root.user__context-name {
   font-weight: bold;
-  font-size: 16px;
 }
 
-.MuiTypography-root.user__card-title {
+.MuiTypography-root.user__context-role {
   color: #999;
+}
+
+/*=========== Thumbnail ===========*/
+.MuiTypography-root.thumbnail__headline {
+  font-weight: bold;
+} 
+
+.MuiTypography-root.thumbnail__subheader {
+  margin-top: -3px;
+}
+
+.MuiTypography-root.thumbnail__text {
+  margin-top: 10px;
+}
+
+.MuiTab-root.MuiTab-textColorPrimary, .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
+  color: #4a4848;
+  padding: 0;
+  min-height: initial;
+  text-transform: inherit;
+}
+
+.MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
+  font-weight: bold;
+}
+
+.answer__pagination-buttons {
+  position: absolute;
+  top: 7px;
+  right: 20px;
+}
+
+.MuiTypography-root.accordion__headline {
+  font-weight: bold;
+}
+
+.MuiButton-root.MuiButton-containedPrimary {
+  background-color: #5D74AC;
+}
+
+.MuiButton-root.MuiButton-containedPrimary:hover {
+  background-color: #5D74AC;
+  opacity: 0.8;
 }

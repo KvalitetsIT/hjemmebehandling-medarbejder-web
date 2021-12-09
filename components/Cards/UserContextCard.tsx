@@ -97,7 +97,7 @@ handleClose() : void {
   render ()  : JSX.Element{
 
     return (<>
-         <div>
+         <div className="user__context-wrapper">
           <Button
             className="profileButton"
             id="basic-button"
@@ -108,8 +108,8 @@ handleClose() : void {
             color="inherit"
           >
             <div>
-             <Typography align="right" variant="body2">{this.state.user.fullName} ({this.state.user.userId})</Typography>
-             <Typography align="right" variant="body2">{this.state.user.email}</Typography>
+             <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
+             <Typography className="user__context-role" align="right" variant="body2">Rolle</Typography>
              </div>
           </Button>
           <Menu

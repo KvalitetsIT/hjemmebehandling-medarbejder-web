@@ -178,9 +178,6 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
         <Card>
         <CardContent>
           <Stack spacing={3}>
-          <Typography variant="inherit">
-          Patient
-      </Typography>
             <Stack direction="row" spacing={3}>
               <TextFieldValidation 
                   id="cprInput"

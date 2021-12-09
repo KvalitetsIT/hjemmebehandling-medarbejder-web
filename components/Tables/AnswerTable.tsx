@@ -137,9 +137,9 @@ statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : Quest
     
     
     return (<>
-    <Box textAlign="right">
-    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()}>Tidligere <NavigateBeforeIcon/> </Button>
-    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()}>Senere <NavigateNextIcon  /></Button>
+    <Box className="answer__pagination-buttons" textAlign="right">
+    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()} startIcon={<NavigateBeforeIcon/>}>Tidligere  </Button>
+    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()} endIcon={<NavigateNextIcon  />}>Senere </Button>
               
             </Box>
     <TableContainer component={Paper}>

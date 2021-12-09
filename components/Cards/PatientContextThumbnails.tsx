@@ -33,23 +33,23 @@ export class PatientContextThumbnails extends Component<Props,{}> {
         <Stack direction="row" spacing={2}>
           <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <ThumbnailCard avatar={<PatientAvatar patient={currentCareplan.patient} />} headline={patient.firstname + " "+currentCareplan?.patient.lastname} boxContent={<HealingOutlinedIcon fontSize="large"/>} >
-          <Typography variant="subtitle2">{currentCareplan?.patient.cpr}</Typography>
-          <Typography variant="subtitle1">{currentCareplan?.patient.primaryPhone ? currentCareplan?.patient.primaryPhone : "-"}</Typography>
+          <Typography className="thumbnail__subheader">{currentCareplan?.patient.cpr}</Typography>
+          <Typography className="thumbnail__text">{currentCareplan?.patient.primaryPhone ? currentCareplan?.patient.primaryPhone : "-"}</Typography>
         </ThumbnailCard>
         </Link>
         
         {currentCareplan.patient.contact.primaryContact ? 
         <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large"/>}>
-          <Typography variant="subtitle2">{currentCareplan.patient.contact.fullname}</Typography>
-          <Typography variant="subtitle1">{currentCareplan.patient.contact.primaryPhone ? currentCareplan.patient.contact.primaryPhone : "-"}</Typography>
+          <Typography className="thumbnail__subheader">{currentCareplan.patient.contact.fullname}</Typography>
+          <Typography className="thumbnail__text">{currentCareplan.patient.contact.primaryPhone ? currentCareplan.patient.contact.primaryPhone : "-"}</Typography>
         </ThumbnailCard>
         </Link>
         : <></>}
         <Link to={"/patients/"+patient.cpr+"/careplans/"+currentCareplan.id}>
         <ThumbnailCard headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large"/>}>
-          <Typography variant="subtitle2">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
-          <Typography variant="subtitle1">Startet: {this.dateHelper.DateToString(currentCareplan?.creationDate)}</Typography>
+          <Typography className="thumbnail__subheader">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
+          <Typography className="thumbnail__text">Startet: {this.dateHelper.DateToString(currentCareplan?.creationDate)}</Typography>
         </ThumbnailCard>
         </Link>
         </Stack>

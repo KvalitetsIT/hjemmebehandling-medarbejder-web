@@ -17,6 +17,7 @@ export interface BasicTabsProps {
   tabLabels : string[]
   tabIds : string[]
   tabContent : JSX.Element[]
+  class : string
 }
 export interface BasicTabsState {
     value : number
@@ -42,7 +43,7 @@ constructor(props : BasicTabsProps){
         let indexTabPanelCounterContent = 0;
         return (
             <>
-                    <Tabs value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example">
+                    <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example" TabIndicatorProps={{style: {display: "none"}, }}>
                         {this.props.tabLabels.map(tabLabel => {
                             return (
                                 <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={tabLabel}  />

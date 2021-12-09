@@ -20,6 +20,7 @@ import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 import { CSSProperties } from '@material-ui/styles';
+import { AccordionActions } from '@mui/material';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -178,7 +179,7 @@ continueButtonStyle : CSSProperties = {
       <Grid container>
 
       
-      <Grid item spacing={5} xs={7}  >
+      <Grid item spacing={5} xs={8}  >
       
        
       <ErrorBoundary>
@@ -188,10 +189,9 @@ continueButtonStyle : CSSProperties = {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
+          <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
             Patient *
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Tilret patient</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -200,8 +200,10 @@ continueButtonStyle : CSSProperties = {
               initialPatient={this.state.patient}
             />
           </Typography>
-          <Button sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
+        <AccordionActions>
+          <Button className="accordion__button" sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={()=>this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
+        </AccordionActions>
       </Accordion>
       </ErrorBoundary>
 
@@ -212,10 +214,9 @@ continueButtonStyle : CSSProperties = {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
+          <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
             Pårørende
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Tilret pårørende</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -223,8 +224,10 @@ continueButtonStyle : CSSProperties = {
               onValidation={(errors) => this.setState({contactError : errors?.length == 0 ? undefined : errors[0].message})}
               initialContact={this.state.patient.contact}/>
           </Typography>
-          <Button disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
+        <AccordionActions>
+          <Button className="accordion__button" disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={()=>this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
+        </AccordionActions>
       </Accordion>
       </ErrorBoundary>
 
@@ -235,10 +238,9 @@ continueButtonStyle : CSSProperties = {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
+          <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
             Patientgruppe *
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Tilret patientgrupper</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -247,21 +249,23 @@ continueButtonStyle : CSSProperties = {
             <QuestionnaireListSimple careplan={this.state.careplan}/>
       
           </Typography>
-          <Button disabled={this.state.planDefinitionError ? true : false} sx={this.continueButtonStyle} component={Box} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
         </AccordionDetails>
+        <AccordionActions>
+          <Button className="accordion__button" disabled={this.state.planDefinitionError ? true : false} sx={this.continueButtonStyle} component={Box} onClick={()=>this.goToSave()} variant="contained">Fortsæt</Button>
+        </AccordionActions>
       </Accordion>
       
       </ErrorBoundary>
 
       <Tooltip title={this.getFirstError()}>
         <Stack paddingTop={5}>
-      <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
-      </Stack>
+            <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
+        </Stack>
       </Tooltip>
    
       
       </Grid>
-       <Grid paddingLeft={3} xs={2}>
+       <Grid paddingLeft={5} xs={2}>
         <div>
         <Card>
           <CardContent>
