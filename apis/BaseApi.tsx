@@ -12,15 +12,15 @@ export default class BaseApi {
         console.log(error)
         if(error instanceof Response){
             let response = error as Response
-            
+            let body = await response.text()
             try{
-                let body = await response.json()
-                let errorDto = ErrorDtoFromJSON(body)
+                let bodyJson = JSON.parse(body)
+                let errorDto = ErrorDtoFromJSON(bodyJson)
     
                 throw new BaseApiError(response, errorDto.errorText!, errorDto.errorCode!)
             } catch(error){
                 //When json-parser tries to parse fx "" we end up here
-                throw new BaseApiError(response, await response.text(),response.status!)
+                throw new BaseApiError(response, body,response.status!)
             }
 
         }
