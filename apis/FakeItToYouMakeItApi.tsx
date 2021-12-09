@@ -248,6 +248,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         
         //======================================= tasks
         this.task1.cpr = this.patient1.cpr!
+        this.task1.planDefinitionName = this.planDefinition1.name
         this.task1.category = CategoryEnum.GREEN
         this.task1.firstname = this.patient1.firstname
         this.task1.lastname = this.patient1.lastname
@@ -258,6 +259,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
         this.task1.responseLinkEnabled = true
 
         this.task2.cpr = this.patient1.cpr!
+        this.task2.planDefinitionName = this.planDefinition1.name
         this.task2.category = CategoryEnum.BLUE
         this.task2.firstname = this.patient1.firstname
         this.task2.lastname = this.patient1.lastname

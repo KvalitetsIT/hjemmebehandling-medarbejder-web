@@ -10,5 +10,6 @@ export class Task {
     carePlanId!: string
     questionnaireId! : string
     answeredTime? : Date
+    planDefinitionName? : string
     responseLinkEnabled! : boolean
 }

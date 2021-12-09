@@ -72,6 +72,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
         task.questionnaireName = questionnaireResponse.questionnaireName!
         task.answeredTime = questionnaireResponse.answered!
         task.responseLinkEnabled = true
+        task.planDefinitionName = ""; //TODO : Get from QuestionnaireResponseDTO
 
         return task
     }
