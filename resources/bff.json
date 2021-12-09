@@ -1453,6 +1453,12 @@
           "patientContactDetails": {
             "$ref": "#/components/schemas/ContactDetailsDto"
           },
+          "primaryRelativeName": {
+            "type": "string"
+          },
+          "primaryRelativeAffiliation": {
+            "type": "string"
+          },
           "primaryRelativeContactDetails": {
             "$ref": "#/components/schemas/ContactDetailsDto"
           },
