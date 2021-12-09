@@ -20,7 +20,7 @@ export default class BaseApi {
                 throw new BaseApiError(response, errorDto.errorText!, errorDto.errorCode!)
             } catch(error){
                 //When json-parser tries to parse fx "" we end up here
-                throw new BaseApiError(response, "Der skete en ukendt fejl i tolkningen af data fra bagvedliggende applikation",response.status!)
+                throw new BaseApiError(response, await response.text(),response.status!)
             }
 
         }
