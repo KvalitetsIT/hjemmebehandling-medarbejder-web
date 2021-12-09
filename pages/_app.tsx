@@ -93,7 +93,6 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
 
 
 const black = '#4a4848'
-const greyLight = '#f2f2f2'
 
 const green = '#61BD84'
 
@@ -142,23 +141,33 @@ const THEME = createTheme({
         {
           props: { className: 'thumbnail__icon' },
           style: {
-            backgroundColor : '#333 !important',
             borderRadius : 10,
             flexBasis : 'initial',
-            width : 70,
-            height : 70
+            width : 80,
+            height : 80
           }
         }
       ]
     },
-    MuiTabs : {
+
+    //=========== Tabs ===========//
+    MuiTabs : { 
       styleOverrides : {
         root : {
           borderBottom : '3px solid #f2f2f2', 
-          padding : 10
+          padding : 20
 
         }
-      }
+      },
+      variants : [
+        {
+          props: { className: 'questionnaire__tab' },
+          style: {
+            margin : '-20px -20px 0 -20px',
+            color : black
+          }
+        }
+      ]
     },
     //=========== Input ===========//
     MuiFormControl : {
@@ -181,24 +190,6 @@ const THEME = createTheme({
         }
       }
     },
-    MuiInput : {
-      styleOverrides : {
-        root : {
-          "::before": {
-            border : 'none'
-          }
-        }
-      }
-
-    },
-    MuiOutlinedInput : {
-      styleOverrides : {
-        root : {
-          borderRadius : 30,
-          border : 'none'
-        }
-      }
-    },
     MuiAutocomplete : {
       variants : [
         {
@@ -206,7 +197,7 @@ const THEME = createTheme({
           props: { className: 'search' },
           style: {
             backgroundColor : 'white',
-            borderRadius : 30
+            borderRadius : 10
           }
         }
       ]
@@ -216,9 +207,9 @@ const THEME = createTheme({
       styleOverrides : {
         root : {
           borderRadius : 10,
-          backgroundColor : blueDark,
-          height : 70,
-          width : 70
+          backgroundColor : blueDark + '!important',
+          height : 80,
+          width : 80
         }
       }
     },
@@ -331,6 +322,17 @@ const THEME = createTheme({
         }
       ]
     },
+    MuiCardContent : {
+      styleOverrides : {
+        root : {
+          padding : 20,
+          position: 'relative',
+          ":last-child" : {
+            paddingBottom : 20
+          }
+        }
+      }
+    },
     //=========== Chip ===========//
     MuiChip : {
       styleOverrides : {
@@ -380,17 +382,6 @@ const THEME = createTheme({
         }
       ]
     },
-    //=========== Card ===========//
-    MuiCardContent : {
-      styleOverrides : {
-        root : {
-          padding : 20,
-          ":last-child" : {
-            paddingBottom : 20
-          }
-        }
-      }
-    },
     //=========== Collapse ===========//
     MuiCollapse : {
       variants : [
@@ -401,6 +392,39 @@ const THEME = createTheme({
           }
         }
       ]
+    },
+
+    //=========== Accordion ===========// 
+    MuiAccordion : {
+      styleOverrides : {
+        root : {
+          borderRadius : 20,
+          borderTop : 'none',
+          marginBottom : 20,
+          ":first-of-type" : {
+            borderRadius : 20
+          },
+          ":before" : {
+            backgroundColor : 'transparent'
+          }
+        }
+      }
+    },
+    MuiAccordionSummary : {
+      styleOverrides : {
+        root : {
+          borderBottom : '3px solid #f2f2f2',
+          fontWeight : 'bold'
+        }
+      }
+    },
+    MuiAccordionActions : {
+      styleOverrides : {
+        root : {
+          borderTop : '3px solid #f2f2f2',
+          padding : 20
+        }
+      }
     },
     //=========== Buttons ===========//
     MuiButtonBase : {
@@ -422,17 +446,17 @@ const THEME = createTheme({
           padding : 10,
           boxShadow : 'none',
           ":hover" : {
-            background : 'white',
             boxShadow : 'none',
           }
         }
       },
       variants : [
         {
-          // Logout
-          props: {className: "user__card-logout-button" },
+          // Profile button accordion__button
+          props: {className: "profileButton" },
           style: {
-            color : red
+            width : '100%',
+            justifyContent : 'flex-end'
           }
         },
         {
@@ -491,18 +515,19 @@ const THEME = createTheme({
           }
         },
         {
-          props: {className:"decline__button" },
+          props: {className:"MuiButton-containedPrimary" },
           style: {
-            outline : '3px solid #f2f2f2',
-            color : '#777777',
-            width : 120,
-            ":hover" : {
-              backgroundColor : greyLight,
-              opacity : '0.7',
-              boxShadow : 'none',
-            }
+            backgroundColor : blueDark
           }
-        }
+        },
+        {
+          // Create patient button
+          props: {className: "accordion__button" },
+          style: {
+            margin : 0,
+            padding : '10px 20px'
+          }
+        },
       ],
     },
   }

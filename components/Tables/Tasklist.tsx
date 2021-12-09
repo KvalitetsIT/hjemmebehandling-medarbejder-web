@@ -137,7 +137,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell style={{width: '12%'}} align="left">Patientgruppe</TableCell>
               <TableCell style={{width: '12%'}} align="left">Spørgeskema</TableCell>
               <TableCell style={{width: '12%'}} align="left">Besvaret</TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

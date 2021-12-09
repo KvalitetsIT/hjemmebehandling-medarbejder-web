@@ -94,7 +94,9 @@ async populateCareplans() : Promise<void> {
             tabIds={questionnaires.map(x=>x.id)}
             tabLabels={questionnaires.map(x=>x.name)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(currentCareplan!,x))}
+            class="questionnaire__tab"
             >
+              
           </BasicTabs>
         
         </CardContent>

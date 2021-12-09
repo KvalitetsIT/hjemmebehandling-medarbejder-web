@@ -1,7 +1,6 @@
-import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton, Tooltip } from '@mui/material';
+import { Card, CardContent, Skeleton, Tooltip } from '@mui/material';
 import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
@@ -178,9 +177,6 @@ modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => 
         <Card>
         <CardContent>
           <Stack spacing={3}>
-          <Typography variant="inherit">
-          Patient
-      </Typography>
             <Stack direction="row" spacing={3}>
               <TextFieldValidation 
                   id="cprInput"

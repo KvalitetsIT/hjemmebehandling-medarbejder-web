@@ -32,7 +32,7 @@ export class ThumbnailCard extends Component<Props,{}> {
                    </Avatar>}
              </Grid>
              <Grid item xs={8} paddingLeft={2}>
-             <Typography variant="inherit">{this.props.headline}</Typography>
+             <Typography className="thumbnail__headline" variant="inherit">{this.props.headline}</Typography>
              {this.props.children}
              </Grid>
              </Grid>
