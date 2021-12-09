@@ -35,19 +35,21 @@ export default class BaseService {
     }
 
     private FromApiToServiceError(apiError : BaseApiError) : BaseServiceError {
-        switch(apiError.response.status) {
-            case 400:
-                return new BadRequestError(apiError.errorMessage)
-            case 401 : 
-                return new NotCorrectRightsError();
-            case 403 : 
-                return new NotCorrectRightsError();
-            case 404 : 
-                return new NotFoundError();
-
-            default :
-                return apiError;
+        if(apiError && apiError.response && apiError.errorMessage){
+            switch(apiError.response.status) {
+                case 400:
+                    return new BadRequestError(apiError.errorMessage)
+                case 401 : 
+                    return new NotCorrectRightsError();
+                case 403 : 
+                    return new NotCorrectRightsError();
+                case 404 : 
+                    return new NotFoundError();
+            }
         }
+
+        return apiError
+       
     }
 }
   
