@@ -6,4 +6,7 @@ export class BaseServiceError extends Error {
     displayTitle() : string{
         return "";
     }
+    displayUrl() : string{
+        return "";
+    }
 }

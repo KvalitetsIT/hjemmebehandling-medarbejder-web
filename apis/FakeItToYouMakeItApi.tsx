@@ -26,8 +26,9 @@ import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { User } from "../components/Models/User";
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
+import BaseApi from "./BaseApi";
 
-export class FakeItToYouMakeItApi implements IBackendApi {
+export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     timeToWait : number = 1000;
 
@@ -60,6 +61,7 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     task2 : Task = new Task();
 
     constructor(){
+        super();
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
@@ -414,7 +416,13 @@ export class FakeItToYouMakeItApi implements IBackendApi {
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
-        return [this.task1,this.task2].filter(x=>x.category != CategoryEnum.BLUE)
+        try{
+            //throw new Response()
+            return [this.task1,this.task2].filter(x=>x.category != CategoryEnum.BLUE)
+        } catch(error){
+            return this.HandleError(error)
+        }
+        
     }
 
     async GetUnansweredQuestionnaireTasks(page : number, pagesize : number) : Promise<Array<Task>> {
