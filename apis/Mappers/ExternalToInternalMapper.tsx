@@ -25,19 +25,20 @@ import BaseMapper from "./BaseMapper";
  */
 export default class ExternalToInternalMapper extends BaseMapper{
     mapCarePlanDto(carePlanDto: CarePlanDto) : PatientCareplan {
+        let carePlan = new PatientCareplan()
 
-            let carePlan = new PatientCareplan();
-    
-            carePlan.id = FhirUtils.unqualifyId(carePlanDto.id);
-            carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
-            carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-            carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!);
-            carePlan.creationDate = new Date(); // TODO - include creation and termination date in the response ...
-            //carePlan.terminationDate = undefined; // TODO
-            carePlan.department = "Umuliologisk Afdeling"; // TODO - include Department in the api response ...
-    
-            return carePlan;
+        carePlan.id = FhirUtils.unqualifyId(carePlanDto.id)
+        carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
+        carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
+        carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!)
+        if(!carePlanDto.created) {
+            throw new Error('No creation date on careplan!')
+        }
+        carePlan.creationDate = carePlanDto.created
+        carePlan.terminationDate = carePlanDto.endDate
+        carePlan.department = "Umuliologisk Afdeling" // TODO - include Department in the api response ...
 
+        return carePlan
     }
 
     buildTaskFromCarePlan(carePlan: CarePlanDto) : Task {
