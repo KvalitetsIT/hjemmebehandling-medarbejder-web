@@ -17,122 +17,125 @@ import { ThresholdSlider } from './ThresholdSlider';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
-    careplan : PatientCareplan;
-    questionnaire : Questionnaire;
+    careplan: PatientCareplan;
+    questionnaire: Questionnaire;
 }
 
 export interface State {
-    questionnaireResponses : QuestionnaireResponse[]
-    loading : boolean
+    questionnaireResponses: QuestionnaireResponse[]
+    loading: boolean
 }
 
-export class ObservationCard extends Component<Props,State> {
-  static displayName = ObservationCard.name;
-  static contextType = ApiContext
-  questionnaireService! : IQuestionnaireService;
-  dateHelper! : IDateHelper
+export class ObservationCard extends Component<Props, State> {
+    static displayName = ObservationCard.name;
+    static contextType = ApiContext
+    questionnaireService!: IQuestionnaireService;
+    dateHelper!: IDateHelper
 
-  constructor(props : Props){
-      super(props);
-      this.state = {
-          questionnaireResponses : [],
-          loading : true
-      }
-  }
-  initialiseServices() : void {
-    this.questionnaireService = this.context.questionnaireService;
-    this.dateHelper = this.context.dateHelper;
-  }
-
-  async componentDidMount() :  Promise<void> {
-      try{
-    const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id,[this.props.questionnaire.id],1,5)
-    //console.log(responses)
-    //console.log(this.props.questionnaire.thresholds)
-    this.setState({questionnaireResponses : responses, loading : false})
-}  catch(error : any){
-    this.setState(()=>{throw error})
-  }  
-  }
-
-  findObservationQuestions(questionnaireResponse : QuestionnaireResponse) : Question[] {
-    console.log(questionnaireResponse)
-    const questions : Question[] = [];
-    questionnaireResponse.questions.forEach( (answer,question) =>{
-        const numberAnswer : boolean = answer instanceof NumberAnswer;
-        if(numberAnswer){
-            questions.push(question)
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            questionnaireResponses: [],
+            loading: true
         }
-    })
-    return questions;
-  }
+    }
+    initialiseServices(): void {
+        this.questionnaireService = this.context.questionnaireService;
+        this.dateHelper = this.context.dateHelper;
+    }
 
-  getColumnSize(elementsInArray : number) : GridSize{
-
-    if(elementsInArray == 1)
-        return 12;
-    if(elementsInArray == 2)
-        return 6;
-
-    return 4
-  }
-
-  render () : JSX.Element {
-    this.initialiseServices()
-
-    if(this.state.loading)
-        return (<LoadingSmallComponent/>)
-
-    
-
-    const allQuestions : Question[] = [];
-
-    if(this.state.questionnaireResponses.length > 0) {
-        const questionIterator = this.state.questionnaireResponses[0].questions.keys()
-        let question = questionIterator.next()
-
-        while(!question.done){
-            if(question.value.type === QuestionTypeEnum.OBSERVATION)
-                allQuestions.push(question.value)
-            question = questionIterator.next()
+    async componentDidMount(): Promise<void> {
+        try {
+            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id, [this.props.questionnaire.id], 1, 5)
+            //console.log(responses)
+            //console.log(this.props.questionnaire.thresholds)
+            this.setState({ questionnaireResponses: responses, loading: false })
+        } catch (error: any) {
+            this.setState(() => { throw error })
         }
     }
 
-    if(allQuestions.length == 0){
+    findObservationQuestions(questionnaireResponse: QuestionnaireResponse): Question[] {
+        console.log(questionnaireResponse)
+        const questions: Question[] = [];
+        questionnaireResponse.questions.forEach((answer, question) => {
+            const numberAnswer: boolean = answer instanceof NumberAnswer;
+            if (numberAnswer) {
+                questions.push(question)
+            }
+        })
+        return questions;
+    }
+
+    getColumnSize(elementsInArray: number): GridSize {
+
+        if (elementsInArray == 1)
+            return 12;
+        if (elementsInArray == 2)
+            return 6;
+
+        return 4
+    }
+
+    render(): JSX.Element {
+        this.initialiseServices()
+
+        if (this.state.loading)
+            return (<LoadingSmallComponent />)
+
+
+
+        const allQuestions: Question[] = [];
+
+        if (this.state.questionnaireResponses.length > 0) {
+            const questionIterator = this.state.questionnaireResponses[0].questions.keys()
+            let question = questionIterator.next()
+
+            while (!question.done) {
+                if (question.value.type === QuestionTypeEnum.OBSERVATION)
+                    allQuestions.push(question.value)
+                question = questionIterator.next()
+            }
+        }
+
+        if (allQuestions.length == 0) {
+            return (
+                <Alert severity="info">
+                    <Typography>Ingen tilgængelige målinger</Typography>
+                </Alert>
+            )
+        }
+
+        let counter = 0
+
         return (
-        <Alert severity="info">
-            <Typography>Ingen tilgængelige målinger</Typography>
-        </Alert>
-        )
+            <Grid container >
+                {allQuestions.map(question => {
+                    const isFirst = counter++ == 0;
+                    const threshold = this.props.questionnaire.thresholds.find(x => x.questionId == question.Id)
+                    console.log(question.Id)
+                    console.log(threshold)
+                    return (
+                        <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
+                            <Card>
+                                <CardHeader subheader={question.question} />
+                                <CardContent>
+                                    {threshold && threshold.thresholdNumbers ?
+                                        <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> :
+                                        <QuestionChart thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} />
+                                    }
+                                </CardContent>
+                            </Card>
+                            <Card marginTop={3} component={Box}>
+                                <CardHeader subheader={question.question + " - Alarmgrænser"} />
+                                <CardContent>
+                                    {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    )
+                })}
+            </Grid>
+        );
     }
-        
-    let counter = 0
-    
-    return (
-        <Grid container >
-        {allQuestions.map(question => {
-            const isFirst = counter++ == 0;
-            const threshold = this.props.questionnaire.thresholds.find(x=>x.questionId == question.Id)
-            console.log(question.Id)
-            console.log(threshold)
-                return (
-                <Grid paddingLeft={isFirst ? 0 : 2}  item xs={this.getColumnSize(allQuestions.length)}>
-                    <Card>
-                        <CardHeader subheader={question.question}/>
-                        <CardContent>
-                                {threshold && threshold.thresholdNumbers ? <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> : <></>}
-                        </CardContent>
-                    </Card>
-                    <Card  marginTop={3} component={Box}>
-                        <CardHeader subheader={question.question + " - Alarmgrænser"}/>
-                        <CardContent>
-                        {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question}/> : <></>}
-                        </CardContent>
-                    </Card>
-                </Grid>
-             )
-            })}
-        </Grid>
-    );
-  }
 }
