@@ -36,7 +36,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
         }
         carePlan.creationDate = carePlanDto.created
         carePlan.terminationDate = carePlanDto.endDate
-        carePlan.department = carePlanDto?.departmentName ?? 'Ukendt afdeling'
+        carePlan.department = carePlanDto?.departmentName ?? 'Ukendt afdeling   '
 
         return carePlan
     }
@@ -45,6 +45,12 @@ export default class ExternalToInternalMapper extends BaseMapper{
         let task = new Task()
 
         task.cpr = carePlan.patientDto!.cpr!
+
+        var planDefinitionName = 'PATIENTGRUPPE MANGLER'
+        if(carePlan.planDefinitions && carePlan.planDefinitions.length === 1 && carePlan.planDefinitions![0].title) {
+            planDefinitionName = carePlan.planDefinitions![0].title
+        }
+        task.planDefinitionName = planDefinitionName
         task.category = CategoryEnum.BLUE
         task.firstname = carePlan.patientDto!.givenName
         task.lastname = carePlan.patientDto!.familyName
@@ -73,7 +79,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
         task.questionnaireName = questionnaireResponse.questionnaireName!
         task.answeredTime = questionnaireResponse.answered!
         task.responseLinkEnabled = true
-        task.planDefinitionName = ""; //TODO : Get from QuestionnaireResponseDTO
+        task.planDefinitionName = questionnaireResponse.planDefinitionTitle ?? 'PATIENTGRUPPE MANGLER'
 
         return task
     }

@@ -1663,13 +1663,16 @@
           "triagingCategory": {
             "type": "string",
             "enum": [
-              "RED",
+              "GREEN",
               "YELLOW",
-              "GREEN"
+              "RED"
             ]
           },
           "patient": {
             "$ref": "#/components/schemas/PatientDto"
+          },
+          "planDefinitionTitle": {
+            "type": "string"
           }
         }
       },
