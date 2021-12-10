@@ -24,7 +24,6 @@ export default class BaseService {
         console.log(error)
         let errorIsApiError = error instanceof BaseApiError
         let errorIsServiceError = error instanceof BaseServiceError
-
         if(errorIsApiError)
             throw this.FromApiToServiceError(error) //Make this error to Service-error
             
@@ -35,10 +34,10 @@ export default class BaseService {
     }
 
     private FromApiToServiceError(apiError : BaseApiError) : BaseServiceError {
-        if(apiError && apiError.response && apiError.errorMessage){
+        if(apiError && apiError.response){
             switch(apiError.response.status) {
                 case 400:
-                    return new BadRequestError(apiError.errorMessage)
+                    return new BadRequestError(apiError.errorMessage ?? "")
                 case 401 : 
                     return new NotCorrectRightsError();
                 case 403 : 

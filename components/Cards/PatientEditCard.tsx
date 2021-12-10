@@ -15,275 +15,276 @@ import { NotFoundError } from '../../services/Errors/NotFoundError';
 import { ToastError } from '../Alerts/ToastError';
 
 export interface Props {
-    initialPatient : PatientDetail
-    onValidation? : (error : InvalidInputModel[]) => void
+  initialPatient: PatientDetail
+  onValidation?: (error: InvalidInputModel[]) => void
 }
 
 export interface State {
-    loadingCprButton : boolean;
-    loadingPage : boolean
-    tempCpr? : string;
-    patient : PatientDetail;
-    errorArray : InvalidInputModel[];
-    errorToast : JSX.Element
+  loadingCprButton: boolean;
+  loadingPage: boolean
+  tempCpr?: string;
+  patient: PatientDetail;
+  errorArray: InvalidInputModel[];
+  errorToast: JSX.Element
 }
 
-export class PatientEditCard extends Component<Props,State> {
+export class PatientEditCard extends Component<Props, State> {
   static contextType = ApiContext;
-  static displayName = PatientEditCard.name; 
+  static displayName = PatientEditCard.name;
   personService!: IPersonService;
   validationService!: IValidationService;
   collectionHelper!: ICollectionHelper;
 
-  constructor(props : Props){
-      super(props);
-      this.state = {
-	      loadingCprButton : false,
-        errorToast : <></>,
-        loadingPage : true,
-        tempCpr : props.initialPatient.cpr,
-	      patient : props.initialPatient,
-        errorArray : props.initialPatient.cpr ? [] : [new InvalidInputModel("","ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
-      }
-      this.modifyPatient = this.modifyPatient.bind(this);
-
-  }
-
-  render () : JSX.Element{
-      const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
-      return contents;
-  }
-
-  componentDidMount() : void {
-      this.setState({loadingPage:false})
-}
-
-InitializeServices() : void{
-  this.personService = this.context.personService;
-  this.validationService = this.context.validationService;
-  this.collectionHelper = this.context.collectionHelper;
-}
-
-async getPerson() : Promise<void>{
-  try{
-    const tempCpr = this.state.tempCpr;
-    if (this.state.patient.cpr === null || this.state.patient.cpr === ""){
-	  return;
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      loadingCprButton: false,
+      errorToast: <></>,
+      loadingPage: true,
+      tempCpr: props.initialPatient.cpr,
+      patient: props.initialPatient,
+      errorArray: props.initialPatient.cpr ? [] : [new InvalidInputModel("", "ikke udfyldt")] //Dont validate at start, but dont allow cpr-button to be pressed
     }
-    
-    this.setState({
-      loadingCprButton: true,
-      errorToast : <></>
-    })
-    
-    const newPerson = await this.personService.GetPerson(tempCpr!);
-    
-    const p = this.state.patient;
-      
+    this.modifyPatient = this.modifyPatient.bind(this);
 
-    p.firstname = newPerson.givenName;
-    p.lastname = newPerson.familyName;
-    
-    p.address = new Address();
-    p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
-    p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
-    p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
-    p.cpr = tempCpr;
-    this.setState({patient : p});
+  }
+
+  render(): JSX.Element {
+    const contents = this.state.loadingPage ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
+    return contents;
+  }
+
+  componentDidMount(): void {
+    this.setState({ loadingPage: false })
+  }
+
+  InitializeServices(): void {
+    this.personService = this.context.personService;
+    this.validationService = this.context.validationService;
+    this.collectionHelper = this.context.collectionHelper;
+  }
+
+  async getPerson(): Promise<void> {
+    try {
+      const tempCpr = this.state.tempCpr;
+      if (this.state.patient.cpr === null || this.state.patient.cpr === "") {
+        return;
+      }
+
+      this.setState({
+        loadingCprButton: true,
+        errorToast: <></>
+      })
+
+      const newPerson = await this.personService.GetPerson(tempCpr!);
+
+      const p = this.state.patient;
+
+
+      p.firstname = newPerson.givenName;
+      p.lastname = newPerson.familyName;
+
+      p.address = new Address();
+      p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
+      p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
+      p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
+      p.cpr = tempCpr;
+      this.setState({ patient: p });
+      this.setState({
+        loadingCprButton: false
+      })
+
+
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+      } else {
+        this.setState(() => { throw error })
+      }
+
+    }
+
     this.setState({
       loadingCprButton: false
     })
-    
-
-  } catch(error){
-    if(error instanceof NotFoundError){
-      this.setState({errorToast : <ToastError severity="info" error={error} />})
-    } else {
-      this.setState(()=>{throw error})
-    }
-	  
-  }
-
-  this.setState({
-    loadingCprButton: false
-    })
 
     this.triggerOnChangeEvent("cprInput")
-  
-  
-}
 
-clearPersonFields() : void {
-	const p = this.state.patient;
-  
+
+  }
+
+  clearPersonFields(): void {
+    const p = this.state.patient;
+
     p.firstname = "";
     p.lastname = "";
     p.address = new Address();
     p.address.city = "";
-    p.address.zipCode =  "";
+    p.address.zipCode = "";
     p.address.street = "";
-    
-    this.setState({patient : p});
-}
 
-modifyPatient(patientModifier : (patient : PatientDetail, newValue : string) => PatientDetail, input :  React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) : void{
-  const valueFromInput = input.currentTarget.value;
-    const modifiedPatient = patientModifier(this.state.patient,valueFromInput);
-    this.setState({patient : modifiedPatient  })
+    this.setState({ patient: p });
   }
 
-  getFirstError() : string | undefined {
-    const errors = this.state.errorArray.filter(x=>x.criticalLevel == CriticalLevelEnum.ERROR)
-    if(errors.length > 0)
+  modifyPatient(patientModifier: (patient: PatientDetail, newValue: string) => PatientDetail, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    const valueFromInput = input.currentTarget.value;
+    const modifiedPatient = patientModifier(this.state.patient, valueFromInput);
+    this.setState({ patient: modifiedPatient })
+  }
+
+  getFirstError(): string | undefined {
+    const errors = this.state.errorArray.filter(x => x.criticalLevel == CriticalLevelEnum.ERROR)
+    if (errors.length > 0)
       return this.state.errorArray[0].message;
-    
+
     return undefined;
   }
 
-  triggerOnChangeEvent(id : string) : void {
+  triggerOnChangeEvent(id: string): void {
     const input = document.getElementById(id);
-    const event = new Event("input",{bubbles : true});
-    input!.dispatchEvent(event)
+    const event = new Event("input", { bubbles: true });
+    if (input)
+      input.dispatchEvent(event)
   }
 
-  errorMap : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
-  onValidation(from : number, invalid : InvalidInputModel[]) : void{
-      console.log("from : " + from)  
-      const errorMap = this.errorMap;
-      errorMap.set(from,invalid);
-      
-      const allErrors : InvalidInputModel[] = 
-              this.collectionHelper.MapValueCollectionToArray<number,InvalidInputModel>(errorMap);
+  errorMap: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
+  onValidation(from: number, invalid: InvalidInputModel[]): void {
+    console.log("from : " + from)
+    const errorMap = this.errorMap;
+    errorMap.set(from, invalid);
 
-      if(this.state.tempCpr !== this.state.patient.cpr){
-        console.log("Der er indtastet nyt cpr uden at trykke fremsøg ("+this.state.tempCpr + " != "+this.state.patient.cpr+")")
-        allErrors.push(new InvalidInputModel("cpr","Der er indtastet nyt cpr uden at trykke fremsøg",CriticalLevelEnum.WARNING))
-      }
-      
+    const allErrors: InvalidInputModel[] =
+      this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(errorMap);
 
-      if(this.props.onValidation){
-        this.props.onValidation(allErrors);
-      }
-      this.setState({errorArray  : allErrors})
+    if (this.state.tempCpr !== this.state.patient.cpr) {
+      console.log("Der er indtastet nyt cpr uden at trykke fremsøg (" + this.state.tempCpr + " != " + this.state.patient.cpr + ")")
+      allErrors.push(new InvalidInputModel("cpr", "Der er indtastet nyt cpr uden at trykke fremsøg", CriticalLevelEnum.WARNING))
+    }
+
+
+    if (this.props.onValidation) {
+      this.props.onValidation(allErrors);
+    }
+    this.setState({ errorArray: allErrors })
   }
 
 
-  renderCard() : JSX.Element{
-	this.InitializeServices();
-  const firstError = this.getFirstError();
-  let inputId = 0;
-    return ( <>
-    <ErrorBoundary>
+  renderCard(): JSX.Element {
+    this.InitializeServices();
+    const firstError = this.getFirstError();
+    let inputId = 0;
+    return (<>
+      <ErrorBoundary>
         <Card>
-        <CardContent>
-          <Stack spacing={3}>
-            <Stack direction="row" spacing={3}>
-              <TextFieldValidation 
+          <CardContent>
+            <Stack spacing={3}>
+              <Stack direction="row" spacing={3}>
+                <TextFieldValidation
                   id="cprInput"
-                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
+                  onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={inputId++}
-                  validate={(cpr) => this.validationService.ValidateCPR(cpr) } 
-                  required={true} 
-                  label="CPR" 
-                  value={this.state.tempCpr} 
-                  onChange={input => this.setState({tempCpr : input.target.value}) } />
-                  <Stack>
-                    <Tooltip title={firstError ?? "Hent fra CPR!"}>
-                      <div>
-                  <LoadingButton disabled={firstError !== undefined} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async ()=>await this.getPerson()}>Fremsøg</LoadingButton>
+                  validate={(cpr) => this.validationService.ValidateCPR(cpr)}
+                  required={true}
+                  label="CPR"
+                  value={this.state.tempCpr}
+                  onChange={input => this.setState({ tempCpr: input.target.value })} />
+                <Stack>
+                  <Tooltip title={firstError ?? "Hent fra CPR!"}>
+                    <div>
+                      <LoadingButton disabled={firstError !== undefined} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async () => await this.getPerson()}>Fremsøg</LoadingButton>
                     </div>
                   </Tooltip>
-                  </Stack>
-                
-            </Stack>
-            <Stack spacing={3} direction="row">
-              <TextFieldValidation uniqueId={inputId++}disabled label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname,input) }  variant="outlined" />
-              <TextFieldValidation uniqueId={inputId++} disabled label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname,input) } variant="outlined" />
-            </Stack>
-            <Stack spacing={3} direction="row">
-              <TextFieldValidation uniqueId={inputId++} disabled  label="Addresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad,input) }  variant="outlined" />
-              <TextFieldValidation disabled  
-                    onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
-                    uniqueId={inputId++}
-                    label="Postnummer" 
-                    value={this.state.patient.address?.zipCode} 
-                    onChange={input => this.modifyPatient(this.setZipcode,input) }  
-                    variant="outlined" />
-              <TextFieldValidation uniqueId={inputId++} disabled  label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy,input) }  variant="outlined" />
-            </Stack>
-            <Stack spacing={3} direction="row">
-              <TextFieldValidation 
-                  onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
-                  uniqueId={inputId++}
-                  validate={(phone) => this.validationService.ValidatePhonenumber(phone) } 
-                  type="tel" 
-                  label="Primært telefonnummer" 
-                  value={this.state.patient.primaryPhone} 
-                  onChange={input => this.modifyPatient(this.setPrimaryPhonenumber,input) } 
-                  variant="outlined" />
-              <TextFieldValidation 
-                    onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
-                    uniqueId={inputId++}
-                    validate={(phone) => this.validationService.ValidatePhonenumber(phone) }
-                    type="tel" label="sekundært telefonnummer" value={this.state.patient.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber,input) } variant="outlined" />
-            </Stack>
-         </Stack>
+                </Stack>
 
-          
-        </CardContent>
-    </Card>
-    {this.state.errorToast ?? <></> }
-    </ErrorBoundary>
+              </Stack>
+              <Stack spacing={3} direction="row">
+                <TextFieldValidation uniqueId={inputId++} disabled label="Fornavn" value={this.state.patient.firstname} onChange={input => this.modifyPatient(this.setFirstname, input)} variant="outlined" />
+                <TextFieldValidation uniqueId={inputId++} disabled label="Efternavn" value={this.state.patient.lastname} onChange={input => this.modifyPatient(this.setLastname, input)} variant="outlined" />
+              </Stack>
+              <Stack spacing={3} direction="row">
+                <TextFieldValidation uniqueId={inputId++} disabled label="Addresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
+                <TextFieldValidation disabled
+                  onValidation={(uid, errors) => this.onValidation(uid, errors)}
+                  uniqueId={inputId++}
+                  label="Postnummer"
+                  value={this.state.patient.address?.zipCode}
+                  onChange={input => this.modifyPatient(this.setZipcode, input)}
+                  variant="outlined" />
+                <TextFieldValidation uniqueId={inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
+              </Stack>
+              <Stack spacing={3} direction="row">
+                <TextFieldValidation
+                  onValidation={(uid, errors) => this.onValidation(uid, errors)}
+                  uniqueId={inputId++}
+                  validate={(phone) => this.validationService.ValidatePhonenumber(phone)}
+                  type="tel"
+                  label="Primært telefonnummer"
+                  value={this.state.patient.primaryPhone}
+                  onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
+                  variant="outlined" />
+                <TextFieldValidation
+                  onValidation={(uid, errors) => this.onValidation(uid, errors)}
+                  uniqueId={inputId++}
+                  validate={(phone) => this.validationService.ValidatePhonenumber(phone)}
+                  type="tel" label="sekundært telefonnummer" value={this.state.patient.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber, input)} variant="outlined" />
+              </Stack>
+            </Stack>
+
+
+          </CardContent>
+        </Card>
+        {this.state.errorToast ?? <></>}
+      </ErrorBoundary>
     </>
     )
   }
-  
 
-  setLastname(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+
+  setLastname(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.lastname = newValue;
     return modifiedPatient;
   }
-  setFirstname(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+  setFirstname(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.firstname = newValue;
     return modifiedPatient;
   }
-  setCpr(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+  setCpr(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.cpr = newValue;
     return modifiedPatient;
   }
-  
-  setRoad(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+
+  setRoad(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient!.address!.street = newValue;
     return modifiedPatient;
   }
-  setZipcode(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+  setZipcode(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient!.address!.zipCode = newValue;
     return modifiedPatient;
   }
-  
-  setCiy(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+
+  setCiy(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient!.address!.city = newValue;
     return modifiedPatient;
   }
-  
-  setPrimaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+
+  setPrimaryPhonenumber(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.primaryPhone = newValue;
     return modifiedPatient;
   }
-  
-  setSecondaryPhonenumber(oldPatient : PatientDetail, newValue : string ) : PatientDetail {
+
+  setSecondaryPhonenumber(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
     modifiedPatient.secondaryPhone = newValue;
     return modifiedPatient;
   }
-  
+
 
 
 }
