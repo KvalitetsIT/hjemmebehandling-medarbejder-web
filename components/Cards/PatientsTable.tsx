@@ -8,126 +8,131 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { LoadingSmallComponent } from '../../components/Layout/LoadingSmallComponent';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
+import IsEmptyCard from '../Layout/IsEmptyCard';
 
 interface State {
-    pageSize : number,
+    pageSize: number,
     loadingPage: boolean,
     loadingTable: boolean,
-    patients : PatientDetail[]
+    patients: PatientDetail[]
 }
 
 interface Props {
-    showActivePatients : boolean;
-    pagenumber : number;
+    showActivePatients: boolean;
+    pagenumber: number;
 
 }
 
-class PatientsTable extends React.Component<Props,State> {
-  static contextType = ApiContext
-  patientService! : IPatientService
+class PatientsTable extends React.Component<Props, State> {
+    static contextType = ApiContext
+    patientService!: IPatientService
 
-  constructor(props : Props){
-    super(props);
-    this.state = {
-        loadingPage : true,
-        loadingTable : false,
-        patients : [],
-        pageSize : 10,
-    }    
-}
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            loadingPage: true,
+            loadingTable: false,
+            patients: [],
+            pageSize: 10,
+        }
+    }
 
-InitializeServices(): void {
-    this.patientService = this.context.patientService;
-  }
+    InitializeServices(): void {
+        this.patientService = this.context.patientService;
+    }
 
-  async componentDidMount() : Promise<void> {
-    this.setState({
-        loadingPage : false,
-    })
-    await this.populatePatients();
-  }
-
-  async populatePatients() : Promise<void>{
-    this.setState({
-        loadingTable : true,
-    })
-
-      try{
-        
-        const patients = await this.patientService.GetPatients(this.props.showActivePatients,this.props.pagenumber,this.state.pageSize);
-        console.log(patients)
+    async componentDidMount(): Promise<void> {
         this.setState({
-            loadingTable : false,
-            patients : patients
+            loadingPage: true,
         })
-      } catch(error){
-        this.setState(()=>{throw error})
-      }
-      
-  }
+        await this.populatePatients();
+        this.setState({
+            loadingPage: false,
+        })
+    }
 
-  componentDidUpdate(prevProps : Props) : void{
-      //When url changes, we should reload patient-data
-      if(prevProps.pagenumber != this.props.pagenumber){
-          this.populatePatients()
-      }
-        
-  }
+    async populatePatients(): Promise<void> {
+        this.setState({
+            loadingTable: true,
+        })
 
-  render () : JSX.Element{
+        try {
+
+            const patients = await this.patientService.GetPatients(this.props.showActivePatients, this.props.pagenumber, this.state.pageSize);
+            console.log(patients)
+            this.setState({
+                loadingTable: false,
+                patients: patients
+            })
+        } catch (error) {
+            this.setState(() => { throw error })
+        }
+
+    }
+
+    componentDidUpdate(prevProps: Props): void {
+        //When url changes, we should reload patient-data
+        if (prevProps.pagenumber != this.props.pagenumber) {
+            this.populatePatients()
+        }
+
+    }
+
+    render(): JSX.Element {
         this.InitializeServices();
-        const contents = this.state.loadingPage ? <LoadingBackdropComponent/> : this.renderPage();
+        const contents = this.state.loadingPage ? <LoadingBackdropComponent /> : this.renderPage();
         return contents;
     }
 
-    renderPage() : JSX.Element{
-        const hasMorePages : boolean= this.state.patients.length == this.state.pageSize;
+    renderPage(): JSX.Element {
+        const hasMorePages: boolean = this.state.patients.length == this.state.pageSize;
         const currentpage = this.props.pagenumber
-        const nextpage : number = currentpage +1
-        const previouspage : number = currentpage -1
+        const nextpage: number = currentpage + 1
+        const previouspage: number = currentpage - 1
         return (
             <>
-            
-            <TableContainer component={Card}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                CPR
-                            </TableCell>
-                            <TableCell>
-                                Navn
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    {this.state.loadingTable ? <LoadingSmallComponent/> : 
-                    
-                    this.state.patients.map(patient => {
-                        return (
-                            <TableRow>
-                                <TableCell>
-                                    {patient.cpr}
-                                </TableCell>
-                                <TableCell>
-                                    {patient.firstname} {patient.lastname}
-                                </TableCell>
-                            </TableRow>
-                        );
-                    })
+                <IsEmptyCard list={this.state.patients} jsxWhenEmpty="Ingen patienter fundet">
+                    <TableContainer component={Card}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        CPR
+                                    </TableCell>
+                                    <TableCell>
+                                        Navn
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            {this.state.loadingTable ? <LoadingSmallComponent /> :
 
-                    }
-                </Table>
-            </TableContainer>  
-            <Box paddingTop={5}>
-        <ButtonGroup>
-                  <Button component={Link} to={"./"+previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon/></Button>
-                  <Button disabled> {currentpage} </Button>
-                  <Button component={Link} to={"./"+nextpage} disabled={!hasMorePages}><NavigateNextIcon/></Button>
-              </ButtonGroup>
-        </Box> 
+                                this.state.patients.map(patient => {
+                                    return (
+                                        <TableRow>
+                                            <TableCell>
+                                                {patient.cpr}
+                                            </TableCell>
+                                            <TableCell>
+                                                {patient.firstname} {patient.lastname}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })
+
+                            }
+                        </Table>
+                    </TableContainer>
+                    <Box paddingTop={5}>
+                        <ButtonGroup>
+                            <Button component={Link} to={"./" + previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon /></Button>
+                            <Button disabled> {currentpage} </Button>
+                            <Button component={Link} to={"./" + nextpage} disabled={!hasMorePages}><NavigateNextIcon /></Button>
+                        </ButtonGroup>
+                    </Box>
+                </IsEmptyCard>
             </>
-        
+
         )
     }
-  }
-  export default PatientsTable
+}
+export default PatientsTable
