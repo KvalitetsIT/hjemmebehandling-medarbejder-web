@@ -16,9 +16,9 @@ export default class PersonService extends BaseService implements IPersonService
         this.backendApi = backendApi;
     }
     
-    GetPerson(cpr : string) : Promise<Person>{
+    async GetPerson(cpr : string) : Promise<Person>{
         try{
-        return this.backendApi.GetPerson(cpr);
+        return await this.backendApi.GetPerson(cpr);
     } catch(error : any){
         return this.HandleError(error);
       }
