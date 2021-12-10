@@ -21,6 +21,8 @@ import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 import { CSSProperties } from '@material-ui/styles';
 import { AccordionActions } from '@mui/material';
+import { BaseServiceError } from '../services/Errors/BaseServiceError';
+import { ToastError } from '../components/Alerts/ToastError';
 
 export interface Accordians{
   PatientIsOpen : boolean
@@ -41,7 +43,7 @@ export interface State {
     loading: boolean;
     canSubmit : boolean;
     submitted : boolean
-    
+    errorToast : JSX.Element
     patientError? : string;
     contactError? : string;
     planDefinitionError? : string
@@ -65,6 +67,7 @@ constructor(props : Props){
     this.state = {
       loading : true,
       submitted : false,
+      errorToast : (<></>),
       canSubmit : false,
       accordians : props.openAccordians
     }
@@ -95,9 +98,7 @@ async submitPatient() : Promise<void>{
   this.state.careplan.patient = this.state.patient!;
   
   console.log(this.state.careplan)
-    this.setState({
-      loading: true
-    })
+    this.setState({loading: true})
     try {
       let careplanId! : string;
 
@@ -115,8 +116,13 @@ async submitPatient() : Promise<void>{
       })
     }
     catch(error) {
-      this.setState(() => { throw error })
+      if (error instanceof BaseServiceError) {
+        this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+      } else {
+        this.setState(() => { throw error })
+      }
     }
+    this.setState({loading: false})
 }
 
 SaveCareplan(editedCareplan : PatientCareplan) : void{
@@ -290,6 +296,7 @@ continueButtonStyle : CSSProperties = {
         </Grid>
 
         </Grid>
+        {this.state.errorToast ?? <></>}
         </form>
         
         
