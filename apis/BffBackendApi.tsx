@@ -29,7 +29,7 @@ import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/Qu
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
-import { Configuration, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
+import { Configuration, PatientApi, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
@@ -55,6 +55,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     questionnaireResponseApi = new QuestionnaireResponseApi(this.conf);
     personApi = new PersonApi(this.conf);
     userApi = new UserApi(this.conf);
+    patientApi = new PatientApi(this.conf);
 ;
 
     constructor() {
@@ -234,39 +235,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             let carePlans = await api.searchCarePlans(request)
 
             return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
-
-
-    async GetPatient(cpr: string): Promise<PatientDetail> {
-        try {
-            var status = -1;
-            var body = null;
-            await fetch(
-                'http://localhost:8080/api/v1/patient',
-                {
-                    'method': 'POST',
-                    'body': '{"cpr": "' + cpr + '"}',
-                    'headers': new Headers({ 'Content-Type': 'application/json' })
-                })
-                .then(res => res.json())
-                .then(res => { body = res; });
-
-            let patient: PatientDetail = new PatientDetail();
-            if(body) {
-                // Map the body to a PatientDetail object
-                patient.firstname = body['familyName'];
-                patient.lastname = body['givenName'];
-                patient.cpr = cpr;
-                patient.address = new Address();
-                patient.address.country = "HardCodedCountry";
-                patient.address.street = "HardCodedStreet";
-                patient.address.zipCode = "HardcodedZip";
-                patient.primaryPhone = body['patientContactDetails']['primaryPhone'];
-            }
-            return patient;
         } catch (error: any) {
             return await this.HandleError(error)
         }

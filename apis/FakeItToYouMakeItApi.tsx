@@ -339,8 +339,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
-        await new Promise(f => setTimeout(f, this.timeToWait))
+        try {
+            await new Promise(f => setTimeout(f, this.timeToWait))
         return carePlan.id
+        } catch (error) {
+            return await this.HandleError(error)
+        }
     }
 
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
@@ -422,6 +426,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
+
             return [this.task1, this.task2].filter(x => x.category != CategoryEnum.BLUE)
         } catch (error) {
             return await this.HandleError(error)
@@ -445,7 +450,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetPerson(cpr: string): Promise<Person> {
         try {
             await new Promise(f => setTimeout(f, this.timeToWait));
-            await this.throwError(404);
             return this.person1;
         } catch (error) {
             return await this.HandleError(error)

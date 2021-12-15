@@ -45,14 +45,6 @@ export default class PatientService extends BaseService implements IPatientServi
       }
     }
 
-    async GetPatient(cpr: string) : Promise<PatientDetail>{
-        try{
-        return await this.backendApi.GetPatient(cpr);
-    } catch(error : any){
-        return this.HandleError(error);
-      }
-    }
-
     async GetPatients(includeActive : boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
       try{
         this.ValidatePagination(page,pageSize);

@@ -84,11 +84,6 @@ export interface IBackendApi {
     GetUnansweredQuestionnaireTasks : (page : number, pagesize : number) => Promise<Array<Task>>
 
     /**
-     * Returns one patient
-     */
-    GetPatient : (cpr : string) => Promise<PatientDetail>
-
-    /**
      * Returns all patients that either has match in name or CPR
      */
     SearchPatient : (searchstring : string) => Promise<PatientDetail[]>
