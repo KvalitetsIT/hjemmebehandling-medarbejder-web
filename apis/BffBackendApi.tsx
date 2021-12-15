@@ -45,8 +45,18 @@ import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
+    conf: Configuration = new Configuration({ basePath: '/api/proxy' });
+    
     toInternal: ExternalToInternalMapper;
     toExternal: InternalToExternalMapper;
+    
+    careplanApi = new CarePlanApi(this.conf)
+    planDefinitionApi = new PlanDefinitionApi(this.conf)
+    questionnaireResponseApi = new QuestionnaireResponseApi(this.conf);
+    personApi = new PersonApi(this.conf);
+    userApi = new UserApi(this.conf);
+;
+
     constructor() {
         super();
         this.toInternal = new ExternalToInternalMapper();
@@ -54,7 +64,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
         try {
-            let api = new CarePlanApi(this.conf)
+            let api = this.careplanApi
             let request = {
                 onlyActiveCareplans: includeActive,
                 pageNumber: page,
@@ -71,7 +81,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async RemoveAlarm(task: Task): Promise<void> {
         try {
-            let api = new CarePlanApi(this.conf)
+            let api = this.careplanApi
             let request = {
                 id: FhirUtils.unqualifyId(task.carePlanId)
             }
@@ -82,11 +92,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    conf: Configuration = new Configuration({ basePath: '/api/proxy' });
+    
 
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
-            throw new NotImplementedError();
+            let request = {
+                id : careplan.id
+            }
+            await this.careplanApi.completeCarePlan(request)
+            return careplan;
         } catch (error: any) {
             return await this.HandleError(error)
         }
@@ -118,7 +132,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             console.log('inside BffBackendApi.GetAllPlanDefinitions!')
 
-            let api = new PlanDefinitionApi(this.conf)
+            let api = this.planDefinitionApi;
             let planDefinitions = await api.getPlanDefinitions()
 
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
@@ -138,7 +152,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
         try {
-            let api = new CarePlanApi(this.conf)
+            let api = this.careplanApi
             let request = {
                 createCarePlanRequest: {
                     carePlan: this.toExternal.mapCarePlan(carePlan)
@@ -172,7 +186,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
 
-            let api = new QuestionnaireResponseApi(this.conf);
+            let api = this.questionnaireResponseApi;
             let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
             return status;
@@ -191,7 +205,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
-            let api = new QuestionnaireResponseApi(this.conf);
+            let api = this.questionnaireResponseApi;
             let request = {
                 status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
                 pageNumber: page,
@@ -208,7 +222,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
-            let api = new CarePlanApi(this.conf)
+            let api = this.careplanApi
             let request = {
                 onlyUnsatisfiedSchedules: true,
                 onlyActiveCareplans: true,
@@ -260,7 +274,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetPerson(cpr: string): Promise<Person> {
         try {
-            let api = new PersonApi(this.conf);
+            let api = this.personApi
             let request = { cpr: cpr };
             let person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapPersonFromExternalToInternal(person);
@@ -272,7 +286,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetUser(): Promise<User> {
         try {
-            let api = new UserApi(this.conf);
+            let api = this.userApi;
             let request = {};
             let user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapUserFromExternalToInternal(user);
@@ -286,7 +300,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             console.log('Inside BffBackendApi.GetPatientCareplans !');
 
             // Retrieve the careplans
-            let api = new CarePlanApi(this.conf);
+            let api = this.careplanApi;
             let request = {
                 cpr: cpr,
                 onlyActiveCareplans: true
@@ -307,7 +321,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             console.log('Inside BffBackendApi.GetPatientCareplanById !');
 
             // Retrieve the careplan
-            let api = new CarePlanApi(this.conf);
+            let api = this.careplanApi;
             let carePlan = await api.getCarePlanById({ id: id })
             if (!carePlan) {
                 throw new Error('Could not retrieve careplan!');
@@ -322,7 +336,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
         console.log("cp-id: " + careplanId);
         try {
-            let api = new QuestionnaireResponseApi(this.conf)
+            let api = this.questionnaireResponseApi
             let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
             let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
 
