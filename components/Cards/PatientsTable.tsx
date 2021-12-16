@@ -119,16 +119,16 @@ class PatientsTable extends React.Component<Props, State> {
                                     );
                                 })
 
-                            }
-                        </Table>
-                    </TableContainer>
-                    <Box paddingTop={5}>
-                        <ButtonGroup>
-                            <Button component={Link} to={"./" + previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon /></Button>
-                            <Button disabled> {currentpage} </Button>
-                            <Button component={Link} to={"./" + nextpage} disabled={!hasMorePages}><NavigateNextIcon /></Button>
-                        </ButtonGroup>
-                    </Box>
+                    }
+                </Table>
+            </TableContainer>  
+            <Box paddingTop={5}>
+        <ButtonGroup>
+                  <Button className='button__page-switch' component={Link} to={"./"+previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon/></Button>
+                  <Button className='button__page-switch' disabled> {currentpage} </Button>
+                  <Button className='button__page-switch' component={Link} to={"./"+nextpage} disabled={!hasMorePages}><NavigateNextIcon/></Button>
+              </ButtonGroup>
+        </Box> 
                 </IsEmptyCard>
             </>
 

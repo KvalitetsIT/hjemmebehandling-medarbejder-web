@@ -7,6 +7,7 @@ import { Component } from 'react';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import { CategoryEnum } from '../Models/CategoryEnum';
 
 export interface Props {
     questionnaireResponse : QuestionnaireResponse
@@ -64,11 +65,29 @@ InitializeServices() : void{
     if(this.props.onUpdate)
        this.props.onUpdate(this.state.status!);
   };
+
+  GetQuestionnaireCategoryClassName(category?:CategoryEnum) : string {
+    if(!category) {
+      return ""
+    }
+
+    switch(category) {
+      case CategoryEnum.RED : 
+        return "red-answer"
+      case CategoryEnum.YELLOW :
+        return "yellow-answer"
+      case CategoryEnum.GREEN :
+        return "green-answer"
+      /*case CategoryEnum.BLUE :
+        return "blue"*/
+    }
+  }
+
   
   render () : JSX.Element {
     this.InitializeServices()
     return ( <>
-<FormControl className="answer__status" variant="standard" fullWidth>
+<FormControl className={"answer__status" + " " + this.GetQuestionnaireCategoryClassName(this.props.questionnaireResponse.category)} variant="standard" fullWidth>
                         <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"

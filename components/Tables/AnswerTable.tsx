@@ -138,8 +138,8 @@ statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : Quest
     
     return (<>
     <Box className="answer__pagination-buttons" textAlign="right">
-    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()} startIcon={<NavigateBeforeIcon/>}>Tidligere  </Button>
-    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()} endIcon={<NavigateNextIcon  />}>Senere </Button>
+    <Button disabled={!hasMorePages} onClick={async ()=>await this.NextPage()} startIcon={<NavigateBeforeIcon/>}>Nyere</Button>
+    <Button disabled={this.state.page <= 1} onClick={async ()=>await this.PreviousPage()} endIcon={<NavigateNextIcon  />}>Ældre</Button>
               
             </Box>
     <TableContainer component={Paper}>
@@ -147,7 +147,7 @@ statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : Quest
       <Table aria-label="simple table">
         <TableHead>
             
-          <TableRow>
+          <TableRow className='table__row'>
           <TableCell>
          
             </TableCell>
@@ -161,7 +161,7 @@ statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : Quest
                 return (
                     <TableCell className="answer__table-head" align="center">
      
-                            <Stack component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
+                            <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
                                 <div className="answer__header">
                                     <Typography className="answer__headline" align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
                                     <Typography className="answer__date" align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
@@ -197,18 +197,13 @@ statusUpdate(status : QuestionnaireResponseStatus, questionnaireResponse : Quest
                                     const thresholdCollection = this.props.questionnaires.thresholds.find(x=>x.questionId == question.Id);
                                     const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection,answer) : CategoryEnum.GREEN;
                                     return (
-                                        <TableCell> <Chip component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
+                                        <TableCell> <Chip className='answer__chip' component={Box} width="100%" size="medium"  color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /></TableCell>
                                     )
                                 })}
                             </TableRow>
                             </>
                         )
-                    })}
-        <TableRow>
-        <TableCell></TableCell>
-
-           
-             </TableRow>         
+                    })}     
         </TableBody>
       </Table>
     </TableContainer>

@@ -95,10 +95,13 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
 const black = '#4a4848'
 
 const green = '#61BD84'
+const greenLight = '#D0EFDC'
 
 const yellow = '#FFD78C'
+const yellowLight = '#FFEFD0'
 
 const red = '#EE6969'
+const redLight = '#FAD8D7'
 
 const blue = '#5D74AC'
 const blueDark = '#5D74AC'
@@ -149,7 +152,6 @@ const THEME = createTheme({
         }
       ]
     },
-
     //=========== Tabs ===========//
     MuiTabs : { 
       styleOverrides : {
@@ -170,19 +172,25 @@ const THEME = createTheme({
       ]
     },
     //=========== Input ===========//
-    MuiFormControl : {
-      variants : [
-        {
-          props: { className: 'answer__status' },
-          style: {
-            backgroundColor : 'white',
-            borderRadius : 30,
-            padding : 10,
-            minWidth : 200
+    MuiInput : {
+      styleOverrides : {
+        root : {
+          ":before" : {
+            borderBottom : 'none'
           }
         }
-      ]
+      }
     },
+    MuiInputBase : {
+      styleOverrides : {
+        root : {
+          '& label.Mui-focused': {
+            color: 'pink',
+         },
+        }
+      }
+    },
+    //=========== Menu item ===========//
     MuiMenuItem : {
       styleOverrides : {
         root : {
@@ -190,6 +198,7 @@ const THEME = createTheme({
         }
       }
     },
+    //=========== Autocomplete ===========//
     MuiAutocomplete : {
       variants : [
         {
@@ -246,10 +255,19 @@ const THEME = createTheme({
         }
       }
     },
+    MuiTableRow : {
+      styleOverrides : {
+        root : {
+          borderBottom : '1px solid #f2f2f2'
+        }
+      }
+    },
     MuiTableCell : {
       styleOverrides : {
         root : {
-          borderBottom: 'none'
+          borderBottom: 'none',
+          fontSize : 16,
+          padding : 20
         }
       },
       // Answer table
@@ -269,7 +287,32 @@ const THEME = createTheme({
         root : {
           borderRadius : 28
         }
-      }
+      },
+      variants : [
+        {
+          props: { severity: 'success' },
+          style: {
+            backgroundColor : greenLight
+          },
+        },
+        {
+          props: { severity: 'warning' },
+          style: {
+            backgroundColor : yellowLight,
+          },
+        },        {
+          props: { severity: 'error' },
+          style: {
+            backgroundColor : redLight,
+          },
+        },
+        {
+          props: { severity: 'info' },
+          style: {
+            backgroundColor : mainBackground,
+          },
+        },
+      ]
     },
     //=========== Dialog ===========//
     MuiDialogTitle : {
@@ -357,27 +400,59 @@ const THEME = createTheme({
           }
         },
         {
-          props: { variant: 'filled', color: 'success' },
+          // Chip on answers
+          props: { className: 'answer__chip' },
+          style: {
+            height: 47,
+            fontSize : 14
+          }
+        },
+        {
+          props: { variant: 'filled', color: 'success', className : 'chip__alarm' },
           style: {
             backgroundColor : green
           },
         },
         {
-          props : {variant: 'filled', color : 'warning'},
+          props : {variant: 'filled', color : 'warning', className : 'chip__alarm'},
           style : {
             backgroundColor : yellow
           }
         },
         {
-          props : {variant: 'filled', color : 'error'},
+          props : {variant: 'filled', color : 'error', className : 'chip__alarm'},
           style : {
             backgroundColor : red
           }
         },
         {
-          props : {variant: 'filled', color : 'primary'},
+          props : {variant: 'filled', color : 'primary', className : 'chip__alarm'},
           style : {
             backgroundColor : blue
+          }
+        },
+        {
+          props: { variant: 'filled', color: 'success', className : 'answer__chip' },
+          style: {
+            backgroundColor : greenLight,
+            color : black,
+            fontSize : 16
+          },
+        },
+        {
+          props : {variant: 'filled', color : 'warning', className : 'answer__chip'},
+          style : {
+            backgroundColor : yellowLight,
+            color : black,
+            fontSize : 16
+          }
+        },
+        {
+          props : {variant: 'filled', color : 'error', className : 'answer__chip'},
+          style : {
+            backgroundColor : redLight,
+            color : black,
+            fontSize : 16
           }
         }
       ]
@@ -428,6 +503,11 @@ const THEME = createTheme({
     },
     //=========== Buttons ===========//
     MuiButtonBase : {
+      styleOverrides : {
+        root : {
+          border : 'none'
+        }
+      },
       variants : [
         {
           props: { className: 'user__card' },
@@ -440,6 +520,7 @@ const THEME = createTheme({
     MuiButton : {
       styleOverrides : {
         root : {
+          border : 'none',
           borderRadius : 30,
           textTransform : 'capitalize',
           fontWeight : 'bold',
@@ -527,7 +608,7 @@ const THEME = createTheme({
             margin : 0,
             padding : '10px 20px'
           }
-        },
+        }
       ],
     },
   }
