@@ -11,10 +11,20 @@ a {
   border-radius: 20px;
 }
 
+/* answer table */
 .answer__header {
   padding-bottom: 20px;
 }
 
+.answer__pagination-buttons {
+  position: absolute;
+  top: 7px;
+  right: 20px;
+}
+
+/*=========== Typography ===========*/
+
+/* answer table */
 .MuiTypography-root.answer__headline {
   color: #4a4848;
   font-weight: bold;
@@ -24,8 +34,7 @@ a {
   color: #4a4848;
 }
 
-
-/*=========== User Context Card ===========*/
+/* User context card */
 .MuiTypography-root.user__context-name {
   font-weight: bold;
 }
@@ -34,7 +43,7 @@ a {
   color: #999;
 }
 
-/*=========== Thumbnail ===========*/
+/* Thumbnail */
 .MuiTypography-root.thumbnail__headline {
   font-weight: bold;
 } 
@@ -47,6 +56,12 @@ a {
   margin-top: 10px;
 }
 
+/* Accordion */
+.MuiTypography-root.accordion__headline {
+  font-weight: bold;
+}
+
+/* Selected */
 .MuiTab-root.MuiTab-textColorPrimary, .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
   color: #4a4848;
   padding: 0;
@@ -58,16 +73,8 @@ a {
   font-weight: bold;
 }
 
-.answer__pagination-buttons {
-  position: absolute;
-  top: 7px;
-  right: 20px;
-}
 
-.MuiTypography-root.accordion__headline {
-  font-weight: bold;
-}
-
+/*=========== Buttons ===========*/
 .MuiButton-root.MuiButton-containedPrimary {
   background-color: #5D74AC;
 }
@@ -75,4 +82,38 @@ a {
 .MuiButton-root.MuiButton-containedPrimary:hover {
   background-color: #5D74AC;
   opacity: 0.8;
+}
+
+/*=========== MuiBox ===========*/
+
+/* Answer table */
+.css-19kzrtu {
+  padding: 0 !important;
+}
+
+
+.MuiFormControl-root.answer__status {
+  padding: 10px;
+  border-radius: 30px;
+  width: 190px;
+}
+
+.MuiFormControl-root.answer__status > .MuiInput-root{
+  color: white;
+}
+
+.MuiFormControl-root.answer__status > .MuiInput-root > .MuiSvgIcon-root {
+  color: white;
+}
+
+.MuiFormControl-root.answer__status.green-answer {
+  background-color: #61BD84;
+}
+
+.MuiFormControl-root.answer__status.red-answer {
+  background-color: #EE6969;
+}
+
+.MuiFormControl-root.answer__status.yellow-answer {
+  background-color: #F4B156;
 }
