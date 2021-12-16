@@ -93,6 +93,7 @@ InitializeServices() : void{
                         id="demo-simple-select-standard"
                         value={this.state.status}
                         label="Status"
+                        disabled={this.state.status == QuestionnaireResponseStatus.Processed}
                         onChange={this.handleChange}
                     >
                         <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
