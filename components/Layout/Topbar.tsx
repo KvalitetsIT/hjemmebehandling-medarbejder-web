@@ -24,8 +24,8 @@ export class Topbar extends Component<{},State> {
  
       
       </Grid>
-      <Grid item xs={8}></Grid>
-      <Grid item xs={2}>
+      <Grid item xs={9}></Grid>
+      <Grid item xs={1}>
     
         
             <UserContextCard />
