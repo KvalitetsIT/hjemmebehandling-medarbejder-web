@@ -97,7 +97,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
               datalabels: {
                 color: 'rgba(0,100,200,0)'
                 },
-              order : threshold.to,
+              order : threshold.from,
               backgroundColor: this.getChipColorFromCategory(threshold.category),
               borderColor: this.getChipColorFromCategory(threshold.category)
             }
@@ -113,7 +113,7 @@ createThresholdDataset(question : Question, length : number) : Array<{label : st
             datalabels: {
                 color: 'rgba(0,100,200,0)'
             },
-            order : threshold.to,
+            order : threshold.from,
             backgroundColor: this.getChipColorFromCategory(threshold.category),
             borderColor: this.getChipColorFromCategory(threshold.category)
             }
