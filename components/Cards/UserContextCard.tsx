@@ -2,133 +2,128 @@ import * as React from 'react';
 import { Component } from 'react';
 import IUserService from '../../services/interfaces/IUserService';
 import { User } from '../Models/User';
-import { Button, Menu, MenuItem,Typography } from '@mui/material';
+import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
+import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 
 export interface Props {
-    color? : string;
+  color?: string;
 }
 
 export interface State {
-    loadingUserContextButton : boolean;
-    user: User;
-    expand: boolean
-    ancherEl : any
+  loadingUserContextButton: boolean;
+  user: User;
+  expand: boolean
+  ancherEl: any
 }
 
-export class UserContextCard extends Component<Props,State> {
+export class UserContextCard extends Component<Props, State> {
   static displayName = UserContextCard.name;
   static contextType = ApiContext;
   userService!: IUserService;
 
-  constructor(props : Props){
-      super(props);
-      this.state = {
-	      loadingUserContextButton : false,
-	      user: new User(),
-	      expand: false,
-        ancherEl : null
-      }
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      loadingUserContextButton: true,
+      user: new User(),
+      expand: false,
+      ancherEl: null
+    }
 
-      this.handleClick = this.handleClick.bind(this);
-      this.handleClose = this.handleClose.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
   }
 
-  componentWillMount() :void {
-      this.InitializeServices();
-      this.getUser();
+  async componentDidMount(): Promise<void> {
+    this.setState({ loadingUserContextButton: true })
+    try {
+      await this.getUser();
+    } catch (error) {
+      this.setState(() => { throw error })
+    }
+    this.setState({ loadingUserContextButton: false })
   }
 
-  InitializeServices() : void{
-	 this.userService = this.context.userService;
+  InitializeServices(): void {
+    this.userService = this.context.userService;
   }
-  
-  logout() :void {
- 	 window.location.href = "/oauth2/sign_out";
-  }
-  
-  
 
-async getUser() : Promise<void>{
-  try{
-    this.setState({
-      loadingUserContextButton: true
-    })
-    
+  logout(): void {
+    window.location.href = "/oauth2/sign_out";
+  }
+
+
+
+  async getUser(): Promise<void> {
+
     const user = await this.userService.GetUser();
-    
+
     const u = this.state.user;
-    u.userId = user.userId ?user.userId:"";
-    u.fullName = user.fullName ?user.fullName:"";
-    u.orgId = user.orgId ?user.orgId:"";
-    u.orgName = user.orgName ?user.orgName:"";
-    u.email = user.email ?user.email:"";
-    u.entitlements = user.entitlements ?user.entitlements:[];
-    u.autorisationsids = user.autorisationsids ?user.autorisationsids:[];
-    u.firstName = user.firstName ?user.firstName:"";
-    u.lastName = user.lastName ?user.lastName:"";
-    
+    u.userId = user.userId ? user.userId : "";
+    u.fullName = user.fullName ? user.fullName : "";
+    u.orgId = user.orgId ? user.orgId : "";
+    u.orgName = user.orgName ? user.orgName : "";
+    u.email = user.email ? user.email : "";
+    u.entitlements = user.entitlements ? user.entitlements : [];
+    u.autorisationsids = user.autorisationsids ? user.autorisationsids : [];
+    u.firstName = user.firstName ? user.firstName : "";
+    u.lastName = user.lastName ? user.lastName : "";
+
     this.setState({
       user: u
     })
-    
-    this.setState({
-      loadingUserContextButton: false
-    })
-    
-  } catch(error){
-	this.setState({
-    loadingUserContextButton: false
-    })
-    throw error;
+
   }
-  
-}
-handleClick(event: React.MouseEvent<HTMLButtonElement>) : void {
-  this.setState({ancherEl : event.currentTarget});
-};
+  handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
+    this.setState({ ancherEl: event.currentTarget });
+  }
 
-handleClose() : void {
-  this.setState({ancherEl : null});
-};
+  handleClose(): void {
+    this.setState({ ancherEl: null });
+  }
 
-  render ()  : JSX.Element{
+  render(): JSX.Element {
+    this.InitializeServices();
+    return this.state.loadingUserContextButton ? <LoadingSmallComponent/> : this.renderCard();
+  }
 
+  renderCard(): JSX.Element{
     return (<>
-         <div className="user__context-wrapper">
-          <Button
-            className="profileButton"
-            id="basic-button"
-            aria-controls="basic-menu"
-            aria-haspopup="true"
-            onClick={this.handleClick}
-            variant="text"
-            color="inherit"
-          >
-            <div>
-             <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
-             <Typography className="user__context-role" align="right" variant="body2">Rolle</Typography>
-             </div>
-          </Button>
-          <Menu
-            anchorEl={this.state.ancherEl}
-            id="basic-menu"
-            open={this.state.ancherEl}
-            onClose={this.handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem disabled>
-              <Typography align="right" variant="body2">{this.state.user.orgName}</Typography>
-            </MenuItem>
-            <MenuItem onClick={this.logout}>Log ud</MenuItem>
-          </Menu>
-        </div>
-    
-        </>
+      <div className="user__context-wrapper">
+        <Button
+          className="profileButton"
+          id="basic-button"
+          aria-controls="basic-menu"
+          aria-haspopup="true"
+          onClick={this.handleClick}
+          variant="text"
+          color="inherit"
+        >
+          <div>
+            <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
+            <Typography className="user__context-role" align="right" variant="body2">Rolle</Typography>
+          </div>
+        </Button>
+        <Menu
+          anchorEl={this.state.ancherEl}
+          id="basic-menu"
+          open={this.state.ancherEl}
+          onClose={this.handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem disabled>
+            <Typography align="right" variant="body2">{this.state.user.orgName}</Typography>
+          </MenuItem>
+          <MenuItem onClick={this.logout}>Log ud</MenuItem>
+        </Menu>
+      </div>
+
+    </>
     );
   }
 }

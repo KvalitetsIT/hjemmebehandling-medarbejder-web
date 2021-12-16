@@ -458,6 +458,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetUser(): Promise<User> {
+        await new Promise(f => setTimeout(f, this.timeToWait));
         let user = new User();
         user.userId = "TESTES";
         user.firstName = "Test";
