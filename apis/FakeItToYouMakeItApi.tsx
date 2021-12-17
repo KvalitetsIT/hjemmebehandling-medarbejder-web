@@ -27,6 +27,7 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { User } from "../components/Models/User";
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 import BaseApi from "./BaseApi";
+import { NotImplementedError } from "./Errors/NotImplementedError";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -295,8 +296,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         return responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
     }
 
-    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        throw new Error("Method not implemented.");
+    async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+        throw new NotImplementedError();
     }
     async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
     }

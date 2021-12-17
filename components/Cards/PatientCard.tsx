@@ -10,83 +10,96 @@ import { Component } from 'react';
 import { Divider, Grid, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
-
+import { ConfirmationButton } from '../Input/ConfirmationButton';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 export interface Props {
-    patient : PatientDetail
+  patient: PatientDetail
 
 }
 
 export interface State {
-    loading : boolean;
+  loading: boolean;
 }
 
-export class PatientCard extends Component<Props,State> {
+export class PatientCard extends Component<Props, State> {
   static displayName = PatientCard.name;
 
-  constructor(props : Props){
-      super(props);
-      this.state = {loading : true}
+  constructor(props: Props) {
+    super(props);
+    this.state = { loading: true }
   }
 
-  render () : JSX.Element{
+  async resetPassword(): Promise<void> {
+    try {
+      await new Promise(f => setTimeout(f, 1000));
+    } catch (error: any) {
+      this.setState(() => { throw error })
+    }
+  }
+
+  render(): JSX.Element {
     const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
     return contents;
   }
 
-  componentDidMount() : void{
-    this.setState({loading : false})
-}
+  componentDidMount(): void {
+    this.setState({ loading: false })
+  }
 
-  renderCard() :JSX.Element{
+  renderCard(): JSX.Element {
     const contact = this.props.patient.contact
     return (
-        <Card>
+      <Card>
 
-          <CardContent>
-            <Grid container padding={2}>
-              <Grid item xs={4} paddingRight={2}>
-                <PatientAvatar patient={this.props.patient} />
-              </Grid>
-              <Grid item xs={7}>
-                <Stack>
-                  <Typography>
-                    {this.props.patient.firstname} {this.props.patient.lastname} <br/>
-                    {this.props.patient.cpr?.slice(0,6)}-{this.props.patient.cpr?.slice(6)}
-                  </Typography>
-                  <Typography variant="subtitle2">
-                  {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "("+this.props.patient.secondaryPhone+")" : ""}
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={1}>
-              <Button component={Link} to={"/patients/"+this.props.patient.cpr+"/edit"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
-              </Grid>
+        <CardContent>
+          <Grid container padding={2}>
+            <Grid item xs={4} paddingRight={2}>
+              <PatientAvatar patient={this.props.patient} />
             </Grid>
-            
-            <Divider />
-            <Grid container padding={2}>
-              <Grid item xs={12}>
+            <Grid item xs={7}>
+              <Stack>
+                <Typography>
+                  {this.props.patient.firstname} {this.props.patient.lastname} <br />
+                  {this.props.patient.cpr?.slice(0, 6)}-{this.props.patient.cpr?.slice(6)}
+                </Typography>
+                <Typography variant="subtitle2">
+                  {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhone + ")" : ""}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={1}>
+              <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
+              <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
+                Er du sikker på at du ønsker at nulstille patientens adgangskode?
+              </ConfirmationButton>
+            </Grid>
+          </Grid>
+
+          <Divider />
+          <Grid container padding={2}>
+            <Grid item xs={12}>
               <Typography variant="subtitle2">
-                {this.props.patient.address?.street}<br/>
-                {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br/>
+                {this.props.patient.address?.street}<br />
+                {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br />
                 {this.props.patient.address?.country}
-            </Typography>
-            <br/>
-            <Typography variant="button">
-                        Kontakt
-                    </Typography>
-            <Typography variant="subtitle2">
-                        {contact.fullname} {contact.affiliation ? "("+contact.affiliation+")" : ""}
-                        <br/>
-                        {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}<br/>
-                    </Typography>
-              </Grid>
+              </Typography>
+              <br />
+              <Typography variant="button">
+                Kontakt
+              </Typography>
+              <Typography variant="subtitle2">
+                {contact.fullname} {contact.affiliation ? "(" + contact.affiliation + ")" : ""}
+                <br />
+                {contact.primaryPhone} {contact.secondaryPhone ? "(" + contact.secondaryPhone + ")" : ""}<br />
+              </Typography>
             </Grid>
-            
+          </Grid>
 
-            
-          </CardContent>
-        </Card>
+
+
+        </CardContent>
+      </Card>
     )
   }
+  
 }
