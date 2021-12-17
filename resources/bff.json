@@ -1600,6 +1600,9 @@
       "AnswerDto": {
         "type": "object",
         "properties": {
+          "linkId": {
+            "type": "string"
+          },
           "value": {
             "type": "string"
           },
@@ -1637,6 +1640,9 @@
             "example": "CarePlan/10"
           },
           "questionnaireId": {
+            "type": "string"
+          },
+          "carePlanId": {
             "type": "string"
           },
           "questionnaireName": {
