@@ -203,13 +203,15 @@ const THEME = createTheme({
       
       styleOverrides: {
         root : {
+
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: blue,
             borderRadius: 100,
           }
         },
         notchedOutline: {
-          borderWidth: 0,
+          borderWidth: 1,
+          borderRadius: 100,
         },
       }
     },
@@ -224,7 +226,12 @@ const THEME = createTheme({
             border: "none"
           }
         }
-      ]
+      ],
+      styleOverrides : {
+        root : {
+          "fieldset" : {borderWidth : 0},
+        }
+      }
     },
     //=========== Avatar ===========//
     MuiAvatar: {
