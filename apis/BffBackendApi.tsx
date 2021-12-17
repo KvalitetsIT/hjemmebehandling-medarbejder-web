@@ -63,6 +63,12 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    async ResetPassword(patient: PatientDetail): Promise<void> {
+        throw new NotImplementedError();
+    }
+    async CreateUser(patient: PatientDetail): Promise<User> {
+        throw new NotImplementedError();
+    }
     async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
         try {
             let api = this.careplanApi
@@ -252,7 +258,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
 
 
-    async GetUser(): Promise<User> {
+    async GetActiveUser(): Promise<User> {
         try {
             let api = this.userApi;
             let request = {};

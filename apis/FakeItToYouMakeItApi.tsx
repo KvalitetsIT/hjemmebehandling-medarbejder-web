@@ -271,6 +271,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task2.questionnaireId = this.questionnaire1.id
         this.task2.responseLinkEnabled = true
     }
+    async ResetPassword(patient: PatientDetail): Promise<void> {
+        throw new NotImplementedError();
+    }
+    async CreateUser(patient: PatientDetail): Promise<User> {
+        throw new NotImplementedError();
+    }
     async GetPatients(includeActive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         let toReturn = [];
@@ -458,7 +464,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     }
 
-    async GetUser(): Promise<User> {
+    async GetActiveUser(): Promise<User> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         let user = new User();
         user.userId = "TESTES";

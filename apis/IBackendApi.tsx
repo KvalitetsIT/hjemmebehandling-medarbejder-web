@@ -12,13 +12,18 @@ import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { User } from "../components/Models/User";
 
 export interface IBackendApi {
+    /**
+     * Resets a patient-users password
+     * @param patient 
+     */
+    ResetPassword(patient: PatientDetail): Promise<void>;
 
     /**
      * Remove task from missing-answer-overview
      * @param task task to remove from overview
      */
     RemoveAlarm(task: Task): Promise<void>;
-    
+
     /**
      * Edit patient
      * @param patient patient to be edited
@@ -64,29 +69,29 @@ export interface IBackendApi {
      * Is used to terminate a careplan
      * @param careplan careplan to terminate
      */
-    TerminateCareplan(careplan : PatientCareplan) : Promise<PatientCareplan>;
+    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
 
     /**
      * Update status on QuestionnaireResponse.
      * @param id The id of the QuestionnaireResponse
      * @param status The new status
      */
-    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus) : Promise<QuestionnaireResponseStatus>;
+    UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<QuestionnaireResponseStatus>;
 
     /**
      * Return a list of Questionnaireresponses that have not yet finished processing.
      */
-    GetUnfinishedQuestionnaireResponseTasks : (page : number, pagesize : number) => Promise<Array<Task>>
+    GetUnfinishedQuestionnaireResponseTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
     /**
      * Return a list of Questionnaires that are overdue.
      */
-    GetUnansweredQuestionnaireTasks : (page : number, pagesize : number) => Promise<Array<Task>>
+    GetUnansweredQuestionnaireTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
     /**
      * Returns all patients that either has match in name or CPR
      */
-    SearchPatient : (searchstring : string) => Promise<PatientDetail[]>
+    SearchPatient: (searchstring: string) => Promise<PatientDetail[]>
 
     /**
      * Creates and returns patient
@@ -103,41 +108,46 @@ export interface IBackendApi {
     /**
      * Returns usercontext 
      */
-    GetUser(): Promise<User>;
+    GetActiveUser(): Promise<User>;
+
+    /**
+     * Returns usercontext 
+     */
+    CreateUser(patient: PatientDetail): Promise<User>;
 
     /**
      * Returns all patient careplans for one patient
      */
-    GetPatientCareplans : (cpr: string) => Promise<Array<PatientCareplan>>
+    GetPatientCareplans: (cpr: string) => Promise<Array<PatientCareplan>>
 
     /**
      * Returns patient careplans by id
      */
-    GetPatientCareplanById : (id: string) => Promise<PatientCareplan>
-    
+    GetPatientCareplanById: (id: string) => Promise<PatientCareplan>
+
     /**
      * 
      */
-    GetQuestionnaireResponses : (careplanId : string, questionnaireIds : string[], page : number, pagesize : number) => Promise<QuestionnaireResponse[]>
+    GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
     /**
      * Change questionnaireResponse
      */
-    SetQuestionaireResponse : (id : string, questionnaireResponses : QuestionnaireResponse) => Promise<void>
+    SetQuestionaireResponse: (id: string, questionnaireResponses: QuestionnaireResponse) => Promise<void>
 
     /**
      * Set the value of threshold number
      */
-    SetThresholdNumber : (thresholdId : string, threshold : ThresholdNumber) => Promise<void>
+    SetThresholdNumber: (thresholdId: string, threshold: ThresholdNumber) => Promise<void>
 
     /**
      * Set the value of threshold option
      */
-    SetThresholdOption : (thresholdId : string, threshold : ThresholdOption) => Promise<void>
+    SetThresholdOption: (thresholdId: string, threshold: ThresholdOption) => Promise<void>
 
 
     /**
      * Returns patients based on paramaters
      */
-    GetPatients : (includeActive : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
+    GetPatients: (includeActive: boolean, page: number, pageSize: number) => Promise<PatientDetail[]>
 }
 

@@ -59,7 +59,7 @@ export class UserContextCard extends Component<Props, State> {
 
   async getUser(): Promise<void> {
 
-    const user = await this.userService.GetUser();
+    const user = await this.userService.GetActiveUser();
 
     const u = this.state.user;
     u.userId = user.userId ? user.userId : "";

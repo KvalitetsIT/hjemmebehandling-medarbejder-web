@@ -1,8 +1,11 @@
 import React from "react";
-import { UserContext } from "../../generated/models/UserContext";
+import { PatientDetail } from "../../components/Models/PatientDetail";
+import { User } from "../../components/Models/User";
 
 export default interface IUserService {
-    GetUser : () => Promise<UserContext>
+    ResetPassword : (patient: PatientDetail) => Promise<void>;
+    GetActiveUser : () => Promise<User>
+    CreateUser : (patient : PatientDetail) => Promise<User>
     
 }
   

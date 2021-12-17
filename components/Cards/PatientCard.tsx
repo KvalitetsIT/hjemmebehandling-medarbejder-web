@@ -12,6 +12,9 @@ import { Skeleton } from '@mui/material';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import ApiContext from '../../pages/_context';
+import IUserService from '../../services/interfaces/IUserService';
+import { ErrorBoundary } from '../Layout/ErrorBoundary';
 export interface Props {
   patient: PatientDetail
 
@@ -23,6 +26,8 @@ export interface State {
 
 export class PatientCard extends Component<Props, State> {
   static displayName = PatientCard.name;
+  static contextType = ApiContext
+  userService!: IUserService;
 
   constructor(props: Props) {
     super(props);
@@ -31,13 +36,17 @@ export class PatientCard extends Component<Props, State> {
 
   async resetPassword(): Promise<void> {
     try {
-      await new Promise(f => setTimeout(f, 1000));
+      await this.userService.ResetPassword(this.props.patient)
     } catch (error: any) {
       this.setState(() => { throw error })
     }
   }
 
+  initialiseServices(): void {
+    this.userService = this.context.userService;
+  }
   render(): JSX.Element {
+    this.initialiseServices();
     const contents = this.state.loading ? <Skeleton variant="rectangular" height={200} /> : this.renderCard();
     return contents;
   }
@@ -68,10 +77,16 @@ export class PatientCard extends Component<Props, State> {
               </Stack>
             </Grid>
             <Grid item xs={1}>
-              <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
-              <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
-                Er du sikker på at du ønsker at nulstille patientens adgangskode?
-              </ConfirmationButton>
+
+              <ErrorBoundary>
+
+                <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
+                  Er du sikker på at du ønsker at nulstille patientens adgangskode?
+                </ConfirmationButton>
+              </ErrorBoundary>
             </Grid>
           </Grid>
 
@@ -101,5 +116,5 @@ export class PatientCard extends Component<Props, State> {
       </Card>
     )
   }
-  
+
 }
