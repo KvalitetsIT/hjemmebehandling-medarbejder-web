@@ -20,17 +20,17 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
 
-function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
-  const mockApi : IBackendApi = new FakeItToYouMakeItApi();
-  const backendApi : IBackendApi = new BffBackendApi();
-  
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  const mockApi: IBackendApi = new FakeItToYouMakeItApi();
+  const backendApi: IBackendApi = new BffBackendApi();
+
   let questionnaireBackend = backendApi
     , questionAnswerBackend = backendApi
     , careplanBackend = backendApi
     , patientBackend = backendApi
     , userBackend = backendApi
     , personBackend = backendApi
-  ;
+    ;
 
   if (process?.env.NODE_ENV === 'development') {
     if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE === "true") {
@@ -55,40 +55,40 @@ function MyApp({ Component, pageProps }: AppProps) : JSX.Element{
 
   return (
     <>
-    <div suppressHydrationWarning>
-    
-    <ThemeProvider theme={THEME}>
-    
-    <ApiContext.Provider
-      value={{
-        //Services
-        questionnaireService : new QuestionnaireService(questionnaireBackend),
-        questionAnswerService : new QuestionAnswerService(questionAnswerBackend),
-        careplanService : new CareplanService(careplanBackend),
-        patientService : new PatientService(patientBackend),
-        userService : new UserService(userBackend),
-        personService : new PersonService(personBackend),
-        validationService : new ValidationService(),
-        
-        //Helpers
-        dateHelper : new DanishDateHelper(),
-        collectionHelper : new CollectionHelper()
-      }}
-    >
-      <CssBaseline />
-        {typeof window === 'undefined' ? null : 
-          
+      <div suppressHydrationWarning>
+
+        <ThemeProvider theme={THEME}>
+
+          <ApiContext.Provider
+            value={{
+              //Services
+              questionnaireService: new QuestionnaireService(questionnaireBackend),
+              questionAnswerService: new QuestionAnswerService(questionAnswerBackend),
+              careplanService: new CareplanService(careplanBackend),
+              patientService: new PatientService(patientBackend),
+              userService: new UserService(userBackend),
+              personService: new PersonService(personBackend),
+              validationService: new ValidationService(),
+
+              //Helpers
+              dateHelper: new DanishDateHelper(),
+              collectionHelper: new CollectionHelper()
+            }}
+          >
+            <CssBaseline />
+            {typeof window === 'undefined' ? null :
+
               <ErrorBoundary>
-          <Layout>
-                <Component {...pageProps} />
-            </Layout>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
               </ErrorBoundary>}
-        </ApiContext.Provider>
-    </ThemeProvider>
-    </div>
+          </ApiContext.Provider>
+        </ThemeProvider>
+      </div>
     </>
-    )
-  
+  )
+
 }
 
 
@@ -110,285 +110,293 @@ const blueLight = '#E8EFF7'
 const mainBackground = "#F2F2F2"
 
 const THEME = createTheme({
-  palette : {
-    background : {
-      default : mainBackground,
+  palette: {
+    background: {
+      default: mainBackground,
     },
-    text : {
-      primary : black
+    text: {
+      primary: black
     }
   },
   typography: {
-   "fontFamily": "verdana, sans-serif",
-   h6 : {
-     fontSize : 17,
-     fontWeight : "bold",
-     color : black
-   }
+    "fontFamily": "verdana, sans-serif",
+    h6: {
+      fontSize: 17,
+      fontWeight: "bold",
+      color: black
+    }
   },
-  components : {
+  components: {
     //=========== Grid ===========//
-    MuiGrid : {
-      styleOverrides : {
-        root : {
-          fontsize : 16,
-          ".grid__headline" : {
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          fontsize: 16,
+          ".grid__headline": {
             paddingBottom: 10
           },
-          ".grid__table" : {
-            paddingTop : 0
+          ".grid__table": {
+            paddingTop: 0
           }
         }
       },
-      variants : [
+      variants: [
         {
           props: { className: 'thumbnail__icon' },
           style: {
-            borderRadius : 10,
-            flexBasis : 'initial',
-            width : 80,
-            height : 80
+            borderRadius: 10,
+            flexBasis: 'initial',
+            width: 80,
+            height: 80
           }
         }
       ]
     },
     //=========== Tabs ===========//
-    MuiTabs : { 
-      styleOverrides : {
-        root : {
-          borderBottom : '3px solid #f2f2f2', 
-          padding : 20
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          borderBottom: '3px solid #f2f2f2',
+          padding: 20
 
         }
       },
-      variants : [
+      variants: [
         {
           props: { className: 'questionnaire__tab' },
           style: {
-            margin : '-20px -20px 0 -20px',
-            color : black
+            margin: '-20px -20px 0 -20px',
+            color: black
           }
         }
       ]
     },
     //=========== Input ===========//
-    MuiInput : {
-      styleOverrides : {
-        root : {
-          ":before" : {
-            borderBottom : 'none'
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          ":before": {
+            borderBottom: 'none'
           }
         }
       }
     },
-    MuiInputBase : {
-      styleOverrides : {
-        root : {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
           '& label.Mui-focused': {
             color: 'pink',
-         },
+          },
         }
       }
     },
     //=========== Menu item ===========//
-    MuiMenuItem : {
-      styleOverrides : {
-        root : {
-          borderRadius : 0
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0
         }
       }
     },
     //=========== Autocomplete ===========//
-    MuiAutocomplete : {
-      variants : [
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          borderWidth: 0,
+        },
+      }
+    },
+    MuiAutocomplete: {
+      variants: [
         {
           // Chip on tasklist (alarm)
           props: { className: 'search' },
           style: {
-            backgroundColor : 'white',
-            borderRadius : 10
+            backgroundColor: 'white',
+            borderRadius: 100,
+            border: "none"
           }
         }
       ]
     },
     //=========== Avatar ===========//
-    MuiAvatar : {
-      styleOverrides : {
-        root : {
-          borderRadius : 10,
-          backgroundColor : blueDark + '!important',
-          height : 80,
-          width : 80
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          backgroundColor: blueDark + '!important',
+          height: 80,
+          width: 80
         }
       }
     },
     //=========== Paper ===========//
-    MuiPaper : {
-      styleOverrides : {
-        root : {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
           boxShadow: "none"
         }
       }
     },
     //=========== Table ===========//
-    MuiTable : {
-      styleOverrides : {
-        root : {
+    MuiTable: {
+      styleOverrides: {
+        root: {
           border: 'none'
         }
       }
     },
-    MuiTableBody : {
-      styleOverrides : {
-        root : {
+    MuiTableBody: {
+      styleOverrides: {
+        root: {
           boxShadow: 'none'
         }
       }
     },
-    MuiTableHead : {
-      styleOverrides : {
-        root : {
-          borderBottom : '3px solid #f2f2f2',
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          borderBottom: '3px solid #f2f2f2',
           "& .MuiTableCell-head": {
             fontWeight: 'bold'
           }
         }
       }
     },
-    MuiTableRow : {
-      styleOverrides : {
-        root : {
-          borderBottom : '1px solid #f2f2f2'
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          borderBottom: '1px solid #f2f2f2'
         }
       }
     },
-    MuiTableCell : {
-      styleOverrides : {
-        root : {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
           borderBottom: 'none',
-          fontSize : 16,
-          padding : 20
+          fontSize: 16,
+          padding: 20
         }
       },
       // Answer table
-      variants : [
+      variants: [
         {
           props: { className: 'answer__table-head' },
           style: {
-            width : '15%',
-            padding : 20
+            width: '15%',
+            padding: 20
           }
         }
       ]
     },
     //=========== Alert ===========/
-    MuiAlert : {
-      styleOverrides : {
-        root : {
-          borderRadius : 28
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: 28
         }
       },
-      variants : [
+      variants: [
         {
           props: { severity: 'success' },
           style: {
-            backgroundColor : greenLight
+            backgroundColor: greenLight
           },
         },
         {
           props: { severity: 'warning' },
           style: {
-            backgroundColor : yellowLight,
+            backgroundColor: yellowLight,
           },
-        },        {
+        }, {
           props: { severity: 'error' },
           style: {
-            backgroundColor : redLight,
+            backgroundColor: redLight,
           },
         },
         {
           props: { severity: 'info' },
           style: {
-            backgroundColor : mainBackground,
+            backgroundColor: mainBackground,
           },
         },
       ]
     },
     //=========== Dialog ===========//
-    MuiDialogTitle : {
-      styleOverrides : {
-        root : {
-          borderBottom : "3px solid #f2f2f2",
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          borderBottom: "3px solid #f2f2f2",
           marginBottom: 10,
-          padding : 20
+          padding: 20
         }
       }
     },
-    MuiDialogContent : {
-      styleOverrides : {
-        root : {
-          padding : 20
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          padding: 20
         }
       }
     },
-    MuiDialogActions : {
-      styleOverrides : {
-        root : {
-          borderTop : "3px solid #f2f2f2",
-          padding : 20
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          borderTop: "3px solid #f2f2f2",
+          padding: 20
         }
       }
     },
     //=========== Card ===========//
-    MuiCard : {
-      styleOverrides : {
-        root : {
-          borderRadius : 20
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 20
         }
       },
-      variants : [
+      variants: [
         {
           props: { className: 'user' },
           style: {
-            backgroundColor : 'transparent'
+            backgroundColor: 'transparent'
           }
         }
       ]
     },
-    MuiCardActions : {
-      variants : [
+    MuiCardActions: {
+      variants: [
         {
           props: { className: 'user__card-logout' },
           style: {
-            justifyContent : 'flex-end'
+            justifyContent: 'flex-end'
           }
         }
       ]
     },
-    MuiCardContent : {
-      styleOverrides : {
-        root : {
-          padding : 20,
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 20,
           position: 'relative',
-          ":last-child" : {
-            paddingBottom : 20
+          ":last-child": {
+            paddingBottom: 20
           }
         }
       }
     },
     //=========== Chip ===========//
-    MuiChip : {
-      styleOverrides : {
-        root : {
-          borderRadius : 30,
-          color : 'white',
-          fontsize : 11
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 30,
+          color: 'white',
+          fontsize: 11
         },
-        label : {
-          padding : 0
+        label: {
+          padding: 0
         }
       },
-      variants : [
+      variants: [
         {
           // Chip on tasklist (alarm)
           props: { className: 'chip__alarm' },
@@ -404,209 +412,217 @@ const THEME = createTheme({
           props: { className: 'answer__chip' },
           style: {
             height: 47,
-            fontSize : 14
+            fontSize: 14
           }
         },
         {
-          props: { variant: 'filled', color: 'success', className : 'chip__alarm' },
+          props: { variant: 'filled', color: 'success', className: 'chip__alarm' },
           style: {
-            backgroundColor : green
+            backgroundColor: green
           },
         },
         {
-          props : {variant: 'filled', color : 'warning', className : 'chip__alarm'},
-          style : {
-            backgroundColor : yellow
-          }
-        },
-        {
-          props : {variant: 'filled', color : 'error', className : 'chip__alarm'},
-          style : {
-            backgroundColor : red
-          }
-        },
-        {
-          props : {variant: 'filled', color : 'primary', className : 'chip__alarm'},
-          style : {
-            backgroundColor : blue
-          }
-        },
-        {
-          props: { variant: 'filled', color: 'success', className : 'answer__chip' },
+          props: { variant: 'filled', color: 'warning', className: 'chip__alarm' },
           style: {
-            backgroundColor : greenLight,
-            color : black,
-            fontSize : 16
+            backgroundColor: yellow
+          }
+        },
+        {
+          props: { variant: 'filled', color: 'error', className: 'chip__alarm' },
+          style: {
+            backgroundColor: red
+          }
+        },
+        {
+          props: { variant: 'filled', color: 'primary', className: 'chip__alarm' },
+          style: {
+            backgroundColor: blue
+          }
+        },
+        {
+          props: { variant: 'filled', color: 'success', className: 'answer__chip' },
+          style: {
+            backgroundColor: greenLight,
+            color: black,
+            fontSize: 16
           },
         },
         {
-          props : {variant: 'filled', color : 'warning', className : 'answer__chip'},
-          style : {
-            backgroundColor : yellowLight,
-            color : black,
-            fontSize : 16
+          props: { variant: 'filled', color: 'warning', className: 'answer__chip' },
+          style: {
+            backgroundColor: yellowLight,
+            color: black,
+            fontSize: 16
           }
         },
         {
-          props : {variant: 'filled', color : 'error', className : 'answer__chip'},
-          style : {
-            backgroundColor : redLight,
-            color : black,
-            fontSize : 16
+          props: { variant: 'filled', color: 'error', className: 'answer__chip' },
+          style: {
+            backgroundColor: redLight,
+            color: black,
+            fontSize: 16
           }
         }
       ]
     },
     //=========== Collapse ===========//
-    MuiCollapse : {
-      variants : [
+    MuiCollapse: {
+      variants: [
         {
           props: { className: 'user__card-collapse' },
           style: {
-            backgroundColor : 'white'
+            backgroundColor: 'white'
           }
         }
       ]
     },
 
     //=========== Accordion ===========// 
-    MuiAccordion : {
-      styleOverrides : {
-        root : {
-          borderRadius : 20,
-          borderTop : 'none',
-          marginBottom : 20,
-          ":first-of-type" : {
-            borderRadius : 20
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: 20,
+          borderTop: 'none',
+          marginBottom: 20,
+          ":first-of-type": {
+            borderRadius: 20
           },
-          ":before" : {
-            backgroundColor : 'transparent'
+          ":before": {
+            backgroundColor: 'transparent'
           }
         }
       }
     },
-    MuiAccordionSummary : {
-      styleOverrides : {
-        root : {
-          borderBottom : '3px solid #f2f2f2',
-          fontWeight : 'bold'
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          borderBottom: '3px solid #f2f2f2',
+          fontWeight: 'bold'
         }
       }
     },
-    MuiAccordionActions : {
-      styleOverrides : {
-        root : {
-          borderTop : '3px solid #f2f2f2',
-          padding : 20
+    MuiAccordionActions: {
+      styleOverrides: {
+        root: {
+          borderTop: '3px solid #f2f2f2',
+          padding: 20
         }
       }
     },
     //=========== Buttons ===========//
-    MuiButtonBase : {
-      styleOverrides : {
-        root : {
-          border : 'none'
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          border: 'none'
         }
       },
-      variants : [
+      variants: [
         {
           props: { className: 'user__card' },
           style: {
-            backgroundColor : 'transparent'
+            backgroundColor: 'transparent'
           }
         }
       ]
     },
-    MuiButton : {
-      styleOverrides : {
-        root : {
-          border : 'none',
-          borderRadius : 30,
-          textTransform : 'capitalize',
-          fontWeight : 'bold',
-          padding : 10,
-          boxShadow : 'none',
-          ":hover" : {
-            boxShadow : 'none',
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          border: "none",
+          borderWidth: 0
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          border: 'none',
+          borderRadius: 30,
+          textTransform: 'capitalize',
+          fontWeight: 'bold',
+          padding: 10,
+          boxShadow: 'none',
+          ":hover": {
+            boxShadow: 'none',
           }
         }
       },
-      variants : [
+      variants: [
         {
           // Profile button accordion__button
-          props: {className: "profileButton" },
+          props: { className: "profileButton" },
           style: {
-            width : '100%',
-            justifyContent : 'flex-end'
+            width: '100%',
+            justifyContent: 'flex-end'
           }
         },
         {
           // Patient name button
-          props: {className: "patient__button" },
+          props: { className: "patient__button" },
           style: {
             backgroundColor: 'transparent',
             color: black,
-            height : 47,
-            padding : '0 20px',
-            '&:hover' : {
-              background : blueLight,
-              opacity : '1'
+            height: 47,
+            padding: '0 20px',
+            '&:hover': {
+              background: blueLight,
+              opacity: '1'
             }
           }
         },
         {
           // Patient name button
-          props: {className: "answer__button" },
+          props: { className: "answer__button" },
           style: {
-            backgroundColor : blueDark,
-            color : 'white',
-            height : 47,
-            padding : '0 20px',
-            ":hover" : {
-              backgroundColor : blueDark,
-              opacity : '0.7',
-              boxShadow : 'none',
+            backgroundColor: blueDark,
+            color: 'white',
+            height: 47,
+            padding: '0 20px',
+            ":hover": {
+              backgroundColor: blueDark,
+              opacity: '0.7',
+              boxShadow: 'none',
             }
           }
         },
         {
-          props: {className:"remove-alarm__button" },
+          props: { className: "remove-alarm__button" },
           style: {
-            backgroundColor : blueDark,
-            color : 'white',
-            height : 47,
-            padding : '0 20px',
-            ":hover" : {
-              backgroundColor : blueDark,
-              opacity : '0.7',
-              boxShadow : 'none',
+            backgroundColor: blueDark,
+            color: 'white',
+            height: 47,
+            padding: '0 20px',
+            ":hover": {
+              backgroundColor: blueDark,
+              opacity: '0.7',
+              boxShadow: 'none',
             }
           }
         },
         {
-          props: {className:"accept__button" },
+          props: { className: "accept__button" },
           style: {
-            backgroundColor : blueDark,
-            width : 120,
-            ":hover" : {
-              backgroundColor : blueDark,
-              opacity : '0.7',
-              boxShadow : 'none',
+            backgroundColor: blueDark,
+            width: 120,
+            ":hover": {
+              backgroundColor: blueDark,
+              opacity: '0.7',
+              boxShadow: 'none',
             }
           }
         },
         {
-          props: {className:"MuiButton-containedPrimary" },
+          props: { className: "MuiButton-containedPrimary" },
           style: {
-            backgroundColor : blueDark
+            backgroundColor: blueDark
           }
         },
         {
           // Create patient button
-          props: {className: "accordion__button" },
+          props: { className: "accordion__button" },
           style: {
-            margin : 0,
-            padding : '10px 20px'
+            margin: 0,
+            padding: '10px 20px'
           }
         }
       ],
