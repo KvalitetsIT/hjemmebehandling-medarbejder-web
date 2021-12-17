@@ -200,7 +200,14 @@ const THEME = createTheme({
     },
     //=========== Autocomplete ===========//
     MuiOutlinedInput: {
+      
       styleOverrides: {
+        root : {
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: blue,
+            borderRadius: 100,
+          }
+        },
         notchedOutline: {
           borderWidth: 0,
         },
