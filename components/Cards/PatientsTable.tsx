@@ -122,6 +122,7 @@ class PatientsTable extends React.Component<Props, State> {
                     }
                 </Table>
             </TableContainer>  
+            </IsEmptyCard>
             <Box paddingTop={5}>
         <ButtonGroup>
                   <Button variant="text" className='button__page-switch' component={Link} to={"./"+previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon/></Button>
@@ -129,7 +130,7 @@ class PatientsTable extends React.Component<Props, State> {
                   <Button variant="text" className='button__page-switch' component={Link} to={"./"+nextpage} disabled={!hasMorePages}><NavigateNextIcon/></Button>
               </ButtonGroup>
         </Box> 
-                </IsEmptyCard>
+                
             </>
 
         )
