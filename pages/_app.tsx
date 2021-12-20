@@ -239,8 +239,8 @@ const THEME = createTheme({
         root: {
           borderRadius: 10,
           backgroundColor: blueDark + '!important',
-          height: 80,
-          width: 80
+          height: "100%",
+          width: "100%"
         }
       }
     },

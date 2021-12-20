@@ -148,7 +148,7 @@ export class AnswerTable extends Component<Props, State> {
                     <TableHead>
 
                         <TableRow className='table__row'>
-                            <TableCell>
+                            <TableCell width="10%">
 
                             </TableCell>
                             {questionnairesResponsesToShow.map(collection => {
