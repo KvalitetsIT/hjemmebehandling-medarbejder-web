@@ -97,7 +97,7 @@ export class QuestionChart extends Component<Props, State> {
       const fromDataset = {
         label: this.getDisplayNameFromCategory(threshold.category) + " (min)",
         data: dataFrom,
-        pointRadius: [0, 0, 0, 0, 0, 8, 0],
+        pointRadius: 0,
         fill: false,
         datalabels: {
           color: 'rgba(0,100,200,0)'
@@ -113,7 +113,7 @@ export class QuestionChart extends Component<Props, State> {
       const toDataset = {
         label: this.getDisplayNameFromCategory(threshold.category) + " (max)",
         data: dataTo,
-        pointRadius: [0, 0, 0, 0, 0, 8, 0],
+        pointRadius: 0,
         fill: false,
         datalabels: {
           color: 'rgba(0,100,200,0)'
@@ -191,9 +191,7 @@ export class QuestionChart extends Component<Props, State> {
     this.initialiszeServices();
 
     const questionnaireResponses = this.props.questionnaireResponses;
-    console.log(questionnaireResponses)
     const question = this.props.question;
-    console.log(question)
 
     const answersData: number[] = [] //Contains all numbers that should be shown in chart
     const answersLabels = [] // Contains the x-axes values (dates)
