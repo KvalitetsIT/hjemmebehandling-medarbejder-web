@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { PatientDetail } from '../../components/Models/PatientDetail';
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
-import { Divider, Grid, Stack } from '@mui/material';
+import { CardHeader, Divider, Grid, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
@@ -61,11 +61,9 @@ export class PatientCard extends Component<Props, State> {
       <Card>
 
         <CardContent>
-          <Grid container padding={2}>
-            <Grid item xs={4} paddingRight={2}>
-              <PatientAvatar patient={this.props.patient} />
-            </Grid>
-            <Grid item xs={7}>
+          <CardHeader
+            avatar={<PatientAvatar patient={this.props.patient} />}
+            title={
               <Stack>
                 <Typography>
                   {this.props.patient.firstname} {this.props.patient.lastname} <br />
@@ -75,20 +73,20 @@ export class PatientCard extends Component<Props, State> {
                   {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhone + ")" : ""}
                 </Typography>
               </Stack>
-            </Grid>
-            <Grid item xs={1}>
-
-              <ErrorBoundary>
-
-                <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
-              </ErrorBoundary>
-              <ErrorBoundary>
-                <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
-                  Er du sikker på at du ønsker at nulstille patientens adgangskode?
-                </ConfirmationButton>
-              </ErrorBoundary>
-            </Grid>
-          </Grid>
+            }
+            action={
+              <Stack>
+                <ErrorBoundary>
+                  <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
+                    Er du sikker på at du ønsker at nulstille patientens adgangskode?
+                  </ConfirmationButton>
+                </ErrorBoundary>
+              </Stack>
+            }
+          />
 
           <Divider />
           <Grid container padding={2}>

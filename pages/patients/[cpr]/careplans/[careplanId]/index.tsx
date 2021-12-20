@@ -99,7 +99,7 @@ async populateCareplans() : Promise<void>{
     console.log(activeCareplan)
     return (
       <Grid container spacing={3}>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <ErrorBoundary>
           <Stack spacing={3} >
             
@@ -111,7 +111,7 @@ async populateCareplans() : Promise<void>{
             </Stack>
             </ErrorBoundary>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={9}>
         <ErrorBoundary>
         <Stack spacing={3}>
             <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan}/>
