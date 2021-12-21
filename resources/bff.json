@@ -1746,8 +1746,17 @@
           "patientSecondaryPhone": {
             "type": "string"
           },
-          "patientPrimaryRelativeContactDetails": {
-            "$ref": "#/components/schemas/ContactDetailsDto"
+          "primaryRelativeName": {
+            "type": "string"
+          },
+          "primaryRelativeAffiliation": {
+            "type": "string"
+          },
+          "primaryRelativePrimaryPhone": {
+            "type": "string"
+          },
+          "primaryRelativeSecondaryPhone": {
+            "type": "string"
           }
         }
       },

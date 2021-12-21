@@ -195,10 +195,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     }),
                     patientPrimaryPhone: careplan?.patient.primaryPhone,
                     patientSecondaryPhone: careplan?.patient.secondaryPhone,
-                    patientPrimaryRelativeContactDetails: {
-                        primaryPhone: careplan?.patient.contact.primaryPhone,
-                        secondaryPhone: careplan?.patient.contact.secondaryPhone
-                    }
+                    primaryRelativeName: careplan?.patient.contact.fullname,
+                    primaryRelativeAffiliation: careplan?.patient.contact.affiliation,
+                    primaryRelativePrimaryPhone: careplan?.patient.contact.primaryPhone,
+                    primaryRelativeSecondaryPhone: careplan?.patient.contact.secondaryPhone,
                 }
             }
 
