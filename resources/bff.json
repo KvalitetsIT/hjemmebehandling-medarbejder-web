@@ -851,7 +851,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialUpdateCareplanRequest"
+                "$ref": "#/components/schemas/UpdateCareplanRequest"
               }
             }
           },
@@ -1714,20 +1714,40 @@
           }
         }
       },
-      "PartialUpdateCareplanRequest": {
+      "QuestionnaireFrequencyPairDto": {
         "type": "object",
         "properties": {
-          "questionnaireIds": {
+          "id": {
+            "type": "string"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/FrequencyDto"
+          }
+        }
+      },
+      "UpdateCareplanRequest": {
+        "type": "object",
+        "properties": {
+          "planDefinitionIds": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "questionnaireFrequencies": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/FrequencyDto"
+          "questionnaires": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireFrequencyPairDto"
             }
+          },
+          "patientPrimaryPhone": {
+            "type": "string"
+          },
+          "patientSecondaryPhone": {
+            "type": "string"
+          },
+          "patientPrimaryRelativeContactDetails": {
+            "$ref": "#/components/schemas/ContactDetailsDto"
           }
         }
       },

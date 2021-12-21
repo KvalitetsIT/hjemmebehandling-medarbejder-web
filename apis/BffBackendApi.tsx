@@ -28,7 +28,7 @@ import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
 import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/QuestionDto";
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
-import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
+import { QuestionnaireFrequencyPairDto } from "../generated/models/QuestionnaireFrequencyPairDto";
 import { Configuration, PatientApi, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
@@ -56,7 +56,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     personApi = new PersonApi(this.conf);
     userApi = new UserApi(this.conf);
     patientApi = new PatientApi(this.conf);
-;
+
 
     constructor() {
         super();
@@ -99,8 +99,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    
-
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             let request = {
@@ -113,6 +111,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
 
     }
+
     async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
         try {
             throw new NotImplementedError();
@@ -183,7 +182,28 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
-            throw new NotImplementedError();
+            let api = this.careplanApi
+            let request = {
+                id: careplan.id,
+                updateCareplanRequest: {
+                    planDefinitionIds: careplan.planDefinitions.map(pd => pd.id),
+                    questionnaires: careplan.questionnaires.map(q => {
+                        return {
+                            id: q.id,
+                            frequency: this.toExternal.mapFrequency(q.frequency)
+                        }
+                    }),
+                    patientPrimaryPhone: careplan?.patient.primaryPhone,
+                    patientSecondaryPhone: careplan?.patient.secondaryPhone,
+                    patientPrimaryRelativeContactDetails: {
+                        primaryPhone: careplan?.patient.contact.primaryPhone,
+                        secondaryPhone: careplan?.patient.contact.secondaryPhone
+                    }
+                }
+            }
+
+            var response = await api.patchCarePlan(request)
+            return careplan
         } catch (error: any) {
             return await this.HandleError(error)
         }
