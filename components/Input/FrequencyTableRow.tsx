@@ -49,8 +49,9 @@ export class FrequencyTableRow extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    const elevenOClock = "11:00";
     const deadlineTime = new Date(0, 0, 0, 11, 0);
-    props.questionnaire.frequency.deadline = deadlineTime.getHours() + ':' + deadlineTime.getMinutes()
+    props.questionnaire.frequency.deadline = elevenOClock
     this.state = {
       questionnaire: props.questionnaire,
       deadineTime: deadlineTime
