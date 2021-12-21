@@ -13,119 +13,108 @@ import { TextField } from '@mui/material';
 import daLocale from 'date-fns/locale/da';
 
 export interface Props {
-    questionnaire : Questionnaire
-    firstCell? : JSX.Element
-    afterChange? : () => void
+  questionnaire: Questionnaire
+  firstCell?: JSX.Element
+  afterChange?: () => void
 }
 
 export interface State {
-    questionnaire : Questionnaire
+  questionnaire: Questionnaire
+  deadineTime: Date
 }
 
 
-export class FrequencyTableRow extends Component<Props,State> {
+export class FrequencyTableRow extends Component<Props, State> {
   static displayName = FrequencyTableRow.name;
   static contextType = ApiContext
 
-  getAllDays() : DayEnum[]{
+  getAllDays(): DayEnum[] {
     return [
-        DayEnum.Monday,
-        DayEnum.Tuesday,
-        DayEnum.Wednesday,
-        DayEnum.Thursday,
-        DayEnum.Friday,
-        DayEnum.Saturday,
-        DayEnum.Sunday
-    ]
-  } 
-
-  getAllRepeated() : FrequencyEnum[]{
-    return [
-        FrequencyEnum.WEEKLY,
-        FrequencyEnum.EVERYOTHERWEEK     
+      DayEnum.Monday,
+      DayEnum.Tuesday,
+      DayEnum.Wednesday,
+      DayEnum.Thursday,
+      DayEnum.Friday,
+      DayEnum.Saturday,
+      DayEnum.Sunday
     ]
   }
 
-  constructor(props : Props){
-      super(props);
-      this.state = {
-        questionnaire : props.questionnaire
-      }
-      
+  getAllRepeated(): FrequencyEnum[] {
+    return [
+      FrequencyEnum.WEEKLY,
+      FrequencyEnum.EVERYOTHERWEEK
+    ]
   }
 
-  SetDays(daysSelected : string | DayEnum[]) : void{
-    const oldFre = this.state.questionnaire
-      oldFre.frequency.days = daysSelected as DayEnum[];
-        
-      this.setState({questionnaire : oldFre})
-      if(this.props.afterChange)
-        this.props.afterChange()
-  }
-
-  SetFrequencyTime(time : string) : void {
-    const date = new Date(time)
-    
-    if(isNaN(date.getTime())) {
-      // Not a valid date, so we just return
-      return
+  constructor(props: Props) {
+    super(props);
+    const deadlineTime = new Date(0, 0, 0, 11, 0);
+    props.questionnaire.frequency.deadline = deadlineTime.getHours() + ':' + deadlineTime.getMinutes()
+    this.state = {
+      questionnaire: props.questionnaire,
+      deadineTime: deadlineTime
     }
 
-    const oldFre = this.state.questionnaire;
-    oldFre.frequency.deadline = date.getHours() + ':' + date.getMinutes()
-    console.log(time)
-    this.setState({questionnaire : oldFre})
-      if(this.props.afterChange)
-        this.props.afterChange()
   }
 
-  SetFrequency(frequencySelected : string | FrequencyEnum):void{
+  SetDays(daysSelected: string | DayEnum[]): void {
+    const oldFre = this.state.questionnaire
+    oldFre.frequency.days = daysSelected as DayEnum[];
+
+    this.setState({ questionnaire: oldFre })
+    if (this.props.afterChange)
+      this.props.afterChange()
+  }
+
+  SetFrequency(frequencySelected: string | FrequencyEnum): void {
     const oldFre = this.state.questionnaire
     oldFre.frequency.repeated = frequencySelected as FrequencyEnum;
-      
-    this.setState({questionnaire : oldFre})
-    if(this.props.afterChange)
-     this.props.afterChange()
-}
 
-  render () : JSX.Element{
+    this.setState({ questionnaire: oldFre })
+    if (this.props.afterChange)
+      this.props.afterChange()
+  }
+
+  render(): JSX.Element {
     return (
-        <>
+      <>
         <TableRow>
-                <TableCell>
-                  <Typography>{this.props.firstCell}</Typography>
-                    
-                </TableCell>
-                <TableCell>
-                <Select onChange={(a) => this.SetDays(a.target.value)} multiple value={this.state.questionnaire.frequency.days}>
-                    {this.getAllDays().map(day=>{
-                        return (<MenuItem key={day} value={day}>{day}</MenuItem>)
-                    })}
-                </Select>
-                </TableCell>
-                <TableCell>
-                <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency.repeated}>
-              {this.getAllRepeated().map(day=>{
-                  return (<MenuItem key={day} value={day}>{day}</MenuItem>)
+          <TableCell>
+            <Typography>{this.props.firstCell}</Typography>
+
+          </TableCell>
+          <TableCell>
+            <Select onChange={(a) => this.SetDays(a.target.value)} multiple value={this.state.questionnaire.frequency.days}>
+              {this.getAllDays().map(day => {
+                return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
-          </Select>
-                </TableCell>
-                <TableCell>
-                <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
-                <TimePicker
-                  label="Seneste besvarelses tidspunkt"
-                  value={this.state.questionnaire.frequency.deadline}
-                  onChange={(newValue) => this.SetFrequencyTime(newValue!)}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                </LocalizationProvider>
-                </TableCell>
-                <TableCell>
-                  {this.props.children}
-                </TableCell>
-                </TableRow>
-          
-        </>
+            </Select>
+          </TableCell>
+          <TableCell>
+            <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency.repeated}>
+              {this.getAllRepeated().map(day => {
+                return (<MenuItem key={day} value={day}>{day}</MenuItem>)
+              })}
+            </Select>
+          </TableCell>
+          <TableCell>
+            <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
+              <TimePicker
+                disabled
+                label="Seneste besvarelses tidspunkt"
+                value={this.state.deadineTime}
+                onChange={() => { console.log("Deadline cannot be changed!") }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </TableCell>
+          <TableCell>
+            {this.props.children}
+          </TableCell>
+        </TableRow>
+
+      </>
     )
   }
 
