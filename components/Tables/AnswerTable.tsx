@@ -42,7 +42,7 @@ export class AnswerTable extends Component<Props, State> {
             thresholdModalOpen: false,
             questionnaireResponses: [],
             loading: true,
-            pagesize: 6,
+            pagesize: 5,
             page: 1
         }
     }
@@ -129,11 +129,10 @@ export class AnswerTable extends Component<Props, State> {
 
 
 
-        if (this.state.questionnaireResponses.length === this.state.pagesize)
+        if (this.state.questionnaireResponses.length >= this.state.pagesize)
             hasMorePages = true;
 
-        const questionnairesResponsesToShow = this.state.questionnaireResponses.slice(0, this.state.pagesize)
-
+        const questionnairesResponsesToShow = this.state.questionnaireResponses;
 
 
         return (<>
