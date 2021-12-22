@@ -10,4 +10,5 @@ export class PatientDetail extends PatientSimple {
     secondaryPhone? : string
     address? : Address
     contact : Contact = new Contact();
+    username? : string;
 }

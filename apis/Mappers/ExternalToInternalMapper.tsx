@@ -343,8 +343,9 @@ export default class ExternalToInternalMapper extends BaseMapper{
             address = this.buildAddress(patientDto.patientContactDetails)
         }
 
-        let contactDetails = this.buildContactDetails(patientDto)
 
+        let contactDetails = this.buildContactDetails(patientDto)
+        
         return {
             firstname: patientDto.givenName,
             lastname: patientDto.familyName,
@@ -352,7 +353,9 @@ export default class ExternalToInternalMapper extends BaseMapper{
             primaryPhone: patientDto.patientContactDetails?.primaryPhone,
             secondaryPhone: patientDto.patientContactDetails?.secondaryPhone,
             address: address,
-            contact: contactDetails
+            contact: contactDetails,
+            username : patientDto.customUserName
+
         }
     }
 

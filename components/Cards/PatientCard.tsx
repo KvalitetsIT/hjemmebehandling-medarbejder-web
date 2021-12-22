@@ -66,7 +66,8 @@ export class PatientCard extends Component<Props, State> {
             title={
               <Stack>
                 <Typography>
-                  {this.props.patient.firstname} {this.props.patient.lastname} <br />
+                  {this.props.patient.firstname} {this.props.patient.lastname} {this.props.patient.username ? " ("+this.props.patient.username+")" : ""}<br />
+                  
                   {this.props.patient.cpr?.slice(0, 6)}-{this.props.patient.cpr?.slice(6)}
                 </Typography>
                 <Typography variant="subtitle2">
