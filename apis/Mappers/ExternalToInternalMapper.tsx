@@ -14,7 +14,7 @@ import { Questionnaire } from "../../components/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
 import { Task } from "../../components/Models/Task";
 import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
-import { User } from "../../components/Models/User";
+import { EntitlementEnum, User } from "../../components/Models/User";
 import { AnswerDto, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
@@ -220,7 +220,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
         const internalUser = new User();
         internalUser.autorisationsids = user.autorisationsids;
         internalUser.email = user.email;
-        internalUser.entitlements = user.entitlements;
+        internalUser.entitlements = user.entitlements?.map(e => this.mapSingleEntitlement(e)).filter(e=>e != EntitlementEnum.UNKNOWN);
         internalUser.firstName = user.firstName;
         internalUser.fullName = user.fullName;
         internalUser.lastName = user.lastName;
@@ -229,6 +229,17 @@ export default class ExternalToInternalMapper extends BaseMapper{
         internalUser.userId = user.userId!;
         
         return internalUser;
+    }
+
+    mapSingleEntitlement(entitlement : string) : EntitlementEnum {
+        switch(entitlement){
+            case "sygeplejerske":
+                return EntitlementEnum.NURSE
+            case "sosu":
+                return EntitlementEnum.SOSU
+            default:
+                return EntitlementEnum.UNKNOWN
+        }
     }
 
     mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum) : QuestionnaireResponseStatus {
@@ -345,7 +356,7 @@ export default class ExternalToInternalMapper extends BaseMapper{
 
 
         let contactDetails = this.buildContactDetails(patientDto)
-        
+
         return {
             firstname: patientDto.givenName,
             lastname: patientDto.familyName,

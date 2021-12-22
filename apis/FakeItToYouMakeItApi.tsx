@@ -24,7 +24,7 @@ import { BaseApiError } from "./Errors/BaseApiError";
 import { NotFoundError } from "../services/Errors/NotFoundError";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
 import { ThresholdOption } from "../components/Models/ThresholdOption";
-import { User } from "../components/Models/User";
+import { EntitlementEnum, User } from "../components/Models/User";
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 import BaseApi from "./BaseApi";
 import { NotImplementedError } from "./Errors/NotImplementedError";
@@ -474,7 +474,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         user.orgId = "453071000016001";
         user.orgName = "Infektionsmedicinsk Afdeling";
         user.email = "test@rm.dk"
-        user.entitlements = ["DIAS_HJEMMEBEHANDLING_Sygeplejerske"];
+        user.entitlements = [EntitlementEnum.NURSE,EntitlementEnum.SOSU];
         user.autorisationsids = [""];
         return user;
     }

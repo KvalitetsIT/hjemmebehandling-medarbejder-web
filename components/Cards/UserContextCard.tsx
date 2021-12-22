@@ -87,10 +87,10 @@ export class UserContextCard extends Component<Props, State> {
 
   render(): JSX.Element {
     this.InitializeServices();
-    return this.state.loadingUserContextButton ? <LoadingSmallComponent/> : this.renderCard();
+    return this.state.loadingUserContextButton ? <LoadingSmallComponent /> : this.renderCard();
   }
 
-  renderCard(): JSX.Element{
+  renderCard(): JSX.Element {
     return (<>
       <div className="user__context-wrapper">
         <Button
@@ -104,7 +104,10 @@ export class UserContextCard extends Component<Props, State> {
         >
           <div>
             <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
-            <Typography className="user__context-role" align="right" variant="body2">Rolle</Typography>
+            <Typography className="user__context-role" align="right" variant="body2">
+              {this.state.user.entitlements?.join(", ")}
+            </Typography>
+
           </div>
         </Button>
         <Menu
