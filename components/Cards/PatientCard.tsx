@@ -82,6 +82,9 @@ export class PatientCard extends Component<Props, State> {
                 </ErrorBoundary>
                 <ErrorBoundary>
                   <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
+                    Brugernavn: <Typography variant='button'>{this.props.patient.username} </Typography> 
+                    <br/>
+                    <br/>
                     Er du sikker på at du ønsker at nulstille patientens adgangskode?
                   </ConfirmationButton>
                 </ErrorBoundary>
