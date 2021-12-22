@@ -29,7 +29,7 @@ import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/Qu
 import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
 import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
 import { QuestionnaireWrapperDto } from "../generated/models/QuestionnaireWrapperDto";
-import { Configuration, PatientApi, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
+import { Configuration, CustomUserApi, PatientApi, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
@@ -56,6 +56,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     personApi = new PersonApi(this.conf);
     userApi = new UserApi(this.conf);
     patientApi = new PatientApi(this.conf);
+    customUserApi = new CustomUserApi(this.conf);
 ;
 
     constructor() {
@@ -63,12 +64,19 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    
     async ResetPassword(patient: PatientDetail): Promise<void> {
-        throw new NotImplementedError();
+        try {
+            let api = this.customUserApi;
+            let request = {
+                cpr: patient.cpr!
+            }
+            await api.resetPassword(request)
+        } catch(error: any) {
+            return await this.HandleError(error)
+        }
     }
-    async CreateUser(patient: PatientDetail): Promise<User> {
-        throw new NotImplementedError();
-    }
+    
     async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
         try {
             let api = this.careplanApi

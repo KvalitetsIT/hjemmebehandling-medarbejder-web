@@ -29,14 +29,6 @@ export default class UserService extends BaseService implements IUserService {
         }
     }
 
-    async CreateUser(patient: PatientDetail): Promise<User> {
-        try {
-            return await this.backendApi.CreateUser(patient);
-        } catch (error) {
-            return this.HandleError(error);
-        }
-    }
-
     async GetActiveUser(): Promise<User> {
         try {
             return await this.backendApi.GetActiveUser();

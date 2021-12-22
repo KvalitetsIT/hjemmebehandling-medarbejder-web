@@ -111,11 +111,6 @@ export interface IBackendApi {
     GetActiveUser(): Promise<User>;
 
     /**
-     * Returns usercontext 
-     */
-    CreateUser(patient: PatientDetail): Promise<User>;
-
-    /**
      * Returns all patient careplans for one patient
      */
     GetPatientCareplans: (cpr: string) => Promise<Array<PatientCareplan>>
