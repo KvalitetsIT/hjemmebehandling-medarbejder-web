@@ -95,7 +95,7 @@ export default function MiniDrawer() : JSX.Element {
         <List >
         <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
-            <img width={30} src="/assets/images/logo.svg" alt="An SVG of an eye" />
+              <img width={30} src="/assets/images/logo.svg" alt="Hjemmebehandling" />
             </ListItemIcon>
             <ListItemText  style={{fontWeight:"bold", paddingTop:20, paddingBottom:20}} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
             </ListItem>

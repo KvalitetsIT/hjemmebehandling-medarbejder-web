@@ -102,7 +102,7 @@ export class QuestionChart extends Component<Props, State> {
         datalabels: {
           color: 'rgba(0,100,200,0)'
         },
-        order: threshold.to,
+        order: threshold.category,
         backgroundColor: this.getChipColorFromCategory(threshold.category),
         borderColor: this.getChipColorFromCategory(threshold.category)
       }
@@ -118,7 +118,7 @@ export class QuestionChart extends Component<Props, State> {
         datalabels: {
           color: 'rgba(0,100,200,0)'
         },
-        order: threshold.to,
+        order: threshold.category,
         backgroundColor: this.getChipColorFromCategory(threshold.category),
         borderColor: this.getChipColorFromCategory(threshold.category)
       }

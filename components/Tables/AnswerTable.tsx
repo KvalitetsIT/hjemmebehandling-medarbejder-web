@@ -127,8 +127,6 @@ export class AnswerTable extends Component<Props, State> {
 
         let hasMorePages = false;
 
-
-
         if (this.state.questionnaireResponses.length >= this.state.pagesize)
             hasMorePages = true;
 
@@ -137,8 +135,8 @@ export class AnswerTable extends Component<Props, State> {
 
         return (<>
             <Box className="answer__pagination-buttons" textAlign="right">
-                <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} startIcon={<NavigateBeforeIcon />}>Nyere</Button>
-                <Button disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} endIcon={<NavigateNextIcon />}>Ældre</Button>
+                <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} startIcon={<NavigateBeforeIcon />}>Ældre</Button>
+                <Button disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} endIcon={<NavigateNextIcon />}>Nyere</Button>
 
             </Box>
             <TableContainer component={Paper}>
