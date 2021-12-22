@@ -97,7 +97,7 @@ export class QuestionChart extends Component<Props, State> {
       const fromDataset = {
         label: this.getDisplayNameFromCategory(threshold.category) + " (min)",
         data: dataFrom,
-        pointRadius: 0,
+        pointRadius: 1,
         fill: false,
         datalabels: {
           color: 'rgba(0,100,200,0)'
@@ -113,7 +113,7 @@ export class QuestionChart extends Component<Props, State> {
       const toDataset = {
         label: this.getDisplayNameFromCategory(threshold.category) + " (max)",
         data: dataTo,
-        pointRadius: 0,
+        pointRadius: 1,
         fill: false,
         datalabels: {
           color: 'rgba(0,100,200,0)'
