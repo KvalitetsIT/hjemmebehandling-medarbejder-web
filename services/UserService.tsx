@@ -2,11 +2,11 @@
 
 import React from "react";
 import { IBackendApi } from "../apis/IBackendApi";
-import { Answer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
-import { CategoryEnum } from "../components/Models/CategoryEnum";
-import { PatientDetail } from "../components/Models/PatientDetail";
-import { Person } from "../components/Models/Person";
-import { User } from "../components/Models/User";
+import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { UserContext } from "../generated";
 import { PersonDto } from "../generated/models/PersonDto";
 import BaseService from "./BaseService";

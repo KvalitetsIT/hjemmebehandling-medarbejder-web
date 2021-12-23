@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { PatientDetail } from '../../components/Models/PatientDetail';
+import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Stack } from '@mui/material';

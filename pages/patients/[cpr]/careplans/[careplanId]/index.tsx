@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Grid, Stack } from '@mui/material';
 import { PatientCard } from '../../../../../components/Cards/PatientCard';
-import { PatientCareplan } from '../../../../../components/Models/PatientCareplan';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import ApiContext from '../../../../_context';
 import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
 import ICareplanService from '../../../../../services/interfaces/ICareplanService';
@@ -10,7 +10,7 @@ import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
-import { QuestionnaireResponse } from '../../../../../components/Models/QuestionnaireResponse';
+import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 

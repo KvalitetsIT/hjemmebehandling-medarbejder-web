@@ -3,16 +3,16 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import { PatientCareplan } from '../Models/PatientCareplan';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { Alert, CardHeader, Grid, GridSize, Typography } from '@mui/material';
-import { Questionnaire } from '../Models/Questionnaire';
-import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
-import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
-import { NumberAnswer } from '../Models/Answer';
-import { Question, QuestionTypeEnum } from '../Models/Question';
-import { QuestionChart } from '../Charts/QuestionChart';
+import { NumberAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
+import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { QuestionChart } from '@kvalitetsit/hjemmebehandling/Charts/QuestionChart';
 import { ThresholdSlider } from './ThresholdSlider';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
@@ -121,8 +121,8 @@ export class ObservationCard extends Component<Props, State> {
                                 <CardHeader subheader={question.question} />
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ?
-                                        <QuestionChart thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> :
-                                        <QuestionChart thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} />
+                                        <QuestionChart  thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} dateHelper={this.dateHelper} /> :
+                                        <QuestionChart thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} dateHelper={this.dateHelper} />
                                     }
                                 </CardContent>
                             </Card>

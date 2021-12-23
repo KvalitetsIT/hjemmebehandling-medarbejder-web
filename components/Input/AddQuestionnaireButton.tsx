@@ -7,10 +7,10 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
-import { Questionnaire } from '../Models/Questionnaire';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import CloseIcon from '@mui/icons-material/Close';
-import { PatientCareplan } from '../Models/PatientCareplan';
-import { PlanDefinition } from '../Models/PlanDefinition';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 
 export interface Props {
     careplan : PatientCareplan

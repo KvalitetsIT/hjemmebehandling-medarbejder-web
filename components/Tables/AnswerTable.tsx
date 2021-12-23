@@ -1,17 +1,17 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { CategoryEnum } from '../Models/CategoryEnum';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
 import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
-import { Questionnaire } from '../Models/Questionnaire';
-import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { PatientCareplan } from '../Models/PatientCareplan';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 

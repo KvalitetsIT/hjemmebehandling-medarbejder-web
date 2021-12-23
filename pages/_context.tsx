@@ -11,16 +11,16 @@ import IPatientService from '../services/interfaces/IPatientService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import QuestionnaireService from '../services/QuestionnaireService';
 import PatientService from '../services/PatientService';
-import IDateHelper from '../globalHelpers/interfaces/IDateHelper';
-import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import DanishDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DanishDateHelper';
 import IPersonService from '../services/interfaces/IPersonService';
 import PersonService from '../services/PersonService';
 import UserService from '../services/UserService';
 import IUserService from '../services/interfaces/IUserService';
 import ValidationService from '../services/ValidationService';
 import IValidationService from '../services/interfaces/IValidationService';
-import { ICollectionHelper } from '../globalHelpers/interfaces/ICollectionHelper';
-import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
+import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
+import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
 
 interface IApiContext {
     questionnaireService : IQuestionnaireService

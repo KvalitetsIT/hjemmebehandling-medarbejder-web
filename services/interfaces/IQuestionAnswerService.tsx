@@ -1,10 +1,10 @@
 import React from "react";
-import { Answer } from "../../components/Models/Answer";
-import { CategoryEnum } from "../../components/Models/CategoryEnum";
-import { Question } from "../../components/Models/Question";
-import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
-import { ThresholdNumber } from "../../components/Models/ThresholdNumber";
-import { ThresholdOption } from "../../components/Models/ThresholdOption";
+import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 
 
 

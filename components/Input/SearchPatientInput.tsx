@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { Autocomplete, Button, CircularProgress, InputAdornment, Stack, TextField } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { Typography } from '@material-ui/core';
-import { PatientSimple } from '../Models/PatientSimple';
+import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
 import IPatientService from '../../services/interfaces/IPatientService';
 import { Link } from 'react-router-dom';
 

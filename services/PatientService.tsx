@@ -2,13 +2,13 @@
 
 import React from "react";
 import { IBackendApi } from "../apis/IBackendApi";
-import { Answer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
-import { CategoryEnum } from "../components/Models/CategoryEnum";
-import { PatientCareplan } from "../components/Models/PatientCareplan";
-import { PatientDetail } from "../components/Models/PatientDetail";
-import { PatientSimple } from "../components/Models/PatientSimple";
-import { Question } from "../components/Models/Question";
-import { QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
+import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { QuestionnaireResponse } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import BaseService from "./BaseService";
 import ICareplanService from "./interfaces/ICareplanService";
 import IPatientService from "./interfaces/IPatientService";

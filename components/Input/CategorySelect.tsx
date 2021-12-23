@@ -4,7 +4,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import { Chip } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { CategoryEnum } from '../Models/CategoryEnum';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 
 export interface Props {
     category : CategoryEnum

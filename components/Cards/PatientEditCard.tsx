@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Tooltip } from '@mui/material';
-import { PatientDetail } from '../Models/PatientDetail';
+import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { CriticalLevelEnum, InvalidInputModel } from '../../services/Errors/InvalidInputError';
-import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
+import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { Address } from '../Models/Address';
+import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { NotFoundError } from '../../services/Errors/NotFoundError';
 import {ToastError} from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 

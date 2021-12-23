@@ -1,5 +1,5 @@
 import React from "react";
-import { PatientCareplan } from "../../components/Models/PatientCareplan";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 
 
 

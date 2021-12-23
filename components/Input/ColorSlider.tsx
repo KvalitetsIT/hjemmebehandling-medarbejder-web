@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Slider } from '@material-ui/core';
-import { CategoryEnum } from '../Models/CategoryEnum';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 
 export interface Props {
     category : CategoryEnum

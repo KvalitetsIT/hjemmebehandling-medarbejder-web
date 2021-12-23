@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import { Avatar } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { PatientDetail } from '../Models/PatientDetail';
+import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 
 export interface Props {
     patient : PatientDetail

@@ -8,14 +8,14 @@ import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
 
-import DanishDateHelper from '../globalHelpers/danishImpl/DanishDateHelper';
+import DanishDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
 import { IBackendApi } from '../apis/IBackendApi';
 import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
-import { CollectionHelper } from '../globalHelpers/danishImpl/CollectionHelper';
+import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'

@@ -1,6 +1,6 @@
 import React from "react";
-import { PatientDetail } from "../../components/Models/PatientDetail";
-import { User } from "../../components/Models/User";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 
 export default interface IUserService {
     ResetPassword : (patient: PatientDetail) => Promise<void>;

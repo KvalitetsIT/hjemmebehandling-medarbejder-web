@@ -4,11 +4,11 @@ import Stack from '@mui/material/Stack';
 import { Card, Checkbox, Skeleton } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
-import { Contact } from '../Models/Contact';
+import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
 import IValidationService from '../../services/interfaces/IValidationService';
-import { ICollectionHelper } from '../../globalHelpers/interfaces/ICollectionHelper';
+import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 
 export interface Props {
     initialContact : Contact

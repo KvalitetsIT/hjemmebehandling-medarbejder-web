@@ -1,6 +1,6 @@
-import { CategoryEnum } from "../../components/Models/CategoryEnum";
-import { ThresholdNumber } from "../../components/Models/ThresholdNumber";
-import { ThresholdOption } from "../../components/Models/ThresholdOption";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 
 export default class BaseMapper{
     CreateOption(id : string, value : string,category : CategoryEnum) : ThresholdOption{

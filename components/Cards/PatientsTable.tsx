@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup, Card, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import * as React from 'react';
 import { LoadingBackdropComponent } from '../../components/Layout/LoadingBackdropComponent';
-import { PatientDetail } from '../../components/Models/PatientDetail';
+import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import IPatientService from '../../services/interfaces/IPatientService';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';

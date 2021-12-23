@@ -1,14 +1,14 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { CategoryEnum } from '../Models/CategoryEnum';
-import { TaskType } from '../Models/TaskType';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { TaskType } from '@kvalitetsit/hjemmebehandling/Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
-import { Task } from '../Models/Task';
+import { Task } from '@kvalitetsit/hjemmebehandling/Models/Task';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import FhirUtils from '../../util/FhirUtils';
-import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 
 export interface Props {

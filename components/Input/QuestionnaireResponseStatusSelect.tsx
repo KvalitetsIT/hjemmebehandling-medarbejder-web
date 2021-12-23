@@ -2,12 +2,12 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Component } from 'react';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
-import { CategoryEnum } from '../Models/CategoryEnum';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 
 export interface Props {
     questionnaireResponse : QuestionnaireResponse

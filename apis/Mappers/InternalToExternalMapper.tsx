@@ -1,10 +1,10 @@
-import { Contact } from "../../components/Models/Contact";
-import { DayEnum, Frequency } from "../../components/Models/Frequency";
-import { PatientCareplan } from "../../components/Models/PatientCareplan";
-import { PatientDetail } from "../../components/Models/PatientDetail";
-import { PlanDefinition } from "../../components/Models/PlanDefinition";
-import { Questionnaire } from "../../components/Models/Questionnaire";
-import { QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
+import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionnaireWrapperDto } from "../../generated/models";
 import BaseMapper from "./BaseMapper";
 

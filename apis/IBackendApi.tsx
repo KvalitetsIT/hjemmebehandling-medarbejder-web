@@ -1,15 +1,15 @@
-import { PatientCareplan } from "../components/Models/PatientCareplan";
-import { CategoryEnum } from "../components/Models/CategoryEnum";
-import { PatientDetail } from "../components/Models/PatientDetail";
-import { PatientSimple } from "../components/Models/PatientSimple";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
-import { Questionnaire } from "../components/Models/Questionnaire";
-import { Task } from "../components/Models/Task";
-import { ThresholdNumber } from "../components/Models/ThresholdNumber";
-import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Person } from "../components/Models/Person";
-import { ThresholdOption } from "../components/Models/ThresholdOption";
-import { User } from "../components/Models/User";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
+import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 
 export interface IBackendApi {
     /**

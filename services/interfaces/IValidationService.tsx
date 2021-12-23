@@ -1,5 +1,5 @@
 import React from "react";
-import { PlanDefinition } from "../../components/Models/PlanDefinition";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { InvalidInputModel } from "../Errors/InvalidInputError";
 
 export default interface IValidationService {

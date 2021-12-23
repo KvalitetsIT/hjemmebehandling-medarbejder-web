@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 import { Component } from 'react';
 import { Chip, Stack, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { Question } from '../Models/Question';
-import { CategoryEnum } from '../Models/CategoryEnum';
-import { ThresholdNumber } from '../Models/ThresholdNumber';
+import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
 
 export interface Props {
     question : Question

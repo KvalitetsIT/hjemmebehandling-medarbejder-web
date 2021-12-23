@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { ThumbnailCard } from './ThumbnailCard';
-import { PatientCareplan } from '../Models/PatientCareplan';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PatientAvatar } from '../Avatars/PatientAvatar';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ApiContext from '../../pages/_context';
-import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { Link } from 'react-router-dom';
 
 export interface Props {

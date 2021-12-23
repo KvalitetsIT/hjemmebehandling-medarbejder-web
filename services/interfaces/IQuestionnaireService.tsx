@@ -1,12 +1,12 @@
 import React from "react";
-import { Answer } from "../../components/Models/Answer";
-import { CategoryEnum } from "../../components/Models/CategoryEnum";
-import { PatientCareplan } from "../../components/Models/PatientCareplan";
-import { PlanDefinition } from "../../components/Models/PlanDefinition";
-import { Question } from "../../components/Models/Question";
-import { Questionnaire } from "../../components/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
-import { Task } from "../../components/Models/Task";
+import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
+import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 
 export default interface IQuestionnaireService {
     

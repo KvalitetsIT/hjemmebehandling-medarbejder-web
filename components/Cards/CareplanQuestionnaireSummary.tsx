@@ -2,13 +2,13 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import { PatientCareplan } from '../Models/PatientCareplan';
+import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { BasicTabs } from '../Layout/Tabs';
-import { Questionnaire } from '../Models/Questionnaire';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Button, Grid, Stack, Typography } from '@mui/material';
-import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
+import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
-import IDateHelper from '../../globalHelpers/interfaces/IDateHelper';
+import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 

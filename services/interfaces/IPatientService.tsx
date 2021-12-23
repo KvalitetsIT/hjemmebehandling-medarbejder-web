@@ -1,7 +1,7 @@
 import React from "react";
-import { PatientCareplan } from "../../components/Models/PatientCareplan";
-import { PatientDetail } from "../../components/Models/PatientDetail";
-import { PatientSimple } from "../../components/Models/PatientSimple";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
 
 
 

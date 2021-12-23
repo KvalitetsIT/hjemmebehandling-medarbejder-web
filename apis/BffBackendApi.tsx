@@ -1,16 +1,16 @@
-import { Address } from "../components/Models/Address";
-import { Answer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
-import { CategoryEnum } from "../components/Models/CategoryEnum";
-import { Contact } from "../components/Models/Contact";
-import { Frequency, FrequencyEnum, DayEnum } from "../components/Models/Frequency";
-import { PatientCareplan } from "../components/Models/PatientCareplan";
-import { PatientDetail } from "../components/Models/PatientDetail";
-import { PlanDefinition } from "../components/Models/PlanDefinition";
-import { Question, QuestionTypeEnum } from "../components/Models/Question";
-import { Questionnaire } from "../components/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
-import { Task } from "../components/Models/Task";
-import { ThresholdNumber } from "../components/Models/ThresholdNumber";
+import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
+import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { Frequency, FrequencyEnum, DayEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
+import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
+import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
+import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 
 import { IBackendApi } from "./IBackendApi";
 
@@ -34,12 +34,12 @@ import { Configuration, CustomUserApi, PatientApi, PlanDefinitionApi, ThresholdD
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "./BaseApi";
 import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
-import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { NotImplementedError } from "./Errors/NotImplementedError";
-import { Person } from "../components/Models/Person";
-import { User } from "../components/Models/User";
-import PersonContact from "../components/Models/PersonContact";
-import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 
