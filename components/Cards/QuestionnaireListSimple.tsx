@@ -6,7 +6,7 @@ import { Component } from 'react';
 import { PatientCareplan } from '../Models/PatientCareplan';
 import { Questionnaire } from '../Models/Questionnaire';
 import { FrequencyTableRow } from '../Input/FrequencyTableRow';
-import { ErrorBoundary } from '../Layout/ErrorBoundary';
+import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 export interface Props {
     careplan : PatientCareplan

@@ -1,6 +1,6 @@
 import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError";
 import { BaseApiError } from "./../apis/Errors/BaseApiError"
-import { BaseServiceError } from "./Errors/BaseServiceError";
+import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { BadRequestError } from "./Errors/BadRequestError";
 import { NotCorrectRightsError } from "./Errors/NotCorrectRightsError";
 import { NotFoundError } from "./Errors/NotFoundError";

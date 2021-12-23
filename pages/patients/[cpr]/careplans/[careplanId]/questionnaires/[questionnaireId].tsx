@@ -12,7 +12,7 @@ import { Questionnaire } from '../../../../../../components/Models/Questionnaire
 import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
 import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
-import { ErrorBoundary } from '../../../../../../components/Layout/ErrorBoundary';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 
 interface State {

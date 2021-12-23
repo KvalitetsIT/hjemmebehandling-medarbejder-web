@@ -8,7 +8,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { LoadingSmallComponent } from '../../components/Layout/LoadingSmallComponent';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
-import IsEmptyCard from '../Layout/IsEmptyCard';
+import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard'
 
 interface State {
     pageSize: number,

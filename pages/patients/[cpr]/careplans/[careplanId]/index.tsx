@@ -12,7 +12,7 @@ import { ObservationCard } from '../../../../../components/Cards/ObservationCard
 import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
 import { QuestionnaireResponse } from '../../../../../components/Models/QuestionnaireResponse';
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
-import { ErrorBoundary } from '../../../../../components/Layout/ErrorBoundary';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 interface State {
   

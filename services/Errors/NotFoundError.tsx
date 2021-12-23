@@ -1,4 +1,4 @@
-import { BaseServiceError } from "./BaseServiceError";
+import {BaseServiceError} from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 
 export class NotFoundError extends BaseServiceError {
     displayMessage() {

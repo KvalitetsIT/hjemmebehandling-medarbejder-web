@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { TaskType } from '../components/Models/TaskType';
 import { Tasklist } from '../components/Tables/Tasklist';
 function Patients() : JSX.Element{

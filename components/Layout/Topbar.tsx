@@ -2,7 +2,7 @@ import { Box, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 import { UserContextCard } from '../Cards/UserContextCard';
-import { ErrorBoundary } from './ErrorBoundary';
+import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 export interface State {
   drawerIsOpen: boolean
 }

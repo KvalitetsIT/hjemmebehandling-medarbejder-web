@@ -10,7 +10,7 @@ import CreatePatient from '../../pages/createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
-import { ErrorBoundary } from './ErrorBoundary';
+import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 
 export interface State {

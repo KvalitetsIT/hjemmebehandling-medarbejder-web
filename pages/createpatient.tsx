@@ -18,11 +18,11 @@ import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import ICareplanService from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
-import { ErrorBoundary } from '../components/Layout/ErrorBoundary';
+import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
 import { AccordionActions } from '@mui/material';
-import { BaseServiceError } from '../services/Errors/BaseServiceError';
-import { ToastError } from '../components/Alerts/ToastError';
+import {BaseServiceError} from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
+import {ToastError} from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 
 export interface Accordians{
   PatientIsOpen : boolean

@@ -14,7 +14,7 @@ import { ConfirmationButton } from '../Input/ConfirmationButton';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import ApiContext from '../../pages/_context';
 import IUserService from '../../services/interfaces/IUserService';
-import { ErrorBoundary } from '../Layout/ErrorBoundary';
+import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 export interface Props {
   patient: PatientDetail
 

@@ -18,8 +18,7 @@ import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { QuestionnaireAlreadyOnCareplan } from "../services/Errors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 import { UserContext } from "../generated";
-
-import { BaseServiceError } from "../services/Errors/BaseServiceError";
+import {BaseServiceError} from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { BaseApiError } from "./Errors/BaseApiError";
 import { NotFoundError } from "../services/Errors/NotFoundError";
 import { ThresholdCollection } from "../components/Models/ThresholdCollection";
