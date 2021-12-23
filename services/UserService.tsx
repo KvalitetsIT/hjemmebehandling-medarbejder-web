@@ -9,7 +9,7 @@ import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { UserContext } from "../generated";
 import { PersonDto } from "../generated/models/PersonDto";
-import BaseService from "./BaseService";
+import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import IPersonService from "./interfaces/IPersonService";
 import IUserService from "./interfaces/IUserService";
 

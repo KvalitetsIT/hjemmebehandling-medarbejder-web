@@ -8,7 +8,7 @@ import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import IValidationService from '../../services/interfaces/IValidationService';
-import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 
 export interface Props {
     careplan : PatientCareplan

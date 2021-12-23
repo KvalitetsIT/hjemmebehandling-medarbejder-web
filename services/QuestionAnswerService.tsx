@@ -7,7 +7,7 @@ import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import BaseService from "./BaseService";
+import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
 
 export default class QuestionAnswerService extends BaseService implements IQuestionAnswerService {

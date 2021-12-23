@@ -1,12 +1,6 @@
-import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
-import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
-import { Frequency, FrequencyEnum, DayEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
@@ -18,27 +12,14 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { AnswerDto } from "../generated/models/AnswerDto";
-import { CarePlanDto } from "../generated/models/CarePlanDto";
-import { ContactDetailsDto } from "../generated/models/ContactDetailsDto";
-import { FrequencyDto, FrequencyDtoWeekdaysEnum } from "../generated/models/FrequencyDto";
-import { PatientDto } from "../generated/models/PatientDto";
-import { PersonDto } from "../generated/models/PersonDto";
-import { PlanDefinitionDto } from "../generated/models/PlanDefinitionDto";
-import { QuestionDto, QuestionDtoQuestionTypeEnum } from "../generated/models/QuestionDto";
-import { PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum } from "../generated/models/PartialUpdateQuestionnaireResponseRequest";
-import { QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum } from "../generated/models/QuestionnaireResponseDto";
-import { QuestionnaireFrequencyPairDto } from "../generated/models/QuestionnaireFrequencyPairDto";
-import { Configuration, CustomUserApi, PatientApi, PlanDefinitionApi, ThresholdDto, ThresholdDtoTypeEnum, UserApi, UserContext } from "../generated";
+import { Configuration, CustomUserApi, ErrorDtoFromJSON, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
-import BaseApi from "./BaseApi";
-import { FakeItToYouMakeItApi } from "./FakeItToYouMakeItApi";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { NotImplementedError } from "./Errors/NotImplementedError";
+import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
+
+import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
@@ -57,10 +38,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     userApi = new UserApi(this.conf);
     patientApi = new PatientApi(this.conf);
     customUserApi = new CustomUserApi(this.conf);
-
-
     constructor() {
-        super();
+        super((json : string) => ErrorDtoFromJSON(json)); // Super(..) takes an argument that converts json to an error
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }

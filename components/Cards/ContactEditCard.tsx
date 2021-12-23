@@ -6,7 +6,7 @@ import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
-import { InvalidInputModel } from '../../services/Errors/InvalidInputError';
+import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 

@@ -5,7 +5,7 @@ import { IBackendApi } from "../apis/IBackendApi";
 import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import BaseService from "./BaseService";
+import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import IPersonService from "./interfaces/IPersonService";
 
 export default class PersonService extends BaseService implements IPersonService {

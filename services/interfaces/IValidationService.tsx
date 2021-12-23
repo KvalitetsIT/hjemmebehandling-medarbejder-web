@@ -1,6 +1,6 @@
 import React from "react";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { InvalidInputModel } from "../Errors/InvalidInputError";
+import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 
 export default interface IValidationService {
     ValidateCPR : (cpr : string) => Promise<InvalidInputModel[]>

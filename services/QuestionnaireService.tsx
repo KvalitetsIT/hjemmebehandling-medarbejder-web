@@ -8,8 +8,8 @@ import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import BaseService from "./BaseService";
-import { InvalidInputError, InvalidInputModel } from "./Errors/InvalidInputError";
+import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import { InvalidInputError, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService extends BaseService implements IQuestionnaireService {

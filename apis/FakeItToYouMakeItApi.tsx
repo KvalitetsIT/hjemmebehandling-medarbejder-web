@@ -15,18 +15,18 @@ import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 
-import { QuestionnaireAlreadyOnCareplan } from "../services/Errors/QuestionnaireAlreadyOnCareplan";
+import { QuestionnaireAlreadyOnCareplan } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
-import { UserContext } from "../generated";
+import { ErrorDtoFromJSON, UserContext } from "../generated";
 import {BaseServiceError} from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
-import { BaseApiError } from "./Errors/BaseApiError";
-import { NotFoundError } from "../services/Errors/NotFoundError";
+import { BaseApiError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseApiError";
+import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { EntitlementEnum, User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
-import BaseApi from "./BaseApi";
-import { NotImplementedError } from "./Errors/NotImplementedError";
+import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
+import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -61,7 +61,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     task2: Task = new Task();
 
     constructor() {
-        super();
+        super((json : string) => ErrorDtoFromJSON(json)); // Super(..) takes an argument that converts json to an error
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"

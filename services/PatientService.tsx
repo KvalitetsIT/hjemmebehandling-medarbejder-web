@@ -9,7 +9,7 @@ import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { QuestionnaireResponse } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import BaseService from "./BaseService";
+import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import ICareplanService from "./interfaces/ICareplanService";
 import IPatientService from "./interfaces/IPatientService";
 import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
