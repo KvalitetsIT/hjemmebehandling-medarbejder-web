@@ -44,7 +44,7 @@ export class CareplanSummary extends Component<Props,{}> {
             <CardHeader subheader={
             <>
             Monitoreringsplan 
-            <Button component={Link} to={"/patients/"+careplan.patient.cpr+"/edit/plandefinition"}>
+            <Button component={Link} to={"/patients/"+careplan.patient?.cpr+"/edit/plandefinition"}>
                 <ModeEditOutlineIcon fontSize="inherit"/> 
             </Button>
             </>
@@ -56,7 +56,7 @@ export class CareplanSummary extends Component<Props,{}> {
                             Afdeling
                         </Typography>
                         <Typography>
-                            {careplan.department}
+                            {careplan.organization?.name}
                         </Typography>
                         <br/>
                         <Typography variant="caption">
@@ -70,7 +70,7 @@ export class CareplanSummary extends Component<Props,{}> {
                             Opstart
                         </Typography>
                         <Typography>
-                            {this.dateHelper.DateToString( careplan.creationDate)}
+                            {careplan.creationDate ? this.dateHelper.DateToString(careplan.creationDate) : ""}
                         </Typography>
                         <br/>
                             <ConfirmationButton color="error" title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>

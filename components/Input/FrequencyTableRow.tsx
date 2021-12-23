@@ -51,7 +51,7 @@ export class FrequencyTableRow extends Component<Props, State> {
     super(props);
     const elevenOClock = "11:00";
     const deadlineTime = new Date(0, 0, 0, 11, 0);
-    props.questionnaire.frequency.deadline = elevenOClock
+    props.questionnaire!.frequency!.deadline = elevenOClock
     this.state = {
       questionnaire: props.questionnaire,
       deadineTime: deadlineTime
@@ -61,7 +61,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
   SetDays(daysSelected: string | DayEnum[]): void {
     const oldFre = this.state.questionnaire
-    oldFre.frequency.days = daysSelected as DayEnum[];
+    oldFre.frequency!.days = daysSelected as DayEnum[];
 
     this.setState({ questionnaire: oldFre })
     if (this.props.afterChange)
@@ -70,7 +70,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
   SetFrequency(frequencySelected: string | FrequencyEnum): void {
     const oldFre = this.state.questionnaire
-    oldFre.frequency.repeated = frequencySelected as FrequencyEnum;
+    oldFre.frequency!.repeated = frequencySelected as FrequencyEnum;
 
     this.setState({ questionnaire: oldFre })
     if (this.props.afterChange)
@@ -86,14 +86,14 @@ export class FrequencyTableRow extends Component<Props, State> {
 
           </TableCell>
           <TableCell>
-            <Select onChange={(a) => this.SetDays(a.target.value)} multiple value={this.state.questionnaire.frequency.days}>
+            <Select onChange={(a) => this.SetDays(a.target.value)} multiple value={this.state.questionnaire.frequency!.days}>
               {this.getAllDays().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
             </Select>
           </TableCell>
           <TableCell>
-            <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency.repeated}>
+            <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency!.repeated}>
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}

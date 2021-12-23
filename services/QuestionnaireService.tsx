@@ -101,7 +101,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     
     findAnswer(desiredQuestion : Question, questionResponses : QuestionnaireResponse) : Answer | undefined {
         let answer : Answer | undefined;
-        questionResponses.questions.forEach( (responseAnswer,responseQuestion) => {
+        questionResponses.questions!.forEach( (responseAnswer,responseQuestion) => {
             if(responseQuestion.isEqual(desiredQuestion)){
                 answer = responseAnswer;
                 return; //Return out of foreach-function
@@ -113,7 +113,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
         let questions : Question[] = [];
         questionResponses.forEach(singleResponse => {
-            let iterator = singleResponse.questions.entries();
+            let iterator = singleResponse.questions!.entries();
             let element = iterator.next();
             while(!element.done){
                 

@@ -39,7 +39,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     patientApi = new PatientApi(this.conf);
     customUserApi = new CustomUserApi(this.conf);
     constructor() {
-        super((json : string) => ErrorDtoFromJSON(json)); // Super(..) takes an argument that converts json to an error
+        super();
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
@@ -89,7 +89,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             let request = {
-                id : careplan.id
+                id : careplan.id!
             }
             await this.careplanApi.completeCarePlan(request)
             return careplan;
@@ -171,21 +171,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             let api = this.careplanApi
             let request = {
-                id: careplan.id,
+                id: careplan.id!,
                 updateCareplanRequest: {
                     planDefinitionIds: careplan.planDefinitions.map(pd => pd.id),
                     questionnaires: careplan.questionnaires.map(q => {
                         return {
                             id: q.id,
-                            frequency: this.toExternal.mapFrequency(q.frequency)
+                            frequency: this.toExternal.mapFrequency(q.frequency!)
                         }
                     }),
-                    patientPrimaryPhone: careplan?.patient.primaryPhone,
-                    patientSecondaryPhone: careplan?.patient.secondaryPhone,
-                    primaryRelativeName: careplan?.patient.contact.fullname,
-                    primaryRelativeAffiliation: careplan?.patient.contact.affiliation,
-                    primaryRelativePrimaryPhone: careplan?.patient.contact.primaryPhone,
-                    primaryRelativeSecondaryPhone: careplan?.patient.contact.secondaryPhone,
+                    patientPrimaryPhone: careplan?.patient?.primaryPhone,
+                    patientSecondaryPhone: careplan?.patient?.secondaryPhone,
+                    primaryRelativeName: careplan?.patient?.contact.fullname,
+                    primaryRelativeAffiliation: careplan?.patient?.contact.affiliation,
+                    primaryRelativePrimaryPhone: careplan?.patient?.contact.primaryPhone,
+                    primaryRelativeSecondaryPhone: careplan?.patient?.contact.secondaryPhone,
                 }
             }
 

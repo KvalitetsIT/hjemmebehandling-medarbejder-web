@@ -29,13 +29,14 @@ export class CareplanSelectorCard extends Component<Props,State> {
                 <Stack>
             {this.props.careplans.map(careplan => {
                 return (
-                    <Button variant="text" component={Link} to={careplan.id} disabled={this.props.activeCareplan.id === careplan.id}>
+                    <Button variant="text" component={Link} to={"" + careplan?.id} disabled={this.props.activeCareplan?.id === careplan?.id}>
+                        
                         <Stack alignItems="center">
                         {careplan.planDefinitions.map(planDefinition => {
                             return (
                                 <>
                                 {careplan.terminationDate ? 
-                                <Typography variant="caption" >{careplan.creationDate.toLocaleDateString()} - {careplan.terminationDate?.toLocaleDateString()}</Typography>
+                                <Typography variant="caption" >{careplan.creationDate?.toLocaleDateString()} - {careplan.terminationDate?.toLocaleDateString()}</Typography>
                                 :
                                 <Typography variant="caption" >Igangværende</Typography>
                                 }

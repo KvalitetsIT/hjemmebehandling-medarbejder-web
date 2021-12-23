@@ -40,7 +40,7 @@ clickedButton(careplan : PatientCareplan) : void{
 
     return (
         <Stepper activeStep={1} alternativeLabel>
-        {this.props.careplans.sort( (a,b) => b.creationDate.getTime() - a.creationDate.getTime()).map(careplan => {
+        {this.props.careplans.sort( (a,b) => b.creationDate!.getTime() - a.creationDate!.getTime()).map(careplan => {
     return (
         
             <Step>
@@ -48,7 +48,7 @@ clickedButton(careplan : PatientCareplan) : void{
                     <Button onClick={()=>this.clickedButton(careplan)} component={Link} to={"./"+careplan.id} disabled={activeCareplan.id === careplan.id ? true : false} variant="outlined">
                     {careplan.planDefinitions.map(x=>x.name + ", ")}
                     <br/>
-                    {careplan.creationDate.toLocaleDateString()} - {careplan.terminationDate ? careplan.terminationDate.toLocaleDateString() : ""}
+                    {careplan.creationDate!.toLocaleDateString()} - {careplan.terminationDate ? careplan.terminationDate.toLocaleDateString() : ""}
                     <br/>
                     </Button>
                 </StepLabel>

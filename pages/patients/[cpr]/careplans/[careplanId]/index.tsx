@@ -72,7 +72,7 @@ async populateCareplans() : Promise<void>{
     const questionnaireIds : string[] = careplans.flatMap(x=>x.questionnaires.map(x=>x.id))
   
     const careplan = careplans.find(a => !a.terminationDate)!
-    activeCareplanId = careplan?.id
+    activeCareplanId = careplan!.id!
     const questionnaireResponses : QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId,questionnaireIds,1,5)
     this.setState({
       loading : false,  
@@ -104,7 +104,7 @@ async populateCareplans() : Promise<void>{
           <Stack spacing={3} >
             
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses}/>
-                <PatientCard patient={activeCareplan.patient}></PatientCard>
+                <PatientCard patient={activeCareplan.patient!}></PatientCard>
                 <ErrorBoundary>
                   <CareplanSummary careplan={activeCareplan}></CareplanSummary>
                 </ErrorBoundary>

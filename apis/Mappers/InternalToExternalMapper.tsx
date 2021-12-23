@@ -16,7 +16,7 @@ export default class InternalToExternalMapper extends BaseMapper{
             let carePlanDto = {
                 id: "dummy",
                 title: "Ny behandlingsplan", // TODO - set a title ...
-                patientDto: this.mapPatient(carePlan.patient),
+                patientDto: this.mapPatient(carePlan.patient!),
                 questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
                 planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
             }
@@ -89,7 +89,7 @@ export default class InternalToExternalMapper extends BaseMapper{
                     id: questionnaire.id,
                     title: questionnaire.name
                 },
-                frequency: this.mapFrequency(questionnaire.frequency)
+                frequency: this.mapFrequency(questionnaire.frequency!)
             }
        
     }

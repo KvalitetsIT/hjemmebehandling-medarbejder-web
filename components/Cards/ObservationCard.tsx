@@ -42,11 +42,12 @@ export class ObservationCard extends Component<Props, State> {
     initialiseServices(): void {
         this.questionnaireService = this.context.questionnaireService;
         this.dateHelper = this.context.dateHelper;
+        console.log(this.dateHelper)
     }
 
     async componentDidMount(): Promise<void> {
         try {
-            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan.id, [this.props.questionnaire.id], 1, 5)
+            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 5)
             //console.log(responses)
             //console.log(this.props.questionnaire.thresholds)
             this.setState({ questionnaireResponses: responses, loading: false })
@@ -58,7 +59,7 @@ export class ObservationCard extends Component<Props, State> {
     findObservationQuestions(questionnaireResponse: QuestionnaireResponse): Question[] {
         console.log(questionnaireResponse)
         const questions: Question[] = [];
-        questionnaireResponse.questions.forEach((answer, question) => {
+        questionnaireResponse.questions!.forEach((answer, question) => {
             const numberAnswer: boolean = answer instanceof NumberAnswer;
             if (numberAnswer) {
                 questions.push(question)
@@ -88,7 +89,7 @@ export class ObservationCard extends Component<Props, State> {
         const allQuestions: Question[] = [];
 
         if (this.state.questionnaireResponses.length > 0) {
-            const questionIterator = this.state.questionnaireResponses[0].questions.keys()
+            const questionIterator = this.state.questionnaireResponses[0].questions!.keys()
             let question = questionIterator.next()
 
             while (!question.done) {
@@ -107,12 +108,11 @@ export class ObservationCard extends Component<Props, State> {
         }
 
         let counter = 0
-
         return (
             <Grid container >
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
-                    const threshold = this.props.questionnaire.thresholds.find(x => x.questionId == question.Id)
+                    const threshold = this.props.questionnaire!.thresholds!.find(x => x.questionId == question.Id)
                     console.log(question.Id)
                     console.log(threshold)
                     return (
@@ -121,8 +121,8 @@ export class ObservationCard extends Component<Props, State> {
                                 <CardHeader subheader={question.question} />
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ?
-                                        <QuestionChart  thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} dateHelper={this.dateHelper} /> :
-                                        <QuestionChart thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} dateHelper={this.dateHelper} />
+                                        <QuestionChart dateToString={(date: Date) => this.dateHelper.DateToString(date)} thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> :
+                                        <QuestionChart dateToString={(date: Date) => this.dateHelper.DateToString(date)} thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} />
                                     }
                                 </CardContent>
                             </Card>

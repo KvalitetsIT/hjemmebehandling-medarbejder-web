@@ -69,7 +69,7 @@ export class AnswerTable extends Component<Props, State> {
     async populateData(page: number): Promise<void> {
         this.setState({ loading: true })
         const careplan = this.props.careplan
-        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan.id, [this.props.questionnaires.id], page, this.state.pagesize)
+        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.pagesize)
         this.setState({ questionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
         this.setState({ questionnaireResponses: questionnaireResponses, page: page, loading: false })
 
@@ -119,7 +119,7 @@ export class AnswerTable extends Component<Props, State> {
             return (
                 <>
                     <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>
-                    <Typography variant="caption">Spørgeskemaet besvares {questionaire.frequency.ToString()}</Typography>
+                    <Typography variant="caption">Spørgeskemaet besvares {questionaire.frequency!.ToString()}</Typography>
                 </>
             )
         }
@@ -191,7 +191,7 @@ export class AnswerTable extends Component<Props, State> {
 
                                         {questionnairesResponsesToShow.map(questionResponse => {
                                             const answer = this.questionnaireService.findAnswer(question, questionResponse);
-                                            const thresholdCollection = this.props.questionnaires.thresholds.find(x => x.questionId == question.Id);
+                                            const thresholdCollection = this.props.questionnaires.thresholds!.find(x => x.questionId == question.Id);
                                             const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
                                             return (
                                                 <TableCell>

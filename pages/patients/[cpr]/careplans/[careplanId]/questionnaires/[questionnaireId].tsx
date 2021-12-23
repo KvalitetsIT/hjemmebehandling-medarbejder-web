@@ -92,7 +92,7 @@ async populateCareplans() : Promise<void> {
         <BasicTabs 
             idOfStartTab={this.props.match.params.questionnaireId}
             tabIds={questionnaires.map(x=>x.id)}
-            tabLabels={questionnaires.map(x=>x.name)}
+            tabLabels={questionnaires!.map(x=>x!.name!)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(currentCareplan!,x))}
             class="questionnaire__tab"
             >

@@ -36,11 +36,11 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
         <BasicTabs 
             idOfStartTab={questionnaires[0].id}
             tabIds={questionnaires.map(x=>x.id)}
-            tabLabels={questionnaires.map(x=>x.name)}
+            tabLabels={questionnaires.map(x=>x!.name!)}
             tabContent={questionnaires.map(x=>this.renderQuestionnaireResponseTab(x))}
             class=""
             >
-            <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/edit/plandefinition"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
+            <Button component={Link} to={"/patients/"+this.props.careplan?.patient?.cpr+"/edit/plandefinition"}><ModeEditOutlineIcon fontSize="inherit"/> </Button>
 
             
           </BasicTabs>
@@ -75,13 +75,13 @@ export class CareplanQuestionnaireSummary extends Component<Props,{}> {
                 Frekvens
             </Typography>
             <Typography>
-            {questionnaire.frequency.ToString()}
+            {questionnaire.frequency!.ToString()}
             </Typography>
            </Stack>
         </Grid>
         <Grid item xs={2}>
         <Stack>
-           <Button component={Link} to={"/patients/"+this.props.careplan.patient.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelser</Button>        
+           <Button component={Link} to={"/patients/"+this.props.careplan?.patient?.cpr+"/questionnaires/"+questionnaire.id} variant="contained">Se besvarelser</Button>        
            </Stack>
         </Grid>
       </Grid>

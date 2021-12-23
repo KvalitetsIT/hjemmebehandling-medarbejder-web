@@ -27,6 +27,7 @@ import { EntitlementEnum, User } from "@kvalitetsit/hjemmebehandling/Models/User
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
+import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -61,7 +62,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     task2: Task = new Task();
 
     constructor() {
-        super((json : string) => ErrorDtoFromJSON(json)); // Super(..) takes an argument that converts json to an error
+        super();
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
@@ -163,7 +164,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
-        this.careplan1.department = "Infektionssygdomme";
+        this.careplan1.organization = new SimpleOrganization();
+        this.careplan1.organization.name = "Infektionssygdomme";
         this.careplan1.planDefinitions = [this.planDefinition1]
         this.careplan1.creationDate = this.CreateDate()
         this.careplan1.questionnaires = [this.questionnaire1]
@@ -172,7 +174,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         //======================================= careplan1
         this.careplan2.id = "plan2"
         this.careplan2.patient = this.patient1;
-        this.careplan2.department = "Infektionssygdomme";
+        this.careplan1.organization = new SimpleOrganization();
+        this.careplan1.organization.name = "Infektionssygdomme";
         this.careplan2.planDefinitions = [this.planDefinition1]
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
@@ -347,7 +350,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
         try {
             await new Promise(f => setTimeout(f, this.timeToWait))
-        return carePlan.id
+        return carePlan.id!
         } catch (error) {
             return await this.HandleError(error)
         }
@@ -480,7 +483,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
 
-        return [this.careplan1, this.careplan2].filter(x => x.patient.cpr == cpr);
+        return [this.careplan1, this.careplan2].filter(x => x.patient!.cpr == cpr);
     }
 
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {

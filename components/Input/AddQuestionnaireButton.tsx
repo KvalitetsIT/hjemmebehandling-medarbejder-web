@@ -68,7 +68,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
             <Autocomplete
             autoComplete
             groupBy={(option) => option.planDefinition.name}
-            getOptionLabel={(option) => option.questionnaire.name}
+            getOptionLabel={(option) => option.questionnaire!.name!}
             options={options}
             
             sx={{ width: 300 }}

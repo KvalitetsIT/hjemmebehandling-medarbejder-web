@@ -104,7 +104,7 @@ async submitPatient() : Promise<void>{
 
       if(this.props.editmode){
         const editedCareplan = await this.careplanService.SetCareplan(this.state.careplan)
-        careplanId = editedCareplan.id
+        careplanId = editedCareplan.id!
       } else {
         const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
         careplanId = newCareplanId

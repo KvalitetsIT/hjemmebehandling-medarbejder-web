@@ -12,6 +12,7 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
+import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { EntitlementEnum, User } from "@kvalitetsit/hjemmebehandling/Models/User";
@@ -36,7 +37,8 @@ export default class ExternalToInternalMapper extends BaseMapper{
         }
         carePlan.creationDate = carePlanDto.created
         carePlan.terminationDate = carePlanDto.endDate
-        carePlan.department = carePlanDto?.departmentName ?? 'Ukendt afdeling   '
+        carePlan.organization = new SimpleOrganization();
+        carePlan.organization.name = carePlanDto?.departmentName ?? 'Ukendt afdeling   '
 
         return carePlan
     }
