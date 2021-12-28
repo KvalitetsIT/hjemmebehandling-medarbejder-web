@@ -47,7 +47,7 @@ export class ObservationCard extends Component<Props, State> {
 
     async componentDidMount(): Promise<void> {
         try {
-            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 5)
+            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50)
             //console.log(responses)
             //console.log(this.props.questionnaire.thresholds)
             this.setState({ questionnaireResponses: responses, loading: false })
