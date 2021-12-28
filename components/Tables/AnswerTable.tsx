@@ -91,7 +91,7 @@ export class AnswerTable extends Component<Props, State> {
         this.forceUpdate()
     }
 
-    getChipColorFromCategory(category: CategoryEnum): "error" | "warning" | "primary" | "default" | "success" {
+    getChipColorFromCategory(category: CategoryEnum): "error" | "warning" | "primary" | "default" | "success"{
         if (category === CategoryEnum.RED)
             return "error"
         if (category === CategoryEnum.YELLOW)
@@ -195,7 +195,11 @@ export class AnswerTable extends Component<Props, State> {
                                             const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
                                             return (
                                                 <TableCell>
-                                                    <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
+                                                    {category == CategoryEnum.BLUE ? 
+                                                    <Typography textAlign="center"> {answer ? answer.ToString() : "" }</Typography>:
+                                                    <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /> 
+                                                }
+                                                   
                                                 </TableCell>
                                             )
                                         })}

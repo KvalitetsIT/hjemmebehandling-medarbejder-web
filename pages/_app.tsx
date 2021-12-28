@@ -403,7 +403,6 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 30,
-          color: 'white',
           fontsize: 11
         },
         label: {
