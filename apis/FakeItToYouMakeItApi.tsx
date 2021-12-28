@@ -1,5 +1,5 @@
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
-import { Answer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { Answer, BooleanAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
@@ -53,6 +53,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     question1: Question = new Question();
     question2: Question = new Question();
     question3: Question = new Question();
+    question4: Question = new Question();
 
     tc1 = new ThresholdCollection();
     tc2 = new ThresholdCollection();
@@ -106,6 +107,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question3.Id = "q3";
         this.question3.question = "Hvor frisk føler du dig i dag (Fra 0-100, hvor 100 er det højeste)?"
         this.question3.type = QuestionTypeEnum.INTEGER;
+
+        this.question4.Id = "q4";
+        this.question4.question = "Har du det godt i dag?"
+        this.question4.type = QuestionTypeEnum.BOOLEAN;
 
         //======================================= questionnaire
         this.questionnaire1.id = "qn1"
@@ -193,6 +198,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
+        questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
         this.questionnaireResponse1.questions = questionAnswerMap1;
 
 
@@ -208,6 +214,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(35, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(10, UnitType.NOUNIT));
+        questionAnswerMap2.set(this.question4, this.CreateBooleanAnswer(true));
         this.questionnaireResponse2.questions = questionAnswerMap2;
 
         //======================================= Response // QuestionResponse3
@@ -222,6 +229,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(90, UnitType.NOUNIT));
+        questionAnswerMap3.set(this.question4, this.CreateBooleanAnswer(true));
         this.questionnaireResponse3.questions = questionAnswerMap3;
         //======================================= Response // QuestionResponse4
         this.questionnaireResponse4.id = "qr4"
@@ -235,6 +243,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![2].option));
         questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(42, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(100, UnitType.NOUNIT));
+        questionAnswerMap4.set(this.question4, this.CreateBooleanAnswer(true));
+
         this.questionnaireResponse4.questions = questionAnswerMap4;
         //======================================= Response // QuestionResponse5
         this.questionnaireResponse5.id = "qr5"
@@ -248,6 +258,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![2].option));
         questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
+        questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(true));
         this.questionnaireResponse5.questions = questionAnswerMap5;
 
 
@@ -391,6 +402,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         let answer = new NumberAnswer();
         answer.answer = value;
         answer.unit = unit;
+        return answer;
+
+    }
+    private CreateBooleanAnswer(value: boolean) {
+        let answer = new BooleanAnswer();
+        answer.answer = value;
         return answer;
 
     }
