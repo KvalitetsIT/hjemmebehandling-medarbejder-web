@@ -27,10 +27,10 @@ import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
     conf: Configuration = new Configuration({ basePath: '/api/proxy' });
-    
+
     toInternal: ExternalToInternalMapper;
     toExternal: InternalToExternalMapper;
-    
+
     careplanApi = new CarePlanApi(this.conf)
     planDefinitionApi = new PlanDefinitionApi(this.conf)
     questionnaireResponseApi = new QuestionnaireResponseApi(this.conf);
@@ -43,7 +43,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
-    
+
     async ResetPassword(patient: PatientDetail): Promise<void> {
         try {
             let api = this.customUserApi;
@@ -51,12 +51,12 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 cpr: patient.cpr!
             }
             await api.resetPassword(request)
-        } catch(error: any) {
+        } catch (error: any) {
             return await this.HandleError(error)
         }
     }
-    
-    async GetPatients(includeActive: boolean, page : number, pageSize : number) : Promise<PatientDetail[]>{
+
+    async GetPatients(includeActive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         try {
             let api = this.careplanApi
             let request = {
@@ -68,7 +68,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             let carePlans = await api.searchCarePlans(request)
             return carePlans.map(cp => this.toInternal.mapPatientDto(cp.patientDto!));
-        } catch(error: any) {
+        } catch (error: any) {
             return await this.HandleError(error)
         }
     }
@@ -89,7 +89,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             let request = {
-                id : careplan.id!
+                id: careplan.id!
             }
             await this.careplanApi.completeCarePlan(request)
             return careplan;
@@ -318,12 +318,17 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         console.log("cp-id: " + careplanId);
         try {
             let api = this.questionnaireResponseApi
-            let request = { carePlanId: careplanId, questionnaireIds: questionnaireIds }
+            let request = {
+                carePlanId: careplanId,
+                questionnaireIds: questionnaireIds,
+                pageNumber: page,
+                pageSize: pagesize
+            }
             let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
 
             return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
         } catch (error: any) {
-            return await  this.HandleError(error)
+            return await this.HandleError(error)
         }
 
     }
