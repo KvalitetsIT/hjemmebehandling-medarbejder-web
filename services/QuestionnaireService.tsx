@@ -23,7 +23,13 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number) : Promise<QuestionnaireResponse[]>{
     try{
       this.ValidatePagination(page,pagesize);
-      return await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
+      let toReturn = await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
+      toReturn.sort((a,b) => {
+        if(a.answeredTime && b.answeredTime)
+          return a.answeredTime.getTime() - b.answeredTime.getTime();
+        return -1;
+      })
+      return toReturn;
     } catch(error : any){
       return this.HandleError(error);
     }
