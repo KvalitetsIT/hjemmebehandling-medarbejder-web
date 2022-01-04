@@ -152,25 +152,6 @@ const THEME = createTheme({
         }
       ]
     },
-    //=========== Tabs ===========//
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          borderBottom: '3px solid #f2f2f2',
-          padding: 20
-
-        }
-      },
-      variants: [
-        {
-          props: { className: 'questionnaire__tab' },
-          style: {
-            margin: '-20px -20px 0 -20px',
-            color: black
-          }
-        }
-      ]
-    },
     //=========== Input ===========//
     MuiInput: {
       styleOverrides: {

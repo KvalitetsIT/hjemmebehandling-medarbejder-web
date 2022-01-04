@@ -5,68 +5,82 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, Divider, Grid } from '@mui/material';
 
 export interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
+  children?: React.ReactNode;
+  index: number;
+  value: number;
 }
 
 export interface BasicTabsProps {
   idOfStartTab?: string;
-  tabLabels : string[]
-  tabIds : string[]
-  tabContent : JSX.Element[]
-  class : string
+  tabLabels: string[]
+  tabIds: string[]
+  tabContent: JSX.Element[]
+  class: string
 }
 export interface BasicTabsState {
-    value : number
+  value: number
 }
 
-export class BasicTabs extends Component<BasicTabsProps,BasicTabsState> {
+export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
   static displayName = BasicTabs.name;
 
-constructor(props : BasicTabsProps){
+  constructor(props: BasicTabsProps) {
     super(props);
     const startTabIndex = props.idOfStartTab !== undefined ? props.tabIds.indexOf(props.idOfStartTab) : 0;
     this.state = {
-        value : startTabIndex
+      value: startTabIndex
     }
-}
+  }
 
-  handleChange = (event: React.SyntheticEvent, newValue: number) : void => {
-    this.setState({value : newValue})
+  handleChange = (event: React.SyntheticEvent, newValue: number): void => {
+    this.setState({ value: newValue })
   };
 
-  render () : JSX.Element{
-        let indexTabPanelCounterLabel = 0;
-        let indexTabPanelCounterContent = 0;
-        return (
-            <>
-                    <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example" TabIndicatorProps={{style: {display: "none"}, }}>
-                        {this.props.tabLabels.map(tabLabel => {
-                            return (
-                                <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={tabLabel}  />
-                            )
-                        })}
-                        {this.props.children}
-                    </Tabs>
-            
-                    {this.props.tabContent.map(content => {
-                            
-                            return (
-                                <this.TabPanel value={this.state.value} index={indexTabPanelCounterContent++}>
-                                {content}
-                              </this.TabPanel>
-                            )
-                        })}
-            </>
-              );
+  render(): JSX.Element {
+    let indexTabPanelCounterLabel = 0;
+    let indexTabPanelCounterContent = 0;
+    return (
+      <>
+        <Card>
+
+          <CardHeader sx={{paddingTop:1, paddingLeft:2, paddingBottom:0}} title={
+            <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example" TabIndicatorProps={{ style: { display: "none" }, }}>
+              {this.props.tabLabels.map(tabLabel => {
+                return (
+                  <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={tabLabel} />
+                )
+              })}
+              {this.props.children}
+            </Tabs>
+
+          } />
+          <Divider />
+          <CardContent>
+            <Grid container paddingLeft={2}paddingTop={2}  paddingRight={2}>
+              <Grid item xs={12}>
+                {this.props.tabContent.map(content => {
+
+                  return (
+                    <this.TabPanel value={this.state.value} index={indexTabPanelCounterContent++}>
+                      {content}
+                    </this.TabPanel>
+                  )
+                })}
+              </Grid>
+            </Grid>
+          </CardContent>
+
+        </Card>
+      </>
+    );
   }
 
 
-  TabPanel(props: TabPanelProps) : JSX.Element{
-  
+  TabPanel(props: TabPanelProps): JSX.Element {
+
     return (
       <div
         role="tabpanel"
