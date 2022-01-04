@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { Alert, CardHeader, Grid, GridSize, Typography } from '@mui/material';
+import { Alert, CardHeader, Divider, Grid, GridSize, Typography } from '@mui/material';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
@@ -119,6 +119,7 @@ export class ObservationCard extends Component<Props, State> {
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                             <Card>
                                 <CardHeader subheader={question.question} />
+                                <Divider/>
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ?
                                         <QuestionChart dateToString={(date: Date) => this.dateHelper.DateToString(date)} thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> :
@@ -128,6 +129,7 @@ export class ObservationCard extends Component<Props, State> {
                             </Card>
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={question.question + " - Alarmgrænser"} />
+                                <Divider/>
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
                                 </CardContent>
