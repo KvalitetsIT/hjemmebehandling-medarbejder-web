@@ -12,7 +12,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CustomUserApi, ErrorDtoFromJSON, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
+import { Configuration, ErrorDtoFromJSON, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -37,7 +37,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     personApi = new PersonApi(this.conf);
     userApi = new UserApi(this.conf);
     patientApi = new PatientApi(this.conf);
-    customUserApi = new CustomUserApi(this.conf);
     constructor() {
         super();
         this.toInternal = new ExternalToInternalMapper();
@@ -46,7 +45,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async ResetPassword(patient: PatientDetail): Promise<void> {
         try {
-            let api = this.customUserApi;
+            let api = this.patientApi;
             let request = {
                 cpr: patient.cpr!
             }
