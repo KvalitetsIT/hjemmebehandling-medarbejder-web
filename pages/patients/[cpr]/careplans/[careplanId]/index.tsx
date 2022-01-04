@@ -99,7 +99,7 @@ class PatientCareplans extends React.Component<Props, State> {
     console.log(activeCareplan)
     return (
       <Grid container spacing={3}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <ErrorBoundary>
             <Stack spacing={3} >
 
@@ -111,7 +111,7 @@ class PatientCareplans extends React.Component<Props, State> {
             </Stack>
           </ErrorBoundary>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <ErrorBoundary>
 
             <Grid container spacing={2}>
