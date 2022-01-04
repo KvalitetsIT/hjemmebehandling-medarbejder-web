@@ -8,7 +8,7 @@ export interface Props {
     value? : string;
     id? : string;
     required : boolean;
-    disabled : boolean;
+    disabled? : boolean;
     uniqueId : number;
 
     label : string;

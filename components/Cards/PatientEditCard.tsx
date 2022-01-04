@@ -181,6 +181,7 @@ export class PatientEditCard extends Component<Props, State> {
               <Stack direction="row" spacing={3}>
                 <TextFieldValidation
                   id="cprInput"
+                  disabled={this.state.patient.cpr ? true : false}
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={inputId++}
                   validate={(cpr) => this.validationService.ValidateCPR(cpr)}
