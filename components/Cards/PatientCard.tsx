@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
-import { CardHeader, Divider, Grid, Stack } from '@mui/material';
+import { CardHeader, Divider, Grid, Stack, Typography } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -15,6 +15,7 @@ import ApiContext from '../../pages/_context';
 import IUserService from '../../services/interfaces/IUserService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { PencilIcon } from '../Icons/PencilIcon';
+import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 export interface Props {
   patient: PatientDetail
 
@@ -79,7 +80,7 @@ export class PatientCard extends Component<Props, State> {
               <Stack>
                 <ErrorBoundary>
                   <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                    <PencilIcon color='#1976d2'/>
+                    <PencilIcon color='#1976d2' />
                   </Button>
                 </ErrorBoundary>
                 <ErrorBoundary>
@@ -97,20 +98,29 @@ export class PatientCard extends Component<Props, State> {
           <Divider />
           <Grid container padding={2}>
             <Grid item xs={12}>
-              <Typography variant="subtitle2">
-                {this.props.patient.address?.street}<br />
-                {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br />
-                {this.props.patient.address?.country}
+              <Typography variant="button">
+                Addresse
               </Typography>
-              <br />
+              <IsEmptyCard object={this.props.patient.address} jsxWhenEmpty="Ingen addresse">
+
+                <Typography variant="subtitle2">
+                  {this.props.patient.address?.street}<br />
+                  {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br />
+                  {this.props.patient.address?.country}
+                </Typography>
+
+                <br />
+              </IsEmptyCard>
               <Typography variant="button">
                 Kontakt
               </Typography>
-              <Typography variant="subtitle2">
-                {contact.fullname} {contact.affiliation ? "(" + contact.affiliation + ")" : ""}
-                <br />
-                {contact.primaryPhone} {contact.secondaryPhone ? "(" + contact.secondaryPhone + ")" : ""}<br />
-              </Typography>
+              <IsEmptyCard object={contact} jsxWhenEmpty="Ingen kontakter">
+                <Typography variant="subtitle2">
+                  {contact?.fullname} {contact?.affiliation ? "(" + contact.affiliation + ")" : ""}
+                  <br />
+                  {contact?.primaryPhone} {contact?.secondaryPhone ? "(" + contact.secondaryPhone + ")" : ""}<br />
+                </Typography>
+              </IsEmptyCard>
             </Grid>
           </Grid>
 

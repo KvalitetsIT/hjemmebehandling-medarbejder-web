@@ -125,8 +125,8 @@ export default class InternalToExternalMapper extends BaseMapper{
             familyName: patient.lastname,
             cpr: patient.cpr,
             patientContactDetails: contactDetails,
-            primaryRelativeName: patient?.contact.fullname,
-            primaryRelativeAffiliation: patient?.contact.affiliation,
+            primaryRelativeName: patient?.contact?.fullname,
+            primaryRelativeAffiliation: patient?.contact?.affiliation,
             primaryRelativeContactDetails: primaryRelativeContactDetails
         }
     }

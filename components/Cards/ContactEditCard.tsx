@@ -11,7 +11,7 @@ import IValidationService from '../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 
 export interface Props {
-    initialContact : Contact
+    initialContact? : Contact
     onValidation? : (error : InvalidInputModel[]) => void
 }
 
@@ -29,7 +29,7 @@ export class ContactEditCard extends Component<Props,State> {
 
   constructor(props : Props){
       super(props);
-      this.state = {loading : true, contact : props.initialContact}
+      this.state = {loading : true, contact : props.initialContact ?? new Contact()}
       this.modifyPatient = this.modifyPatient.bind(this);
   }
 

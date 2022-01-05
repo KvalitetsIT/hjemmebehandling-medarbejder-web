@@ -44,7 +44,7 @@ export class PatientContextThumbnails extends Component<Props, {}> {
               </ThumbnailCard>
             </Link>
 
-            {patient!.contact.primaryContact ?
+            {patient!.contact?.primaryContact ?
               <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
                 <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large" />}>
                   <Typography className="thumbnail__subheader">{patient!.contact.fullname}</Typography>
