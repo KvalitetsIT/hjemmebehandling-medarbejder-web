@@ -543,6 +543,12 @@ const THEME = createTheme({
       },
       variants: [
         {
+          props: {className:"darkColor", color : "error"},
+          style:{
+            color : red
+          }
+        },
+        {
           // Profile button accordion__button
           props: { className: "profileButton" },
           style: {

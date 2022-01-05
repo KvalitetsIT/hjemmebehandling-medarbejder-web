@@ -74,7 +74,7 @@ export class CareplanSummary extends Component<Props,{}> {
                             {careplan.creationDate ? this.dateHelper.DateToString(careplan.creationDate) : ""}
                         </Typography>
                         <br/>
-                            <ConfirmationButton color="error" title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
+                            <ConfirmationButton color="error" className='darkColor' title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
                             Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
                             </ConfirmationButton>
                     </Grid>
