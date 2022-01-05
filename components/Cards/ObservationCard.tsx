@@ -8,12 +8,12 @@ import { Alert, CardHeader, Divider, Grid, GridSize, Typography } from '@mui/mat
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
+import {ThresholdSlider} from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { QuestionChart } from '@kvalitetsit/hjemmebehandling/Charts/QuestionChart';
-import { ThresholdSlider } from './ThresholdSlider';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
