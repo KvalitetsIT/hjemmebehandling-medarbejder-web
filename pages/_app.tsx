@@ -18,7 +18,7 @@ import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
@@ -127,23 +127,23 @@ const THEME = createTheme({
     }
   },
   components: {
-    MuiTypography : {
-      variants : [
+    MuiTypography: {
+      variants: [
         {
-          props:{className : "labelTextTab"},
-          style : {
-            color : black,
-            textTransform : "none",
-            
+          props: { className: "labelTextTab" },
+          style: {
+            color: black,
+            textTransform: "none",
+
           }
         }
       ]
     },
-    MuiDivider : {
-      styleOverrides : {
-        root : {
-          borderColor : mainBackground,
-          borderBottomWidth : "thick"
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderColor: mainBackground,
+          borderBottomWidth: "thick"
         }
       }
     },
@@ -201,9 +201,9 @@ const THEME = createTheme({
     },
     //=========== Autocomplete ===========//
     MuiOutlinedInput: {
-      
+
       styleOverrides: {
-        root : {
+        root: {
 
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: blue,
@@ -228,9 +228,9 @@ const THEME = createTheme({
           }
         }
       ],
-      styleOverrides : {
-        root : {
-          "fieldset" : {borderWidth : 0},
+      styleOverrides: {
+        root: {
+          "fieldset": { borderWidth: 0 },
         }
       }
     },
@@ -320,18 +320,18 @@ const THEME = createTheme({
         },
         // Unread answer alerts
         {
-          props: { severity: 'success', className:"darkColor" },
+          props: { severity: 'success', className: "darkColor" },
           style: {
             backgroundColor: green
           },
         },
         {
-          props: { severity: 'warning' ,className:"darkColor"},
+          props: { severity: 'warning', className: "darkColor" },
           style: {
             backgroundColor: yellow,
           },
         }, {
-          props: { severity: 'error',className:"darkColor"},
+          props: { severity: 'error', className: "darkColor" },
           style: {
             backgroundColor: red,
           },
@@ -413,21 +413,21 @@ const THEME = createTheme({
       },
       variants: [
         {
-          props : {className: "darkColor", color : "error"},
-          style : {
-            backgroundColor : red
+          props: { className: "darkColor", color: "error" },
+          style: {
+            backgroundColor: red
           }
         },
         {
-          props : {className: "darkColor", color : "warning"},
-          style : {
-            backgroundColor : yellow
+          props: { className: "darkColor", color: "warning" },
+          style: {
+            backgroundColor: yellow
           }
         },
         {
-          props : {className: "darkColor", color : "success"},
-          style : {
-            backgroundColor : green
+          props: { className: "darkColor", color: "success" },
+          style: {
+            backgroundColor: green
           }
         },
         {
@@ -581,11 +581,16 @@ const THEME = createTheme({
       },
       variants: [
         {
-          props: {className:"darkColor border", color : "error"},
-          style:{
-            color : red,
-            borderColor : red,
-            borderWidth : "2px"
+          props: { className: "darkColor border", color: "error" },
+          style: {
+            color: red,
+            borderColor: red,
+            borderWidth: "2px",
+            ":hover": {
+              color: red,
+              borderColor: red,
+              borderWidth: "2px",
+            }
           }
         },
         {
