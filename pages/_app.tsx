@@ -531,7 +531,6 @@ const THEME = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          border: 'none',
           borderRadius: 30,
           textTransform: 'capitalize',
           fontWeight: 'bold',
