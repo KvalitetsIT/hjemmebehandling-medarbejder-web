@@ -569,9 +569,11 @@ const THEME = createTheme({
       },
       variants: [
         {
-          props: {className:"darkColor", color : "error"},
+          props: {className:"darkColor border", color : "error"},
           style:{
-            color : red
+            color : red,
+            borderColor : red,
+            borderWidth : "2px"
           }
         },
         {

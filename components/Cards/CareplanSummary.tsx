@@ -68,7 +68,7 @@ export class CareplanSummary extends Component<Props, {}> {
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <ConfirmationButton fullWidth color="error" className='darkColor' title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
+                            <ConfirmationButton fullWidth color="error" className='darkColor border' title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
                                 Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
                             </ConfirmationButton>
                         </Grid>
