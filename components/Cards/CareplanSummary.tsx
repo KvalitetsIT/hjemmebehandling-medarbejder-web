@@ -1,4 +1,3 @@
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -11,6 +10,7 @@ import ApiContext from '../../pages/_context';
 import { Link } from 'react-router-dom';
 import ICareplanService from '../../services/interfaces/ICareplanService';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
+import { PencilIcon } from '../Icons/PencilIcon';
 
 export interface Props {
     careplan : PatientCareplan
@@ -45,7 +45,7 @@ export class CareplanSummary extends Component<Props,{}> {
             <>
             Monitoreringsplan 
             <Button component={Link} to={"/patients/"+careplan.patient?.cpr+"/edit/plandefinition"}>
-                <ModeEditOutlineIcon fontSize="inherit"/> 
+                <PencilIcon/>
             </Button>
             </>
             }/>

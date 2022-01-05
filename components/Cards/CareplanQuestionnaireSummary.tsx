@@ -8,7 +8,7 @@ import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/Ques
 import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import { PencilIcon } from '../Icons/PencilIcon';
 
 export interface Props {
   careplan: PatientCareplan
@@ -38,7 +38,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
               tabContent={questionnaires.map(x => this.renderQuestionnaireResponseTab(x))}
               class=""
             >
-              <Button component={Link} to={"/patients/" + this.props.careplan?.patient?.cpr + "/edit/plandefinition"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
+              <Button component={Link} to={"/patients/" + this.props.careplan?.patient?.cpr + "/edit/plandefinition"}><PencilIcon/> </Button>
 
 
             </BasicTabs>

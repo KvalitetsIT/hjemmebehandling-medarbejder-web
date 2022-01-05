@@ -1,3 +1,4 @@
 export interface BaseIconProps {
-    color: string
+    color?: string
+    fontSize? : string
 }
