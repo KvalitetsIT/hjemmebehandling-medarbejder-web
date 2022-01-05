@@ -10,6 +10,7 @@ export interface Props {
   title: string
   buttonText: JSX.Element | string
   className: string
+  fullWidth : boolean
 
   color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   variant: "outlined" | "contained" | "text"
@@ -28,7 +29,8 @@ export class ConfirmationButton extends Component<Props, State> {
   public static defaultProps = {
     color: "inherit",
     variant: "outlined",
-    className: ""
+    className: "",
+    fullWidth : false
   };
 
   constructor(props: Props) {
@@ -64,7 +66,7 @@ export class ConfirmationButton extends Component<Props, State> {
     return (
       <>
         <Tooltip title={this.props.title}>
-          <Button className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
+          <Button fullWidth={this.props.fullWidth} className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
         </Tooltip>
         <Dialog
           open={this.state.openConfirmationBox}

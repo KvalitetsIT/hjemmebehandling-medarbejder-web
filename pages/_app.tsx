@@ -127,6 +127,14 @@ const THEME = createTheme({
     }
   },
   components: {
+    MuiDivider : {
+      styleOverrides : {
+        root : {
+          borderColor : mainBackground,
+          borderBottomWidth : "thick"
+        }
+      }
+    },
     //=========== Grid ===========//
     MuiGrid: {
       styleOverrides: {

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 
 import { Grid, Stack } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
@@ -87,8 +85,6 @@ async populateCareplans() : Promise<void> {
 <Stack spacing={2}>
         <PatientContextThumbnails currentCareplan={currentCareplan!}/>
         
-        <Card>
-        <CardContent>
         <BasicTabs 
             idOfStartTab={this.props.match.params.questionnaireId}
             tabIds={questionnaires.map(x=>x.id)}
@@ -99,8 +95,6 @@ async populateCareplans() : Promise<void> {
               
           </BasicTabs>
         
-        </CardContent>
-        </Card>
         
       </Stack>
   </Grid>

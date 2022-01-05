@@ -61,7 +61,7 @@ export class PatientCard extends Component<Props, State> {
     return (
       <Card>
 
-        <CardContent>
+        
           <CardHeader
             avatar={<PatientAvatar patient={this.props.patient} />}
             title={
@@ -96,7 +96,8 @@ export class PatientCard extends Component<Props, State> {
           />
 
           <Divider />
-          <Grid container padding={2}>
+          <CardContent>
+          <Grid container>
             <Grid item xs={12}>
               <Typography variant="button">
                 Addresse
