@@ -13,6 +13,7 @@ import { CareplanUnreadResponse } from '../../../../../components/Alerts/Carepla
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 
 interface State {
 
@@ -105,6 +106,7 @@ class PatientCareplans extends React.Component<Props, State> {
 
               <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
               <PatientCard patient={activeCareplan.patient!}></PatientCard>
+              <LoginInfoCard patient={activeCareplan.patient!} />
               <ErrorBoundary>
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
               </ErrorBoundary>
@@ -122,7 +124,7 @@ class PatientCareplans extends React.Component<Props, State> {
                 <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan} />
               </Grid>
             </Grid>
-            
+
           </ErrorBoundary>
         </Grid>
 

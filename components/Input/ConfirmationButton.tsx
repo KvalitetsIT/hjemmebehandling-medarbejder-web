@@ -11,6 +11,7 @@ export interface Props {
   buttonText: JSX.Element | string
   className: string
   fullWidth : boolean
+  disabled? : boolean 
 
   color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   variant: "outlined" | "contained" | "text"
@@ -66,7 +67,7 @@ export class ConfirmationButton extends Component<Props, State> {
     return (
       <>
         <Tooltip title={this.props.title}>
-          <Button fullWidth={this.props.fullWidth} className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
+          <Button disabled={this.props.disabled} fullWidth={this.props.fullWidth} className={this.props.className} onClick={async () => this.OpenVerificationBox()} color={this.props.color} variant={this.props.variant}>{this.props.buttonText}</Button>
         </Tooltip>
         <Dialog
           open={this.state.openConfirmationBox}
@@ -84,7 +85,7 @@ export class ConfirmationButton extends Component<Props, State> {
           </DialogContent>
           <DialogActions>
             <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>Nej</Button>
-            <LoadingButton loading={this.state.doingAction} className="accept__button" color="primary" variant="contained" onClick={async () => await this.doAction()} >
+            <LoadingButton  loading={this.state.doingAction} className="accept__button" color="primary" variant="contained" onClick={async () => await this.doAction()} >
               Ja
             </LoadingButton>
           </DialogActions>
