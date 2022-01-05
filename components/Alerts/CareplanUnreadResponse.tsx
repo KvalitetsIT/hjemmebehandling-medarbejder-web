@@ -54,9 +54,9 @@ export class CareplanUnreadResponse extends Component<Props, {}> {
                     <Grid item >
                       <ErrorIcon fontSize='large' />
                     </Grid>
-                    <Grid item >
-                      <Typography alignContent="left" variant="caption">Der er en ulæst besvarelse</Typography><br/>
-                      <Typography alignContent="left" variant="caption">Se besvarelse</Typography>
+                    <Grid item lineHeight={1}>
+                      <Typography lineHeight={0} alignContent="left" fontWeight="bold" variant="caption">Der er en ulæst besvarelse</Typography><br/>
+                      <Typography lineHeight={0} alignContent="left" variant="caption">Se besvarelse</Typography>
                     </Grid>
                   </Grid>
                 </Alert>

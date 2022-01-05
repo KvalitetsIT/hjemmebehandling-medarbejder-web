@@ -118,7 +118,7 @@ export class ObservationCard extends Component<Props, State> {
                     return (
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                             <Card>
-                                <CardHeader subheader={question.question} />
+                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question}</Typography>} />
                                 <Divider/>
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ?
@@ -128,7 +128,7 @@ export class ObservationCard extends Component<Props, State> {
                                 </CardContent>
                             </Card>
                             <Card marginTop={3} component={Box}>
-                                <CardHeader subheader={question.question + " - Alarmgrænser"} />
+                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question} - Alarmgrænser</Typography>} />
                                 <Divider/>
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}

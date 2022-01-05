@@ -43,27 +43,35 @@ export class CareplanSummary extends Component<Props, {}> {
             <Card>
                 <CardHeader subheader={
                     <>
-                        Monitoreringsplan
-                        <Button component={Link} to={"/patients/" + careplan.patient?.cpr + "/edit/plandefinition"}>
-                            <PencilIcon />
-                        </Button>
+                        <Grid container alignItems="center">
+                            <Grid item xs={10}>
+                                <Typography variant="h6" fontWeight="bold">Monitoreringsplan</Typography>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Button component={Link} to={"/patients/" + careplan.patient?.cpr + "/edit/plandefinition"}>
+                                    <PencilIcon />
+                                </Button>
+                            </Grid>
+                        </Grid>
+
+
                     </>
                 } />
                 <Divider />
                 <CardContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography fontWeight="bold" variant="caption">
+                            <Typography variant="caption">
                                 Patientgrupper
                             </Typography>
-                            <Typography>
+                            <Typography fontWeight="bold">
                                 {careplan.planDefinitions.map(x => x.name).join(", ")}
                             </Typography>
                             <br />
-                            <Typography fontWeight="bold" variant="caption">
+                            <Typography variant="caption">
                                 Opstart
                             </Typography>
-                            <Typography>
+                            <Typography fontWeight="bold">
                                 {careplan.creationDate ? this.dateHelper.DateToString(careplan.creationDate) : ""}
                             </Typography>
                         </Grid>

@@ -99,7 +99,7 @@ export class PatientCard extends Component<Props, State> {
           <CardContent>
           <Grid container>
             <Grid item xs={12}>
-              <Typography variant="button">
+              <Typography fontWeight="bold" variant="subtitle2">
                 Addresse
               </Typography>
               <IsEmptyCard object={this.props.patient.address} jsxWhenEmpty="Ingen addresse">
@@ -112,7 +112,7 @@ export class PatientCard extends Component<Props, State> {
 
                 <br />
               </IsEmptyCard>
-              <Typography variant="button">
+              <Typography fontWeight="bold" variant="subtitle2">
                 Kontakt
               </Typography>
               <IsEmptyCard object={contact} jsxWhenEmpty="Ingen kontakter">

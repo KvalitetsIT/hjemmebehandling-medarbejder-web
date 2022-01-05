@@ -59,7 +59,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
               <Typography variant="caption">
                 Seneste besvarelse
               </Typography>
-              <Typography>
+              <Typography fontWeight="bold">
                 {latestResponse && latestResponse.answeredTime ? this.dateHelper.DateToString(latestResponse.answeredTime) : "-"}
               </Typography>
             </Stack>
@@ -69,7 +69,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
               <Typography variant="caption">
                 Frekvens
               </Typography>
-              <Typography>
+              <Typography fontWeight="bold">
                 {questionnaire.frequency!.ToString()}
               </Typography>
             </Stack>
