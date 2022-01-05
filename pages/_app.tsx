@@ -143,7 +143,7 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           borderColor: mainBackground,
-          borderBottomWidth: "thick"
+          borderBottomWidth: "medium"
         }
       }
     },
