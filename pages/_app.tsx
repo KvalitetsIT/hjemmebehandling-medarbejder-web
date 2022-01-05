@@ -127,6 +127,18 @@ const THEME = createTheme({
     }
   },
   components: {
+    MuiTypography : {
+      variants : [
+        {
+          props:{className : "labelTextTab"},
+          style : {
+            color : black,
+            textTransform : "none",
+            
+          }
+        }
+      ]
+    },
     MuiDivider : {
       styleOverrides : {
         root : {
