@@ -6,7 +6,7 @@ import { BaseIconProps } from './BaseIconProps';
 export class BaseIcon extends React.Component<BaseIconProps,{}>{
     render() : JSX.Element{   
         const color = this.props.color ?? "black"
-        const fontSize = this.props.fontSize ?? "inherit"
+        const fontSize = this.props.fontSize
 
         return (
             <SvgIcon sx={{ fill: "none", stroke: color, fontSize : fontSize }} >
