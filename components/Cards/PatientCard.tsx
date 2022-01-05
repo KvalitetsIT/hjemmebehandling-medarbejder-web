@@ -9,12 +9,12 @@ import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Stack } from '@mui/material';
 import { Skeleton } from '@mui/material';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import ApiContext from '../../pages/_context';
 import IUserService from '../../services/interfaces/IUserService';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { PencilIcon } from '../Icons/PencilIcon';
 export interface Props {
   patient: PatientDetail
 
@@ -66,8 +66,8 @@ export class PatientCard extends Component<Props, State> {
             title={
               <Stack>
                 <Typography>
-                  {this.props.patient.firstname} {this.props.patient.lastname} {this.props.patient.username ? " ("+this.props.patient.username+")" : ""}<br />
-                  
+                  {this.props.patient.firstname} {this.props.patient.lastname} {this.props.patient.username ? " (" + this.props.patient.username + ")" : ""}<br />
+
                   {this.props.patient.cpr?.slice(0, 6)}-{this.props.patient.cpr?.slice(6)}
                 </Typography>
                 <Typography variant="subtitle2">
@@ -78,13 +78,15 @@ export class PatientCard extends Component<Props, State> {
             action={
               <Stack>
                 <ErrorBoundary>
-                  <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}><ModeEditOutlineIcon fontSize="inherit" /> </Button>
+                  <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
+                    <PencilIcon color='#1976d2'/>
+                  </Button>
                 </ErrorBoundary>
                 <ErrorBoundary>
                   <ConfirmationButton variant="text" color="primary" title="Nulstil adgangskode?" buttonText={<LockOpenIcon />} action={async () => await this.resetPassword()}>
-                    Brugernavn: <Typography variant='button'>{this.props.patient.username} </Typography> 
-                    <br/>
-                    <br/>
+                    Brugernavn: <Typography variant='button'>{this.props.patient.username} </Typography>
+                    <br />
+                    <br />
                     Er du sikker på at du ønsker at nulstille patientens adgangskode?
                   </ConfirmationButton>
                 </ErrorBoundary>
