@@ -52,21 +52,21 @@ export class CareplanSummary extends Component<Props,{}> {
             <CardContent>
                 <Grid container>
                     <Grid item xs={10}>
-                            <Typography variant="caption">
+                            <Typography fontWeight="bold" variant="caption">
                             Afdeling
                         </Typography>
                         <Typography>
                             {careplan.organization?.name}
                         </Typography>
                         <br/>
-                        <Typography variant="caption">
+                        <Typography fontWeight="bold" variant="caption">
                             Patientgrupper
                         </Typography>
                         <Typography>
                         {careplan.planDefinitions.map(x=>x.name).join(", ")}
                         </Typography>
                         <br/>
-                        <Typography variant="caption">
+                        <Typography fontWeight="bold" variant="caption">
                             Opstart
                         </Typography>
                         <Typography>
