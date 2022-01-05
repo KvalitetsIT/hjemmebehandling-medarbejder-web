@@ -1,6 +1,6 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Alert, AlertColor, Box, Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -13,7 +13,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
 export interface Props {
     questionnaires: Questionnaire
@@ -91,7 +91,7 @@ export class AnswerTable extends Component<Props, State> {
         this.forceUpdate()
     }
 
-    getChipColorFromCategory(category: CategoryEnum): "error" | "warning" | "primary" | "default" | "success"{
+    getChipColorFromCategory(category: CategoryEnum): "error" | "warning" | "primary" | "default" | "success" {
         if (category === CategoryEnum.RED)
             return "error"
         if (category === CategoryEnum.YELLOW)
@@ -134,82 +134,90 @@ export class AnswerTable extends Component<Props, State> {
 
 
         return (<>
-            <Box className="answer__pagination-buttons" textAlign="right">
-                <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} startIcon={<NavigateBeforeIcon />}>Ældre</Button>
-                <Button disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} endIcon={<NavigateNextIcon />}>Nyere</Button>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Box className="answer__pagination-buttons" textAlign="right">
+                        <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} startIcon={<NavigateBeforeIcon />}>Ældre</Button>
+                        <Button disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} endIcon={<NavigateNextIcon />}>Nyere</Button>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <TableContainer component={Paper}>
 
-            </Box>
-            <TableContainer component={Paper}>
+                        <Table aria-label="simple table">
+                            <TableHead>
 
-                <Table aria-label="simple table">
-                    <TableHead>
-
-                        <TableRow className='table__row'>
-                            <TableCell width="10%">
-
-                            </TableCell>
-                            {questionnairesResponsesToShow.map(collection => {
-
-                                let severity = this.getChipColorFromCategory(collection.category) as string
-
-                                if (collection.status === QuestionnaireResponseStatus.Processed)
-                                    severity = "info"
-
-                                return (
-                                    <TableCell className="answer__table-head" align="center">
-
-                                        <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
-                                            <div className="answer__header">
-                                                <Typography className="answer__headline" align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
-                                                <Typography className="answer__date" align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
-                                            </div>
-
-                                            <ErrorBoundary rerenderChildren={false}>
-                                                <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, collection)} questionnaireResponse={collection} />
-                                            </ErrorBoundary>
-                                        </Stack>
-
-
+                                <TableRow className='table__row'>
+                                    <TableCell width="10%">
 
                                     </TableCell>
+                                    {questionnairesResponsesToShow.map(collection => {
 
-                                )
-                            })}
+                                        let severity = this.getChipColorFromCategory(collection.category) as string
 
-                        </TableRow>
+                                        if (collection.status === QuestionnaireResponseStatus.Processed)
+                                            severity = "info"
 
-                    </TableHead>
-                    <TableBody>
-                        {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
-                            return (
-                                <>
+                                        return (
+                                            <TableCell className="answer__table-head" align="center">
 
-                                    <TableRow>
-                                        <TableCell>
-                                            {question.question}
-                                        </TableCell>
+                                                <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
+                                                    <div className="answer__header">
+                                                        <Typography className="answer__headline" align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
+                                                        <Typography className="answer__date" align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                                                    </div>
 
-                                        {questionnairesResponsesToShow.map(questionResponse => {
-                                            const answer = this.questionnaireService.findAnswer(question, questionResponse);
-                                            const thresholdCollection = this.props.questionnaires.thresholds!.find(x => x.questionId == question.Id);
-                                            const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
-                                            return (
+                                                    <ErrorBoundary rerenderChildren={false}>
+                                                        <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, collection)} questionnaireResponse={collection} />
+                                                    </ErrorBoundary>
+                                                </Stack>
+
+
+
+                                            </TableCell>
+
+                                        )
+                                    })}
+
+                                </TableRow>
+
+                            </TableHead>
+                            <TableBody>
+                                {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
+                                    return (
+                                        <>
+
+                                            <TableRow>
                                                 <TableCell>
-                                                    {category == CategoryEnum.BLUE ? 
-                                                    <Typography textAlign="center"> {answer ? answer.ToString() : "" }</Typography>:
-                                                    <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" /> 
-                                                }
-                                                   
+                                                    {question.question}
                                                 </TableCell>
-                                            )
-                                        })}
-                                    </TableRow>
-                                </>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+
+                                                {questionnairesResponsesToShow.map(questionResponse => {
+                                                    const answer = this.questionnaireService.findAnswer(question, questionResponse);
+                                                    const thresholdCollection = this.props.questionnaires.thresholds!.find(x => x.questionId == question.Id);
+                                                    const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
+                                                    return (
+                                                        <TableCell>
+                                                            {category == CategoryEnum.BLUE ?
+                                                                <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography> :
+                                                                <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
+                                                            }
+
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        </>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+            </Grid>
+
+
+
 
 
         </>
