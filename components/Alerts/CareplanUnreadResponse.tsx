@@ -49,7 +49,7 @@ export class CareplanUnreadResponse extends Component<Props, {}> {
           <CardContent>
             <Link to={"./../questionnaires/" + latestUnansweredAnswer.questionnaireId} color="inherit" >
               {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ?
-                <Alert sx={{padding:0}}  variant="filled" icon={<></>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
+                <Alert className="darkColor" sx={{padding:0}}  variant="filled" icon={<></>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
                   <Grid container columnSpacing={3} alignItems="center">
                     <Grid item >
                       <ErrorIcon fontSize='large' />

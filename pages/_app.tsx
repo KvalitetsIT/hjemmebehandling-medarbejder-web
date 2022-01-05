@@ -293,28 +293,29 @@ const THEME = createTheme({
       },
       variants: [
         {
-          props: { severity: 'success' },
-          style: {
-            backgroundColor: greenLight
-          },
-        },
-        {
-          props: { severity: 'warning' },
-          style: {
-            backgroundColor: yellowLight,
-          },
-        }, {
-          props: { severity: 'error' },
-          style: {
-            backgroundColor: redLight,
-          },
-        },
-        {
           props: { severity: 'info' },
           style: {
             backgroundColor: mainBackground,
           },
         },
+        // Unread answer alerts
+        {
+          props: { severity: 'success', className:"darkColor" },
+          style: {
+            backgroundColor: green
+          },
+        },
+        {
+          props: { severity: 'warning' ,className:"darkColor"},
+          style: {
+            backgroundColor: yellow,
+          },
+        }, {
+          props: { severity: 'error',className:"darkColor"},
+          style: {
+            backgroundColor: red,
+          },
+        }
       ]
     },
     //=========== Dialog ===========//
