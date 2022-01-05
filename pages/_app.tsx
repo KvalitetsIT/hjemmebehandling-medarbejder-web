@@ -393,6 +393,24 @@ const THEME = createTheme({
       },
       variants: [
         {
+          props : {className: "darkColor", color : "error"},
+          style : {
+            backgroundColor : red
+          }
+        },
+        {
+          props : {className: "darkColor", color : "warning"},
+          style : {
+            backgroundColor : yellow
+          }
+        },
+        {
+          props : {className: "darkColor", color : "success"},
+          style : {
+            backgroundColor : green
+          }
+        },
+        {
           // Chip on tasklist (alarm)
           props: { className: 'chip__alarm' },
           style: {
