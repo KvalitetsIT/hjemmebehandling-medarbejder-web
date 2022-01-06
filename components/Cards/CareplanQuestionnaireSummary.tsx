@@ -54,7 +54,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
     return (
       <>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Stack>
               <Typography variant="caption">
                 Seneste besvarelse
@@ -64,7 +64,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
               </Typography>
             </Stack>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Stack>
               <Typography variant="caption">
                 Frekvens
