@@ -150,7 +150,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
               <TableCell align="left">
                   <Button className="patient__button" component={Link} to={"/patients/"+task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
               </TableCell>
-              <TableCell align="left">{task.cpr}</TableCell>
+              <TableCell align="left">{task.cprToString()}</TableCell>
               <TableCell align="left">{task.planDefinitionName}</TableCell>
               <TableCell align="left">{task.questionnaireName}</TableCell>
               <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>

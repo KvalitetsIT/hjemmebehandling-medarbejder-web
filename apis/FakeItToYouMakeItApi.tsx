@@ -69,13 +69,13 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
         this.patient1.username= "JENPET" //Username is 6 chars
-        //this.patient1.primaryPhone = "29483749"
+        this.patient1.primaryPhone = "29483749"
         let address = new Address();
         address.city = "Aarhus C"
         address.country = "Danmark"
         address.street = "Fiskergade 66"
         address.zipCode = "8000"
-        //this.patient1.address = address;
+        this.patient1.address = address;
 
         let relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"

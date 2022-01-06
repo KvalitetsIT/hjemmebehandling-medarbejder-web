@@ -53,7 +53,7 @@ export class PatientCard extends Component<Props, State> {
                 <Typography>
                   {this.props.patient.firstname} {this.props.patient.lastname} <br />
 
-                  {this.props.patient.cpr?.slice(0, 6)}-{this.props.patient.cpr?.slice(6)}
+                  {this.props.patient.cprToString()}
                 </Typography>
                 <Typography variant="subtitle2">
                   {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhone + ")" : ""}

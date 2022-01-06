@@ -39,7 +39,7 @@ export class PatientContextThumbnails extends Component<Props, {}> {
           <Stack direction="row" spacing={2}>
             <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
               <ThumbnailCard avatar={<PatientAvatar patient={patient!} />} headline={patient!.firstname + " " + patient!.lastname} boxContent={<HealingOutlinedIcon fontSize="large" />} >
-                <Typography className="thumbnail__subheader">{patient!.cpr}</Typography>
+                <Typography className="thumbnail__subheader">{patient!.cprToString()}</Typography>
                 <Typography className="thumbnail__text">{patient!.primaryPhone ? patient!.primaryPhone : "-"}</Typography>
               </ThumbnailCard>
             </Link>
