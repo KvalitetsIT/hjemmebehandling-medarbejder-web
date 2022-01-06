@@ -23,13 +23,13 @@ export class ThumbnailCard extends Component<Props, {}> {
       <Card>
         <CardContent>
           <Grid container>
-            <Grid item className="thumbnail__icon" xs={4}>
+            <Grid item className="thumbnail__icon" xs="auto" >
               {this.props.avatar ? this.props.avatar :
                 <Avatar sx={{ bgcolor: backgroundColor, width: '100%', height: '100%' }} variant="square">
                   {this.props.boxContent}
                 </Avatar>}
             </Grid>
-            <Grid item xs paddingLeft={2}>
+            <Grid item xs sx={{paddingLeft:3}}>
               <Typography className="thumbnail__headline" variant="inherit">{this.props.headline}</Typography>
               {this.props.children}
             </Grid>

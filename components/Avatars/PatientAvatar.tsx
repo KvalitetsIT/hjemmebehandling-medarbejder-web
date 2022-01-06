@@ -5,31 +5,32 @@ import ApiContext from '../../pages/_context';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 
 export interface Props {
-    patient : PatientDetail
-    size? : number
+  patient: PatientDetail
+  size?: number
 }
 
 
 
-export class PatientAvatar extends Component<Props,{}> {
+export class PatientAvatar extends Component<Props, {}> {
   static displayName = PatientAvatar.name;
   static contextType = ApiContext
 
 
-  constructor(props : Props){
+  constructor(props: Props) {
     super(props);
-}
+  }
 
 
-  render () : JSX.Element{
-      const patient = this.props.patient;
-      let initials = "";
-      initials += patient.firstname ? patient.firstname[0] : ""
-      initials += patient.lastname ? patient.lastname[0] : ""
+  render(): JSX.Element {
+    const patient = this.props.patient;
+    let initials = "";
+    initials += patient.firstname ? patient.firstname[0] : ""
+    initials += patient.lastname ? patient.lastname[0] : ""
 
     return (
-        <Avatar variant="square">
-        <Typography fontWeight="bold" variant='h5'>{initials}</Typography> 
+
+      <Avatar variant="square">
+        <Typography fontWeight="bold" variant='h5'>{initials}</Typography>
       </Avatar>
     )
   }

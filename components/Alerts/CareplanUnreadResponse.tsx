@@ -50,11 +50,11 @@ export class CareplanUnreadResponse extends Component<Props, {}> {
             <Link to={"./../questionnaires/" + latestUnansweredAnswer.questionnaireId} color="inherit" >
               {latestUnansweredAnswer.status === QuestionnaireResponseStatus.NotProcessed ?
                 <Alert className="darkColor" sx={{padding:0}}  variant="filled" icon={<></>} severity={this.getAlarmSeverityFromCategory(latestUnansweredAnswer.category)} >
-                  <Grid container columnSpacing={3} alignItems="center">
-                    <Grid item >
+                  <Grid container columnSpacing={3} alignItems="center" direction="row">
+                    <Grid item xs={2} >
                       <ErrorIcon fontSize='large' />
                     </Grid>
-                    <Grid item lineHeight={1}>
+                    <Grid item xs lineHeight={1}>
                       <Typography lineHeight={0} alignContent="left" fontWeight="bold" variant="caption">Der er en ulæst besvarelse</Typography><br/>
                       <Typography lineHeight={0} alignContent="left" variant="caption">Se besvarelse</Typography>
                     </Grid>
