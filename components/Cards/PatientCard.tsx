@@ -45,11 +45,12 @@ export class PatientCard extends Component<Props, State> {
     return (
       <Card>
 
-        
-          <CardHeader
-            avatar={<PatientAvatar patient={this.props.patient} />}
-            title={
-              <Stack>
+
+        <CardHeader
+          avatar={<PatientAvatar patient={this.props.patient} />}
+          title={
+            <Grid container>
+              <Grid item xs="auto">
                 <Typography>
                   {this.props.patient.firstname} {this.props.patient.lastname} <br />
 
@@ -58,24 +59,25 @@ export class PatientCard extends Component<Props, State> {
                 <Typography variant="subtitle2">
                   {this.props.patient.primaryPhone} {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhone + ")" : ""}
                 </Typography>
-              </Stack>
-            }
-            action={
-              <Stack>
-                <ErrorBoundary>
-                  <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                    <PencilIcon />
-                  </Button>
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  
-                </ErrorBoundary>
-              </Stack>
-            }
-          />
+              </Grid>
+            </Grid>
+          }
+          action={
+            <Stack>
+              <ErrorBoundary>
+                <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
+                  <PencilIcon />
+                </Button>
+              </ErrorBoundary>
+              <ErrorBoundary>
 
-          <Divider />
-          <CardContent>
+              </ErrorBoundary>
+            </Stack>
+          }
+        />
+
+        <Divider />
+        <CardContent>
           <Grid container>
             <Grid item xs={12}>
               <Typography fontWeight="bold" variant="subtitle2">

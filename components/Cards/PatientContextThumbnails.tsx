@@ -1,7 +1,5 @@
-import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import { Component } from 'react';
-import Stack from '@mui/material/Stack';
 import { ThumbnailCard } from './ThumbnailCard';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PatientAvatar } from '../Avatars/PatientAvatar';
@@ -12,6 +10,7 @@ import ApiContext from '../../pages/_context';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { Link } from 'react-router-dom';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { Grid, Typography } from '@mui/material';
 
 export interface Props {
   currentCareplan: PatientCareplan
@@ -36,29 +35,34 @@ export class PatientContextThumbnails extends Component<Props, {}> {
         <IsEmptyCard object={currentCareplan.patient} jsxWhenEmpty="Ingen patient">
 
 
-          <Stack direction="row" spacing={2}>
-            <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
-              <ThumbnailCard avatar={<PatientAvatar patient={patient!} />} headline={patient!.firstname + " " + patient!.lastname} boxContent={<HealingOutlinedIcon fontSize="large" />} >
-                <Typography className="thumbnail__subheader">{patient!.cprToString()}</Typography>
-                <Typography className="thumbnail__text">{patient!.primaryPhone ? patient!.primaryPhone : "-"}</Typography>
-              </ThumbnailCard>
-            </Link>
-
-            {patient!.contact?.fullname ?
+          <Grid container spacing={2}>
+            <Grid item xs="auto">
               <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
-                <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large" />}>
-                  <Typography className="thumbnail__subheader">{patient!.contact.fullname}</Typography>
-                  <Typography className="thumbnail__text">{patient!.contact.primaryPhone ? patient!.contact.primaryPhone : "-"}</Typography>
+                <ThumbnailCard avatar={<PatientAvatar patient={patient!} />} headline={patient!.firstname + " " + patient!.lastname} boxContent={<HealingOutlinedIcon fontSize="large" />} >
+                  <Typography className="thumbnail__subheader">{patient!.cprToString()}</Typography>
+                  <Typography className="thumbnail__text">{patient!.primaryPhone ? patient!.primaryPhone : "-"}</Typography>
                 </ThumbnailCard>
               </Link>
-              : <></>}
-            <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
-              <ThumbnailCard headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large" />}>
-                <Typography className="thumbnail__subheader">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
-                <Typography className="thumbnail__text">Startet: {currentCareplan && currentCareplan.creationDate ? this.dateHelper.DateToString(currentCareplan.creationDate) : "N/A"}</Typography>
-              </ThumbnailCard>
-            </Link>
-          </Stack>
+            </Grid>
+            <Grid item xs="auto">
+              {patient!.contact?.fullname ?
+                <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
+                  <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large" />}>
+                    <Typography className="thumbnail__subheader">{patient!.contact.fullname}</Typography>
+                    <Typography className="thumbnail__text">{patient!.contact.primaryPhone ? patient!.contact.primaryPhone : "-"}</Typography>
+                  </ThumbnailCard>
+                </Link>
+                : <></>}
+            </Grid>
+            <Grid item xs="auto">
+              <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
+                <ThumbnailCard headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large" />}>
+                  <Typography className="thumbnail__subheader">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
+                  <Typography className="thumbnail__text">Startet: {currentCareplan && currentCareplan.creationDate ? this.dateHelper.DateToString(currentCareplan.creationDate) : "N/A"}</Typography>
+                </ThumbnailCard>
+              </Link>
+            </Grid>
+          </Grid>
         </IsEmptyCard>
       </IsEmptyCard>
 

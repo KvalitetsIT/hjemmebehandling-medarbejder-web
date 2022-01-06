@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Avatar } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 
@@ -29,7 +29,7 @@ export class PatientAvatar extends Component<Props,{}> {
 
     return (
         <Avatar variant="square">
-        {initials}
+        <Typography fontWeight="bold" variant='h5'>{initials}</Typography> 
       </Avatar>
     )
   }
