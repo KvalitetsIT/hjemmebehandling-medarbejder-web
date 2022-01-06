@@ -9,10 +9,10 @@ import { TextFieldValidation } from '../Input/TextFieldValidation';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
-import {ToastError} from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
+import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 
 export interface Props {
   initialPatient: PatientDetail
