@@ -399,7 +399,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return {
             fullname: patientDto?.primaryRelativeName ?? '',
             affiliation: patientDto?.primaryRelativeAffiliation ?? '',
-            primaryContact: true,
             primaryPhone: patientDto?.primaryRelativeContactDetails?.primaryPhone ?? '',
             secondaryPhone: patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
         }

@@ -1,7 +1,7 @@
 import { CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Checkbox, Skeleton } from '@mui/material';
+import { Card, Skeleton } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IPersonService from '../../services/interfaces/IPersonService';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
@@ -94,11 +94,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
                   value={this.state.contact.affiliation} 
                   onChange={input => this.modifyPatient(this.setRelativeContactsAffiliation,input) }  
                   variant="outlined" />
-
-              <span>
-                Primær
-                <Checkbox checked={this.state.contact.primaryContact} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryContact,input) } title="Primær kontakt"/>
-              </span>
                   
             </Stack>
             <Stack spacing={3} direction="row">
@@ -127,12 +122,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
         </CardContent>
     </Card>
     )
-  }
-  setRelativeContactsPrimaryContact(oldPatient: Contact, newValue: string): Contact {
-    const modifiedPatient = oldPatient;
-    modifiedPatient.primaryContact = !modifiedPatient.primaryContact
-    console.log(newValue)
-    return modifiedPatient;
   }
 
   setRelativeContactsName(oldPatient : Contact, newValue : string ) : Contact {
