@@ -395,12 +395,14 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     buildContactDetails(patientDto: PatientDto): Contact {
-        return {
-            fullname: patientDto?.primaryRelativeName ?? '',
-            affiliation: patientDto?.primaryRelativeAffiliation ?? '',
-            primaryPhone: patientDto?.primaryRelativeContactDetails?.primaryPhone ?? '',
-            secondaryPhone: patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
-        }
+        let toReturn = new Contact();
+
+        toReturn.fullname = patientDto?.primaryRelativeName ?? ''
+        toReturn.affiliation = patientDto?.primaryRelativeAffiliation ?? ''
+        toReturn.primaryPhone = patientDto?.primaryRelativeContactDetails?.primaryPhone ?? ''
+        toReturn.secondaryPhone = patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
+        return toReturn;
+
     }
 
     buildAddress(contactDetails: ContactDetailsDto): Address {
