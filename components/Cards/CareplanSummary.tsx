@@ -11,17 +11,25 @@ import { Link } from 'react-router-dom';
 import ICareplanService from '../../services/interfaces/ICareplanService';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PencilIcon } from '../Icons/PencilIcon';
+import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 
 export interface Props {
     careplan: PatientCareplan
 }
+export interface State {
+    toast? : JSX.Element
+}
 
-
-export class CareplanSummary extends Component<Props, {}> {
+export class CareplanSummary extends Component<Props, State> {
     static displayName = CareplanSummary.name;
     static contextType = ApiContext;
     dateHelper!: IDateHelper
     careplanService!: ICareplanService;
+    
+    constructor(props : Props){
+        super(props);
+        this.state = {}
+    }
 
     InitialiseServices(): void {
         this.dateHelper = this.context.dateHelper;
@@ -31,6 +39,12 @@ export class CareplanSummary extends Component<Props, {}> {
     async finishCareplan(careplan: PatientCareplan): Promise<void> {
         try {
             await this.careplanService.TerminateCareplan(careplan)
+            const afterResetPasswordToast = (
+                <Toast snackbarTitle="Afslut Monitoreringsplan" snackbarColor="success">
+                    Monitoreringsplanen er nu afsluttet
+                </Toast>
+            )
+            this.setState({toast : afterResetPasswordToast})
         } catch (error: any) {
             this.setState(() => { throw error })
         }
@@ -40,6 +54,7 @@ export class CareplanSummary extends Component<Props, {}> {
         this.InitialiseServices()
         const careplan = this.props.careplan;
         return (
+            <>
             <Card>
                 <CardHeader subheader={
                     <>
@@ -85,6 +100,8 @@ export class CareplanSummary extends Component<Props, {}> {
 
                 </CardContent>
             </Card>
+            {this.state.toast ?? <></>}
+            </>
         );
     }
 }

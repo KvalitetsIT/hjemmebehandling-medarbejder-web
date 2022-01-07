@@ -13,6 +13,7 @@ import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/Error
 import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
+import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 
 export interface Props {
   initialPatient: PatientDetail
@@ -25,7 +26,7 @@ export interface State {
   tempCpr?: string;
   patient: PatientDetail;
   errorArray: InvalidInputModel[];
-  errorToast: JSX.Element
+  toast?: JSX.Element
 }
 
 export class PatientEditCard extends Component<Props, State> {
@@ -39,7 +40,6 @@ export class PatientEditCard extends Component<Props, State> {
     super(props);
     this.state = {
       loadingCprButton: false,
-      errorToast: <></>,
       loadingPage: true,
       tempCpr: props.initialPatient.cpr,
       patient: props.initialPatient,
@@ -73,10 +73,16 @@ export class PatientEditCard extends Component<Props, State> {
 
       this.setState({
         loadingCprButton: true,
-        errorToast: <></>
+        toast: <></>
       })
 
       const newPerson = await this.personService.GetPerson(tempCpr!);
+      const afterResetPasswordToast = (
+        <Toast snackbarTitle="Resultat af fremsøgning" snackbarColor="success">
+          {newPerson.givenName} {newPerson.familyName} blev fundet og indsat i formularen
+        </Toast>
+      )
+      this.setState({ toast: afterResetPasswordToast })
 
       const p = this.state.patient;
 
@@ -97,7 +103,7 @@ export class PatientEditCard extends Component<Props, State> {
 
     } catch (error) {
       if (error instanceof NotFoundError) {
-        this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+        this.setState({ toast: <ToastError severity="info" error={error} /> })
       } else {
         this.setState(() => { throw error })
       }
@@ -234,7 +240,7 @@ export class PatientEditCard extends Component<Props, State> {
 
           </CardContent>
         </Card>
-        {this.state.errorToast ?? <></>}
+        {this.state.toast ?? <></>}
       </ErrorBoundary>
     </>
     )

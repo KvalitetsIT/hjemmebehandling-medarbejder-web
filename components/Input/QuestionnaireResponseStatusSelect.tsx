@@ -4,112 +4,106 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Component } from 'react';
-import { Alert, AlertColor, Snackbar } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import {Toast} from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 
 export interface Props {
-    questionnaireResponse : QuestionnaireResponse
-    onUpdate : (newStatus : QuestionnaireResponseStatus) => void;
+  questionnaireResponse: QuestionnaireResponse
+  onUpdate: (newStatus: QuestionnaireResponseStatus) => void;
 }
 
 export interface State {
-    status? : QuestionnaireResponseStatus;
-    
-    snackbarOpen : boolean
-    snackbarColor: AlertColor
-    snackbarText : string
-    snackbarTitle : string
+  status?: QuestionnaireResponseStatus;
+
+  toast?: JSX.Element;
 }
 
-export class QuestionnaireResponseStatusSelect extends Component<Props,State> {
+export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
-  questionnaireService! : IQuestionnaireService
+  questionnaireService!: IQuestionnaireService
 
-  constructor(props : Props){
-    
-      super(props);
-      this.state = {
-          status : props.questionnaireResponse.status,
-          snackbarOpen : false,
-            snackbarColor: "info",
-            snackbarText : "",
-            snackbarTitle : ""
-      }
-      console.log("New year, new me!")
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      status : props.questionnaireResponse.status
+    }
   }
 
-  closeSnackbar = () : void => {
-    this.setState({snackbarOpen : false})
-  };
-InitializeServices() : void{
-  this.questionnaireService = this.context.questionnaireService;
-}
-  handleChange = async (event: SelectChangeEvent) : Promise<void> => {
+  InitializeServices(): void {
+    this.questionnaireService = this.context.questionnaireService;
+  }
+
+  handleChange = async (event: SelectChangeEvent): Promise<void> => {
     const collectionStatus = event.target.value as QuestionnaireResponseStatus;
     const changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
-    this.setState({snackbarColor : "info",snackbarOpen : true,snackbarTitle: "Opdaterer ...", snackbarText: "Ændrer status til: " + changes.status , status : collectionStatus})
+    const whileUpdateIsProcessingToast = (
+      <Toast snackbarTitle="Opdaterer ..." snackbarColor="info">
+        Ændrer status til: {changes.status}
+      </Toast>
+    )
+    this.setState({ status: collectionStatus, toast: whileUpdateIsProcessingToast })
 
 
-    try{
-         const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
-        this.setState({snackbarColor : "success",snackbarOpen : true,snackbarTitle: "Opdateret!", snackbarText: "Ny status: " + changes.status , status : newStatus})
-    } catch(error : unknown){
-        this.setState(()=>{throw error})
+    try {
+      const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
+
+      const afterUpdateIsCompletedToast = (
+        <Toast snackbarTitle="Opdateret!" snackbarColor="success">
+          Ny status: {changes.status}
+        </Toast>
+      )
+
+      this.setState({ status: newStatus, toast: afterUpdateIsCompletedToast })
+    } catch (error: unknown) {
+      this.setState(() => { throw error })
     }
 
-    if(this.props.onUpdate)
-       this.props.onUpdate(this.state.status!);
+    if (this.props.onUpdate)
+      this.props.onUpdate(this.state.status!);
   };
 
-  GetQuestionnaireCategoryClassName(category?:CategoryEnum) : string {
-    if(!category) {
+  GetQuestionnaireCategoryClassName(category?: CategoryEnum): string {
+    if (!category) {
       return ""
     }
 
-    switch(category) {
-      case CategoryEnum.RED : 
+    switch (category) {
+      case CategoryEnum.RED:
         return "red-answer"
-      case CategoryEnum.YELLOW :
+      case CategoryEnum.YELLOW:
         return "yellow-answer"
-      case CategoryEnum.GREEN :
+      case CategoryEnum.GREEN:
         return "green-answer"
       /*case CategoryEnum.BLUE :
         return "blue"*/
     }
   }
 
-  
-  render () : JSX.Element {
+
+  render(): JSX.Element {
     this.InitializeServices()
-    return ( <>
-<FormControl className={"answer__status" + " " + this.GetQuestionnaireCategoryClassName(this.props.questionnaireResponse.category)} variant="standard" fullWidth>
-                        <Select
-                        labelId="demo-simple-select-standard-label"
-                        id="demo-simple-select-standard"
-                        value={this.state.status}
-                        label="Status"
-                        disabled={this.state.status == QuestionnaireResponseStatus.Processed}
-                        onChange={this.handleChange}
-                    >
-                        <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
-                        <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
-                    </Select>
-                    </FormControl>
+    return (<>
+      <FormControl className={"answer__status" + " " + this.GetQuestionnaireCategoryClassName(this.props.questionnaireResponse.category)} variant="standard" fullWidth>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={this.state.status}
+          label="Status"
+          disabled={this.state.status == QuestionnaireResponseStatus.Processed}
+          onChange={this.handleChange}
+        >
+          <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
+          <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
+        </Select>
+      </FormControl>
 
-
-                    <Snackbar open={this.state.snackbarOpen} autoHideDuration={6000} onClose={this.closeSnackbar} anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}>
-                        <Alert severity={this.state.snackbarColor} sx={{ width: '100%' }}>
-                            <h5>{this.state.snackbarTitle}</h5>
-                            Besvarelse : {this.props.questionnaireResponse.answeredTime ? this.props.questionnaireResponse.answeredTime.toDateString() : ""} <br/>
-                            {this.state.snackbarText}
-                        </Alert>
-                    </Snackbar>
-                    </>
+      {this.state.toast ?? <></>}
+    </>
     )
   }
 

@@ -288,7 +288,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task2.responseLinkEnabled = true
     }
     async ResetPassword(patient: PatientDetail): Promise<void> {
-        throw new NotImplementedError();
+        
     }
     async CreateUser(patient: PatientDetail): Promise<User> {
         throw new NotImplementedError();
@@ -319,7 +319,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        throw new NotImplementedError();
+        return new PatientCareplan()
     }
     async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
     }
