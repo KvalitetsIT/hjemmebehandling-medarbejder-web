@@ -14,7 +14,7 @@ function Patients() : JSX.Element{
         </Grid>
         <Grid className="grid__table" item xs={12}>
           <ErrorBoundary>
-            <Tasklist taskType={TaskType.UNFINISHED_RESPONSE} pageSize={7}/>
+            <Tasklist taskType={TaskType.UNFINISHED_RESPONSE} pageSize={6}/>
           </ErrorBoundary>
         </Grid>
         <Grid className="grid__headline" item xs={12}>

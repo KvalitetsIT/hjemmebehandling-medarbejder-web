@@ -13,6 +13,7 @@ import FhirUtils from '../../util/FhirUtils';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
   taskType: TaskType
@@ -22,6 +23,7 @@ export interface Props {
 export interface State {
   tasks: Array<Task>
   loading: boolean
+  smallLoading: boolean
   pageNumber: number
 }
 
@@ -36,6 +38,7 @@ export class Tasklist extends Component<Props, State> {
     this.state = {
       tasks: [],
       loading: true,
+      smallLoading: false,
       pageNumber: 1
     }
 
@@ -55,15 +58,17 @@ export class Tasklist extends Component<Props, State> {
   }
   async componentDidMount(): Promise<void> {
     try {
+
       await this.populateQuestionnaireResponses(this.state.pageNumber);
     } catch (error: any) {
       this.setState(() => { throw error })
     }
+
   }
 
   async populateQuestionnaireResponses(pageNumber: number): Promise<void> {
     this.setState({
-      loading: true
+      smallLoading: true
     });
 
     let tasks: Task[] = []
@@ -77,6 +82,7 @@ export class Tasklist extends Component<Props, State> {
 
     this.setState({
       tasks: tasks,
+      smallLoading: false,
       loading: false
     });
   }
@@ -122,12 +128,12 @@ export class Tasklist extends Component<Props, State> {
     await this.removeAlarm(task);
   }
 
-  async nextPage() : Promise<void> {
+  async nextPage(): Promise<void> {
     const nextPageNumber = this.state.pageNumber + 1
     this.setState({ pageNumber: nextPageNumber })
     await this.populateQuestionnaireResponses(nextPageNumber)
   }
-  async previousPage() : Promise<void> {
+  async previousPage(): Promise<void> {
     const previousPageNumber = this.state.pageNumber - 1
     this.setState({ pageNumber: previousPageNumber })
     await this.populateQuestionnaireResponses(previousPageNumber)
@@ -140,50 +146,57 @@ export class Tasklist extends Component<Props, State> {
     const previouspage: number = currentpage - 1
 
     return (<>
-      <IsEmptyCard jsxWhenEmpty="Ingen besvarelser til rådighed" list={tasks}>
-        <TableContainer component={Card}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ width: '3%' }} >Alarm</TableCell>
-                <TableCell style={{ width: '35%' }} align="left">Navn</TableCell>
-                <TableCell style={{ width: '12%' }} align="left">CPR</TableCell>
-                <TableCell style={{ width: '12%' }} align="left">Patientgruppe</TableCell>
-                <TableCell style={{ width: '12%' }} align="left">Spørgeskema</TableCell>
-                <TableCell style={{ width: '12%' }} align="left">Besvaret</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {!tasks ? <></> : tasks.map((task) => (
-                <>
-                  <TableRow key={task.cpr}>
-                    <TableCell component="th" scope="row">
-                      <Chip className="chip__alarm" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
-                    </TableCell>
-                    <TableCell align="left">
-                      <Button className="patient__button" component={Link} to={"/patients/" + task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
-                    </TableCell>
-                    <TableCell align="left">{task.cprToString()}</TableCell>
-                    <TableCell align="left">{task.planDefinitionName}</TableCell>
-                    <TableCell align="left">{task.questionnaireName}</TableCell>
-                    <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
-                    <TableCell className="action-button__cell" align="right">
-                      {task.category == CategoryEnum.BLUE ?
-                        <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" className="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
-                          Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
-                        </ConfirmationButton>
-                        :
-                        <Button className="answer__button" component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>
-                      }
-                    </TableCell>
-                  </TableRow>
-                </>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </IsEmptyCard>
+      <TableContainer component={Card}>
+        {this.state.smallLoading ? <LoadingSmallComponent /> :
+
+          <IsEmptyCard jsxWhenEmpty="Ingen besvarelser til rådighed" list={tasks}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ width: '3%' }} >Alarm</TableCell>
+                  <TableCell style={{ width: '35%' }} align="left">Navn</TableCell>
+                  <TableCell style={{ width: '12%' }} align="left">CPR</TableCell>
+                  <TableCell style={{ width: '12%' }} align="left">Patientgruppe</TableCell>
+                  <TableCell style={{ width: '12%' }} align="left">Spørgeskema</TableCell>
+                  <TableCell style={{ width: '12%' }} align="left">Besvaret</TableCell>
+                  <TableCell align="right"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.smallLoading ? <LoadingSmallComponent /> :
+                  <>
+                    {!tasks ? <></> : tasks.map((task) => (
+                      <>
+                        <TableRow key={task.cpr}>
+                          <TableCell component="th" scope="row">
+                            <Chip className="chip__alarm" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
+                          </TableCell>
+                          <TableCell align="left">
+                            <Button className="patient__button" component={Link} to={"/patients/" + task.cpr} variant="text">{task.firstname + " " + task.lastname}</Button>
+                          </TableCell>
+                          <TableCell align="left">{task.cprToString()}</TableCell>
+                          <TableCell align="left">{task.planDefinitionName}</TableCell>
+                          <TableCell align="left">{task.questionnaireName}</TableCell>
+                          <TableCell align="left">{task && task.answeredTime ? this.dateHelper.DateToString(task.answeredTime) : "Ikke besvaret"}</TableCell>
+                          <TableCell className="action-button__cell" align="right">
+                            {task.category == CategoryEnum.BLUE ?
+                              <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" className="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
+                                Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
+                              </ConfirmationButton>
+                              :
+                              <Button className="answer__button" component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>
+                            }
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    ))}
+                  </>
+                }
+              </TableBody>
+            </Table>
+          </IsEmptyCard>
+        }
+      </TableContainer>
       <ButtonGroup>
         <Button variant="text" className='button__page-switch' onClick={async () => await this.previousPage()} disabled={previouspage <= 0}><NavigateBeforeIcon /></Button>
         <Button variant="text" className='button__page-switch' disabled> {currentpage} </Button>
