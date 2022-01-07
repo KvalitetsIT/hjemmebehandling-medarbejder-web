@@ -18,7 +18,7 @@ import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdN
 import { QuestionnaireAlreadyOnCareplan } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
 import { ErrorDtoFromJSON, UserContext } from "../generated";
-import {BaseServiceError} from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
+import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { BaseApiError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseApiError";
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
@@ -68,7 +68,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
-        this.patient1.username= "JENPET" //Username is 6 chars
+        this.patient1.username = "JENPET" //Username is 6 chars
         this.patient1.primaryPhone = "+4529483749"
         this.patient1.secondaryPhone = "29483749"
         let address = new Address();
@@ -288,7 +288,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task2.responseLinkEnabled = true
     }
     async ResetPassword(patient: PatientDetail): Promise<void> {
-        
+
     }
     async CreateUser(patient: PatientDetail): Promise<User> {
         throw new NotImplementedError();
@@ -364,7 +364,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
         try {
             await new Promise(f => setTimeout(f, this.timeToWait))
-        return carePlan.id!
+            return carePlan.id!
         } catch (error) {
             return await this.HandleError(error)
         }
@@ -455,8 +455,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
-
-            return [this.task1, this.task2].filter(x => x.category != CategoryEnum.BLUE)
+            if (page == 1)
+                return [this.task1, this.task2].filter(x => x.category != CategoryEnum.BLUE)
+            return []
         } catch (error) {
             return await this.HandleError(error)
         }
@@ -464,7 +465,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
-        return [this.task1, this.task2].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+        if (page == 1)
+            return [this.task1, this.task2].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+        return [];
     }
 
     async GetPatient(cpr: string): Promise<PatientDetail> {
@@ -496,7 +499,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         user.orgId = "453071000016001";
         user.orgName = "Infektionsmedicinsk Afdeling";
         user.email = "test@rm.dk"
-        user.entitlements = [EntitlementEnum.NURSE,EntitlementEnum.SOSU];
+        user.entitlements = [EntitlementEnum.NURSE, EntitlementEnum.SOSU];
         user.autorisationsids = [""];
         return user;
     }

@@ -84,7 +84,7 @@ class PatientsTable extends React.Component<Props, State> {
     }
 
     renderPage(): JSX.Element {
-        const hasMorePages: boolean = this.state.patients.length == this.state.pageSize;
+        const hasMorePages: boolean = this.state.patients.length >= this.state.pageSize;
         const currentpage = this.props.pagenumber
         const nextpage: number = currentpage + 1
         const previouspage: number = currentpage - 1
