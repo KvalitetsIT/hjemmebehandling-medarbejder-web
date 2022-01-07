@@ -1,6 +1,6 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -104,6 +104,18 @@ export class AnswerTable extends Component<Props, State> {
         return "default"
     }
 
+    getDisplaynameColorFromCategory(category: CategoryEnum): "Rød" | "Gul" | "Grøn" | "Ingen alarmgrænser for spørgsmål" {
+        if (category === CategoryEnum.RED)
+            return "Rød"
+        if (category === CategoryEnum.YELLOW)
+            return "Gul"
+        if (category === CategoryEnum.GREEN)
+            return "Grøn"
+
+        return "Ingen alarmgrænser for spørgsmål"
+    }
+
+
     statusUpdate(status: QuestionnaireResponseStatus, questionnaireResponse: QuestionnaireResponse): void {
         questionnaireResponse.status = status;
         this.forceUpdate();
@@ -199,11 +211,16 @@ export class AnswerTable extends Component<Props, State> {
                                                     return (
                                                         <TableCell>
                                                             {category == CategoryEnum.BLUE ?
-                                                                <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography> :
-                                                                <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
-                                                            }
+                                                                <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
+                                                                    <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography>
+                                                                </Tooltip> :
 
+                                                                <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
+                                                                    <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
+                                                                </Tooltip>
+                                                            }
                                                         </TableCell>
+
                                                     )
                                                 })}
                                             </TableRow>
