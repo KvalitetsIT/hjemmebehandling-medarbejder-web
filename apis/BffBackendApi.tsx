@@ -122,8 +122,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
         try {
-            console.log('inside BffBackendApi.GetAllPlanDefinitions!')
-
             let api = this.planDefinitionApi;
             let planDefinitions = await api.getPlanDefinitions()
 
@@ -197,8 +195,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<QuestionnaireResponseStatus> {
         try {
-            console.log('inside BffBackendApi.UpdateQuestionnaireResponseStatus!')
-
             let api = this.questionnaireResponseApi;
             let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
@@ -277,8 +273,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
         try {
-            console.log('Inside BffBackendApi.GetPatientCareplans !');
-
             // Retrieve the careplans
             let api = this.careplanApi;
             let request = {
@@ -298,8 +292,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
         try {
-            console.log('Inside BffBackendApi.GetPatientCareplanById !');
-
             // Retrieve the careplan
             let api = this.careplanApi;
             let carePlan = await api.getCarePlanById({ id: id })
@@ -314,7 +306,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
-        console.log("cp-id: " + careplanId);
         try {
             let api = this.questionnaireResponseApi
             let request = {

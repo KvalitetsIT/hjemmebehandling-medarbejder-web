@@ -56,7 +56,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
 
   errorArray : Map<number,InvalidInputModel[]> = new Map<number,InvalidInputModel[]>();
   onValidation(from : number, invalid : InvalidInputModel[]) : void{
-    console.log("from : " + from)  
     this.errorArray.set(from,invalid);
       
       const allErrors : InvalidInputModel[] = 
@@ -65,7 +64,6 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
       if(this.props.onValidation)
         this.props.onValidation(allErrors);
 
-        console.log(this.errorArray)
   }
 
   renderCard() : JSX.Element{

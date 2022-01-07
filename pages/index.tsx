@@ -1,9 +1,4 @@
 import React from 'react';
-
-
-  function foo(x: number) {
-    return x;
-  }
   
   function bar() {
     console.log('calling bff ...');
@@ -14,7 +9,6 @@ import React from 'react';
   }
   
   function App() : JSX.Element {
-    console.log('Calling foo. Result: ' + foo(4));
   
     return (
       <div className="App">

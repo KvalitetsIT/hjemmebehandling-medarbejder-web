@@ -155,7 +155,6 @@ export class PatientEditCard extends Component<Props, State> {
 
   errorMap: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
   onValidation(from: number, invalid: InvalidInputModel[]): void {
-    console.log("from : " + from)
     const errorMap = this.errorMap;
     errorMap.set(from, invalid);
 
@@ -163,7 +162,6 @@ export class PatientEditCard extends Component<Props, State> {
       this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(errorMap);
 
     if (this.state.tempCpr !== this.state.patient.cpr) {
-      console.log("Der er indtastet nyt cpr uden at trykke fremsøg (" + this.state.tempCpr + " != " + this.state.patient.cpr + ")")
       allErrors.push(new InvalidInputModel("cpr", "Der er indtastet nyt cpr uden at trykke fremsøg", CriticalLevelEnum.WARNING))
     }
 

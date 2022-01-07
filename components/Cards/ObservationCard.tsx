@@ -42,14 +42,11 @@ export class ObservationCard extends Component<Props, State> {
     initialiseServices(): void {
         this.questionnaireService = this.context.questionnaireService;
         this.dateHelper = this.context.dateHelper;
-        console.log(this.dateHelper)
     }
 
     async componentDidMount(): Promise<void> {
         try {
             const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50)
-            //console.log(responses)
-            //console.log(this.props.questionnaire.thresholds)
             this.setState({ questionnaireResponses: responses, loading: false })
         } catch (error: any) {
             this.setState(() => { throw error })
@@ -57,7 +54,6 @@ export class ObservationCard extends Component<Props, State> {
     }
 
     findObservationQuestions(questionnaireResponse: QuestionnaireResponse): Question[] {
-        console.log(questionnaireResponse)
         const questions: Question[] = [];
         questionnaireResponse.questions!.forEach((answer, question) => {
             const numberAnswer: boolean = answer instanceof NumberAnswer;
@@ -113,8 +109,6 @@ export class ObservationCard extends Component<Props, State> {
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
                     const threshold = this.props.questionnaire!.thresholds!.find(x => x.questionId == question.Id)
-                    console.log(question.Id)
-                    console.log(threshold)
                     return (
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                             <Card>

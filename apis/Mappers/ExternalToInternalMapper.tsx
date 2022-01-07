@@ -100,7 +100,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     mapThresholdDtos(thresholdDtos: Array<ThresholdDto>): Array<ThresholdCollection> {
 
-        console.log(thresholdDtos)
         let thresholds: ThresholdCollection[] = [];
 
 
@@ -113,7 +112,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
             }
 
             if (!(thresholdDto.valueBoolean === undefined)) {
-                console.log(threshold.questionId + "=thresholdOption")
                 let thresholdOption = this.CreateOption(
                     thresholdDto.questionId!,
                     String(thresholdDto.valueBoolean!),
@@ -122,7 +120,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 threshold.thresholdOptions!.push(thresholdOption);
             }
             else {
-                console.log(threshold.questionId + "=thresholdNumber")
                 let thresholdNumber = this.CreateThresholdNumber(
                     thresholdDto.questionId!,
                     Number(thresholdDto.valueQuantityLow),
@@ -132,7 +129,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 threshold.thresholdNumbers!.push(thresholdNumber);
             }
         }
-        console.log(thresholds)
         return thresholds;
 
     }

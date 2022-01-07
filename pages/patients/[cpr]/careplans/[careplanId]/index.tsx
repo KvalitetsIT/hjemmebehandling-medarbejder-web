@@ -97,7 +97,6 @@ class PatientCareplans extends React.Component<Props, State> {
       )
 
     const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
-    console.log(activeCareplan)
     return (
       <Grid container spacing={3}>
         <Grid item xs={2}>

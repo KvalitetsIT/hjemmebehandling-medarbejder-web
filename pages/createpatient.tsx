@@ -98,8 +98,6 @@ export default class CreatePatient extends Component<Props, State> {
     }
 
     this.state.careplan.patient = this.state.patient!;
-
-    console.log(this.state.careplan)
     this.setState({ loading: true })
     try {
       let careplanId!: string;
