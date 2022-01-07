@@ -19,6 +19,7 @@ export interface BasicTabsProps {
   tabIds: string[]
   tabContent: JSX.Element[]
   class: string
+  linkToId: boolean
 }
 export interface BasicTabsState {
   value: number
@@ -26,6 +27,9 @@ export interface BasicTabsState {
 
 export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
   static displayName = BasicTabs.name;
+  static defaultProps = {
+    linkToId: true
+  }
 
   constructor(props: BasicTabsProps) {
     super(props);
@@ -52,12 +56,17 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
                 <Grid item xs={11}>
                   {this.props.tabLabels.map(tabLabel => {
                     return (
-                      <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />
+                      <>
+                        {this.props.linkToId ?
+                          <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} /> :
+                          <Tab label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />
+                        }
+                      </>
                     )
                   })}
                 </Grid>
               </Grid>
-                  {this.props.children}
+              {this.props.children}
 
             </Tabs>
 
