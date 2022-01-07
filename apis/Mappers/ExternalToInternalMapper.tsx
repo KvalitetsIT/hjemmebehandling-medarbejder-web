@@ -15,7 +15,7 @@ import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { EntitlementEnum, User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
@@ -218,7 +218,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const internalUser = new User();
         internalUser.autorisationsids = user.autorisationsids;
         internalUser.email = user.email;
-        internalUser.entitlements = user.entitlements?.map(e => this.mapSingleEntitlement(e)).filter(e => e != EntitlementEnum.UNKNOWN);
+        internalUser.entitlements = user.entitlements?.map(e => this.mapSingleEntitlement(e)).filter(e => e != undefined);
         internalUser.firstName = user.firstName;
         internalUser.fullName = user.fullName;
         internalUser.lastName = user.lastName;
@@ -229,15 +229,11 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return internalUser;
     }
 
-    mapSingleEntitlement(entitlement: string): EntitlementEnum {
-        switch (entitlement) {
-            case "sygeplejerske":
-                return EntitlementEnum.NURSE
-            case "sosu":
-                return EntitlementEnum.SOSU
-            default:
-                return EntitlementEnum.UNKNOWN
-        }
+    mapSingleEntitlement(entitlement: string): string {
+        const splittedByUnderscore = entitlement.split("_");
+        const lenght = splittedByUnderscore.length
+        const mappedEntitlement = splittedByUnderscore[lenght-1]
+        return mappedEntitlement;
     }
 
     mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum): QuestionnaireResponseStatus {

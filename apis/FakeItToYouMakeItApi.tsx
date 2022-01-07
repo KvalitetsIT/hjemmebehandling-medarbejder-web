@@ -23,7 +23,7 @@ import { BaseApiError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseAp
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import { EntitlementEnum, User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
@@ -454,6 +454,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
+        await new Promise(f => setTimeout(f, this.timeToWait));
         try {
             if (page == 1)
                 return [this.task1, this.task2].filter(x => x.category != CategoryEnum.BLUE)
@@ -465,6 +466,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
+        await new Promise(f => setTimeout(f, this.timeToWait));
         if (page == 1)
             return [this.task1, this.task2].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
         return [];
@@ -499,7 +501,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         user.orgId = "453071000016001";
         user.orgName = "Infektionsmedicinsk Afdeling";
         user.email = "test@rm.dk"
-        user.entitlements = [EntitlementEnum.NURSE, EntitlementEnum.SOSU];
+        user.entitlements = ["Sygepljerske", "SOSU"];
         user.autorisationsids = [""];
         return user;
     }
