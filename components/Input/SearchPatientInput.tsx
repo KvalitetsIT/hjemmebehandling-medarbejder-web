@@ -44,9 +44,6 @@ export class SearchPatientInput extends Component<{}, State> {
     let patientSearchResults: PatientDetail[] = [];
     try {
       patientSearchResults = await this.patientService.SearchPatient(searchString);
-
-      this.setState({ patientResults: patientSearchResults, loading: false });
-
     } catch (error: any) {
       const noResults = error instanceof NotFoundError
       if (noResults)
@@ -55,6 +52,7 @@ export class SearchPatientInput extends Component<{}, State> {
         this.setState(() => { throw error })
     }
 
+    this.setState({ patientResults: patientSearchResults, loading: false });
     this.forceUpdate();
   }
   render(): JSX.Element {
