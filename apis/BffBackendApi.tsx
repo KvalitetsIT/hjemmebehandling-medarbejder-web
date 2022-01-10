@@ -114,7 +114,16 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     async SearchPatient(searchstring: string): Promise<PatientDetail[]> {
         try {
-            throw new NotImplementedError();
+            let request = {
+                searchString: searchstring
+            }
+
+            let result = await this.patientApi.searchPatients(request)
+            if (!result.patients)
+                return [];
+
+            return result.patients?.map(p => this.toInternal.mapPatientDto(p))
+
         } catch (error: any) {
             return await this.HandleError(error)
         }
