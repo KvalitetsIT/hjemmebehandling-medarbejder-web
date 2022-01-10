@@ -105,8 +105,14 @@ class PatientCareplans extends React.Component<Props, State> {
               <Stack spacing={3} >
 
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
-                <PatientCard patient={activeCareplan.patient!}></PatientCard>
-                <LoginInfoCard patient={activeCareplan.patient!} />
+                {activeCareplan?.patient ?
+                  <>
+                    <PatientCard patient={activeCareplan?.patient}></PatientCard>
+                    <LoginInfoCard patient={activeCareplan?.patient} />
+                  </> :
+                  <div>Noget gik galt - Ingen aktiv-behandlingsplan, eller så var ingen patient tilknyttet</div>  
+              }
+
                 <ErrorBoundary>
                   <CareplanSummary careplan={activeCareplan}></CareplanSummary>
                 </ErrorBoundary>
