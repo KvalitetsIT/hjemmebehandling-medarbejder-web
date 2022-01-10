@@ -14,6 +14,7 @@ import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/Ques
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
+import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 
 interface State {
 
@@ -70,11 +71,17 @@ class PatientCareplans extends React.Component<Props, State> {
         careplans = [await this.careplanService.GetPatientCareplanById(activeCareplanId)]
       }
 
-      const questionnaireIds: string[] = careplans.flatMap(x => x.questionnaires.map(x => x.id))
+      const careplan = careplans.find(a => !a?.terminationDate)
 
-      const careplan = careplans.find(a => !a.terminationDate)!
-      activeCareplanId = careplan!.id!
-      const questionnaireResponses: QuestionnaireResponse[] = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, questionnaireIds, 1, 5)
+      let questionnaireResponses: QuestionnaireResponse[] = [];
+      if (careplan && careplan.id) {
+        const questionnaireIds: string[] = careplans.flatMap(x => x.questionnaires.map(x => x.id))
+
+        activeCareplanId = careplan!.id!
+        questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, questionnaireIds, 1, 5)
+      }
+
+
       this.setState({
         loading: false,
         careplans: careplans,
@@ -89,46 +96,40 @@ class PatientCareplans extends React.Component<Props, State> {
   //=====================TABS===============================
 
   renderCareplanTab(): JSX.Element {
-
-    const careplans = this.state.careplans.find(a => !a.terminationDate)!
-    if (!careplans)
-      return (
-        <div>Ingen aktive behandlingsplaner fundet :-(</div>
-      )
-
-    const activeCareplan = this.state.careplans.find(c => c.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
+    const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={2}>
-          <ErrorBoundary>
-            <Stack spacing={3} >
+      <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive behandlingsplaner fundet :-(">
+        <Grid container spacing={3}>
+          <Grid item xs={2}>
+            <ErrorBoundary>
+              <Stack spacing={3} >
 
-              <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
-              <PatientCard patient={activeCareplan.patient!}></PatientCard>
-              <LoginInfoCard patient={activeCareplan.patient!} />
-              <ErrorBoundary>
-                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
-              </ErrorBoundary>
-            </Stack>
-          </ErrorBoundary>
-        </Grid>
-        <Grid item xs={10}>
-          <ErrorBoundary>
+                <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
+                <PatientCard patient={activeCareplan.patient!}></PatientCard>
+                <LoginInfoCard patient={activeCareplan.patient!} />
+                <ErrorBoundary>
+                  <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+                </ErrorBoundary>
+              </Stack>
+            </ErrorBoundary>
+          </Grid>
+          <Grid item xs={10}>
+            <ErrorBoundary>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan} />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan} />
+                </Grid>
+                <Grid item xs={12}>
+                  <ObservationCard questionnaire={activeCareplan?.questionnaires[0]} careplan={activeCareplan} />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <ObservationCard questionnaire={activeCareplan.questionnaires[0]} careplan={activeCareplan} />
-              </Grid>
-            </Grid>
 
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </Grid>
+
         </Grid>
-
-      </Grid>
-
+      </IsEmptyCard>
     )
   }
 

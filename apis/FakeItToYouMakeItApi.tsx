@@ -507,7 +507,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
-
         return [this.careplan1, this.careplan2].filter(x => x.patient!.cpr == cpr);
     }
 
