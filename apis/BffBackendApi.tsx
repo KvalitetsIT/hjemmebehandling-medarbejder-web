@@ -55,18 +55,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetPatients(includeActive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
+    async GetPatients(includeActive: boolean, includeCompleted : boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         try {
-            let api = this.careplanApi
+            let api = this.patientApi
             let request = {
-                onlyActiveCareplans: includeActive,
+                includeActive: includeActive,
+                includeCompleted: includeCompleted,
                 pageNumber: page,
                 pageSize: pageSize
             }
 
+            let carePlans = await api.getPatients(request)
+            if (!carePlans.patients)
+                return []
 
-            let carePlans = await api.searchCarePlans(request)
-            return carePlans.map(cp => this.toInternal.mapPatientDto(cp.patientDto!));
+            return carePlans.patients.map(patient => this.toInternal.mapPatientDto(patient));
         } catch (error: any) {
             return await this.HandleError(error)
         }

@@ -7,7 +7,7 @@ import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimpl
 
 export default interface IPatientService {
     SearchPatient : (searchString : string) => Promise<PatientDetail[]>
-    GetPatients : (includeActive : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
+    GetPatients : (includeActive : boolean,includeCompleted : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
 
     EditPatient : (patient: PatientDetail) => Promise<PatientDetail>
     CreatePatient : (patient : PatientDetail) => Promise<PatientDetail>

@@ -58,7 +58,7 @@ class PatientsTable extends React.Component<Props, State> {
 
         try {
 
-            const patients = await this.patientService.GetPatients(this.props.showActivePatients, this.props.pagenumber, this.state.pageSize);
+            const patients = await this.patientService.GetPatients(this.props.showActivePatients,!this.props.showActivePatients, this.props.pagenumber, this.state.pageSize);
             this.setState({
                 loadingTable: false,
                 patients: patients

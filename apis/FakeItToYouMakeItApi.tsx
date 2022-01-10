@@ -293,7 +293,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async CreateUser(patient: PatientDetail): Promise<User> {
         throw new NotImplementedError();
     }
-    async GetPatients(includeActive: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
+    async GetPatients(includeActive: boolean,includeCompleted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         let toReturn = [];
         for (let i = 0; i < pageSize; i++) {
