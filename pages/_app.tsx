@@ -581,6 +581,13 @@ const THEME = createTheme({
       },
       variants: [
         {
+          props: { variant: "text", color: "primary" },
+          style: {
+            color: blue,
+            padding: 0
+          }
+        },
+        {
           props: { className: "darkColor border", color: "error" },
           style: {
             color: red,

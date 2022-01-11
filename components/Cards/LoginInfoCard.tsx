@@ -9,7 +9,7 @@ import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import IUserService from '../../services/interfaces/IUserService';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import {Toast} from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 
 export interface Props {
     patient: PatientDetail
@@ -25,7 +25,7 @@ export class LoginInfoCard extends Component<Props, State> {
     dateHelper!: IDateHelper
     userService!: IUserService;
 
-    constructor(props : Props){
+    constructor(props: Props) {
         super(props)
         this.state = {
         }
@@ -43,7 +43,7 @@ export class LoginInfoCard extends Component<Props, State> {
                     Adgangskoden er nu nulstillet!
                 </Toast>
             )
-            this.setState({toast : afterResetPasswordToast})
+            this.setState({ toast: afterResetPasswordToast })
         } catch (error: any) {
             this.setState(() => { throw error })
         }
@@ -71,10 +71,9 @@ export class LoginInfoCard extends Component<Props, State> {
 
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="caption">
+                                <Typography variant="caption" align='left' alignItems="left" textAlign="left" alignContent="flex-start" alignSelf="self-start">
                                     Adgangskode
-                                </Typography>
-                                <Typography fontWeight="bold">
+<br/>
                                     <ConfirmationButton disabled={!patient.username} variant="text" color="primary" title="Nulstil adgangskode?" buttonText="Nulstil adgangskode" action={async () => await this.resetPassword()}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
