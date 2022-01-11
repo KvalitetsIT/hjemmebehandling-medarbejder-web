@@ -7,7 +7,6 @@ import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
-import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
@@ -17,14 +16,10 @@ import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdN
 
 import { QuestionnaireAlreadyOnCareplan } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
 import { IBackendApi } from "./IBackendApi";
-import { ErrorDtoFromJSON, UserContext } from "../generated";
-import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
-import { BaseApiError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseApiError";
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { QuestionnaireResponseStatusSelect } from "../components/Input/QuestionnaireResponseStatusSelect";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
@@ -124,7 +119,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency.repeated = FrequencyEnum.WEEKLY;
         frequency.deadline = '11:00'
         this.questionnaire1.frequency = frequency;
-        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3,this.tc4]
+        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
 
 
         this.questionnaire2.id = "qn2"
@@ -355,7 +350,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-        return [this.planDefinition1]
+        try {
+            return [this.planDefinition1]
+        } catch (error: any) {
+            return await this.HandleError(error);
+        }
     }
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         let questionnaireAlreadyInCareplan = careplan.questionnaires.find(x => x.id == questionnaireToAdd.id)
@@ -457,10 +456,22 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async throwError(statusCode: number): Promise<Response> {
-        let standardResponse: Response = new Response(null, { status: statusCode });
+        const body = JSON.stringify({
+            "timestamp": "2022-01-11T13:31:21.337851392Z",
+            "status": 400,
+            "error": "Bad Request",
+            "message": "Aktiv behandlingsplan eksisterer allerede for det angivne cpr-nummer.",
+            "path": "/api/v1/careplan",
+            "errorCode": 10,
+            "errorText": "Aktiv behandlingsplan eksisterer allerede for det angivne cpr-nummer."
+        });
+
+        let standardResponse: Response = new Response(body, { status: statusCode });
         throw standardResponse;
     }
-
+    async giveStringInPromise(message: string): Promise<string> {
+        return message;
+    }
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         try {
