@@ -566,6 +566,13 @@ const THEME = createTheme({
         }
       }
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          opacity: 1
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -584,7 +591,7 @@ const THEME = createTheme({
           props: { variant: "text", color: "primary" },
           style: {
             color: blue,
-            padding: 0
+            padding: 0,
           }
         },
         {
