@@ -134,9 +134,9 @@ const THEME = createTheme({
           style: {
             color: black,
             textTransform: "none",
-
+            fontWeight: "bold",
           }
-        }
+        },
       ]
     },
     MuiDivider: {

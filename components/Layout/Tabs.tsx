@@ -59,7 +59,7 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
                       <>
                         {this.props.linkToId ?
                           <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} /> :
-                          <Tab label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />
+                          <Tab label={<Typography sx={{color:"black"}}className='labelTextTab'>{tabLabel}</Typography>} />
                         }
                       </>
                     )
