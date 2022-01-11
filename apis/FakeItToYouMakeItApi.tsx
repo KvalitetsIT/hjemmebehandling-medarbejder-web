@@ -58,6 +58,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     tc1 = new ThresholdCollection();
     tc2 = new ThresholdCollection();
     tc3 = new ThresholdCollection();
+    tc4 = new ThresholdCollection();
 
     task1: Task = new Task();
     task2: Task = new Task();
@@ -123,7 +124,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency.repeated = FrequencyEnum.WEEKLY;
         frequency.deadline = '11:00'
         this.questionnaire1.frequency = frequency;
-        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3]
+        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3,this.tc4]
 
 
         this.questionnaire2.id = "qn2"
@@ -151,10 +152,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         //====================================== Thresholds
         this.tc1.questionId = "q1";
         this.tc1.thresholdOptions = [
-            this.CreateOption("1", "Korekt", CategoryEnum.GREEN),
-            this.CreateOption("2", "Ved ikke", CategoryEnum.YELLOW),
-            this.CreateOption("3", "Ikke Korekt", CategoryEnum.RED),
+            this.CreateOption("1", "true", CategoryEnum.RED),
+            this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
+
+        
 
         this.tc2.questionId = "q2"
         this.tc2.thresholdNumbers = [
@@ -168,6 +170,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateThreshold("1", 0, 37, CategoryEnum.RED),
             this.CreateThreshold("2", 37, 44, CategoryEnum.YELLOW),
             this.CreateThreshold("3", 44, 100, CategoryEnum.GREEN),
+        ]
+
+        this.tc4.questionId = "q4";
+        this.tc4.thresholdOptions = [
+            this.CreateOption("1", "true", CategoryEnum.RED),
+            this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
         //======================================= careplan
         this.careplan1.id = "plan1"
@@ -243,7 +251,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
 
         let questionAnswerMap4 = new Map<Question, Answer>();
-        questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![2].option));
+        questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(42, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(100, UnitType.NOUNIT));
         questionAnswerMap4.set(this.question4, this.CreateBooleanAnswer(true));
@@ -258,7 +266,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
 
         let questionAnswerMap5 = new Map<Question, Answer>();
-        questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![2].option));
+        questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(true));
@@ -507,7 +515,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
-        return []
         return [this.careplan1, this.careplan2].filter(x => x.patient!.cpr == cpr);
     }
 
