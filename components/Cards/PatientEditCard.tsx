@@ -14,6 +14,7 @@ import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { PhonenumberInput } from '../Input/PhonenumberInput';
 
 export interface Props {
   initialPatient: PatientDetail
@@ -218,24 +219,23 @@ export class PatientEditCard extends Component<Props, State> {
                 <TextFieldValidation uniqueId={inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
               </Stack>
               <Stack spacing={3} direction="row">
-                <TextFieldValidation
+                <PhonenumberInput
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={inputId++}
-                  validate={(phone) => this.validationService.ValidatePhonenumber(phone)}
-                  type="tel"
                   label="Primært telefonnummer"
                   value={this.state.patient.primaryPhone}
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
                   variant="outlined" />
-                <TextFieldValidation
+
+                <PhonenumberInput
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={inputId++}
-                  validate={(phone) => this.validationService.ValidatePhonenumber(phone)}
-                  type="tel" label="sekundært telefonnummer" value={this.state.patient.secondaryPhone} onChange={input => this.modifyPatient(this.setSecondaryPhonenumber, input)} variant="outlined" />
+                  label="sekundært telefonnummer"
+                  value={this.state.patient.secondaryPhone}
+                  onChange={input => this.modifyPatient(this.setSecondaryPhonenumber, input)}
+                  variant="outlined" />
               </Stack>
             </Stack>
-
-
           </CardContent>
         </Card>
         {this.state.toast ?? <></>}

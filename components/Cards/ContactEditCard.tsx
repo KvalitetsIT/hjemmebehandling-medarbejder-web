@@ -9,6 +9,7 @@ import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import IValidationService from '../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
+import { PhonenumberInput } from '../Input/PhonenumberInput';
 
 export interface Props {
     initialContact? : Contact
@@ -95,19 +96,15 @@ modifyPatient(patientModifier : (contact : Contact, newValue : string) => Contac
                   
             </Stack>
             <Stack spacing={3} direction="row">
-              <TextFieldValidation 
+              <PhonenumberInput 
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
-                  type="tel"      
                   label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber,input) } 
-                  validate={(input)=>this.validationService.ValidatePhonenumber(input)}
                   variant="outlined" />
-              <TextFieldValidation 
+              <PhonenumberInput 
                   onValidation={(uid, errors)=>this.onValidation(uid,errors)} 
                   uniqueId={inputId++}
-                  type="tel"
                   label="Sekundær telefonnummer" 
-                  validate={(input)=>this.validationService.ValidatePhonenumber(input)}
                   value={this.state.contact.secondaryPhone} 
                   onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber,input) } 
                   variant="outlined" />

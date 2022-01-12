@@ -1,17 +1,8 @@
 
 
-import React from "react";
-import { IBackendApi } from "../apis/IBackendApi";
-import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { UserContext } from "../generated";
-import { PersonDto } from "../generated/models/PersonDto";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
-import IPersonService from "./interfaces/IPersonService";
-import IUserService from "./interfaces/IUserService";
 import IValidationService from "./interfaces/IValidationService";
 
 export default class ValidationService extends BaseService implements IValidationService {
@@ -58,7 +49,7 @@ export default class ValidationService extends BaseService implements IValidatio
         }
 
         if(phoneNumber.length != 11){
-            const error = new InvalidInputModel(propName,"Telefonnummer skal være 11 karakter (inkl landekode)")
+            const error = new InvalidInputModel(propName,"Telefonnummer skal være 8 karakter")
             errors.push(error)
         }
 
