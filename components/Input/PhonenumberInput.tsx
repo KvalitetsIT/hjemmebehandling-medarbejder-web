@@ -46,16 +46,23 @@ export class PhonenumberInput extends Component<Props, State> {
         }
     }
 
-    initializeServer() : void {
+    initializeServer(): void {
         this.validationService = this.context.validationService;
     }
 
-    addAreaCode(input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> {
-        input.target.value =this.state.areaCode+input.target.value
+    formatPhoneNumber(input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> {
+        input.target.value = this.addAreaCodeToPhonenumber(input.target.value)
         return input;
     }
-    executeOnSubmit(beforeValue : string) : string{
-        return this.state.areaCode+beforeValue;
+
+    addAreaCodeToPhonenumber(phone: string) {
+        if (phone == "")
+            return phone
+        return this.state.areaCode + phone;
+    }
+
+    executeOnSubmit(beforeValue: string): string {
+        return this.state.areaCode + beforeValue;
     }
 
     render(): JSX.Element {
@@ -65,11 +72,11 @@ export class PhonenumberInput extends Component<Props, State> {
             <TextFieldValidation
                 onValidation={(uid, errors) => this.props.onValidation ? this.props.onValidation(uid, errors) : {}}
                 uniqueId={this.props.uniqueId}
-                validate={(phone) => this.validationService.ValidatePhonenumber(this.state.areaCode + phone)}
+                validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone))}
                 type="tel"
                 label={this.props.label}
-                value={this.props.value?.replaceAll("+45","")}
-                onChange={input => this.props.onChange(this.addAreaCode(input))}
+                value={this.props.value?.replaceAll("+45", "")}
+                onChange={input => this.props.onChange(this.formatPhoneNumber(input))}
                 variant="outlined">
                 <Select
 
@@ -77,7 +84,7 @@ export class PhonenumberInput extends Component<Props, State> {
                     value={this.state.areaCode}
                     label="Landekode"
                     variant='standard'
-                    onChange={(a) => this.setState({areaCode : a.target.value})}
+                    onChange={(a) => this.setState({ areaCode: a.target.value })}
                 >
                     {this.areaCodes.map(areaCode => {
                         return (
