@@ -42,7 +42,7 @@ export class CareplanUnreadResponse extends Component<Props, {}> {
     if (responses.length == 0)
       return (<></>);
 
-    const latestUnansweredAnswer = responses.sort((a, b) => b.answeredTime!.getTime() - a.answeredTime!.getTime())[0]
+    const latestUnansweredAnswer = responses.sort((a, b) => b.category - a.category)[0]
     return (
       <>
         <Card>
