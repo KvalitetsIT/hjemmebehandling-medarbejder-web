@@ -55,7 +55,7 @@ export class PhonenumberInput extends Component<Props, State> {
         return input;
     }
 
-    addAreaCodeToPhonenumber(phone: string) {
+    addAreaCodeToPhonenumber(phone: string) : string {
         if (phone == "")
             return phone
         return this.state.areaCode + phone;
