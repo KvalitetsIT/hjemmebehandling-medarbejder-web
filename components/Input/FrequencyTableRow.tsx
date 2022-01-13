@@ -42,8 +42,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
   getAllRepeated(): FrequencyEnum[] {
     return [
-      FrequencyEnum.WEEKLY,
-      FrequencyEnum.EVERYOTHERWEEK
+      FrequencyEnum.WEEKLY
     ]
   }
 
