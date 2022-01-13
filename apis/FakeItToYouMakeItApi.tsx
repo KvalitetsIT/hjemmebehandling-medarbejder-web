@@ -57,6 +57,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     task1: Task = new Task();
     task2: Task = new Task();
+    task3: Task = new Task();
 
     constructor() {
         super();
@@ -289,6 +290,16 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task2.questionnaireName = this.questionnaire1.name
         this.task2.questionnaireId = this.questionnaire1.id
         this.task2.responseLinkEnabled = true
+
+        this.task3.cpr = this.patient1.cpr!
+        this.task3.planDefinitionName = this.planDefinition1.name
+        this.task3.category = CategoryEnum.RED
+        this.task3.firstname = "jens"
+        this.task3.lastname = "larsen"
+        this.task3.questionnaireResponseStatus = this.questionnaireResponse1.status
+        this.task3.questionnaireName = this.questionnaire1.name
+        this.task3.questionnaireId = this.questionnaire1.id
+        this.task3.responseLinkEnabled = true
     }
     async ResetPassword(patient: PatientDetail): Promise<void> {
 
@@ -476,7 +487,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         await new Promise(f => setTimeout(f, this.timeToWait));
         try {
             if (page == 1)
-                return [this.task1, this.task2].filter(x => x.category != CategoryEnum.BLUE)
+                return [this.task1, this.task2, this.task3].filter(x => x.category != CategoryEnum.BLUE)
             return []
         } catch (error) {
             return await this.HandleError(error)
@@ -487,7 +498,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         if (page == 1)
-            return [this.task1, this.task2].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+            return [this.task1, this.task2,this.task3].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
         return [];
     }
 

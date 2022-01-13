@@ -65,7 +65,8 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     async  GetUnfinishedQuestionnaireResponseTasks(page : number, pagesize : number) : Promise<Array<Task>> {
       try{
       this.ValidatePagination(page,pagesize);
-        return await this.backendApi.GetUnfinishedQuestionnaireResponseTasks(page, pagesize)
+        const apiResult = await this.backendApi.GetUnfinishedQuestionnaireResponseTasks(page, pagesize)
+        return apiResult.sort((a,b) => b.category - a.category)
       } catch(error : any){
         return this.HandleError(error);
       }
