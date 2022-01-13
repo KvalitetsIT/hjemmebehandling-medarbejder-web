@@ -47,6 +47,12 @@ export default class ValidationService extends BaseService implements IValidatio
             const error = new InvalidInputModel(propName,"Telefonnummer skal indeholde landekode")
             errors.push(error)
         }
+        
+        const phoneNumberWithNoPlus = phoneNumber.replace("+","") as unknown as number
+        if(isNaN(phoneNumberWithNoPlus)){
+            const error = new InvalidInputModel(propName,"Telefonnummer må kun indeholde tal")
+            errors.push(error)
+        }
 
         if(phoneNumber.length != 11){
             const error = new InvalidInputModel(propName,"Telefonnummer skal være 8 karakter")
