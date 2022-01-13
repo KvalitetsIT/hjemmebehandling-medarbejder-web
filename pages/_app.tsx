@@ -51,8 +51,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
       userBackend = mockApi;
     }
+
   }
 
+  console.log("Version: " + process.env.DOCKERTAG)
+  
   return (
     <>
       <div suppressHydrationWarning>
