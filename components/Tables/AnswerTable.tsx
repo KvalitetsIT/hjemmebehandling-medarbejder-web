@@ -148,8 +148,9 @@ export class AnswerTable extends Component<Props, State> {
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
-                    <Button sx={{paddingRight:2}} disabled={!hasMorePages} onClick={async () => await this.NextPage()} startIcon={<NavigateBeforeIcon />}>Ældre</Button>
-                    <Button disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} endIcon={<NavigateNextIcon />}>Nyere</Button>
+                    <Button sx={{ paddingRight: 2 }} disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} startIcon={<NavigateBeforeIcon />}>Nyere</Button>
+                    <Button  disabled={!hasMorePages} onClick={async () => await this.NextPage()} endIcon={<NavigateNextIcon />}>Ældre</Button>
+
                 </Grid>
                 <Grid item xs={12}>
                     <TableContainer component={Paper}>
