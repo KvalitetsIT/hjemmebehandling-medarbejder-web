@@ -99,10 +99,10 @@ class PatientCareplans extends React.Component<Props, State> {
     const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
       <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive behandlingsplaner fundet :-(">
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
+        <Grid container spacing={3} sx={{flexWrap:"inherit"}}>
+          <Grid item xs="auto">
             <ErrorBoundary>
-              <Stack spacing={3} >
+              <Stack spacing={3}  >
 
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
                 {activeCareplan?.patient ?
@@ -119,7 +119,7 @@ class PatientCareplans extends React.Component<Props, State> {
               </Stack>
             </ErrorBoundary>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs>
             <ErrorBoundary>
 
               <Grid container spacing={2}>

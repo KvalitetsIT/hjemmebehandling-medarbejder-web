@@ -105,7 +105,7 @@ export class ObservationCard extends Component<Props, State> {
 
         let counter = 0
         return (
-            <Grid container >
+            <Grid container  columns={12}>
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
                     const threshold = this.props.questionnaire!.thresholds!.find(x => x.questionId == question.Id)
