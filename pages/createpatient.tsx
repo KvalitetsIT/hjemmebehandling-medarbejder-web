@@ -182,10 +182,10 @@ export default class CreatePatient extends Component<Props, State> {
 
     return (
       <form onSubmit={(e) => { e.preventDefault(); this.submitPatient() }} noValidate onBlur={() => this.forceUpdate()}  >
-        <Grid container>
+        <Grid container sx={{flexWrap : "inherit"}} columns={12}>
 
 
-          <Grid item spacing={5} xs={8}  >
+          <Grid item spacing={5} xs={10}  minWidth={500}>
 
 
             <ErrorBoundary>
@@ -271,7 +271,7 @@ export default class CreatePatient extends Component<Props, State> {
 
 
           </Grid>
-          <Grid paddingLeft={5} xs={2}>
+          <Grid paddingLeft={5} xs="auto">
             <div>
               <Card>
                 <CardContent>

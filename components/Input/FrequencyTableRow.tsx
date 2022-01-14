@@ -101,6 +101,7 @@ export class FrequencyTableRow extends Component<Props, State> {
           <TableCell>
             <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
               <TimePicker
+                
                 disabled
                 label="Seneste besvarelses tidspunkt"
                 value={this.state.deadineTime}
