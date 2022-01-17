@@ -215,7 +215,7 @@ const THEME = createTheme({
         },
         notchedOutline: {
           borderWidth: 1,
-          borderRadius: 100,
+          borderRadius: 10,
         },
       }
     },
