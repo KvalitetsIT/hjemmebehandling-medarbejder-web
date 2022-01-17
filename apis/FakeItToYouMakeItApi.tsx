@@ -159,6 +159,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateThreshold("1", 120, 135, CategoryEnum.RED),
             this.CreateThreshold("2", 37, 120, CategoryEnum.YELLOW),
             this.CreateThreshold("3", 0, 37, CategoryEnum.GREEN),
+            this.CreateThreshold("3", -10, 0, CategoryEnum.YELLOW),
+            this.CreateThreshold("3", -50, -10, CategoryEnum.RED),
         ]
 
         this.tc3.questionId = "q3"

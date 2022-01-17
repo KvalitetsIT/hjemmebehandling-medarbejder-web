@@ -8,12 +8,13 @@ import { Alert, CardHeader, Divider, Grid, GridSize, Typography } from '@mui/mat
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
-import {ThresholdSlider} from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
+import { ThresholdSlider } from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
+import ChartData from '@kvalitetsit/hjemmebehandling/Charts/ChartData';
+import ResponseViewCard from '@kvalitetsit/hjemmebehandling/Charts/ResponseViewCard';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { QuestionChart } from '@kvalitetsit/hjemmebehandling/Charts/QuestionChart';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 export interface Props {
@@ -24,6 +25,7 @@ export interface Props {
 export interface State {
     questionnaireResponses: QuestionnaireResponse[]
     loading: boolean
+
 }
 
 export class ObservationCard extends Component<Props, State> {
@@ -104,26 +106,22 @@ export class ObservationCard extends Component<Props, State> {
         }
 
         let counter = 0
+
         return (
-            <Grid container  columns={12}>
+            <Grid container columns={12}>
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
                     const threshold = this.props.questionnaire!.thresholds!.find(x => x.questionId == question.Id)
+
+                    const dateToString = (date: Date) => this.dateHelper.DateToString(date);
+                    const chartData = new ChartData(this.state.questionnaireResponses, question, threshold, dateToString);
+
                     return (
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
-                            <Card>
-                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question}</Typography>} />
-                                <Divider/>
-                                <CardContent>
-                                    {threshold && threshold.thresholdNumbers ?
-                                        <QuestionChart dateToString={(date: Date) => this.dateHelper.DateToString(date)} thresholds={threshold.thresholdNumbers} question={question} questionnaireResponses={this.state.questionnaireResponses} /> :
-                                        <QuestionChart dateToString={(date: Date) => this.dateHelper.DateToString(date)} thresholds={[]} question={question} questionnaireResponses={this.state.questionnaireResponses} />
-                                    }
-                                </CardContent>
-                            </Card>
+                            <ResponseViewCard chartData={chartData}/>
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question} - Alarmgrænser</Typography>} />
-                                <Divider/>
+                                <Divider />
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
                                 </CardContent>
