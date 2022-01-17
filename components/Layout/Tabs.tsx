@@ -50,7 +50,7 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
       <>
         <Card>
 
-          <CardHeader sx={{ paddingTop: 0, paddingBottom: 0 }} title={
+          <CardHeader sx={{ padding: 0}} title={
             <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example" TabIndicatorProps={{ style: { display: "none" }, }}>
               <Grid container>
                 <Grid item xs={11}>
