@@ -124,7 +124,7 @@ const THEME = createTheme({
   typography: {
     "fontFamily": "verdana, sans-serif",
     h6: {
-      fontSize: 17,
+      fontSize: 14,
       fontWeight: "bold",
       color: black
     }
