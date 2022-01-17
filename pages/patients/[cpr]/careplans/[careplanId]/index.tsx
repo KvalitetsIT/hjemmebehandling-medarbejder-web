@@ -100,7 +100,7 @@ class PatientCareplans extends React.Component<Props, State> {
     return (
       <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive behandlingsplaner fundet :-(">
         <Grid container spacing={3} sx={{flexWrap:"inherit"}}>
-          <Grid item xs="auto">
+          <Grid maxWidth={400}  item xs="auto">
             <ErrorBoundary>
               <Stack spacing={3}  >
 
