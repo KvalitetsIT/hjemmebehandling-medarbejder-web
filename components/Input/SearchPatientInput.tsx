@@ -62,6 +62,7 @@ export class SearchPatientInput extends Component<{}, State> {
         className="search"
         autoComplete
         getOptionLabel={(option) => option.firstname + " " + option.lastname + " (" + option.cpr + ")"}
+        noOptionsText="Ingen resultater"
         options={this.state.patientResults}
         onInputChange={async (a, b) => await this.searchForPatient(b)}
         renderOption={(a, b) => (<Stack><Button component={Link} to={"/patients/" + b.cpr}>{b.firstname + " " + b.lastname + " (" + b.cpr + ")"}</Button></Stack>)}
