@@ -93,8 +93,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.person1.patientContactDetails = personContact;
 
-        this.planDefinition1.name = "Imundefekt"
-        this.planDefinition1.id = "def1"
         //======================================= Questions
         this.question1.Id = "q1";
         this.question1.question = "Jeg har det bedre i dag"
@@ -140,7 +138,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire3.frequency = frequency3;
 
 
-        this.planDefinition1.name = "Imundefekt"
+        this.planDefinition1.name = "Infektionsmedicinsk patientgruppe Infektionsmedicinsk patientgruppe"
         this.planDefinition1.id = "def1"
 
         this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2]
@@ -159,8 +157,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateThreshold("1", 120, 135, CategoryEnum.RED),
             this.CreateThreshold("2", 37, 120, CategoryEnum.YELLOW),
             this.CreateThreshold("3", 0, 37, CategoryEnum.GREEN),
-            this.CreateThreshold("3", -10, 0, CategoryEnum.YELLOW),
-            this.CreateThreshold("3", -50, -10, CategoryEnum.RED),
+            //this.CreateThreshold("3", -10, 0, CategoryEnum.YELLOW),
+            //this.CreateThreshold("3", -50, -10, CategoryEnum.RED),
         ]
 
         this.tc3.questionId = "q3"
