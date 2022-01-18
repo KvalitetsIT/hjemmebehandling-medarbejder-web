@@ -55,10 +55,9 @@ class PatientsTable extends React.Component<Props, State> {
         this.setState({
             loadingTable: true,
         })
-
         try {
 
-            const patients = await this.patientService.GetPatients(this.props.showActivePatients,!this.props.showActivePatients, this.props.pagenumber, this.state.pageSize);
+            const patients = await this.patientService.GetPatients(this.props.showActivePatients, !this.props.showActivePatients, this.props.pagenumber, this.state.pageSize);
             this.setState({
                 loadingTable: false,
                 patients: patients
@@ -66,7 +65,6 @@ class PatientsTable extends React.Component<Props, State> {
         } catch (error) {
             this.setState(() => { throw error })
         }
-
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -104,12 +102,11 @@ class PatientsTable extends React.Component<Props, State> {
                                 </TableRow>
                             </TableHead>
                             {this.state.loadingTable ? <LoadingSmallComponent /> :
-
                                 this.state.patients.map(patient => {
                                     return (
                                         <TableRow>
                                             <TableCell>
-                                                <Button component={Link} to={"/patients/"+patient.cpr}>{patient.cprToString()}</Button> 
+                                                <Button component={Link} to={"/patients/" + patient.cpr}>{patient.cprToString()}</Button>
                                             </TableCell>
                                             <TableCell>
                                                 {patient.firstname} {patient.lastname}
@@ -117,19 +114,18 @@ class PatientsTable extends React.Component<Props, State> {
                                         </TableRow>
                                     );
                                 })
+                            }
+                        </Table>
+                    </TableContainer>
+                </IsEmptyCard>
+                <Box paddingTop={5}>
+                    <ButtonGroup>
+                        <Button variant="text" className='button__page-switch' component={Link} to={"./" + previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon /></Button>
+                        <Button variant="text" className='button__page-switch' disabled> {currentpage} </Button>
+                        <Button variant="text" className='button__page-switch' component={Link} to={"./" + nextpage} disabled={!hasMorePages}><NavigateNextIcon /></Button>
+                    </ButtonGroup>
+                </Box>
 
-                    }
-                </Table>
-            </TableContainer>  
-            </IsEmptyCard>
-            <Box paddingTop={5}>
-        <ButtonGroup>
-                  <Button variant="text" className='button__page-switch' component={Link} to={"./"+previouspage} disabled={previouspage <= 0}><NavigateBeforeIcon/></Button>
-                  <Button variant="text" className='button__page-switch' disabled> {currentpage} </Button>
-                  <Button variant="text" className='button__page-switch' component={Link} to={"./"+nextpage} disabled={!hasMorePages}><NavigateNextIcon/></Button>
-              </ButtonGroup>
-        </Box> 
-                
             </>
 
         )
