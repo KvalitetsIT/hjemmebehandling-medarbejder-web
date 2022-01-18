@@ -88,7 +88,8 @@ a {
 
 
 .MuiFormControl-root.answer__status {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 30px;
   width: 190px;
 }
