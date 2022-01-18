@@ -26,7 +26,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       let toReturn = await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
       toReturn.sort((a,b) => {
         if(b.answeredTime && a.answeredTime)
-          return a.answeredTime.getTime() - b.answeredTime.getTime();
+          return b.answeredTime.getTime() - a.answeredTime.getTime();
         return -1;
       })
       return toReturn;
