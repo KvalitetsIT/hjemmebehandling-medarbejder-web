@@ -154,7 +154,7 @@ const THEME = createTheme({
     MuiGrid: {
       styleOverrides: {
         root: {
-          fontsize: 16,
+          fontsize: 14,
           ".grid__headline": {
             paddingBottom: 10
           },
@@ -292,7 +292,7 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           borderBottom: 'none',
-          fontSize: 16,
+          fontSize: 14,
           padding: 20
         }
       },
