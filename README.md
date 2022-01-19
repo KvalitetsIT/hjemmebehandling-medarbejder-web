@@ -47,3 +47,10 @@ npm run lint
 | Environment variable | Description | Required |
 |----------------------|-------------|---------- |
 | BFF_BASE_URL | Base URL for Backend API server. | Yes |
+| NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE | If true the QuestionnaireApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE | If true the QuestionnaireAnswerApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE |If true the CareplanApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_PATIENT_SERVICE | If true the PatientApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_USER_SERVICE | If true the UserApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_PERSON_SERVICE | If true the PersonApi is mocked, and will not call backendApi| No |
+
