@@ -180,7 +180,8 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           ":before": {
-            borderBottom: 'none'
+            borderBottom: 'none',
+            content: `none`
           }
         }
       }
