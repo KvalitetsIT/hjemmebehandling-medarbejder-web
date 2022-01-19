@@ -48,7 +48,7 @@ npm install @openapitools/openapi-generator-cli
 https://nextjs.org/docs :
 ```
 npm install next react react-dom
-
+```
 ## Configuration
 
 | Environment variable | Description | Required |
