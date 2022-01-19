@@ -199,8 +199,6 @@ export class AnswerTable extends Component<Props, State> {
                             </TableHead>
                             <TableBody>
                                 {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
-
-                                    let coloumnCount = 0;
                                     return (
                                         <>
 
@@ -224,7 +222,7 @@ export class AnswerTable extends Component<Props, State> {
         </>
         )
     }
-    renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse) {
+    renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse) : JSX.Element{
         if (questionResponse == undefined)
             return <TableCell></TableCell>
 
