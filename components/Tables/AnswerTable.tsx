@@ -14,6 +14,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 
 export interface Props {
     questionnaires: Questionnaire
@@ -22,7 +23,7 @@ export interface Props {
 
 export interface State {
     thresholdModalOpen: boolean
-    questionnaireResponses: QuestionnaireResponse[]
+    questionnaireResponses: (QuestionnaireResponse | undefined)[]
     loading: boolean
     pagesize: number
     page: number
@@ -143,13 +144,15 @@ export class AnswerTable extends Component<Props, State> {
             hasMorePages = true;
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
-
+        while (questionnairesResponsesToShow.length < 5) {
+            questionnairesResponsesToShow.push(undefined)
+        }
 
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
                     <Button sx={{ paddingRight: 2 }} disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} startIcon={<NavigateBeforeIcon />}>Nyere</Button>
-                    <Button  disabled={!hasMorePages} onClick={async () => await this.NextPage()} endIcon={<NavigateNextIcon />}>Ældre</Button>
+                    <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} endIcon={<NavigateNextIcon />}>Ældre</Button>
 
                 </Grid>
                 <Grid item xs={12}>
@@ -162,11 +165,12 @@ export class AnswerTable extends Component<Props, State> {
                                     <TableCell width="10%">
 
                                     </TableCell>
-                                    {questionnairesResponsesToShow.map(collection => {
+                                    {questionnairesResponsesToShow.map(questionResponse => {
+                                        if (questionResponse == undefined)
+                                            return <TableCell></TableCell>
+                                        let severity = this.getChipColorFromCategory(questionResponse.category) as string
 
-                                        let severity = this.getChipColorFromCategory(collection.category) as string
-
-                                        if (collection.status === QuestionnaireResponseStatus.Processed)
+                                        if (questionResponse.status === QuestionnaireResponseStatus.Processed)
                                             severity = "info"
 
                                         return (
@@ -174,12 +178,12 @@ export class AnswerTable extends Component<Props, State> {
 
                                                 <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
                                                     <div className="answer__header">
-                                                        <Typography className="answer__headline" align="center">{collection.answeredTime ? this.datehelper.DayIndexToDay(collection.answeredTime.getUTCDay()) : ""}</Typography>
-                                                        <Typography className="answer__date" align="center" variant="caption">{collection.answeredTime ? this.datehelper.DateToString(collection.answeredTime) : ""}</Typography>
+                                                        <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
+                                                        <Typography className="answer__date" align="center" variant="caption">{questionResponse.answeredTime ? this.datehelper.DateToString(questionResponse.answeredTime) : ""}</Typography>
                                                     </div>
 
                                                     <ErrorBoundary rerenderChildren={false}>
-                                                        <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, collection)} questionnaireResponse={collection} />
+                                                        <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, questionResponse)} questionnaireResponse={questionResponse} />
                                                     </ErrorBoundary>
                                                 </Stack>
 
@@ -195,6 +199,8 @@ export class AnswerTable extends Component<Props, State> {
                             </TableHead>
                             <TableBody>
                                 {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
+
+                                    let coloumnCount = 0;
                                     return (
                                         <>
 
@@ -204,23 +210,7 @@ export class AnswerTable extends Component<Props, State> {
                                                 </TableCell>
 
                                                 {questionnairesResponsesToShow.map(questionResponse => {
-                                                    const answer = this.questionnaireService.findAnswer(question, questionResponse);
-                                                    const thresholdCollection = this.props.questionnaires.thresholds!.find(x => x.questionId == question.Id);
-                                                    const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
-                                                    return (
-                                                        <TableCell>
-                                                            {category == CategoryEnum.BLUE ?
-                                                                <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
-                                                                    <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography>
-                                                                </Tooltip> :
-
-                                                                <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
-                                                                    <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
-                                                                </Tooltip>
-                                                            }
-                                                        </TableCell>
-
-                                                    )
+                                                    return this.renderSingleResponse(question, questionResponse)
                                                 })}
                                             </TableRow>
                                         </>
@@ -231,13 +221,30 @@ export class AnswerTable extends Component<Props, State> {
                     </TableContainer>
                 </Grid>
             </Grid>
-
-
-
-
-
         </>
         )
     }
+    renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse) {
+        if (questionResponse == undefined)
+            return <TableCell></TableCell>
 
+        const answer = this.questionnaireService.findAnswer(question, questionResponse);
+        const thresholdCollection = this.props.questionnaires.thresholds!.find(x => x.questionId == question.Id);
+        const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
+
+        return (
+            <TableCell>
+                {category == CategoryEnum.BLUE ?
+                    <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
+                        <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography>
+                    </Tooltip> :
+
+                    <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
+                        <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
+                    </Tooltip>
+                }
+            </TableCell>
+
+        )
+    }
 }

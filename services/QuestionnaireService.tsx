@@ -117,10 +117,10 @@ export default class QuestionnaireService extends BaseService implements IQuesti
         return answer;
     }
 
-    findAllQuestions(questionResponses : Array<QuestionnaireResponse>) : Question[]{
+    findAllQuestions(questionResponses : Array<QuestionnaireResponse | undefined>) : Question[]{
         let questions : Question[] = [];
-        questionResponses.forEach(singleResponse => {
-            let iterator = singleResponse.questions!.entries();
+        questionResponses.filter(x=>x != undefined).forEach(singleResponse => {
+            let iterator = singleResponse!.questions!.entries();
             let element = iterator.next();
             while(!element.done){
                 

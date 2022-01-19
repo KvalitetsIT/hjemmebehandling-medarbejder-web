@@ -11,7 +11,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 export default interface IQuestionnaireService {
     
     //FIND
-    findAllQuestions : (questionResponses : Array<QuestionnaireResponse>) => Question[]
+    findAllQuestions : (questionResponses : Array<QuestionnaireResponse | undefined>) => Question[]
     findAnswer : (desiredQuestion : Question, questionResponses : QuestionnaireResponse) => Answer | undefined;
     
     //GET
