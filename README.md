@@ -60,3 +60,4 @@ npm install next react react-dom
 | NEXT_PUBLIC_MOCK_PATIENT_SERVICE | If true the PatientApi is mocked, and will not call backendApi | No |
 | NEXT_PUBLIC_MOCK_USER_SERVICE | If true the UserApi is mocked, and will not call backendApi | No |
 | NEXT_PUBLIC_MOCK_PERSON_SERVICE | If true the PersonApi is mocked, and will not call backendApi| No |
+
