@@ -11,6 +11,7 @@ import ICareplanService from '../../../../../../services/interfaces/ICareplanSer
 import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
 import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 
 
 interface State {
@@ -58,9 +59,18 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   async populateCareplans(): Promise<void> {
 
     const { cpr } = this.props.match.params;
-    const responses = await this.careplanService.GetPatientCareplans(cpr)
+    const activeCareplanId = this.props.match.params.careplanId
+
+    let careplans: PatientCareplan[] = []
+    if (!activeCareplanId || activeCareplanId === 'Aktiv') {
+      careplans = await this.careplanService.GetPatientCareplans(cpr);
+    }
+    else {
+      careplans = [await this.careplanService.GetPatientCareplanById(activeCareplanId)]
+    }
+
     this.setState({
-      careplans: responses,
+      careplans: careplans,
       loading: false
     });
   }
@@ -69,9 +79,9 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   renderTabs(): JSX.Element {
 
     let questionnaires: Questionnaire[] = []
-    let currentCareplan = this.state.careplans.find(x => x.id === this.props.match.params.careplanId);
+    let currentCareplan = this.state.careplans.find(x => x?.id === this.props.match.params.careplanId);
     if (!currentCareplan)
-      currentCareplan = this.state.careplans.find(x => !x.terminationDate);
+      currentCareplan = this.state.careplans.find(x => !x?.terminationDate);
 
     if (currentCareplan)
       questionnaires = currentCareplan.questionnaires;
@@ -79,7 +89,8 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
 
     return (
-      <>
+
+      <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen behandlingsplan">
         <Grid container spacing={2}>
           <Grid item xs={12}>
 
@@ -94,13 +105,11 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
               tabContent={questionnaires.map(x => this.renderQuestionnaireResponseTab(currentCareplan!, x))}
               class="questionnaire__tab"
             >
-
             </BasicTabs>
-
           </Grid>
         </Grid>
+      </IsEmptyCard>
 
-      </>
 
 
     );
