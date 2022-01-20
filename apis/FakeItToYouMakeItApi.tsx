@@ -541,7 +541,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
-        return this.careplan1
+        return [this.careplan1].find(x=>x.id == id)!
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse): Promise<void> {

@@ -59,7 +59,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   async populateCareplans(): Promise<void> {
 
     const { cpr } = this.props.match.params;
-    let activeCareplanId = this.props.match.params.careplanId
+    const activeCareplanId = this.props.match.params.careplanId
 
     let careplans: PatientCareplan[] = []
     if (!activeCareplanId || activeCareplanId === 'Aktiv') {
