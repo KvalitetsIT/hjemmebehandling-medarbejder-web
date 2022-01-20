@@ -102,7 +102,7 @@ class PatientCareplans extends React.Component<Props, State> {
         <Grid container spacing={3} sx={{flexWrap:"inherit"}}>
           <Grid maxWidth={400}  item xs="auto">
             <ErrorBoundary>
-              <Stack spacing={3}  >
+              <Stack spacing={3}>
 
                 <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
                 {activeCareplan?.patient ?

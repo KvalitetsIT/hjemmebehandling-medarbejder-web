@@ -321,6 +321,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
+        
         await new Promise(f => setTimeout(f, this.timeToWait));
         let responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
         let start = (page - 1) * pagesize
@@ -329,8 +330,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             const statusObject = this.statusChanges.reverse().find(y => y.id == x.id)
             x.status = statusObject?.status ?? x.status
         })
+         
         return responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
-    }
+        }
 
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         return new PatientCareplan()
