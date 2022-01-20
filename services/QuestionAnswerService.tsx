@@ -44,7 +44,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
 
                     thresholdPoint = thresholdCollection.thresholdNumbers
                         .sort((a, b) => b.category - a.category) //Red wil be first, then yellow, then green and then blue
-                        .find(x => (x.from === undefined || x.from <= answerAsNumber.answer) && (x.to === undefined || answerAsNumber.answer <= x.to)); //Get the first and most critical threshold which matches our answer
+                        .find(x => (x.from === undefined || x.from <= answerAsNumber.answer!) && (x.to === undefined || answerAsNumber.answer! <= x.to)); //Get the first and most critical threshold which matches our answer
 
                     return thresholdPoint ? thresholdPoint.category : CategoryEnum.RED;
                 }
