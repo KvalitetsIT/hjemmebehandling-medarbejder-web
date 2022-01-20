@@ -27,25 +27,25 @@ export class PatientContextThumbnails extends Component<Props, {}> {
   render(): JSX.Element {
     this.initialiseServices()
     const currentCareplan = this.props.currentCareplan;
-    const patient = currentCareplan.patient;
+    const patient = currentCareplan?.patient;
 
     return (
 
       <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen behandlingsplan">
-        <IsEmptyCard object={currentCareplan.patient} jsxWhenEmpty="Ingen patient">
+        <IsEmptyCard object={currentCareplan?.patient} jsxWhenEmpty="Ingen patient">
 
 
           <Grid container spacing={2}>
             <Grid item xs="auto">
-              <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
-                <ThumbnailCard avatar={<PatientAvatar patient={patient!} />} headline={patient!.firstname + " " + patient!.lastname} boxContent={<HealingOutlinedIcon fontSize="large" />} >
-                  <Typography className="thumbnail__subheader">{patient!.cprToString()}</Typography>
-                  <Typography className="thumbnail__text">{patient!.primaryPhone ? patient!.primaryPhonenumberToString() : "-"}</Typography>
+              <Link to={"/patients/" + patient?.cpr + "/careplans/" + currentCareplan?.id}>
+                <ThumbnailCard avatar={<PatientAvatar patient={patient!} />} headline={patient?.firstname + " " + patient?.lastname} boxContent={<HealingOutlinedIcon fontSize="large" />} >
+                  <Typography className="thumbnail__subheader">{patient?.cprToString()}</Typography>
+                  <Typography className="thumbnail__text">{patient?.primaryPhone ? patient!.primaryPhonenumberToString() : "-"}</Typography>
                 </ThumbnailCard>
               </Link>
             </Grid>
             <Grid item xs="auto">
-              {patient!.contact?.fullname ?
+              {patient?.contact?.fullname ?
                 <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
                   <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large" />}>
                     <Typography className="thumbnail__subheader">{patient!.contact.fullname}</Typography>
@@ -55,7 +55,7 @@ export class PatientContextThumbnails extends Component<Props, {}> {
                 : <></>}
             </Grid>
             <Grid item xs="auto">
-              <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
+              <Link to={"/patients/" + patient?.cpr + "/careplans/" + currentCareplan?.id}>
                 <ThumbnailCard headline="Monitoreringsplan" boxContent={<EventNoteIcon fontSize="large" />}>
                   <Typography className="thumbnail__subheader">{currentCareplan?.terminationDate ? "Ikke aktiv" : "Aktiv"}</Typography>
                   <Typography className="thumbnail__text">Startet: {currentCareplan && currentCareplan.creationDate ? this.dateHelper.DateToString(currentCareplan.creationDate) : "N/A"}</Typography>
