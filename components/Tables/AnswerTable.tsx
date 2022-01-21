@@ -185,7 +185,7 @@ export class AnswerTable extends Component<Props, State> {
                                             )
                                         })}
                                         {
-                                            Array.from(Array(5 - questionaireResponses.length).keys()).map(x => {
+                                            Array.from(Array(5 - questionaireResponses.length).keys()).map(() => {
                                                 return (
                                                     <TableCell className="answer__table-head" align="center"></TableCell>
                                                 )
