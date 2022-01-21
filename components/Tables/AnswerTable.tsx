@@ -15,6 +15,7 @@ import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 
 export interface Props {
     questionnaires: Questionnaire
@@ -23,7 +24,7 @@ export interface Props {
 
 export interface State {
     thresholdModalOpen: boolean
-    questionnaireResponses: (QuestionnaireResponse | undefined)[]
+    questionnaireResponses: QuestionnaireResponse[]
     loading: boolean
     pagesize: number
     page: number
@@ -137,17 +138,13 @@ export class AnswerTable extends Component<Props, State> {
             )
         }
 
-
-        let hasMorePages = false;
-
-        if (this.state.questionnaireResponses.length >= this.state.pagesize)
+        let hasMorePages:boolean = false;
+        if (this.state.questionnaireResponses.length >= this.state.pagesize){
             hasMorePages = true;
-
-        const questionnairesResponsesToShow = this.state.questionnaireResponses;
-        while (questionnairesResponsesToShow.length < 5) {
-            questionnairesResponsesToShow.push(undefined)
         }
 
+        const questionnairesResponsesToShow = this.state.questionnaireResponses;
+       
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
@@ -157,65 +154,70 @@ export class AnswerTable extends Component<Props, State> {
                 </Grid>
                 <Grid item xs={12}>
                     <TableContainer component={Paper}>
+                        <IsEmptyCard list={this.state.questionnaireResponses} jsxWhenEmpty={"Ikke flere besvarelser"} >
+                            <Table aria-label="simple table">
+                                <TableHead>
 
-                        <Table aria-label="simple table">
-                            <TableHead>
+                                    <TableRow className='table__row'>
+                                        <TableCell width="10%">
 
-                                <TableRow className='table__row'>
-                                    <TableCell width="10%">
+                                        </TableCell>
+                                        {questionaireResponses.map(questionResponse => {
+                                            let severity = this.getChipColorFromCategory(questionResponse.category) as string
+                                        
+                                            if (questionResponse.status === QuestionnaireResponseStatus.Processed)
+                                                severity = "info"
+                                        
+                                            return (
+                                                <TableCell className="answer__table-head" align="center">
+                                                    
+                                                    <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
+                                                        <div className="answer__header">
+                                                            <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
+                                                            <Typography className="answer__date" align="center" variant="caption">{questionResponse.answeredTime ? this.datehelper.DateToString(questionResponse.answeredTime) : ""}</Typography>
+                                                        </div>
 
-                                    </TableCell>
-                                    {questionnairesResponsesToShow.map(questionResponse => {
-                                        if (questionResponse == undefined)
-                                            return <TableCell></TableCell>
-                                        let severity = this.getChipColorFromCategory(questionResponse.category) as string
+                                                        <ErrorBoundary rerenderChildren={false}>
+                                                            <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, questionResponse)} questionnaireResponse={questionResponse} />
+                                                        </ErrorBoundary>
+                                                    </Stack>
+                                                </TableCell>
+                                            )
+                                        })}
+                                        {
+                                            Array.from(Array(5 - questionaireResponses.length).keys()).map(() => {
+                                                return (
+                                                    <TableCell className="answer__table-head" align="center"></TableCell>
+                                                )
+                                            })
+                                        }
+                                    </TableRow>
 
-                                        if (questionResponse.status === QuestionnaireResponseStatus.Processed)
-                                            severity = "info"
-
+                                </TableHead>
+                                <TableBody>
+                                    {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
                                         return (
-                                            <TableCell className="answer__table-head" align="center">
+                                            <>
 
-                                                <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
-                                                    <div className="answer__header">
-                                                        <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
-                                                        <Typography className="answer__date" align="center" variant="caption">{questionResponse.answeredTime ? this.datehelper.DateToString(questionResponse.answeredTime) : ""}</Typography>
-                                                    </div>
+                                                <TableRow>
+                                                    <TableCell>
+                                                        {question.question}
+                                                    </TableCell>
 
-                                                    <ErrorBoundary rerenderChildren={false}>
-                                                        <QuestionnaireResponseStatusSelect onUpdate={status => this.statusUpdate(status, questionResponse)} questionnaireResponse={questionResponse} />
-                                                    </ErrorBoundary>
-                                                </Stack>
-
-
-
-                                            </TableCell>
-
+                                                    {questionnairesResponsesToShow.map(questionResponse => {
+                                                        return this.renderSingleResponse(question, questionResponse)
+                                                    })}
+                                                </TableRow>
+                                            </>
                                         )
                                     })}
+                                </TableBody>
+                            </Table>
+                            
+                        </IsEmptyCard>
 
-                                </TableRow>
-
-                            </TableHead>
-                            <TableBody>
-                                {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
-                                    return (
-                                        <>
-
-                                            <TableRow>
-                                                <TableCell>
-                                                    {question.question}
-                                                </TableCell>
-
-                                                {questionnairesResponsesToShow.map(questionResponse => {
-                                                    return this.renderSingleResponse(question, questionResponse)
-                                                })}
-                                            </TableRow>
-                                        </>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
+                        
+                        
                     </TableContainer>
                 </Grid>
             </Grid>
