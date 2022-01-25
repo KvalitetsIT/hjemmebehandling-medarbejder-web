@@ -1,25 +1,15 @@
-import React from "react";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 
 
-
+/**
+ * QuestionAnswerService 
+ * - should be in charge of validating responses
+ * - should contain logic between the api and frontend
+ * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ */
 export default interface IQuestionAnswerService {
-    
-    /**
-     * Set the value of threshold number
-     */
-     SetThresholdNumber : (thresholdId : string, threshold : ThresholdNumber) => Promise<void>
-
-     /**
-      * Set the value of threshold option
-      */
-     SetThresholdOption : (thresholdId : string, threshold : ThresholdOption) => Promise<void>
-
      /**
       * Finds the answers risk-value (category)
       */

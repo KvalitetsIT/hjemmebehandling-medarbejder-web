@@ -4,7 +4,6 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 
 import { IBackendApi } from "./IBackendApi";
 
@@ -12,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, ErrorDtoFromJSON, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
+import { Configuration, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -20,7 +19,6 @@ import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 
@@ -55,7 +53,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetPatients(includeActive: boolean, includeCompleted : boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
+    async GetPatients(includeActive: boolean, includeCompleted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         try {
             let api = this.patientApi
             let request = {
@@ -333,30 +331,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return await this.HandleError(error)
         }
 
-    }
-
-    async SetQuestionaireResponse(id: string, measurementCollection: QuestionnaireResponse) {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
-
-    async SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber) {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
-
-    async SetThresholdOption(thresholdId: string, threshold: ThresholdOption) {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
     }
 }
 

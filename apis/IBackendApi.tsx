@@ -1,14 +1,10 @@
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 
 export interface IBackendApi {
@@ -106,7 +102,7 @@ export interface IBackendApi {
     GetPerson(cpr: string): Promise<Person>;
 
     /**
-     * Returns usercontext 
+     * Returns the user logged in
      */
     GetActiveUser(): Promise<User>;
 
@@ -124,21 +120,6 @@ export interface IBackendApi {
      * 
      */
     GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
-    /**
-     * Change questionnaireResponse
-     */
-    SetQuestionaireResponse: (id: string, questionnaireResponses: QuestionnaireResponse) => Promise<void>
-
-    /**
-     * Set the value of threshold number
-     */
-    SetThresholdNumber: (thresholdId: string, threshold: ThresholdNumber) => Promise<void>
-
-    /**
-     * Set the value of threshold option
-     */
-    SetThresholdOption: (thresholdId: string, threshold: ThresholdOption) => Promise<void>
-
 
     /**
      * Returns patients based on paramaters

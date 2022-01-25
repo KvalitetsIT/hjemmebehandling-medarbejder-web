@@ -1,7 +1,5 @@
-import React from "react";
 import { IBackendApi } from "../apis/IBackendApi";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
@@ -9,7 +7,6 @@ import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnair
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import { InvalidInputError, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService extends BaseService implements IQuestionnaireService {
@@ -87,14 +84,6 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     async RemoveAlarm(task : Task) : Promise<void> {
       try{
         return await this.backendApi.RemoveAlarm(task);
-      } catch(error : any){
-        return this.HandleError(error);
-      }
-    }
-
-    async SetQuestionaireResponse (id : string, questionnaireResponses : QuestionnaireResponse) : Promise<void>{
-      try{
-        return await this.backendApi.SetQuestionaireResponse(id,questionnaireResponses)
       } catch(error : any){
         return this.HandleError(error);
       }

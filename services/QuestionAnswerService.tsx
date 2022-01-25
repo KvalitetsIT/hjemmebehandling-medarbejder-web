@@ -5,7 +5,6 @@ import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
 import { UnsupportedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/UnsupportedError";
@@ -17,20 +16,6 @@ export default class QuestionAnswerService extends BaseService implements IQuest
         super()
         this.backendApi = backendApi;
     }
-    SetThresholdNumber(thresholdId: string, threshold: ThresholdNumber): Promise<void> {
-        try {
-            return this.backendApi.SetThresholdNumber(thresholdId, threshold);
-        } catch (error: any) {
-            return this.HandleError(error);
-        }
-    };
-    SetThresholdOption(thresholdId: string, threshold: ThresholdOption): Promise<void> {
-        try {
-            return this.backendApi.SetThresholdOption(thresholdId, threshold);
-        } catch (error: any) {
-            return this.HandleError(error);
-        }
-    };
 
     FindCategory(thresholdCollection: ThresholdCollection, answer: Answer): CategoryEnum {
         try {

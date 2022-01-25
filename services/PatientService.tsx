@@ -1,19 +1,9 @@
 
 
-import React from "react";
 import { IBackendApi } from "../apis/IBackendApi";
-import { Answer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { QuestionnaireResponse } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import ICareplanService from "./interfaces/ICareplanService";
 import IPatientService from "./interfaces/IPatientService";
-import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
-import IQuestionnaireService from "./interfaces/IQuestionnaireService";
 
 export default class PatientService extends BaseService implements IPatientService {
     backendApi : IBackendApi
