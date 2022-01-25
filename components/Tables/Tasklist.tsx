@@ -60,7 +60,7 @@ export class Tasklist extends Component<Props, State> {
     try {
 
       await this.populateQuestionnaireResponses(this.state.pageNumber);
-    } catch (error: any) {
+    } catch (error : unknown) {
       this.setState(() => { throw error })
     }
 

@@ -1,7 +1,4 @@
-import React from "react";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PatientSimple } from "@kvalitetsit/hjemmebehandling/Models/PatientSimple";
 
 
 /**
@@ -23,16 +20,5 @@ export default interface IPatientService {
      * - Inactive patients are considered inactive when they dont have an active careplan
      */
     GetPatients : (includeActive : boolean,includeCompleted : boolean, page : number, pageSize : number) => Promise<PatientDetail[]>
-
-    /**
-     * Edits a patient using the provided patients' id
-     */
-    EditPatient : (patient: PatientDetail) => Promise<PatientDetail>
-
-    /**
-     * Create a patient from provided patient
-     * the id will always be generated in the backend
-     */
-    CreatePatient : (patient : PatientDetail) => Promise<PatientDetail>
 }
   

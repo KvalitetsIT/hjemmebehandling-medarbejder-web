@@ -50,7 +50,7 @@ export class ObservationCard extends Component<Props, State> {
         try {
             const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50)
             this.setState({ questionnaireResponses: responses, loading: false })
-        } catch (error: any) {
+        } catch (error : unknown) {
             this.setState(() => { throw error })
         }
     }

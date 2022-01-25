@@ -1,5 +1,4 @@
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import React from "react";
 
 /**
  * PersonService 

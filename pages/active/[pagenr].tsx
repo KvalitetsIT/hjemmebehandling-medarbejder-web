@@ -4,10 +4,16 @@ import { LoadingBackdropComponent } from '../../components/Layout/LoadingBackdro
 import ApiContext from '../_context';
 import PatientsTable from '../../components/Cards/PatientsTable';
 
+/**
+ * 
+ */
 interface State {
     loadingPage: boolean,
 }
 
+/**
+ * 
+ */
 interface Props {
     match : { params : {pagenr : string} }
 }

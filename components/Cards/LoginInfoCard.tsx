@@ -44,7 +44,7 @@ export class LoginInfoCard extends Component<Props, State> {
                 </Toast>
             )
             this.setState({ toast: afterResetPasswordToast })
-        } catch (error: any) {
+        } catch (error : unknown) {
             this.setState(() => { throw error })
         }
     }

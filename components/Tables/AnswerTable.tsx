@@ -64,7 +64,7 @@ export class AnswerTable extends Component<Props, State> {
     async componentDidMount(): Promise<void> {
         try {
             await this.populateData(this.state.page)
-        } catch (error: any) {
+        } catch (error : unknown) {
             this.setState(() => { throw error })
         }
     }

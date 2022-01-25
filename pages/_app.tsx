@@ -11,7 +11,7 @@ import PatientService from '../services/PatientService';
 import DanishDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DanishDateHelper';
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
-import { IBackendApi } from '../apis/IBackendApi';
+import { IBackendApi } from '../apis/interfaces/IBackendApi';
 import React from 'react';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
@@ -20,6 +20,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
   const backendApi: IBackendApi = new BffBackendApi();

@@ -19,13 +19,7 @@ export interface IBackendApi {
      * @param task task to remove from overview
      */
     RemoveAlarm(task: Task): Promise<void>;
-
-    /**
-     * Edit patient
-     * @param patient patient to be edited
-     */
-    EditPatient(patient: PatientDetail): Promise<PatientDetail>;
-
+    
     /**
      * Returns all plandefinitions in system
      */
@@ -38,14 +32,6 @@ export interface IBackendApi {
      * @param questionnaireToAdd Questionnaire to add to careplan
      */
     AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan>;
-
-    /**
-     * Change questionnaire
-     * Id should always be provided
-     * To change the frequency fx, provide only frequency and id - Everything else will stay the same
-     * @param questionnaireEdit 
-     */
-    SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void>;
 
     /**
      * Creates careplan and returns its id.
@@ -90,12 +76,6 @@ export interface IBackendApi {
     SearchPatient: (searchstring: string) => Promise<PatientDetail[]>
 
     /**
-     * Creates and returns patient
-     * @param patient 
-     */
-    CreatePatient(patient: PatientDetail): Promise<PatientDetail>;
-
-    /**
      * Returns person
      * @param person 
      */
@@ -117,7 +97,7 @@ export interface IBackendApi {
     GetPatientCareplanById: (id: string) => Promise<PatientCareplan>
 
     /**
-     * 
+     * Returns all questionnaireresponses that has reference to, any of the provided questionnaireIds, and careplanId
      */
     GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
 

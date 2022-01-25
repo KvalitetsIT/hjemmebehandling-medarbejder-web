@@ -55,7 +55,7 @@ export class CareplanSummary extends Component<Props, State> {
                 </>
             )
             this.setState({ toast: afterResetPasswordToast })
-        } catch (error: any) {
+        } catch (error : unknown) {
             this.setState(() => { throw error })
         }
     }

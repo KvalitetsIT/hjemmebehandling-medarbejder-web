@@ -1,6 +1,4 @@
-import React from "react";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
@@ -63,12 +61,6 @@ export default interface IQuestionnaireService {
      * - Sets the status to the provided status
      */
     UpdateQuestionnaireResponseStatus: (id: string, status: QuestionnaireResponseStatus) => Promise<QuestionnaireResponseStatus>;
-
-    /**
-     * Takes the id, and the frequency from the provided questionnaire
-     * Updates the questionnaire that matches the id
-     */
-    SetQuestionnaireFrequency: (questionnaire: Questionnaire) => Promise<void>;
 
     /**
      * Remove the alarm from a task so that it is not shown in the "ikke besvaret"-section

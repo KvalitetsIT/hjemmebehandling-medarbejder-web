@@ -15,21 +15,51 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "jsdoc"
     ],
+    "overrides": [
+        {
+            "files": [
+                "./services/interfaces/*.tsx",
+                "./apis/interfaces/*.tsx"
+            ],
+            "rules": {
+                "require-jsdoc": ["error", {
+                    "require": {
+                        "FunctionDeclaration": true,
+                        "MethodDefinition": true,
+                        "ClassDeclaration": true,
+                        "ArrowFunctionExpression": true,
+                        "FunctionExpression": true
+                    }
+                }]
+            }
+        }
+    ],
+    "settings": {
+        "jsdoc": {
+            "mode": "typescript"
+        }
+    },
     "rules": {
         "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-extra-semi" : "off",
-        "@typescript-eslint/explicit-module-boundary-types" : ["error"],
-        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-extra-semi": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/explicit-module-boundary-types": [
+            "error"
+        ],
+        "@typescript-eslint/no-unused-vars": [
+            "error"
+        ],
         "@typescript-eslint/ban-types": [
             "error",
             {
-              "extendDefaults": true,
-              "types": {
-                "{}": false
-              }
+                "extendDefaults": true,
+                "types": {
+                    "{}": false
+                }
             }
-          ]      
+        ]
     }
 }

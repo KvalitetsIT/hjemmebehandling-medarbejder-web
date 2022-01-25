@@ -1,4 +1,3 @@
-import React from "react";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 

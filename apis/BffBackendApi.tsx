@@ -5,7 +5,7 @@ import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnair
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 
-import { IBackendApi } from "./IBackendApi";
+import { IBackendApi } from "./interfaces/IBackendApi";
 
 import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
@@ -43,100 +43,86 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async ResetPassword(patient: PatientDetail): Promise<void> {
         try {
-            let api = this.patientApi;
-            let request = {
+            const api = this.patientApi;
+            const request = {
                 cpr: patient.cpr!
             }
             await api.resetPassword(request)
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetPatients(includeActive: boolean, includeCompleted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         try {
-            let api = this.patientApi
-            let request = {
+            const api = this.patientApi
+            const request = {
                 includeActive: includeActive,
                 includeCompleted: includeCompleted,
                 pageNumber: page,
                 pageSize: pageSize
             }
 
-            let carePlans = await api.getPatients(request)
+            const carePlans = await api.getPatients(request)
             if (!carePlans.patients)
                 return []
 
             return carePlans.patients.map(patient => this.toInternal.mapPatientDto(patient));
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async RemoveAlarm(task: Task): Promise<void> {
         try {
-            let api = this.careplanApi
-            let request = {
+            const api = this.careplanApi
+            const request = {
                 id: FhirUtils.unqualifyId(task.carePlanId)
             }
 
             return await api.resolveAlarm(request)
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
-            let request = {
+            const request = {
                 id: careplan.id!
             }
             await this.careplanApi.completeCarePlan(request)
             return careplan;
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
 
     }
 
-    async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
-    async EditPatient(patient: PatientDetail): Promise<PatientDetail> {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
     async SearchPatient(searchstring: string): Promise<PatientDetail[]> {
         try {
-            let request = {
+            const request = {
                 searchString: searchstring
             }
 
-            let result = await this.patientApi.searchPatients(request)
+            const result = await this.patientApi.searchPatients(request)
             if (!result.patients)
                 return [];
 
             return result.patients?.map(p => this.toInternal.mapPatientDto(p))
 
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
         try {
-            let api = this.planDefinitionApi;
-            let planDefinitions = await api.getPlanDefinitions()
+            const api = this.planDefinitionApi;
+            const planDefinitions = await api.getPlanDefinitions()
 
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
 
@@ -144,40 +130,41 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try {
+            console.log("careplan: " + careplan.id + ", questionnaireId: " + questionnaireToAdd.id);
             throw new NotImplementedError();
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
         try {
-            let api = this.careplanApi
-            let request = {
+            const api = this.careplanApi
+            const request = {
                 createCarePlanRequest: {
                     carePlan: this.toExternal.mapCarePlan(carePlan)
                 }
             }
 
-            var response = await api.createCarePlanRaw(request)
+            const response = await api.createCarePlanRaw(request)
 
             // Extract Location header, extract the id
-            var location = response.raw.headers?.get('Location')
+            const location = response.raw.headers?.get('Location')
             if (!location) {
                 throw new Error('No Location header in CreateCarePlan response!')
             }
 
-            var parts = location.split('/')
+            const parts = location.split('/')
             return parts[parts.length - 1]
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
-            let api = this.careplanApi
-            let request = {
+            const api = this.careplanApi
+            const request = {
                 id: careplan.id!,
                 updateCareplanRequest: {
                     planDefinitionIds: careplan.planDefinitions.map(pd => pd.id),
@@ -196,53 +183,45 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 }
             }
 
-            var response = await api.patchCarePlan(request)
+            await api.patchCarePlan(request)
             return careplan
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<QuestionnaireResponseStatus> {
         try {
-            let api = this.questionnaireResponseApi;
-            let request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
+            const api = this.questionnaireResponseApi;
+            const request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
             return status;
-        } catch (error: any) {
-            return await this.HandleError(error)
-        }
-    }
-
-    async CreatePatient(patient: PatientDetail): Promise<PatientDetail> {
-        try {
-            throw new NotImplementedError();
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
-            let api = this.questionnaireResponseApi;
-            let request = {
+            const api = this.questionnaireResponseApi;
+            const request = {
                 status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
                 pageNumber: page,
                 pageSize: pagesize
             };
 
-            let questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
+            const questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
             return questionnaireResponses.map(qr => this.toInternal.buildTaskFromQuestionnaireResponse(qr))
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         try {
-            let api = this.careplanApi
-            let request = {
+            const api = this.careplanApi
+            const request = {
                 onlyUnsatisfiedSchedules: true,
                 onlyActiveCareplans: true,
                 pageNumber: page,
@@ -250,21 +229,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
 
 
-            let carePlans = await api.searchCarePlans(request)
+            const carePlans = await api.searchCarePlans(request)
 
             return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetPerson(cpr: string): Promise<Person> {
         try {
-            let api = this.personApi
-            let request = { cpr: cpr };
-            let person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
+            const api = this.personApi
+            const request = { cpr: cpr };
+            const person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapPersonFromExternalToInternal(person);
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
@@ -272,11 +251,11 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetActiveUser(): Promise<User> {
         try {
-            let api = this.userApi;
-            let request = {};
-            let user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
+            const api = this.userApi;
+            const request = {};
+            const user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapUserFromExternalToInternal(user);
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
@@ -284,18 +263,18 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
         try {
             // Retrieve the careplans
-            let api = this.careplanApi;
-            let request = {
+            const api = this.careplanApi;
+            const request = {
                 cpr: cpr,
                 onlyActiveCareplans: true
             };
-            let carePlans = await api.searchCarePlans(request);
+            const carePlans = await api.searchCarePlans(request);
             if (!carePlans) {
                 throw new Error('Could not retrieve careplans!');
             }
 
             return carePlans.map(cp => this.toInternal.mapCarePlanDto(cp));
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
@@ -303,31 +282,31 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
         try {
             // Retrieve the careplan
-            let api = this.careplanApi;
-            let carePlan = await api.getCarePlanById({ id: id })
+            const api = this.careplanApi;
+            const carePlan = await api.getCarePlanById({ id: id })
             if (!carePlan) {
                 throw new Error('Could not retrieve careplan!');
             }
 
             return this.toInternal.mapCarePlanDto(carePlan);
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
         try {
-            let api = this.questionnaireResponseApi
-            let request = {
+            const api = this.questionnaireResponseApi
+            const request = {
                 carePlanId: careplanId,
                 questionnaireIds: questionnaireIds,
                 pageNumber: page,
                 pageSize: pagesize
             }
-            let questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
+            const questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
 
             return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
-        } catch (error: any) {
+        } catch (error : unknown) {
             return await this.HandleError(error)
         }
 

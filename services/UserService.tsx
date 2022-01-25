@@ -1,6 +1,6 @@
 
 
-import { IBackendApi } from "../apis/IBackendApi";
+import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";

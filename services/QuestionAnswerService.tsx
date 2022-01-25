@@ -1,6 +1,6 @@
 
 
-import { IBackendApi } from "../apis/IBackendApi";
+import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
@@ -20,7 +20,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
     FindCategory(thresholdCollection: ThresholdCollection, answer: Answer): CategoryEnum {
         try {
             if (answer instanceof NumberAnswer) {
-                let answerAsNumber = answer as NumberAnswer;
+                const answerAsNumber = answer as NumberAnswer;
                 let thresholdPoint: ThresholdNumber | undefined = undefined;
 
                 if (thresholdCollection.thresholdNumbers) {
@@ -36,7 +36,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
             }
 
             if (answer instanceof StringAnswer) {
-                let answerAsString = answer as StringAnswer;
+                const answerAsString = answer as StringAnswer;
                 let thresholdPoint: ThresholdNumber | undefined = undefined;
                 if (thresholdCollection.thresholdOptions) {
                     if (thresholdCollection.thresholdOptions.length <= 0)
@@ -48,7 +48,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
             }
 
             if (answer instanceof BooleanAnswer) {
-                let answerAsBoolean = answer as BooleanAnswer;
+                const answerAsBoolean = answer as BooleanAnswer;
                 let thresholdPoint: ThresholdNumber | undefined = undefined;
                 if (thresholdCollection.thresholdOptions) {
                     if (thresholdCollection.thresholdOptions.length <= 0)
@@ -61,7 +61,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
 
             throw new UnsupportedError(answer, "En besvarelse indeholder en ukendt svartype - Kontakt en adminstrator")
 
-        } catch (error: any) {
+        } catch (error : unknown) {
             return this.HandleError(error);
         }
 

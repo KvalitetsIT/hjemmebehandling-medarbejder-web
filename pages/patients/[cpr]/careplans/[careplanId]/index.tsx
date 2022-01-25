@@ -76,7 +76,7 @@ class PatientCareplans extends React.Component<Props, State> {
       if (careplan && careplan.id) {
         const questionnaireIds: string[] = careplans.flatMap(x => x.questionnaires.map(x => x.id))
 
-        activeCareplanId = careplan!.id!
+        activeCareplanId = careplan.id
         questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, questionnaireIds, 1, 5)
       }
 

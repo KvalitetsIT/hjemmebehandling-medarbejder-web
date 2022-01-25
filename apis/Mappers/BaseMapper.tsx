@@ -4,7 +4,7 @@ import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdO
 
 export default class BaseMapper{
     CreateOption(id : string, value : string,category : CategoryEnum) : ThresholdOption{
-        let option = new ThresholdOption();
+        const option = new ThresholdOption();
         option.option = value;
         option.category = category;
         option.id = id
@@ -12,7 +12,7 @@ export default class BaseMapper{
     }
 
     CreateThresholdNumber(id : string, valueLow : number, valueHigh : number, category : CategoryEnum) : ThresholdNumber {
-        let number = new ThresholdNumber();
+        const number = new ThresholdNumber();
         number.from = valueLow;
         number.to = valueHigh;
         number.category = category;

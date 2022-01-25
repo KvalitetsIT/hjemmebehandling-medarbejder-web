@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
 import { Answer, BooleanAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
@@ -15,7 +17,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 
 import { QuestionnaireAlreadyOnCareplan } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
-import { IBackendApi } from "./IBackendApi";
+import { IBackendApi } from "./interfaces/IBackendApi";
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
@@ -68,14 +70,14 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.patient1.username = "JENPET" //Username is 6 chars
         this.patient1.primaryPhone = "+4529483749"
         this.patient1.secondaryPhone = "29483749"
-        let address = new Address();
+        const address = new Address();
         address.city = "Aarhus C"
         address.country = "Danmark"
         address.street = "Fiskergade 66"
         address.zipCode = "8000"
         this.patient1.address = address;
 
-        let relativeContact = new Contact();
+        const relativeContact = new Contact();
         relativeContact.fullname = "Johanne Petersen"
         relativeContact.affiliation = "Kone"
         relativeContact.primaryPhone = "27384910"
@@ -85,7 +87,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.person1.cpr = "2512489996"
         this.person1.givenName = "Nancy Ann"
         this.person1.familyName = "Berggren"
-        let personContact = new PersonContact();
+        const personContact = new PersonContact();
         personContact.city = "Aarhus C";
         personContact.postalCode = "8000";
         personContact.street = "Fiskergade 66"
@@ -113,7 +115,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         //======================================= questionnaire
         this.questionnaire1.id = "qn1"
         this.questionnaire1.name = "Imundefekt alm"
-        let frequency = new Frequency();
+        const frequency = new Frequency();
         frequency.days = [DayEnum.Monday, DayEnum.Wednesday];
         frequency.repeated = FrequencyEnum.WEEKLY;
         frequency.deadline = '11:00'
@@ -123,7 +125,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.questionnaire2.id = "qn2"
         this.questionnaire2.name = "Imundefekt medium"
-        let frequency2 = new Frequency();
+        const frequency2 = new Frequency();
         frequency2.days = [DayEnum.Monday, DayEnum.Wednesday, DayEnum.Friday];
         frequency2.repeated = FrequencyEnum.WEEKLY;
         frequency2.deadline = '11:00'
@@ -131,7 +133,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.questionnaire3.id = "qn3"
         this.questionnaire3.name = "Imundefekt voldsom"
-        let frequency3 = new Frequency();
+        const frequency3 = new Frequency();
         frequency3.days = [DayEnum.Monday, DayEnum.Tuesday, DayEnum.Wednesday, DayEnum.Thursday, DayEnum.Friday];
         frequency3.repeated = FrequencyEnum.WEEKLY;
         frequency3.deadline = '11:00'
@@ -201,7 +203,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.answeredTime = this.CreateDate()
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
-        let questionAnswerMap1 = new Map<Question, Answer>();
+        const questionAnswerMap1 = new Map<Question, Answer>();
         questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
@@ -217,7 +219,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse2.answeredTime = this.CreateDate()
         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
 
-        let questionAnswerMap2 = new Map<Question, Answer>();
+        const questionAnswerMap2 = new Map<Question, Answer>();
         questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(35, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(10, UnitType.NOUNIT));
@@ -232,7 +234,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse3.answeredTime = this.CreateDate()
         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
 
-        let questionAnswerMap3 = new Map<Question, Answer>();
+        const questionAnswerMap3 = new Map<Question, Answer>();
         questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(90, UnitType.NOUNIT));
@@ -246,7 +248,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse4.answeredTime = this.CreateDate()
         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
 
-        let questionAnswerMap4 = new Map<Question, Answer>();
+        const questionAnswerMap4 = new Map<Question, Answer>();
         questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(42, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(100, UnitType.NOUNIT));
@@ -261,7 +263,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse5.answeredTime = this.CreateDate()
         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
 
-        let questionAnswerMap5 = new Map<Question, Answer>();
+        const questionAnswerMap5 = new Map<Question, Answer>();
         questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
@@ -307,9 +309,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async CreateUser(patient: PatientDetail): Promise<User> {
         throw new NotImplementedError();
     }
-    async GetPatients(includeActive: boolean,includeCompleted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
+    async GetPatients(includeActive: boolean,includeCompconsted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         await new Promise(f => setTimeout(f, this.timeToWait));
-        let toReturn = [];
+        const toReturn = [];
         for (let i = 0; i < pageSize; i++) {
             toReturn.push(this.patient1);
         }
@@ -323,9 +325,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
         
         await new Promise(f => setTimeout(f, this.timeToWait));
-        let responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
-        let start = (page - 1) * pagesize
-        let end = page * pagesize
+        const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
+        const start = (page - 1) * pagesize
+        const end = page * pagesize
         responses.forEach(x => {
             const statusObject = this.statusChanges.reverse().find(y => y.id == x.id)
             x.status = statusObject?.status ?? x.status
@@ -347,12 +349,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async SearchPatient(searchstring: string): Promise<PatientDetail[]> {
         await new Promise(f => setTimeout(f, this.timeToWait));
 
-        let allPatients = [this.patient1];
+        const allPatients = [this.patient1];
 
         let results: PatientDetail[] = [];
-        let allPatientsWithFirstName: PatientDetail[] = allPatients.filter(x => x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
-        let allPatientsWithlastname: PatientDetail[] = allPatients.filter(x => x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
-        let allPatientsWithCPR: PatientDetail[] = allPatients.filter(x => x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        const allPatientsWithFirstName: PatientDetail[] = allPatients.filter(x => x.firstname ? x.firstname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        const allPatientsWithlastname: PatientDetail[] = allPatients.filter(x => x.lastname ? x.lastname.toLowerCase().includes(searchstring.toLowerCase()) : false)
+        const allPatientsWithCPR: PatientDetail[] = allPatients.filter(x => x.cpr ? x.cpr.toLowerCase().includes(searchstring.toLowerCase()) : false)
 
         results = results.concat(allPatientsWithFirstName)
         results = results.concat(allPatientsWithlastname)
@@ -370,7 +372,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         }
     }
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
-        let questionnaireAlreadyInCareplan = careplan.questionnaires.find(x => x.id == questionnaireToAdd.id)
+        const questionnaireAlreadyInCareplan = careplan.questionnaires.find(x => x.id == questionnaireToAdd.id)
         if (questionnaireAlreadyInCareplan) {
             throw new QuestionnaireAlreadyOnCareplan();
         }
@@ -398,7 +400,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     statusChanges: Array<{ id: string, status: QuestionnaireResponseStatus }> = [];
 
     async UpdateQuestionnaireResponseStatus(id: string, status: QuestionnaireResponseStatus): Promise<QuestionnaireResponseStatus> {
-        let allQuestionnaireResponses: QuestionnaireResponse[] = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5];
+        const allQuestionnaireResponses: QuestionnaireResponse[] = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5];
         await new Promise(f => setTimeout(f, this.timeToWait))
         this.statusChanges.push({ id: id, status: status })
         return status;
@@ -411,31 +413,31 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     static date: Date = new Date()
     private CreateDate() {
-        let days = 86400000 //number of milliseconds in a day
+        const days = 86400000 //number of milliseconds in a day
         FakeItToYouMakeItApi.date = new Date(FakeItToYouMakeItApi.date.getTime() - (1 * days))
         return FakeItToYouMakeItApi.date;
     }
     private CreateStringAnswer(value: string) {
-        let answer = new StringAnswer();
+        const answer = new StringAnswer();
         answer.answer = value;
         return answer;
     }
 
     private CreateNumberAnswer(value: number, unit: UnitType) {
-        let answer = new NumberAnswer();
+        const answer = new NumberAnswer();
         answer.answer = value;
         answer.unit = unit;
         return answer;
 
     }
     private CreateBooleanAnswer(value: boolean) {
-        let answer = new BooleanAnswer();
+        const answer = new BooleanAnswer();
         answer.answer = value;
         return answer;
 
     }
     private CreateOption(id: string, value: string, category: CategoryEnum): ThresholdOption {
-        let option = new ThresholdOption();
+        const option = new ThresholdOption();
         option.option = value;
         option.category = category;
         option.id = id
@@ -443,7 +445,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     private CreateThreshold(id: string, from: number, to: number, category: CategoryEnum): ThresholdNumber {
-        let option = new ThresholdNumber();
+        const option = new ThresholdNumber();
         option.category = category;
         option.id = id
         option.to = to;
@@ -452,15 +454,15 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     private GetUniqueList(questionnaireresponses: QuestionnaireResponse[]): QuestionnaireResponse[] {
-        let toReturn: QuestionnaireResponse[] = [];
+        const toReturn: QuestionnaireResponse[] = [];
 
         for (let i = 0; i < questionnaireresponses.length; i++) {
-            let potential = questionnaireresponses[i];
+            const potential = questionnaireresponses[i];
             if (potential.status == QuestionnaireResponseStatus.Processed) {
                 continue;
             }
 
-            let existing = toReturn.find(a => a.patient.cpr == potential.patient.cpr)
+            const existing = toReturn.find(a => a.patient.cpr == potential.patient.cpr)
             if (!existing) {
                 toReturn.push(potential)
             }
@@ -479,7 +481,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             "errorText": "Aktiv behandlingsplan eksisterer allerede for det angivne cpr-nummer."
         });
 
-        let standardResponse: Response = new Response(body, { status: statusCode });
+        const standardResponse: Response = new Response(body, { status: statusCode });
         throw standardResponse;
     }
     async giveStringInPromise(message: string): Promise<string> {
@@ -525,7 +527,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetActiveUser(): Promise<User> {
         await new Promise(f => setTimeout(f, this.timeToWait));
-        let user = new User();
+        const user = new User();
         user.userId = "TESTES";
         user.firstName = "Test";
         user.lastName = "Testsen";

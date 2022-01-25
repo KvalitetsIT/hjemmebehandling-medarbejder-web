@@ -1,6 +1,6 @@
 
 
-import { IBackendApi } from "../apis/IBackendApi";
+import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
@@ -24,7 +24,7 @@ export default class CareplanService extends BaseService implements ICareplanSer
   async CreateCarePlan(carePlan: PatientCareplan): Promise<string> {
     try {
       return await this.backendApi.CreateCarePlan(carePlan)
-    } catch (error: any) {
+    } catch (error : unknown) {
       return this.HandleError(error);
     }
   }
@@ -32,7 +32,7 @@ export default class CareplanService extends BaseService implements ICareplanSer
   async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
     try {
       return await this.backendApi.TerminateCareplan(careplan);
-    } catch (error: any) {
+    } catch (error : unknown) {
       return this.HandleError(error);
     }
   }
@@ -40,7 +40,7 @@ export default class CareplanService extends BaseService implements ICareplanSer
   async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
     try {
       return await this.backendApi.GetPatientCareplanById(id);
-    } catch (error: any) {
+    } catch (error : unknown) {
       return this.HandleError(error);
     }
   }
@@ -48,7 +48,7 @@ export default class CareplanService extends BaseService implements ICareplanSer
   async GetPatientCareplans(cpr: string): Promise<Array<PatientCareplan>> {
     try {
       return await this.backendApi.GetPatientCareplans(cpr);
-    } catch (error: any) {
+    } catch (error : unknown) {
       return this.HandleError(error);
     }
   }

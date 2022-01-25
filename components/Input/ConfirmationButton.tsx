@@ -50,7 +50,7 @@ export class ConfirmationButton extends Component<Props, State> {
         await this.props.action();
 
       this.setState({ openConfirmationBox: false })
-    } catch (error: any) {
+    } catch (error : unknown) {
       this.setState(() => { throw error })
     }
     this.setState({ doingAction: false })

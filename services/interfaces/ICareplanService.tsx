@@ -1,19 +1,22 @@
-import React from "react";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 
 
-
+/**
+ * CareplanService
+ * - should be in charge of validating responses
+ * - should contain logic between the api and frontend
+ * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ */
 export default interface ICareplanService {
 
     /**
      * Creates a careplan using the careplan provided
      * The ID wil always be auto-generated
+     * @param careplan 
      */
     CreateCarePlan : (carePlan : PatientCareplan) => Promise<string>
 
-    /**
-     * To retrieve a careplan by the careplan ID
-     */
+
     GetPatientCareplanById : (id : string) => Promise<PatientCareplan>
 
     /**

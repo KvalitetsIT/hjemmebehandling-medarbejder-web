@@ -26,17 +26,26 @@ import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
+/**
+ * Contains booleans that tells which sections that should be open
+ */
 export interface Accordians {
   PatientIsOpen: boolean
   RelativeContactIsOpen: boolean
   PlanDefinitionIsOpen: boolean
 }
+/**
+ * 
+ */
 export interface Props {
   editmode: boolean,
   openAccordians: Accordians
   match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
 }
 
+/**
+ * 
+ */
 export interface State {
   accordians: Accordians;
   patient?: PatientDetail;
@@ -97,14 +106,14 @@ export default class CreatePatient extends Component<Props, State> {
       return;
     }
 
-    this.state.careplan.patient = this.state.patient!;
+    this.state.careplan.patient = this.state.patient;
     this.setState({ loading: true })
     try {
-      let careplanId!: string;
+      let careplanId: string | undefined;
 
       if (this.props.editmode) {
         const editedCareplan = await this.careplanService.SetCareplan(this.state.careplan)
-        careplanId = editedCareplan.id!
+        careplanId = editedCareplan.id
       } else {
         const newCareplanId = await this.careplanService.CreateCarePlan(this.state.careplan)
         careplanId = newCareplanId

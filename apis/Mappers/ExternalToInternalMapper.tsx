@@ -16,7 +16,7 @@ import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrgan
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
+import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -26,7 +26,7 @@ import BaseMapper from "./BaseMapper";
  */
 export default class ExternalToInternalMapper extends BaseMapper {
     mapCarePlanDto(carePlanDto: CarePlanDto): PatientCareplan {
-        let carePlan = new PatientCareplan()
+        const carePlan = new PatientCareplan()
 
         carePlan.id = FhirUtils.unqualifyId(carePlanDto.id)
         carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
@@ -44,11 +44,11 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     buildTaskFromCarePlan(carePlan: CarePlanDto): Task {
-        let task = new Task()
+        const task = new Task()
 
         task.cpr = carePlan.patientDto!.cpr!
 
-        var planDefinitionName = 'PATIENTGRUPPE MANGLER'
+        let planDefinitionName = 'PATIENTGRUPPE MANGLER'
         if (carePlan.planDefinitions && carePlan.planDefinitions.length === 1 && carePlan.planDefinitions![0].title) {
             planDefinitionName = carePlan.planDefinitions![0].title
         }
@@ -59,7 +59,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         task.questionnaireResponseStatus = undefined
         task.carePlanId = carePlan.id
 
-        var questionnaire = carePlan.questionnaires![0].questionnaire!
+        const questionnaire = carePlan.questionnaires![0].questionnaire!
         task.questionnaireId = questionnaire.id!
         task.questionnaireName = questionnaire.title!
 
@@ -70,7 +70,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
-        let task = new Task()
+        const task = new Task()
 
         task.cpr = questionnaireResponse.patient!.cpr!
         task.category = this.mapTriagingCategory(questionnaireResponse.triagingCategory!)
@@ -88,7 +88,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     mapPlanDefinitionDto(planDefinitionDto: PlanDefinitionDto): PlanDefinition {
 
-        let planDefinition = new PlanDefinition()
+        const planDefinition = new PlanDefinition()
 
         planDefinition.id = planDefinitionDto.id!
         planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
@@ -100,10 +100,10 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     mapThresholdDtos(thresholdDtos: Array<ThresholdDto>): Array<ThresholdCollection> {
 
-        let thresholds: ThresholdCollection[] = [];
+        const thresholds: ThresholdCollection[] = [];
 
 
-        for (var thresholdDto of thresholdDtos) {
+        for (const thresholdDto of thresholdDtos) {
             let threshold = thresholds.find(x => x.questionId == thresholdDto.questionId);
             if (threshold === undefined) {
                 threshold = new ThresholdCollection();
@@ -112,7 +112,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
             }
 
             if (!(thresholdDto.valueBoolean === undefined)) {
-                let thresholdOption = this.CreateOption(
+                const thresholdOption = this.CreateOption(
                     thresholdDto.questionId!,
                     String(thresholdDto.valueBoolean!),
                     this.mapTresholdCategory(thresholdDto.type!)
@@ -120,7 +120,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 threshold.thresholdOptions!.push(thresholdOption);
             }
             else {
-                let thresholdNumber = this.CreateThresholdNumber(
+                const thresholdNumber = this.CreateThresholdNumber(
                     thresholdDto.questionId!,
                     Number(thresholdDto.valueQuantityLow),
                     Number(thresholdDto.valueQuantityHigh),
@@ -133,8 +133,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     }
     mapWeekdayDto(weekdays: FrequencyDtoWeekdaysEnum[]): DayEnum[] {
-        let dayEnums: DayEnum[] = [];
-        for (var weekday of weekdays) {
+        const dayEnums: DayEnum[] = [];
+        for (const weekday of weekdays) {
             dayEnums.push(this.mapFrequencyDtoWeekdaysEnum(weekday));
         }
         return dayEnums;
@@ -142,7 +142,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
 
     mapQuestionDto(questionDto: QuestionDto): Question {
-        let question = new Question();
+        const question = new Question();
         question.Id = questionDto.linkId!;
 
         switch (questionDto.questionType) {
@@ -289,22 +289,22 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     mapStringAnswer(answerDto: AnswerDto): StringAnswer {
-        let toReturn = new StringAnswer();
+        const toReturn = new StringAnswer();
         toReturn.answer = answerDto.value!
         return toReturn;
     }
 
     mapNumberedAnswer(answerDto: AnswerDto): NumberAnswer {
-        let toReturn = new NumberAnswer();
+        const toReturn = new NumberAnswer();
         toReturn.answer = Number.parseFloat(answerDto.value!)
         return toReturn;
     }
 
     mapBooleanAnswer(answerDto: AnswerDto): BooleanAnswer {
-        let toReturn = new BooleanAnswer();
-        let answerValue = answerDto.value?.toLowerCase()
+        const toReturn = new BooleanAnswer();
+        const answerValue = answerDto.value?.toLowerCase()
 
-        let isTrueOrFalse = answerValue == "true" || answerValue == "false"
+        const isTrueOrFalse = answerValue == "true" || answerValue == "false"
         if (isTrueOrFalse) {
             toReturn.answer = answerValue == "true"
             return toReturn;
@@ -314,14 +314,14 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     mapQuestionnaireResponseDto(questionnaireResponseDto: QuestionnaireResponseDto): QuestionnaireResponse {
-        let response = new QuestionnaireResponse();
-        //let response = this.getQuestionnaireResponse();
+        const response = new QuestionnaireResponse();
+        //const response = this.getQuestionnaireResponse();
         response.id = questionnaireResponseDto.id!;
         response.questions = new Map<Question, Answer>();
 
-        for (var pair of questionnaireResponseDto.questionAnswerPairs!) {
-            var question = this.mapQuestionDto(pair.question!);
-            var answer = this.mapAnswerDto(pair.answer!);
+        for (const pair of questionnaireResponseDto.questionAnswerPairs!) {
+            const question = this.mapQuestionDto(pair.question!);
+            const answer = this.mapAnswerDto(pair.answer!);
             response.questions.set(question, answer);
         }
 
@@ -343,7 +343,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
     mapFrequencyDto(frequencyDto: FrequencyDto): Frequency {
 
-        let frequency = new Frequency();
+        const frequency = new Frequency();
 
         frequency.repeated = FrequencyEnum.WEEKLY
         frequency.days = this.mapWeekdayDto(frequencyDto.weekdays!)
@@ -355,7 +355,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto): Questionnaire {
 
-        let questionnaire = new Questionnaire();
+        const questionnaire = new Questionnaire();
 
         questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
         questionnaire.name = wrapper.questionnaire!.title!;
@@ -372,9 +372,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
         }
 
 
-        let contactDetails = this.buildContactDetails(patientDto)
+        const contactDetails = this.buildContactDetails(patientDto)
 
-        let toReturn = new PatientDetail();
+        const toReturn = new PatientDetail();
         toReturn.firstname = patientDto.givenName;
         toReturn.lastname = patientDto.familyName;
         toReturn.cpr = patientDto.cpr;
@@ -387,7 +387,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     buildContactDetails(patientDto: PatientDto): Contact {
-        let toReturn = new Contact();
+        const toReturn = new Contact();
 
         toReturn.fullname = patientDto?.primaryRelativeName ?? ''
         toReturn.affiliation = patientDto?.primaryRelativeAffiliation ?? ''
@@ -398,7 +398,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     buildAddress(contactDetails: ContactDetailsDto): Address {
-        let address = new Address();
+        const address = new Address();
 
         address.city = contactDetails?.city;
         address.country = contactDetails?.country;

@@ -22,6 +22,9 @@ import IValidationService from '../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
 
+/**
+ * 
+ */
 interface IApiContext {
     questionnaireService : IQuestionnaireService
     questionAnswerService : IQuestionAnswerService

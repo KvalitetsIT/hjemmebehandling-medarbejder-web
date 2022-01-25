@@ -44,7 +44,7 @@ export class SearchPatientInput extends Component<{}, State> {
     let patientSearchResults: PatientDetail[] = [];
     try {
       patientSearchResults = await this.patientService.SearchPatient(searchString);
-    } catch (error: any) {
+    } catch (error : unknown) {
       const noResults = error instanceof NotFoundError
       if (noResults)
         patientSearchResults = []
