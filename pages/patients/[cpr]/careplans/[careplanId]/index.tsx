@@ -9,7 +9,6 @@ import ICareplanService from '../../../../../services/interfaces/ICareplanServic
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
-import { CareplanUnreadResponse } from '../../../../../components/Alerts/CareplanUnreadResponse';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
@@ -103,8 +102,6 @@ class PatientCareplans extends React.Component<Props, State> {
           <Grid maxWidth={400}  item xs="auto">
             <ErrorBoundary>
               <Stack spacing={3}>
-
-                <CareplanUnreadResponse careplan={activeCareplan} questionnaireResponses={this.state.questionnaireResponses} />
                 {activeCareplan?.patient ?
                   <>
                     <PatientCard patient={activeCareplan?.patient}></PatientCard>
