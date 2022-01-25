@@ -8,7 +8,7 @@ import { TaskType } from '@kvalitetsit/hjemmebehandling/Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
 import { Task } from '@kvalitetsit/hjemmebehandling/Models/Task';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
 import FhirUtils from '../../util/FhirUtils';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';

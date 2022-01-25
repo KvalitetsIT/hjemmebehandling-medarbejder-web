@@ -6,7 +6,7 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import IQuestionAnswerService from "./interfaces/IQuestionAnswerService";
+import {IQuestionAnswerService} from "./interfaces/IQuestionAnswerService";
 import { UnsupportedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/UnsupportedError";
 
 export default class QuestionAnswerService extends BaseService implements IQuestionAnswerService {

@@ -12,7 +12,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
  * - should contain logic between the api and frontend
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
-export default interface IQuestionnaireService {
+export interface IQuestionnaireService {
 
     //====================FIND====================
     /**

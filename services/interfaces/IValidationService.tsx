@@ -6,7 +6,7 @@ import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/S
  * - Should contain all validation-methods used in fx input-validation
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
-export default interface IValidationService {
+export interface IValidationService {
     ValidateCPR : (cpr : string) => Promise<InvalidInputModel[]>
     ValidatePhonenumber : (phoneNumber : string) => Promise<InvalidInputModel[]>
     ValidatePlanDefinitions : (planDefinitions : PlanDefinition[]) => Promise<InvalidInputModel[]>

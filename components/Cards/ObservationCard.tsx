@@ -10,7 +10,7 @@ import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/Ques
 import ApiContext from '../../pages/_context';
 import { ThresholdSlider } from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
 import ChartData from '@kvalitetsit/hjemmebehandling/Charts/ChartData';
 import ResponseViewCard from '@kvalitetsit/hjemmebehandling/Charts/ResponseViewCard';

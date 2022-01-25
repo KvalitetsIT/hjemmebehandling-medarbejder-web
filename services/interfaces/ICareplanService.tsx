@@ -7,7 +7,7 @@ import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCar
  * - should contain logic between the api and frontend
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
-export default interface ICareplanService {
+export interface ICareplanService {
 
     /**
      * Creates a careplan using the careplan provided

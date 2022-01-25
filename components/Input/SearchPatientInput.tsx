@@ -4,7 +4,7 @@ import { Autocomplete, Button, CircularProgress, InputAdornment, Stack, TextFiel
 import ApiContext from '../../pages/_context';
 import { Typography } from '@material-ui/core';
 import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
-import IPatientService from '../../services/interfaces/IPatientService';
+import { IPatientService } from '../../services/interfaces/IPatientService';
 import { Link } from 'react-router-dom';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
@@ -44,7 +44,7 @@ export class SearchPatientInput extends Component<{}, State> {
     let patientSearchResults: PatientDetail[] = [];
     try {
       patientSearchResults = await this.patientService.SearchPatient(searchString);
-    } catch (error : unknown) {
+    } catch (error: unknown) {
       const noResults = error instanceof NotFoundError
       if (noResults)
         patientSearchResults = []

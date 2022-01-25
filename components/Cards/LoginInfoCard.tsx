@@ -7,7 +7,7 @@ import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateH
 import ApiContext from '../../pages/_context';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-import IUserService from '../../services/interfaces/IUserService';
+import {IUserService} from '../../services/interfaces/IUserService';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 

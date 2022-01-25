@@ -7,6 +7,9 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 
+/**
+ * Containing all methods that should call the actual api
+ */
 export interface IBackendApi {
     /**
      * Resets a patient-users password

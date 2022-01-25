@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import IUserService from '../../services/interfaces/IUserService';
+import {IUserService} from '../../services/interfaces/IUserService';
 import { User } from '@kvalitetsit/hjemmebehandling/Models/User';
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';

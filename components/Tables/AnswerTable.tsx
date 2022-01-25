@@ -5,8 +5,8 @@ import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum'
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
-import IQuestionAnswerService from '../../services/interfaces/IQuestionAnswerService';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import {IQuestionAnswerService} from '../../services/interfaces/IQuestionAnswerService';
+import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
