@@ -16,6 +16,7 @@ import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { updateLanguageServiceSourceFile } from 'typescript';
 
 export interface Props {
     questionnaires: Questionnaire
@@ -25,6 +26,7 @@ export interface Props {
 export interface State {
     thresholdModalOpen: boolean
     questionnaireResponses: QuestionnaireResponse[]
+    nextQuestionnaireResponses: QuestionnaireResponse[]
     loading: boolean
     pagesize: number
     page: number
@@ -43,6 +45,7 @@ export class AnswerTable extends Component<Props, State> {
         this.state = {
             thresholdModalOpen: false,
             questionnaireResponses: [],
+            nextQuestionnaireResponses: [],
             loading: true,
             pagesize: 5,
             page: 1
@@ -64,18 +67,42 @@ export class AnswerTable extends Component<Props, State> {
     async componentDidMount(): Promise<void> {
         try {
             await this.populateData(this.state.page)
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             this.setState(() => { throw error })
         }
     }
     async populateData(page: number): Promise<void> {
         this.setState({ loading: true })
-        const careplan = this.props.careplan
-        const questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.pagesize)
-        this.setState({ questionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
-        this.setState({ questionnaireResponses: questionnaireResponses, page: page, loading: false })
+        const careplan = this.props.careplan;
 
+
+        let questionnaireResponses = null
+        let nextQuestionnaireResponses = null
+
+        const isFirstPage = page == 1
+
+        if (isFirstPage) {
+            questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.pagesize)
+            nextQuestionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page + 1, this.state.pagesize)
+        } else {
+            questionnaireResponses = this.state.nextQuestionnaireResponses
+            nextQuestionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page + 1, this.state.pagesize)
+        }
+
+
+        this.setState({ questionnaireResponses: [], nextQuestionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
+
+        this.setState({
+            nextQuestionnaireResponses: nextQuestionnaireResponses,
+            questionnaireResponses: questionnaireResponses,
+            page: page,
+            loading: false
+        })
     }
+
+
+
+
 
     async NextPage(): Promise<void> {
         const currenpage = this.state.page;
@@ -138,13 +165,11 @@ export class AnswerTable extends Component<Props, State> {
             )
         }
 
-        let hasMorePages:boolean = false;
-        if (this.state.questionnaireResponses.length >= this.state.pagesize){
-            hasMorePages = true;
-        }
+        let hasMorePages: boolean = this.state.nextQuestionnaireResponses.length > 0;
+
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
-       
+
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
@@ -164,13 +189,13 @@ export class AnswerTable extends Component<Props, State> {
                                         </TableCell>
                                         {questionaireResponses.map(questionResponse => {
                                             let severity = this.getChipColorFromCategory(questionResponse.category) as string
-                                        
+
                                             if (questionResponse.status === QuestionnaireResponseStatus.Processed)
                                                 severity = "info"
-                                        
+
                                             return (
                                                 <TableCell className="answer__table-head" align="center">
-                                                    
+
                                                     <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
                                                         <div className="answer__header">
                                                             <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
@@ -213,18 +238,18 @@ export class AnswerTable extends Component<Props, State> {
                                     })}
                                 </TableBody>
                             </Table>
-                            
+
                         </IsEmptyCard>
 
-                        
-                        
+
+
                     </TableContainer>
                 </Grid>
             </Grid>
         </>
         )
     }
-    renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse) : JSX.Element{
+    renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse): JSX.Element {
         if (questionResponse == undefined)
             return <TableCell></TableCell>
 
