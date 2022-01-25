@@ -6,7 +6,7 @@ import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
  * - should contain logic between the api and frontend
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
-export default interface IPersonService {
+export interface IPersonService {
     /**
      * Get person from CPR
      * - Is used fx when creating a patient

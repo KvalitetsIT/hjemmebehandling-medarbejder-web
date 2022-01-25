@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
 import { LoadingButton } from '@mui/lab';
 
 export interface Props {

@@ -7,9 +7,9 @@ import ApiContext from '../../../../../_context';
 import { BasicTabs } from '../../../../../../components/Layout/Tabs';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import ICareplanService from '../../../../../../services/interfaces/ICareplanService';
+import {ICareplanService} from '../../../../../../services/interfaces/ICareplanService';
 import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
-import IQuestionnaireService from '../../../../../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 

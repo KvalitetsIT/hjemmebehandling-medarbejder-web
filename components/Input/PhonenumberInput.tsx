@@ -4,7 +4,7 @@ import ApiContext from '../../pages/_context';
 import { MenuItem, Select } from '@mui/material';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { TextFieldValidation } from './TextFieldValidation';
-import IValidationService from '../../services/interfaces/IValidationService';
+import { IValidationService } from '../../services/interfaces/IValidationService';
 
 export interface Props {
 
@@ -55,7 +55,7 @@ export class PhonenumberInput extends Component<Props, State> {
         return input;
     }
 
-    addAreaCodeToPhonenumber(phone: string) : string {
+    addAreaCodeToPhonenumber(phone: string): string {
         if (phone == "")
             return phone
         return this.state.areaCode + phone;

@@ -5,9 +5,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import {Toast} from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 
 export interface Props {
   questionnaireResponse: QuestionnaireResponse
@@ -28,7 +28,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      status : props.questionnaireResponse.status
+      status: props.questionnaireResponse.status
     }
   }
 

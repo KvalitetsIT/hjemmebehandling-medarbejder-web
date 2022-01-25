@@ -5,12 +5,12 @@ import { PatientCard } from '../../../../../components/Cards/PatientCard';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import ApiContext from '../../../../_context';
 import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
-import ICareplanService from '../../../../../services/interfaces/ICareplanService';
+import {ICareplanService} from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
-import IQuestionnaireService from '../../../../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../../../../services/interfaces/IQuestionnaireService';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';

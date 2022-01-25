@@ -9,7 +9,7 @@ import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/Thresh
  * - should contain logic between the api and frontend
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
-export default interface IQuestionAnswerService {
+export interface IQuestionAnswerService {
      /**
       * Finds the answers risk-value (category)
       */

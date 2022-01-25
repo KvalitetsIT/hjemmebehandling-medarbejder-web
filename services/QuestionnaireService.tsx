@@ -7,7 +7,7 @@ import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnair
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import IQuestionnaireService from "./interfaces/IQuestionnaireService";
+import {IQuestionnaireService} from "./interfaces/IQuestionnaireService";
 
 export default class QuestionnaireService extends BaseService implements IQuestionnaireService {
     backendApi : IBackendApi;

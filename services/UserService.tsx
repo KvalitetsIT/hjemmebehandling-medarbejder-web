@@ -4,7 +4,7 @@ import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import IUserService from "./interfaces/IUserService";
+import {IUserService} from "./interfaces/IUserService";
 
 export default class UserService extends BaseService implements IUserService {
     backendApi: IBackendApi

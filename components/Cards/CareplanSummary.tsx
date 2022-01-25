@@ -8,7 +8,7 @@ import { CardHeader, Chip, Dialog, DialogActions, DialogContent, DialogContentTe
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import { Link } from 'react-router-dom';
-import ICareplanService from '../../services/interfaces/ICareplanService';
+import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PencilIcon } from '../Icons/PencilIcon';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
@@ -50,12 +50,12 @@ export class CareplanSummary extends Component<Props, State> {
                 <><CheckCircleOutlinedIcon color='success' /> Monitoreringsplanen er afsluttet</>,
                 "",
                 <>
-                <Typography>Følgende behandlingsplan blev afsluttet</Typography>
-                <Chip icon={<PersonOutlineOutlinedIcon />} label={<Typography padding={2}>{patientName} ({patientCpr})</Typography>} />
+                    <Typography>Følgende behandlingsplan blev afsluttet</Typography>
+                    <Chip icon={<PersonOutlineOutlinedIcon />} label={<Typography padding={2}>{patientName} ({patientCpr})</Typography>} />
                 </>
             )
             this.setState({ toast: afterResetPasswordToast })
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             this.setState(() => { throw error })
         }
     }

@@ -7,7 +7,7 @@ import { Button, CardContent, Box, Card, Grid, Step, StepLabel, Stepper, Tooltip
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import ApiContext from './_context';
-import IPatientService from '../services/interfaces/IPatientService';
+import {IPatientService} from '../services/interfaces/IPatientService';
 import { LoadingBackdropComponent } from '../components/Layout/LoadingBackdropComponent';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
@@ -16,7 +16,7 @@ import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
-import ICareplanService from '../services/interfaces/ICareplanService';
+import {ICareplanService} from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';

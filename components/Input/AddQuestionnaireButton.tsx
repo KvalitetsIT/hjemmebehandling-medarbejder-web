@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import IQuestionnaireService from '../../services/interfaces/IQuestionnaireService';
+import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import CloseIcon from '@mui/icons-material/Close';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';

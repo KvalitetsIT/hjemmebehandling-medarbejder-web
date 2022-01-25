@@ -4,7 +4,7 @@ import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import ICareplanService from "./interfaces/ICareplanService";
+import {ICareplanService} from "./interfaces/ICareplanService";
 
 export default class CareplanService extends BaseService implements ICareplanService {
   backendApi: IBackendApi

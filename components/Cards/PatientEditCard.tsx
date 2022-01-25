@@ -3,10 +3,10 @@ import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Tooltip } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import ApiContext from '../../pages/_context';
-import IPersonService from '../../services/interfaces/IPersonService';
+import { IPersonService } from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
-import IValidationService from '../../services/interfaces/IValidationService';
+import {IValidationService} from '../../services/interfaces/IValidationService';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
