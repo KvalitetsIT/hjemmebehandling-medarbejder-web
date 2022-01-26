@@ -16,7 +16,6 @@ import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { updateLanguageServiceSourceFile } from 'typescript';
 
 export interface Props {
     questionnaires: Questionnaire
@@ -165,7 +164,7 @@ export class AnswerTable extends Component<Props, State> {
             )
         }
 
-        let hasMorePages: boolean = this.state.nextQuestionnaireResponses.length > 0;
+        const hasMorePages: boolean = this.state.nextQuestionnaireResponses.length > 0;
 
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
