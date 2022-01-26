@@ -95,7 +95,7 @@ export class PatientCard extends Component<Props, State> {
               </IsEmptyCard>
               <IsEmptyCard  useRawJsxWhenEmpty={true} object={contact?.fullname == "" ? undefined : contact?.fullname} jsxWhenEmpty="">
                 <Typography fontWeight="bold" variant="subtitle2">
-                  Kontakt
+                  Primærkontakt
                 </Typography>
                 <Typography variant="subtitle2">
                   {contact?.fullname} {contact?.affiliation ? "(" + contact.affiliation + ")" : ""}
