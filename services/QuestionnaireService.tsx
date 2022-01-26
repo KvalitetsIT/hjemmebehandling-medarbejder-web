@@ -21,8 +21,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     try{
       this.ValidatePagination(page,pagesize);
       let toReturn = await this.backendApi.GetQuestionnaireResponses(careplanId,questionnaireIds,page,pagesize);
-      toReturn = toReturn.filter(x => x !== undefined)
-      console.log("toReturn", toReturn);    
+      toReturn = toReturn.filter(x => x !== undefined)    
       toReturn.sort((a,b) => {
         if(b.answeredTime && a.answeredTime)
           return b.answeredTime.getTime() - a.answeredTime.getTime();
