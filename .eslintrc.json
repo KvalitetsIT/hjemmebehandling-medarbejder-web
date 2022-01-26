@@ -31,8 +31,12 @@
                         "contexts": [
                             "TSInterfaceDeclaration",
                             "TSTypeAliasDeclaration",
+                            "TSPropertySignature",
                             "TSEnumDeclaration",
-                            "TSMethodSignature"
+                            "TSMethodSignature",
+                            "TSMethodDefinition",
+                            "TSArrowFunctionExpression",
+                            "TSValueDeclaration"
                         ]
                     }
                 ]
@@ -45,6 +49,7 @@
         }
     },
     "rules": {
+        "@typescript-eslint/no-var-requires": "error",
         "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/no-extra-semi": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
