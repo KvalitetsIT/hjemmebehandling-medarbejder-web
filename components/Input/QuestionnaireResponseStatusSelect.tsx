@@ -8,6 +8,7 @@ import ApiContext from '../../pages/_context';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { Typography } from '@mui/material';
 
 export interface Props {
   questionnaireResponse: QuestionnaireResponse
@@ -87,14 +88,18 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
 
   render(): JSX.Element {
     this.InitializeServices()
+    const height = 50;
+    
+    if (this.state.status == QuestionnaireResponseStatus.Processed)
+      return <Typography height={height} variant='h6'>{this.state.status}</Typography>
+
     return (<>
-      <FormControl className={"answer__status" + " " + this.GetQuestionnaireCategoryClassName(this.props.questionnaireResponse.category)} variant="standard" fullWidth>
+      <FormControl sx={{ height: { height } }} className={"answer__status" + " " + this.GetQuestionnaireCategoryClassName(this.props.questionnaireResponse.category)} variant="standard" fullWidth>
         <Select
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
           value={this.state.status}
           label="Status"
-          disabled={this.state.status == QuestionnaireResponseStatus.Processed}
           onChange={this.handleChange}
         >
           <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
