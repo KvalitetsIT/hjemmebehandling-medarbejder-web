@@ -11,9 +11,10 @@ import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/Ca
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import {IQuestionnaireService} from '../../../../../services/interfaces/IQuestionnaireService';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
+
 
 interface State {
 
@@ -110,9 +111,13 @@ class PatientCareplans extends React.Component<Props, State> {
                   <div>Noget gik galt - Ingen aktiv-behandlingsplan, eller så var ingen patient tilknyttet</div>  
               }
 
-                <ErrorBoundary>
+              
+                
                   <CareplanSummary careplan={activeCareplan}></CareplanSummary>
-                </ErrorBoundary>
+                
+                
+                  
+                
               </Stack>
             </ErrorBoundary>
           </Grid>
