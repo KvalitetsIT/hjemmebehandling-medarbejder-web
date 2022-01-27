@@ -20,11 +20,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 
-/**
- * 
- * @param param0 
- * @returns 
- */
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
   const backendApi: IBackendApi = new BffBackendApi();
@@ -58,8 +53,6 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     }
 
   }
-
-  console.log("Version: " + process.env.DOCKERTAG)
   
   return (
     <>

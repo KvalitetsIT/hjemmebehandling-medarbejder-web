@@ -76,7 +76,7 @@ export class ContactEditCard extends Component<Props, State> {
           <Stack spacing={3}>
 
             <Typography variant="inherit">
-              Pårørede
+              Denne kontaktperson udfyldes, hvis det er en anden end patienten, der er den primære kontakt.
             </Typography>
             <Stack spacing={3} direction="row">
               <TextFieldValidation

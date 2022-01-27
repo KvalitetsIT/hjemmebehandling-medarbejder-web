@@ -13,5 +13,8 @@ export interface IUserService {
      */
     ResetPassword: (patient: PatientDetail) => Promise<void>;
 
+    /**
+     * @returns user that is logged in
+     */
     GetActiveUser: () => Promise<User>
 }

@@ -160,7 +160,7 @@ export default class CreatePatient extends Component<Props, State> {
       return "Fejl i Patient-sektion"
 
     if (this.state.contactError)
-      return "Fejl i Pårørende-sektion"
+      return "Fejl i primærkontakt-sektion"
 
     if (this.state.planDefinitionError)
       return "Fejl i Patientgruppe-sektion"
@@ -230,7 +230,7 @@ export default class CreatePatient extends Component<Props, State> {
                   id="panel1bh-header"
                 >
                   <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
-                    Pårørende
+                    Primærkontakt
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -291,7 +291,7 @@ export default class CreatePatient extends Component<Props, State> {
                     </Step>
                     <Step key="relativecontact">
 
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Pårørende</StepLabel>
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
 
                     </Step>
                     <Step key="plandefinition">
