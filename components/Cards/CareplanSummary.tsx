@@ -4,22 +4,21 @@ import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import Button from '@mui/material/Button';
-import { CardHeader, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Typography } from '@mui/material';
+import { CardHeader, Divider, Grid, Typography } from '@mui/material';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import { Link } from 'react-router-dom';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
-import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PencilIcon } from '../Icons/PencilIcon';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+
+import { FinishMonitoringButton } from '../Input/FinishMonitoringButton';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
 
 export interface Props {
     careplan: PatientCareplan
 }
 export interface State {
-    toast?: JSX.Element
+
     finishedCareplan: boolean
 }
 
@@ -41,51 +40,6 @@ export class CareplanSummary extends Component<Props, State> {
         this.careplanService = this.context.careplanService
     }
 
-    async finishCareplan(careplan: PatientCareplan): Promise<void> {
-        try {
-            await this.careplanService.TerminateCareplan(careplan)
-            const patientName = this.props.careplan.patient?.firstname + " " + this.props.careplan.patient?.lastname
-            const patientCpr = this.props.careplan.patient?.cprToString()
-            const afterResetPasswordToast = this.createNonCloseableDialog(
-                <><CheckCircleOutlinedIcon color='success' /> Monitoreringsplanen er afsluttet</>,
-                "",
-                <>
-                    <Typography>Følgende behandlingsplan blev afsluttet</Typography>
-                    <Chip icon={<PersonOutlineOutlinedIcon />} label={<Typography padding={2}>{patientName} ({patientCpr})</Typography>} />
-                </>
-            )
-            this.setState({ toast: afterResetPasswordToast })
-        } catch (error: unknown) {
-            this.setState(() => { throw error })
-        }
-    }
-
-    createNonCloseableDialog(title: string | JSX.Element, subtitle: string | JSX.Element, message: string | JSX.Element): JSX.Element {
-        return (
-            <Dialog fullWidth open={true}>
-                <DialogTitle id="alert-dialog-title">
-                    <Typography variant="subtitle1">{title}</Typography>
-                    <Typography variant="caption">{subtitle}</Typography>
-
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        <Typography variant="caption">{message}</Typography>
-                    </DialogContentText>
-
-
-                </DialogContent>
-
-                <DialogActions>
-                    <Button autoFocus onClick={this.reloadPage}><AssignmentIcon />Patientoverblik</Button>
-                </DialogActions>
-            </Dialog>
-        )
-    }
-
-    reloadPage(): void {
-        window.location.replace("/");
-    }
 
     render(): JSX.Element {
         this.InitialiseServices()
@@ -105,8 +59,6 @@ export class CareplanSummary extends Component<Props, State> {
                                     </Button>
                                 </Grid>
                             </Grid>
-
-
                         </>
                     } />
                     <Divider />
@@ -128,17 +80,18 @@ export class CareplanSummary extends Component<Props, State> {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <ConfirmationButton fullWidth color="error" className='darkColor border' title="Afslut monitoreringsplan?" buttonText="Afslut monitoreringsplan" action={async () => await this.finishCareplan(careplan)}>
-                                    Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
-                                </ConfirmationButton>
+                                <ErrorBoundary>
+                                    <FinishMonitoringButton careplan={this.props.careplan}>                                    </FinishMonitoringButton>
+                                </ErrorBoundary>
                             </Grid>
 
                         </Grid>
 
                     </CardContent>
                 </Card>
-                {this.state.toast ?? <></>}
+
             </>
         );
     }
 }
+
