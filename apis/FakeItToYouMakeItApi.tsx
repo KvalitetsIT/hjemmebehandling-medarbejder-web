@@ -303,6 +303,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    async IsPatientOnUnanswered(cpr: string) : Promise<boolean>{
+        return true;
+    }
+    
     async ResetPassword(patient: PatientDetail): Promise<void> {
 
     }

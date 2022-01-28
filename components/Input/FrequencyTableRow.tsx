@@ -11,9 +11,11 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { TextField } from '@mui/material';
 import daLocale from 'date-fns/locale/da';
+import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 
 export interface Props {
   questionnaire: Questionnaire
+  patient: PatientDetail
   firstCell?: JSX.Element
   afterChange?: () => void
 }
@@ -46,6 +48,8 @@ export class FrequencyTableRow extends Component<Props, State> {
     ]
   }
 
+
+
   constructor(props: Props) {
     super(props);
     const elevenOClock = "11:00";
@@ -53,7 +57,7 @@ export class FrequencyTableRow extends Component<Props, State> {
     props.questionnaire!.frequency!.deadline = elevenOClock
     this.state = {
       questionnaire: props.questionnaire,
-      deadineTime: deadlineTime
+      deadineTime: deadlineTime,
     }
 
   }
@@ -76,7 +80,13 @@ export class FrequencyTableRow extends Component<Props, State> {
       this.props.afterChange()
   }
 
+
   render(): JSX.Element {
+
+    return this.renderContent();
+  }
+
+  renderContent(): JSX.Element {
     return (
       <>
         <TableRow>
@@ -96,12 +106,13 @@ export class FrequencyTableRow extends Component<Props, State> {
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
+              
             </Select>
           </TableCell>
           <TableCell>
             <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
               <TimePicker
-                
+
                 disabled
                 label="Seneste besvarelses tidspunkt"
                 value={this.state.deadineTime}

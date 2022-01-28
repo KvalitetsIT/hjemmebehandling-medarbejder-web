@@ -40,6 +40,12 @@ export interface IQuestionnaireService {
     GetUnansweredQuestionnaireTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
     /**
+     * Checks whether the given cpr number has any unanswered questionnaires
+     * @param cpr the cpr number to find unanswered for
+     * @returns if true the patient has unanswered questionnaires
+     */
+    IsPatientOnUnanswered : (cpr: string) => Promise<boolean>
+    /**
      * Get all plan definitions
      */
     GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>

@@ -48,7 +48,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 cpr: patient.cpr!
             }
             await api.resetPassword(request)
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -68,7 +68,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 return []
 
             return carePlans.patients.map(patient => this.toInternal.mapPatientDto(patient));
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -81,7 +81,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
 
             return await api.resolveAlarm(request)
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -93,7 +93,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
             await this.careplanApi.completeCarePlan(request)
             return careplan;
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
 
@@ -111,7 +111,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             return result.patients?.map(p => this.toInternal.mapPatientDto(p))
 
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -122,7 +122,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const planDefinitions = await api.getPlanDefinitions()
 
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
 
@@ -132,7 +132,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             console.log("careplan: " + careplan.id + ", questionnaireId: " + questionnaireToAdd.id);
             throw new NotImplementedError();
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -156,7 +156,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             const parts = location.split('/')
             return parts[parts.length - 1]
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -185,7 +185,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             await api.patchCarePlan(request)
             return careplan
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -196,7 +196,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = { id: FhirUtils.unqualifyId(id), partialUpdateQuestionnaireResponseRequest: { examinationStatus: this.toExternal.mapQuestionnaireResponseStatus(status) } };
             await api.patchQuestionnaireResponse(request)
             return status;
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -213,7 +213,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
             return questionnaireResponses.map(qr => this.toInternal.buildTaskFromQuestionnaireResponse(qr))
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -232,9 +232,28 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const carePlans = await api.searchCarePlans(request)
 
             return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
+    }
+
+    async IsPatientOnUnanswered(cpr: string): Promise<boolean> {
+        try {
+            const api = this.careplanApi
+            const request = {
+                cpr : cpr,
+                onlyUnsatisfiedSchedules: true,
+                onlyActiveCareplans: true,
+                pageNumber: 1,
+                pageSize: 1
+            }
+            const carePlans = await api.searchCarePlans(request)
+            return carePlans.some(()=>true);
+
+        } catch (error: unknown) {
+            return await this.HandleError(error)
+        }
+
     }
 
     async GetPerson(cpr: string): Promise<Person> {
@@ -243,7 +262,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = { cpr: cpr };
             const person = await api.getPerson(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapPersonFromExternalToInternal(person);
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -255,7 +274,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = {};
             const user = await api.getUser(request).catch(err => { console.log(err); throw err; });;
             return this.toInternal.mapUserFromExternalToInternal(user);
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -274,7 +293,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
 
             return carePlans.map(cp => this.toInternal.mapCarePlanDto(cp));
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -289,7 +308,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             }
 
             return this.toInternal.mapCarePlanDto(carePlan);
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
     }
@@ -306,7 +325,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
 
             return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return await this.HandleError(error)
         }
 

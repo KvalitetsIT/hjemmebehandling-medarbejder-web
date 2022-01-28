@@ -22,7 +22,7 @@ export interface IBackendApi {
      * @param task task to remove from overview
      */
     RemoveAlarm(task: Task): Promise<void>;
-    
+
     /**
      * Returns all plandefinitions in system
      */
@@ -74,6 +74,13 @@ export interface IBackendApi {
     GetUnansweredQuestionnaireTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
     /**
+     * Checks whether the given cpr number has any unanswered questionnaires
+     * @param cpr the cpr number to find unanswered for
+     * @returns if true the patient has unanswered questionnaires
+     */
+    IsPatientOnUnanswered: (cpr: string) => Promise<boolean>
+
+    /**
      * Returns all patients that either has match in name or CPR
      */
     SearchPatient: (searchstring: string) => Promise<PatientDetail[]>
@@ -107,6 +114,6 @@ export interface IBackendApi {
     /**
      * Returns patients based on paramaters
      */
-    GetPatients: (includeActive: boolean,includeCompleted: boolean, page: number, pageSize: number) => Promise<PatientDetail[]>
+    GetPatients: (includeActive: boolean, includeCompleted: boolean, page: number, pageSize: number) => Promise<PatientDetail[]>
 }
 
