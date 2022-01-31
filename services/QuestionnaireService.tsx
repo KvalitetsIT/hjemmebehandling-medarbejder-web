@@ -16,6 +16,14 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     super();
     this.backendApi = backendapi;
   }
+  async GetAllQuestionnaires() : Promise<Questionnaire[]>{
+    try{
+      return await this.backendApi.GetAllQuestionnaires();
+    } catch(error){
+      return this.HandleError(error);
+    }
+  }
+
   async IsPatientOnUnanswered(cpr: string): Promise<boolean> {
     try {
       return await this.backendApi.IsPatientOnUnanswered(cpr);
