@@ -120,6 +120,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency.repeated = FrequencyEnum.WEEKLY;
         frequency.deadline = '11:00'
         this.questionnaire1.frequency = frequency;
+        this.questionnaire1.status = "Aktiv"
+        this.questionnaire1.version = 1
+        
+        this.questionnaire1.questions = [this.question1,this.question2,this.question3,this.question4]
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
 
 
@@ -303,6 +307,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    async GetAllQuestionnaires() : Promise<Questionnaire[]>{
+        return [this.questionnaire1,this.questionnaire2, this.questionnaire3];
+    }
+
     async IsPatientOnUnanswered(cpr: string) : Promise<boolean>{
         return true;
     }

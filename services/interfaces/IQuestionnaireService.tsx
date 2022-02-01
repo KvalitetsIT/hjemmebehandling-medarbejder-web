@@ -13,7 +13,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
 export interface IQuestionnaireService {
-
+    
     //====================FIND====================
     /**
      * Goes through all the provided questionnaireResponses 

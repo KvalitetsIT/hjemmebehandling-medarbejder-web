@@ -11,6 +11,7 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
  * Containing all methods that should call the actual api
  */
 export interface IBackendApi {
+
     /**
      * Resets a patient-users password
      * @param patient 
