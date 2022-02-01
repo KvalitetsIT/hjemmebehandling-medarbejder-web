@@ -12,6 +12,9 @@ import HistoryIcon from '@mui/icons-material/History';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import AddIcon from '@mui/icons-material/Add';
+import { Typography } from '@mui/material';
+import GroupsIcon from '@mui/icons-material/Groups';
+import QuizIcon from '@mui/icons-material/Quiz';
 
 const drawerWidth = 270;
 
@@ -63,19 +66,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const bottomPush : CSSProperties  = {
+const bottomPush: CSSProperties = {
   marginTop: "auto",
-  marginRight:5,
-  marginLeft:5
+  marginRight: 5,
+  marginLeft: 5
 }
 
-const newPatientButton : CSSProperties = {
-  backgroundColor : "#1976d2",
-  borderRadius:200,
+const newPatientButton: CSSProperties = {
+  backgroundColor: "#1976d2",
+  borderRadius: 200,
   color: "white"
 }
 
-export default function MiniDrawer() : JSX.Element {
+export default function MiniDrawer(): JSX.Element {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -87,57 +90,88 @@ export default function MiniDrawer() : JSX.Element {
   };
 
   return (
-<>
-      
-      
+    <>
+
+
       <Drawer variant="permanent" open={open}>
-    
+
         <List >
-        <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
+          <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
               <img width={30} src="/assets/images/logo.svg" alt="Hjemmebehandling" />
             </ListItemIcon>
-            <ListItemText  style={{fontWeight:"bold", paddingTop:20, paddingBottom:20}} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
-            </ListItem>
+            <ListItemText style={{ fontWeight: "bold", paddingTop: 20, paddingBottom: 20 }} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
+          </ListItem>
 
-        
-        <Divider />
 
-            <ListItem button component={Link} color="inherit" to="/patients">
+          <Divider />
+
+          <ListItem >
             <ListItemIcon>
-              <AssignmentIcon/>
             </ListItemIcon>
-                <ListItemText>Opgaveliste</ListItemText>
-            </ListItem>
-            <ListItem button component={Link} color="inherit"  to="/active/1"> 
+            <ListItemText primary={<Typography variant="h6">Kliniker</Typography>} />
+          </ListItem>
+
+          <ListItem button component={Link} color="inherit" to="/patients">
             <ListItemIcon>
-              <SupervisedUserCircleIcon/>
-            </ListItemIcon>               
-                <ListItemText primary="Aktive patienter" />
-            </ListItem>
-            <ListItem button component={Link} color="inherit"  to="/inactive/1"> 
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText>Opgaveliste</ListItemText>
+          </ListItem>
+
+          <ListItem button component={Link} color="inherit" to="/active/1">
             <ListItemIcon>
-              <HistoryIcon/>
-            </ListItemIcon>               
-                <ListItemText primary="Inaktive patienter" />
-            </ListItem>
-            
+              <SupervisedUserCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Aktive patienter" />
+          </ListItem>
+
+          <ListItem button component={Link} color="inherit" to="/inactive/1">
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
+            <ListItemText primary="Inaktive patienter" />
+          </ListItem>
+
+
+          <Divider />
+
+          <ListItem >
+            <ListItemIcon>
+            </ListItemIcon>
+            <ListItemText primary={<Typography variant="h6">Adminstrator</Typography>} />
+          </ListItem>
+
+          <ListItem button component={Link} color="inherit" to="/questionnaires">
+            <ListItemIcon>
+              <QuizIcon />
+            </ListItemIcon>
+            <ListItemText primary="Spørgeskema" />
+          </ListItem>
+
+          <ListItem button component={Link} color="inherit" to="/plandefinitions">
+            <ListItemIcon>
+              <GroupsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Patientgrupper" />
+          </ListItem>
+
         </List>
 
-          <List style={bottomPush}>
-          <ListItem style={newPatientButton} button component={Link} color="inherit"  to="/newpatient">
+        <List style={bottomPush}>
+          <ListItem style={newPatientButton} button component={Link} color="inherit" to="/newpatient">
             <ListItemIcon>
-              <AddIcon fontSize="medium" style={{color:"white", marginLeft : -5}}/>
-            </ListItemIcon>               
-              <ListItemText primary="Opret patient" />
-            
-        </ListItem>
-          </List>
-       
-        
+              <AddIcon fontSize="medium" style={{ color: "white", marginLeft: -5 }} />
+            </ListItemIcon>
+            <ListItemText primary="Opret patient" />
+
+          </ListItem>
+        </List>
+
+
       </Drawer>
-      
-      </>
+
+    </>
 
   );
 }
