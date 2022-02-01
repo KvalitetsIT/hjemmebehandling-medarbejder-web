@@ -354,7 +354,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto): Questionnaire {
-
         const questionnaire = new Questionnaire();
 
         questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
@@ -362,7 +361,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
         questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
         questionnaire.status = wrapper.questionnaire?.status;
-
+        questionnaire.version = wrapper.questionnaire?.version;
         return questionnaire;
     }
 

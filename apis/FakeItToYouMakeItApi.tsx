@@ -121,7 +121,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency.deadline = '11:00'
         this.questionnaire1.frequency = frequency;
         this.questionnaire1.status = "Aktiv"
-        this.questionnaire1.version = 1
+        this.questionnaire1.version = "1"
         
         this.questionnaire1.questions = [this.question1,this.question2,this.question3,this.question4]
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
