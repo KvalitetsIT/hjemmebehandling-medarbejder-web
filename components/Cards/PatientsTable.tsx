@@ -1,11 +1,11 @@
 import { Box, Button, ButtonGroup, Card, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import * as React from 'react';
-import { LoadingBackdropComponent } from '../../components/Layout/LoadingBackdropComponent';
+import { LoadingBackdropComponent } from '../Layout/LoadingBackdropComponent';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { IPatientService } from '../../services/interfaces/IPatientService';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { LoadingSmallComponent } from '../../components/Layout/LoadingSmallComponent';
+import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard'

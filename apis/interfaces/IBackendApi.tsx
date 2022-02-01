@@ -12,9 +12,6 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
  */
 export interface IBackendApi {
 
-
-    GetAllQuestionnaires : () => Promise<Questionnaire[]>
-    
     /**
      * Resets a patient-users password
      * @param patient 

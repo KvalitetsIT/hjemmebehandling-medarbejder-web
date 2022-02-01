@@ -14,8 +14,6 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
  */
 export interface IQuestionnaireService {
     
-    GetAllQuestionnaires : () => Promise<Questionnaire[]>
-
     //====================FIND====================
     /**
      * Goes through all the provided questionnaireResponses 

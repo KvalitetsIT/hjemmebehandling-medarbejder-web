@@ -1,6 +1,6 @@
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Card, CardContent, Typography } from "@mui/material";
+import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Card, Typography } from "@mui/material";
 import React from "react";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { QuestionnaireTable } from "../../components/Tables/QuestionnaireTable";
@@ -10,21 +10,19 @@ import ApiContext from "../_context";
 
 interface State {
     loading: boolean
-    questionnaires: Questionnaire[]
+    planDefinitions: PlanDefinition[]
 }
 
-interface Props {
-}
 
-class QuestionnairePage extends React.Component<Props, State> {
+class QuestionnairePage extends React.Component<{}, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
 
-    constructor(props: Props) {
+    constructor(props: {}) {
         super(props);
         this.state = {
             loading: true,
-            questionnaires: []
+            planDefinitions: []
         }
 
     }
@@ -44,8 +42,8 @@ class QuestionnairePage extends React.Component<Props, State> {
 
     async populateCareplans(): Promise<void> {
         try {
-            const allQuestionnaires = await this.questionnaireService.GetAllQuestionnaires();
-            this.setState({ questionnaires: allQuestionnaires })
+            const allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions();
+            this.setState({ planDefinitions: allPlanDefinitions })
         } catch (error) {
             this.setState(() => { throw error })
         }
@@ -60,9 +58,9 @@ class QuestionnairePage extends React.Component<Props, State> {
             <>
                 <Typography variant="h6">Spørgeskemaer</Typography>
                 <br />
-                <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.questionnaires}>
+                <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.planDefinitions}>
                     <Card>
-                        <QuestionnaireTable questionnaires={this.state.questionnaires} />
+                        <QuestionnaireTable planDefinitions={this.state.planDefinitions} />
                     </Card>
                 </IsEmptyCard>
             </>
