@@ -361,6 +361,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaire.name = wrapper.questionnaire!.title!;
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
         questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
+        questionnaire.status = wrapper.questionnaire?.status;
 
         return questionnaire;
     }
