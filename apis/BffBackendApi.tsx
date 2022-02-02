@@ -40,7 +40,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
-    async GetAllQuestionnaires() : Promise<Questionnaire[]>{
+    async GetAllQuestionnaires(): Promise<Questionnaire[]> {
         return [];
     }
 
@@ -244,14 +244,14 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             const api = this.careplanApi
             const request = {
-                cpr : cpr,
+                cpr: cpr,
                 onlyUnsatisfiedSchedules: true,
                 onlyActiveCareplans: true,
                 pageNumber: 1,
                 pageSize: 1
             }
             const carePlans = await api.searchCarePlans(request)
-            return carePlans.some(()=>true);
+            return carePlans.some(() => true);
 
         } catch (error: unknown) {
             return await this.HandleError(error)
@@ -288,7 +288,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const api = this.careplanApi;
             const request = {
                 cpr: cpr,
-                onlyActiveCareplans: true
+                onlyActiveCareplans: true,
+                pageNumber: 1,
+                pageSize: 100
             };
             const carePlans = await api.searchCarePlans(request);
             if (!carePlans) {
