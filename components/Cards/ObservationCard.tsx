@@ -70,10 +70,7 @@ export class ObservationCard extends Component<Props, State> {
 
         if (elementsInArray == 1)
             return 12;
-        if (elementsInArray == 2)
-            return 6;
-
-        return 4
+        return 6
     }
 
     render(): JSX.Element {
