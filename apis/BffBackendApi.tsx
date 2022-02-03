@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, PatientApi, PlanDefinitionApi, UserApi } from "../generated";
+import { Configuration, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -35,15 +35,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     personApi = new PersonApi(this.conf);
     userApi = new UserApi(this.conf);
     patientApi = new PatientApi(this.conf);
+    questionnaireApi = new QuestionnaireApi(this.conf);
+
     constructor() {
         super();
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         try {
             console.log(questionnaireId)
-            throw new NotImplementedError();
+            const request = {
+                id : questionnaireId
+            }
+            return await this.questionnaireApi.getQuestionnaireById(request);
         } catch (error) {
             return this.HandleError(error);
         }

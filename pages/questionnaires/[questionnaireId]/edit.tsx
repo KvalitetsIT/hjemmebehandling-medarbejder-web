@@ -9,7 +9,7 @@ import { TextFieldValidation } from "../../../components/Input/TextFieldValidati
 import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../../_context";
-
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface State {
     loading: boolean
@@ -99,7 +99,9 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                         {childQuestion?.map(childQuestion => {
                                             return (
                                                 <>
-                                                    <Grid item xs={1} />
+                                                    <Grid item xs={1} alignSelf="center" textAlign="center">
+                                                        <ArrowForwardIosIcon fontSize="large"/>
+                                                    </Grid>
                                                     <Grid item xs={11}>
                                                         <QuestionEditCard
                                                             moveItemUp={() => { console.log("") }}
