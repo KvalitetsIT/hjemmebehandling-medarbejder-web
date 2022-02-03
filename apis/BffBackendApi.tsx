@@ -49,7 +49,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = {
                 id : questionnaireId
             }
-            return await this.questionnaireApi.getQuestionnaireById(request);
+            const questionnaireDto = await this.questionnaireApi.getQuestionnaireById(request);
+            return this.toInternal.mapQuestionnaire(questionnaireDto);
         } catch (error) {
             return this.HandleError(error);
         }

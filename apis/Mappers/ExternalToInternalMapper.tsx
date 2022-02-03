@@ -16,7 +16,7 @@ import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrgan
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
+import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireDto, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -363,6 +363,19 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaire.status = wrapper.questionnaire?.status;
         questionnaire.version = wrapper.questionnaire?.version;
         return questionnaire;
+    }
+
+    mapQuestionnaire(questionnaire: QuestionnaireDto): Questionnaire {
+        const questionnaireResult = new Questionnaire();
+
+        questionnaireResult.id = FhirUtils.unqualifyId(questionnaire!.id!)
+        questionnaireResult.name = questionnaire!.title!;
+        //questionnaire.frequency = this.mapFrequencyDto(frequency!);
+        //questionnaire.thresholds = this.mapThresholdDtos(thresholds!);
+        questionnaireResult.status = questionnaire?.status;
+        questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
+        questionnaireResult.version = questionnaire?.version;
+        return questionnaireResult;
     }
 
     mapPatientDto(patientDto: PatientDto): PatientDetail {
