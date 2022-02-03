@@ -111,6 +111,13 @@ export interface IBackendApi {
      * Returns all questionnaireresponses that has reference to, any of the provided questionnaireIds, and careplanId
      */
     GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
+    
+    /**
+     * Gets one questionnaire based on the given questionnaireId
+     * @param questionnaireId the id of the questionnaire to get 
+     * @returns The questionnaire with the given id
+     */
+    GetQuestionnaire: (questionnaireId: string) => Promise<Questionnaire | undefined>
 
     /**
      * Returns patients based on paramaters

@@ -12,6 +12,7 @@ import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
 import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import QuestionnairePage from '../../pages/questionnaires';
+import EditQuestionnairePage from '../../pages/questionnaires/[questionnaireId]/edit';
 
 
 export interface State {
@@ -81,6 +82,7 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
                 
+                    <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <EditQuestionnairePage {...props} />} />
                     <Route path="/questionnaires" render={(props) => <QuestionnairePage {...props} />} />
 
                     <Route path="/active/:pagenr" render={(props) => <ActivePatients {...props} />} />

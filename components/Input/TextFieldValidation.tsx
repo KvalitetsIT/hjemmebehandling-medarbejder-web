@@ -13,9 +13,11 @@ export interface Props {
     inputProps?: Partial<OutlinedInputProps>
 
     label: string;
-    variant: "outlined";
+    variant: "outlined" | "standard" | "filled"
     size: "small" | "medium";
     type: string
+    maxWidth: string | number
+    minWidth: string | number
 
     onWheel?: () => void;
     onChange: (input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
@@ -35,7 +37,9 @@ export class TextFieldValidation extends Component<Props, State> {
         size: "small",
         required: false,
         disabled: false,
-        type: "string"
+        type: "string",
+        maxWidth: 1000,
+        minWidth: 300
     }
 
     constructor(props: Props) {
@@ -76,26 +80,31 @@ export class TextFieldValidation extends Component<Props, State> {
         return (
             <FormControl>
                 <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-                {this.props.children}
+                    {this.props.children}
                     <TextField
-                            id={this.props.id}
-                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
-                            InputLabelProps={{ shrink: this.props.value ? true : false }}
-                            InputProps={this.props.inputProps}
-                            label={this.props.label}
-                            variant={this.props.variant}
-                            error={hasError}
-                            color={color}
-                            onWheel={() => this.props.onWheel ? this.props.onWheel() : {}}
-                            helperText={firstError?.message}
-                            disabled={this.props.disabled}
-                            onChange={(input) => this.props.onChange(input)}
-                            required={this.props.required}
-                            size={this.props.size}
-                            type={this.props.type}
-                            value={this.props.value}>
+                        id={this.props.id}
+                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
+                        InputLabelProps={{ shrink: this.props.value ? true : false }}
+                        InputProps={this.props.inputProps}
+                        label={this.props.label}
+                        variant={this.props.variant}
+                        error={hasError}
+                        color={color}
+                        onWheel={() => this.props.onWheel ? this.props.onWheel() : {}}
+                        helperText={firstError?.message}
+                        disabled={this.props.disabled}
+                        onChange={(input) => this.props.onChange(input)}
+                        required={this.props.required}
+                        size={this.props.size}
+                        type={this.props.type}
+                        value={this.props.value}
+                        sx={{
+                            minWidth: this.props.minWidth,
+                            maxWidth: this.props.maxWidth,
+                        }}
+                    >
 
-                        </TextField>
+                    </TextField>
                 </Box>
 
             </FormControl>

@@ -22,6 +22,13 @@ export interface IQuestionnaireService {
      */
     findAllQuestions: (questionResponses: Array<QuestionnaireResponse | undefined>) => Question[]
 
+   /**
+     * Gets one questionnaire based on the given questionnaireId
+     * @param questionnaireId the id of the questionnaire to get 
+     * @returns The questionnaire with the given id
+     */
+    getQuestionnaire : (questionnaireId : string) => Promise<Questionnaire | undefined>
+
     /**
      * Provide a response, and a question - and you shall recieve the answer.
      * If the question does not exist in the response, you shall recieve undefined.

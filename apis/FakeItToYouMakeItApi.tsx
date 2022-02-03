@@ -25,6 +25,7 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
+import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -109,6 +110,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question3.type = QuestionTypeEnum.INTEGER;
 
         this.question4.Id = "q4";
+        const q4EnableWhen = new EnableWhen<boolean>();
+        q4EnableWhen.questionId = this.question1.Id;
+        this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
 
@@ -122,8 +126,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.frequency = frequency;
         this.questionnaire1.status = "Aktiv"
         this.questionnaire1.version = "1"
-        
-        this.questionnaire1.questions = [this.question1,this.question2,this.question3,this.question4]
+
+        this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
 
 
@@ -156,7 +160,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
 
-        
+
 
         this.tc2.questionId = "q2"
         this.tc2.thresholdNumbers = [
@@ -307,21 +311,24 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
-    async GetAllQuestionnaires() : Promise<Questionnaire[]>{
-        return [this.questionnaire1,this.questionnaire2, this.questionnaire3];
+    async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
+        return [this.questionnaire1, this.questionnaire2, this.questionnaire3].find(x => x.id == questionnaireId)
+    }
+    async GetAllQuestionnaires(): Promise<Questionnaire[]> {
+        return [this.questionnaire1, this.questionnaire2, this.questionnaire3];
     }
 
-    async IsPatientOnUnanswered(cpr: string) : Promise<boolean>{
+    async IsPatientOnUnanswered(cpr: string): Promise<boolean> {
         return true;
     }
-    
+
     async ResetPassword(patient: PatientDetail): Promise<void> {
 
     }
     async CreateUser(patient: PatientDetail): Promise<User> {
         throw new NotImplementedError();
     }
-    async GetPatients(includeActive: boolean,includeCompconsted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
+    async GetPatients(includeActive: boolean, includeCompconsted: boolean, page: number, pageSize: number): Promise<PatientDetail[]> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         const toReturn = [];
         for (let i = 0; i < pageSize; i++) {
@@ -335,7 +342,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
-        
+
         await new Promise(f => setTimeout(f, this.timeToWait));
         const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
         const start = (page - 1) * pagesize
@@ -344,9 +351,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             const statusObject = this.statusChanges.reverse().find(y => y.id == x.id)
             x.status = statusObject?.status ?? x.status
         })
-         
+
         return responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
-        }
+    }
 
     async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         return new PatientCareplan()
@@ -514,7 +521,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         await new Promise(f => setTimeout(f, this.timeToWait));
         if (page == 1)
-            return [this.task1, this.task2,this.task3].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+            return [this.task1, this.task2, this.task3].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
         return [];
     }
 
@@ -557,7 +564,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
-        return [this.careplan1].find(x=>x.id == id)!
+        return [this.careplan1].find(x => x.id == id)!
     }
 
     async SetQuestionaireResponse(id: string, questionnaireResponses: QuestionnaireResponse): Promise<void> {
