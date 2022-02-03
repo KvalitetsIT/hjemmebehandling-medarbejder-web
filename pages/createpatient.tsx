@@ -3,11 +3,11 @@ import Stack from '@mui/material/Stack';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import { Button, CardContent, Box, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography } from '@mui/material';
+import { Button, CardContent, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import ApiContext from './_context';
-import {IPatientService} from '../services/interfaces/IPatientService';
+import { IPatientService } from '../services/interfaces/IPatientService';
 import { LoadingBackdropComponent } from '../components/Layout/LoadingBackdropComponent';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
@@ -16,7 +16,7 @@ import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
-import {ICareplanService} from '../services/interfaces/ICareplanService';
+import { ICareplanService } from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
@@ -25,6 +25,7 @@ import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/Ba
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { PatientAvatar } from '../components/Avatars/PatientAvatar';
 
 /**
  * Contains booleans that tells which sections that should be open
@@ -191,10 +192,10 @@ export default class CreatePatient extends Component<Props, State> {
 
     return (
       <form onSubmit={(e) => { e.preventDefault(); this.submitPatient() }} noValidate onBlur={() => this.forceUpdate()}  >
-        <Grid container sx={{flexWrap : "inherit"}} columns={12}>
+        <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
 
 
-          <Grid item spacing={5} xs={10}  minWidth={500}>
+          <Grid item spacing={5} xs={10} minWidth={500}>
 
 
             <ErrorBoundary>
@@ -266,23 +267,42 @@ export default class CreatePatient extends Component<Props, State> {
                   </Typography>
                 </AccordionDetails>
                 <AccordionActions>
-                  <Button className="accordion__button" disabled={this.state.planDefinitionError ? true : false} sx={this.continueButtonStyle} component={Box} onClick={() => this.goToSave()} variant="contained">Fortsæt</Button>
+                  <Tooltip title={this.getFirstError()}>
+                    <Stack paddingTop={5}>
+                      <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
+                    </Stack>
+                  </Tooltip>
                 </AccordionActions>
               </Accordion>
 
             </ErrorBoundary>
 
-            <Tooltip title={this.getFirstError()}>
-              <Stack paddingTop={5}>
-                <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
-              </Stack>
-            </Tooltip>
+
 
 
           </Grid>
           <Grid paddingLeft={5} xs="auto">
             <div>
               <Card>
+                {this.state.patient.cpr ? 
+                <>
+                <CardHeader
+                  avatar={<PatientAvatar patient={this.state.patient} />}
+                  title={
+                    <Grid container>
+                      <Grid item xs="auto">
+                        <Typography>
+                          {this.state.patient.firstname} {this.state.patient.lastname} <br />
+                          {this.state.patient.cprToString()}
+                        </Typography>
+                      </Grid>
+                      
+                    </Grid>
+                    
+                  }
+                /><Divider/></> : <></> }
+
+
                 <CardContent>
                   <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
                     <Step key="patient">
@@ -312,7 +332,7 @@ export default class CreatePatient extends Component<Props, State> {
     )
   }
 
-  GetCheckboxIcon(object: unknown) : React.ElementType{
+  GetCheckboxIcon(object: unknown): React.ElementType {
     if (!object)
       return RadioButtonUncheckedIcon
     return CheckCircleOutlineIcon
