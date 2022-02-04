@@ -9,7 +9,6 @@ import { TextFieldValidation } from "../../../components/Input/TextFieldValidati
 import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../../_context";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface State {
     loading: boolean
@@ -91,23 +90,28 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                     <>
                                         <Grid item xs={12}>
                                             <QuestionEditCard
+                                                key={question.Id}
                                                 addSubQuestionAction={(q) => this.addSubQuestion(q)}
                                                 moveItemUp={() => this.MoveItemFromIndex(index, -1)}
                                                 moveItemDown={() => this.MoveItemFromIndex(index, 1)}
+                                                forceUpdate={() => this.forceUpdate()}
                                                 question={question} />
                                         </Grid>
                                         {childQuestion?.map(childQuestion => {
                                             return (
                                                 <>
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
-                                                        <ArrowForwardIosIcon fontSize="large"/>
+
                                                     </Grid>
                                                     <Grid item xs={11}>
                                                         <QuestionEditCard
+                                                            key={childQuestion.Id}
                                                             moveItemUp={() => { console.log("") }}
                                                             moveItemDown={() => { console.log("") }}
                                                             parentQuestion={question}
-                                                            question={childQuestion} />
+                                                            question={childQuestion}
+                                                            forceUpdate={() => this.forceUpdate()}
+                                                        />
                                                     </Grid>
                                                 </>
                                             )
@@ -117,7 +121,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                 )
                             })}
                         </Grid>
-                        <br/>
+                        <br />
                         <Button variant="contained" onClick={() => console.log(this.state.questionnaire)}>
                             Gem
                         </Button>
@@ -147,7 +151,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
     }
 
-    MoveItemFromIndex(index: number, step: number) : void{
+    MoveItemFromIndex(index: number, step: number): void {
         this.setState({ loading: true })
         const toPosition = index + step;
         const fromPosition = index;
@@ -172,6 +176,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         const afterQuestionnaire = beforeQuestionnaire;
         afterQuestionnaire.questions = newQuestions;
+
         this.setState({ questionnaire: afterQuestionnaire, loading: false })
 
     }

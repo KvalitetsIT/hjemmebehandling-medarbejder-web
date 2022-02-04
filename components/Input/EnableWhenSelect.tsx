@@ -31,7 +31,7 @@ export class EnableWhenSelect extends Component<Props, State> {
     render(): JSX.Element {
         if (this.props.parentQuestion.type == QuestionTypeEnum.BOOLEAN)
             return this.renderBoolean();
-        return (<Typography>Spørgsmålstype kan ikke benyttes til underspørgsmål</Typography>)
+        return (<Typography>?</Typography>)
     }
 
     renderBoolean() : JSX.Element {

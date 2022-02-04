@@ -8,11 +8,13 @@ import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models
 
 export interface Props {
     question: Question
+    forceUpdate?: () => void
 }
 
 export interface State {
     question: Question
 }
+
 
 
 export class QuestionTypeSelect extends Component<Props, State> {
@@ -34,9 +36,15 @@ export class QuestionTypeSelect extends Component<Props, State> {
         this.handleChange = this.handleChange.bind(this)
     }
 
+    forceTypeSelectUpdate() : void{
+        if (this.props.forceUpdate)
+            this.props.forceUpdate()
+        this.forceUpdate();
+    }
+
     render(): JSX.Element {
         return (
-            <FormControl sx={{minWidth:150}} required>
+            <FormControl sx={{ minWidth: 150 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmålstype</InputLabel>
                 <Select label="Vælg spørgsmålstype" value={this.state.question.type} onChange={this.handleChange}>
                     {this.allTypes.map(type => {
@@ -53,7 +61,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
         const clicked = e.target.value as unknown as QuestionTypeEnum
         const newQuestion = this.state.question
         newQuestion.type = clicked;
-
+        this.forceTypeSelectUpdate();
         this.setState({ question: newQuestion })
 
     }

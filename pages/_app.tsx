@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     }
 
   }
-  
+
   return (
     <>
       <div suppressHydrationWarning>
@@ -169,6 +169,23 @@ const THEME = createTheme({
             flexBasis: 'initial',
             width: 80,
             height: 80
+          }
+        },
+        {
+          props: { className: 'nonFocusedQuestionEditCard' },
+          style: {
+            backgroundColor: "white",
+            textAlign: "center"
+          }
+        },
+        {
+          props: { className: 'focusedQuestionEditCard' },
+
+          style: {
+            backgroundColor: blue, //"white"
+            "button": {
+              color: "white"
+            }
           }
         }
       ]
