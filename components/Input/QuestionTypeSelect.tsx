@@ -46,7 +46,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmålstype</InputLabel>
-                <Select label="Vælg spørgsmålstype" value={this.state.question.type} onChange={this.handleChange}>
+                <Select defaultValue="" label="Vælg spørgsmålstype" value={this.state.question.type} onChange={this.handleChange}>
                     {this.allTypes.map(type => {
                         return (
                             <MenuItem key={type.type} value={type.type}>{type.displayName}</MenuItem>

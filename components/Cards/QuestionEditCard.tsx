@@ -140,10 +140,7 @@ export class QuestionEditCard extends Component<Props, State>{
             return <></>
 
         const thresholdCollection = this.props.getThreshold(this.state.question)
-
-        console.log("thresholdCollection")
-        console.log(thresholdCollection)
-
+        
         return (
             <TableContainer>
                 <Table>
