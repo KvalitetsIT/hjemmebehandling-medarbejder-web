@@ -16,11 +16,18 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     super();
     this.backendApi = backendapi;
   }
-  
-  async getQuestionnaire(questionnaireId: string) :  Promise<Questionnaire | undefined>{
-    try{
+  async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+    try {
+      await this.backendApi.updateQuestionnaire(questionnaire);
+    } catch (error) {
+      return this.HandleError(error);
+    }
+  }
+
+  async getQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
+    try {
       return await this.backendApi.GetQuestionnaire(questionnaireId);
-    }catch(error){
+    } catch (error) {
       return this.HandleError(error);
     }
   }

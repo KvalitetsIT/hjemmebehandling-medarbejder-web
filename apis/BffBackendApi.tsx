@@ -42,6 +42,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        console.log(questionnaire)
+        throw new NotImplementedError()
+    }
     
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         try {

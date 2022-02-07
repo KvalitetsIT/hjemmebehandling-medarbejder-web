@@ -317,6 +317,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetAllQuestionnaires(): Promise<Questionnaire[]> {
         return [this.questionnaire1, this.questionnaire2, this.questionnaire3];
     }
+    
+    async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        console.log(questionnaire)
+        throw new NotImplementedError()
+    }
 
     async IsPatientOnUnanswered(cpr: string): Promise<boolean> {
         return true;

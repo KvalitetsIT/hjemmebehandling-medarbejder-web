@@ -13,71 +13,78 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
  * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
  */
 export interface IQuestionnaireService {
-    
-    //====================FIND====================
-    /**
-     * Goes through all the provided questionnaireResponses 
-     *  - All elements in list that are undefined will be removed
-     * Returns all questions - No questions should be duplicates
-     */
-    findAllQuestions: (questionResponses: Array<QuestionnaireResponse | undefined>) => Question[]
 
-   /**
-     * Gets one questionnaire based on the given questionnaireId
-     * @param questionnaireId the id of the questionnaire to get 
-     * @returns The questionnaire with the given id
-     */
-    getQuestionnaire : (questionnaireId : string) => Promise<Questionnaire | undefined>
+  //====================FIND====================
+  /**
+   * Goes through all the provided questionnaireResponses 
+   *  - All elements in list that are undefined will be removed
+   * Returns all questions - No questions should be duplicates
+   */
+  findAllQuestions: (questionResponses: Array<QuestionnaireResponse | undefined>) => Question[]
 
-    /**
-     * Provide a response, and a question - and you shall recieve the answer.
-     * If the question does not exist in the response, you shall recieve undefined.
-     */
-    findAnswer: (desiredQuestion: Question, questionResponses: QuestionnaireResponse) => Answer | undefined;
+  /**
+    * Gets one questionnaire based on the given questionnaireId
+    * @param questionnaireId the id of the questionnaire to get 
+    * @returns The questionnaire with the given id
+    */
+  getQuestionnaire: (questionnaireId: string) => Promise<Questionnaire | undefined>
 
-    //====================GET====================
-    /**
-     * Get all tasks that has been answered, but are not processed yet
+  /**
+     * Assumes the questionnaire already exists
+     * Updates the given questionnaire based on the id of the provided entity
+     * @param questionnaire the questionnaire to be updated
      */
-    GetUnfinishedQuestionnaireResponseTasks: (page: number, pagesize: number) => Promise<Array<Task>>
+  updateQuestionnaire(questionnaire: Questionnaire): Promise<void>
 
-    /**
-     * Get all tasks that has not been answered
-     */
-    GetUnansweredQuestionnaireTasks: (page: number, pagesize: number) => Promise<Array<Task>>
+  /**
+   * Provide a response, and a question - and you shall recieve the answer.
+   * If the question does not exist in the response, you shall recieve undefined.
+   */
+  findAnswer: (desiredQuestion: Question, questionResponses: QuestionnaireResponse) => Answer | undefined;
 
-    /**
-     * Checks whether the given cpr number has any unanswered questionnaires
-     * @param cpr the cpr number to find unanswered for
-     * @returns if true the patient has unanswered questionnaires
-     */
-    IsPatientOnUnanswered : (cpr: string) => Promise<boolean>
-    /**
-     * Get all plan definitions
-     */
-    GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>
+  //====================GET====================
+  /**
+   * Get all tasks that has been answered, but are not processed yet
+   */
+  GetUnfinishedQuestionnaireResponseTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
-    /**
-     * Returns all questionnaireresponses that
-     * - Has a reference to the provided careplan and
-     * - Has a reference to any of the provided questionnaireids
-     */
-    GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
+  /**
+   * Get all tasks that has not been answered
+   */
+  GetUnansweredQuestionnaireTasks: (page: number, pagesize: number) => Promise<Array<Task>>
 
-    /**
-     * Adds the provided questionnaire to the provided careplan
-     */
-    AddQuestionnaireToCareplan: (careplan: PatientCareplan, questionnaireToAdd: Questionnaire) => Promise<PatientCareplan>
+  /**
+   * Checks whether the given cpr number has any unanswered questionnaires
+   * @param cpr the cpr number to find unanswered for
+   * @returns if true the patient has unanswered questionnaires
+   */
+  IsPatientOnUnanswered: (cpr: string) => Promise<boolean>
+  /**
+   * Get all plan definitions
+   */
+  GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>
 
-    /**
-     * Updates the questionnaireResponse with the provided id
-     * - Sets the status to the provided status
-     */
-    UpdateQuestionnaireResponseStatus: (id: string, status: QuestionnaireResponseStatus) => Promise<QuestionnaireResponseStatus>;
+  /**
+   * Returns all questionnaireresponses that
+   * - Has a reference to the provided careplan and
+   * - Has a reference to any of the provided questionnaireids
+   */
+  GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
 
-    /**
-     * Remove the alarm from a task so that it is not shown in the "ikke besvaret"-section
-     */
-    RemoveAlarm: (task: Task) => Promise<void>;
+  /**
+   * Adds the provided questionnaire to the provided careplan
+   */
+  AddQuestionnaireToCareplan: (careplan: PatientCareplan, questionnaireToAdd: Questionnaire) => Promise<PatientCareplan>
+
+  /**
+   * Updates the questionnaireResponse with the provided id
+   * - Sets the status to the provided status
+   */
+  UpdateQuestionnaireResponseStatus: (id: string, status: QuestionnaireResponseStatus) => Promise<QuestionnaireResponseStatus>;
+
+  /**
+   * Remove the alarm from a task so that it is not shown in the "ikke besvaret"-section
+   */
+  RemoveAlarm: (task: Task) => Promise<void>;
 }
 

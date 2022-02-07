@@ -1,4 +1,6 @@
+import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
+import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
@@ -7,6 +9,7 @@ import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/Thresh
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { Button, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
 import { TextFieldValidation } from "../../../components/Input/TextFieldValidation";
 import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
@@ -15,7 +18,9 @@ import ApiContext from "../../_context";
 
 interface State {
     loading: boolean
+    submitted: boolean
     questionnaire?: Questionnaire
+    errorToast: JSX.Element
 }
 
 interface Props {
@@ -30,6 +35,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.state = {
             loading: true,
             questionnaire: undefined,
+            errorToast: (<></>),
+            submitted: false
         }
         this.removeQuestion = this.removeQuestion.bind(this)
         this.getThresholds = this.getThresholds.bind(this)
@@ -59,10 +66,35 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
+    async submitQuestionnaire() : Promise<void> {
+        try {
+            this.setState({
+                loading: true
+            })
+            if (this.state.questionnaire)
+                await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
+            this.setState({
+                submitted: true
+            })
+        } catch (error) {
+            if (error instanceof BaseServiceError) {
+                this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+            } else {
+                this.setState(() => { throw error })
+            }
+        }
 
+        this.setState({
+            loading: false
+        })
+    }
 
 
     renderContent(): JSX.Element {
+
+        if (this.state.submitted)
+            return (<Redirect push to={"/questionnaires/"} />)
+
         if (!this.state.questionnaire)
             return <>Ingen</>
 
@@ -130,12 +162,12 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                             })}
                         </Grid>
                         <br />
-                        <Button variant="contained" onClick={() => console.log(this.state.questionnaire)}>Gem</Button>
+                        <Button variant="contained" onClick={() => this.submitQuestionnaire()}>Gem</Button>
                         <Button variant="contained" onClick={() => this.addQuestion()}>Tilføj overspørgsmål</Button>
                     </Grid>
 
                 </Grid>
-
+                {this.state.errorToast ?? <></>}
             </IsEmptyCard>
         )
     }
@@ -168,7 +200,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             thresholdCollection = new ThresholdCollection();
             thresholdCollection.questionId = question.Id!;
             questionnaire?.thresholds?.push(thresholdCollection);
-            
+
         }
 
         const trueOption = new ThresholdOption();
@@ -184,7 +216,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
     }
 
 
-    removeQuestion(questionToRemove: Question) : void {
+    removeQuestion(questionToRemove: Question): void {
         const questionnaire = this.state.questionnaire;
 
         if (!questionnaire?.questions)
