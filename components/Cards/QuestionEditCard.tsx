@@ -58,8 +58,10 @@ export class QuestionEditCard extends Component<Props, State>{
             <Card>
                 <Grid key={this.props.key} container>
                     <Grid className="nonFocusedQuestionEditCard" item xs={1} >
-                        <Button onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
-                        <Button onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
+                        <Stack>
+                            <Button onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
+                            <Button onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
+                        </Stack>
                     </Grid>
                     <Grid item xs={11}>
                         <CardHeader subheader={
@@ -74,7 +76,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         </Grid>
                                         : <></>
                                     }
-                                    <Grid item xs="auto">
+                                    <Grid item xs>
                                         <TextFieldValidation
                                             label="Spørgsmål"
                                             value={this.props.question.question}
@@ -106,18 +108,27 @@ export class QuestionEditCard extends Component<Props, State>{
                         <Divider />
                         <CardContent>
 
-                            <Stack direction="row" spacing={2}>
+                            <Grid container spacing={2}>
+                                <Grid item xs>
+                                    <TextFieldValidation
+                                        label="Hjælpetekst"
+                                        value={this.props.question.helperText}
+                                        variant="outlined"
+                                        size="medium"
+                                        uniqueId={1}
+                                        minWidth={800}
+                                        onChange={input => this.modifyQuestion(this.setHelperText, input)}
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <QuestionTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
+                                </Grid>
 
-                                <TextFieldValidation
-                                    label="Hjælpetekst"
-                                    value={this.props.question.helperText}
-                                    variant="standard"
-                                    uniqueId={1}
-                                    minWidth={800}
-                                    onChange={input => this.modifyQuestion(this.setHelperText, input)}
-                                />
-                                <QuestionTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
-                            </Stack>
+                            </Grid>
+
+
+
+
                             {shouldShowThresholds ? this.renderBooleanThreshold() : <></>}
 
                         </CardContent>
@@ -133,14 +144,14 @@ export class QuestionEditCard extends Component<Props, State>{
         )
     }
 
-    renderBooleanThreshold() : JSX.Element{
+    renderBooleanThreshold(): JSX.Element {
 
 
         if (!this.props.getThreshold)
             return <></>
 
         const thresholdCollection = this.props.getThreshold(this.state.question)
-        
+
         return (
             <TableContainer>
                 <Table>
