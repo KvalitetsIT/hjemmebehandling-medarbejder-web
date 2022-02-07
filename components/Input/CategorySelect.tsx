@@ -2,7 +2,7 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
-import { Chip } from '@mui/material';
+import { Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 
@@ -29,21 +29,9 @@ export class CategorySelect extends Component<Props,State> {
     }
     
 }
-getChipColorFromCategory(category : CategoryEnum) : "error"|"warning"|"success"|"primary"|"default"{
-    if(category === CategoryEnum.RED)
-        return "error"
-    if(category === CategoryEnum.YELLOW)
-        return "warning"
-    //if(category === CategoryEnum.GREEN)
-      //  return "success"
-    if(category === CategoryEnum.BLUE)
-        return "primary"
 
-    return "default"
-
-}
 getAllCategories() : CategoryEnum[]{
-    return [CategoryEnum.BLUE,CategoryEnum.GREEN,CategoryEnum.YELLOW,CategoryEnum.RED]
+    return [CategoryEnum.GREEN,CategoryEnum.YELLOW,CategoryEnum.RED]
 }
 getDanishColornameFromCategory(category : CategoryEnum) : string{
     if(category === CategoryEnum.RED)
@@ -52,8 +40,6 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
         return "Gul"
     if(category === CategoryEnum.GREEN)
         return "Grøn"
-    if(category === CategoryEnum.BLUE)
-        return "Blå"
 
     return "Ukendt"
 }
@@ -80,7 +66,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
             value={category}
             
             >
-            <Chip color={this.getChipColorFromCategory(category)} label={this.getDanishColornameFromCategory(category)}></Chip>
+            <Typography>{this.getDanishColornameFromCategory(category)}</Typography>
             </MenuItem>
         ))}
         </Select> 

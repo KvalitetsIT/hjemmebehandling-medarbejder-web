@@ -99,15 +99,15 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         //======================================= Questions
         this.question1.Id = "q1";
         this.question1.question = "Jeg har det bedre i dag"
-        this.question1.type = QuestionTypeEnum.CHOICE;
+        this.question1.type = QuestionTypeEnum.BOOLEAN;
 
         this.question2.Id = "q2";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
 
         this.question3.Id = "q3";
-        this.question3.question = "Hvor frisk føler du dig i dag (Fra 0-100, hvor 100 er det højeste)?"
-        this.question3.type = QuestionTypeEnum.INTEGER;
+        this.question3.question = "Føler du dig frisk idag?"
+        this.question3.type = QuestionTypeEnum.BOOLEAN;
 
         this.question4.Id = "q4";
         const q4EnableWhen = new EnableWhen<boolean>();

@@ -38,9 +38,9 @@ export class EnableWhenSelect extends Component<Props, State> {
         return (
             <FormControl sx={{minWidth:150}}>
                 <InputLabel id="demo-simple-select-label">Hvis overspørgsmål er</InputLabel>
-                <Select label="Hvis overspørgsmål er" value={this.state.subQuestion.enableWhen?.answer + ""} onChange={this.handleChange}>
-                    <MenuItem value={true+ ""}>Ja</MenuItem>
-                    <MenuItem value={false+ ""}>Nej</MenuItem>
+                <Select label="Hvis overspørgsmål er" value={this.state.subQuestion.enableWhen?.answer?.toString() ?? true.toString()} onChange={this.handleChange}>
+                    <MenuItem value={true.toString()}>Ja</MenuItem>
+                    <MenuItem value={false.toString()}>Nej</MenuItem>
                 </Select>
             </FormControl>
         )

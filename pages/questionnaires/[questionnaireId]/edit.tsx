@@ -1,7 +1,10 @@
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { Button, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
@@ -28,6 +31,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             loading: true,
             questionnaire: undefined,
         }
+        this.removeQuestion = this.removeQuestion.bind(this)
+        this.getThresholds = this.getThresholds.bind(this)
 
     }
 
@@ -62,7 +67,6 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             return <>Ingen</>
 
         const questionnaire = this.state.questionnaire;
-        console.log(questionnaire)
         return (
             <IsEmptyCard object={questionnaire.questions} jsxWhenEmpty="Ingen spørgsmål på spørgeskema">
                 <Grid container>
@@ -91,7 +95,9 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                         <Grid item xs={12}>
                                             <QuestionEditCard
                                                 key={question.Id}
-                                                addSubQuestionAction={(q) => this.addSubQuestion(q)}
+                                                getThreshold={this.getThresholds}
+                                                addSubQuestionAction={(q) => this.addQuestion(q)}
+                                                removeQuestionAction={this.removeQuestion}
                                                 moveItemUp={() => this.MoveItemFromIndex(index, -1)}
                                                 moveItemDown={() => this.MoveItemFromIndex(index, 1)}
                                                 forceUpdate={() => this.forceUpdate()}
@@ -106,6 +112,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                     <Grid item xs={11}>
                                                         <QuestionEditCard
                                                             key={childQuestion.Id}
+                                                            getThreshold={this.getThresholds}
+                                                            removeQuestionAction={this.removeQuestion}
                                                             moveItemUp={() => { console.log("") }}
                                                             moveItemDown={() => { console.log("") }}
                                                             parentQuestion={question}
@@ -122,9 +130,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                             })}
                         </Grid>
                         <br />
-                        <Button variant="contained" onClick={() => console.log(this.state.questionnaire)}>
-                            Gem
-                        </Button>
+                        <Button variant="contained" onClick={() => console.log(this.state.questionnaire)}>Gem</Button>
+                        <Button variant="contained" onClick={() => this.addQuestion()}>Tilføj overspørgsmål</Button>
                     </Grid>
 
                 </Grid>
@@ -134,7 +141,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
     }
 
     tempQuestionId = 0;
-    addSubQuestion(parrentQuestion: Question): void {
+    addQuestion(parrentQuestion?: Question): void {
         const beforeUpdate = this.state.questionnaire;
 
         if (!beforeUpdate?.questions)
@@ -142,13 +149,52 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         const newQuestion = new Question();
         newQuestion.Id = "" + this.tempQuestionId++;
-        const enableWhen = new EnableWhen<boolean>();
-        enableWhen.questionId = parrentQuestion.Id;
-        newQuestion.enableWhen = enableWhen;
+        if (parrentQuestion) {
+            const enableWhen = new EnableWhen<boolean>();
+            enableWhen.questionId = parrentQuestion.Id;
+            newQuestion.enableWhen = enableWhen;
+        }
 
         beforeUpdate.questions.push(newQuestion);
 
         this.setState({ questionnaire: beforeUpdate })
+    }
+
+    getThresholds(question: Question): ThresholdCollection {
+        const questionnaire = this.state.questionnaire
+        let thresholdCollection = questionnaire?.thresholds?.find(x => x.questionId == question.Id);
+
+        if (!thresholdCollection) {
+            thresholdCollection = new ThresholdCollection();
+            thresholdCollection.questionId = question.Id!;
+            questionnaire?.thresholds?.push(thresholdCollection);
+            
+        }
+
+        const trueOption = new ThresholdOption();
+        trueOption.option = true.toString();
+        trueOption.category = CategoryEnum.GREEN
+        const falseOption = new ThresholdOption();
+        falseOption.option = false.toString();
+        falseOption.category = CategoryEnum.GREEN
+
+        thresholdCollection.thresholdOptions = [trueOption, falseOption];
+
+        return thresholdCollection;
+    }
+
+
+    removeQuestion(questionToRemove: Question) : void {
+        const questionnaire = this.state.questionnaire;
+
+        if (!questionnaire?.questions)
+            return;
+
+        const indexOfElementToRemove = questionnaire.questions.findIndex(q => q.Id == questionToRemove.Id)
+        if (indexOfElementToRemove > -1)
+            questionnaire.questions.splice(indexOfElementToRemove, 1);
+
+        this.setState({ questionnaire: questionnaire })
     }
 
     MoveItemFromIndex(index: number, step: number): void {

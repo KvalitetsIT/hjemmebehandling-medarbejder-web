@@ -1,17 +1,21 @@
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Stack } from "@mui/material";
+import { Alert, Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Stack, Table, TableCell, TableContainer, TableRow } from "@mui/material";
 import { Component, Key, ReactNode } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
 import { TextFieldValidation } from "../Input/TextFieldValidation";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { CategorySelect } from "../Input/CategorySelect";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 
 interface Props {
-    key : Key | null | undefined
+    key: Key | null | undefined
     parentQuestion?: Question
     question: Question
+    getThreshold?: (question: Question) => ThresholdCollection
     addSubQuestionAction?: (parentQuestion: Question) => void
+    removeQuestionAction: (questionToRemove: Question) => void
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
     forceUpdate?: () => void
@@ -26,7 +30,7 @@ export class QuestionEditCard extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            question: props.question,
+            question: props.question
         }
         this.modifyQuestion = this.modifyQuestion.bind(this);
         this.forceCardUpdate = this.forceCardUpdate.bind(this);
@@ -35,8 +39,8 @@ export class QuestionEditCard extends Component<Props, State>{
     modifyQuestion(questionModifier: (question: Question, newValue: string) => Question, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         const valueFromInput = input.currentTarget.value;
         const modifiedQuestion = questionModifier(this.props.question, valueFromInput);
-        this.forceCardUpdate();
         this.setState({ question: modifiedQuestion })
+        this.forceCardUpdate();
     }
 
     forceCardUpdate(): void {
@@ -47,6 +51,9 @@ export class QuestionEditCard extends Component<Props, State>{
     }
 
     render(): ReactNode {
+        const parrentQuestion = this.props.parentQuestion;
+        const parentQuestionHasGoodType = parrentQuestion == undefined || parrentQuestion?.type == QuestionTypeEnum.BOOLEAN
+        const shouldShowThresholds = this.state.question.type == QuestionTypeEnum.BOOLEAN
         return (
             <Card>
                 <Grid key={this.props.key} container>
@@ -90,9 +97,17 @@ export class QuestionEditCard extends Component<Props, State>{
                                 </Grid>
                             </>
                         } />
+                        {parentQuestionHasGoodType ? <></> :
+                            <Alert color="warning">
+                                Overspørgsmålets spørgsmålstype understøtter ikke underspørgsmål - Dette spørgsmål vil blive slettet
+                            </Alert>
+                        }
+
                         <Divider />
                         <CardContent>
+
                             <Stack direction="row" spacing={2}>
+
                                 <TextFieldValidation
                                     label="Hjælpetekst"
                                     value={this.props.question.helperText}
@@ -103,15 +118,52 @@ export class QuestionEditCard extends Component<Props, State>{
                                 />
                                 <QuestionTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
                             </Stack>
+                            {shouldShowThresholds ? this.renderBooleanThreshold() : <></>}
+
                         </CardContent>
-                        <CardActions>
-                            {this.props.addSubQuestionAction ? <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN} onClick={() => this.props.addSubQuestionAction!(this.props.question)}>Tilføj underspørgsmål</Button> : <></>}
+                        <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                            <Stack direction="row" spacing={4}>
+                                {this.props.addSubQuestionAction ? <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN} onClick={() => this.props.addSubQuestionAction!(this.props.question)}>Tilføj underspørgsmål</Button> : <></>}
+                                <Button onClick={() => this.props.removeQuestionAction(this.props.question)}>Fjern spørgsmål</Button>
+                            </Stack>
                         </CardActions>
                     </Grid>
                 </Grid>
             </Card>
         )
     }
+
+    renderBooleanThreshold() : JSX.Element{
+
+
+        if (!this.props.getThreshold)
+            return <></>
+
+        const thresholdCollection = this.props.getThreshold(this.state.question)
+
+        console.log("thresholdCollection")
+        console.log(thresholdCollection)
+
+        return (
+            <TableContainer>
+                <Table>
+                    {thresholdCollection.thresholdOptions?.map(option => {
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    {option.option == "true" ? "Ja" : "Nej"}
+                                </TableCell>
+                                <TableCell>
+                                    <CategorySelect category={option.category} onChange={(newCategory) => { option.category = newCategory }} />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </Table>
+            </TableContainer>
+        )
+    }
+
 
     setQuestion(oldQuestion: Question, newValue: string): Question {
         const modifiedQuestion = oldQuestion;
