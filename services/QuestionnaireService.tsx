@@ -2,27 +2,34 @@ import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { IQuestionnaireService } from "./interfaces/IQuestionnaireService";
 
+
+
 export default class QuestionnaireService extends BaseService implements IQuestionnaireService {
   backendApi: IBackendApi;
+  questionnaireFiltering : QuestionnaireFiltering
 
   constructor(backendapi: IBackendApi) {
     super();
     this.backendApi = backendapi;
+    this.questionnaireFiltering = new QuestionnaireFiltering();
   }
+
   async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
     try {
+      questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.updateQuestionnaire(questionnaire);
     } catch (error) {
       return this.HandleError(error);
     }
   }
+
 
   async getQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
     try {
@@ -140,3 +147,29 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   }
 }
 
+export class QuestionnaireFiltering {
+  removeOrphans(questions: Question[]): Question[] {
+    const newQuestions: Question[] = [];
+
+    for (let i = 0; i < questions.length; i++) {
+      const candidate = questions[i];
+      const candidateEnableWhen = candidate.enableWhen
+
+      //Questions with no parent should always get through
+      const hasNoParent = candidateEnableWhen == undefined
+      if (hasNoParent)
+        newQuestions.push(candidate);
+
+      //If question has enableWhen, it is a childquestion
+      //Now we need to figure out if the parent is in list, and that the parent is supported to have children
+      //Right now it is only the boolean-type that can have children
+      const parentExists = questions.find(q => q.Id == candidateEnableWhen?.questionId);
+      const parentIsSupportedToHaveChildren = parentExists?.type == QuestionTypeEnum.BOOLEAN
+      if (parentExists && parentIsSupportedToHaveChildren)
+        newQuestions.push(candidate)
+    }
+
+    return newQuestions;
+  }
+
+}

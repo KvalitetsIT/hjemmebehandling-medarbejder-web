@@ -559,7 +559,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         user.orgId = "453071000016001";
         user.orgName = "Infektionsmedicinsk Afdeling";
         user.email = "test@rm.dk"
-        user.entitlements = ["Sygepljerske", "SOSU", "DIAS_KoMo_Administrator"];
+        user.entitlements = ["Sygepljerske", "SOSU", "Administrator"];
         user.autorisationsids = [""];
         return user;
     }
