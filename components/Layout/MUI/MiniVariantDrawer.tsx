@@ -15,6 +15,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import QuizIcon from '@mui/icons-material/Quiz';
+import ApiContext from '../../../pages/_context';
+import { IUserService } from '../../../services/interfaces/IUserService';
 
 const drawerWidth = 270;
 
@@ -78,8 +80,10 @@ const newPatientButton: CSSProperties = {
   color: "white"
 }
 
+
 export default function MiniDrawer(): JSX.Element {
   const [open, setOpen] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -88,13 +92,24 @@ export default function MiniDrawer(): JSX.Element {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  
+  const things = React.useContext(ApiContext)
+  const userService: IUserService = things.userService;
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const user = await userService.GetActiveUser();
+      setIsAdmin(user.isAdmin())    
+    };
+
+    fetchData();
+
+  });
 
   return (
     <>
 
-
       <Drawer variant="permanent" open={open}>
-
         <List >
           <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
@@ -134,27 +149,32 @@ export default function MiniDrawer(): JSX.Element {
           </ListItem>
 
 
-          <Divider />
+          {isAdmin ?
+            <>
+              <Divider />
 
-          <ListItem >
-            <ListItemIcon>
-            </ListItemIcon>
-            <ListItemText primary={<Typography variant="h6">Adminstrator</Typography>} />
-          </ListItem>
+              <ListItem >
+                <ListItemIcon>
+                </ListItemIcon>
+                <ListItemText primary={<Typography variant="h6">Adminstrator</Typography>} />
+              </ListItem>
 
-          <ListItem button component={Link} color="inherit" to="/questionnaires">
-            <ListItemIcon>
-              <QuizIcon />
-            </ListItemIcon>
-            <ListItemText primary="Spørgeskema" />
-          </ListItem>
+              <ListItem button component={Link} color="inherit" to="/questionnaires">
+                <ListItemIcon>
+                  <QuizIcon />
+                </ListItemIcon>
+                <ListItemText primary="Spørgeskema" />
+              </ListItem>
 
-          <ListItem button component={Link} color="inherit" to="/plandefinitions">
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Patientgrupper" />
-          </ListItem>
+              <ListItem button component={Link} color="inherit" to="/plandefinitions">
+                <ListItemIcon>
+                  <GroupsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Patientgrupper" />
+              </ListItem>
+            </> : <></>
+          }
+
 
         </List>
 
@@ -170,7 +190,6 @@ export default function MiniDrawer(): JSX.Element {
 
 
       </Drawer>
-
     </>
 
   );
