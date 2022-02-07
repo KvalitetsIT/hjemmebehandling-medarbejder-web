@@ -146,6 +146,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.Id = questionDto.linkId!;
 
         switch (questionDto.questionType) {
+            case QuestionDtoQuestionTypeEnum.Boolean:
+                question.type = QuestionTypeEnum.BOOLEAN;
+                break;
             case QuestionDtoQuestionTypeEnum.Choice:
                 question.type = QuestionTypeEnum.CHOICE;
                 break;
@@ -162,7 +165,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         question.question = questionDto.text!
         // TODO - handle options properly (there must be at least one option for the answer table to render).
-        //TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
+        // TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
     }
@@ -232,7 +235,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     mapSingleEntitlement(entitlement: string): string {
         const splittedByUnderscore = entitlement.split("_");
         const lenght = splittedByUnderscore.length
-        const mappedEntitlement = splittedByUnderscore[lenght-1]
+        const mappedEntitlement = splittedByUnderscore[lenght - 1]
         return mappedEntitlement;
     }
 
