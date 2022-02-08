@@ -105,7 +105,6 @@ const red = '#EE6969'
 const redLight = '#FAD8D7'
 
 const blue = '#5D74AC'
-const blueDark = '#5D74AC'
 const blueLight = '#E8EFF7'
 
 const mainBackground = "#F2F2F2"
@@ -179,10 +178,20 @@ const THEME = createTheme({
           }
         },
         {
-          props: { className: 'focusedQuestionEditCard' },
+          props: { className: 'focusedParentQuestionEditCard' },
 
           style: {
             backgroundColor: blue, //"white"
+            "button": {
+              color: "white"
+            }
+          }
+        },
+        {
+          props: { className: 'focusedChildQuestionEditCard' },
+
+          style: {
+            backgroundColor: blueLight, //"white"
             "button": {
               color: "white"
             }
@@ -258,7 +267,7 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 10,
-          backgroundColor: blueDark + '!important',
+          backgroundColor: blue + '!important',
           height: "80px",
           width: "80px"
         }
@@ -652,12 +661,12 @@ const THEME = createTheme({
           // Patient name button
           props: { className: "answer__button" },
           style: {
-            backgroundColor: blueDark,
+            backgroundColor: blue,
             color: 'white',
             height: 47,
             padding: '0 20px',
             ":hover": {
-              backgroundColor: blueDark,
+              backgroundColor: blue,
               opacity: '0.7',
               boxShadow: 'none',
             }
@@ -666,12 +675,12 @@ const THEME = createTheme({
         {
           props: { className: "remove-alarm__button" },
           style: {
-            backgroundColor: blueDark,
+            backgroundColor: blue,
             color: 'white',
             height: 47,
             padding: '0 20px',
             ":hover": {
-              backgroundColor: blueDark,
+              backgroundColor: blue,
               opacity: '0.7',
               boxShadow: 'none',
             }
@@ -680,10 +689,10 @@ const THEME = createTheme({
         {
           props: { className: "accept__button" },
           style: {
-            backgroundColor: blueDark,
+            backgroundColor: blue,
             width: 120,
             ":hover": {
-              backgroundColor: blueDark,
+              backgroundColor: blue,
               opacity: '0.7',
               boxShadow: 'none',
             }
@@ -692,7 +701,7 @@ const THEME = createTheme({
         {
           props: { className: "MuiButton-containedPrimary" },
           style: {
-            backgroundColor: blueDark
+            backgroundColor: blue
           }
         },
         {

@@ -1,5 +1,5 @@
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Alert, Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Stack, Table, TableCell, TableContainer, TableRow } from "@mui/material";
+import { Alert, Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, GridSize, Stack, Table, TableCell, TableContainer, TableRow } from "@mui/material";
 import { Component, Key, ReactNode } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
@@ -54,22 +54,21 @@ export class QuestionEditCard extends Component<Props, State>{
         const parrentQuestion = this.props.parentQuestion;
         const parentQuestionHasGoodType = parrentQuestion == undefined || parrentQuestion?.type == QuestionTypeEnum.BOOLEAN
         const shouldShowThresholds = this.state.question.type == QuestionTypeEnum.BOOLEAN
+        const className = this.props.parentQuestion != undefined ? "focusedChildQuestionEditCard" : "focusedParentQuestionEditCard"
         return (
             <Card>
-                <Grid key={this.props.key} container>
-                    <Grid className="nonFocusedQuestionEditCard" item xs={1} >
-                        <Stack>
-                            <Button onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
-                            <Button onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
-                        </Stack>
+                <Grid key={this.props.key} container columns={24}>
+                    <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} className={className} item xs={1} >
+                        <Button onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
+                        <Button onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs={23 as GridSize}>
                         <CardHeader subheader={
                             <>
                                 <Grid container>
 
                                     {this.props.parentQuestion ?
-                                        <Grid item xs={2}>
+                                        <Grid item xs={6}>
                                             <Box>
                                                 <EnableWhenSelect subQuestion={this.state.question} parentQuestion={this.props.parentQuestion} />
                                             </Box>
