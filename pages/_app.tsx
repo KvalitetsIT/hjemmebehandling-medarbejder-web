@@ -171,13 +171,6 @@ const THEME = createTheme({
           }
         },
         {
-          props: { className: 'nonFocusedQuestionEditCard' },
-          style: {
-            backgroundColor: "white",
-            textAlign: "center"
-          }
-        },
-        {
           props: { className: 'focusedParentQuestionEditCard' },
 
           style: {
@@ -191,7 +184,7 @@ const THEME = createTheme({
           props: { className: 'focusedChildQuestionEditCard' },
 
           style: {
-            backgroundColor: blueLight, //"white"
+            backgroundColor: blue, //"white"
             "button": {
               color: "white"
             }
