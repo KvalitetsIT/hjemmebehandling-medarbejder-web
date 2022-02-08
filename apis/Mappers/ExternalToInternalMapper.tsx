@@ -172,9 +172,12 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return question;
     }
     mapEnableWhenDto(enableWhenDto: EnableWhenDto | undefined): EnableWhen<boolean> | undefined {
+        if(!enableWhenDto)
+            return undefined;
+        
         const toReturn = new EnableWhen<boolean>();
-        toReturn.answer = enableWhenDto?.answer?.value == "true"
-        toReturn.questionId =enableWhenDto?.answer?.linkId ?? ""
+        toReturn.answer = enableWhenDto.answer?.value == "true"
+        toReturn.questionId =enableWhenDto.answer?.linkId ?? ""
         return toReturn;
 
     }
