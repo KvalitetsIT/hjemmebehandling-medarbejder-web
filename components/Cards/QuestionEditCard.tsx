@@ -58,9 +58,9 @@ export class QuestionEditCard extends Component<Props, State>{
         return (
             <Card>
                 <Grid key={this.props.key} container columns={24}>
-                    <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} className={className} item xs={1} >
-                        <Button onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
-                        <Button onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
+                    <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} paddingTop={2} paddingBottom={2} className={className} item xs={1} >
+                        <Button sx={{minWidth:0}} onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
+                        <Button sx={{minWidth:0}} onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
                     </Grid>
                     <Grid item xs={23 as GridSize}>
                         <CardHeader subheader={
