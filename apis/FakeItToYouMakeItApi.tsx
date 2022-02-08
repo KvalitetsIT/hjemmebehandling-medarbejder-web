@@ -36,7 +36,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     person1: Person = new Person();
     careplan1: PatientCareplan = new PatientCareplan();
     careplan2: PatientCareplan = new PatientCareplan();
+
     planDefinition1: PlanDefinition = new PlanDefinition();
+    planDefinition2: PlanDefinition = new PlanDefinition();
 
     questionnaire1: Questionnaire = new Questionnaire();
     questionnaire2: Questionnaire = new Questionnaire();
@@ -61,6 +63,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     task1: Task = new Task();
     task2: Task = new Task();
     task3: Task = new Task();
+    
 
     constructor() {
         super();
@@ -148,10 +151,14 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire3.frequency = frequency3;
 
 
-        this.planDefinition1.name = "Infektionsmedicinsk patientgruppe Infektionsmedicinsk patientgruppe"
+        this.planDefinition1.name = "Infektionsmedicinsk patientgruppe"
         this.planDefinition1.id = "def1"
+        this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
 
-        this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2]
+        this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
+        this.planDefinition2.id = "def1"
+        this.planDefinition2.questionnaires = []
+
 
         //====================================== Thresholds
         this.tc1.questionId = "q1";
@@ -188,19 +195,19 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.careplan1.patient = this.patient1;
         this.careplan1.organization = new SimpleOrganization();
         this.careplan1.organization.name = "Infektionssygdomme";
-        this.careplan1.planDefinitions = [this.planDefinition1]
+        this.careplan1.planDefinitions = [this.planDefinition1, this.planDefinition2]
         this.careplan1.creationDate = this.CreateDate()
-        this.careplan1.questionnaires = [this.questionnaire1]
+        this.careplan1.questionnaires = [this.questionnaire1, this.questionnaire2]
 
 
         //======================================= careplan1
         this.careplan2.id = "plan2"
         this.careplan2.patient = this.patient1;
-        this.careplan1.organization = new SimpleOrganization();
-        this.careplan1.organization.name = "Infektionssygdomme";
-        this.careplan2.planDefinitions = [this.planDefinition1]
+        this.careplan2.organization = new SimpleOrganization();
+        this.careplan2.organization.name = "Infektionssygdomme";
+        this.careplan2.planDefinitions = [this.planDefinition2]
         this.careplan2.creationDate = this.CreateDate()
-        this.careplan2.terminationDate = this.CreateDate()
+        this.careplan2.terminationDate = this.CreateDate()  
         this.careplan2.questionnaires = [this.questionnaire1]
 
         //======================================= Response // QuestionResponse1
@@ -319,7 +326,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
     
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
-        console.log(questionnaire)
         throw new NotImplementedError()
     }
 

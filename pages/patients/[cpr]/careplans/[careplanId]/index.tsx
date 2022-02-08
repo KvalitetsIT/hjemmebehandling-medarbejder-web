@@ -81,6 +81,7 @@ class PatientCareplans extends React.Component<Props, State> {
         questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, questionnaireIds, 1, 5)
       }
 
+      console.log(questionnaireResponses)
 
       this.setState({
         loading: false,

@@ -27,6 +27,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
   render(): JSX.Element {
     this.InitialiseServices()
     const questionnaires = this.props.careplan.questionnaires;
+    
     return (
       <>
 

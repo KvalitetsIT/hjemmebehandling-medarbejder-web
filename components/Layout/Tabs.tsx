@@ -2,10 +2,10 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, Divider, Grid } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Divider, Grid, makeStyles } from '@mui/material';
+
+
 
 export interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,33 +44,24 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
   };
 
   render(): JSX.Element {
-    let indexTabPanelCounterLabel = 0;
     let indexTabPanelCounterContent = 0;
     return (
       <>
         <Card>
-
-          <CardHeader sx={{ padding: 0}} title={
-            <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} aria-label="basic tabs example" TabIndicatorProps={{ style: { display: "none" }, }}>
-              <Grid container>
-                <Grid item xs={11}>
-                  {this.props.tabLabels.map(tabLabel => {
-                    return (
-                      <>
-                        {this.props.linkToId ?
-                          <Tab component={Link} to={this.props.tabIds[indexTabPanelCounterLabel++]} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} /> :
-                          <Tab label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />
-                        }
-                      </>
-                    )
-                  })}
-                </Grid>
-              </Grid>
-              {this.props.children}
-
+          <CardHeader sx={{ padding: 0 }} subheader={
+            <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} TabIndicatorProps={{ style: {  }, }}>
+              {this.props.tabLabels.map(tabLabel => {
+                return (
+                  <Tab sx={{height: "4em"}} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />
+                ) 
+              }
+              )}
+              <>
+                {this.props.children}
+              </>
             </Tabs>
 
-          } />
+          }></CardHeader>
           <Divider />
           <CardContent>
             <Grid container >
@@ -78,22 +69,20 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
                 {this.props.tabContent.map(content => {
 
                   return (
-                    <this.TabPanel value={this.state.value} index={indexTabPanelCounterContent++}>
+                    <this.renderTabPanel value={this.state.value} index={indexTabPanelCounterContent++}>
                       {content}
-                    </this.TabPanel>
+                    </this.renderTabPanel>
                   )
                 })}
               </Grid>
             </Grid>
           </CardContent>
-
         </Card>
       </>
     );
   }
 
-
-  TabPanel(props: TabPanelProps): JSX.Element {
+  renderTabPanel(props: TabPanelProps): JSX.Element {
 
     return (
       <div
@@ -111,4 +100,10 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
     );
   }
 
+
 }
+
+
+
+
+
