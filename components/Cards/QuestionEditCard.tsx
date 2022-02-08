@@ -40,7 +40,7 @@ export class QuestionEditCard extends Component<Props, State>{
         const valueFromInput = input.currentTarget.value;
         const modifiedQuestion = questionModifier(this.props.question, valueFromInput);
         this.setState({ question: modifiedQuestion })
-        this.forceCardUpdate();
+        
     }
 
     forceCardUpdate(): void {
