@@ -1,5 +1,5 @@
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Alert, Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, GridSize, Stack, Table, TableCell, TableContainer, TableRow } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Divider, Grid, GridSize, IconButton, Stack, Table, TableCell, TableContainer, TableRow } from "@mui/material";
 import { Component, Key, ReactNode } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
@@ -8,13 +8,16 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { CategorySelect } from "../Input/CategorySelect";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 interface Props {
     key: Key | null | undefined
     parentQuestion?: Question
     question: Question
     getThreshold?: (question: Question) => ThresholdCollection
-    addSubQuestionAction?: (parentQuestion: Question) => void
+    addSubQuestionAction?: (parentQuestion?: Question) => void
     removeQuestionAction: (questionToRemove: Question) => void
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
@@ -40,7 +43,7 @@ export class QuestionEditCard extends Component<Props, State>{
         const valueFromInput = input.currentTarget.value;
         const modifiedQuestion = questionModifier(this.props.question, valueFromInput);
         this.setState({ question: modifiedQuestion })
-        
+
     }
 
     forceCardUpdate(): void {
@@ -59,8 +62,8 @@ export class QuestionEditCard extends Component<Props, State>{
             <Card>
                 <Grid key={this.props.key} container columns={24}>
                     <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} paddingTop={2} paddingBottom={2} className={className} item xs={1} >
-                        <Button sx={{minWidth:0}} onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
-                        <Button sx={{minWidth:0}} onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
+                        <Button sx={{ minWidth: 0 }} onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
+                        <Button sx={{ minWidth: 0 }} onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
                     </Grid>
                     <Grid item xs={23 as GridSize}>
                         <CardHeader subheader={
@@ -131,12 +134,21 @@ export class QuestionEditCard extends Component<Props, State>{
                             {shouldShowThresholds ? this.renderBooleanThreshold() : <></>}
 
                         </CardContent>
-                        <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                            <Stack direction="row" spacing={4}>
-                                {this.props.addSubQuestionAction ? <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN} onClick={() => this.props.addSubQuestionAction!(this.props.question)}>Tilføj underspørgsmål</Button> : <></>}
-                                <Button onClick={() => this.props.removeQuestionAction(this.props.question)}>Fjern spørgsmål</Button>
+
+                        <CardActions disableSpacing>
+                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN} onClick={() => this.props.addSubQuestionAction!(this.props.question)}><AddCircleOutlineIcon/>Tilføj underspørgsmål</Button>
+
+                            <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
+
+                                <ButtonGroup variant="text" >
+                                    <IconButton onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
+                                    <Button sx={{padding:2}} onClick={() => this.props.addSubQuestionAction!(undefined)}> <AddCircleIcon/>Tilføj nyt spørgsmål</Button>
+                                </ButtonGroup>
                             </Stack>
                         </CardActions>
+
                     </Grid>
                 </Grid>
             </Card>

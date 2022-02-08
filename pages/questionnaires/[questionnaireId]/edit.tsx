@@ -7,7 +7,7 @@ import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import { Button, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
@@ -66,7 +66,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
-    async submitQuestionnaire() : Promise<void> {
+    async submitQuestionnaire(): Promise<void> {
         try {
             this.setState({
                 loading: true
@@ -160,10 +160,19 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                     </>
                                 )
                             })}
+                            <Grid item xs={12}>
+                                <Card>
+                                    <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
+                                    <Divider />
+                           
+                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                        <Button variant="contained" onClick={() => this.submitQuestionnaire()}>Gem</Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <br />
-                        <Button variant="contained" onClick={() => this.submitQuestionnaire()}>Gem</Button>
-                        <Button variant="contained" onClick={() => this.addQuestion()}>Tilføj overspørgsmål</Button>
+
+
                     </Grid>
 
                 </Grid>
