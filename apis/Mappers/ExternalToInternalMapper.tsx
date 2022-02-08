@@ -3,6 +3,7 @@ import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
 import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
@@ -16,7 +17,7 @@ import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrgan
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireDto, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
+import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, EnableWhen as EnableWhenDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireDto, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -164,10 +165,18 @@ export default class ExternalToInternalMapper extends BaseMapper {
         }
 
         question.question = questionDto.text!
+        question.enableWhen = this.mapEnableWhenDto(questionDto.enableWhen?.find(()=>true));
         // TODO - handle options properly (there must be at least one option for the answer table to render).
         // TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
+    }
+    mapEnableWhenDto(enableWhenDto: EnableWhenDto | undefined): EnableWhen<boolean> | undefined {
+        const toReturn = new EnableWhen<boolean>();
+        toReturn.answer = enableWhenDto?.answer?.value == "true"
+        toReturn.questionId =enableWhenDto?.answer?.linkId ?? ""
+        return toReturn;
+
     }
 
     mapTriagingCategory(category: QuestionnaireResponseDtoTriagingCategoryEnum): CategoryEnum {
