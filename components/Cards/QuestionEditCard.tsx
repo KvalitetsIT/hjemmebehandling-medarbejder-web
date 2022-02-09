@@ -60,18 +60,18 @@ export class QuestionEditCard extends Component<Props, State>{
         const className = this.props.parentQuestion != undefined ? "focusedChildQuestionEditCard" : "focusedParentQuestionEditCard"
         return (
             <Card>
-                <Grid key={this.props.key} container columns={24}>
+                <Grid key={this.props.key} container columns={48}>
                     <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} paddingTop={2} paddingBottom={2} className={className} item xs={1} >
                         <Button sx={{ minWidth: 0 }} onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
                         <Button sx={{ minWidth: 0 }} onClick={() => this.props.moveItemDown(this.props.question)}><KeyboardArrowDownIcon fontSize="large" /></Button>
                     </Grid>
-                    <Grid item xs={23 as GridSize}>
+                    <Grid item xs={47 as GridSize}>
                         <CardHeader subheader={
                             <>
-                                <Grid container>
+                                <Grid container columns={12}>
 
                                     {this.props.parentQuestion ?
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12}>
                                             <Box>
                                                 <EnableWhenSelect enableWhen={this.state.question.enableWhen!} parentQuestion={this.props.parentQuestion} />
                                             </Box>
