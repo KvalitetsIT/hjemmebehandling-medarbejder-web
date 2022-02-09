@@ -10,7 +10,7 @@ import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
@@ -141,11 +141,19 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return dayEnums;
     }
 
+    mapCallToAction(questionDto: QuestionDto): CallToActionQuestion {
+        const callToAction = new CallToActionQuestion();
+        callToAction.Id = questionDto.linkId!;
+
+
+        callToAction.message = questionDto.text!
+        callToAction.enableWhens = questionDto.enableWhen?.map(ew => this.mapEnableWhenDto(ew)) as EnableWhen<boolean>[] ?? [];
+        return callToAction;
+    }
 
     mapQuestionDto(questionDto: QuestionDto): Question {
         const question = new Question();
         question.Id = questionDto.linkId!;
-
         switch (questionDto.questionType) {
             case QuestionDtoQuestionTypeEnum.Boolean:
                 question.type = QuestionTypeEnum.BOOLEAN;
@@ -389,6 +397,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
         //questionnaire.thresholds = this.mapThresholdDtos(thresholds!);
         questionnaireResult.status = questionnaire?.status;
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
+        const callToActions : BaseQuestion[] = questionnaire.callToActions!.map(x=>this.mapCallToAction(x));
+        questionnaireResult.questions?.push(...callToActions);
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
