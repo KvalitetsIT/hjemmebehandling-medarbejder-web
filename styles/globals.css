@@ -59,7 +59,7 @@ a {
 /* Selected */
 .MuiTab-root.MuiTab-textColorPrimary, .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
   color: #4a4848;
-  padding: 0;
+  /*padding: 0; */
   min-height: initial;
   text-transform: inherit;
 }
