@@ -136,7 +136,7 @@ export class QuestionEditCard extends Component<Props, State>{
                         </CardContent>
 
                         <CardActions disableSpacing>
-                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN} onClick={() => this.props.addSubQuestionAction!(this.props.question)}><AddCircleOutlineIcon/>Tilføj underspørgsmål</Button>
+                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question)}><AddCircleOutlineIcon/>Tilføj underspørgsmål</Button>
 
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
 
