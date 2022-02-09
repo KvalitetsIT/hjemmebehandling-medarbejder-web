@@ -72,6 +72,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             this.setState({
                 loading: true
             })
+            console.log("submitted questionnaire:")
             console.log(this.state.questionnaire)
             if (this.state.questionnaire)
                 await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);

@@ -4,11 +4,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { CallToActionQuestion, Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { Button, CardHeader, Divider, Grid, Typography } from '@mui/material';
+import { Button, CardActions, CardHeader, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { EnableWhenSelect } from '../Input/EnableWhenSelect';
 import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
 import { QuestionSelector } from '../Input/QuestionSelector';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export interface Props {
     callToActionQuestion: CallToActionQuestion
@@ -36,7 +38,7 @@ export class CallToActionCard extends Component<Props, State> {
     }
 
     render(): JSX.Element {
-        const callToActionQuestion = this.props.callToActionQuestion;
+        const callToActionQuestion = this.state.callToActionQuestion;
         return (
             <Card component={Box} minWidth={100}>
                 <CardHeader subheader={<Typography variant="h6">Call-to-action</Typography>} />
@@ -58,16 +60,23 @@ export class CallToActionCard extends Component<Props, State> {
                             />
                         </Grid>
 
-                        {this.state.callToActionQuestion.enableWhens?.map((enableWhen) => {
+                        {callToActionQuestion.enableWhens?.map((enableWhen, index) => {
+                            const questionsToShowInSelector = this.props.allQuestions;
                             return (
                                 <>
-                                    <Grid item xs={12}>
-                                        <QuestionSelector enableWhen={enableWhen} updateParent={() => this.forceUpdate()} allQuestions={this.props.allQuestions} />
-                                        {enableWhen.questionId ?
-                                            <EnableWhenSelect enableWhen={enableWhen} parentQuestion={this.getQuestionById(enableWhen.questionId)} />
-                                            :
-                                            <></>
-                                        }
+                                    <Grid item xs={12} alignItems="baseline">
+                                        <Stack spacing={2} direction="row">
+                                            <QuestionSelector enableWhen={enableWhen} updateParent={() => this.forceUpdate()} allQuestions={questionsToShowInSelector} />
+                                            {enableWhen.questionId ?
+                                                <EnableWhenSelect enableWhen={enableWhen} parentQuestion={this.getQuestionById(enableWhen.questionId)} />
+                                                :
+                                                <></>
+                                            }
+                                            <IconButton onClick={() => this.removeEnableWhen(index)}>
+                                                <DeleteOutlineIcon />
+                                            </IconButton>
+                                        </Stack>
+
                                     </Grid>
                                 </>
                             )
@@ -76,17 +85,24 @@ export class CallToActionCard extends Component<Props, State> {
                     </Grid>
 
                 </CardContent>
-                <Button onClick={() => this.addEnableWhen()}>Tilføj</Button>
+                <CardActions>
+                    <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon/>Tilføj betingelse</Button>
+                </CardActions>
             </Card>
         );
     }
 
-    addEnableWhen() : void {
+    addEnableWhen(): void {
         const newEnableWhen = new EnableWhen<boolean>();
         const modifiedQuestion = this.state.callToActionQuestion
         modifiedQuestion.enableWhens?.push(newEnableWhen);
         console.log("modifiedQuestion.enableWhens")
         console.log(modifiedQuestion.enableWhens)
+        this.setState({ callToActionQuestion: modifiedQuestion })
+    }
+    removeEnableWhen(indexToRemove: number) : void {
+        const modifiedQuestion = this.state.callToActionQuestion
+        modifiedQuestion.enableWhens = modifiedQuestion.enableWhens?.filter((ew, index) => index != indexToRemove);
         this.setState({ callToActionQuestion: modifiedQuestion })
     }
 
