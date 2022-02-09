@@ -13,6 +13,8 @@ import MiniDrawer from './MUI/MiniVariantDrawer';
 import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import QuestionnairePage from '../../pages/questionnaires';
 import EditQuestionnairePage from '../../pages/questionnaires/[questionnaireId]/edit';
+import PlandefinitionOverview from '../../pages/planDefinitions';
+import EditPlandefinition from '../../pages/planDefinitions/[plandefinitionid]/edit';
 
 
 export interface State {
@@ -81,6 +83,8 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPatient} {...props} />} />
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
+                    <Route path="/plandefinitions/:plandefinitionid/edit" render={(props) => <EditPlandefinition {...props} />} />
+                    <Route path="/plandefinitions" render={(props) => <PlandefinitionOverview {...props} />} />
                 
                     <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <EditQuestionnairePage {...props} />} />
                     <Route path="/questionnaires" render={(props) => <QuestionnairePage {...props} />} />
