@@ -3,13 +3,14 @@ import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { CallToActionCard } from "../../../components/Cards/CallToActionCard";
 import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
 import { TextFieldValidation } from "../../../components/Input/TextFieldValidation";
 import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
@@ -71,6 +72,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             this.setState({
                 loading: true
             })
+            console.log(this.state.questionnaire)
             if (this.state.questionnaire)
                 await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
             this.setState({
@@ -99,6 +101,19 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             return <>Ingen</>
 
         const questionnaire = this.state.questionnaire;
+        const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
+        const parentQuestions = questions?.filter(q => !(q as Question).enableWhen);
+        
+        //If there are no call-to-action, we add one
+        const hasCallToActionQuestion = questionnaire.questions?.find(q => q.type == QuestionTypeEnum.CALLTOACTION)
+        if(!hasCallToActionQuestion){
+            const newCallToActionQuestion = new CallToActionQuestion();
+            newCallToActionQuestion.enableWhens = [];
+            questionnaire.questions?.push(newCallToActionQuestion)
+        }
+        const callToAction = questionnaire.questions?.find(q => q.type == QuestionTypeEnum.CALLTOACTION)
+        console.log("callToAction")
+        console.log(callToAction)
         return (
             <IsEmptyCard object={questionnaire.questions} jsxWhenEmpty="Ingen spørgsmål på spørgeskema">
                 <Grid container>
@@ -120,8 +135,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            {questionnaire.questions?.filter(q => !q.enableWhen).map((question, index) => {
-                                const childQuestion = questionnaire.questions?.filter(q => q.enableWhen?.questionId == question.Id)
+                            {parentQuestions?.map((question, index) => {
+                                const childQuestion = questions?.map(q=>q as Question).filter(q => q.enableWhen?.questionId == question.Id)
                                 return (
                                     <>
                                         <Grid item xs={12}>
@@ -161,14 +176,18 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                 )
                             })}
                             <Grid item xs={12}>
+                                <CallToActionCard allQuestions={parentQuestions} callToActionQuestion={callToAction!} />
+                            </Grid>
+                            <Grid item xs={12}>
                                 <Card>
                                     <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
                                     <Divider />
-                           
+
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
                                         <Button variant="contained" onClick={() => this.submitQuestionnaire()}>Gem</Button>
                                     </CardActions>
                                 </Card>
+
                             </Grid>
                         </Grid>
 
@@ -200,6 +219,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         this.setState({ questionnaire: beforeUpdate })
     }
+
+
 
     getThresholds(question: Question): ThresholdCollection {
         const questionnaire = this.state.questionnaire

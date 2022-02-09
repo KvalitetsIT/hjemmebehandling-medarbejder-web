@@ -54,6 +54,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     question2: Question = new Question();
     question3: Question = new Question();
     question4: Question = new Question();
+    callToActionQuestion1: Question = new Question();
 
     tc1 = new ThresholdCollection();
     tc2 = new ThresholdCollection();
@@ -118,6 +119,13 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
+
+        this.callToActionQuestion1.Id = "callToAction1";
+        this.callToActionQuestion1.type = QuestionTypeEnum.CALLTOACTION;
+        const callToActionEnableWhen = new EnableWhen<boolean>();
+        callToActionEnableWhen.questionId = this.question1.Id;
+        callToActionEnableWhen.answer = false;
+        this.callToActionQuestion1.enableWhen = callToActionEnableWhen;
 
         //======================================= questionnaire
         this.questionnaire1.id = "qn1"

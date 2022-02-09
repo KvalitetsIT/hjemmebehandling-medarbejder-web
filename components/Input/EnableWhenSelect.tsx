@@ -5,14 +5,17 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { FormControl, InputLabel, Typography } from '@mui/material';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
 
 export interface Props {
-    parentQuestion: Question
-    subQuestion: Question
+    parentQuestion?: Question
+    //subQuestion: Question
+    enableWhen: EnableWhen<boolean>
 }
 
 export interface State {
-    subQuestion: Question
+  //  subQuestion: Question
+    enableWhen: EnableWhen<boolean>
 }
 
 
@@ -23,22 +26,23 @@ export class EnableWhenSelect extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            subQuestion: props.subQuestion
+           // subQuestion: props.subQuestion,
+            enableWhen: props.enableWhen // ?? props.subQuestion.enableWhen
         }
         this.handleChange = this.handleChange.bind(this)
     }
 
     render(): JSX.Element {
-        if (this.props.parentQuestion.type == QuestionTypeEnum.BOOLEAN)
+        if (this.props.parentQuestion?.type == QuestionTypeEnum.BOOLEAN)
             return this.renderBoolean();
-        return (<Typography>?</Typography>)
+        return (<Typography>Spørgsmål ikke valgt</Typography>)
     }
 
     renderBoolean() : JSX.Element {
         return (
             <FormControl sx={{minWidth:150}}>
                 <InputLabel id="demo-simple-select-label">Hvis overspørgsmål er</InputLabel>
-                <Select label="Hvis overspørgsmål er" value={this.state.subQuestion.enableWhen?.answer?.toString() ?? true.toString()} onChange={this.handleChange}>
+                <Select label="Hvis overspørgsmål er" value={this.state.enableWhen?.answer?.toString() ?? true.toString()} onChange={this.handleChange}>
                     <MenuItem value={true.toString()}>Ja</MenuItem>
                     <MenuItem value={false.toString()}>Nej</MenuItem>
                 </Select>
@@ -49,10 +53,10 @@ export class EnableWhenSelect extends Component<Props, State> {
     handleChange(e: SelectChangeEvent<string>): void {
         const clicked = e.target.value as unknown as boolean
         console.log(clicked)
-        const newQuestion = this.state.subQuestion
-        newQuestion.enableWhen!.answer = clicked;
+        const newEnableWhen = this.state.enableWhen
+        newEnableWhen!.answer = clicked;
 
-        this.setState({ subQuestion: newQuestion })
+        this.setState({ enableWhen: newEnableWhen })
 
     }
 

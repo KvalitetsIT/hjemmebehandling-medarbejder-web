@@ -1,5 +1,5 @@
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { TableCell } from "@kvalitetsit/hjemmebehandling/node_modules/@mui/material";
 import { Button, Stack, Table, TableBody, TableHead, TableRow } from "@mui/material";
 import { Component, ReactNode } from "react";
@@ -31,7 +31,7 @@ export class QuestionnaireTable extends Component<Props>{
                             <>
                                 {planDefinition.questionnaires.map(questionnaire => {
                                     const observationQuestions =
-                                        questionnaire.questions?.filter(question => question && question.type == QuestionTypeEnum.OBSERVATION).map(q => q.question);
+                                        questionnaire.questions?.filter(question => question && question.type == QuestionTypeEnum.OBSERVATION).map(q => (q as Question).question);
                                     return (
                                         <TableRow>
                                             <TableCell>{questionnaire.name}</TableCell>

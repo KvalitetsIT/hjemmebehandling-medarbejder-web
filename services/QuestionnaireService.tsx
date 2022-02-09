@@ -164,7 +164,8 @@ export class QuestionnaireFiltering {
       //Now we need to figure out if the parent is in list, and that the parent is supported to have children
       //Right now it is only the boolean-type that can have children
       const parentExists = questions.find(q => q.Id == candidateEnableWhen?.questionId);
-      const parentIsSupportedToHaveChildren = parentExists?.type == QuestionTypeEnum.BOOLEAN
+      const acceptableTypes = [QuestionTypeEnum.BOOLEAN]
+      const parentIsSupportedToHaveChildren = acceptableTypes.some(at => parentExists?.type == at)
       if (parentExists && parentIsSupportedToHaveChildren)
         newQuestions.push(candidate)
     }

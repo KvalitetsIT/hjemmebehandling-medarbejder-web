@@ -73,7 +73,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     {this.props.parentQuestion ?
                                         <Grid item xs={6}>
                                             <Box>
-                                                <EnableWhenSelect subQuestion={this.state.question} parentQuestion={this.props.parentQuestion} />
+                                                <EnableWhenSelect enableWhen={this.state.question.enableWhen!} parentQuestion={this.props.parentQuestion} />
                                             </Box>
                                         </Grid>
                                         : <></>
