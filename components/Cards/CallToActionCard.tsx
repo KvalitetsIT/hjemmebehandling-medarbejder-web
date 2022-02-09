@@ -85,7 +85,8 @@ export class CallToActionCard extends Component<Props, State> {
                     </Grid>
 
                 </CardContent>
-                <CardActions>
+                <Divider/>
+                <CardActions sx={{ display: "flex", justifyContent: "left", padding:2 }}>
                     <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon/>Tilføj betingelse</Button>
                 </CardActions>
             </Card>
