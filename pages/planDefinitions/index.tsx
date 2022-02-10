@@ -2,6 +2,7 @@ import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateH
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../_context";
@@ -24,7 +25,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
             planDefinitions: []
         }
     }
-    async componentDidMount() : Promise<void> {
+    async componentDidMount(): Promise<void> {
         try {
             const planDefinitions = await this.questionnaireService.GetAllPlanDefinitions();
             this.setState({ planDefinitions: planDefinitions });
@@ -34,7 +35,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
         this.setState({ loading: false })
 
     }
-    initialiseServices() : void {
+    initialiseServices(): void {
         this.questionnaireService = this.context.questionnaireService;
         this.dateHelper = this.context.dateHelper;
     }
@@ -67,7 +68,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                                             <TableCell><Typography>{planDefinition.name}</Typography></TableCell>
                                             <TableCell><Typography>{planDefinition.status}</Typography></TableCell>
                                             <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
-                                            <TableCell><Typography>{planDefinition?.questionnaires?.map(q=>q.name).join(" / ")}</Typography></TableCell>
+                                            <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
                                             <TableCell><Button variant="contained">Se patientgruppe</Button></TableCell>
                                         </TableRow>
                                     )
@@ -76,7 +77,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                         </Table>
                     </TableContainer>
                 </Card>
-
+                <Button variant="contained" component={Link} to="plandefinitions/create" >Opret patientgruppe</Button>
 
             </>
         )
