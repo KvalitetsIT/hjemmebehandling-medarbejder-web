@@ -87,7 +87,7 @@ export class QuestionnaireListSimple extends Component<Props, State> {
                     {this.state.patientIsOnUnansweredList ?
                         <Alert sx={{ margin: 2 }} color='warning' icon={<WarningAmberIcon />}>
                             <Typography variant='h6'>Denne patient mangler at besvare et eller flere spørgeskemaer</Typography>
-                            <Typography>Ved ændring af frekvensen, vil patientens manglende besvarelse blive glemt</Typography>
+                            <Typography>Ved ændring af frekvensen, genberegnes svarfrister og patienten vil som følge heraf ikke længere fremgå på listen under manglende besvarelser</Typography>
                         </Alert>
                         : <></>
                     }
