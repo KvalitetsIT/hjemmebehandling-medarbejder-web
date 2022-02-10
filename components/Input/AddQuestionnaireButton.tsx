@@ -67,7 +67,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
         <>
             <Autocomplete
             autoComplete
-            groupBy={(option) => option.planDefinition.name}
+            groupBy={(option) => option.planDefinition.name!}
             getOptionLabel={(option) => option.questionnaire!.name!}
             options={options}
             
@@ -100,8 +100,8 @@ export class AddQuestionnaireButton extends Component<Props,State> {
         for(let pdefinitionIndex = 0; pdefinitionIndex<plandefinitions.length; pdefinitionIndex++){
             const currentPlanDefinition = plandefinitions[pdefinitionIndex];
             
-            for(let questionnaireIndex = 0; questionnaireIndex < currentPlanDefinition.questionnaires?.length; questionnaireIndex++){
-                const currentQuestionnaire = currentPlanDefinition.questionnaires[questionnaireIndex]
+            for(let questionnaireIndex = 0; questionnaireIndex < currentPlanDefinition.questionnaires!.length; questionnaireIndex++){
+                const currentQuestionnaire = currentPlanDefinition.questionnaires![questionnaireIndex]
                 
                 options.push({
                     questionnaire : currentQuestionnaire,

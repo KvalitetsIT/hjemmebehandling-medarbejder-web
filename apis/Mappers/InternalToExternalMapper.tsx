@@ -113,9 +113,9 @@ export default class InternalToExternalMapper extends BaseMapper {
     mapPlanDefinition(planDefinition: PlanDefinition): PlanDefinitionDto {
 
         return {
-            id: planDefinition.id,
+            id: planDefinition!.id!,
             name: planDefinition.name,
-            questionnaires: planDefinition.questionnaires.map(q => this.mapQuestionnaire(q))
+            questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q))
         }
 
     }

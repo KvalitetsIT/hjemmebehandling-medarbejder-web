@@ -187,7 +187,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = {
                 id: careplan.id!,
                 updateCareplanRequest: {
-                    planDefinitionIds: careplan.planDefinitions.map(pd => pd.id),
+                    planDefinitionIds: careplan.planDefinitions.map(pd => pd.id) as string[],
                     questionnaires: careplan.questionnaires.map(q => {
                         return {
                             id: q.id,

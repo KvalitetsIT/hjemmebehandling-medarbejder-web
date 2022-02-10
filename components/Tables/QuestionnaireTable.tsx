@@ -29,7 +29,7 @@ export class QuestionnaireTable extends Component<Props>{
                     {this.props.planDefinitions.map(planDefinition => {
                         return (
                             <>
-                                {planDefinition.questionnaires.map(questionnaire => {
+                                {planDefinition.questionnaires!.map(questionnaire => {
                                     const observationQuestions =
                                         questionnaire.questions?.filter(question => question && question.type == QuestionTypeEnum.OBSERVATION).map(q => (q as Question).question);
                                     return (
