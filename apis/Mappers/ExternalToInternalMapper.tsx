@@ -174,19 +174,19 @@ export default class ExternalToInternalMapper extends BaseMapper {
         }
 
         question.question = questionDto.text!
-        question.enableWhen = this.mapEnableWhenDto(questionDto.enableWhen?.find(()=>true));
+        question.enableWhen = this.mapEnableWhenDto(questionDto.enableWhen?.find(() => true));
         // TODO - handle options properly (there must be at least one option for the answer table to render).
         // TODO: question.options = [this.CreateOption("1", "placeholder", CategoryEnum.YELLOW)]
 
         return question;
     }
     mapEnableWhenDto(enableWhenDto: EnableWhenDto | undefined): EnableWhen<boolean> | undefined {
-        if(!enableWhenDto)
+        if (!enableWhenDto)
             return undefined;
-        
+
         const toReturn = new EnableWhen<boolean>();
         toReturn.answer = enableWhenDto.answer?.value == "true"
-        toReturn.questionId =enableWhenDto.answer?.linkId ?? ""
+        toReturn.questionId = enableWhenDto.answer?.linkId ?? ""
         return toReturn;
 
     }
@@ -378,14 +378,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto): Questionnaire {
-        const questionnaire = new Questionnaire();
-
-        questionnaire.id = FhirUtils.unqualifyId(wrapper.questionnaire!.id!)
-        questionnaire.name = wrapper.questionnaire!.title!;
+        const questionnaire = this.mapQuestionnaire(wrapper!.questionnaire!);
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
         questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
-        questionnaire.status = wrapper.questionnaire?.status;
-        questionnaire.version = wrapper.questionnaire?.version;
         return questionnaire;
     }
 
@@ -394,11 +389,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         questionnaireResult.id = FhirUtils.unqualifyId(questionnaire!.id!)
         questionnaireResult.name = questionnaire!.title!;
-        //questionnaire.frequency = this.mapFrequencyDto(frequency!);
-        //questionnaire.thresholds = this.mapThresholdDtos(thresholds!);
         questionnaireResult.status = questionnaire?.status;
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
-        const callToActions : BaseQuestion[] = questionnaire.callToActions!.map(x=>this.mapCallToAction(x));
+        const callToActions: BaseQuestion[] = questionnaire.callToActions!.map(x => this.mapCallToAction(x));
         questionnaireResult.questions?.push(...callToActions);
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
