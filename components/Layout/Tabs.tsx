@@ -49,7 +49,7 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
       <>
         <Card>
           <CardHeader sx={{ padding: 0 }} subheader={
-            <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange} TabIndicatorProps={{ style: {  }, }}>
+            <Tabs className={this.props.class} value={this.state.value} onChange={this.handleChange}  >
               {this.props.tabLabels.map(tabLabel => {
                 return (
                   <Tab sx={{height: "4em"}} label={<Typography className='labelTextTab'>{tabLabel}</Typography>} />

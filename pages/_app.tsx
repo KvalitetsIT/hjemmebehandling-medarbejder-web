@@ -19,6 +19,7 @@ import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishIm
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { lightBlue } from '@material-ui/core/colors';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
@@ -590,10 +591,24 @@ const THEME = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          opacity: 1
-        }
+          opacity: 1,
+        },
+        
       }
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          
+        },
+        indicator: {
+          backgroundColor: blue
+        }  
+      }
+    },
+    
+
+    
     MuiButton: {
       styleOverrides: {
         root: {
