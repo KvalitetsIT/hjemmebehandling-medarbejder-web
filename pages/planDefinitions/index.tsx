@@ -1,5 +1,6 @@
+import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
@@ -14,6 +15,7 @@ interface State {
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
+    dateHelper!: IDateHelper
 
     constructor(props: {}) {
         super(props)
@@ -34,6 +36,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
     }
     initialiseServices() : void {
         this.questionnaireService = this.context.questionnaireService;
+        this.dateHelper = this.context.dateHelper;
     }
     render(): JSX.Element {
         this.initialiseServices();
@@ -54,6 +57,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                                     <TableCell>Status</TableCell>
                                     <TableCell>Oprettelsesdato</TableCell>
                                     <TableCell>Spørgeskemaer</TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -61,9 +65,10 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                                     return (
                                         <TableRow>
                                             <TableCell><Typography>{planDefinition.name}</Typography></TableCell>
-                                            <TableCell><Typography></Typography></TableCell>
-                                            <TableCell><Typography></Typography></TableCell>
-                                            <TableCell><Typography>{planDefinition.questionnaires.map(q=>q.name).join(", ")}</Typography></TableCell>
+                                            <TableCell><Typography>{planDefinition.status}</Typography></TableCell>
+                                            <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
+                                            <TableCell><Typography>{planDefinition?.questionnaires?.map(q=>q.name).join(" / ")}</Typography></TableCell>
+                                            <TableCell><Button variant="contained">Se patientgruppe</Button></TableCell>
                                         </TableRow>
                                     )
                                 })}

@@ -161,6 +161,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.planDefinition1.name = "Infektionsmedicinsk patientgruppe"
         this.planDefinition1.id = "def1"
+        this.planDefinition1.status = "Aktiv"
+        this.planDefinition1.created = this.CreateDate();
         this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
