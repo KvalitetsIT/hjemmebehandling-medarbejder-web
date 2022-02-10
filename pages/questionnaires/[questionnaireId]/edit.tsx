@@ -177,7 +177,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                 )
                             })}
                             <Grid item xs={12}>
-                                <CallToActionCard allQuestions={parentQuestions} callToActionQuestion={callToAction!} />
+                                <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} />
                             </Grid>
                             <Grid item xs={12}>
                                 <Card>
