@@ -62,9 +62,13 @@ export class ContactEditCard extends Component<Props, State> {
     const allErrors: InvalidInputModel[] =
       this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(this.errorArray)
 
+
+    
     if (this.props.onValidation)
       this.props.onValidation(allErrors);
 
+
+      
   }
 
   renderCard(): JSX.Element {
@@ -97,6 +101,7 @@ export class ContactEditCard extends Component<Props, State> {
             </Stack>
             <Stack spacing={3} direction="row">
               <PhonenumberInput
+                id="contactPrimaryPhone"
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
                 label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}

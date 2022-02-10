@@ -26,6 +26,7 @@ import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { PatientAvatar } from '../components/Avatars/PatientAvatar';
+import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 
 /**
  * Contains booleans that tells which sections that should be open
@@ -171,6 +172,24 @@ export default class CreatePatient extends Component<Props, State> {
   continueButtonStyle: CSSProperties = {
     marginTop: 2
   }
+
+  triggerOnChangeEvent(id: string): void {
+    const input = document.getElementById(id);
+    const event = new Event("input", { bubbles: true });
+    if (input)
+      input.dispatchEvent(event)
+  }
+
+
+  validateMissingPhoneNumber(errors: InvalidInputModel[]): void {
+    if (!(this.state.patient?.primaryPhone || this.state.patient?.contact?.primaryPhone)) {
+      errors.push(new InvalidInputModel("telefonnummer", "Et telefonnummer mangler", CriticalLevelEnum.ERROR))
+    }
+    this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })
+  }
+
+
+
   render(): JSX.Element {
     this.InitializeServices();
 
@@ -189,6 +208,8 @@ export default class CreatePatient extends Component<Props, State> {
     canSubmit &&= !this.state.contactError ? true : false //No errors in contact section
     canSubmit &&= !this.state.planDefinitionError ? true : false //No errors in planDefinitionSection
     canSubmit &&= this.state.careplan.planDefinitions.length === 0 ? false : true; //Plandefinition must be filled!
+
+
 
     return (
       <form onSubmit={(e) => { e.preventDefault(); this.submitPatient() }} noValidate onBlur={() => this.forceUpdate()}  >
@@ -212,13 +233,21 @@ export default class CreatePatient extends Component<Props, State> {
                 <AccordionDetails>
                   <Typography>
                     <PatientEditCard
-                      onValidation={(errors) => this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })}
+                      onValidation={(errors) => {
+                        this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })
+                      }}
                       initialPatient={this.state.patient}
                     />
                   </Typography>
                 </AccordionDetails>
                 <AccordionActions>
-                  <Button className="accordion__button" sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={() => this.goToRelativeContactIsOpen()} variant="contained">Fortsæt</Button>
+
+                  <Button className="accordion__button" sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={() => {
+                    this.goToRelativeContactIsOpen()
+                    this.triggerOnChangeEvent("contactPrimaryPhone")
+                  }} variant="contained">Fortsæt</Button>
+
+
                 </AccordionActions>
               </Accordion>
             </ErrorBoundary>
@@ -237,12 +266,18 @@ export default class CreatePatient extends Component<Props, State> {
                 <AccordionDetails>
                   <Typography>
                     <ContactEditCard
-                      onValidation={(errors) => this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })}
+                      onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
                       initialContact={this.state.patient.contact} />
                   </Typography>
                 </AccordionDetails>
                 <AccordionActions>
-                  <Button className="accordion__button" disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={() => this.goToPlanDefinitionIsOpen()} variant="contained">Fortsæt</Button>
+                  <Tooltip title={<Typography>{this.state.contactError}</Typography>}>
+                    <div>
+                    <Button className="accordion__button" disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={() => this.goToPlanDefinitionIsOpen()} variant="contained">
+                      <Typography>Fortsæt</Typography>
+                    </Button>
+                    </div>
+                  </Tooltip>
                 </AccordionActions>
               </Accordion>
             </ErrorBoundary>
@@ -284,23 +319,23 @@ export default class CreatePatient extends Component<Props, State> {
           <Grid paddingLeft={5} xs="auto">
             <div>
               <Card>
-                {this.state.patient.cpr ? 
-                <>
-                <CardHeader
-                  avatar={<PatientAvatar patient={this.state.patient} />}
-                  title={
-                    <Grid container>
-                      <Grid item xs="auto">
-                        <Typography>
-                          {this.state.patient.firstname} {this.state.patient.lastname} <br />
-                          {this.state.patient.cprToString()}
-                        </Typography>
-                      </Grid>
-                      
-                    </Grid>
-                    
-                  }
-                /><Divider/></> : <></> }
+                {this.state.patient.cpr ?
+                  <>
+                    <CardHeader
+                      avatar={<PatientAvatar patient={this.state.patient} />}
+                      title={
+                        <Grid container>
+                          <Grid item xs="auto">
+                            <Typography>
+                              {this.state.patient.firstname} {this.state.patient.lastname} <br />
+                              {this.state.patient.cprToString()}
+                            </Typography>
+                          </Grid>
+
+                        </Grid>
+
+                      }
+                    /><Divider /></> : <></>}
 
 
                 <CardContent>
@@ -326,7 +361,7 @@ export default class CreatePatient extends Component<Props, State> {
 
         </Grid>
         {this.state.errorToast ?? <></>}
-      </form>
+      </form >
 
 
     )

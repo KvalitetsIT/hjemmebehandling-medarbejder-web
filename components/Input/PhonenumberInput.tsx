@@ -70,6 +70,7 @@ export class PhonenumberInput extends Component<Props, State> {
 
         return (
             <TextFieldValidation
+                id={this.props.id}
                 onValidation={(uid, errors) => this.props.onValidation ? this.props.onValidation(uid, errors) : {}}
                 uniqueId={this.props.uniqueId}
                 validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone))}
@@ -77,7 +78,8 @@ export class PhonenumberInput extends Component<Props, State> {
                 label={this.props.label}
                 value={this.props.value?.replaceAll("+45", "")}
                 onChange={input => this.props.onChange(this.formatPhoneNumber(input))}
-                variant="outlined">
+                variant="outlined"
+                >
                 <Select
 
                     size={this.props.size}

@@ -6,7 +6,7 @@ import ApiContext from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
-import {IValidationService} from '../../services/interfaces/IValidationService';
+import { IValidationService } from '../../services/interfaces/IValidationService';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
@@ -155,6 +155,7 @@ export class PatientEditCard extends Component<Props, State> {
   }
 
   errorMap: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
+
   onValidation(from: number, invalid: InvalidInputModel[]): void {
     const errorMap = this.errorMap;
     errorMap.set(from, invalid);
@@ -225,7 +226,8 @@ export class PatientEditCard extends Component<Props, State> {
                   label="Primært telefonnummer"
                   value={this.state.patient.primaryPhone}
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
-                  variant="outlined" />
+                  variant="outlined"
+                  />
 
                 <PhonenumberInput
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
@@ -239,6 +241,7 @@ export class PatientEditCard extends Component<Props, State> {
           </CardContent>
         </Card>
         {this.state.toast ?? <></>}
+
       </ErrorBoundary>
     </>
     )
