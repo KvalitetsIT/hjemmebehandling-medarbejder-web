@@ -104,10 +104,10 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         const questionnaire = this.state.questionnaire;
         const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
         const parentQuestions = questions?.filter(q => !(q as Question).enableWhen);
-        
+
         //If there are no call-to-action, we add one
         const hasCallToActionQuestion = questionnaire.questions?.find(q => q.type == QuestionTypeEnum.CALLTOACTION)
-        if(!hasCallToActionQuestion){
+        if (!hasCallToActionQuestion) {
             const newCallToActionQuestion = new CallToActionQuestion();
             newCallToActionQuestion.enableWhens = [];
             questionnaire.questions?.push(newCallToActionQuestion)
@@ -131,13 +131,13 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                             label="Navn"
                                             value={this.state.questionnaire.name}
                                             variant="outlined" uniqueId={1}
-                                            onChange={() => { console.log("") }}
+                                            onChange={input => this.modifyQuestionnaire(this.setName, input)}
                                         />
                                     </CardContent>
                                 </Card>
                             </Grid>
                             {parentQuestions?.map((question, index) => {
-                                const childQuestion = questions?.map(q=>q as Question).filter(q => q.enableWhen?.questionId == question.Id)
+                                const childQuestion = questions?.map(q => q as Question).filter(q => q.enableWhen?.questionId == question.Id)
                                 return (
                                     <>
                                         <Grid item xs={12}>
@@ -221,6 +221,20 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
     }
 
+    modifyQuestionnaire(questionnaireModifier: (questionnaire: Questionnaire, newValue: string) => Questionnaire, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+        if (!this.state.questionnaire)
+            return;
+
+        const valueFromInput = input.currentTarget.value;
+        const modifiedQuestionnaire = questionnaireModifier(this.state.questionnaire, valueFromInput);
+        this.setState({ questionnaire: modifiedQuestionnaire })
+    }
+
+    setName(questionnaire: Questionnaire, newValue: string) : Questionnaire{
+        const modifiedQuestionnaire = questionnaire;
+        modifiedQuestionnaire.name = newValue;
+        return modifiedQuestionnaire;
+    }
 
 
     getThresholds(question: Question): ThresholdCollection {
