@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Grid, Slider, TextField, Typography } from '@mui/material';
+import { Grid, Slider, Stack, TextField, Typography } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
@@ -40,11 +40,12 @@ export class ColorSlider extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            min: 0,
-            max: 500
+            min: this.calculateMin(),
+            max: this.calculateMax()
         }
 
     }
+
 
     render(): JSX.Element {
         const questionnaire = this.props.questionnaire;
@@ -52,15 +53,15 @@ export class ColorSlider extends Component<Props, State> {
 
         const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
         const marks: number[] = []
-        const minVal = Math.min(...thresholdForQuestion!.thresholdNumbers!.map(t => t?.from ?? 9999));
-        const maxVal = Math.max(...thresholdForQuestion!.thresholdNumbers!.map(t => t?.to ?? 0));
+        const minVal = this.calculateMin()
+        const maxVal = this.calculateMax()
         marks.push(minVal)
         const thresholdNumbers = thresholdForQuestion!.thresholdNumbers;
 
         return (
             <Grid container>
                 <Grid item xs={1}>
-                    <TextField value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
+                    <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
                 </Grid>
                 <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10 }}>
                     <Slider
@@ -76,10 +77,27 @@ export class ColorSlider extends Component<Props, State> {
                     />
                 </Grid>
                 <Grid item xs={1}>
-                    <TextField value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>
+                    <TextField label="Max" value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>
                 </Grid>
             </Grid>
         )
+    }
+
+    calculateMin(): number {
+        const questionnaire = this.props.questionnaire;
+        const question = this.props.question;
+        const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+        const minVal = Math.min(...thresholdForQuestion!.thresholdNumbers!.map(t => t?.from ?? 9999));
+        return minVal;
+
+    }
+
+    calculateMax(): number {
+        const questionnaire = this.props.questionnaire;
+        const question = this.props.question;
+        const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+        const maxVal = Math.max(...thresholdForQuestion!.thresholdNumbers!.map(t => t?.to ?? 0));
+        return maxVal;
     }
 
     setMax(number: number, minVal: number): void {
@@ -104,8 +122,10 @@ class mark {
     renderBelowMark(thresholdnumber: ThresholdNumber) {
         return (
             <>
-                <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
-                <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
+                <Stack>
+                    <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
+                    <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
+                </Stack>
             </>
         )
     }
