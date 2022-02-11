@@ -139,7 +139,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.version = "1"
 
         this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
-        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+        
 
 
         this.questionnaire2.id = "qn2"
@@ -200,6 +200,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateOption("1", "true", CategoryEnum.RED),
             this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
+
+        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;

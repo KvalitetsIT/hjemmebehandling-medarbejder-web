@@ -11,9 +11,9 @@ export interface Props {
     toggleExpandedButtonAction: () => void
 }
 
-export class AccordianDims extends Component<Props, {}> {
+export class AccordianWrapper extends Component<Props, {}> {
     static contextType = ApiContext;
-    static displayName = AccordianDims.name;
+    static displayName = AccordianWrapper.name;
 
     constructor(props: Props) {
         super(props);

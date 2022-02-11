@@ -17,9 +17,9 @@ export interface State {
     loading: boolean
 }
 
-export class PlanDefinitionEditAccordian extends Component<Props, State> {
+export class PlanDefinitionEdit extends Component<Props, State> {
     static contextType = ApiContext;
-    static displayName = PlanDefinitionEditAccordian.name;
+    static displayName = PlanDefinitionEdit.name;
     personService!: IPersonService;
     validationService!: IValidationService;
     collectionHelper!: ICollectionHelper;

@@ -20,9 +20,9 @@ export interface State {
     loading: boolean
 }
 
-export class PlanDefinitionEditQuestionnaireAccordian extends Component<Props, State> {
+export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     static contextType = ApiContext;
-    static displayName = PlanDefinitionEditQuestionnaireAccordian.name;
+    static displayName = PlanDefinitionEditQuestionnaire.name;
     personService!: IPersonService;
     validationService!: IValidationService;
     collectionHelper!: ICollectionHelper;
