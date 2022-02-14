@@ -41,12 +41,22 @@ export default class CreatePlandefinition extends React.Component<{}, State> {
     }
 
     toggleAccordian(page: AccordianRowEnum, overrideExpanded?: boolean): void {
+        this.closeAllAccordians();
         const oldAccordians = this.state.openAccordians
         oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
         this.setState({ openAccordians: oldAccordians })
     }
 
+    closeAllAccordians() : void {
+        const openAccordians = this.state.openAccordians
+        openAccordians[AccordianRowEnum.generelInfo] = false
+        openAccordians[AccordianRowEnum.thresholds]= false
+        openAccordians[AccordianRowEnum.attachQuestionnaire]= false
+        this.setState({ openAccordians: openAccordians })
+    }
+
     expandNextPage(currentPage: AccordianRowEnum): void {
+        
         this.toggleAccordian(currentPage, false)
         switch (currentPage) {
             case AccordianRowEnum.generelInfo:

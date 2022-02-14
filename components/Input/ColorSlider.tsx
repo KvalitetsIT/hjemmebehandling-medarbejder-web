@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Grid, Slider, Stack, TextField, Typography } from '@mui/material';
+import { Box, Grid, Slider, TextField, Typography } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
@@ -41,16 +41,16 @@ export class ColorSlider extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {
-            min: this.calculateMin(),
-            max: this.calculateMax()
-        }
 
-        if (!props.questionnaire.thresholds || props.questionnaire.thresholds.length == 0) {
+        if (!props.questionnaire.thresholds || props.questionnaire.thresholds.length != props.defaultNumberOfThresholds) {
             const defaultThreshold = Array.from(Array(this.props.defaultNumberOfThresholds + 1).keys());
             const defaultThresholdCollection = this.NumbersToThresholdCollection(props.question, defaultThreshold)
             props.onChange(defaultThresholdCollection, props.question, props.questionnaire)
-            this.forceUpdate();
+        }
+
+        this.state = {
+            min: this.calculateMin(),
+            max: this.calculateMax(),
         }
     }
 
@@ -70,13 +70,14 @@ export class ColorSlider extends Component<Props, State> {
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
 
         return (
-            <Grid container>
-                <Grid item xs={1}>
+            <Grid container sx={{ alignItems: "center" }}>
+                <Grid item xs={1} >
                     <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
                 </Grid>
-                <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10 }}>
+                <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10, position: "relative", zIndex: 1 }}>
                     <Slider
                         disableSwap
+                        sx={{ minHeight: 150 }}
                         value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
                         aria-labelledby="discrete-slider"
                         valueLabelDisplay="auto"
@@ -94,7 +95,7 @@ export class ColorSlider extends Component<Props, State> {
         )
     }
 
-    setSliderPoint(sliderPoints: number[]) : void {
+    setSliderPoint(sliderPoints: number[]): void {
         if (this.hasDuplicates(sliderPoints)) //No point should have same value
             return;
 
@@ -155,12 +156,12 @@ export class ColorSlider extends Component<Props, State> {
         thresholdCollection.questionId = question.Id!
         thresholdCollection.thresholdNumbers = [];
 
-        const categoryByIndex = [CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW, CategoryEnum.GREEN]
+        const categoryByIndex = [CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW]
         for (let i = 0; i < numbers.length - 1; i++) {
             const threshold = new ThresholdNumber();
             threshold.from = numbers[i]
             threshold.to = numbers[i + 1]
-            threshold.category = categoryByIndex[i]
+            threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
         }
 
@@ -172,18 +173,25 @@ class mark {
     label: JSX.Element
     value: number
     constructor(thresholdnumber: ThresholdNumber) {
-        this.label = this.renderBelowMark(thresholdnumber);
         this.value = thresholdnumber.from!;
+        this.label = this.renderBelowMark(thresholdnumber);
     }
 
     renderBelowMark(thresholdnumber: ThresholdNumber) {
         return (
-            <>
-                <Stack>
-                    <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
-                    <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
-                </Stack>
-            </>
+            <Box position="absolute" zIndex={9999999}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
+                        <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
+                        <Box marginTop={5} minWidth={50} maxWidth={70}>
+                            <TextField onChange={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} variant='filled' value={this.value} type="number"></TextField>
+                        </Box>
+                    </Grid>
+
+
+                </Grid>
+            </Box>
         )
     }
 

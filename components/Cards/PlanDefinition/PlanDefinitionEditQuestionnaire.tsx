@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, CardContent, CardHeader, Checkbox, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Skeleton } from '@mui/material';
+import { Button, Card, CardHeader, Checkbox, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Skeleton } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
@@ -8,6 +8,7 @@ import { IQuestionnaireService } from '../../../services/interfaces/IQuestionnai
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { Box } from '@mui/system';
 
 export interface Props {
     planDefinition: PlanDefinition
@@ -75,25 +76,30 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     renderCard(): JSX.Element {
         this.InitializeServices();
         return (
+
             <Grid container textAlign="center" alignItems="center" spacing={2}>
-                <Grid item xs={2}>
+                <Grid item xs={4}>
+
                     {this.renderList("Valgte", this.state.planDefinition.questionnaires!)}
+
 
                 </Grid>
                 <Grid item xs={1}>
                     <Button onClick={() => this.addToPlanDefinition()} variant='contained'>{"<"}</Button>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <Button onClick={() => this.removeFromPlanDefinition()} variant='contained'>{">"}</Button>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={4}>
+
                     {this.renderList("Tilgængelige", this.getQuestinnairesNotInPlandefinition())}
+
                 </Grid>
             </Grid>
         )
     }
 
-    toggleChecked(questionnaire: Questionnaire) : void {
+    toggleChecked(questionnaire: Questionnaire): void {
         const allChecked = this.state.checked;
 
 
@@ -139,17 +145,17 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
         this.setState({ planDefinition: planDefinition, checked: [] })
     }
 
-    renderList(title: string, questionnaires: (Questionnaire | undefined)[]) : JSX.Element{
+    renderList(title: string, questionnaires: (Questionnaire | undefined)[]): JSX.Element {
         return (
-            <Card>
+            <Card elevation={2}>
                 <CardHeader subheader={title} />
                 <Divider />
-                <CardContent sx={{ height: 230, overflow: 'auto' }}>
-                    <List dense component="div" >
+                <Box sx={{ height: 230, overflow: 'auto' }}>
+                    <List role="list" dense component="div" >
                         {questionnaires.map(questionnaire => {
                             const isChecked = this.isChecked(questionnaire!);
                             return (
-                                <ListItem button onClick={() => this.toggleChecked(questionnaire!)}>
+                                <ListItem role="listitem" button onClick={() => this.toggleChecked(questionnaire!)}>
                                     <ListItemIcon>
                                         <Checkbox
                                             checked={isChecked}
@@ -163,7 +169,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
                         })}
 
                     </List>
-                </CardContent>
+                </Box>
             </Card >
         )
     }
@@ -178,7 +184,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
         const toReturn = a.filter((value) => b?.findIndex(y => y.id == value?.id) == -1)
         return toReturn;
     }
-    isChecked(questionnaire: Questionnaire) : boolean{
+    isChecked(questionnaire: Questionnaire): boolean {
         return this.state.checked.find(c => c.id == questionnaire.id) != undefined
     }
 

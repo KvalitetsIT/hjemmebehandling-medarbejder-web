@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardContent, CardHeader, Divider, Grid, Skeleton, Typography } from '@mui/material';
+import { Button, ButtonGroup, Card, CardContent, CardHeader, Divider, Grid, Skeleton, Typography } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
@@ -18,6 +18,7 @@ export interface Props {
 export interface State {
     planDefinition: PlanDefinition
     loading: boolean
+    defaultNumberOfThresholds: number
 }
 
 export class PlanDefinitionEditThresholds extends Component<Props, State> {
@@ -31,7 +32,8 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         super(props);
         this.state = {
             loading: false,
-            planDefinition: props.planDefinition
+            planDefinition: props.planDefinition,
+            defaultNumberOfThresholds: 3
         }
 
         this.modifyPlandefinition = this.modifyPlandefinition.bind(this);
@@ -86,9 +88,14 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                                                 <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} />
                                                 <Divider />
                                                 <CardContent >
-
-                                                    <ColorSlider onChange={this.setThreshold} questionnaire={questionnaire} question={question} defaultNumberOfThresholds={3}></ColorSlider>
-
+                                                    <ButtonGroup>
+                                                        {[3, 5].map(number => {
+                                                            return (
+                                                                <Button variant="outlined" onClick={() => { this.setState({ defaultNumberOfThresholds: number }); this.forceUpdate(); }}>{number} grænser</Button>
+                                                            )
+                                                        })}
+                                                    </ButtonGroup>
+                                                    <ColorSlider key={"colorslider" + this.state.defaultNumberOfThresholds} onChange={this.setThreshold} questionnaire={questionnaire} question={question} defaultNumberOfThresholds={this.state.defaultNumberOfThresholds}></ColorSlider>
                                                 </CardContent>
                                             </Card>
                                         </>
@@ -120,7 +127,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         this.setState({ planDefinition: modified })
     }
 
-   
+
 
     setPlanDefinitionName(planDefinition: PlanDefinition, newValue: string): PlanDefinition {
         const modifiedPlanDefinition = planDefinition;

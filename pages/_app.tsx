@@ -268,11 +268,14 @@ const THEME = createTheme({
     },
     //=========== Paper ===========//
     MuiPaper: {
-      styleOverrides: {
-        root: {
-          boxShadow: "none"
+      variants : [
+        {
+          props: { elevation: 1 },
+          style: {
+            boxShadow: "none"
+          }
         }
-      }
+      ]
     },
     //=========== Table ===========//
     MuiTable: {
@@ -592,22 +595,22 @@ const THEME = createTheme({
         root: {
           opacity: 1,
         },
-        
+
       }
     },
     MuiTabs: {
       styleOverrides: {
         root: {
-          
+
         },
         indicator: {
           backgroundColor: blue
-        }  
+        }
       }
     },
-    
 
-    
+
+
     MuiButton: {
       styleOverrides: {
         root: {
