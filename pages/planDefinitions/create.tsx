@@ -81,7 +81,7 @@ export default class CreatePlandefinition extends React.Component<{}, State> {
 
                 <AccordianWrapper
                     expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
-                    title="Patientgruppe"
+                    title="Tilknyt spørgeskema"
                     toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
                     continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}>
 

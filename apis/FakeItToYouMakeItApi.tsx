@@ -201,7 +201,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
 
-        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+        //this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -231,7 +231,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap1 = new Map<Question, Answer>();
-        questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+       // questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
@@ -247,7 +247,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap2 = new Map<Question, Answer>();
-        questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+      //  questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(35, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(10, UnitType.NOUNIT));
         questionAnswerMap2.set(this.question4, this.CreateBooleanAnswer(true));
@@ -262,7 +262,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
 
         const questionAnswerMap3 = new Map<Question, Answer>();
-        questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
+       // questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(90, UnitType.NOUNIT));
         questionAnswerMap3.set(this.question4, this.CreateBooleanAnswer(true));
@@ -276,7 +276,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
 
         const questionAnswerMap4 = new Map<Question, Answer>();
-        questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
+        //questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(42, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(100, UnitType.NOUNIT));
         questionAnswerMap4.set(this.question4, this.CreateBooleanAnswer(true));
@@ -291,7 +291,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
 
         const questionAnswerMap5 = new Map<Question, Answer>();
-        questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+        //questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(true));

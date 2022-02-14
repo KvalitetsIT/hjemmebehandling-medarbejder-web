@@ -7,8 +7,6 @@ import { IValidationService } from '../../../services/interfaces/IValidationServ
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/ThresholdCollection';
 import { ColorSlider } from '../../Input/ColorSlider';
@@ -65,6 +63,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
     renderCard(): JSX.Element {
         this.InitializeServices();
+        console.log(this.props.planDefinition)
         return (
 
             <Grid container spacing={2}>
@@ -74,7 +73,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                 <Grid item xs={12}>
                     {this.state.planDefinition.questionnaires?.map(questionnaire => {
                         if (!questionnaire.thresholds)
-                            return;
+                            questionnaire.thresholds = [];
 
 
                         return (
@@ -88,7 +87,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                                                 <Divider />
                                                 <CardContent >
 
-                                                    <ColorSlider onChange={this.setThreshold} questionnaire={questionnaire} question={question}></ColorSlider>
+                                                    <ColorSlider onChange={this.setThreshold} questionnaire={questionnaire} question={question} defaultNumberOfThresholds={3}></ColorSlider>
 
                                                 </CardContent>
                                             </Card>
@@ -105,30 +104,23 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
             </Grid>
         )
     }
-    setThreshold(newThresholds: number[], question: Question, questionnaire: Questionnaire): void {
 
-        const thresholdCollection = this.NumbersToThresholdCollection(question, newThresholds);
+    setThreshold(newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire): void {
+        const thresholdCollection = newThresholds
         const modified = this.state.planDefinition;
         const questionnaireIndex = modified.questionnaires!.findIndex(q => q.id == questionnaire.id);
-        const thresholdIndex = modified.questionnaires![questionnaireIndex].thresholds!.findIndex(t => t.questionId == question.Id)
-        modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
+        if (modified.questionnaires && questionnaireIndex != -1) {
+            let thresholdIndex = modified.questionnaires![questionnaireIndex!].thresholds!.findIndex(t => t.questionId == question.Id)
+            if (thresholdIndex == -1) {
+                thresholdIndex = 0;
+            }
+
+            modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
+        }
         this.setState({ planDefinition: modified })
     }
 
-    NumbersToThresholdCollection(question: Question, numbers: number[]): ThresholdCollection {
-        const thresholdCollection = new ThresholdCollection();
-        thresholdCollection.questionId = question.Id!
-        thresholdCollection.thresholdNumbers = [];
-        const categoryByIndex = [CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW, CategoryEnum.GREEN]
-        for (let i = 0; i < numbers.length - 1; i++) {
-            const threshold = new ThresholdNumber();
-            threshold.from = numbers[i]
-            threshold.to = numbers[i + 1]
-            threshold.category = categoryByIndex[i]
-            thresholdCollection.thresholdNumbers.push(threshold);
-        }
-        return thresholdCollection;
-    }
+   
 
     setPlanDefinitionName(planDefinition: PlanDefinition, newValue: string): PlanDefinition {
         const modifiedPlanDefinition = planDefinition;
