@@ -108,7 +108,7 @@ export class ObservationCard extends Component<Props, State> {
             <Grid container columns={12}>
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
-                    const threshold = this.props.questionnaire!.thresholds!.find(x => x.questionId == question.Id)
+                    const threshold = this.props.questionnaire!.thresholds?.find(x => x.questionId == question.Id)
 
                     const dateToString = (date: Date) => this.dateHelper.DateToString(date);
                     const chartData = new ChartData(this.state.questionnaireResponses, question, threshold, dateToString);
