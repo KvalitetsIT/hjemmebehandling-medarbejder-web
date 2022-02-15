@@ -39,12 +39,16 @@ export class ColorSlider extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-
-        if (!props.questionnaire.thresholds || props.questionnaire.thresholds.length != props.defaultNumberOfThresholds) {
+        console.log(props.question.question)
+        const thresholdsForThisQuestion = props.questionnaire.thresholds?.filter(t => t.questionId == props.question.Id)
+        console.log(thresholdsForThisQuestion)
+        if (thresholdsForThisQuestion == undefined || thresholdsForThisQuestion.length != props.defaultNumberOfThresholds) {
+            
             const defaultThreshold = Array.from(Array(this.props.defaultNumberOfThresholds + 1).keys());
             const defaultThresholdCollection = this.NumbersToThresholdCollection(props.question, defaultThreshold)
             props.onChange(defaultThresholdCollection, props.question, props.questionnaire)
         }
+        console.log(thresholdsForThisQuestion)
 
         this.state = {
             min: this.calculateMin(),
@@ -52,45 +56,6 @@ export class ColorSlider extends Component<Props, State> {
         }
     }
 
-    generateColor(thresholdNumbers: ThresholdNumber[]): string {
-        let string = "";
-        const hundredPercent = this.max(thresholdNumbers);
-        console.log("hundredPercent")
-        console.log(hundredPercent)
-        let latestPercentageTo = 0;
-        thresholdNumbers.forEach((t) => {
-
-            const percentageFrom = latestPercentageTo
-            let percentageTo = 1;
-            if (t.to != undefined && t.from != undefined)
-                percentageTo = (t.to - t.from + percentageFrom)
-
-            latestPercentageTo = percentageTo
-
-            if (string != "")
-                string += ", "
-
-            string += this.getChipColorFromCategory(t.category)
-            string += " "
-            string += (percentageFrom / hundredPercent * 100) + "%"
-            string += ", "
-            string += this.getChipColorFromCategory(t.category)
-            string += " "
-            string += (percentageTo / hundredPercent * 100) + "%"
-        });
-
-        return "linear-gradient(90deg, " + string + ")";
-    }
-
-    max(thresholdNumbers: ThresholdNumber[]) : number {
-        let totalWidth: number = 0;
-        thresholdNumbers.forEach(threshold => {
-            const to = threshold.to ?? 100;
-            const from = threshold.from ?? -100;
-            totalWidth += to - from
-        })
-        return totalWidth
-    }
 
     render(): JSX.Element {
         const questionnaire = this.props.questionnaire;
@@ -105,6 +70,7 @@ export class ColorSlider extends Component<Props, State> {
         let thresholdNumbers: ThresholdNumber[] = []
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
+     
 
         return (
             <Grid container sx={{ alignItems: "center" }}>
@@ -130,7 +96,7 @@ export class ColorSlider extends Component<Props, State> {
                                 minHeight: 150,
 
                             }}
-                            key={"slider_"+question.Id}
+                            key={"slider_" + question.Id}
                             value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
                             aria-labelledby="discrete-slider"
                             valueLabelDisplay="off"
@@ -154,6 +120,46 @@ export class ColorSlider extends Component<Props, State> {
             return;
 
         this.props.onChange(this.NumbersToThresholdCollection(this.props.question, sliderPoints), this.props.question, this.props.questionnaire)
+    }
+
+
+    generateColor(thresholdNumbers: ThresholdNumber[]): string {
+        let string = "";
+        const hundredPercent = this.max(thresholdNumbers);
+
+        let latestPercentageTo = 0;
+        thresholdNumbers.forEach((t) => {
+
+            const percentageFrom = latestPercentageTo
+            let percentageTo = 1;
+            if (t.to != undefined && t.from != undefined)
+                percentageTo = (t.to - t.from + percentageFrom)
+
+            latestPercentageTo = percentageTo
+
+            if (string != "")
+                string += ", "
+
+            string += this.getChipColorFromCategory(t.category)
+            string += " "
+            string += (percentageFrom / hundredPercent * 100) + "%"
+            string += ", "
+            string += this.getChipColorFromCategory(t.category)
+            string += " "
+            string += (percentageTo / hundredPercent * 100) + "%"
+        });
+
+        return "linear-gradient(90deg, " + string + ")";
+    }
+
+    max(thresholdNumbers: ThresholdNumber[]): number {
+        let totalWidth: number = 0;
+        thresholdNumbers.forEach(threshold => {
+            const to = threshold.to ?? 100;
+            const from = threshold.from ?? -100;
+            totalWidth += to - from
+        })
+        return totalWidth
     }
 
     hasDuplicates(checkForDuplicatesArray: number[]): boolean {
