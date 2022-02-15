@@ -130,6 +130,7 @@ export class ColorSlider extends Component<Props, State> {
                                 minHeight: 150,
 
                             }}
+                            key={"slider_"+question.Id}
                             value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
                             aria-labelledby="discrete-slider"
                             valueLabelDisplay="off"
