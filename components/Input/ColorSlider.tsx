@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Box, Grid, Slider, TextField, Typography } from '@mui/material';
+import { Box, createTheme, Grid, Slider, TextField, ThemeProvider, Typography } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
@@ -27,13 +27,11 @@ export class ColorSlider extends Component<Props, State> {
 
     getChipColorFromCategory(category: CategoryEnum): string {
         if (category === CategoryEnum.RED)
-            return "red"
+            return "rgba(255,29,0,1) "
         if (category === CategoryEnum.YELLOW)
-            return "yellow"
+            return "rgba(228,255,0,1)"
         if (category === CategoryEnum.GREEN)
-            return "success"
-        if (category === CategoryEnum.BLUE)
-            return "blue"
+            return "rgba(2,218,63,1)"
 
         return ""
 
@@ -54,6 +52,45 @@ export class ColorSlider extends Component<Props, State> {
         }
     }
 
+    generateColor(thresholdNumbers: ThresholdNumber[]): string {
+        let string = "";
+        const hundredPercent = this.max(thresholdNumbers);
+        console.log("hundredPercent")
+        console.log(hundredPercent)
+        let latestPercentageTo = 0;
+        thresholdNumbers.forEach((t) => {
+
+            const percentageFrom = latestPercentageTo
+            let percentageTo = 1;
+            if (t.to != undefined && t.from != undefined)
+                percentageTo = (t.to - t.from + percentageFrom)
+
+            latestPercentageTo = percentageTo
+
+            if (string != "")
+                string += ", "
+
+            string += this.getChipColorFromCategory(t.category)
+            string += " "
+            string += (percentageFrom / hundredPercent * 100) + "%"
+            string += ", "
+            string += this.getChipColorFromCategory(t.category)
+            string += " "
+            string += (percentageTo / hundredPercent * 100) + "%"
+        });
+
+        return "linear-gradient(90deg, " + string + ")";
+    }
+
+    max(thresholdNumbers: ThresholdNumber[]) : number {
+        let totalWidth: number = 0;
+        thresholdNumbers.forEach(threshold => {
+            const to = threshold.to ?? 100;
+            const from = threshold.from ?? -100;
+            totalWidth += to - from
+        })
+        return totalWidth
+    }
 
     render(): JSX.Element {
         const questionnaire = this.props.questionnaire;
@@ -75,18 +112,34 @@ export class ColorSlider extends Component<Props, State> {
                     <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
                 </Grid>
                 <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10, position: "relative", zIndex: 1 }}>
-                    <Slider
-                        disableSwap
-                        sx={{ minHeight: 150 }}
-                        value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
-                        aria-labelledby="discrete-slider"
-                        valueLabelDisplay="auto"
-                        step={0.1}
-                        min={this.state.min}
-                        max={this.state.max}
-                        marks={thresholdNumbers?.map(x => new mark(x))}
-                        onChange={(event, value) => this.setSliderPoint(value as number[])}
-                    />
+                    <ThemeProvider theme={createTheme({
+                        components: {
+                            MuiSlider: {
+                                styleOverrides: {
+                                    track: {
+                                        background: this.generateColor(thresholdNumbers),
+                                        border: 0
+                                    }
+                                }
+                            }
+                        }
+                    })}>
+                        <Slider
+                            disableSwap
+                            sx={{
+                                minHeight: 150,
+
+                            }}
+                            value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
+                            aria-labelledby="discrete-slider"
+                            valueLabelDisplay="off"
+                            step={0.1}
+                            min={this.state.min}
+                            max={this.state.max}
+                            marks={thresholdNumbers?.map(x => new mark(x))}
+                            onChange={(event, value) => this.setSliderPoint(value as number[])}
+                        />
+                    </ThemeProvider>
                 </Grid>
                 <Grid item xs={1}>
                     <TextField label="Max" value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>

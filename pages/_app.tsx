@@ -268,7 +268,7 @@ const THEME = createTheme({
     },
     //=========== Paper ===========//
     MuiPaper: {
-      variants : [
+      variants: [
         {
           props: { elevation: 1 },
           style: {
