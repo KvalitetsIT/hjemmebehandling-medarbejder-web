@@ -137,7 +137,7 @@ export class ColorSlider extends Component<Props, State> {
                                     step={0.1}
                                     min={this.state.min}
                                     max={this.state.max}
-                                    marks={thresholdNumbers?.map(x => new mark(x))}
+                                    marks={thresholdNumbers?.map(x => this.renderBelowMark(x))}
                                     onChange={(event, value) => this.setSliderPoint(value as number[])}
                                 />
                             </ThemeProvider>
@@ -263,25 +263,16 @@ export class ColorSlider extends Component<Props, State> {
 
         return thresholdCollection;
     }
-}
 
-class mark {
-    label: JSX.Element
-    value: number
-    constructor(thresholdnumber: ThresholdNumber) {
-        this.value = thresholdnumber.from!;
-        this.label = this.renderBelowMark(thresholdnumber);
-    }
-
-    renderBelowMark(thresholdnumber: ThresholdNumber) {
-        return (
+    renderBelowMark(thresholdnumber: ThresholdNumber): { label: JSX.Element, value: number } {
+        const label = (
             <Box position="absolute" zIndex={9999999}>
                 <Grid container>
                     <Grid item xs={12}>
                         <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
                         <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
                         <Box marginTop={5} minWidth={50} maxWidth={70}>
-                            <TextField onChange={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} variant='filled' value={this.value} type="number"></TextField>
+                            <TextField inputProps={{ style: { zIndex: -999 } }} variant='filled' value={thresholdnumber.from} type="number"></TextField>
                         </Box>
                     </Grid>
 
@@ -289,9 +280,10 @@ class mark {
                 </Grid>
             </Box>
         )
+        return { label: label, value: thresholdnumber.from! }
     }
 
-    categoryToString(categoryEnum: CategoryEnum) {
+    categoryToString(categoryEnum: CategoryEnum): string {
         switch (categoryEnum) {
             case CategoryEnum.GREEN:
                 return "Grøn"
