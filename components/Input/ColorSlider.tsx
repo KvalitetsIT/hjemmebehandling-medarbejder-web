@@ -190,18 +190,12 @@ export class ColorSlider extends Component<Props, State> {
         if (thresholdNumbers == undefined || values == undefined || indexToReplace == undefined || indexToReplace == -1)
             return
 
-        console.log("før")
-        console.log(values)
-
         values[indexToReplace] = newValue;
-        console.log("efter")
-        console.log(values);
+
         this.setSliderPoint(this.correctValues(values))
     }
 
     correctValues(values: number[]): number[] {
-        console.log("=a==")
-        console.log(values)
         let earlier = values[0];
         for (let i = 1; i < values.length; i++) {
             const current = values[i]
@@ -210,8 +204,6 @@ export class ColorSlider extends Component<Props, State> {
             }
             earlier = values[i]
         }
-        console.log(values)
-        console.log("==B=")
         return values;
     }
 
@@ -300,10 +292,7 @@ export class ColorSlider extends Component<Props, State> {
             threshold.to = numbers[i + 1]
             threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
-            console.log(this.categoryToString(threshold.category) + ": " + threshold.from + " => " + threshold.to)
         }
-        console.log("thresholdCollection")
-        console.log(thresholdCollection)
         return thresholdCollection;
     }
 
