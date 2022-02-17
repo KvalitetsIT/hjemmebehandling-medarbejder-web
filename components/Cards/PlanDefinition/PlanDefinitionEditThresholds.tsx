@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Card, CardContent, CardHeader, Divider, Grid, Skeleton, Typography } from '@mui/material';
+import { Grid, Skeleton, Typography } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
@@ -72,42 +72,24 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                 <Grid item xs={12}>
                     <Typography>De valgte spørgeskemaer indeholder nedenstående Alarmgrænser</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    {this.state.planDefinition.questionnaires?.map(questionnaire => {
-                        if (!questionnaire.thresholds)
-                            questionnaire.thresholds = [];
 
+                {this.state.planDefinition.questionnaires?.map(questionnaire => {
+                    if (!questionnaire.thresholds)
+                        questionnaire.thresholds = [];
 
-                        return (
-                            <>
-                                {questionnaire.questions?.filter(x => x.type == QuestionTypeEnum.OBSERVATION).map(question => {
+                    return (
+                        <>
+                            {questionnaire.questions?.filter(x => x.type == QuestionTypeEnum.OBSERVATION).map(question => {
 
-                                    return (
-                                        <>
-                                            <Card >
-                                                <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} />
-                                                <Divider />
-                                                <CardContent >
-                                                    <ButtonGroup>
-                                                        {[3, 5].map(number => {
-                                                            return (
-                                                                <Button variant="outlined" onClick={() => { this.setState({ defaultNumberOfThresholds: number }); this.forceUpdate(); }}>{number} grænser</Button>
-                                                            )
-                                                        })}
-                                                    </ButtonGroup>
-                                                    <ColorSlider key={"colorslider" + this.state.defaultNumberOfThresholds} onChange={this.setThreshold} questionnaire={questionnaire} question={question} defaultNumberOfThresholds={this.state.defaultNumberOfThresholds}></ColorSlider>
-                                                </CardContent>
-                                            </Card>
-                                        </>
-                                    )
-                                })}
-                            </>
-                        )
-
-
-                    })}
-
-                </Grid>
+                                return (
+                                        <Grid item xs={12}>
+                                            <ColorSlider key={"colorslider" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></ColorSlider>
+                                        </Grid>
+                                )
+                            })}
+                        </>
+                    )
+                })}
             </Grid>
         )
     }
@@ -126,8 +108,8 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
             } else {
                 modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
             }
-            
-            
+
+
         }
         console.log(modified)
         console.log("---------------")

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Box, createTheme, Grid, Slider, TextField, ThemeProvider, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Card, CardContent, CardHeader, createTheme, Divider, Grid, Slider, TextField, ThemeProvider, Typography } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
@@ -10,7 +10,6 @@ import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/Thresh
 
 export interface Props {
     questionnaire: Questionnaire
-    defaultNumberOfThresholds: number
     question: Question
     onChange: (values: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
 }
@@ -18,12 +17,14 @@ export interface Props {
 export interface State {
     min: number
     max: number
+    desiredNumberOfThresholds: number
 }
 
 
 export class ColorSlider extends Component<Props, State> {
     static displayName = ColorSlider.name;
     static contextType = ApiContext
+    allowedNumberOfThresholds = [3, 5];
 
     getChipColorFromCategory(category: CategoryEnum): string {
         if (category === CategoryEnum.RED)
@@ -39,29 +40,38 @@ export class ColorSlider extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        console.log(props.question.question)
-        const thresholdsForThisQuestion = props.questionnaire.thresholds?.filter(t => t.questionId == props.question.Id)
-        console.log(thresholdsForThisQuestion)
-        if (thresholdsForThisQuestion == undefined || thresholdsForThisQuestion.length != props.defaultNumberOfThresholds) {
-            
-            const defaultThreshold = Array.from(Array(this.props.defaultNumberOfThresholds + 1).keys());
-            const defaultThresholdCollection = this.NumbersToThresholdCollection(props.question, defaultThreshold)
-            props.onChange(defaultThresholdCollection, props.question, props.questionnaire)
+        const questionThresholdNumbers = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)?.thresholdNumbers ?? []
+        const isNumberOfThresholdsInQuestionAllowed = this.allowedNumberOfThresholds.some(at => at == questionThresholdNumbers.length)
+        let desiredThresholdCount = questionThresholdNumbers.length;
+        if (!isNumberOfThresholdsInQuestionAllowed) {
+            desiredThresholdCount = this.allowedNumberOfThresholds[0]
         }
-        console.log(thresholdsForThisQuestion)
 
         this.state = {
             min: this.calculateMin(),
             max: this.calculateMax(),
+            desiredNumberOfThresholds: desiredThresholdCount
         }
+    }
+
+    CreateNewThresholds() : void {
+        const defaultThreshold = Array.from(Array(this.state.desiredNumberOfThresholds + 1).keys());
+        const defaultThresholdCollection = this.NumbersToThresholdCollection(this.props.question, defaultThreshold)
+        this.props.onChange(defaultThresholdCollection, this.props.question, this.props.questionnaire)
     }
 
 
     render(): JSX.Element {
+
         const questionnaire = this.props.questionnaire;
         const question = this.props.question;
 
         const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+        if (this.state.desiredNumberOfThresholds != thresholdForQuestion?.thresholdNumbers?.length) {
+            this.CreateNewThresholds();
+            return (<></>);
+        }
+
         const marks: number[] = []
         const minVal = this.calculateMin()
         const maxVal = this.calculateMax()
@@ -70,48 +80,67 @@ export class ColorSlider extends Component<Props, State> {
         let thresholdNumbers: ThresholdNumber[] = []
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
-     
+
 
         return (
-            <Grid container sx={{ alignItems: "center" }}>
-                <Grid item xs={1} >
-                    <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
-                </Grid>
-                <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10, position: "relative", zIndex: 1 }}>
-                    <ThemeProvider theme={createTheme({
-                        components: {
-                            MuiSlider: {
-                                styleOverrides: {
-                                    track: {
-                                        background: this.generateColor(thresholdNumbers),
-                                        border: 0
+            <Card elevation={2}>
+                <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} action={
+                    <ButtonGroup variant="text" >
+                        {[3, 5].map(number => {
+                            const isDesired = number == this.state.desiredNumberOfThresholds
+                            return (
+                                <Button sx={{ paddingLeft: 1, paddingRight: 1 }} onClick={() => { this.setState({ desiredNumberOfThresholds: number }); this.forceUpdate(); }}>
+                                    <Typography variant='h6' fontWeight={isDesired ? "bold" : "initial"}>
+                                        {number} grænser
+                                    </Typography>
+                                </Button>
+                            )
+                        })}
+                    </ButtonGroup>
+                } />
+                <Divider />
+                <CardContent>
+                    <Grid container sx={{ alignItems: "center" }}>
+                        <Grid item xs={1} >
+                            <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
+                        </Grid>
+                        <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10, position: "relative", zIndex: 1 }}>
+                            <ThemeProvider theme={createTheme({
+                                components: {
+                                    MuiSlider: {
+                                        styleOverrides: {
+                                            track: {
+                                                background: this.generateColor(thresholdNumbers),
+                                                border: 0
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    })}>
-                        <Slider
-                            disableSwap
-                            sx={{
-                                minHeight: 150,
+                            })}>
+                                <Slider
+                                    disableSwap
+                                    sx={{
+                                        minHeight: 150,
 
-                            }}
-                            key={"slider_" + question.Id}
-                            value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
-                            aria-labelledby="discrete-slider"
-                            valueLabelDisplay="off"
-                            step={0.1}
-                            min={this.state.min}
-                            max={this.state.max}
-                            marks={thresholdNumbers?.map(x => new mark(x))}
-                            onChange={(event, value) => this.setSliderPoint(value as number[])}
-                        />
-                    </ThemeProvider>
-                </Grid>
-                <Grid item xs={1}>
-                    <TextField label="Max" value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>
-                </Grid>
-            </Grid>
+                                    }}
+                                    key={"slider_" + question.Id}
+                                    value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
+                                    aria-labelledby="discrete-slider"
+                                    valueLabelDisplay="off"
+                                    step={0.1}
+                                    min={this.state.min}
+                                    max={this.state.max}
+                                    marks={thresholdNumbers?.map(x => new mark(x))}
+                                    onChange={(event, value) => this.setSliderPoint(value as number[])}
+                                />
+                            </ThemeProvider>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <TextField label="Max" value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
         )
     }
 
