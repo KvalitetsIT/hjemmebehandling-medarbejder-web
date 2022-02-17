@@ -44,7 +44,8 @@ export class ColorSlider extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        const questionThresholdNumbers = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)?.thresholdNumbers ?? []
+        const questionThresholdCollection = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)
+        const questionThresholdNumbers = questionThresholdCollection?.thresholdNumbers ?? []
         const isNumberOfThresholdsInQuestionAllowed = this.allowedNumberOfThresholds.some(at => at == questionThresholdNumbers.length)
         let desiredThresholdCount = questionThresholdNumbers.length;
         if (!isNumberOfThresholdsInQuestionAllowed) {
@@ -52,8 +53,8 @@ export class ColorSlider extends Component<Props, State> {
         }
 
         this.state = {
-            min: this.calculateMin(),
-            max: this.calculateMax(),
+            min: this.calculateMin(questionThresholdCollection),
+            max: this.calculateMax(questionThresholdCollection),
             desiredNumberOfThresholds: desiredThresholdCount
         }
     }
@@ -78,7 +79,6 @@ export class ColorSlider extends Component<Props, State> {
 
         const marks: number[] = []
         const minVal = this.calculateMin()
-        const maxVal = this.calculateMax()
         marks.push(minVal)
 
         let thresholdNumbers: ThresholdNumber[] = []
@@ -105,9 +105,7 @@ export class ColorSlider extends Component<Props, State> {
                 <Divider />
                 <CardContent>
                     <Grid container sx={{ alignItems: "center" }}>
-                        <Grid item xs={1} >
-                            <TextField label="Min" value={this.state.min} onChange={(event) => this.setMin(Number(event.currentTarget.value), minVal)} type="number" size='small'></TextField>
-                        </Grid>
+
                         <Grid item xs={10} sx={{ paddingLeft: 10, paddingRight: 10, position: "relative", zIndex: 1 }}>
                             <ThemeProvider theme={createTheme({
                                 components: {
@@ -115,10 +113,17 @@ export class ColorSlider extends Component<Props, State> {
                                         styleOverrides: {
                                             track: {
                                                 background: this.generateColor(thresholdNumbers),
-                                                border: 0
+                                                border: 0,
                                             },
                                             thumbColorPrimary: {
                                                 backgroundColor: 'white'
+                                            },
+                                        }
+                                    },
+                                    MuiFilledInput: {
+                                        styleOverrides: {
+                                            root: {
+                                                backgroundColor: "transparent"
                                             }
                                         }
                                     }
@@ -137,14 +142,16 @@ export class ColorSlider extends Component<Props, State> {
                                     step={0.1}
                                     min={this.state.min}
                                     max={this.state.max}
-                                    marks={thresholdNumbers?.map(x => this.renderBelowMark(x))}
+                                    marks={
+                                        [
+                                            ...thresholdNumbers?.map(x => this.renderFromMarks(x)),
+                                            this.renderToMark(thresholdNumbers[thresholdNumbers.length - 1])
+                                        ]}
                                     onChange={(event, value) => this.setSliderPoint(value as number[])}
                                 />
                             </ThemeProvider>
                         </Grid>
-                        <Grid item xs={1}>
-                            <TextField label="Max" value={this.state.max} onChange={(event) => this.setMax(Number(event.currentTarget.value), maxVal)} type="number" size='small'></TextField>
-                        </Grid>
+
                     </Grid>
                 </CardContent>
             </Card>
@@ -155,7 +162,52 @@ export class ColorSlider extends Component<Props, State> {
         if (this.hasDuplicates(sliderPoints)) //No point should have same value
             return;
 
-        this.props.onChange(this.NumbersToThresholdCollection(this.props.question, sliderPoints), this.props.question, this.props.questionnaire)
+        const thresholdCollection = this.NumbersToThresholdCollection(this.props.question, sliderPoints);
+
+        const max = this.calculateMax(thresholdCollection)
+        const min = this.calculateMin(thresholdCollection)
+
+        this.setState({ max: max, min: min })
+
+        this.props.onChange(thresholdCollection, this.props.question, this.props.questionnaire)
+    }
+
+    setSingleValue(thresholdnumber: ThresholdNumber, newValue: number, replaceFunc: (thresholdNumber: ThresholdNumber) => number) : void {
+        const thresholdNumbers = this.props.questionnaire?.thresholds?.find(x => x.questionId == this.props.question.Id)?.thresholdNumbers
+        if (thresholdNumbers == undefined)
+            return;
+
+        const values = thresholdNumbers.map(x => x.from!);
+
+        values.push(thresholdNumbers[thresholdNumbers.length - 1]!.to!)
+        const indexToReplace = values.findIndex(x => x == replaceFunc(thresholdnumber))
+
+        if (thresholdNumbers == undefined || values == undefined || indexToReplace == undefined || indexToReplace == -1)
+            return
+
+        console.log("før")
+        console.log(values)
+
+        values[indexToReplace] = newValue;
+        console.log("efter")
+        console.log(values);
+        this.setSliderPoint(this.correctValues(values))
+    }
+
+    correctValues(values: number[]): number[] {
+        console.log("=a==")
+        console.log(values)
+        let earlier = values[0];
+        for (let i = 1; i < values.length; i++) {
+            const current = values[i]
+            if (earlier > current) {
+                values[i] = earlier + 1
+            }
+            earlier = values[i]
+        }
+        console.log(values)
+        console.log("==B=")
+        return values;
     }
 
 
@@ -213,38 +265,24 @@ export class ColorSlider extends Component<Props, State> {
         return morePointsWithSameValue;
     }
 
-    calculateMin(): number {
-        const questionnaire = this.props.questionnaire;
-        const question = this.props.question;
-        const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+    calculateMin(thresholdCollection?: ThresholdCollection): number {
         let minOf: number[] = [0]
-        if (thresholdForQuestion)
-            minOf = thresholdForQuestion!.thresholdNumbers!.map(t => t?.from ?? 9999);
+        if (thresholdCollection)
+            minOf = thresholdCollection!.thresholdNumbers!.map(t => t?.from ?? 9999);
 
         const minVal = Math.min(...minOf);
+        console.log("min: " + minVal)
         return minVal;
 
     }
 
-    calculateMax(): number {
-        const questionnaire = this.props.questionnaire;
-        const question = this.props.question;
-        const thresholdForQuestion = questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+    calculateMax(thresholdCollection?: ThresholdCollection): number {
         let maxOf: number[] = [10]
-        if (thresholdForQuestion)
-            maxOf = thresholdForQuestion!.thresholdNumbers!.map(t => t?.to ?? 9999);
+        if (thresholdCollection)
+            maxOf = thresholdCollection!.thresholdNumbers!.map(t => t?.to ?? 9999);
         const maxVal = Math.max(...maxOf);
+        console.log("max: " + maxVal)
         return maxVal;
-    }
-
-    setMax(number: number, minVal: number): void {
-        const toSet = number < minVal ? minVal : number
-        this.setState({ max: toSet })
-    }
-
-    setMin(number: number, maxVal: number): void {
-        const toSet = number > maxVal ? maxVal : number
-        this.setState({ min: toSet })
     }
 
     NumbersToThresholdCollection(question: Question, numbers: number[]): ThresholdCollection {
@@ -259,28 +297,43 @@ export class ColorSlider extends Component<Props, State> {
             threshold.to = numbers[i + 1]
             threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
+            console.log(this.categoryToString(threshold.category) + ": " + threshold.from + " => " + threshold.to)
         }
 
         return thresholdCollection;
     }
 
-    renderBelowMark(thresholdnumber: ThresholdNumber): { label: JSX.Element, value: number } {
+    renderFromMarks(thresholdnumber: ThresholdNumber): { label: JSX.Element, value: number } {
         const label = (
             <Box position="absolute" zIndex={9999999}>
                 <Grid container>
                     <Grid item xs={12}>
                         <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
                         <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
-                        <Box marginTop={5} minWidth={50} maxWidth={70}>
-                            <TextField inputProps={{ style: { zIndex: -999 } }} variant='filled' value={thresholdnumber.from} type="number"></TextField>
+                        <Box marginTop={5} minWidth={70} maxWidth={90}>
+                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.from!)} inputProps={{ style: { zIndex: -999 } }} variant='filled' defaultValue={thresholdnumber.from} type="number"></TextField>
                         </Box>
                     </Grid>
-
-
                 </Grid>
             </Box>
         )
         return { label: label, value: thresholdnumber.from! }
+    }
+    renderToMark(thresholdnumber: ThresholdNumber): { label: JSX.Element, value: number } {
+        const label = (
+            <Box position="absolute" zIndex={9999999}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Box marginTop={5} minWidth={70} maxWidth={90}>
+                            <br />
+                            <br />
+                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.to!)} inputProps={{ style: { zIndex: -999 } }} variant='filled' defaultValue={thresholdnumber.to} type="number"></TextField>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Box>
+        )
+        return { label: label, value: thresholdnumber.to! }
     }
 
     categoryToString(categoryEnum: CategoryEnum): string {

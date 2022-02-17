@@ -111,7 +111,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.question3.Id = "q3";
         this.question3.question = "Føler du dig frisk idag?"
-        this.question3.type = QuestionTypeEnum.OBSERVATION;
+        this.question3.type = QuestionTypeEnum.BOOLEAN;
 
         this.question4.Id = "q4";
         const q4EnableWhen = new EnableWhen<boolean>();
