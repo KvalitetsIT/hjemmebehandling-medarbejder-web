@@ -63,6 +63,11 @@ export class ColorSlider extends Component<Props, State> {
         const defaultThreshold = Array.from(Array(this.state.desiredNumberOfThresholds + 1).keys());
         const defaultThresholdCollection = this.NumbersToThresholdCollection(this.props.question, defaultThreshold)
         this.props.onChange(defaultThresholdCollection, this.props.question, this.props.questionnaire)
+        this.setState({
+            min: this.calculateMin(defaultThresholdCollection),
+            max: this.calculateMax(defaultThresholdCollection),
+        })
+
     }
 
 
@@ -172,7 +177,7 @@ export class ColorSlider extends Component<Props, State> {
         this.props.onChange(thresholdCollection, this.props.question, this.props.questionnaire)
     }
 
-    setSingleValue(thresholdnumber: ThresholdNumber, newValue: number, replaceFunc: (thresholdNumber: ThresholdNumber) => number) : void {
+    setSingleValue(thresholdnumber: ThresholdNumber, newValue: number, replaceFunc: (thresholdNumber: ThresholdNumber) => number): void {
         const thresholdNumbers = this.props.questionnaire?.thresholds?.find(x => x.questionId == this.props.question.Id)?.thresholdNumbers
         if (thresholdNumbers == undefined)
             return;
@@ -271,7 +276,6 @@ export class ColorSlider extends Component<Props, State> {
             minOf = thresholdCollection!.thresholdNumbers!.map(t => t?.from ?? 9999);
 
         const minVal = Math.min(...minOf);
-        console.log("min: " + minVal)
         return minVal;
 
     }
@@ -281,7 +285,6 @@ export class ColorSlider extends Component<Props, State> {
         if (thresholdCollection)
             maxOf = thresholdCollection!.thresholdNumbers!.map(t => t?.to ?? 9999);
         const maxVal = Math.max(...maxOf);
-        console.log("max: " + maxVal)
         return maxVal;
     }
 
@@ -299,7 +302,8 @@ export class ColorSlider extends Component<Props, State> {
             thresholdCollection.thresholdNumbers.push(threshold);
             console.log(this.categoryToString(threshold.category) + ": " + threshold.from + " => " + threshold.to)
         }
-
+        console.log("thresholdCollection")
+        console.log(thresholdCollection)
         return thresholdCollection;
     }
 

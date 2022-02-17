@@ -109,7 +109,8 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
 
         }
-
+        console.log("modified")
+        console.log(modified)
         this.setState({ planDefinition: modified })
     }
 
