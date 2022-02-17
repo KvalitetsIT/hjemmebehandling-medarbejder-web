@@ -26,13 +26,17 @@ export class ColorSlider extends Component<Props, State> {
     static contextType = ApiContext
     allowedNumberOfThresholds = [3, 5];
 
+    green = '#61BD84'
+    yellow = '#FFD78C'
+    red = '#EE6969'
+
     getChipColorFromCategory(category: CategoryEnum): string {
         if (category === CategoryEnum.RED)
-            return "rgba(255,29,0,1) "
+            return this.red
         if (category === CategoryEnum.YELLOW)
-            return "rgba(228,255,0,1)"
+            return this.yellow
         if (category === CategoryEnum.GREEN)
-            return "rgba(2,218,63,1)"
+            return this.green
 
         return ""
 
@@ -54,7 +58,7 @@ export class ColorSlider extends Component<Props, State> {
         }
     }
 
-    CreateNewThresholds() : void {
+    CreateNewThresholds(): void {
         const defaultThreshold = Array.from(Array(this.state.desiredNumberOfThresholds + 1).keys());
         const defaultThresholdCollection = this.NumbersToThresholdCollection(this.props.question, defaultThreshold)
         this.props.onChange(defaultThresholdCollection, this.props.question, this.props.questionnaire)
@@ -112,6 +116,9 @@ export class ColorSlider extends Component<Props, State> {
                                             track: {
                                                 background: this.generateColor(thresholdNumbers),
                                                 border: 0
+                                            },
+                                            thumbColorPrimary: {
+                                                backgroundColor: 'white'
                                             }
                                         }
                                     }
