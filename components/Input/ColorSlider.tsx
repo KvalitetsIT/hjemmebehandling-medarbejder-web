@@ -86,7 +86,7 @@ export class ColorSlider extends Component<Props, State> {
             <Card elevation={2}>
                 <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} action={
                     <ButtonGroup variant="text" >
-                        {[3, 5].map(number => {
+                        {this.allowedNumberOfThresholds.map(number => {
                             const isDesired = number == this.state.desiredNumberOfThresholds
                             return (
                                 <Button sx={{ paddingLeft: 1, paddingRight: 1 }} onClick={() => { this.setState({ desiredNumberOfThresholds: number }); this.forceUpdate(); }}>
