@@ -3,7 +3,7 @@ import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
@@ -275,11 +275,32 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: questionnaire })
     }
 
+    findClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean) : number{
+        //FindIndex-method starts at index 0 and increments from there
+        //FindClosesIndex-method starts at the closestToIndex-param and finds the index matching the given predicate that is closest to the the provided index
+
+        let left = closestToIndex;
+        let right = closestToIndex
+        let result = -1;
+        while (!(left == 0 && right == list.length - 1) && result == -1) {
+            if (predicate(list[left], left))
+                result = left;
+            if (predicate(list[right], right))
+                result = right;
+
+            left = left - 1 <= 0 ? 0 : left - 1;
+            right = right + 1 > list.length ? list.length : right + 1;
+        }
+
+        return result
+    }
+
     MoveItemFromIndex(index: number, step: number): void {
-        const toPosition = index + step;
+
         const fromPosition = index;
 
         const beforeQuestionnaire = this.state.questionnaire;
+
         if (!beforeQuestionnaire)
             return;
 
@@ -287,15 +308,23 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         if (!oldQuestions)
             return;
 
+        let toPosition = -1;
+
+        const isQuestionParent = (question: Question) => question instanceof Question && question.enableWhen?.questionId == undefined;
+
+        const moveItemUp = step < 0;
+        if (moveItemUp) {
+            toPosition = this.findClosestIndex(index, oldQuestions, (e, i) => i <= index + step && isQuestionParent(e))
+        }
+
+        const moveItemDown = step > 0;
+        if (moveItemDown) {
+            toPosition = this.findClosestIndex(index, oldQuestions, (e, i) => i >= index + step && isQuestionParent(e))
+        }
+
         const fromPositionItem = oldQuestions[fromPosition];
         const toPositionItem = oldQuestions[toPosition];
         if (!fromPositionItem || !toPositionItem)
-            return;
-
-        if (oldQuestions.length < index + step)
-            return;
-
-        if (index + step < 0)
             return;
 
         const newQuestions = oldQuestions;
@@ -306,10 +335,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         afterQuestionnaire.questions = newQuestions;
 
         this.setState({ questionnaire: afterQuestionnaire })
-
     }
-
-
-
 }
+
 export default EditQuestionnairePage;
