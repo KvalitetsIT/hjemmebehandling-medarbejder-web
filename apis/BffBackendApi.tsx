@@ -21,6 +21,7 @@ import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
+import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -42,16 +43,29 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
+        try {
+            const allplanDefinitions = await this.GetAllPlanDefinitions()
+            const result = allplanDefinitions.find(x => x.id == planDefinitionId);
+            if (!result)
+                throw new NotFoundError()
+
+            return result
+        } catch (error) {
+            return this.HandleError(error)
+        }
+    }
+
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         console.log(questionnaire)
         throw new NotImplementedError()
     }
-    
+
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         try {
             console.log(questionnaireId)
             const request = {
-                id : questionnaireId
+                id: questionnaireId
             }
             const questionnaireDto = await this.questionnaireApi.getQuestionnaireById(request);
             return this.toInternal.mapQuestionnaire(questionnaireDto);

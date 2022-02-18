@@ -79,6 +79,14 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
 
+  async GetPlanDefinitionById(planDefinitionId : string): Promise<PlanDefinition> {
+    try {
+      return await this.backendApi.GetPlanDefinitionById(planDefinitionId);
+    } catch (error: unknown) {
+      return this.HandleError(error);
+    }
+  }
+
   async GetUnfinishedQuestionnaireResponseTasks(page: number, pagesize: number): Promise<Array<Task>> {
     try {
       this.ValidatePagination(page, pagesize);

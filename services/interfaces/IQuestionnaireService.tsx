@@ -65,6 +65,13 @@ export interface IQuestionnaireService {
   GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>
 
   /**
+  * Returns one single plandefinitions in system
+  * @param planDefinitionId the id of the plandefinition to fetch
+  * @returns one single plandefinition
+  * @throws if plandefinition with id does not exist 
+  */
+  GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition>
+  /**
    * Returns all questionnaireresponses that
    * - Has a reference to the provided careplan and
    * - Has a reference to any of the provided questionnaireids

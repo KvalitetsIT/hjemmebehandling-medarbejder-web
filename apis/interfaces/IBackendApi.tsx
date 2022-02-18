@@ -35,6 +35,14 @@ export interface IBackendApi {
      */
     GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
 
+    /**
+     * Returns one single plandefinitions in system
+     * @param planDefinitionId the id of the plandefinition to fetch
+     * @returns one single plandefinition
+     * @throws if plandefinition with id does not exist 
+     */
+     GetPlanDefinitionById(planDefinitionId : string): Promise<PlanDefinition>;
+
 
     /**
      * Add a questionnaire to the careplan

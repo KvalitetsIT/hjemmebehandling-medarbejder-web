@@ -64,7 +64,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     task1: Task = new Task();
     task2: Task = new Task();
     task3: Task = new Task();
-    
+
 
     constructor() {
         super();
@@ -139,7 +139,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.version = "1"
 
         this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
-        
+
 
 
         this.questionnaire2.id = "qn2"
@@ -219,7 +219,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.careplan2.organization.name = "Infektionssygdomme";
         this.careplan2.planDefinitions = [this.planDefinition2]
         this.careplan2.creationDate = this.CreateDate()
-        this.careplan2.terminationDate = this.CreateDate()  
+        this.careplan2.terminationDate = this.CreateDate()
         this.careplan2.questionnaires = [this.questionnaire1]
 
         //======================================= Response // QuestionResponse1
@@ -231,7 +231,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap1 = new Map<Question, Answer>();
-       // questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+        // questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
@@ -247,7 +247,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap2 = new Map<Question, Answer>();
-      //  questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+        //  questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(35, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(10, UnitType.NOUNIT));
         questionAnswerMap2.set(this.question4, this.CreateBooleanAnswer(true));
@@ -262,7 +262,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
 
         const questionAnswerMap3 = new Map<Question, Answer>();
-       // questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
+        // questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![1].option));
         questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(90, UnitType.NOUNIT));
         questionAnswerMap3.set(this.question4, this.CreateBooleanAnswer(true));
@@ -330,13 +330,22 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
+        const allplanDefinitions = await this.GetAllPlanDefinitions()
+        const result = allplanDefinitions.find(x => x.id == planDefinitionId);
+        if (!result)
+            throw new NotFoundError()
+
+        return result
+    }
+    
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         return [this.questionnaire1, this.questionnaire2, this.questionnaire3].find(x => x.id == questionnaireId)
     }
     async GetAllQuestionnaires(): Promise<Questionnaire[]> {
         return [this.questionnaire1, this.questionnaire2, this.questionnaire3];
     }
-    
+
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         throw new NotImplementedError()
     }

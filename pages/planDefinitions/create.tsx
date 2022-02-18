@@ -6,6 +6,7 @@ import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDe
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
+import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../_context";
 
 interface State {
@@ -14,16 +15,21 @@ interface State {
     openAccordians: boolean[]
 }
 
+interface Props {
+    match: { params: { plandefinitionid?: string } }
+}
+
 enum AccordianRowEnum {
     generelInfo,
     attachQuestionnaire,
     thresholds
 }
 
-export default class CreatePlandefinition extends React.Component<{}, State> {
+export default class CreatePlandefinition extends React.Component<Props, State> {
     static contextType = ApiContext
+    questionnaireService!: IQuestionnaireService
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props)
 
         const accordian: boolean[] = [];
@@ -40,6 +46,24 @@ export default class CreatePlandefinition extends React.Component<{}, State> {
 
     }
 
+    InitializeServices(): void {
+        this.questionnaireService = this.context.questionnaireService;
+    }
+
+    async componentDidMount() : Promise<void> {
+        this.setState({ loading: true })
+        try {
+            const providedPlanDefinitionId = this.props.match.params.plandefinitionid
+            if (providedPlanDefinitionId) {
+                const planDefinitionToEdit = await this.questionnaireService.GetPlanDefinitionById(providedPlanDefinitionId)
+                this.setState({ planDefinition: planDefinitionToEdit });
+            }
+        } catch (error) {
+            this.setState(() => { throw error });
+        }
+        this.setState({ loading: false })
+    }
+
     toggleAccordian(page: AccordianRowEnum, overrideExpanded?: boolean): void {
         this.closeAllAccordians();
         const oldAccordians = this.state.openAccordians
@@ -47,16 +71,16 @@ export default class CreatePlandefinition extends React.Component<{}, State> {
         this.setState({ openAccordians: oldAccordians })
     }
 
-    closeAllAccordians() : void {
+    closeAllAccordians(): void {
         const openAccordians = this.state.openAccordians
         openAccordians[AccordianRowEnum.generelInfo] = false
-        openAccordians[AccordianRowEnum.thresholds]= false
-        openAccordians[AccordianRowEnum.attachQuestionnaire]= false
+        openAccordians[AccordianRowEnum.thresholds] = false
+        openAccordians[AccordianRowEnum.attachQuestionnaire] = false
         this.setState({ openAccordians: openAccordians })
     }
 
     expandNextPage(currentPage: AccordianRowEnum): void {
-        
+
         this.toggleAccordian(currentPage, false)
         switch (currentPage) {
             case AccordianRowEnum.generelInfo:
@@ -74,6 +98,7 @@ export default class CreatePlandefinition extends React.Component<{}, State> {
     }
 
     renderCareplanTab(): JSX.Element {
+        this.InitializeServices();
         return (
             <>
                 <Typography variant="h6">Opret patientgruppe</Typography>
