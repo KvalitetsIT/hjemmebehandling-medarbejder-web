@@ -276,7 +276,6 @@ class EditQuestionnairePage extends React.Component<Props, State> {
     }
 
     MoveItemFromIndex(index: number, step: number): void {
-        this.setState({ loading: true })
         const toPosition = index + step;
         const fromPosition = index;
 
@@ -293,6 +292,11 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         if (!fromPositionItem || !toPositionItem)
             return;
 
+        if (oldQuestions.length < index + step)
+            return;
+
+        if (index + step < 0)
+            return;
 
         const newQuestions = oldQuestions;
         newQuestions[fromPosition] = toPositionItem;
@@ -301,7 +305,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         const afterQuestionnaire = beforeQuestionnaire;
         afterQuestionnaire.questions = newQuestions;
 
-        this.setState({ questionnaire: afterQuestionnaire, loading: false })
+        this.setState({ questionnaire: afterQuestionnaire })
 
     }
 
