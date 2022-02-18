@@ -35,7 +35,6 @@ class InactivePatients extends React.Component<Props,State> {
     }
 
     renderPage() : JSX.Element{
-      const currentPage = parseInt(this.props.match.params.pagenr);
         return (<>
             <Box paddingBottom={2}>
             <Typography variant="h6">
@@ -43,7 +42,7 @@ class InactivePatients extends React.Component<Props,State> {
           </Typography>
           </Box>
 
-          <PatientsTable showActivePatients={false} pagenumber={currentPage}></PatientsTable>
+          <PatientsTable showActivePatients={false} ></PatientsTable>
           </>
         )
     }

@@ -37,7 +37,6 @@ componentDidMount() : void{
     }
 
     renderPage() : JSX.Element{
-      const currentPage = parseInt(this.props.match.params.pagenr);
         return (<>
           <Box paddingBottom={2}>
           <Typography variant="h6">
@@ -45,7 +44,7 @@ componentDidMount() : void{
         </Typography>
         </Box>
 
-        <PatientsTable showActivePatients={true} pagenumber={currentPage}></PatientsTable>
+        <PatientsTable showActivePatients={true} ></PatientsTable>
 
          
         </>
