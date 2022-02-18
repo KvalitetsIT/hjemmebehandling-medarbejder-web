@@ -1,19 +1,18 @@
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { TaskType } from '@kvalitetsit/hjemmebehandling/Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext from '../../pages/_context';
 import { Task } from '@kvalitetsit/hjemmebehandling/Models/Task';
-import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
+import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import FhirUtils from '../../util/FhirUtils';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
+import { PageSelectorButtons } from '../Input/PageSelectorButtons';
 
 export interface Props {
   taskType: TaskType
@@ -37,8 +36,8 @@ export class Tasklist extends Component<Props, State> {
     super(props);
     this.state = {
       tasks: [],
-      loading: true,
-      smallLoading: false,
+      loading: false,
+      smallLoading: true,
       pageNumber: 1
     }
 
@@ -56,34 +55,35 @@ export class Tasklist extends Component<Props, State> {
     this.questionnaireService = this.context.questionnaireService;
     this.dateHelper = this.context.dateHelper;
   }
-  async componentDidMount(): Promise<void> {
-    try {
 
-      await this.populateQuestionnaireResponses(this.state.pageNumber);
-    } catch (error : unknown) {
-      this.setState(() => { throw error })
-    }
-
-  }
-
-  async populateQuestionnaireResponses(pageNumber: number): Promise<void> {
+  async getData(pageNumber: number): Promise<Task[]> {
     this.setState({
       smallLoading: true
     });
 
     let tasks: Task[] = []
-
-    if (this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
-      tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(pageNumber, this.props.pageSize)
-    }
-    if (this.props.taskType === TaskType.UNANSWERED_QUESTIONNAIRE) {
-      tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(pageNumber, this.props.pageSize)
+    try {
+      if (this.props.taskType === TaskType.UNFINISHED_RESPONSE) {
+        tasks = await this.questionnaireService.GetUnfinishedQuestionnaireResponseTasks(pageNumber, this.props.pageSize)
+      }
+      if (this.props.taskType === TaskType.UNANSWERED_QUESTIONNAIRE) {
+        tasks = await this.questionnaireService.GetUnansweredQuestionnaireTasks(pageNumber, this.props.pageSize)
+      }
+    } catch (error) {
+      this.setState(() => { throw error })
     }
 
     this.setState({
+      smallLoading: false
+    });
+    return tasks;
+  }
+
+  async populateQuestionnaireResponses(pageNumber: number, tasks: Task[]): Promise<void> {
+    this.setState({
+      pageNumber: pageNumber,
       tasks: tasks,
-      smallLoading: false,
-      loading: false
+      smallLoading: false
     });
   }
 
@@ -117,7 +117,7 @@ export class Tasklist extends Component<Props, State> {
   async removeAlarm(task: Task): Promise<void> {
     try {
       await this.questionnaireService.RemoveAlarm(task)
-      await this.populateQuestionnaireResponses(this.state.pageNumber);
+      this.forceUpdate();
     } catch (error) {
       this.setState(() => { throw error })
     }
@@ -128,23 +128,11 @@ export class Tasklist extends Component<Props, State> {
     await this.removeAlarm(task);
   }
 
-  async nextPage(): Promise<void> {
-    const nextPageNumber = this.state.pageNumber + 1
-    this.setState({ pageNumber: nextPageNumber })
-    await this.populateQuestionnaireResponses(nextPageNumber)
-  }
-  async previousPage(): Promise<void> {
-    const previousPageNumber = this.state.pageNumber - 1
-    this.setState({ pageNumber: previousPageNumber })
-    await this.populateQuestionnaireResponses(previousPageNumber)
+  async setPageNumber(pageNumber: number) : Promise<void>{
+    this.setState({ pageNumber: pageNumber })
   }
 
   renderTableData(tasks: Array<Task>): JSX.Element {
-
-    const hasMorePages: boolean = this.state.tasks.length >= this.props.pageSize;
-    const currentpage = this.state.pageNumber
-    const previouspage: number = currentpage - 1
-
     return (<>
       <TableContainer component={Card}>
         {this.state.smallLoading ? <LoadingSmallComponent /> :
@@ -197,12 +185,11 @@ export class Tasklist extends Component<Props, State> {
           </IsEmptyCard>
         }
       </TableContainer>
-      <ButtonGroup>
-        <Button variant="text" className='button__page-switch' onClick={async () => await this.previousPage()} disabled={previouspage <= 0}><NavigateBeforeIcon /></Button>
-        <Button variant="text" className='button__page-switch' disabled> {currentpage} </Button>
-        <Button variant="text" className='button__page-switch' onClick={async () => await this.nextPage()} disabled={!hasMorePages}><NavigateNextIcon /></Button>
-      </ButtonGroup>
-
+      <PageSelectorButtons
+        currentPageNumber={this.state.pageNumber}
+        setPage={async (pageNumber, data) => await this.populateQuestionnaireResponses(pageNumber, data as Task[])}
+        getData={async (pageNumber) => (await this.getData(pageNumber)) as Task[]}
+      />
     </>
     )
   }
