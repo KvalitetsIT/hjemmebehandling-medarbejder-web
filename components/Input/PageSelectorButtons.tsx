@@ -20,7 +20,7 @@ export class PageSelectorButtons extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            hasNextPage: true
+            hasNextPage: false
         }
     }
 
