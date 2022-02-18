@@ -41,8 +41,8 @@ export class EnableWhenSelect extends Component<Props, State> {
     renderBoolean() : JSX.Element {
         return (
             <FormControl sx={{minWidth:150}}>
-                <InputLabel id="demo-simple-select-label">Hvis overspørgsmål er</InputLabel>
-                <Select defaultValue='' label="Hvis overspørgsmål er" value={this.state.enableWhen?.answer?.toString() ?? ""} onChange={this.handleChange}>
+                <InputLabel id="demo-simple-select-label">Hvis spørgsmål er</InputLabel>
+                <Select defaultValue='' label="Hvis spørgsmål er" value={this.state.enableWhen?.answer?.toString() ?? ""} onChange={this.handleChange}>
                     <MenuItem value={true.toString()}>Ja</MenuItem>
                     <MenuItem value={false.toString()}>Nej</MenuItem>
                 </Select>
