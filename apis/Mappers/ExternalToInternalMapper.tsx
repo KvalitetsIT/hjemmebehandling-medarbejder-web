@@ -91,7 +91,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         const planDefinition = new PlanDefinition()
 
-        planDefinition.id = planDefinitionDto.id!
+        planDefinition.id = FhirUtils.unqualifyId(planDefinitionDto.id!);
         planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
         planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
         planDefinition.status = "HardCodedActive"; //TODO: Implement in BFF

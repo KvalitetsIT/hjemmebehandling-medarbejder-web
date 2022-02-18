@@ -6,6 +6,7 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionnaireWrapperDto } from "../../generated/models";
+import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
 /**
@@ -113,7 +114,7 @@ export default class InternalToExternalMapper extends BaseMapper {
     mapPlanDefinition(planDefinition: PlanDefinition): PlanDefinitionDto {
 
         return {
-            id: planDefinition!.id!,
+            id: FhirUtils.qualifyId(planDefinition.id!,Qualifier.PlanDefinition),
             name: planDefinition.name,
             questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q))
         }

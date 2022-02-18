@@ -33,5 +33,6 @@ export enum Qualifier {
     CarePlan,
     Patient,
     Questionnaire,
-    QuestionnaireResponse
+    QuestionnaireResponse,
+    PlanDefinition,
 }
