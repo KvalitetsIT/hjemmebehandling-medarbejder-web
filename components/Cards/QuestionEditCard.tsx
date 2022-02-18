@@ -17,7 +17,7 @@ interface Props {
     parentQuestion?: Question
     question: Question
     getThreshold?: (question: Question) => ThresholdCollection
-    addSubQuestionAction?: (parentQuestion?: Question) => void
+    addSubQuestionAction?: (referenceQuestion: Question | undefined, isParent : boolean) => void
     removeQuestionAction: (questionToRemove: Question) => void
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
@@ -136,7 +136,7 @@ export class QuestionEditCard extends Component<Props, State>{
                         </CardContent>
 
                         <CardActions disableSpacing>
-                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question)}><AddCircleOutlineIcon/>Tilføj underspørgsmål</Button>
+                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}><AddCircleOutlineIcon/>Tilføj underspørgsmål</Button>
 
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
 
@@ -144,7 +144,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     <IconButton onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                         <DeleteOutlineIcon />
                                     </IconButton>
-                                    <Button sx={{padding:2}} onClick={() => this.props.addSubQuestionAction!(undefined)}> <AddCircleIcon/>Tilføj nyt spørgsmål</Button>
+                                    <Button sx={{padding:2}} onClick={() => this.props.addSubQuestionAction!(this.props.question,false)}> <AddCircleIcon/>Tilføj nyt spørgsmål</Button>
                                 </ButtonGroup>
                             </Stack>
                         </CardActions>

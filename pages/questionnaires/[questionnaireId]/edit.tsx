@@ -144,7 +144,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                             <QuestionEditCard
                                                 key={question.Id}
                                                 getThreshold={this.getThresholds}
-                                                addSubQuestionAction={(q) => this.addQuestion(q)}
+                                                addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
                                                 removeQuestionAction={this.removeQuestion}
                                                 moveItemUp={() => this.MoveItemFromIndex(index, -1)}
                                                 moveItemDown={() => this.MoveItemFromIndex(index, 1)}
@@ -202,7 +202,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
     }
 
     tempQuestionId = 0;
-    addQuestion(parrentQuestion?: Question): void {
+    addQuestion(referenceQuestion: Question | undefined, isParent: boolean): void {
         const beforeUpdate = this.state.questionnaire;
 
         if (!beforeUpdate?.questions)
@@ -210,13 +210,14 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         const newQuestion = new Question();
         newQuestion.Id = "" + this.tempQuestionId++;
-        if (parrentQuestion) {
+        if (referenceQuestion && isParent) {
             const enableWhen = new EnableWhen<boolean>();
-            enableWhen.questionId = parrentQuestion.Id;
+            enableWhen.questionId = referenceQuestion.Id;
             newQuestion.enableWhen = enableWhen;
         }
 
-        beforeUpdate.questions.push(newQuestion);
+        const indexOfRefQuestion = beforeUpdate.questions.findIndex(q => q.Id == referenceQuestion?.Id)
+        beforeUpdate.questions.splice(indexOfRefQuestion + 1, 0, newQuestion)
 
         this.setState({ questionnaire: beforeUpdate })
     }
@@ -230,7 +231,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: modifiedQuestionnaire })
     }
 
-    setName(questionnaire: Questionnaire, newValue: string) : Questionnaire{
+    setName(questionnaire: Questionnaire, newValue: string): Questionnaire {
         const modifiedQuestionnaire = questionnaire;
         modifiedQuestionnaire.name = newValue;
         return modifiedQuestionnaire;

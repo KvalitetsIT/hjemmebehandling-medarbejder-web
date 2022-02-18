@@ -70,7 +70,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                                             <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
                                             <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
                                             <TableCell>
-                                                <Button component={Link} to={"/plandefinitions/"+planDefinition.id+"/edit"} variant="outlined">Redigér</Button>
+                                                <Button component={Link} to={"/plandefinitions/"+planDefinition.id +"/edit"} variant="outlined">Redigér</Button>
                                                 <Button variant="contained">Se mere</Button>
                                             </TableCell>
 
