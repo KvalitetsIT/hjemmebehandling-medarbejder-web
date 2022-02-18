@@ -21,48 +21,15 @@ import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
 import { AccordionActions } from '@mui/material';
-import { BaseServiceError, DisplaySettings } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
+import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { PatientAvatar } from '../components/Avatars/PatientAvatar';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { LoadingButton } from '@mui/lab';
+import { MissingContactDetailsError } from '../components/Errors/MissingContactDetailsError';
 
-
-
-class MissingContactDetailsError extends BaseServiceError {
-
-
-  private missingDetalis: string[]
-
-  constructor(missingDetalis: string[]) {
-    super();
-    this.missingDetalis = missingDetalis
-  }
-
-  displayMessage(): string {
-
-    const message: string = ""
-
-    this.missingDetalis.forEach(x => {
-      message.concat(x + "\n")
-    })
-
-    return message;
-  }
-
-  displayTitle(): string {
-    return this.missingDetalis.length > 0 ? "Følgende informationer mangler" : "Informationer mangler"
-  }
-
-  displayUrl(): string {
-    return "";
-  }
-  displaySettings(): DisplaySettings {
-    return new DisplaySettings();
-  }
-}
 
 /**
  * Contains booleans that tells which sections that should be open
