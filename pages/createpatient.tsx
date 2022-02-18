@@ -21,12 +21,48 @@ import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
 import { AccordionActions } from '@mui/material';
-import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
+import { BaseServiceError, DisplaySettings } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { PatientAvatar } from '../components/Avatars/PatientAvatar';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { LoadingButton } from '@mui/lab';
+
+
+
+class MissingContactDetailsError extends BaseServiceError {
+
+
+  private missingDetalis: string[]
+
+  constructor(missingDetalis: string[]) {
+    super();
+    this.missingDetalis = missingDetalis
+  }
+
+  displayMessage(): string {
+
+    const message: string = ""
+
+    this.missingDetalis.forEach(x => {
+      message.concat(x + "\n")
+    })
+
+    return message;
+  }
+
+  displayTitle(): string {
+    return this.missingDetalis.length > 0 ? "Følgende informationer mangler" : "Informationer mangler"
+  }
+
+  displayUrl(): string {
+    return "";
+  }
+  displaySettings(): DisplaySettings {
+    return new DisplaySettings();
+  }
+}
 
 /**
  * Contains booleans that tells which sections that should be open
@@ -54,13 +90,12 @@ export interface State {
   careplan?: PatientCareplan;
   newCareplanId?: string;
   loading: boolean;
-  canSubmit: boolean;
   submitted: boolean
   errorToast: JSX.Element
   patientError?: string;
   contactError?: string;
   planDefinitionError?: string
-
+  validating: boolean
 }
 
 
@@ -81,8 +116,8 @@ export default class CreatePatient extends Component<Props, State> {
       loading: true,
       submitted: false,
       errorToast: (<></>),
-      canSubmit: false,
-      accordians: props.openAccordians
+      accordians: props.openAccordians,
+      validating: false,
     }
 
   }
@@ -94,7 +129,7 @@ export default class CreatePatient extends Component<Props, State> {
   createNewEmptyCareplan(): PatientCareplan {
     const relativeContact = new Contact();
     const newPatient = new PatientDetail();
-    newPatient.address = new Address()
+    newPatient.address = new Address();
 
     newPatient.contact = relativeContact
 
@@ -104,13 +139,18 @@ export default class CreatePatient extends Component<Props, State> {
   }
 
   async submitPatient(): Promise<void> {
+    this.setState({ errorToast: <></> })
     if (!(this.state.careplan && this.state.careplan.patient)) {
+
       return;
     }
 
     this.state.careplan.patient = this.state.patient;
-    this.setState({ loading: true })
+
     try {
+
+      await this.validateAll()
+      this.setState({ loading: true })
       let careplanId: string | undefined;
 
       if (this.props.editmode) {
@@ -173,11 +213,38 @@ export default class CreatePatient extends Component<Props, State> {
     marginTop: 2
   }
 
-  triggerOnChangeEvent(id: string): void {
-    const input = document.getElementById(id);
-    const event = new Event("input", { bubbles: true });
-    if (input)
-      input.dispatchEvent(event)
+  triggerEventOnTagName(className: string, event: Event): void {
+    const input = document.getElementsByTagName(className);
+    Array.from(input).forEach(x => x.dispatchEvent(event))
+  }
+
+
+  async validateAll(): Promise<void> {
+    this.setState({ validating: true })
+    this.triggerEventOnTagName("input", new Event("input", { bubbles: true }))
+    await new Promise(f => setTimeout(f, 100)) 
+
+    const errors: string[] = []
+
+    if (this.state.careplan?.planDefinitions.length === 0) {
+      errors.push("Ingen behandlingsplaner")
+    }
+
+    if (this.state.contactError != undefined) {
+      errors.push(this.state.contactError)
+    }
+    if (this.state.patientError != undefined) {
+      errors.push(this.state.patientError)
+    }
+    if (this.state.planDefinitionError != undefined) {
+      errors.push(this.state.planDefinitionError)
+    }
+
+    this.setState({ validating: false })
+    if (errors.length > 0) {
+      throw new MissingContactDetailsError(errors);
+    }
+
   }
 
 
@@ -187,7 +254,6 @@ export default class CreatePatient extends Component<Props, State> {
     }
     this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })
   }
-
 
 
   render(): JSX.Element {
@@ -202,17 +268,15 @@ export default class CreatePatient extends Component<Props, State> {
     if (!(this.state.patient && this.state.careplan))
       return (<div>Fandt ikke patienten</div>)
 
-    let canSubmit: boolean = true;
-    canSubmit &&= this.state.patient.cpr ? true : false; //CPR Must be filled
-    canSubmit &&= !this.state.patientError ? true : false; //No errors in patient section
-    canSubmit &&= !this.state.contactError ? true : false //No errors in contact section
-    canSubmit &&= !this.state.planDefinitionError ? true : false //No errors in planDefinitionSection
-    canSubmit &&= this.state.careplan.planDefinitions.length === 0 ? false : true; //Plandefinition must be filled!
-
-
-
     return (
-      <form onSubmit={(e) => { e.preventDefault(); this.submitPatient() }} noValidate onBlur={() => this.forceUpdate()}  >
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          this.submitPatient()
+        }}
+
+        noValidate
+        onBlur={() => this.forceUpdate()}  >
         <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
 
 
@@ -242,9 +306,9 @@ export default class CreatePatient extends Component<Props, State> {
                 </AccordionDetails>
                 <AccordionActions>
 
-                  <Button className="accordion__button" sx={this.continueButtonStyle} disabled={this.state.patientError ? true : false} onClick={() => {
+                  <Button className="accordion__button" sx={this.continueButtonStyle} /* disabled={this.state.patientError ? true : false} */ onClick={() => {
                     this.goToRelativeContactIsOpen()
-                    this.triggerOnChangeEvent("contactPrimaryPhone")
+
                   }} variant="contained">Fortsæt</Button>
 
 
@@ -271,13 +335,10 @@ export default class CreatePatient extends Component<Props, State> {
                   </Typography>
                 </AccordionDetails>
                 <AccordionActions>
-                  <Tooltip title={<Typography>{this.state.contactError}</Typography>}>
-                    <div>
-                    <Button className="accordion__button" disabled={this.state.contactError ? true : false} sx={this.continueButtonStyle} onClick={() => this.goToPlanDefinitionIsOpen()} variant="contained">
-                      <Typography>Fortsæt</Typography>
-                    </Button>
-                    </div>
-                  </Tooltip>
+
+                  <Button className="accordion__button" /* disabled={this.state.contactError ? true : false} */ sx={this.continueButtonStyle} onClick={() => this.goToPlanDefinitionIsOpen()} variant="contained">
+                    <Typography>Fortsæt</Typography>
+                  </Button>
                 </AccordionActions>
               </Accordion>
             </ErrorBoundary>
@@ -304,7 +365,15 @@ export default class CreatePatient extends Component<Props, State> {
                 <AccordionActions>
                   <Tooltip title={this.getFirstError()}>
                     <Stack paddingTop={5}>
-                      <Button disabled={!canSubmit} type="submit" variant="contained">Gem patient</Button>
+                      <LoadingButton
+                        loading={this.state.validating}
+                        //disabled={!canSubmit} 
+                        type="submit"
+                        variant="contained"
+                        color={!this.state.contactError && !this.state.patientError && !this.state.planDefinitionError ? "success" : "error"}
+                      >
+                        Gem patient
+                      </LoadingButton>
                     </Stack>
                   </Tooltip>
                 </AccordionActions>

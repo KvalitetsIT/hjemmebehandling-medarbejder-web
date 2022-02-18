@@ -40,7 +40,7 @@ export default class ValidationService extends BaseService implements IValidatio
     async ValidatePhonenumber(phoneNumber: string) : Promise<InvalidInputModel[]>{
         const errors : InvalidInputModel[] = []   
         const propName = "Telefonnummer"
-        if(!phoneNumber || phoneNumber === "")
+        if(!phoneNumber || phoneNumber === "" || phoneNumber.length === 3 )
             return [];
 
         if(!phoneNumber.includes("+")){

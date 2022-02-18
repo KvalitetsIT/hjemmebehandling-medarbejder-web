@@ -51,6 +51,7 @@ export class PhonenumberInput extends Component<Props, State> {
     }
 
     formatPhoneNumber(input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> {
+        
         input.target.value = this.addAreaCodeToPhonenumber(input.target.value)
         return input;
     }
@@ -73,11 +74,11 @@ export class PhonenumberInput extends Component<Props, State> {
                 id={this.props.id}
                 onValidation={(uid, errors) => this.props.onValidation ? this.props.onValidation(uid, errors) : {}}
                 uniqueId={this.props.uniqueId}
-                validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone))}
+                validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone??""))}
                 type="tel"
                 label={this.props.label}
                 value={this.props.value?.replaceAll("+45", "")}
-                onChange={input => this.props.onChange(this.formatPhoneNumber(input))}
+                onChange={input => this.props.onChange(this.formatPhoneNumber(input??""))}
                 variant="outlined"
                 >
                 <Select

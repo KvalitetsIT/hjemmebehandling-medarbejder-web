@@ -102,6 +102,7 @@ export class TextFieldValidation extends Component<Props, State> {
                             minWidth: this.props.minWidth,
                             maxWidth: this.props.maxWidth,
                         }}
+                        className={"validatedField"}
                     >
 
                     </TextField>
