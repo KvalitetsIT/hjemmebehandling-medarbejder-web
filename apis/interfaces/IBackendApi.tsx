@@ -4,6 +4,7 @@ import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 
@@ -29,6 +30,11 @@ export interface IBackendApi {
      * @param task task to remove from overview
      */
     RemoveAlarm(task: Task): Promise<void>;
+
+    /**
+     * @returns all measurementtypes
+     */
+    GetAllMeasurementTypes(): Promise<MeasurementType[]>;
 
     /**
      * Returns all plandefinitions in system

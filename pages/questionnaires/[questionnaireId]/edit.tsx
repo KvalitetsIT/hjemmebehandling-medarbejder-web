@@ -162,8 +162,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                             key={childQuestion.Id}
                                                             getThreshold={this.getThresholds}
                                                             removeQuestionAction={this.removeQuestion}
-                                                            moveItemUp={() => { console.log("") }}
-                                                            moveItemDown={() => { console.log("") }}
+                                                            moveItemUp={() => this.MoveItemFromIndex(index, -1)}
+                                                            moveItemDown={() => this.MoveItemFromIndex(index, 1)}
                                                             parentQuestion={question}
                                                             question={childQuestion}
                                                             forceUpdate={() => this.forceUpdate()}
@@ -275,9 +275,9 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: questionnaire })
     }
 
-    findClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean) : number{
+    findClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean): number {
         //FindIndex-method starts at index 0 and increments from there
-        //FindClosesIndex-method starts at the closestToIndex-param and finds the index matching the given predicate that is closest to the the provided index
+        //findClosestIndex-method starts at the closestToIndex-param and finds the index matching the given predicate that is closest to the the provided index
 
         let left = closestToIndex;
         let right = closestToIndex

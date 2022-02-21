@@ -22,6 +22,7 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -43,6 +44,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    
+    async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
+        try {
+            return []
+        } catch (error) {
+            return this.HandleError(error)
+        }
+    }
+
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
         try {
             const allplanDefinitions = await this.GetAllPlanDefinitions()
@@ -55,6 +65,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return this.HandleError(error)
         }
     }
+
 
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         console.log(questionnaire)

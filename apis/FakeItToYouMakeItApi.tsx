@@ -26,6 +26,7 @@ import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
 import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -34,6 +35,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     taskRemovedFromMissingOverview: Task[] = [];
     patient1: PatientDetail = new PatientDetail();
     person1: Person = new Person();
+
+    measurementType1: MeasurementType = new MeasurementType();
+    measurementType2: MeasurementType = new MeasurementType();
+
     careplan1: PatientCareplan = new PatientCareplan();
     careplan2: PatientCareplan = new PatientCareplan();
 
@@ -68,6 +73,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     constructor() {
         super();
+        this.measurementType1 = new MeasurementType();
+        this.measurementType1.name = "CRP"
+        this.measurementType2 = new MeasurementType();
+        this.measurementType2.name = "Temperatur"
+
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
@@ -330,6 +340,15 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+
+    async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
+        
+        try {
+            return [this.measurementType1, this.measurementType2]
+        } catch (error) {
+            return this.HandleError(error)
+        }
+    }
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
         const allplanDefinitions = await this.GetAllPlanDefinitions()
         const result = allplanDefinitions.find(x => x.id == planDefinitionId);
@@ -338,7 +357,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         return result
     }
-    
+
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         return [this.questionnaire1, this.questionnaire2, this.questionnaire3].find(x => x.id == questionnaireId)
     }

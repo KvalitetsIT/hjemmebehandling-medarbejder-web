@@ -6,8 +6,9 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import {IQuestionAnswerService} from "./interfaces/IQuestionAnswerService";
+import { IQuestionAnswerService } from "./interfaces/IQuestionAnswerService";
 import { UnsupportedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/UnsupportedError";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 
 export default class QuestionAnswerService extends BaseService implements IQuestionAnswerService {
     backendApi: IBackendApi
@@ -15,6 +16,10 @@ export default class QuestionAnswerService extends BaseService implements IQuest
     constructor(backendApi: IBackendApi) {
         super()
         this.backendApi = backendApi;
+    }
+
+    async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
+        return await this.backendApi.GetAllMeasurementTypes();
     }
 
     FindCategory(thresholdCollection: ThresholdCollection, answer: Answer): CategoryEnum {
@@ -61,7 +66,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
 
             throw new UnsupportedError(answer, "En besvarelse indeholder en ukendt svartype - Kontakt en adminstrator")
 
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             return this.HandleError(error);
         }
 
