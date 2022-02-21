@@ -32,7 +32,7 @@ class PatientsTable extends React.Component<Props, State> {
             loadingPage: false,
             loadingTable: true,
             patients: [],
-            pageSize: 10,
+            pageSize: 8,
             pagenumber: 1
         }
     }
