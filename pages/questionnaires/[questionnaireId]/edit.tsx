@@ -103,18 +103,17 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         const questionnaire = this.state.questionnaire;
         const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
-        const parentQuestions = questions?.filter(q => !(q as Question).enableWhen);
+        const parentQuestions = questionnaire.getParentQuestions();
 
         //If there are no call-to-action, we add one
-        const hasCallToActionQuestion = questionnaire.questions?.find(q => q.type == QuestionTypeEnum.CALLTOACTION)
+        const hasCallToActionQuestion = questionnaire.getCallToActions().find(() => true);
         if (!hasCallToActionQuestion) {
             const newCallToActionQuestion = new CallToActionQuestion();
             newCallToActionQuestion.enableWhens = [];
             questionnaire.questions?.push(newCallToActionQuestion)
         }
-        const callToAction = questionnaire.questions?.find(q => q.type == QuestionTypeEnum.CALLTOACTION)
-        console.log("callToAction")
-        console.log(callToAction)
+        const callToAction = questionnaire.getCallToActions().find(() => true);
+
         return (
             <IsEmptyCard object={questionnaire.questions} jsxWhenEmpty="Ingen spørgsmål på spørgeskema">
                 <Grid container>
@@ -136,8 +135,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            {parentQuestions?.map((question, index) => {
-                                const childQuestion = questions?.map(q => q as Question).filter(q => q.enableWhen?.questionId == question.Id)
+                            {parentQuestions?.map((question) => {
+                                const childQuestions = questionnaire.getChildQuestions(question.Id)
                                 return (
                                     <>
                                         <Grid item xs={12}>
@@ -146,12 +145,12 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                 getThreshold={this.getThresholds}
                                                 addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
                                                 removeQuestionAction={this.removeQuestion}
-                                                moveItemUp={() => this.MoveItemFromIndex(index, -1)}
-                                                moveItemDown={() => this.MoveItemFromIndex(index, 1)}
+                                                moveItemUp={() => this.MoveQuestion(question, -1, true)}
+                                                moveItemDown={() => this.MoveQuestion(question, 1, true)}
                                                 forceUpdate={() => this.forceUpdate()}
                                                 question={question} />
                                         </Grid>
-                                        {childQuestion?.map(childQuestion => {
+                                        {childQuestions?.map(childQuestion => {
                                             return (
                                                 <>
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
@@ -162,8 +161,8 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                             key={childQuestion.Id}
                                                             getThreshold={this.getThresholds}
                                                             removeQuestionAction={this.removeQuestion}
-                                                            moveItemUp={() => this.MoveItemFromIndex(index, -1)}
-                                                            moveItemDown={() => this.MoveItemFromIndex(index, 1)}
+                                                            moveItemUp={() => this.MoveQuestion(childQuestion, -1, false)}
+                                                            moveItemDown={() => this.MoveQuestion(childQuestion, 1, false)}
                                                             parentQuestion={question}
                                                             question={childQuestion}
                                                             forceUpdate={() => this.forceUpdate()}
@@ -281,8 +280,10 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
         let left = closestToIndex;
         let right = closestToIndex
+        let iterations = 0;
+
         let result = -1;
-        while (!(left == 0 && right == list.length - 1) && result == -1) {
+        while (!(left == 0 && right == list.length - 1) && result == -1 && iterations < list.length) {
             if (predicate(list[left], left))
                 result = left;
             if (predicate(list[right], right))
@@ -290,14 +291,13 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
             left = left - 1 <= 0 ? 0 : left - 1;
             right = right + 1 > list.length ? list.length : right + 1;
+            iterations++;
         }
 
         return result
     }
 
-    MoveItemFromIndex(index: number, step: number): void {
-
-        const fromPosition = index;
+    MoveQuestion(question: Question, step: number, questionToMoveIsParent: boolean): void {
 
         const beforeQuestionnaire = this.state.questionnaire;
 
@@ -308,19 +308,25 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         if (!oldQuestions)
             return;
 
-        let toPosition = -1;
+        const fromPosition = oldQuestions.findIndex(q => q.Id == question.Id)
+
 
         const isQuestionParent = (question: Question) => question instanceof Question && question.enableWhen?.questionId == undefined;
+        let toPosition = -1;
 
         const moveItemUp = step < 0;
         if (moveItemUp) {
-            toPosition = this.findClosestIndex(index, oldQuestions, (e, i) => i <= index + step && isQuestionParent(e))
+            toPosition = this.findClosestIndex(fromPosition, oldQuestions, (e, i) => i <= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
         }
 
         const moveItemDown = step > 0;
         if (moveItemDown) {
-            toPosition = this.findClosestIndex(index, oldQuestions, (e, i) => i >= index + step && isQuestionParent(e))
+            toPosition = this.findClosestIndex(fromPosition, oldQuestions, (e, i) => i >= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
         }
+        console.log("toPosition")
+        console.log(toPosition)
+        if (toPosition == -1)
+            return;
 
         const fromPositionItem = oldQuestions[fromPosition];
         const toPositionItem = oldQuestions[toPosition];
