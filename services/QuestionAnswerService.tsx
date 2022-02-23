@@ -19,7 +19,11 @@ export default class QuestionAnswerService extends BaseService implements IQuest
     }
 
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
-        return await this.backendApi.GetAllMeasurementTypes();
+        try {
+            return await this.backendApi.GetAllMeasurementTypes();
+        } catch (error) {
+            return this.HandleError(error)
+        }
     }
 
     FindCategory(thresholdCollection: ThresholdCollection, answer: Answer): CategoryEnum {
