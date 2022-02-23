@@ -39,8 +39,6 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             errorToast: (<></>),
             submitted: false
         }
-        this.removeQuestion = this.removeQuestion.bind(this)
-        this.getThresholds = this.getThresholds.bind(this)
 
     }
 
@@ -142,11 +140,11 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                         <Grid item xs={12}>
                                             <QuestionEditCard
                                                 key={question.Id}
-                                                getThreshold={this.getThresholds}
+                                                getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                 addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
-                                                removeQuestionAction={this.removeQuestion}
-                                                moveItemUp={() => this.MoveQuestion(question, -1, true)}
-                                                moveItemDown={() => this.MoveQuestion(question, 1, true)}
+                                                removeQuestionAction={(questionToRemove) => this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))}
+                                                moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
+                                                moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
                                                 forceUpdate={() => this.forceUpdate()}
                                                 question={question} />
                                         </Grid>
@@ -159,10 +157,10 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                     <Grid item xs={11}>
                                                         <QuestionEditCard
                                                             key={childQuestion.Id}
-                                                            getThreshold={this.getThresholds}
-                                                            removeQuestionAction={this.removeQuestion}
-                                                            moveItemUp={() => this.MoveQuestion(childQuestion, -1, false)}
-                                                            moveItemDown={() => this.MoveQuestion(childQuestion, 1, false)}
+                                                            getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
+                                                            removeQuestionAction={(questionToRemove) => this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))}
+                                                            moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, -1))}
+                                                            moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
                                                             parentQuestion={question}
                                                             question={childQuestion}
                                                             forceUpdate={() => this.forceUpdate()}
@@ -200,7 +198,19 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         )
     }
 
-    tempQuestionId = 0;
+    generateQuestionId(existingQuestions: Question[]): number {
+
+        let foundNewId = false;
+        let newId = 0;
+        while (!foundNewId) {
+            newId++;
+            const idIsAvailable = existingQuestions.findIndex(eq => eq.Id == newId.toString()) == -1
+            if (idIsAvailable)
+                foundNewId = true;
+        }
+        return newId
+    }
+
     addQuestion(referenceQuestion: Question | undefined, isParent: boolean): void {
         const beforeUpdate = this.state.questionnaire;
 
@@ -208,7 +218,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             return;
 
         const newQuestion = new Question();
-        newQuestion.Id = "" + this.tempQuestionId++;
+        newQuestion.Id = "" + this.generateQuestionId(beforeUpdate.questions)
         if (referenceQuestion && isParent) {
             const enableWhen = new EnableWhen<boolean>();
             enableWhen.questionId = referenceQuestion.Id;
@@ -219,6 +229,10 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         beforeUpdate.questions.splice(indexOfRefQuestion + 1, 0, newQuestion)
 
         this.setState({ questionnaire: beforeUpdate })
+    }
+
+    setQuestionnaire(questionnaire: Questionnaire) {
+        this.setState({ questionnaire: questionnaire })
     }
 
     modifyQuestionnaire(questionnaireModifier: (questionnaire: Questionnaire, newValue: string) => Questionnaire, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
@@ -237,111 +251,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
     }
 
 
-    getThresholds(question: Question): ThresholdCollection {
-        const questionnaire = this.state.questionnaire
-        let thresholdCollection = questionnaire?.thresholds?.find(x => x.questionId == question.Id);
 
-        if (!thresholdCollection) {
-            thresholdCollection = new ThresholdCollection();
-            thresholdCollection.questionId = question.Id!;
-            questionnaire?.thresholds?.push(thresholdCollection);
-
-        }
-
-        const trueOption = new ThresholdOption();
-        trueOption.option = true.toString();
-        trueOption.category = CategoryEnum.GREEN
-        const falseOption = new ThresholdOption();
-        falseOption.option = false.toString();
-        falseOption.category = CategoryEnum.GREEN
-
-        thresholdCollection.thresholdOptions = [trueOption, falseOption];
-
-        return thresholdCollection;
-    }
-
-
-    removeQuestion(questionToRemove: Question): void {
-        const questionnaire = this.state.questionnaire;
-
-        if (!questionnaire?.questions)
-            return;
-
-        const indexOfElementToRemove = questionnaire.questions.findIndex(q => q.Id == questionToRemove.Id)
-        if (indexOfElementToRemove > -1)
-            questionnaire.questions.splice(indexOfElementToRemove, 1);
-
-        this.setState({ questionnaire: questionnaire })
-    }
-
-    findClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean): number {
-        //FindIndex-method starts at index 0 and increments from there
-        //findClosestIndex-method starts at the closestToIndex-param and finds the index matching the given predicate that is closest to the the provided index
-
-        let left = closestToIndex;
-        let right = closestToIndex
-        let iterations = 0;
-
-        let result = -1;
-        while (!(left == 0 && right == list.length - 1) && result == -1 && iterations < list.length) {
-            if (predicate(list[left], left))
-                result = left;
-            if (predicate(list[right], right))
-                result = right;
-
-            left = left - 1 <= 0 ? 0 : left - 1;
-            right = right + 1 > list.length ? list.length : right + 1;
-            iterations++;
-        }
-
-        return result
-    }
-
-    MoveQuestion(question: Question, step: number, questionToMoveIsParent: boolean): void {
-
-        const beforeQuestionnaire = this.state.questionnaire;
-
-        if (!beforeQuestionnaire)
-            return;
-
-        const oldQuestions = beforeQuestionnaire.questions;
-        if (!oldQuestions)
-            return;
-
-        const fromPosition = oldQuestions.findIndex(q => q.Id == question.Id)
-
-
-        const isQuestionParent = (question: Question) => question instanceof Question && question.enableWhen?.questionId == undefined;
-        let toPosition = -1;
-
-        const moveItemUp = step < 0;
-        if (moveItemUp) {
-            toPosition = this.findClosestIndex(fromPosition, oldQuestions, (e, i) => i <= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
-        }
-
-        const moveItemDown = step > 0;
-        if (moveItemDown) {
-            toPosition = this.findClosestIndex(fromPosition, oldQuestions, (e, i) => i >= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
-        }
-        console.log("toPosition")
-        console.log(toPosition)
-        if (toPosition == -1)
-            return;
-
-        const fromPositionItem = oldQuestions[fromPosition];
-        const toPositionItem = oldQuestions[toPosition];
-        if (!fromPositionItem || !toPositionItem)
-            return;
-
-        const newQuestions = oldQuestions;
-        newQuestions[fromPosition] = toPositionItem;
-        newQuestions[toPosition] = fromPositionItem;
-
-        const afterQuestionnaire = beforeQuestionnaire;
-        afterQuestionnaire.questions = newQuestions;
-
-        this.setState({ questionnaire: afterQuestionnaire })
-    }
 }
 
 export default EditQuestionnairePage;

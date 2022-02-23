@@ -1,10 +1,11 @@
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseQuestion, Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 
 /**
  * QuestionnaireService 
@@ -93,5 +94,41 @@ export interface IQuestionnaireService {
    * Remove the alarm from a task so that it is not shown in the "ikke besvaret"-section
    */
   RemoveAlarm: (task: Task) => Promise<void>;
+
+  /**
+   * Finds the thresholds for a given question in a provided questionnaire
+   * @param questionnaire the questionnaire containing thresholds for question
+   * @param question The question to find (only the id is actually used)
+   * @returns One thresholdcollection containing all thresholds for question
+   */
+  GetThresholds(questionnaire: Questionnaire, question: Question): ThresholdCollection;
+
+  /**
+   * Removes a question from a questionnaire
+   * @param questionnaire to remove question from
+   * @param questionToRemove the questino to be removed from the given questionnaire
+   * @returns the modified questionnaire
+   */
+  RemoveQuestion(questionnaire: Questionnaire, questionToRemove: Question): Questionnaire
+
+  /**
+   * Iterates through the given list, starting at the provided closestToIndex-position
+   * Two "pointers" are created (called "left" and "right") and will start by pointing to closestToIndex-position
+   * at each iteration "left" will decrement, and "right" will increment
+   * When we reach a "left" or "right" that returns true to the predicate, the index will be returned
+   * @param closestToIndex the index for "left" and "right" to start at
+   * @param list the list to iterate through
+   * @param predicate the predicate to determine what index to return
+   */
+  FindClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean): number
+
+  /**
+   * Move a question in a questionnaire up or down depending on the step-param
+   * @param questionnaire the questionnaire containing the questions to change order for
+   * @param question the question to move
+   * @param step the number of positions to move the question (1 og -1 is often used)
+   */
+  MoveQuestion(questionnaire: Questionnaire, question: Question, step: number): Questionnaire
+
 }
 
