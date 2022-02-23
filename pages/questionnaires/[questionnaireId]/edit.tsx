@@ -1,12 +1,9 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
@@ -231,7 +228,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
     }
 
-    setQuestionnaire(questionnaire: Questionnaire) {
+    setQuestionnaire(questionnaire: Questionnaire) : void {
         this.setState({ questionnaire: questionnaire })
     }
 
