@@ -16,7 +16,6 @@ export class QuestionnaireTable extends Component<Props>{
                 <TableHead>
                     <TableRow>
                         <TableCell>Navn</TableCell>
-                        <TableCell>Patienter</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell>Version</TableCell>
                         <TableCell>Målingstyper</TableCell>
@@ -39,7 +38,6 @@ export class QuestionnaireTable extends Component<Props>{
                                     return (
                                         <TableRow>
                                             <TableCell>{questionnaire.name}</TableCell>
-                                            <TableCell>Patienter</TableCell>
                                             <TableCell>{questionnaire.status}</TableCell>
                                             <TableCell>{questionnaire.version}</TableCell>
                                             <TableCell>{observationQuestions?.join(", ")}</TableCell>
