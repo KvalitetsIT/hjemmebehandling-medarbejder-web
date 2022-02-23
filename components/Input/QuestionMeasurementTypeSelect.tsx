@@ -59,7 +59,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
                 <Select label="Vælg målingstype" value={this.state.question.measurementType ?? ""} onChange={this.handleChange}>
                     {this.state.allMeasurementTypes.map((type) => {
                         return (
-                            <MenuItem key={type.name} value={type as any}>{type.name}</MenuItem>
+                            <MenuItem key={type.displayName} value={type as any}>{type.displayName}</MenuItem>
                         )
                     })}
                 </Select>

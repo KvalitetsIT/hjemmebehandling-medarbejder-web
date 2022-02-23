@@ -74,9 +74,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     constructor() {
         super();
         this.measurementType1 = new MeasurementType();
-        this.measurementType1.name = "CRP"
+        this.measurementType1.displayName = "CRP"
         this.measurementType2 = new MeasurementType();
-        this.measurementType2.name = "Temperatur"
+        this.measurementType2.displayName = "Temperatur"
 
         //======================================= Patient
         this.patient1.cpr = "1212758392";

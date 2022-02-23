@@ -5,6 +5,7 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
@@ -18,6 +19,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, EnableWhen as EnableWhenDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PersonDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireDto, QuestionnaireResponseDto, QuestionnaireResponseDtoExaminationStatusEnum, QuestionnaireResponseDtoTriagingCategoryEnum, QuestionnaireWrapperDto, ThresholdDto, ThresholdDtoTypeEnum, UserContext } from "../../generated/models";
+import { MeasurementTypeDto } from "../../generated/models/MeasurementTypeDto";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -26,6 +28,14 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the external models (used in bff-api) to the internal models (used in frontend)
  */
 export default class ExternalToInternalMapper extends BaseMapper {
+    mapMeasurementType(mt: MeasurementTypeDto): MeasurementType {
+        const toReturn = new MeasurementType();
+        toReturn.displayName = mt.display
+        toReturn.code = mt.code
+        toReturn.system = mt.system
+        return toReturn;
+    }
+
     mapCarePlanDto(carePlanDto: CarePlanDto): PatientCareplan {
         const carePlan = new PatientCareplan()
 
