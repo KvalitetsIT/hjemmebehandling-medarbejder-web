@@ -4,13 +4,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { Alert, CardHeader, Divider, Grid, GridSize, Typography } from '@mui/material';
+import { CardHeader, Divider, Grid, GridSize, Typography } from '@mui/material';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import ApiContext from '../../pages/_context';
 import { ThresholdSlider } from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
+import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { NumberAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
 import ChartData from '@kvalitetsit/hjemmebehandling/Charts/ChartData';
 import ResponseViewCard from '@kvalitetsit/hjemmebehandling/Charts/ResponseViewCard';
@@ -50,7 +50,7 @@ export class ObservationCard extends Component<Props, State> {
         try {
             const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50)
             this.setState({ questionnaireResponses: responses, loading: false })
-        } catch (error : unknown) {
+        } catch (error: unknown) {
             this.setState(() => { throw error })
         }
     }
@@ -96,16 +96,14 @@ export class ObservationCard extends Component<Props, State> {
 
         if (allQuestions.length == 0) {
             return (
-                <Alert severity="info">
-                    <Typography>Ingen tilgængelige målinger</Typography>
-                </Alert>
+               <></>
             )
         }
 
         let counter = 0
 
         return (
-            <Grid container columns={12}>
+            <>
                 {allQuestions.map(question => {
                     const isFirst = counter++ == 0;
                     const threshold = this.props.questionnaire!.thresholds?.find(x => x.questionId == question.Id)
@@ -115,7 +113,7 @@ export class ObservationCard extends Component<Props, State> {
 
                     return (
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
-                            <ResponseViewCard chartData={chartData}/>
+                            <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question} - Alarmgrænser</Typography>} />
                                 <Divider />
@@ -126,7 +124,7 @@ export class ObservationCard extends Component<Props, State> {
                         </Grid>
                     )
                 })}
-            </Grid>
+            </>
         );
     }
 }

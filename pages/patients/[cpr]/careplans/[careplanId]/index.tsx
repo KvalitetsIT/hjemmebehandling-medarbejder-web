@@ -5,12 +5,12 @@ import { PatientCard } from '../../../../../components/Cards/PatientCard';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import ApiContext from '../../../../_context';
 import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
-import {ICareplanService} from '../../../../../services/interfaces/ICareplanService';
+import { ICareplanService } from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
-import {IQuestionnaireService} from '../../../../../services/interfaces/IQuestionnaireService';
+import { IQuestionnaireService } from '../../../../../services/interfaces/IQuestionnaireService';
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
@@ -100,8 +100,8 @@ class PatientCareplans extends React.Component<Props, State> {
     const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
       <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive behandlingsplaner fundet :-(">
-        <Grid container spacing={3} sx={{flexWrap:"inherit"}}>
-          <Grid maxWidth={400}  item xs="auto">
+        <Grid container spacing={3} sx={{ flexWrap: "inherit" }}>
+          <Grid maxWidth={400} item xs="auto">
             <ErrorBoundary>
               <Stack spacing={3}>
                 {activeCareplan?.patient ?
@@ -109,16 +109,16 @@ class PatientCareplans extends React.Component<Props, State> {
                     <PatientCard patient={activeCareplan?.patient}></PatientCard>
                     <LoginInfoCard patient={activeCareplan?.patient} />
                   </> :
-                  <div>Noget gik galt - Ingen aktiv-behandlingsplan, eller så var ingen patient tilknyttet</div>  
-              }
+                  <div>Noget gik galt - Ingen aktiv-behandlingsplan, eller så var ingen patient tilknyttet</div>
+                }
 
-              
-                
-                  <CareplanSummary careplan={activeCareplan}></CareplanSummary>
-                
-                
-                  
-                
+
+
+                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
+
+
+
+
               </Stack>
             </ErrorBoundary>
           </Grid>
@@ -130,7 +130,13 @@ class PatientCareplans extends React.Component<Props, State> {
                   <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan} />
                 </Grid>
                 <Grid item xs={12}>
-                  <ObservationCard questionnaire={activeCareplan?.questionnaires[0]} careplan={activeCareplan} />
+                  <Grid container>
+                    {activeCareplan.questionnaires.map(questionnaire => {
+                      return (
+                        <ObservationCard questionnaire={questionnaire} careplan={activeCareplan} />
+                      )
+                    })}
+                  </Grid>
                 </Grid>
               </Grid>
 
