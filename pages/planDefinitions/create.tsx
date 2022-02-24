@@ -1,5 +1,5 @@
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
 import { AccordianWrapper } from "../../components/Cards/PlanDefinition/AccordianWrapper";
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
@@ -50,7 +50,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.questionnaireService = this.context.questionnaireService;
     }
 
-    async componentDidMount() : Promise<void> {
+    async componentDidMount(): Promise<void> {
         this.setState({ loading: true })
         try {
             const providedPlanDefinitionId = this.props.match.params.plandefinitionid
@@ -92,6 +92,19 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         }
     }
 
+    expandPreviousPage(currentPage: AccordianRowEnum): void {
+
+        this.toggleAccordian(currentPage, false)
+        switch (currentPage) {
+            case AccordianRowEnum.attachQuestionnaire:
+                this.toggleAccordian(AccordianRowEnum.generelInfo)
+                break
+            case AccordianRowEnum.thresholds:
+                this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
+                break
+        }
+    }
+
     render(): JSX.Element {
         const contents = this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
         return contents;
@@ -100,41 +113,90 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     renderCareplanTab(): JSX.Element {
         this.InitializeServices();
         return (
-            <>
-                <Typography variant="h6">Opret patientgruppe</Typography>
-                <br />
 
-                <AccordianWrapper
-                    expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
-                    title="Patientgruppe"
-                    toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
-                    continueButtonAction={() => this.expandNextPage(AccordianRowEnum.generelInfo)}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h6">Opret patientgruppe</Typography>
+                </Grid>
+                <Grid item xs>
+                    <AccordianWrapper
+                        expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
+                        title="Patientgruppe"
+                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
+                        continueButtonAction={() => this.expandNextPage(AccordianRowEnum.generelInfo)}
+                    >
 
-                    <PlanDefinitionEdit planDefinition={this.state.planDefinition} />
+                        <PlanDefinitionEdit planDefinition={this.state.planDefinition} />
 
-                </AccordianWrapper>
+                    </AccordianWrapper>
 
-                <AccordianWrapper
-                    expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
-                    title="Tilknyt spørgeskema"
-                    toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
-                    continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}>
+                    <AccordianWrapper
+                        expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
+                        title="Tilknyt spørgeskema"
+                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
+                        continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}
+                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
+                    >
 
-                    <PlanDefinitionEditQuestionnaire planDefinition={this.state.planDefinition} />
+                        <PlanDefinitionEditQuestionnaire planDefinition={this.state.planDefinition} />
 
-                </AccordianWrapper>
+                    </AccordianWrapper>
 
-                <AccordianWrapper
-                    expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
-                    title="Alarmgrænser"
-                    toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
-                    continueButtonAction={() => console.log(this.state.planDefinition)}>
+                    <AccordianWrapper
+                        expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
+                        title="Alarmgrænser"
+                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
+                        continueButtonAction={() => console.log(this.state.planDefinition)}
+                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
+                        continueButtonContentOverride="Gem"
+                    >
 
-                    <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
+                        <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
 
 
-                </AccordianWrapper>
-            </>
+                    </AccordianWrapper>
+                </Grid>
+                <Grid item xs={2}>
+                    <Card>
+
+                        <CardHeader
+                            title={<Typography>Oprettelse af patientgruppe</Typography>} />
+
+                        <Divider />
+                        <CardContent>
+                            <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
+                                <Step key="plandefinitionGeneral">
+                                    <StepLabel>Udfyld patientgruppens navn</StepLabel>
+                                </Step>
+                                <Step key="attachQuestionnaire">
+
+                                    <StepLabel>Tilknyt spørgeskema</StepLabel>
+
+                                </Step>
+                                <Step key="setThresholds">
+                                    <StepLabel>Sætte alarmgrænser</StepLabel>
+                                </Step>
+
+                            </Stepper>
+                        </CardContent>
+                        <CardActions>
+                            <Button fullWidth variant="outlined">Gem patientgruppen som kladde</Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
         )
+    }
+
+    getActiveStep(): number {
+        const openAccordians = this.state.openAccordians;
+        if (openAccordians[AccordianRowEnum.generelInfo] == true)
+            return 0
+        if (openAccordians[AccordianRowEnum.attachQuestionnaire] == true)
+            return 1
+        if (openAccordians[AccordianRowEnum.thresholds] == true)
+            return 2
+
+        return 0
     }
 }

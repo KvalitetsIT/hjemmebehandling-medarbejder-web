@@ -5,10 +5,13 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export interface Props {
-    expanded : boolean
-    title : JSX.Element | string
+    expanded: boolean
+    title: JSX.Element | string
     continueButtonAction: () => void
     toggleExpandedButtonAction: () => void
+
+    previousButtonAction?: () => void
+    continueButtonContentOverride?: JSX.Element | string
 }
 
 export class AccordianWrapper extends Component<Props, {}> {
@@ -37,7 +40,10 @@ export class AccordianWrapper extends Component<Props, {}> {
                     {this.props.children}
                 </AccordionDetails>
                 <AccordionActions>
-                    <Button onClick={()=>this.props.continueButtonAction()} className="accordion__button" variant="contained">Fortsæt</Button>
+                    {this.props.previousButtonAction != undefined ?
+                        <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button" variant="text">Forrige</Button> : <></>
+                    }
+                    <Button onClick={() => this.props.continueButtonAction()} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>
                 </AccordionActions>
             </Accordion>
         )
