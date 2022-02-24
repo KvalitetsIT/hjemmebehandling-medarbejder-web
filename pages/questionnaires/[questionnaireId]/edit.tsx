@@ -155,6 +155,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
                                                         <QuestionEditCard
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
+                                                            addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
                                                             removeQuestionAction={(questionToRemove) => this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))}
                                                             moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, -1))}
                                                             moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
@@ -208,7 +209,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         return newId
     }
 
-    addQuestion(referenceQuestion: Question | undefined, isParent: boolean): void {
+    addQuestion(referenceQuestion: Question | undefined, isParent: boolean, enableWhenQuestionId?: string): void {
         const beforeUpdate = this.state.questionnaire;
 
         if (!beforeUpdate?.questions)
@@ -218,7 +219,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         newQuestion.Id = "" + this.generateQuestionId(beforeUpdate.questions)
         if (referenceQuestion && isParent) {
             const enableWhen = new EnableWhen<boolean>();
-            enableWhen.questionId = referenceQuestion.Id;
+            enableWhen.questionId = enableWhenQuestionId ?? referenceQuestion.Id;
             newQuestion.enableWhen = enableWhen;
         }
 
@@ -228,7 +229,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
     }
 
-    setQuestionnaire(questionnaire: Questionnaire) : void {
+    setQuestionnaire(questionnaire: Questionnaire): void {
         this.setState({ questionnaire: questionnaire })
     }
 

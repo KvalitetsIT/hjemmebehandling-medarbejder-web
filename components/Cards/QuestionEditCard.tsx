@@ -142,7 +142,10 @@ export class QuestionEditCard extends Component<Props, State>{
                         </CardContent>
 
                         <CardActions disableSpacing>
-                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}><AddCircleOutlineIcon />Tilføj underspørgsmål</Button>
+                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
+                                <AddCircleOutlineIcon />
+                                Tilføj underspørgsmål
+                            </Button>
 
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
 
@@ -150,7 +153,10 @@ export class QuestionEditCard extends Component<Props, State>{
                                     <IconButton onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                         <DeleteOutlineIcon />
                                     </IconButton>
-                                    <Button sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}> <AddCircleIcon />Tilføj nyt spørgsmål</Button>
+                                    <Button sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
+                                        <AddCircleIcon />
+                                        Tilføj nyt spørgsmål
+                                    </Button>
                                 </ButtonGroup>
                             </Stack>
                         </CardActions>
