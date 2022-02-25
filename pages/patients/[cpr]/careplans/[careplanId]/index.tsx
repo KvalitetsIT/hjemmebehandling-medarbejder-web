@@ -131,7 +131,7 @@ class PatientCareplans extends React.Component<Props, State> {
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container>
-                    {activeCareplan.questionnaires.map(questionnaire => {
+                    {activeCareplan?.questionnaires.map(questionnaire => {
                       return (
                         <ObservationCard questionnaire={questionnaire} careplan={activeCareplan} />
                       )
