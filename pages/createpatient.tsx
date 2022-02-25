@@ -180,21 +180,22 @@ export default class CreatePatient extends Component<Props, State> {
     marginTop: 2
   }
 
-  triggerEventOnTagName(className: string, event: Event): void {
-    const input = document.getElementsByTagName(className);
+  triggerEventOnAllInput(): void {
+    const input = document.getElementsByTagName("input");
+    const event = new Event("input", { bubbles: true })
     Array.from(input).forEach(x => x.dispatchEvent(event))
   }
 
 
   async validateAll(): Promise<void> {
     this.setState({ validating: true })
-    this.triggerEventOnTagName("input", new Event("input", { bubbles: true }))
-    await new Promise(f => setTimeout(f, 100)) 
+    this.triggerEventOnAllInput()
+    await new Promise(f => setTimeout(f, 100))
 
     const errors: string[] = []
 
     if (this.state.careplan?.planDefinitions.length === 0) {
-      errors.push("Ingen behandlingsplaner")
+      errors.push("Ingen patientgrupper valgt")
     }
 
     if (this.state.contactError != undefined) {
@@ -237,6 +238,7 @@ export default class CreatePatient extends Component<Props, State> {
 
     return (
       <form
+        
         onSubmit={(e) => {
           e.preventDefault();
           this.submitPatient()
@@ -251,7 +253,10 @@ export default class CreatePatient extends Component<Props, State> {
 
 
             <ErrorBoundary>
-              <Accordion expanded={this.state.accordians.PatientIsOpen} onChange={() => this.goToPatientIsOpen()}>
+              <Accordion 
+              onClick={() => this.triggerEventOnAllInput()}
+              expanded={this.state.accordians.PatientIsOpen} 
+              onChange={() => this.goToPatientIsOpen()}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
@@ -273,10 +278,13 @@ export default class CreatePatient extends Component<Props, State> {
                 </AccordionDetails>
                 <AccordionActions>
 
-                  <Button className="accordion__button" sx={this.continueButtonStyle} /* disabled={this.state.patientError ? true : false} */ onClick={() => {
-                    this.goToRelativeContactIsOpen()
-
-                  }} variant="contained">Fortsæt</Button>
+                  <Button
+                    className="accordion__button"
+                    sx={this.continueButtonStyle} /* disabled={this.state.patientError ? true : false} */
+                    onClick={() => {
+                      this.triggerEventOnAllInput()
+                      this.goToRelativeContactIsOpen()
+                    }} variant="contained">Fortsæt</Button>
 
 
                 </AccordionActions>
@@ -284,7 +292,11 @@ export default class CreatePatient extends Component<Props, State> {
             </ErrorBoundary>
 
             <ErrorBoundary>
-              <Accordion expanded={this.state.accordians.RelativeContactIsOpen} onChange={() => this.goToRelativeContactIsOpen()}>
+              <Accordion
+                onClick={() => this.triggerEventOnAllInput()}
+                expanded={this.state.accordians.RelativeContactIsOpen}
+                onChange={() => this.goToRelativeContactIsOpen()}>
+                
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
@@ -303,7 +315,15 @@ export default class CreatePatient extends Component<Props, State> {
                 </AccordionDetails>
                 <AccordionActions>
 
-                  <Button className="accordion__button" /* disabled={this.state.contactError ? true : false} */ sx={this.continueButtonStyle} onClick={() => this.goToPlanDefinitionIsOpen()} variant="contained">
+                  <Button 
+                  className="accordion__button" /* disabled={this.state.contactError ? true : false} */ 
+                  sx={this.continueButtonStyle} 
+                  onClick={() => {
+                    this.triggerEventOnAllInput()
+                    this.goToPlanDefinitionIsOpen()
+                  }}
+                    
+                  variant="contained">
                     <Typography>Fortsæt</Typography>
                   </Button>
                 </AccordionActions>
@@ -311,7 +331,12 @@ export default class CreatePatient extends Component<Props, State> {
             </ErrorBoundary>
 
             <ErrorBoundary>
-              <Accordion expanded={this.state.accordians.PlanDefinitionIsOpen} onChange={() => this.goToPlanDefinitionIsOpen()}>
+              <Accordion 
+              expanded={this.state.accordians.PlanDefinitionIsOpen} 
+              onChange={() => this.goToPlanDefinitionIsOpen()}
+              onClick={()=> this.triggerEventOnAllInput()}
+              >
+                
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
