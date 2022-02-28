@@ -116,9 +116,13 @@ export class Tasklist extends Component<Props, State> {
 
   async removeAlarm(task: Task): Promise<void> {
     try {
+      //Remove alarm using api
       await this.questionnaireService.RemoveAlarm(task)
-      await this.getData(this.state.pageNumber);
-      this.forceUpdate();
+
+      //Get new data to refresh table
+      const data = await this.getData(this.state.pageNumber)
+      await this.populateQuestionnaireResponses(this.state.pageNumber, data);
+
     } catch (error) {
       this.setState(() => { throw error })
     }
@@ -129,7 +133,7 @@ export class Tasklist extends Component<Props, State> {
     await this.removeAlarm(task);
   }
 
-  async setPageNumber(pageNumber: number) : Promise<void>{
+  async setPageNumber(pageNumber: number): Promise<void> {
     this.setState({ pageNumber: pageNumber })
   }
 
@@ -156,7 +160,7 @@ export class Tasklist extends Component<Props, State> {
                   <>
                     {!tasks ? <></> : tasks.map((task) => (
                       <>
-                        <TableRow key={task.cpr}>
+                        <TableRow key={""+task.cpr+task.questionnaireId}>
                           <TableCell component="th" scope="row">
                             <Chip className="chip__alarm" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
                           </TableCell>
