@@ -272,7 +272,6 @@ export class ColorSlider extends Component<Props, State> {
         console.log(thresholdCollection)
         const minVal = Math.min(...minOf);
         return minVal;
-
     }
 
     calculateMax(thresholdCollection?: ThresholdCollection): number {
@@ -306,8 +305,8 @@ export class ColorSlider extends Component<Props, State> {
                     <Grid item xs={12}>
                         <Typography variant="h6">{this.categoryToString(thresholdnumber.category)}</Typography>
                         <Typography variant="caption">Område: {thresholdnumber.from} - {thresholdnumber.to}</Typography>
-                        <Box marginTop={5} minWidth={70} maxWidth={90}>
-                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.from!)} inputProps={{ style: { zIndex: -999 } }} variant='filled' defaultValue={thresholdnumber.from} type="number"></TextField>
+                        <Box marginTop={5}>
+                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.from!)} inputProps={{ style: { zIndex: -9999999 } }} variant='filled' defaultValue={thresholdnumber.from} type="number"></TextField>
                         </Box>
                     </Grid>
                 </Grid>
@@ -320,10 +319,10 @@ export class ColorSlider extends Component<Props, State> {
             <Box position="absolute" zIndex={9999999}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Box marginTop={5} minWidth={70} maxWidth={90}>
+                        <Box marginTop={5} minWidth={70} maxWidth={120}>
                             <br />
                             <br />
-                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.to!)} inputProps={{ style: { zIndex: -999 } }} variant='filled' defaultValue={thresholdnumber.to} type="number"></TextField>
+                            <TextField onBlur={(e) => this.setSingleValue(thresholdnumber, Number(e.currentTarget.value), (t) => t.to!)} inputProps={{ style: { zIndex: -9999999 } }} variant='filled' defaultValue={thresholdnumber.to} type="number"></TextField>
                         </Box>
                     </Grid>
                 </Grid>
