@@ -83,7 +83,7 @@ export class ColorSlider extends Component<Props, State> {
         }
 
         const marks: number[] = []
-        const minVal = this.calculateMin()
+        const minVal = this.calculateMin(thresholdForQuestion)
         marks.push(minVal)
 
         let thresholdNumbers: ThresholdNumber[] = []
@@ -138,7 +138,6 @@ export class ColorSlider extends Component<Props, State> {
                                     disableSwap
                                     sx={{
                                         minHeight: 150,
-
                                     }}
                                     key={"slider_" + question.Id}
                                     value={[minVal, ...thresholdNumbers!.map(x => x?.to ?? minVal)]}
@@ -164,6 +163,7 @@ export class ColorSlider extends Component<Props, State> {
     }
 
     setSliderPoint(sliderPoints: number[]): void {
+        console.log(sliderPoints)
         if (this.hasDuplicates(sliderPoints)) //No point should have same value
             return;
 
@@ -196,6 +196,7 @@ export class ColorSlider extends Component<Props, State> {
     }
 
     correctValues(values: number[]): number[] {
+        //The first value should be greater than the next
         let earlier = values[0];
         for (let i = 1; i < values.length; i++) {
             const current = values[i]
@@ -266,7 +267,9 @@ export class ColorSlider extends Component<Props, State> {
         let minOf: number[] = [0]
         if (thresholdCollection)
             minOf = thresholdCollection!.thresholdNumbers!.map(t => t?.from ?? 9999);
-
+        console.log("minOf")
+        console.log(minOf)
+        console.log(thresholdCollection)
         const minVal = Math.min(...minOf);
         return minVal;
 
