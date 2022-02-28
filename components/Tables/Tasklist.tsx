@@ -117,6 +117,7 @@ export class Tasklist extends Component<Props, State> {
   async removeAlarm(task: Task): Promise<void> {
     try {
       await this.questionnaireService.RemoveAlarm(task)
+      await this.getData(this.state.pageNumber);
       this.forceUpdate();
     } catch (error) {
       this.setState(() => { throw error })
