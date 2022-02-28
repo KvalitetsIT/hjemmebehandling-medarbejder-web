@@ -10,7 +10,6 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -67,18 +66,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   }),
 );
-
-const bottomPush: CSSProperties = {
-  marginTop: "auto",
-  marginRight: 5,
-  marginLeft: 5
-}
-
-const newPatientButton: CSSProperties = {
-  backgroundColor: "#1976d2",
-  borderRadius: 200,
-  color: "white"
-}
 
 
 export default function MiniDrawer(): JSX.Element {
@@ -178,8 +165,8 @@ export default function MiniDrawer(): JSX.Element {
 
         </List>
 
-        <List style={bottomPush}>
-          <ListItem style={newPatientButton} button component={Link} color="inherit" to="/newpatient">
+        <List className='toButtom'>
+          <ListItem className='newPatientButton' button component={Link} color="inherit" to="/newpatient">
             <ListItemIcon>
               <AddIcon fontSize="medium" style={{ color: "white", marginLeft: -5 }} />
             </ListItemIcon>

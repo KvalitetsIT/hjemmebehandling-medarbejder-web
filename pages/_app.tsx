@@ -237,6 +237,35 @@ const THEME = createTheme({
         },
       }
     },
+    //Create patient button
+    MuiList: {
+      variants: [
+        {
+          props: { className: 'toButtom' },
+          style: {
+            marginTop: "auto",
+            marginRight: 6,
+            marginLeft: 7
+          }
+        }
+      ]
+    },
+    MuiListItem: {
+      variants: [
+        {
+          props: { className: 'newPatientButton' },
+          style: {
+            backgroundColor: blue,
+            borderRadius: 200,
+            color: "white",
+            ":hover": {
+              backgroundColor: blue,
+            }
+          }
+        }
+      ]
+    },
+    //End of create patient button
     MuiAutocomplete: {
       variants: [
         {
