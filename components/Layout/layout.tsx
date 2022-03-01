@@ -10,11 +10,11 @@ import CreatePatient from '../../pages/createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import QuestionnairePage from '../../pages/questionnaires';
-import EditQuestionnairePage from '../../pages/questionnaires/[questionnaireId]/edit';
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import PlandefinitionOverview from '../../pages/planDefinitions/overview';
 import CreatePlandefinition from '../../pages/planDefinitions/create';
+import CreateQuestionnairePage from '../../pages/questionnaires/create';
+import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
 
 
 export interface State {
@@ -63,12 +63,12 @@ export class Layout extends Component<{}, State> {
               <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
 
                 <Topbar />
-                
 
-                  <Box paddingBottom={3}>
-                    <AutoBreadcrumbs />
-                  </Box>
-                  <ErrorBoundary ekstraText="Fejlen der opstod kræver opdatering af siden (F5)">
+
+                <Box paddingBottom={3}>
+                  <AutoBreadcrumbs />
+                </Box>
+                <ErrorBoundary ekstraText="Fejlen der opstod kræver opdatering af siden (F5)">
                   <Switch>
                     <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv/questionnaires/" + props.match.params.questionnaireId} />} />
 
@@ -86,9 +86,10 @@ export class Layout extends Component<{}, State> {
                     <Route path="/plandefinitions/:plandefinitionid/edit" render={(props) => <CreatePlandefinition {...props} />} />
                     <Route path="/plandefinitions/create" render={(props) => <CreatePlandefinition {...props} />} />
                     <Route path="/plandefinitions" render={(props) => <PlandefinitionOverview {...props} />} />
-                
-                    <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <EditQuestionnairePage {...props} />} />
-                    <Route path="/questionnaires" render={(props) => <QuestionnairePage {...props} />} />
+
+                    <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <CreateQuestionnairePage {...props} />} />
+                    <Route path="/questionnaires/create" render={(props) => <CreateQuestionnairePage {...props} />} />
+                    <Route path="/questionnaires" render={(props) => <QuestionnaireOverviewPage {...props} />} />
 
                     <Route path="/active/:pagenr" render={(props) => <ActivePatients {...props} />} />
                     <Route path="/inactive/:pagenr" render={(props) => <InactivePatients {...props} />} />

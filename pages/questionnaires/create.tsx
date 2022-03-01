@@ -1,5 +1,4 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
-import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
@@ -7,12 +6,12 @@ import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnair
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { CallToActionCard } from "../../../components/Cards/CallToActionCard";
-import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
-import { TextFieldValidation } from "../../../components/Input/TextFieldValidation";
-import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
-import { IQuestionnaireService } from "../../../services/interfaces/IQuestionnaireService";
-import ApiContext from "../../_context";
+import { CallToActionCard } from "../../components/Cards/CallToActionCard";
+import { QuestionEditCard } from "../../components/Cards/QuestionEditCard";
+import { TextFieldValidation } from "../../components/Input/TextFieldValidation";
+import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
+import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
+import ApiContext from "../_context";
 
 interface State {
     loading: boolean
@@ -22,9 +21,9 @@ interface State {
 }
 
 interface Props {
-    match: { params: { questionnaireId: string } }
+    match: { params: { questionnaireId?: string } }
 }
-class EditQuestionnairePage extends React.Component<Props, State> {
+class CreateQuestionnairePage extends React.Component<Props, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
 
@@ -36,7 +35,6 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             errorToast: (<></>),
             submitted: false
         }
-
     }
 
     render(): JSX.Element {
@@ -44,6 +42,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         const contents = this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
         return contents;
     }
+
     InitializeServices(): void {
         this.questionnaireService = this.context.questionnaireService;
     }
@@ -54,7 +53,12 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
     async populateCareplans(): Promise<void> {
         try {
-            const questionnaire = await this.questionnaireService.getQuestionnaire(this.props.match.params.questionnaireId);
+            const questionnaireId = this.props.match.params.questionnaireId;
+            let questionnaire = new Questionnaire();
+            questionnaire.questions = [new Question()];
+            if (questionnaireId != undefined)
+                questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
+
             this.setState({ questionnaire: questionnaire })
         } catch (error) {
             this.setState(() => { throw error })
@@ -67,8 +71,6 @@ class EditQuestionnairePage extends React.Component<Props, State> {
             this.setState({
                 loading: true
             })
-            console.log("submitted questionnaire:")
-            console.log(this.state.questionnaire)
             if (this.state.questionnaire)
                 await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
             this.setState({
@@ -110,7 +112,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
         const callToAction = questionnaire.getCallToActions().find(() => true);
 
         return (
-            <IsEmptyCard object={questionnaire.questions} jsxWhenEmpty="Ingen spørgsmål på spørgeskema">
+            <>
                 <Grid container>
                     <Grid item xs={10}>
 
@@ -192,7 +194,7 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
                 </Grid>
                 {this.state.errorToast ?? <></>}
-            </IsEmptyCard>
+            </>
         )
     }
 
@@ -252,4 +254,4 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
 }
 
-export default EditQuestionnairePage;
+export default CreateQuestionnairePage
