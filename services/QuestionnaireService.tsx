@@ -24,6 +24,14 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     this.questionnaireFiltering = new QuestionnaireFiltering();
   }
 
+  async GetAllQuestionnaires(): Promise<Questionnaire[]> {
+    try {
+      return await this.backendApi.GetAllQuestionnaires();
+    } catch (error) {
+      return this.HandleError(error)
+    }
+  }
+
   async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
     try {
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);

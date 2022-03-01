@@ -1,5 +1,5 @@
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Card, Typography } from "@mui/material";
 import React from "react";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
@@ -10,7 +10,7 @@ import ApiContext from "../_context";
 
 interface State {
     loading: boolean
-    planDefinitions: PlanDefinition[]
+    questionnaires: Questionnaire[]
 }
 
 
@@ -22,7 +22,7 @@ class QuestionnairePage extends React.Component<{}, State> {
         super(props);
         this.state = {
             loading: true,
-            planDefinitions: []
+            questionnaires: []
         }
 
     }
@@ -42,8 +42,8 @@ class QuestionnairePage extends React.Component<{}, State> {
 
     async populateCareplans(): Promise<void> {
         try {
-            const allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions();
-            this.setState({ planDefinitions: allPlanDefinitions })
+            const questionnaires = await this.questionnaireService.GetAllQuestionnaires();
+            this.setState({ questionnaires: questionnaires })
         } catch (error) {
             this.setState(() => { throw error })
         }
@@ -58,9 +58,9 @@ class QuestionnairePage extends React.Component<{}, State> {
             <>
                 <Typography variant="h6">Spørgeskemaer</Typography>
                 <br />
-                <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.planDefinitions}>
+                <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.questionnaires}>
                     <Card>
-                        <QuestionnaireTable planDefinitions={this.state.planDefinitions} />
+                        <QuestionnaireTable questionnaires={this.state.questionnaires} />
                     </Card>
                 </IsEmptyCard>
             </>

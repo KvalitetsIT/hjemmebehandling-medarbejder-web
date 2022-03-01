@@ -66,6 +66,11 @@ export interface IQuestionnaireService {
   GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>
 
   /**
+   * Returns all questionnaires
+   */
+  GetAllQuestionnaires(): Promise<Questionnaire[]>
+  
+  /**
   * Returns one single plandefinitions in system
   * @param planDefinitionId the id of the plandefinition to fetch
   * @returns one single plandefinition

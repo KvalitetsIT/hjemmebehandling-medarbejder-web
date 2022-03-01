@@ -17,7 +17,7 @@ export interface IBackendApi {
      * Updates the given questionnaire based on the id of the provided entity
      * @param questionnaire the questionnaire to be updated
      */
-    updateQuestionnaire(questionnaire: Questionnaire) : Promise<void>;
+    updateQuestionnaire(questionnaire: Questionnaire): Promise<void>;
 
     /**
      * Resets a patient-users password
@@ -37,6 +37,11 @@ export interface IBackendApi {
     GetAllMeasurementTypes(): Promise<MeasurementType[]>;
 
     /**
+   * Returns all questionnaires
+   */
+    GetAllQuestionnaires(): Promise<Questionnaire[]>
+
+    /**
      * Returns all plandefinitions in system
      */
     GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
@@ -47,7 +52,7 @@ export interface IBackendApi {
      * @returns one single plandefinition
      * @throws if plandefinition with id does not exist 
      */
-     GetPlanDefinitionById(planDefinitionId : string): Promise<PlanDefinition>;
+    GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition>;
 
 
     /**
@@ -131,7 +136,7 @@ export interface IBackendApi {
      * Returns all questionnaireresponses that has reference to, any of the provided questionnaireIds, and careplanId
      */
     GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
-    
+
     /**
      * Gets one questionnaire based on the given questionnaireId
      * @param questionnaireId the id of the questionnaire to get 
