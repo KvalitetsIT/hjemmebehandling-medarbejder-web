@@ -1,7 +1,8 @@
 import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Card, Typography } from "@mui/material";
+import { Button, Card, Grid, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { QuestionnaireTable } from "../../components/Tables/QuestionnaireTable";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
@@ -56,13 +57,21 @@ class QuestionnairePage extends React.Component<{}, State> {
     renderCareplanTab(): JSX.Element {
         return (
             <>
-                <Typography variant="h6">Spørgeskemaer</Typography>
-                <br />
-                <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.questionnaires}>
-                    <Card>
-                        <QuestionnaireTable questionnaires={this.state.questionnaires} />
-                    </Card>
-                </IsEmptyCard>
+                <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                        <Typography variant="h6">Spørgeskemaer</Typography>
+                    </Grid>
+                    <Grid item xs={6} textAlign="right">
+                        <Button variant="contained" component={Link} to="questionnaires/create">Opret spørgsmål</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.questionnaires}>
+                            <Card>
+                                <QuestionnaireTable questionnaires={this.state.questionnaires} />
+                            </Card>
+                        </IsEmptyCard>
+                    </Grid>
+                </Grid>
             </>
         )
     }

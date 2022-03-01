@@ -1,9 +1,9 @@
-import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Card, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
+import { PlanDefinitionTable } from "../../components/Tables/PlanDefinitionTable";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../_context";
 
@@ -16,7 +16,7 @@ interface State {
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
-    dateHelper!: IDateHelper
+
 
     constructor(props: {}) {
         super(props)
@@ -37,7 +37,6 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
     }
     initialiseServices(): void {
         this.questionnaireService = this.context.questionnaireService;
-        this.dateHelper = this.context.dateHelper;
     }
     render(): JSX.Element {
         this.initialiseServices();
@@ -47,41 +46,23 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
     renderCareplanTab(): JSX.Element {
         return (
             <>
-                <Typography variant="h6">Patientgrupper</Typography>
-                <br />
-                <Card>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Navn</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Oprettelsesdato</TableCell>
-                                    <TableCell>Spørgeskemaer</TableCell>
-                                    <TableCell></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.planDefinitions.map(planDefinition => {
-                                    return (
-                                        <TableRow>
-                                            <TableCell><Typography>{planDefinition.name}</Typography></TableCell>
-                                            <TableCell><Typography>{planDefinition.status}</Typography></TableCell>
-                                            <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
-                                            <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
-                                            <TableCell>
-                                                <Button component={Link} to={"/plandefinitions/"+planDefinition.id +"/edit"} variant="outlined">Redigér</Button>
-                                                <Button variant="contained">Se mere</Button>
-                                            </TableCell>
+                <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                        <Typography variant="h6">Patientgrupper</Typography>
+                    </Grid>
+                    <Grid item xs={6} textAlign="right">
+                        <Button variant="contained" component={Link} to="plandefinitions/create" >Opret patientgruppe</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Card>
+                            <PlanDefinitionTable planDefinitions={this.state.planDefinitions} />
+                        </Card>
+                    </Grid>
+                </Grid>
 
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Card>
-                <Button variant="contained" component={Link} to="plandefinitions/create" >Opret patientgruppe</Button>
+                <br />
+
+
 
             </>
         )
