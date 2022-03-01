@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BaseIcon, BaseIconProps } from './Base/BaseIcon';
+import {BaseIcon, BaseIconProps} from "@kvalitetsit/hjemmebehandling/icons/BaseIcon"
 
 
 /* 
