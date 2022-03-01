@@ -11,7 +11,7 @@ import { CardHeader, Divider, Grid, Stack, Typography } from '@mui/material';
 import { Skeleton } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { PencilIcon } from '../Icons/PencilIcon';
+import { PencilIcon } from '../Icons/Icons';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 export interface Props {
   patient: PatientDetail
@@ -66,7 +66,7 @@ export class PatientCard extends Component<Props, State> {
             <Stack>
               <ErrorBoundary>
                 <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                  <PencilIcon fontSize="xl"/>
+                  <PencilIcon/>
                 </Button>
               </ErrorBoundary>
               <ErrorBoundary>

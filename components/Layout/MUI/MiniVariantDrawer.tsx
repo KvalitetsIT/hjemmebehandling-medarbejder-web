@@ -6,16 +6,13 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
-import HistoryIcon from '@mui/icons-material/History';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
-import GroupsIcon from '@mui/icons-material/Groups';
-import QuizIcon from '@mui/icons-material/Quiz';
+
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
+import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, LogoIcon, SurveyIcon, TasklistIcon } from '../../Icons/Icons';
 
 const drawerWidth = 270;
 
@@ -116,21 +113,21 @@ export default function MiniDrawer(): JSX.Element {
 
           <ListItem button component={Link} color="inherit" to="/patients">
             <ListItemIcon>
-              <AssignmentIcon />
+              <TasklistIcon />
             </ListItemIcon>
             <ListItemText>Opgaveliste</ListItemText>
           </ListItem>
 
           <ListItem button component={Link} color="inherit" to="/active/1">
             <ListItemIcon>
-              <SupervisedUserCircleIcon />
+              <ActivePatientsIcon />
             </ListItemIcon>
             <ListItemText primary="Aktive patienter" />
           </ListItem>
 
           <ListItem button component={Link} color="inherit" to="/inactive/1">
             <ListItemIcon>
-              <HistoryIcon />
+              <InactivePatientsIcon />
             </ListItemIcon>
             <ListItemText primary="Inaktive patienter" />
           </ListItem>
@@ -148,14 +145,14 @@ export default function MiniDrawer(): JSX.Element {
 
               <ListItem button component={Link} color="inherit" to="/questionnaires">
                 <ListItemIcon>
-                  <QuizIcon />
+                  <SurveyIcon />
                 </ListItemIcon>
                 <ListItemText primary="Spørgeskema" />
               </ListItem>
 
               <ListItem button component={Link} color="inherit" to="/plandefinitions">
                 <ListItemIcon>
-                  <GroupsIcon />
+                  <GroupIcon />
                 </ListItemIcon>
                 <ListItemText primary="Patientgrupper" />
               </ListItem>

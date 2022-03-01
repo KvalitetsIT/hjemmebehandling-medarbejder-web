@@ -8,7 +8,7 @@ import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/Ques
 import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
-import { PencilIcon } from '../Icons/PencilIcon';
+import { PencilIcon } from '../Icons/Icons';
 
 export interface Props {
   careplan: PatientCareplan

@@ -65,8 +65,6 @@ a {
 }
 
 
-
-
 .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
   font-weight: bold;
 }
@@ -116,3 +114,5 @@ a {
 .MuiFormControl-root.answer__status.yellow-answer {
   background-color: #F4B156;
 }
+
+

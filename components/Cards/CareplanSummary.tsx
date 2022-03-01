@@ -9,7 +9,7 @@ import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateH
 import ApiContext from '../../pages/_context';
 import { Link } from 'react-router-dom';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
-import { PencilIcon } from '../Icons/PencilIcon';
+import { PencilIcon } from '../Icons/Icons';
 
 import { FinishMonitoringButton } from '../Input/FinishMonitoringButton';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
