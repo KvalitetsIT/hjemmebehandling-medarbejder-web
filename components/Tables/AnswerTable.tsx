@@ -5,8 +5,8 @@ import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum'
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext from '../../pages/_context';
-import {IQuestionAnswerService} from '../../services/interfaces/IQuestionAnswerService';
-import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
+import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
+import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -184,7 +184,6 @@ export class AnswerTable extends Component<Props, State> {
 
                                     <TableRow className='table__row'>
                                         <TableCell width="10%">
-
                                         </TableCell>
                                         {questionaireResponses.map(questionResponse => {
                                             let severity = this.getChipColorFromCategory(questionResponse.category) as string
@@ -193,9 +192,12 @@ export class AnswerTable extends Component<Props, State> {
                                                 severity = "info"
 
                                             return (
-                                                <TableCell className="answer__table-head" align="center">
+                                                <TableCell 
+                                                    className="answer__table-head"
+                                                    align="center"
+                                                    >
 
-                                                    <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor}>
+                                                    <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor} minWidth={"250px"}>
                                                         <div className="answer__header">
                                                             <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
                                                             <Typography className="answer__date" align="center" variant="caption">{questionResponse.answeredTime ? this.datehelper.DateToString(questionResponse.answeredTime) : ""}</Typography>
