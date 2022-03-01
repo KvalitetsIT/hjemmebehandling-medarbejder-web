@@ -66,7 +66,7 @@ export class PatientCard extends Component<Props, State> {
             <Stack>
               <ErrorBoundary>
                 <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                  <PencilIcon />
+                  <PencilIcon fontSize="xl"/>
                 </Button>
               </ErrorBoundary>
               <ErrorBoundary>

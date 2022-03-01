@@ -63,9 +63,9 @@ a {
   min-height: initial;
   text-transform: inherit;
 }
-.Muttabs-indicator {
-  background-color: #5D74AC;
-}
+
+
+
 
 .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
   font-weight: bold;
