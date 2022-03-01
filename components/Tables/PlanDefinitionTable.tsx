@@ -41,7 +41,7 @@ export class PlanDefinitionTable extends Component<Props>{
                                     <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
                                     <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
                                     <TableCell>
-                                        <Stack direction="row" spacing={2}>
+                                        <Stack sx={{ float: "right" }} direction="row" spacing={2}>
                                             <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="outlined">Redigér</Button>
                                             <Button variant="contained">Se mere</Button>
                                         </Stack>
