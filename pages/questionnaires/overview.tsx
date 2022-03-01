@@ -15,7 +15,7 @@ interface State {
 }
 
 
-class QuestionnairePage extends React.Component<{}, State> {
+class QuestionnaireOverviewPage extends React.Component<{}, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
 
@@ -57,7 +57,7 @@ class QuestionnairePage extends React.Component<{}, State> {
     renderCareplanTab(): JSX.Element {
         return (
             <>
-                <Grid container spacing={1}>
+                <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={6}>
                         <Typography variant="h6">Spørgeskemaer</Typography>
                     </Grid>
@@ -79,4 +79,4 @@ class QuestionnairePage extends React.Component<{}, State> {
 
 
 }
-export default QuestionnairePage;
+export default QuestionnaireOverviewPage;

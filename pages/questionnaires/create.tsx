@@ -6,12 +6,12 @@ import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnair
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { CallToActionCard } from "../../../components/Cards/CallToActionCard";
-import { QuestionEditCard } from "../../../components/Cards/QuestionEditCard";
-import { TextFieldValidation } from "../../../components/Input/TextFieldValidation";
-import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent";
-import { IQuestionnaireService } from "../../../services/interfaces/IQuestionnaireService";
-import ApiContext from "../../_context";
+import { CallToActionCard } from "../../components/Cards/CallToActionCard";
+import { QuestionEditCard } from "../../components/Cards/QuestionEditCard";
+import { TextFieldValidation } from "../../components/Input/TextFieldValidation";
+import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
+import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
+import ApiContext from "../_context";
 
 interface State {
     loading: boolean
@@ -23,7 +23,7 @@ interface State {
 interface Props {
     match: { params: { questionnaireId?: string } }
 }
-class EditQuestionnairePage extends React.Component<Props, State> {
+class CreateQuestionnairePage extends React.Component<Props, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
 
@@ -254,4 +254,4 @@ class EditQuestionnairePage extends React.Component<Props, State> {
 
 }
 
-export default EditQuestionnairePage;
+export default CreateQuestionnairePage
