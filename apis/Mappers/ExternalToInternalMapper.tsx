@@ -399,6 +399,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         questionnaireResult.id = FhirUtils.unqualifyId(questionnaire!.id!)
         questionnaireResult.name = questionnaire!.title!;
+        questionnaireResult.lastUpdated = questionnaire.lastUpdated;
         questionnaireResult.status = questionnaire?.status;
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
         const callToActions: BaseQuestion[] = questionnaire.callToActions!.map(x => this.mapCallToAction(x));
