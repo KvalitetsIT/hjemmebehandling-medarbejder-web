@@ -88,6 +88,7 @@ export class Layout extends Component<{}, State> {
                     <Route path="/plandefinitions" render={(props) => <PlandefinitionOverview {...props} />} />
                 
                     <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <EditQuestionnairePage {...props} />} />
+                    <Route path="/questionnaires/create" render={(props) => <EditQuestionnairePage {...props} />} />
                     <Route path="/questionnaires" render={(props) => <QuestionnairePage {...props} />} />
 
                     <Route path="/active/:pagenr" render={(props) => <ActivePatients {...props} />} />
