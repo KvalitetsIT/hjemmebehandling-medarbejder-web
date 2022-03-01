@@ -26,12 +26,12 @@ export class QuestionnaireTable extends Component<Props>{
                         <>
                             {this.props.questionnaires!.map(questionnaire => {
                                 const observationQuestions =
-                                    questionnaire.questions?.filter(question => question && question.type == QuestionTypeEnum.OBSERVATION).map(q => (q as Question).question);
+                                    questionnaire.questions?.filter(question => question && question.type == QuestionTypeEnum.OBSERVATION).map(q => (q as Question));
                                 return (
                                     <TableRow>
                                         <TableCell>{questionnaire.name}</TableCell>
                                         <TableCell>{questionnaire.status}</TableCell>
-                                        <TableCell>{observationQuestions?.join(", ")}</TableCell>
+                                        <TableCell>{observationQuestions?.map(x=>x.measurementType?.displayName?.toString())?.join(", ")}</TableCell>
                                         <TableCell>
                                             <Stack sx={{ float: "right" }} direction="row" spacing={2}>
                                                 <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="outlined">Rediger</Button>

@@ -118,6 +118,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question2.Id = "q2";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
+        this.question2.measurementType = this.measurementType2
 
         this.question3.Id = "q3";
         this.question3.question = "Føler du dig frisk idag?"
@@ -342,7 +343,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
-        
+
         try {
             return [this.measurementType1, this.measurementType2]
         } catch (error) {
