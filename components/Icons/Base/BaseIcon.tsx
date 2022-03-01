@@ -1,8 +1,4 @@
-import { Icon, SvgIcon } from '@mui/material';
-import { url } from 'inspector';
 import * as React from 'react';
-
-
 
 export interface BaseIconProps {
     color?: string

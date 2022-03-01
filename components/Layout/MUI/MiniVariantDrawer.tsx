@@ -12,7 +12,7 @@ import { Typography } from '@mui/material';
 
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
-import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, LogoIcon, SurveyIcon, TasklistIcon } from '../../Icons/Icons';
+import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon } from '../../Icons/Icons';
 
 const drawerWidth = 270;
 
