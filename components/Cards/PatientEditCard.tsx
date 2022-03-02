@@ -15,6 +15,8 @@ import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/Servi
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { PhonenumberInput } from '../Input/PhonenumberInput';
+import { ICareplanService } from '../../services/interfaces/ICareplanService';
+import { PatientIsAlreadyActivePatientError } from '../Errors/PatientIsAlreadyActivePatientError';
 
 export interface Props {
   initialPatient: PatientDetail
@@ -35,6 +37,7 @@ export class PatientEditCard extends Component<Props, State> {
   static displayName = PatientEditCard.name;
   personService!: IPersonService;
   validationService!: IValidationService;
+  careplanService!: ICareplanService;
   collectionHelper!: ICollectionHelper;
 
   constructor(props: Props) {
@@ -61,6 +64,7 @@ export class PatientEditCard extends Component<Props, State> {
 
   InitializeServices(): void {
     this.personService = this.context.personService;
+    this.careplanService = this.context.careplanService;
     this.validationService = this.context.validationService;
     this.collectionHelper = this.context.collectionHelper;
   }
@@ -78,6 +82,10 @@ export class PatientEditCard extends Component<Props, State> {
       })
 
       const newPerson = await this.personService.GetPerson(tempCpr!);
+      const patientsCareplan = await this.careplanService.GetPatientCareplans(newPerson.cpr)
+      if (patientsCareplan.length > 0)
+        throw new PatientIsAlreadyActivePatientError();
+
       const afterResetPasswordToast = (
         <Toast snackbarTitle="Resultat af fremsøgning" snackbarColor="success">
           {newPerson.givenName} {newPerson.familyName} blev fundet og indsat i formularen
@@ -95,7 +103,7 @@ export class PatientEditCard extends Component<Props, State> {
       p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
       p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
       p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
-      p.cpr = tempCpr;
+      p.cpr = newPerson.cpr;
       this.setState({ patient: p });
       this.setState({
         loadingCprButton: false
@@ -103,7 +111,7 @@ export class PatientEditCard extends Component<Props, State> {
 
 
     } catch (error) {
-      if (error instanceof NotFoundError) {
+      if (error instanceof NotFoundError || error instanceof PatientIsAlreadyActivePatientError) {
         this.setState({ toast: <ToastError severity="info" error={error} /> })
       } else {
         this.setState(() => { throw error })
@@ -227,7 +235,7 @@ export class PatientEditCard extends Component<Props, State> {
                   value={this.state.patient.primaryPhone}
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
                   variant="outlined"
-                  />
+                />
 
                 <PhonenumberInput
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}

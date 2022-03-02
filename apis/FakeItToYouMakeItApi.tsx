@@ -590,6 +590,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetPerson(cpr: string): Promise<Person> {
         try {
             await new Promise(f => setTimeout(f, this.timeToWait));
+            this.person1.cpr = cpr;
             return this.person1;
         } catch (error) {
             return await this.HandleError(error)
