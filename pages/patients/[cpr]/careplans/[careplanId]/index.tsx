@@ -15,7 +15,6 @@ import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
 
-
 interface State {
 
   loading: boolean
@@ -73,15 +72,14 @@ class PatientCareplans extends React.Component<Props, State> {
 
       const careplan = careplans.find(a => !a?.terminationDate)
 
-      let questionnaireResponses: QuestionnaireResponse[] = [];
+      const questionnaireResponses: QuestionnaireResponse[] = [];
       if (careplan && careplan.id) {
-        const questionnaireIds: string[] = careplans.flatMap(x => x.questionnaires.map(x => x.id))
-
         activeCareplanId = careplan.id
-        questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, questionnaireIds, 1, 5)
+        for (const questionnaire of careplans.flatMap(c => c.questionnaires)) {
+          const tempRes = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, [questionnaire.id], 1, 5)
+          questionnaireResponses.push(...tempRes);
+        }
       }
-
-      console.log(questionnaireResponses)
 
       this.setState({
         loading: false,
