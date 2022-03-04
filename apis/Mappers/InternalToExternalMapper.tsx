@@ -15,6 +15,7 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
  */
 export default class InternalToExternalMapper extends BaseMapper {
+
     mapQuestion(internalQuestion: BaseQuestion): QuestionDto {
         const isCallToAction = internalQuestion instanceof CallToActionQuestion;
         if (isCallToAction)
@@ -30,6 +31,8 @@ export default class InternalToExternalMapper extends BaseMapper {
                 options: internalQuestion.options,
                 questionType: this.mapQuestionType(internalQuestion.type),
                 text: internalQuestion.question,
+
+                //helpertext
                 //required : 
                 //thresholds : internalQuestion.
             }
@@ -61,7 +64,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         return {
             linkId: callToActionQuestion.Id,
             enableWhen: callToActionQuestion.enableWhens?.map(enableWhen => this.mapEnableWhen(enableWhen)),
-            questionType: QuestionDtoQuestionTypeEnum.Quantity,
+            questionType: QuestionDtoQuestionTypeEnum.Display,
             text: callToActionQuestion.message
             //options : [],
             //required : false,
@@ -182,7 +185,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         return {
             id: questionnaire.id,
             callToActions: questionnaire.getCallToActions().map(cta => this.mapCallToAction(cta)),
-            questions: questionnaire.getChildQuestions().concat(questionnaire.getParentQuestions()).map(question => this.mapQuestion(question)),
+            questions: questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions()).map(question => this.mapQuestion(question)),
             lastUpdated: questionnaire.lastUpdated,
             status: questionnaire.status,
             title: questionnaire.name,

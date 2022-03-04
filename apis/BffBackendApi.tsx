@@ -101,7 +101,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     status: questionnaire.status,
 
                     callToActions: questionnaire.getCallToActions().map(x => this.toExternal.mapCallToAction(x)),
-                    questions: questionnaire.questions?.map(x => this.toExternal.mapQuestion(x)),
+                    questions: questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions())?.map(x => this.toExternal.mapQuestion(x)),
                 }
             }
             await this.questionnaireApi.patchQuestionnaire(request)
