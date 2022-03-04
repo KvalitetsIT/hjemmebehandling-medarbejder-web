@@ -227,7 +227,7 @@ export class AnswerTable extends Component<Props, State> {
 
                                                 <TableRow>
                                                     <TableCell>
-                                                        {question.question}
+                                                        {question.abbreviation}
                                                     </TableCell>
 
                                                     {questionnairesResponsesToShow.map(questionResponse => {
