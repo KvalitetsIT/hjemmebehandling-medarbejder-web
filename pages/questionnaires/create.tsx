@@ -75,6 +75,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             this.setState({
                 loading: true
             })
+
             if (this.state.questionnaire && this.state.editMode)
                 await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
 
@@ -110,14 +111,15 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
         const parentQuestions = questionnaire.getParentQuestions();
 
-        //If there are no call-to-action, we add one
+        //If there are no call-to-actions, we add one
         const hasCallToActionQuestion = questionnaire.getCallToActions().find(() => true);
-        if (!hasCallToActionQuestion) {
+        if (hasCallToActionQuestion == undefined) {
             const newCallToActionQuestion = new CallToActionQuestion();
             newCallToActionQuestion.Id = this.generateQuestionId(questionnaire.questions ?? []) + ""
             newCallToActionQuestion.enableWhens = [];
             questionnaire.questions?.push(newCallToActionQuestion)
         }
+
         const callToAction = questionnaire.getCallToActions().find(() => true);
 
         return (
@@ -189,9 +191,14 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 <Card>
                                     <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
                                     <Divider />
+                                    <CardContent>
+                                        <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
+                                    </CardContent>
+                                    <Divider />
 
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                        <Button variant="contained" onClick={() => this.submitQuestionnaire()}>Gem</Button>
+                                        <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som klade</Button>
+                                        <Button variant="contained" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE"); this.submitQuestionnaire() }}>Gem</Button>
                                     </CardActions>
                                 </Card>
 
@@ -244,11 +251,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: questionnaire })
     }
 
-    modifyQuestionnaire(questionnaireModifier: (questionnaire: Questionnaire, newValue: string) => Questionnaire, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    modifyQuestionnaire(questionnaireModifier: (questionnaire: Questionnaire, newValue: string) => Questionnaire, input: undefined | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, overrideInput?: string): void {
         if (!this.state.questionnaire)
             return;
 
-        const valueFromInput = input.currentTarget.value;
+        let valueFromInput = input?.currentTarget?.value ?? ""
+        if (overrideInput)
+            valueFromInput = overrideInput
         const modifiedQuestionnaire = questionnaireModifier(this.state.questionnaire, valueFromInput);
         this.setState({ questionnaire: modifiedQuestionnaire })
     }
@@ -256,6 +265,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     setName(questionnaire: Questionnaire, newValue: string): Questionnaire {
         const modifiedQuestionnaire = questionnaire;
         modifiedQuestionnaire.name = newValue;
+        return modifiedQuestionnaire;
+    }
+
+    setStatus(questionnaire: Questionnaire, newValue: string): Questionnaire {
+        const modifiedQuestionnaire = questionnaire;
+        modifiedQuestionnaire.status = newValue;
         return modifiedQuestionnaire;
     }
 
