@@ -102,7 +102,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     renderContent(): JSX.Element {
 
         if (this.state.submitted)
-            return (<Redirect push to={"/questionnaires/"} />)
+            return (<Redirect push to={"/questionnaires"} />)
 
         if (!this.state.questionnaire)
             return <>Ingen</>

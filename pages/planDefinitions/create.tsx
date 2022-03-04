@@ -3,6 +3,7 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { AccordianWrapper } from "../../components/Cards/PlanDefinition/AccordianWrapper";
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
@@ -122,79 +123,88 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
     renderCareplanTab(): JSX.Element {
         this.InitializeServices();
+
+        if (this.state.submitted)
+            return (<Redirect push to={"/plandefinitions"} />)
+
         return (
+            <>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Opret patientgruppe</Typography>
+                    </Grid>
+                    <Grid item xs>
+                        <AccordianWrapper
+                            expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
+                            title="Patientgruppe"
+                            toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
+                            continueButtonAction={() => this.expandNextPage(AccordianRowEnum.generelInfo)}
+                        >
 
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography variant="h6">Opret patientgruppe</Typography>
-                </Grid>
-                <Grid item xs>
-                    <AccordianWrapper
-                        expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
-                        title="Patientgruppe"
-                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
-                        continueButtonAction={() => this.expandNextPage(AccordianRowEnum.generelInfo)}
-                    >
+                            <PlanDefinitionEdit planDefinition={this.state.planDefinition} />
 
-                        <PlanDefinitionEdit planDefinition={this.state.planDefinition} />
+                        </AccordianWrapper>
 
-                    </AccordianWrapper>
+                        <AccordianWrapper
+                            expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
+                            title="Tilknyt spørgeskema"
+                            toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
+                            continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}
+                            previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
+                        >
 
-                    <AccordianWrapper
-                        expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
-                        title="Tilknyt spørgeskema"
-                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
-                        continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}
-                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
-                    >
+                            <PlanDefinitionEditQuestionnaire planDefinition={this.state.planDefinition} />
 
-                        <PlanDefinitionEditQuestionnaire planDefinition={this.state.planDefinition} />
+                        </AccordianWrapper>
 
-                    </AccordianWrapper>
+                        <AccordianWrapper
+                            expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
+                            title="Alarmgrænser"
+                            toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
+                            previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
+                            continueButtonContentOverride="Gem"
+                            continueButtonAction={async () => {
+                                this.setStatusOnPlanDefinition("ACTIVE");
+                                await this.submitQuestionnaire();
+                            }}
+                        >
 
-                    <AccordianWrapper
-                        expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
-                        title="Alarmgrænser"
-                        toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
-                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
-                        continueButtonContentOverride="Gem"
-                        continueButtonAction={() => console.log(this.state.planDefinition)}
-                    >
-
-                        <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
+                            <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
 
 
-                    </AccordianWrapper>
-                </Grid>
-                <Grid item xs={2}>
-                    <Card>
+                        </AccordianWrapper>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Card>
 
-                        <CardHeader
-                            title={<Typography>Oprettelse af patientgruppe</Typography>} />
+                            <CardHeader
+                                title={<Typography>Oprettelse af patientgruppe</Typography>} />
 
-                        <Divider />
-                        <CardContent>
-                            <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
-                                <Step key="plandefinitionGeneral">
-                                    <StepLabel>Udfyld patientgruppens navn</StepLabel>
-                                </Step>
-                                <Step key="attachQuestionnaire">
+                            <Divider />
+                            <CardContent>
+                                <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
+                                    <Step key="plandefinitionGeneral">
+                                        <StepLabel>Udfyld patientgruppens navn</StepLabel>
+                                    </Step>
+                                    <Step key="attachQuestionnaire">
 
-                                    <StepLabel>Tilknyt spørgeskema</StepLabel>
+                                        <StepLabel>Tilknyt spørgeskema</StepLabel>
 
-                                </Step>
-                                <Step key="setThresholds">
-                                    <StepLabel>Sætte alarmgrænser</StepLabel>
-                                </Step>
+                                    </Step>
+                                    <Step key="setThresholds">
+                                        <StepLabel>Sætte alarmgrænser</StepLabel>
+                                    </Step>
 
-                            </Stepper>
-                        </CardContent>
-                        <CardActions>
-                            <Button fullWidth variant="outlined">Gem patientgruppen som kladde</Button>
-                        </CardActions>
-                    </Card>
-                </Grid>
-            </Grid>
+                                </Stepper>
+                            </CardContent>
+                            <CardActions>
+                                <Button fullWidth onClick={async () => { this.setStatusOnPlanDefinition("DRAFT"); await this.submitQuestionnaire(); }} variant="outlined">Gem patientgruppen som kladde</Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                </Grid >
+                {this.state.errorToast ?? <></>}
+            </>
         )
     }
 
@@ -226,6 +236,11 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         })
     }
 
+    setStatusOnPlanDefinition(newStatus: string): void {
+        const planDefinition = this.state.planDefinition
+        planDefinition.status = newStatus;
+        this.setState({ planDefinition: planDefinition })
+    }
     getActiveStep(): number {
         const openAccordians = this.state.openAccordians;
         if (openAccordians[AccordianRowEnum.generelInfo] == true)
