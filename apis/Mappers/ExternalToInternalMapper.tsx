@@ -165,6 +165,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     mapQuestionDto(questionDto: QuestionDto): Question {
         const question = new Question();
         question.Id = questionDto.linkId!;
+        question.abbreviation = questionDto.linkId
         switch (questionDto.questionType) {
             case QuestionDtoQuestionTypeEnum.Boolean:
                 question.type = QuestionTypeEnum.BOOLEAN;
