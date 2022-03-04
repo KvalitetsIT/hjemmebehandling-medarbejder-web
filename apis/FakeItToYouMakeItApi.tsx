@@ -344,6 +344,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.responseLinkEnabled = true
     }
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        questionnaire.id = Date.now()+""
         this.allQuestionnaires.push(questionnaire);
     }
 

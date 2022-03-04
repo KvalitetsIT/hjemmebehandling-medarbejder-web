@@ -16,7 +16,7 @@ export interface Props {
 
 export interface State {
     planDefinition: PlanDefinition
-    allPlanDefinitions: PlanDefinition[]
+    allQuestionnaires: Questionnaire[]
     checked: Questionnaire[]
     loading: boolean
 }
@@ -35,7 +35,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
             loading: false,
             planDefinition: props.planDefinition,
             checked: [],
-            allPlanDefinitions: []
+            allQuestionnaires: []
         }
 
         this.modifyPlandefinition = this.modifyPlandefinition.bind(this);
@@ -48,8 +48,8 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
 
     async componentDidMount(): Promise<void> {
         try {
-            const planDefinitions = await this.questionnaireService.GetAllPlanDefinitions()
-            this.setState({ allPlanDefinitions: planDefinitions })
+            const planDefinitions = await this.questionnaireService.GetAllQuestionnaires()
+            this.setState({ allQuestionnaires: planDefinitions })
         } catch (error) {
             this.setState(() => { throw error })
         }
@@ -176,7 +176,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
 
     getQuestinnairesNotInPlandefinition(): Questionnaire[] {
         const currentQuestionnaires = this.state.planDefinition.questionnaires ?? [];
-        const otherQuestionnaires = this.state.allPlanDefinitions.flatMap(x => x.questionnaires!) ?? [];
+        const otherQuestionnaires = this.state.allQuestionnaires ?? [];
         return this.intersect(otherQuestionnaires, currentQuestionnaires)
     }
 
