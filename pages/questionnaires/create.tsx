@@ -18,6 +18,7 @@ interface State {
     submitted: boolean
     questionnaire?: Questionnaire
     errorToast: JSX.Element
+    editMode: boolean
 }
 
 interface Props {
@@ -33,7 +34,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             loading: true,
             questionnaire: undefined,
             errorToast: (<></>),
-            submitted: false
+            submitted: false,
+            editMode: props.match.params.questionnaireId ? true : false
         }
     }
 
@@ -55,7 +57,9 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         try {
             const questionnaireId = this.props.match.params.questionnaireId;
             let questionnaire = new Questionnaire();
-            questionnaire.questions = [new Question()];
+            const question = new Question();
+            question.Id = this.generateQuestionId([]) + "";
+            questionnaire.questions = [question];
             if (questionnaireId != undefined)
                 questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
 
@@ -71,8 +75,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             this.setState({
                 loading: true
             })
-            if (this.state.questionnaire)
+            if (this.state.questionnaire && this.state.editMode)
                 await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
+
+            if (this.state.questionnaire && !this.state.editMode)
+                await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
+
             this.setState({
                 submitted: true
             })

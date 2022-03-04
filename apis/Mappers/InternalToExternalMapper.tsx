@@ -1,11 +1,13 @@
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionnaireWrapperDto } from "../../generated/models";
+import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -13,6 +15,70 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
  */
 export default class InternalToExternalMapper extends BaseMapper {
+    mapQuestion(internalQuestion: BaseQuestion): QuestionDto {
+        const isCallToAction = internalQuestion instanceof CallToActionQuestion;
+        if (isCallToAction)
+            return this.mapCallToAction(internalQuestion);
+
+
+        const isRegularQuestion = internalQuestion instanceof Question
+        if (isRegularQuestion) {
+            const enableWhen: EnableWhen<boolean>[] = internalQuestion.enableWhen ? [internalQuestion.enableWhen] : []
+            return {
+                enableWhen: enableWhen.map(ew => this.mapEnableWhen(ew)),
+                linkId: internalQuestion.Id,
+                options: internalQuestion.options,
+                questionType: this.mapQuestionType(internalQuestion.type),
+                text: internalQuestion.question,
+                //required : 
+                //thresholds : internalQuestion.
+            }
+        }
+
+        throw new Error("InternalToExternalMapper) Question was not regular question or callToAction - What is it?")
+
+
+    }
+    mapQuestionType(type: QuestionTypeEnum | undefined): QuestionDtoQuestionTypeEnum | undefined {
+        switch (type) {
+            case QuestionTypeEnum.BOOLEAN:
+                return QuestionDtoQuestionTypeEnum.Boolean
+            //case QuestionTypeEnum.CALLTOACTION:
+            //   return QuestionDtoQuestionTypeEnum.
+            case QuestionTypeEnum.CHOICE:
+                return QuestionDtoQuestionTypeEnum.Choice
+            case QuestionTypeEnum.INTEGER:
+                return QuestionDtoQuestionTypeEnum.Integer
+            case QuestionTypeEnum.OBSERVATION:
+                return QuestionDtoQuestionTypeEnum.Quantity
+            case QuestionTypeEnum.STRING:
+                return QuestionDtoQuestionTypeEnum.String
+        }
+        throw new Error("InternalToExternal) could not convert from " + type);
+    }
+
+    mapCallToAction(callToActionQuestion: CallToActionQuestion): QuestionDto {
+        return {
+            linkId: callToActionQuestion.Id,
+            enableWhen: callToActionQuestion.enableWhens?.map(enableWhen => this.mapEnableWhen(enableWhen)),
+            questionType: QuestionDtoQuestionTypeEnum.Quantity,
+            text: callToActionQuestion.message
+            //options : [],
+            //required : false,
+            //thresholds : []
+        }
+    }
+    mapEnableWhen(enableWhen: EnableWhen<boolean>): EnableWhenDto {
+        return {
+            answer: {
+                linkId: enableWhen.questionId,
+                answerType: AnswerModelAnswerTypeEnum.Boolean,
+                value: enableWhen.answer + ""
+            },
+            operator: EnableWhenOperatorEnum.Equal
+        }
+    }
+
     mapCarePlan(carePlan: PatientCareplan): CarePlanDto {
         const carePlanDto = {
             id: "dummy",
@@ -86,7 +152,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 return FrequencyDtoWeekdaysEnum.Sun
             default:
                 throw new Error('Could not map DayEnum ' + weekday)
-                
+
         }
     }
 
@@ -111,10 +177,25 @@ export default class InternalToExternalMapper extends BaseMapper {
 
     }
 
+    mapQuestionnaireToDto(questionnaire: Questionnaire): QuestionnaireDto {
+
+        return {
+            id: questionnaire.id,
+            callToActions: questionnaire.getCallToActions().map(cta => this.mapCallToAction(cta)),
+            questions: questionnaire.getChildQuestions().concat(questionnaire.getParentQuestions()).map(question => this.mapQuestion(question)),
+            lastUpdated: questionnaire.lastUpdated,
+            status: questionnaire.status,
+            title: questionnaire.name,
+            version: questionnaire.version
+        }
+
+    }
+
+
     mapPlanDefinition(planDefinition: PlanDefinition): PlanDefinitionDto {
 
         return {
-            id: FhirUtils.qualifyId(planDefinition.id!,Qualifier.PlanDefinition),
+            id: FhirUtils.qualifyId(planDefinition.id!, Qualifier.PlanDefinition),
             name: planDefinition.name,
             questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q))
         }

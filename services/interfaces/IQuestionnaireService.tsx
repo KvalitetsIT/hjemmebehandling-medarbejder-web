@@ -15,6 +15,8 @@ import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/Thresh
  */
 export interface IQuestionnaireService {
 
+
+
   //====================FIND====================
   /**
    * Goes through all the provided questionnaireResponses 
@@ -36,6 +38,12 @@ export interface IQuestionnaireService {
      * @param questionnaire the questionnaire to be updated
      */
   updateQuestionnaire(questionnaire: Questionnaire): Promise<void>
+
+  /**
+     * Creates a questionnaire from provided paramater
+     * @param questionnaire the new questionnaire to be created
+     */
+  createQuestionnaire(questionnaire: Questionnaire): Promise<void>
 
   /**
    * Provide a response, and a question - and you shall recieve the answer.
@@ -69,7 +77,7 @@ export interface IQuestionnaireService {
    * Returns all questionnaires
    */
   GetAllQuestionnaires(): Promise<Questionnaire[]>
-  
+
   /**
   * Returns one single plandefinitions in system
   * @param planDefinitionId the id of the plandefinition to fetch

@@ -48,6 +48,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     questionnaire1: Questionnaire = new Questionnaire();
     questionnaire2: Questionnaire = new Questionnaire();
     questionnaire3: Questionnaire = new Questionnaire();
+    allQuestionnaires: Questionnaire[] = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
 
     //Response1
     questionnaireResponse1: QuestionnaireResponse = new QuestionnaireResponse();
@@ -342,6 +343,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        this.allQuestionnaires.push(questionnaire);
+    }
 
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
 
@@ -361,14 +365,15 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
-        return [this.questionnaire1, this.questionnaire2, this.questionnaire3].find(x => x.id == questionnaireId)
+        return this.allQuestionnaires.find(x => x.id == questionnaireId)
     }
     async GetAllQuestionnaires(): Promise<Questionnaire[]> {
-        return [this.questionnaire1, this.questionnaire2, this.questionnaire3];
+        return this.allQuestionnaires;
     }
 
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
-        throw new NotImplementedError()
+        const toChangeIndex = this.allQuestionnaires.findIndex(x => x.id == questionnaire.id);
+        this.allQuestionnaires.splice(toChangeIndex, 1, questionnaire);
     }
 
     async IsPatientOnUnanswered(cpr: string): Promise<boolean> {

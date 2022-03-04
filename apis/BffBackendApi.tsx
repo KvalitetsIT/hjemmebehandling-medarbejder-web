@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
+import { Configuration, CreateQuestionnaireOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -45,6 +45,18 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         super();
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
+    }
+    async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        try {
+            const request: CreateQuestionnaireOperationRequest = {
+                createQuestionnaireRequest: {
+                    questionnaire: this.toExternal.mapQuestionnaireToDto(questionnaire)
+                }
+            }
+            await this.questionnaireApi.createQuestionnaire(request)
+        } catch (error) {
+            return this.HandleError(error)
+        }
     }
     async GetAllQuestionnaires(): Promise<Questionnaire[]> {
         try {
@@ -80,8 +92,22 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
 
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
-        console.log(questionnaire)
-        throw new NotImplementedError()
+        try {
+            const request: PatchQuestionnaireOperationRequest = {
+
+                id: questionnaire.id,
+                patchQuestionnaireRequest: {
+                    title: questionnaire.name,
+                    status: questionnaire.status,
+
+                    callToActions: questionnaire.getCallToActions().map(x => this.toExternal.mapCallToAction(x)),
+                    questions: questionnaire.questions?.map(x => this.toExternal.mapQuestion(x)),
+                }
+            }
+            await this.questionnaireApi.patchQuestionnaire(request)
+        } catch (error) {
+            return this.HandleError(error)
+        }
     }
 
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {

@@ -12,6 +12,13 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
  * Containing all methods that should call the actual api
  */
 export interface IBackendApi {
+
+    /**
+     * Creates a questionnaire from provided paramater
+     * @param questionnaire the new questionnaire to be created
+     */
+    createQuestionnaire(questionnaire: Questionnaire): Promise<void>;
+
     /**
      * Assumes the questionnaire already exists
      * Updates the given questionnaire based on the id of the provided entity
