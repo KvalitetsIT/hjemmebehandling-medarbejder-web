@@ -1,7 +1,7 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
@@ -114,6 +114,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const hasCallToActionQuestion = questionnaire.getCallToActions().find(() => true);
         if (!hasCallToActionQuestion) {
             const newCallToActionQuestion = new CallToActionQuestion();
+            newCallToActionQuestion.Id = this.generateQuestionId(questionnaire.questions ?? []) + ""
             newCallToActionQuestion.enableWhens = [];
             questionnaire.questions?.push(newCallToActionQuestion)
         }
@@ -206,7 +207,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         )
     }
 
-    generateQuestionId(existingQuestions: Question[]): number {
+    generateQuestionId(existingQuestions: BaseQuestion[]): number {
 
         let foundNewId = false;
         let newId = 0;
