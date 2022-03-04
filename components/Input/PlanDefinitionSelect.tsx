@@ -9,6 +9,7 @@ import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireSer
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import {IValidationService} from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 
 export interface Props {
   careplan: PatientCareplan
@@ -29,6 +30,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   static contextType = ApiContext
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
+  planDefinitionService!: IPlanDefinitionService
 
   constructor(props: Props) {
     super(props);
@@ -43,6 +45,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   InitializeServices(): void {
     this.questionnaireService = this.context.questionnaireService;
+    this.planDefinitionService = this.context.planDefinitionService;
     this.validationService = this.context.validationService;
   }
 
@@ -70,7 +73,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
     try {
 
-      const planDefinitions = await this.questionnaireService.GetAllPlanDefinitions();
+      const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions();
 
       this.setState({
         allPlanDefinitions: planDefinitions

@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { PlanDefinitionTable } from "../../components/Tables/PlanDefinitionTable";
-import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
+import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext from "../_context";
 
 interface State {
@@ -15,7 +15,7 @@ interface State {
 
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
-    questionnaireService!: IQuestionnaireService
+    planDefinitionService!: IPlanDefinitionService
 
 
     constructor(props: {}) {
@@ -27,7 +27,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
     }
     async componentDidMount(): Promise<void> {
         try {
-            const planDefinitions = await this.questionnaireService.GetAllPlanDefinitions();
+            const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions();
             this.setState({ planDefinitions: planDefinitions });
         } catch (error) {
             this.setState(() => { throw error })
@@ -36,7 +36,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
 
     }
     initialiseServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
+        this.planDefinitionService = this.context.planDefinitionService;
     }
     render(): JSX.Element {
         this.initialiseServices();

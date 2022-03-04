@@ -21,6 +21,8 @@ import ValidationService from '../services/ValidationService';
 import { IValidationService } from '../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
+import PlanDefinitionService from '../services/PlanDefinitionService';
+import { IPlanDefinitionService } from '../services/interfaces/IPlanDefinitionService';
 
 /**
  * 
@@ -33,6 +35,7 @@ interface IApiContext {
     personService: IPersonService,
     userService: IUserService,
     validationService: IValidationService,
+    planDefinitionService: IPlanDefinitionService,
 
     dateHelper: IDateHelper
     collectionHelper: ICollectionHelper
@@ -47,6 +50,7 @@ const ApiContext = createContext<IApiContext>(
         userService: new UserService(new FakeItToYouMakeItApi()),
         personService: new PersonService(new FakeItToYouMakeItApi()),
         validationService: new ValidationService(),
+        planDefinitionService: new PlanDefinitionService(new FakeItToYouMakeItApi()),
 
         dateHelper: new DanishDateHelper(),
         collectionHelper: new CollectionHelper()

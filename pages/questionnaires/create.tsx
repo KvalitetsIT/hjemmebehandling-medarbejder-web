@@ -16,8 +16,8 @@ import ApiContext from "../_context";
 interface State {
     loading: boolean
     submitted: boolean
-    questionnaire?: Questionnaire
     errorToast: JSX.Element
+    questionnaire?: Questionnaire
     editMode: boolean
 }
 

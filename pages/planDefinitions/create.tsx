@@ -1,3 +1,5 @@
+import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
+import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
@@ -6,13 +8,17 @@ import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDe
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
-import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
+import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext from "../_context";
 
 interface State {
     loading: boolean
+    submitted: boolean
+    errorToast: JSX.Element
+
     planDefinition: PlanDefinition
     openAccordians: boolean[]
+    editMode: boolean
 }
 
 interface Props {
@@ -27,7 +33,7 @@ enum AccordianRowEnum {
 
 export default class CreatePlandefinition extends React.Component<Props, State> {
     static contextType = ApiContext
-    questionnaireService!: IQuestionnaireService
+    planDefinitionService!: IPlanDefinitionService
 
     constructor(props: Props) {
         super(props)
@@ -40,14 +46,18 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         newPlanDefinition.questionnaires = []
         this.state = {
             loading: false,
+            submitted: false,
+            errorToast: <></>,
+
             openAccordians: accordian,
-            planDefinition: newPlanDefinition
+            planDefinition: newPlanDefinition,
+            editMode: props.match.params.plandefinitionid ? true : false
         }
 
     }
 
     InitializeServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
+        this.planDefinitionService = this.context.planDefinitionService;
     }
 
     async componentDidMount(): Promise<void> {
@@ -55,7 +65,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         try {
             const providedPlanDefinitionId = this.props.match.params.plandefinitionid
             if (providedPlanDefinitionId) {
-                const planDefinitionToEdit = await this.questionnaireService.GetPlanDefinitionById(providedPlanDefinitionId)
+                const planDefinitionToEdit = await this.planDefinitionService.GetPlanDefinitionById(providedPlanDefinitionId)
                 this.setState({ planDefinition: planDefinitionToEdit });
             }
         } catch (error) {
@@ -146,9 +156,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                         expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
                         title="Alarmgrænser"
                         toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
-                        continueButtonAction={() => console.log(this.state.planDefinition)}
                         previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
                         continueButtonContentOverride="Gem"
+                        continueButtonAction={() => console.log(this.state.planDefinition)}
                     >
 
                         <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
@@ -186,6 +196,34 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                 </Grid>
             </Grid>
         )
+    }
+
+    async submitQuestionnaire(): Promise<void> {
+        try {
+            this.setState({
+                loading: true
+            })
+
+            if (this.state.planDefinition && this.state.editMode)
+                await this.planDefinitionService.updatePlanDefinition(this.state.planDefinition);
+
+            if (this.state.planDefinition && !this.state.editMode)
+                await this.planDefinitionService.createPlanDefinition(this.state.planDefinition);
+
+            this.setState({
+                submitted: true
+            })
+        } catch (error) {
+            if (error instanceof BaseServiceError) {
+                this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+            } else {
+                this.setState(() => { throw error })
+            }
+        }
+
+        this.setState({
+            loading: false
+        })
     }
 
     getActiveStep(): number {

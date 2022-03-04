@@ -19,6 +19,7 @@ import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishIm
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import PlanDefinitionService from '../services/PlanDefinitionService';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     , patientBackend = backendApi
     , userBackend = backendApi
     , personBackend = backendApi
+    , planDefinitionBackend = backendApi
     ;
 
   if (process?.env.NODE_ENV === 'development') {
@@ -51,6 +53,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
       userBackend = mockApi;
     }
+    if (process.env.NEXT_PUBLIC_MOCK_PLANDEFINITION_SERVICE === "true") {
+      planDefinitionBackend = mockApi;
+    }
 
   }
 
@@ -70,6 +75,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
               userService: new UserService(userBackend),
               personService: new PersonService(personBackend),
               validationService: new ValidationService(),
+              planDefinitionService: new PlanDefinitionService(planDefinitionBackend),
 
               //Helpers
               dateHelper: new DanishDateHelper(),

@@ -11,6 +11,7 @@ import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnair
 import CloseIcon from '@mui/icons-material/Close';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
+import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 
 export interface Props {
     careplan : PatientCareplan
@@ -27,6 +28,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   static displayName = AddQuestionnaireButton.name;
   static contextType = ApiContext
   questionnaireService! : IQuestionnaireService
+  planDefinitionService! : IPlanDefinitionService
 
 
   constructor(props : Props){
@@ -38,6 +40,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   }
   InitializeServices() : void{
     this.questionnaireService = this.context.questionnaireService;
+    this.planDefinitionService = this.context.planDefinitionService;
   }
 
   async AddQuestionnaire(questionnaireToAdd : Questionnaire) : Promise<void>{
@@ -121,7 +124,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   }
 
   async populateQuestionnairesList() : Promise<void>{
-    const allPlanDefinitions = await this.questionnaireService.GetAllPlanDefinitions()
+    const allPlanDefinitions = await this.planDefinitionService.GetAllPlanDefinitions()
     this.setState({
         allPlanDefinitions : allPlanDefinitions ?? []
     })

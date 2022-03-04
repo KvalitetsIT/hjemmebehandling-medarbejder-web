@@ -1,7 +1,6 @@
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { BaseQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
@@ -85,22 +84,6 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
     try {
       return await this.backendApi.AddQuestionnaireToCareplan(careplan, questionnaireToAdd);
-    } catch (error: unknown) {
-      return this.HandleError(error);
-    }
-  }
-
-  async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
-    try {
-      return await this.backendApi.GetAllPlanDefinitions();
-    } catch (error: unknown) {
-      return this.HandleError(error);
-    }
-  }
-
-  async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
-    try {
-      return await this.backendApi.GetPlanDefinitionById(planDefinitionId);
     } catch (error: unknown) {
       return this.HandleError(error);
     }

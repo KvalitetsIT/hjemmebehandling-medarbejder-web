@@ -1,6 +1,5 @@
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { BaseQuestion, Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
@@ -68,23 +67,12 @@ export interface IQuestionnaireService {
    * @returns if true the patient has unanswered questionnaires
    */
   IsPatientOnUnanswered: (cpr: string) => Promise<boolean>
-  /**
-   * Get all plan definitions
-   */
-  GetAllPlanDefinitions: () => Promise<Array<PlanDefinition>>
 
   /**
    * Returns all questionnaires
    */
   GetAllQuestionnaires(): Promise<Questionnaire[]>
 
-  /**
-  * Returns one single plandefinitions in system
-  * @param planDefinitionId the id of the plandefinition to fetch
-  * @returns one single plandefinition
-  * @throws if plandefinition with id does not exist 
-  */
-  GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition>
   /**
    * Returns all questionnaireresponses that
    * - Has a reference to the provided careplan and
