@@ -104,8 +104,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
         planDefinition.id = FhirUtils.unqualifyId(planDefinitionDto.id!);
         planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
         planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-        planDefinition.status = "HardCodedActive"; //TODO: Implement in BFF
-        planDefinition.created = new Date(); //TODO: Implement in BFF
+        planDefinition.status = planDefinitionDto.status
+        planDefinition.created = planDefinitionDto.created
         return planDefinition
 
     }
