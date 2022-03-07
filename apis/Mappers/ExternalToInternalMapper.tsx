@@ -104,10 +104,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
         planDefinition.id = FhirUtils.unqualifyId(planDefinitionDto.id!);
         planDefinition.name = planDefinitionDto.title ?? "Titel mangler";
         planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
-        planDefinition.status = planDefinitionDto.status
+        planDefinition.status = PlanDefinition.stringToPlanDefinitionStatus(planDefinitionDto.status)
         planDefinition.created = planDefinitionDto.created
         return planDefinition
-
     }
 
     mapThresholdDtos(thresholdDtos: Array<ThresholdDto>): Array<ThresholdCollection> {
@@ -401,14 +400,13 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.id = FhirUtils.unqualifyId(questionnaire!.id!)
         questionnaireResult.name = questionnaire!.title!;
         questionnaireResult.lastUpdated = questionnaire.lastUpdated;
-        questionnaireResult.status = questionnaire?.status;
+        questionnaireResult.status = Questionnaire.stringToQuestionnaireStatus(questionnaire?.status)
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
         const callToActions: BaseQuestion[] = questionnaire.callToActions!.map(x => this.mapCallToAction(x));
         questionnaireResult.questions?.push(...callToActions);
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
-
     mapPatientDto(patientDto: PatientDto): PatientDetail {
         let address: Address = {}
         if (patientDto.patientContactDetails) {

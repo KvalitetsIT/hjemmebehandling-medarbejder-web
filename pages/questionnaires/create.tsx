@@ -270,7 +270,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     setStatus(questionnaire: Questionnaire, newValue: string): Questionnaire {
         const modifiedQuestionnaire = questionnaire;
-        modifiedQuestionnaire.status = newValue;
+        modifiedQuestionnaire.status = Questionnaire.stringToQuestionnaireStatus(newValue)
         return modifiedQuestionnaire;
     }
 

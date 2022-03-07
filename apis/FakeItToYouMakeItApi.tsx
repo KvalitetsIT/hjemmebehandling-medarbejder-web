@@ -9,9 +9,9 @@ import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
@@ -27,6 +27,7 @@ import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -147,7 +148,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency.repeated = FrequencyEnum.WEEKLY;
         frequency.deadline = '11:00'
         this.questionnaire1.frequency = frequency;
-        this.questionnaire1.status = "Aktiv"
+        this.questionnaire1.status = BaseModelStatus.ACTIVE
         this.questionnaire1.lastUpdated = this.CreateDate();
         this.questionnaire1.version = "1"
 
@@ -174,7 +175,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.planDefinition1.name = "Infektionsmedicinsk patientgruppe"
         this.planDefinition1.id = "def1"
-        this.planDefinition1.status = "Aktiv"
+        this.planDefinition1.status = BaseModelStatus.ACTIVE
         this.planDefinition1.created = this.CreateDate();
         this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
 

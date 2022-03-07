@@ -1,6 +1,7 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
@@ -164,7 +165,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                             previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
                             continueButtonContentOverride="Gem"
                             continueButtonAction={async () => {
-                                this.setStatusOnPlanDefinition("ACTIVE");
+                                this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
                                 await this.submitQuestionnaire();
                             }}
                         >
@@ -198,7 +199,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 </Stepper>
                             </CardContent>
                             <CardActions>
-                                <Button fullWidth onClick={async () => { this.setStatusOnPlanDefinition("DRAFT"); await this.submitQuestionnaire(); }} variant="outlined">Gem patientgruppen som kladde</Button>
+                                <Button fullWidth onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }} variant="outlined">Gem patientgruppen som kladde</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -236,7 +237,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         })
     }
 
-    setStatusOnPlanDefinition(newStatus: string): void {
+    setStatusOnPlanDefinition(newStatus: PlanDefinitionStatus | BaseModelStatus): void {
         const planDefinition = this.state.planDefinition
         planDefinition.status = newStatus;
         this.setState({ planDefinition: planDefinition })

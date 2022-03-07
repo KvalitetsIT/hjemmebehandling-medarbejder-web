@@ -187,7 +187,7 @@ export default class InternalToExternalMapper extends BaseMapper {
             callToActions: questionnaire.getCallToActions().map(cta => this.mapCallToAction(cta)),
             questions: questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions()).map(question => this.mapQuestion(question)),
             lastUpdated: questionnaire.lastUpdated,
-            status: questionnaire.status,
+            status: questionnaire.status?.toString(),
             title: questionnaire.name,
             version: questionnaire.version
         }
@@ -200,7 +200,8 @@ export default class InternalToExternalMapper extends BaseMapper {
         return {
             id: FhirUtils.qualifyId(planDefinition.id!, Qualifier.PlanDefinition),
             name: planDefinition.name,
-            questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q))
+            questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q)),
+            status: planDefinition.status?.toString()
         }
 
     }
