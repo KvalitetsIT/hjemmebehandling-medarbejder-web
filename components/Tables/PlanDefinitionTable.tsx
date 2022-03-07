@@ -1,5 +1,6 @@
 import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { TableCell } from "@kvalitetsit/hjemmebehandling/node_modules/@mui/material";
 import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Component, ReactNode } from "react";
@@ -37,7 +38,7 @@ export class PlanDefinitionTable extends Component<Props>{
                             return (
                                 <TableRow>
                                     <TableCell><Typography>{planDefinition.name}</Typography></TableCell>
-                                    <TableCell><Typography>{planDefinition.status}</Typography></TableCell>
+                                    <TableCell><Typography>{this.statusToString(planDefinition.status)}</Typography></TableCell>
                                     <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
                                     <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
                                     <TableCell>
@@ -54,5 +55,18 @@ export class PlanDefinitionTable extends Component<Props>{
                 </Table>
             </TableContainer>
         )
+    }
+
+    statusToString(stringStatus?: BaseModelStatus | PlanDefinitionStatus) : string {
+        switch (stringStatus) {
+            case BaseModelStatus.ACTIVE:
+                return "Aktiv"
+            case BaseModelStatus.DRAFT:
+                return "Kladde"
+            case BaseModelStatus.UKENDT:
+                return "Ukendt"
+            default:
+                return "N/A"
+        }
     }
 }
