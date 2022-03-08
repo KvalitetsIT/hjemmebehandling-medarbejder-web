@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import {IUserService} from '../../services/interfaces/IUserService';
+import { IUserService } from '../../services/interfaces/IUserService';
 import { User } from '@kvalitetsit/hjemmebehandling/Models/User';
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
@@ -87,44 +87,44 @@ export class UserContextCard extends Component<Props, State> {
 
   render(): JSX.Element {
     this.InitializeServices();
-    return this.state.loadingUserContextButton ? <LoadingSmallComponent /> : this.renderCard();
+    const toReturn = this.state.loadingUserContextButton ? <LoadingSmallComponent /> : this.renderCard();
+    return (
+      <div style={{ float: "right" }}>
+        {toReturn}
+      </div>
+    )
   }
 
   renderCard(): JSX.Element {
     return (<>
-      <div className="user__context-wrapper">
-        <Button
-          className="profileButton"
-          id="basic-button"
-          aria-controls="basic-menu"
-          aria-haspopup="true"
-          onClick={this.handleClick}
-          variant="text"
-          color="inherit"
-        >
-          <div>
-            <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
-            <Typography className="user__context-role" align="right" variant="body2">
-              {this.state.user.entitlements?.join(", ")}
-            </Typography>
 
-          </div>
-        </Button>
-        <Menu
-          anchorEl={this.state.ancherEl}
-          id="basic-menu"
-          open={this.state.ancherEl}
-          onClose={this.handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem disabled>
-            <Typography align="right" variant="body2">{this.state.user.orgName}</Typography>
-          </MenuItem>
-          <MenuItem onClick={this.logout}>Log ud</MenuItem>
-        </Menu>
-      </div>
+      <Button
+        className="profileButton"
+        onClick={this.handleClick}
+        variant="text"
+        color="inherit"
+      >
+        <div>
+          <Typography className="user__context-name" align="right" variant="body2">{this.state.user.fullName}</Typography>
+          <Typography className="user__context-role" align="right" variant="body2">
+            {this.state.user.entitlements?.join(", ")}
+          </Typography>
+        </div>
+      </Button>
+      <Menu
+        anchorEl={this.state.ancherEl}
+        id="basic-menu"
+        open={this.state.ancherEl}
+        onClose={this.handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem disabled>
+          <Typography align="right" variant="body2">{this.state.user.orgName}</Typography>
+        </MenuItem>
+        <MenuItem onClick={this.logout}>Log ud</MenuItem>
+      </Menu>
 
     </>
     );

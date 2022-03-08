@@ -681,14 +681,6 @@ const THEME = createTheme({
           }
         },
         {
-          // Profile button accordion__button
-          props: { className: "profileButton" },
-          style: {
-            width: '100%',
-            justifyContent: 'flex-end'
-          }
-        },
-        {
           // Patient name button
           props: { className: "patient__button" },
           style: {

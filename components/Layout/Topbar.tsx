@@ -2,7 +2,7 @@ import { Box, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 import { UserContextCard } from '../Cards/UserContextCard';
-import {ErrorBoundary} from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 export interface State {
   drawerIsOpen: boolean
 }
@@ -24,12 +24,11 @@ export class Topbar extends Component<{}, State> {
 
 
           </Grid>
-          <Grid item xs={9}></Grid>
-          <Grid item xs={1}>
 
-
-            <UserContextCard />
-
+          <Grid item xs>
+            
+              <UserContextCard />
+            
           </Grid>
         </Grid>
 

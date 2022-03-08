@@ -31,7 +31,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 options: internalQuestion.options,
                 questionType: this.mapQuestionType(internalQuestion.type),
                 text: internalQuestion.question,
-
+                
                 //helpertext
                 //required : 
                 //thresholds : internalQuestion.
