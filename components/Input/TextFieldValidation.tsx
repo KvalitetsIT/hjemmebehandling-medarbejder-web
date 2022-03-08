@@ -3,6 +3,7 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Box, FormControl, OutlinedInputProps, TextField } from '@mui/material';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
 export interface Props {
     value?: string;
@@ -47,6 +48,10 @@ export class TextFieldValidation extends Component<Props, State> {
         this.state = {
             errors: []
         }
+
+        window.addEventListener(ValidateInputEvent.eventName, () => {
+            this.validate(props.value ?? "");
+        });
     }
 
     async validate(input: string): Promise<void> {
@@ -61,6 +66,8 @@ export class TextFieldValidation extends Component<Props, State> {
     }
 
     render(): JSX.Element {
+        
+
         let firstError: InvalidInputModel | undefined = undefined
         let hasError = false
 

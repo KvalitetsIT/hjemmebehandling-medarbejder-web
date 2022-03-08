@@ -5,10 +5,11 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
-import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
+import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
-import {IValidationService} from '../../services/interfaces/IValidationService';
+import { IValidationService } from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 
 export interface Props {
@@ -40,7 +41,9 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       errors: []
     }
     this.handleChange = this.handleChange.bind(this);
-
+    window.addEventListener(ValidateInputEvent.eventName, () => {
+      this.validate();
+    });
   }
 
   InitializeServices(): void {
@@ -65,7 +68,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   async componentDidMount(): Promise<void> {
     try {
       this.populatePlanDefinitions();
-    } catch (error : unknown) {
+    } catch (error: unknown) {
       this.setState(() => { throw error })
     }
   }
@@ -92,6 +95,8 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   }
 
   render(): JSX.Element {
+
+
     this.InitializeServices();
     let firstError = ""
     let hasError = false

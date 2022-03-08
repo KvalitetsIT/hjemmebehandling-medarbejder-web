@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import Stack from '@mui/material/Stack';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import { Button, CardContent, Card, Grid, Step, StepLabel, Stepper, Tooltip, Typography, CardHeader, Divider } from '@mui/material';
+import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import ApiContext from './_context';
@@ -13,46 +9,42 @@ import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
 import { PatientEditCard } from '../components/Cards/PatientEditCard';
 import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ContactEditCard } from '../components/Cards/ContactEditCard';
 import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
 import { ICareplanService } from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
-import { AccordionActions } from '@mui/material';
 import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { PatientAvatar } from '../components/Avatars/PatientAvatar';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { LoadingButton } from '@mui/lab';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { MissingContactDetailsError } from '../components/Errors/MissingContactDetailsError';
+import { AccordianWrapper } from '../components/Cards/PlanDefinition/AccordianWrapper';
 
-
-/**
- * Contains booleans that tells which sections that should be open
- */
-export interface Accordians {
-  PatientIsOpen: boolean
-  RelativeContactIsOpen: boolean
-  PlanDefinitionIsOpen: boolean
-}
 /**
  * 
  */
 export interface Props {
   editmode: boolean,
-  openAccordians: Accordians
+  openAccordians?: boolean[]
   match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
+}
+
+export enum CreatePatientSectionsEnum {
+  patientInfo,
+  primaryContactInfo,
+  planDefinitionInfo
 }
 
 /**
  * 
  */
 export interface State {
-  accordians: Accordians;
+  openAccordians: boolean[]
   patient?: PatientDetail;
   careplan?: PatientCareplan;
   newCareplanId?: string;
@@ -79,11 +71,16 @@ export default class CreatePatient extends Component<Props, State> {
 
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
+    const accordian: boolean[] = [];
+    accordian[CreatePatientSectionsEnum.patientInfo] = true;
+    accordian[CreatePatientSectionsEnum.primaryContactInfo] = false;
+    accordian[CreatePatientSectionsEnum.planDefinitionInfo] = false;
+
     this.state = {
       loading: true,
       submitted: false,
       errorToast: (<></>),
-      accordians: props.openAccordians,
+      openAccordians: props.openAccordians ?? accordian,
       validating: false,
     }
 
@@ -92,6 +89,182 @@ export default class CreatePatient extends Component<Props, State> {
     this.careplanService = this.context.careplanService;
     this.patientService = this.context.patientService;
   }
+
+  toggleAccordian(page: CreatePatientSectionsEnum, overrideExpanded?: boolean): void {
+    this.closeAllAccordians();
+    const oldAccordians = this.state.openAccordians
+    oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
+    this.triggerValidationOnInputs();
+    this.setState({ openAccordians: oldAccordians })
+  }
+
+  closeAllAccordians(): void {
+    const openAccordians = this.state.openAccordians
+    openAccordians[CreatePatientSectionsEnum.patientInfo] = false;
+    openAccordians[CreatePatientSectionsEnum.primaryContactInfo] = false;
+    openAccordians[CreatePatientSectionsEnum.planDefinitionInfo] = false;
+    this.setState({ openAccordians: openAccordians })
+  }
+
+  expandNextPage(currentPage: CreatePatientSectionsEnum): void {
+
+    this.toggleAccordian(currentPage, false)
+    switch (currentPage) {
+      case CreatePatientSectionsEnum.patientInfo:
+        this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)
+        break
+      case CreatePatientSectionsEnum.primaryContactInfo:
+        this.toggleAccordian(CreatePatientSectionsEnum.planDefinitionInfo)
+        break
+    }
+  }
+
+  expandPreviousPage(currentPage: CreatePatientSectionsEnum): void {
+
+    this.toggleAccordian(currentPage, false)
+    switch (currentPage) {
+      case CreatePatientSectionsEnum.primaryContactInfo:
+        this.toggleAccordian(CreatePatientSectionsEnum.patientInfo)
+        break
+      case CreatePatientSectionsEnum.planDefinitionInfo:
+        this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)
+        break
+    }
+  }
+
+  render(): JSX.Element {
+    this.InitializeServices();
+    if (this.state.submitted)
+      return (<Redirect push to={"/patients/" + this.state.patient?.cpr + "/careplans/" + this.state.newCareplanId} />)
+
+    if (this.state.loading)
+      return (<LoadingBackdropComponent />)
+
+    if (!(this.state.patient && this.state.careplan))
+      return (<div>Fandt ikke patienten</div>)
+
+    return (
+      <form
+        noValidate
+        onBlur={() => this.forceUpdate()}  >
+        <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
+          <Grid item spacing={5} xs={10} minWidth={500}>
+            <ErrorBoundary>
+              <AccordianWrapper
+                expanded={this.state.openAccordians[CreatePatientSectionsEnum.patientInfo]}
+                title="Patient"
+                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.patientInfo)}
+                continueButtonAction={() => this.expandNextPage(CreatePatientSectionsEnum.patientInfo)}>
+
+                <Typography>
+                  <PatientEditCard
+                    onValidation={(errors) => {
+                      this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })
+                    }}
+                    initialPatient={this.state.patient}
+                  />
+                </Typography>
+              </AccordianWrapper>
+            </ErrorBoundary>
+
+            <ErrorBoundary>
+
+              <AccordianWrapper
+                expanded={this.state.openAccordians[CreatePatientSectionsEnum.primaryContactInfo]}
+                title="Primærkontakt"
+                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)}
+                continueButtonAction={() => this.expandNextPage(CreatePatientSectionsEnum.primaryContactInfo)}
+                previousButtonAction={() => this.expandPreviousPage(CreatePatientSectionsEnum.primaryContactInfo)}>
+                <Typography>
+                  <ContactEditCard
+                    onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
+                    initialContact={this.state.patient.contact} />
+                </Typography>
+              </AccordianWrapper>
+            </ErrorBoundary>
+
+            <ErrorBoundary>
+              <AccordianWrapper
+                expanded={this.state.openAccordians[CreatePatientSectionsEnum.planDefinitionInfo]}
+                title="Patientgruppe"
+                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.planDefinitionInfo)}
+                continueButtonAction={() => this.submitPatient()}
+                previousButtonAction={() => this.expandPreviousPage(CreatePatientSectionsEnum.planDefinitionInfo)}
+                continueButtonContentOverride={"Gem patient"}>
+                <Typography>
+                  <PlanDefinitionSelect onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan} />
+                  <QuestionnaireListSimple careplan={this.state.careplan} />
+                </Typography>
+              </AccordianWrapper>
+            </ErrorBoundary>
+          </Grid>
+          <Grid paddingLeft={5} xs="auto">
+            <div>
+              <Card>
+                {this.state.patient.cpr ?
+                  <>
+                    <CardHeader
+                      avatar={<PatientAvatar patient={this.state.patient} />}
+                      title={
+                        <Grid container>
+                          <Grid item xs="auto">
+                            <Typography>
+                              {this.state.patient.firstname} {this.state.patient.lastname} <br />
+                              {this.state.patient.cprToString()}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      } />
+                    <Divider /></> : <></>}
+                <CardContent>
+                  <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
+                    <Step key="patient">
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
+
+                    </Step>
+                    <Step key="relativecontact">
+
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
+
+                    </Step>
+                    <Step key="plandefinition">
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
+                    </Step>
+
+                  </Stepper>
+                </CardContent>
+              </Card>
+            </div>
+          </Grid>
+
+        </Grid>
+        {this.state.errorToast ?? <></>}
+      </form >
+
+
+    )
+  }
+
+
+
+  GetCheckboxIcon(object: unknown): React.ElementType {
+    if (!object)
+      return RadioButtonUncheckedIcon
+    return CheckCircleOutlineIcon
+  }
+
+
+  getActiveStep(): number {
+    if (this.state.openAccordians[CreatePatientSectionsEnum.patientInfo])
+      return 1
+    if (this.state.openAccordians[CreatePatientSectionsEnum.primaryContactInfo])
+      return 2
+    return 3;
+  }
+
+
+
+
 
   createNewEmptyCareplan(): PatientCareplan {
     const relativeContact = new Contact();
@@ -108,16 +281,14 @@ export default class CreatePatient extends Component<Props, State> {
   async submitPatient(): Promise<void> {
     this.setState({ errorToast: <></> })
     if (!(this.state.careplan && this.state.careplan.patient)) {
-
       return;
     }
 
     this.state.careplan.patient = this.state.patient;
 
     try {
-
-      await this.validateAll()
       this.setState({ loading: true })
+      await this.validateAcrossData()
       let careplanId: string | undefined;
 
       if (this.props.editmode) {
@@ -180,23 +351,15 @@ export default class CreatePatient extends Component<Props, State> {
     marginTop: 2
   }
 
-  triggerEventOnAllInput(): void {
-    const input = document.getElementsByTagName("input");
-    const event = new Event("input", { bubbles: true })
-    Array.from(input).forEach(x => x.dispatchEvent(event))
+
+
+  triggerValidationOnInputs() : void {
+    new ValidateInputEvent(new ValidateInputEventData()).dispatchEvent();
   }
 
-
-  async validateAll(): Promise<void> {
+  async validateAcrossData(): Promise<void> {
     this.setState({ validating: true })
-    this.triggerEventOnAllInput()
-    await new Promise(f => setTimeout(f, 100))
-
     const errors: string[] = []
-
-    if (this.state.careplan?.planDefinitions.length === 0) {
-      errors.push("Ingen patientgrupper valgt")
-    }
 
     if (this.state.contactError != undefined) {
       errors.push(this.state.contactError)
@@ -212,9 +375,7 @@ export default class CreatePatient extends Component<Props, State> {
     if (errors.length > 0) {
       throw new MissingContactDetailsError(errors);
     }
-
   }
-
 
   validateMissingPhoneNumber(errors: InvalidInputModel[]): void {
     if (!(this.state.patient?.primaryPhone || this.state.patient?.contact?.primaryPhone)) {
@@ -222,261 +383,4 @@ export default class CreatePatient extends Component<Props, State> {
     }
     this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })
   }
-
-
-  render(): JSX.Element {
-    this.InitializeServices();
-
-    if (this.state.submitted)
-      return (<Redirect push to={"/patients/" + this.state.patient?.cpr + "/careplans/" + this.state.newCareplanId} />)
-
-    if (this.state.loading)
-      return (<LoadingBackdropComponent />)
-
-    if (!(this.state.patient && this.state.careplan))
-      return (<div>Fandt ikke patienten</div>)
-
-    return (
-      <form
-        
-        onSubmit={(e) => {
-          e.preventDefault();
-          this.submitPatient()
-        }}
-
-        noValidate
-        onBlur={() => this.forceUpdate()}  >
-        <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
-
-
-          <Grid item spacing={5} xs={10} minWidth={500}>
-
-
-            <ErrorBoundary>
-              <Accordion 
-              onClick={() => this.triggerEventOnAllInput()}
-              expanded={this.state.accordians.PatientIsOpen} 
-              onChange={() => this.goToPatientIsOpen()}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
-                    Patient *
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    <PatientEditCard
-                      onValidation={(errors) => {
-                        this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })
-                      }}
-                      initialPatient={this.state.patient}
-                    />
-                  </Typography>
-                </AccordionDetails>
-                <AccordionActions>
-
-                  <Button
-                    className="accordion__button"
-                    sx={this.continueButtonStyle} /* disabled={this.state.patientError ? true : false} */
-                    onClick={() => {
-                      this.triggerEventOnAllInput()
-                      this.goToRelativeContactIsOpen()
-                    }} variant="contained">Fortsæt</Button>
-
-
-                </AccordionActions>
-              </Accordion>
-            </ErrorBoundary>
-
-            <ErrorBoundary>
-              <Accordion
-                onClick={() => this.triggerEventOnAllInput()}
-                expanded={this.state.accordians.RelativeContactIsOpen}
-                onChange={() => this.goToRelativeContactIsOpen()}>
-                
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
-                    Primærkontakt
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    <ContactEditCard
-                      onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
-                      initialContact={this.state.patient.contact} />
-                  </Typography>
-                </AccordionDetails>
-                <AccordionActions>
-
-                  <Button 
-                  className="accordion__button" /* disabled={this.state.contactError ? true : false} */ 
-                  sx={this.continueButtonStyle} 
-                  onClick={() => {
-                    this.triggerEventOnAllInput()
-                    this.goToPlanDefinitionIsOpen()
-                  }}
-                    
-                  variant="contained">
-                    <Typography>Fortsæt</Typography>
-                  </Button>
-                </AccordionActions>
-              </Accordion>
-            </ErrorBoundary>
-
-            <ErrorBoundary>
-              <Accordion 
-              expanded={this.state.accordians.PlanDefinitionIsOpen} 
-              onChange={() => this.goToPlanDefinitionIsOpen()}
-              onClick={()=> this.triggerEventOnAllInput()}
-              >
-                
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
-                    Patientgruppe *
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-
-                    <PlanDefinitionSelect onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan} />
-                    <QuestionnaireListSimple careplan={this.state.careplan} />
-
-                  </Typography>
-                </AccordionDetails>
-                <AccordionActions>
-                  <Tooltip title={this.getFirstError()}>
-                    <Stack paddingTop={5}>
-                      <LoadingButton
-                        loading={this.state.validating}
-                        //disabled={!canSubmit} 
-                        type="submit"
-                        variant="contained"
-                        color={!this.state.contactError && !this.state.patientError && !this.state.planDefinitionError ? "success" : "error"}
-                      >
-                        Gem patient
-                      </LoadingButton>
-                    </Stack>
-                  </Tooltip>
-                </AccordionActions>
-              </Accordion>
-
-            </ErrorBoundary>
-
-
-
-
-          </Grid>
-          <Grid paddingLeft={5} xs="auto">
-            <div>
-              <Card>
-                {this.state.patient.cpr ?
-                  <>
-                    <CardHeader
-                      avatar={<PatientAvatar patient={this.state.patient} />}
-                      title={
-                        <Grid container>
-                          <Grid item xs="auto">
-                            <Typography>
-                              {this.state.patient.firstname} {this.state.patient.lastname} <br />
-                              {this.state.patient.cprToString()}
-                            </Typography>
-                          </Grid>
-
-                        </Grid>
-
-                      }
-                    /><Divider /></> : <></>}
-
-
-                <CardContent>
-                  <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
-                    <Step key="patient">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
-
-                    </Step>
-                    <Step key="relativecontact">
-
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
-
-                    </Step>
-                    <Step key="plandefinition">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
-                    </Step>
-
-                  </Stepper>
-                </CardContent>
-              </Card>
-            </div>
-          </Grid>
-
-        </Grid>
-        {this.state.errorToast ?? <></>}
-      </form >
-
-
-    )
-  }
-
-  GetCheckboxIcon(object: unknown): React.ElementType {
-    if (!object)
-      return RadioButtonUncheckedIcon
-    return CheckCircleOutlineIcon
-  }
-
-
-  getActiveStep(): number {
-    if (this.state.accordians.PatientIsOpen)
-      return 0
-
-    if (this.state.accordians.RelativeContactIsOpen)
-      return 1
-
-    if (this.state.accordians.PlanDefinitionIsOpen)
-      return 2
-
-    return 3;
-  }
-
-  getAllClosedAccordian(): Accordians {
-    return {
-      PatientIsOpen: false,
-      RelativeContactIsOpen: false,
-      PlanDefinitionIsOpen: false,
-    }
-  }
-  goToPatientIsOpen(): void {
-    const accordians = this.getAllClosedAccordian();
-    accordians.PatientIsOpen = !this.state.accordians.PatientIsOpen;
-    this.setState({ accordians: accordians })
-  }
-
-  goToPlanDefinitionIsOpen(): void {
-    const accordians = this.getAllClosedAccordian();
-    accordians.PlanDefinitionIsOpen = !this.state.accordians.PlanDefinitionIsOpen;
-    this.setState({ accordians: accordians })
-  }
-
-  goToRelativeContactIsOpen(): void {
-    const accordians = this.getAllClosedAccordian();
-    accordians.RelativeContactIsOpen = !this.state.accordians.RelativeContactIsOpen;
-    this.setState({ accordians: accordians })
-  }
-
-  goToSave(): void {
-    const accordians = this.getAllClosedAccordian();
-    this.setState({ accordians: accordians })
-  }
-
-
 }
