@@ -45,6 +45,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     planDefinition1: PlanDefinition = new PlanDefinition();
     planDefinition2: PlanDefinition = new PlanDefinition();
+    allPlanDefinitions: PlanDefinition[] = [];
 
     questionnaire1: Questionnaire = new Questionnaire();
     questionnaire2: Questionnaire = new Questionnaire();
@@ -180,9 +181,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
-        this.planDefinition2.id = "def1"
+        this.planDefinition2.id = "def2"
         this.planDefinition2.questionnaires = []
 
+        this.allPlanDefinitions = [this.planDefinition1, this.planDefinition2];
 
         //====================================== Thresholds
         this.tc1.questionId = "q1";
@@ -344,8 +346,15 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+        this.allPlanDefinitions.push(planDefinition);
+    }
+    async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+        const index = this.allPlanDefinitions.findIndex(x => x.id == planDefinition.id);
+        this.allPlanDefinitions.splice(index, 1, planDefinition);
+    }
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
-        questionnaire.id = Date.now()+""
+        questionnaire.id = Date.now() + ""
         this.allQuestionnaires.push(questionnaire);
     }
 
@@ -445,7 +454,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
         try {
-            return [this.planDefinition1]
+            return this.allPlanDefinitions;
         } catch (error: any) {
             return await this.HandleError(error);
         }

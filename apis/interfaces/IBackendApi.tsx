@@ -12,6 +12,18 @@ import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
  * Containing all methods that should call the actual api
  */
 export interface IBackendApi {
+    /**
+   * Creates a plandefinition from provided plandefinition
+   * @param planDefinition the plandefinition to be created
+   */
+    createPlanDefinition(planDefinition: PlanDefinition): Promise<void>;
+
+    /**
+         * Updates a plandefinition
+         * Uses the id of the provided plandefinition to target what plandefinition to be changed
+         * @param planDefinition the desired plandefinition
+         */
+    updatePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
 
     /**
      * Creates a questionnaire from provided paramater

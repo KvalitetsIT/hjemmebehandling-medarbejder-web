@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreateQuestionnaireOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, PatchPlanDefinitionOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -45,6 +45,31 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         super();
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
+    }
+    async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+        try {
+            const request: CreatePlanDefinitionOperationRequest = {
+                createPlanDefinitionRequest: {
+                    planDefinition: this.toExternal.mapPlanDefinition(planDefinition)
+                }
+            }
+            await this.planDefinitionApi.createPlanDefinition(request)
+        } catch (error) {
+            return this.HandleError(error)
+        }
+    }
+    async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+        try {
+            const request: PatchPlanDefinitionOperationRequest = {
+                id: planDefinition.id!,
+                patchPlanDefinitionRequest: {
+                    questionnaireIds: planDefinition.questionnaires?.map(questionnaire => questionnaire.id)
+                }
+            }
+            await this.planDefinitionApi.patchPlanDefinition(request)
+        } catch (error) {
+            return this.HandleError(error)
+        }
     }
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         try {
