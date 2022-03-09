@@ -94,7 +94,7 @@ export default class CreatePatient extends Component<Props, State> {
     this.closeAllAccordians();
     const oldAccordians = this.state.openAccordians
     oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
-    this.triggerValidationOnInputs();
+    this.triggerValidationOnInputs(page);
     this.setState({ openAccordians: oldAccordians })
   }
 
@@ -321,6 +321,7 @@ export default class CreatePatient extends Component<Props, State> {
 
   async componentDidMount(): Promise<void> {
     const cpr = this.props.match.params.cpr;
+
     try {
       let careplanToEdit: PatientCareplan | undefined = this.createNewEmptyCareplan()
       if (cpr) {
@@ -333,28 +334,29 @@ export default class CreatePatient extends Component<Props, State> {
     } catch (error) {
       this.setState(() => { throw error })
     }
+    new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
   }
 
-  getFirstError(): string {
-    if (this.state.patientError)
-      return "Fejl i Patient-sektion"
-
-    if (this.state.contactError)
-      return "Fejl i primærkontakt-sektion"
-
-    if (this.state.planDefinitionError)
-      return "Fejl i Patientgruppe-sektion"
-
-    return "";
-  }
   continueButtonStyle: CSSProperties = {
     marginTop: 2
   }
 
+  triggerValidationOnInputs(page: CreatePatientSectionsEnum): void {
 
+    if (page == CreatePatientSectionsEnum.patientInfo) {
+      new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
+    }
 
-  triggerValidationOnInputs() : void {
-    new ValidateInputEvent(new ValidateInputEventData()).dispatchEvent();
+    if (page == CreatePatientSectionsEnum.primaryContactInfo) {
+      new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
+      new ValidateInputEvent(new ValidateInputEventData(ContactEditCard.sectionName)).dispatchEvent();
+
+    }
+    if (page == CreatePatientSectionsEnum.planDefinitionInfo) {
+      new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
+      new ValidateInputEvent(new ValidateInputEventData(ContactEditCard.sectionName)).dispatchEvent();
+      new ValidateInputEvent(new ValidateInputEventData(PlanDefinitionSelect.sectionName)).dispatchEvent();
+    }
   }
 
   async validateAcrossData(): Promise<void> {
@@ -378,9 +380,14 @@ export default class CreatePatient extends Component<Props, State> {
   }
 
   validateMissingPhoneNumber(errors: InvalidInputModel[]): void {
-    if (!(this.state.patient?.primaryPhone || this.state.patient?.contact?.primaryPhone)) {
+
+    const patientPrimary = this.state.patient?.primaryPhone ?? "";
+    const contactPrimary = this.state.patient?.contact?.primaryPhone ?? ""
+
+    if (patientPrimary == "" && contactPrimary == "") {
       errors.push(new InvalidInputModel("telefonnummer", "Et telefonnummer mangler", CriticalLevelEnum.ERROR))
     }
+
     this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })
   }
 }

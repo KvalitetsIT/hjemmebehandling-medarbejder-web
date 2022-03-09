@@ -20,7 +20,7 @@ export default class ValidationService extends BaseService implements IValidatio
         const erorrs: InvalidInputModel[] = []
         const propName = "CPR"
 
-        if (!cpr) {
+        if (cpr == "") {
             const error = new InvalidInputModel(propName, "CPR ikke udfyldt")
             erorrs.push(error)
         }

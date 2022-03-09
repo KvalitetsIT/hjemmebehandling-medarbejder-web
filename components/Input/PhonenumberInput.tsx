@@ -9,6 +9,7 @@ import { IValidationService } from '../../services/interfaces/IValidationService
 export interface Props {
 
     id?: string;
+    sectionName? : string
     uniqueId: number;
     value?: string;
     label: string;
@@ -76,8 +77,9 @@ export class PhonenumberInput extends Component<Props, State> {
                 uniqueId={this.props.uniqueId}
                 validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone??""))}
                 type="tel"
+                sectionName={this.props.sectionName}
                 label={this.props.label}
-                value={this.props.value?.replaceAll("+45", "")}
+                value={this.props.value?.replaceAll("+45", "") ?? ""}
                 onChange={input => this.props.onChange(this.formatPhoneNumber(input??""))}
                 variant="outlined"
                 >

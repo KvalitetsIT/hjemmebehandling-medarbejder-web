@@ -9,7 +9,7 @@ import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireS
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import { IValidationService } from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 
 export interface Props {
@@ -29,6 +29,7 @@ export interface State {
 export class PlanDefinitionSelect extends Component<Props, State> {
   static displayName = PlanDefinitionSelect.name;
   static contextType = ApiContext
+  static sectionName = "PlanDefinitionSelectSection"
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
   planDefinitionService!: IPlanDefinitionService
@@ -41,8 +42,10 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       errors: []
     }
     this.handleChange = this.handleChange.bind(this);
-    window.addEventListener(ValidateInputEvent.eventName, () => {
-      this.validate();
+    window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
+      const data = (event as CustomEvent).detail as ValidateInputEventData
+      if (PlanDefinitionSelect.sectionName == data.className)
+        await this.validate();
     });
   }
 

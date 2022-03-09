@@ -3,11 +3,13 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Box, FormControl, OutlinedInputProps, TextField } from '@mui/material';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
 export interface Props {
     value?: string;
     id?: string;
+    className?: string;
+    sectionName?: string;
     required: boolean;
     disabled?: boolean;
     uniqueId: number;
@@ -48,16 +50,17 @@ export class TextFieldValidation extends Component<Props, State> {
         this.state = {
             errors: []
         }
-
-        window.addEventListener(ValidateInputEvent.eventName, () => {
-            this.validate(props.value ?? "");
+        window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
+            const data = (event as CustomEvent).detail as ValidateInputEventData
+            if (props.sectionName == data.className) {
+                await this.validate(this.props.value ?? "");
+            }
         });
     }
 
     async validate(input: string): Promise<void> {
         if (!this.props.validate)
             return;
-
         const errors = await this.props.validate(input);
         this.setState({ errors: errors })
         if (this.props.onValidation) {
@@ -66,7 +69,7 @@ export class TextFieldValidation extends Component<Props, State> {
     }
 
     render(): JSX.Element {
-        
+
 
         let firstError: InvalidInputModel | undefined = undefined
         let hasError = false
@@ -109,7 +112,7 @@ export class TextFieldValidation extends Component<Props, State> {
                             minWidth: this.props.minWidth,
                             maxWidth: this.props.maxWidth,
                         }}
-                        className={"validatedField"}
+                        className={this.props.className}
                     >
 
                     </TextField>

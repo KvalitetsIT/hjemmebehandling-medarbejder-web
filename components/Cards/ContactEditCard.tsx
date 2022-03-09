@@ -24,6 +24,7 @@ export interface State {
 export class ContactEditCard extends Component<Props, State> {
   static contextType = ApiContext;
   static displayName = ContactEditCard.name;
+  static sectionName = "ContactEditSection";
   personService!: IPersonService;
   validationService!: IValidationService;
   collectionHelper!: ICollectionHelper;
@@ -62,13 +63,8 @@ export class ContactEditCard extends Component<Props, State> {
     const allErrors: InvalidInputModel[] =
       this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(this.errorArray)
 
-
-    
     if (this.props.onValidation)
       this.props.onValidation(allErrors);
-
-
-      
   }
 
   renderCard(): JSX.Element {
@@ -84,6 +80,7 @@ export class ContactEditCard extends Component<Props, State> {
             </Typography>
             <Stack spacing={3} direction="row">
               <TextFieldValidation
+                sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
                 label="Navn"
@@ -91,6 +88,7 @@ export class ContactEditCard extends Component<Props, State> {
                 onChange={input => this.modifyPatient(this.setRelativeContactsName, input)}
                 variant="outlined" />
               <TextFieldValidation
+                sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
                 label="Tilhørsforhold"
@@ -101,12 +99,14 @@ export class ContactEditCard extends Component<Props, State> {
             </Stack>
             <Stack spacing={3} direction="row">
               <PhonenumberInput
+                sectionName={ContactEditCard.sectionName}
                 id="contactPrimaryPhone"
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
                 label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
                 variant="outlined" />
               <PhonenumberInput
+                sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
                 label="Sekundær telefonnummer"
