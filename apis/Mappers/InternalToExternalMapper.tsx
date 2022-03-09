@@ -26,15 +26,12 @@ export default class InternalToExternalMapper extends BaseMapper {
         if (isRegularQuestion) {
             const enableWhen: EnableWhen<boolean>[] = internalQuestion.enableWhen ? [internalQuestion.enableWhen] : []
             return {
-                enableWhen: enableWhen.map(ew => this.mapEnableWhen(ew, internalQuestion.abbreviation)),
-                linkId: internalQuestion.abbreviation,
+                enableWhen: enableWhen.map(ew => this.mapEnableWhen(ew)),
+                linkId: internalQuestion.Id,
                 options: internalQuestion.options,
                 questionType: this.mapQuestionType(internalQuestion.type),
                 text: internalQuestion.question,
-
-                //helpertext
-                //required : 
-                //thresholds : internalQuestion.
+                //helpertext : internalQuestion.abbreviation
             }
         }
 
@@ -71,10 +68,10 @@ export default class InternalToExternalMapper extends BaseMapper {
             //thresholds : []
         }
     }
-    mapEnableWhen(enableWhen: EnableWhen<boolean>, idOverride?: string): EnableWhenDto {
+    mapEnableWhen(enableWhen: EnableWhen<boolean>): EnableWhenDto {
         return {
             answer: {
-                linkId: idOverride ?? enableWhen.questionId,
+                linkId: enableWhen.questionId,
                 answerType: AnswerModelAnswerTypeEnum.Boolean,
                 value: enableWhen.answer + ""
             },
