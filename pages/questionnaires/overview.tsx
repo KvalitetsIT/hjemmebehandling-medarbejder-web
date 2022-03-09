@@ -62,7 +62,7 @@ class QuestionnaireOverviewPage extends React.Component<{}, State> {
                         <Typography variant="h6">Spørgeskemaer</Typography>
                     </Grid>
                     <Grid item xs={6} textAlign="right">
-                        <Button variant="contained" component={Link} to="questionnaires/create">Opret spørgsmål</Button>
+                        <Button variant="contained" component={Link} to="questionnaires/create">Opret spørgeskema</Button>
                     </Grid>
                     <Grid item xs={12}>
                         <IsEmptyCard jsxWhenEmpty="Ingen spørgeskemaer tilgængelige" list={this.state.questionnaires}>
