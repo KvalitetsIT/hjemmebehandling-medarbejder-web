@@ -151,6 +151,7 @@ export default class CreatePatient extends Component<Props, State> {
           <Grid item spacing={5} xs={10} minWidth={500}>
             <ErrorBoundary>
               <AccordianWrapper
+                key={CreatePatientSectionsEnum.patientInfo + "_" + this.state.patient.cpr}
                 expanded={this.state.openAccordians[CreatePatientSectionsEnum.patientInfo]}
                 title="Patient"
                 toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.patientInfo)}
@@ -170,6 +171,7 @@ export default class CreatePatient extends Component<Props, State> {
             <ErrorBoundary>
 
               <AccordianWrapper
+                key={CreatePatientSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
                 expanded={this.state.openAccordians[CreatePatientSectionsEnum.primaryContactInfo]}
                 title="Primærkontakt"
                 toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)}
@@ -185,6 +187,7 @@ export default class CreatePatient extends Component<Props, State> {
 
             <ErrorBoundary>
               <AccordianWrapper
+                key={CreatePatientSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
                 expanded={this.state.openAccordians[CreatePatientSectionsEnum.planDefinitionInfo]}
                 title="Patientgruppe"
                 toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.planDefinitionInfo)}

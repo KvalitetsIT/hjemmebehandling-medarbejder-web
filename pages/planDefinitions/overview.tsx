@@ -51,7 +51,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
                         <Typography variant="h6">Patientgrupper</Typography>
                     </Grid>
                     <Grid item xs={6} textAlign="right">
-                        <Button variant="contained" component={Link} to="plandefinitions/create" >Opret patientgruppe</Button>
+                        <Button variant="contained" component={Link} to="/plandefinitions/create" >Opret patientgruppe</Button>
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
