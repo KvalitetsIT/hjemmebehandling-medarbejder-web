@@ -197,7 +197,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                     <Divider />
 
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                        <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som klade</Button>
+                                        <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som kladde</Button>
                                         <Button variant="contained" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE"); this.submitQuestionnaire() }}>Gem</Button>
                                     </CardActions>
                                 </Card>
