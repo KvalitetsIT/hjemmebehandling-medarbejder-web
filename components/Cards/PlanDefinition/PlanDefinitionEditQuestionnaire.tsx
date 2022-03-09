@@ -9,6 +9,7 @@ import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfa
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Box } from '@mui/system';
+import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 
 export interface Props {
     planDefinition: PlanDefinition
@@ -152,7 +153,11 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
                 <Divider />
                 <Box sx={{ height: 230, overflow: 'auto' }}>
                     <List role="list" dense component="div" >
-                        {questionnaires.map(questionnaire => {
+                        {questionnaires.filter(questionnaire => {
+                          if (questionnaire?.status != BaseModelStatus.DRAFT){
+                            return questionnaire  
+                          }
+                        }).map(questionnaire => {
                             const isChecked = this.isChecked(questionnaire!);
                             return (
                                 <ListItem role="listitem" button onClick={() => this.toggleChecked(questionnaire!)}>
