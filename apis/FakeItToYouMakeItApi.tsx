@@ -31,7 +31,7 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
-    timeToWait: number = 1000;
+    timeToWait: number = 0;
 
     taskRemovedFromMissingOverview: Task[] = [];
     patient1: PatientDetail = new PatientDetail();
@@ -114,30 +114,30 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.person1.patientContactDetails = personContact;
 
         //======================================= Questions
-        this.question1.Id = "q1";
+        this.question1.abbreviation = "q1";
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question2.Id = "q2";
+        this.question2.abbreviation = "q2";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
         this.question2.measurementType = this.measurementType2
 
-        this.question3.Id = "q3";
+        this.question3.abbreviation = "q3";
         this.question3.question = "Føler du dig frisk idag?"
         this.question3.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question4.Id = "q4";
+        this.question4.abbreviation = "q4";
         const q4EnableWhen = new EnableWhen<boolean>();
-        q4EnableWhen.questionId = this.question1.Id;
+        q4EnableWhen.questionId = this.question1.abbreviation;
         this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
 
-        this.callToActionQuestion1.Id = "callToAction1";
+        this.callToActionQuestion1.abbreviation = "callToAction1";
         this.callToActionQuestion1.type = QuestionTypeEnum.CALLTOACTION;
         const callToActionEnableWhen = new EnableWhen<boolean>();
-        callToActionEnableWhen.questionId = this.question1.Id;
+        callToActionEnableWhen.questionId = this.question1.abbreviation;
         callToActionEnableWhen.answer = false;
         this.callToActionQuestion1.enableWhen = callToActionEnableWhen;
 

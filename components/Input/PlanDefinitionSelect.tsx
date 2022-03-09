@@ -44,7 +44,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     this.handleChange = this.handleChange.bind(this);
     window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
       const data = (event as CustomEvent).detail as ValidateInputEventData
-      if (PlanDefinitionSelect.sectionName == data.className)
+      if (PlanDefinitionSelect.sectionName == data.sectionName)
         await this.validate();
     });
   }
