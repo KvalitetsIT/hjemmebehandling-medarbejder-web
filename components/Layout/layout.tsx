@@ -93,10 +93,10 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props} />} />
                     <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
-                    <Route path="/patients/:cpr/edit/patient" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPatient} {...props} />} />
-                    <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansContact} {...props} />} />
-                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
-                    <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/patient" render={(props) => <CreatePatient key={"patient"} editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient key={"contact"} editmode={true} openAccordians={accoridansContact} {...props} />} />
+                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient key={"planDefinition"} editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
+                    <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient key={"edit"} editmode={true} openAccordians={accoridansPatient} {...props} />} />
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
                     <Route path="/plandefinitions/:plandefinitionid/edit" render={(props) => <CreatePlandefinition {...props} />} />
