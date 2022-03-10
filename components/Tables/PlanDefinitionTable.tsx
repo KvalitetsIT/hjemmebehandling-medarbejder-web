@@ -44,7 +44,10 @@ export class PlanDefinitionTable extends Component<Props>{
                                     <TableCell>
                                         <Stack sx={{ float: "right" }} direction="row" spacing={2}>
                                             <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="outlined">Redigér</Button>
-                                            <Button variant="contained">Se mere</Button>
+                                            
+                                            
+                                            {/*<Button variant="contained">Se mere</Button>*/}
+
                                         </Stack>
                                     </TableCell>
 

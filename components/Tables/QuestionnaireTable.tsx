@@ -51,7 +51,8 @@ export class QuestionnaireTable extends Component<Props>{
                                         <TableCell>
                                             <Stack sx={{ float: "right" }} direction="row" spacing={2}>
                                                 <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="outlined">Rediger</Button>
-                                                <Button component={Link} to={"/questionnaires/" + questionnaire.id} variant="contained">Se mere</Button>
+
+                                                {/*<Button component={Link} to={"/questionnaires/" + questionnaire.id} variant="contained">Se mere</Button>*/}
                                             </Stack>
                                         </TableCell>
                                     </TableRow>
