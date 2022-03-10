@@ -129,12 +129,14 @@ export default class InternalToExternalMapper extends BaseMapper {
         return carePlanDto
 
     }
-    mapFrequency(frequency: Frequency): FrequencyDto {
-
-        return {
-            weekdays: frequency.days.map(d => this.mapDayEnum(d)),
-            timeOfDay: frequency.deadline
-        }
+    mapFrequency(frequency?: Frequency): FrequencyDto {
+        let toReturn: FrequencyDto = {}
+        if (frequency != undefined)
+            toReturn = {
+                weekdays: frequency.days.map(d => this.mapDayEnum(d)),
+                timeOfDay: frequency.deadline
+            }
+        return toReturn;
     }
 
     mapDayEnum(day: DayEnum): FrequencyDtoWeekdaysEnum {
@@ -211,7 +213,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 title: questionnaire.name
             },
             thresholds: questionnaire.thresholds?.flatMap(threshold => this.mapThreshold(threshold)),
-            frequency: this.mapFrequency(questionnaire.frequency!)
+            frequency: this.mapFrequency(questionnaire.frequency)
         }
 
     }
