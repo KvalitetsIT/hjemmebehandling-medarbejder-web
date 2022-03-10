@@ -63,7 +63,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request: PatchPlanDefinitionOperationRequest = {
                 id: planDefinition.id!,
                 patchPlanDefinitionRequest: {
-                    questionnaireIds: planDefinition.questionnaires?.map(questionnaire => questionnaire.id)
+                    questionnaireIds: planDefinition.questionnaires?.map(questionnaire => questionnaire.id),
+                    name: planDefinition.name,
+                    thresholds: planDefinition.questionnaires?.flatMap(x => x.thresholds).flatMap(threshold => this.toExternal.mapThreshold(threshold))
                 }
             }
             await this.planDefinitionApi.patchPlanDefinition(request)

@@ -1,3 +1,4 @@
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
@@ -7,7 +8,8 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto } from "../../generated/models";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -15,6 +17,42 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
  */
 export default class InternalToExternalMapper extends BaseMapper {
+    mapThreshold(threshold: ThresholdCollection | undefined): ThresholdDto[] {
+        const toReturn: ThresholdDto[] = []
+
+        threshold?.thresholdNumbers?.forEach(thresholdNumber => {
+            const currentThreshold: ThresholdDto = {}
+            currentThreshold.questionId = threshold?.questionId;
+            currentThreshold.valueQuantityLow = thresholdNumber.from;
+            currentThreshold.valueQuantityHigh = thresholdNumber.to;
+            currentThreshold.type = this.mapCategory(thresholdNumber.category);
+
+            toReturn.push(currentThreshold)
+        })
+        threshold?.thresholdOptions?.forEach(thresholdOption => {
+            const currentThreshold: ThresholdDto = {}
+            currentThreshold.questionId = threshold?.questionId;
+            const isBoolean = thresholdOption.option.toLowerCase() == "true" || thresholdOption.option.toLowerCase() == "false"
+            if (isBoolean)
+                currentThreshold.valueBoolean = thresholdOption.option.toLowerCase() == "true"
+
+            toReturn.push(currentThreshold)
+        })
+
+        return toReturn
+    }
+    mapCategory(category: CategoryEnum): ThresholdDtoTypeEnum | undefined {
+        switch (category) {
+            case CategoryEnum.GREEN:
+                return ThresholdDtoTypeEnum.Normal
+            case CategoryEnum.YELLOW:
+                return ThresholdDtoTypeEnum.Abnormal
+            case CategoryEnum.RED:
+                return ThresholdDtoTypeEnum.Critical
+        }
+
+        throw new Error("Unsupported enum : " + category)
+    }
 
     mapQuestion(internalQuestion: BaseQuestion): QuestionDto {
         const isCallToAction = internalQuestion instanceof CallToActionQuestion;
@@ -172,6 +210,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 id: questionnaire.id,
                 title: questionnaire.name
             },
+            thresholds: questionnaire.thresholds?.flatMap(threshold => this.mapThreshold(threshold)),
             frequency: this.mapFrequency(questionnaire.frequency!)
         }
 
@@ -197,8 +236,10 @@ export default class InternalToExternalMapper extends BaseMapper {
         return {
             id: FhirUtils.qualifyId(planDefinition.id!, Qualifier.PlanDefinition),
             name: planDefinition.name,
+            title: planDefinition.name,
             questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q)),
-            status: planDefinition.status?.toString()
+            status: planDefinition.status?.toString(),
+            created: planDefinition.created
         }
 
     }
