@@ -134,7 +134,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         let toReturn: FrequencyDto = {}
         toReturn = {
             weekdays: frequency?.days?.map(d => this.mapDayEnum(d)) ?? [],
-            timeOfDay: frequency?.deadline ?? ""
+            timeOfDay: frequency?.deadline ?? "11:00" //Must not be null or empty string
         }
         return toReturn;
     }
