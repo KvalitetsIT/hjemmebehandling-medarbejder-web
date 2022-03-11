@@ -33,6 +33,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         threshold?.thresholdOptions?.forEach(thresholdOption => {
             const currentThreshold: ThresholdDto = {}
             currentThreshold.questionId = threshold?.questionId;
+            currentThreshold.type = this.mapCategory(thresholdOption.category);
             const isBoolean = thresholdOption.option.toLowerCase() == "true" || thresholdOption.option.toLowerCase() == "false"
             if (isBoolean)
                 currentThreshold.valueBoolean = thresholdOption.option.toLowerCase() == "true"
