@@ -120,15 +120,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         try {
+            const questions = questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions());
             const request: PatchQuestionnaireOperationRequest = {
 
                 id: questionnaire.id,
                 patchQuestionnaireRequest: {
                     title: questionnaire.name,
                     status: questionnaire.status?.toString(),
-
                     callToActions: questionnaire.getCallToActions().map(x => this.toExternal.mapCallToAction(x)),
-                    questions: questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions())?.map(x => this.toExternal.mapQuestion(x)),
+                    questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id))),
                 }
             }
             await this.questionnaireApi.patchQuestionnaire(request)

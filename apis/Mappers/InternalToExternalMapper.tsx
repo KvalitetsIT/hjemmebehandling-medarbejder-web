@@ -2,6 +2,7 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
@@ -9,7 +10,7 @@ import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum } from "../../generated/models";
+import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -54,7 +55,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         throw new Error("Unsupported enum : " + category)
     }
 
-    mapQuestion(internalQuestion: BaseQuestion): QuestionDto {
+    mapQuestion(internalQuestion: BaseQuestion, thresholdCollection: ThresholdCollection | undefined): QuestionDto {
         const isCallToAction = internalQuestion instanceof CallToActionQuestion;
         if (isCallToAction)
             return this.mapCallToAction(internalQuestion);
@@ -69,7 +70,9 @@ export default class InternalToExternalMapper extends BaseMapper {
                 options: internalQuestion.options,
                 questionType: this.mapQuestionType(internalQuestion.type),
                 text: internalQuestion.question,
-                abbreviation: internalQuestion.abbreviation
+                abbreviation: internalQuestion.abbreviation,
+                thresholds: this.mapThreshold(thresholdCollection)
+                //measurementType: this.mapMeasurementType(internalQuestion.measurementType)
                 //helpertext : internalQuestion.abbreviation
             }
         }
@@ -77,6 +80,17 @@ export default class InternalToExternalMapper extends BaseMapper {
         throw new Error("InternalToExternalMapper) Question was not regular question or callToAction - What is it?")
 
 
+    }
+    mapMeasurementType(measurementType?: MeasurementType): MeasurementTypeDto | undefined {
+        if (measurementType == undefined)
+            return undefined;
+
+        const toReturn: MeasurementTypeDto = {
+            code: measurementType?.code,
+            display: measurementType?.displayName,
+            system: measurementType?.system
+        }
+        return toReturn;
     }
     mapQuestionType(type: QuestionTypeEnum | undefined): QuestionDtoQuestionTypeEnum | undefined {
         switch (type) {
@@ -220,14 +234,16 @@ export default class InternalToExternalMapper extends BaseMapper {
 
     mapQuestionnaireToDto(questionnaire: Questionnaire): QuestionnaireDto {
 
+        const questions = questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions())
         return {
             id: questionnaire.id,
             callToActions: questionnaire.getCallToActions().map(cta => this.mapCallToAction(cta)),
-            questions: questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions()).map(question => this.mapQuestion(question)),
+            questions: questions.map(question => this.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id))),
             lastUpdated: questionnaire.lastUpdated,
             status: questionnaire.status?.toString(),
             title: questionnaire.name,
-            version: questionnaire.version
+            version: questionnaire.version,
+
         }
 
     }
