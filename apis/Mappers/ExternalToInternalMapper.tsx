@@ -405,6 +405,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
         const callToActions: BaseQuestion[] = questionnaire.callToActions!.map(x => this.mapCallToAction(x));
         questionnaireResult.questions?.push(...callToActions);
+        questionnaireResult.thresholds = questionnaire.questions?.flatMap(question => this.mapThresholdDtos(question.thresholds ?? []))
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
