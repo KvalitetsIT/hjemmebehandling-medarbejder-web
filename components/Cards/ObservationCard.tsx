@@ -96,7 +96,7 @@ export class ObservationCard extends Component<Props, State> {
 
         if (allQuestions.length == 0) {
             return (
-               <></>
+                <></>
             )
         }
 
@@ -110,12 +110,12 @@ export class ObservationCard extends Component<Props, State> {
 
                     const dateToString = (date: Date) => this.dateHelper.DateToString(date);
                     const chartData = new ChartData(this.state.questionnaireResponses, question, threshold, dateToString);
-
+                    const subheader = question.abbreviation ?? question.question ?? ""
                     return (
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                             <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
-                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.abbreviation} - Alarmgrænser</Typography>} />
+                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
                                 <Divider />
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
