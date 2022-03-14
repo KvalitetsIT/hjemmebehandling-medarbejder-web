@@ -114,20 +114,20 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.person1.patientContactDetails = personContact;
 
         //======================================= Questions
-        this.question1.abbreviation = "q1";
+        this.question1.abbreviation = "Bedre idag?";
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question2.abbreviation = "q2";
+        this.question2.abbreviation = "Temperatur";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
         this.question2.measurementType = this.measurementType2
 
-        this.question3.abbreviation = "q3";
+        this.question3.abbreviation = "Frisk idag?";
         this.question3.question = "Føler du dig frisk idag?"
         this.question3.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question4.abbreviation = "q4";
+        this.question4.abbreviation = "Godt i dag?";
         const q4EnableWhen = new EnableWhen<boolean>();
         q4EnableWhen.questionId = this.question1.abbreviation;
         this.question4.enableWhen = q4EnableWhen;
