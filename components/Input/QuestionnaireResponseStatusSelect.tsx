@@ -9,6 +9,8 @@ import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireS
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { Typography } from '@mui/material';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
 
 export interface Props {
   questionnaireResponse: QuestionnaireResponse
@@ -17,8 +19,6 @@ export interface Props {
 
 export interface State {
   status?: QuestionnaireResponseStatus;
-
-  toast?: JSX.Element;
 }
 
 export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
@@ -42,24 +42,17 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
     const changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
-    const whileUpdateIsProcessingToast = (
-      <Toast snackbarTitle="Opdaterer ..." snackbarColor="info">
-        Ændrer status til: {changes.status}
-      </Toast>
-    )
-    this.setState({ status: collectionStatus, toast: whileUpdateIsProcessingToast })
+    new CreateToastEvent(new CreateToastEventData("Opdaterer ...", "info", "black")).dispatchEvent();
+
+    this.setState({ status: collectionStatus })
 
 
     try {
       const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
 
-      const afterUpdateIsCompletedToast = (
-        <Toast snackbarTitle="Opdateret!" snackbarColor="success">
-          Ny status: {changes.status}
-        </Toast>
-      )
+      new CreateToastEvent(new CreateToastEventData("Ny status: " + changes.status, "success")).dispatchEvent();
 
-      this.setState({ status: newStatus, toast: afterUpdateIsCompletedToast })
+      this.setState({ status: newStatus })
     } catch (error: unknown) {
       this.setState(() => { throw error })
     }
@@ -89,7 +82,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   render(): JSX.Element {
     this.InitializeServices()
     const height = 50;
-    
+
     if (this.state.status == QuestionnaireResponseStatus.Processed)
       return <Typography height={height} variant='h6'>{this.state.status}</Typography>
 
@@ -106,8 +99,6 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
           <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
         </Select>
       </FormControl>
-
-      {this.state.toast ?? <></>}
     </>
     )
   }

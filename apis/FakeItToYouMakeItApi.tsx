@@ -31,7 +31,7 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
-    timeToWait: number = 0;
+    timeToWait: number = 1000;
 
     taskRemovedFromMissingOverview: Task[] = [];
     patient1: PatientDetail = new PatientDetail();
