@@ -115,7 +115,7 @@ export class ObservationCard extends Component<Props, State> {
                         <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
                             <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
-                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.question} - Alarmgrænser</Typography>} />
+                                <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{question.abbreviation} - Alarmgrænser</Typography>} />
                                 <Divider />
                                 <CardContent>
                                     {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
