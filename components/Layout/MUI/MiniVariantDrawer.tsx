@@ -33,7 +33,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(7)} + 1px)`,
+    width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
 
@@ -97,9 +97,9 @@ export default function MiniDrawer(): JSX.Element {
         <List >
           <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
-              <img width={30} src="/assets/images/logo.svg" alt="Hjemmebehandling" />
+              <img width={30} src="/assets/images/logo.svg" alt="KOMO" />
             </ListItemIcon>
-            <ListItemText style={{ fontWeight: "bold", paddingTop: 20, paddingBottom: 20 }} primary="Hjemmebehandling" secondary="Infektionssygdomme" />
+            <ListItemText style={{ fontWeight: "bold", paddingTop: 20, paddingBottom: 20 }} primary="KOMO" secondary="Infektionssygdomme" />
           </ListItem>
 
 
@@ -129,7 +129,7 @@ export default function MiniDrawer(): JSX.Element {
             <ListItemIcon>
               <InactivePatientsIcon />
             </ListItemIcon>
-            <ListItemText primary="Inaktive patienter" />
+            <ListItemText primary="Afsluttede patienter" />
           </ListItem>
 
 
