@@ -54,33 +54,37 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return carePlan
     }
 
-    buildTaskFromCarePlan(carePlan: CarePlanDto): Task {
-        const task = new Task()
+    buildUnansweredTaskFromCarePlan(carePlan: CarePlanDto): Task[] {
 
-        task.cpr = carePlan.patientDto!.cpr!
+        const tasks: Task[] = []
+        carePlan.questionnaires?.forEach(questionnaireWrapper => {
+            const planDefinition = carePlan.planDefinitions?.find(planDef => planDef.questionnaires?.find(questionnaire => questionnaire.questionnaire?.id == questionnaireWrapper.questionnaire?.id));
+            
+            const task = new Task()
+            task.cpr = carePlan.patientDto!.cpr!
+            task.planDefinitionName = planDefinition?.name ?? "Patientgruppe mangler"
+            task.category = CategoryEnum.BLUE
+            task.firstname = carePlan.patientDto!.givenName
+            task.lastname = carePlan.patientDto!.familyName
+            task.questionnaireResponseStatus = undefined
+            task.carePlanId = carePlan.id
 
-        let planDefinitionName = 'PATIENTGRUPPE MANGLER'
-        if (carePlan.planDefinitions && carePlan.planDefinitions.length === 1 && carePlan.planDefinitions![0].title) {
-            planDefinitionName = carePlan.planDefinitions![0].title
-        }
-        task.planDefinitionName = planDefinitionName
-        task.category = CategoryEnum.BLUE
-        task.firstname = carePlan.patientDto!.givenName
-        task.lastname = carePlan.patientDto!.familyName
-        task.questionnaireResponseStatus = undefined
-        task.carePlanId = carePlan.id
+            const questionnaire = questionnaireWrapper.questionnaire!
+            task.questionnaireId = questionnaire.id!
+            task.questionnaireName = questionnaire.title!
+            task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
 
-        const questionnaire = carePlan.questionnaires![0].questionnaire!
-        task.questionnaireId = questionnaire.id!
-        task.questionnaireName = questionnaire.title!
+            task.answeredTime = undefined
+            task.responseLinkEnabled = false
+            if (task.isUnsatisfied())
+                tasks.push(task)
+        });
 
-        task.answeredTime = undefined
-        task.responseLinkEnabled = false
 
-        return task
+        return tasks
     }
 
-    buildTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
+    buildAnsweredTaskFromQuestionnaireResponse(questionnaireResponse: QuestionnaireResponseDto): Task {
         const task = new Task()
 
         task.cpr = questionnaireResponse.patient!.cpr!
