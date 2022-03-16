@@ -89,7 +89,7 @@ export class UserContextCard extends Component<Props, State> {
     this.InitializeServices();
     const toReturn = this.state.loadingUserContextButton ? <LoadingSmallComponent /> : this.renderCard();
     return (
-      <div style={{ float: "right" }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         {toReturn}
       </div>
     )

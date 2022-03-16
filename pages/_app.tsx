@@ -234,7 +234,7 @@ const THEME = createTheme({
 
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: blue,
-            borderRadius: 100,
+            borderRadius: 10,
           }
         },
         notchedOutline: {
@@ -250,8 +250,8 @@ const THEME = createTheme({
           props: { className: 'toButtom' },
           style: {
             marginTop: "auto",
-            marginRight: 6,
-            marginLeft: 7
+            marginRight: 10,
+            marginLeft: 10
           }
         }
       ]
@@ -264,9 +264,10 @@ const THEME = createTheme({
             backgroundColor: blue,
             borderRadius: 200,
             color: "white",
-            ":hover": {
-              backgroundColor: blue,
-            }
+            height: '43px',            
+              ":hover": {
+                backgroundColor: blue,
+              }
           }
         }
       ]
@@ -279,7 +280,7 @@ const THEME = createTheme({
           props: { className: 'search' },
           style: {
             backgroundColor: 'white',
-            borderRadius: 100,
+            borderRadius: 10,
             border: "none"
           }
         }
@@ -702,6 +703,7 @@ const THEME = createTheme({
             color: 'white',
             height: 47,
             padding: '0 20px',
+            minWidth: '137px',
             ":hover": {
               backgroundColor: blue,
               opacity: '0.7',
@@ -716,6 +718,7 @@ const THEME = createTheme({
             color: 'white',
             height: 47,
             padding: '0 20px',
+            minWidth: '137px',
             ":hover": {
               backgroundColor: blue,
               opacity: '0.7',
