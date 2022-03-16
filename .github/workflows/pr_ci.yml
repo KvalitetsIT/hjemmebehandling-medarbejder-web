@@ -4,25 +4,17 @@ on:
   pull_request: ~
 
 jobs:
-  build:
+  prcheck:
     runs-on: ubuntu-latest
 
     steps:
+# Set docker image names.
+    - name: Setup env variables
+      run: |
+        echo "DOCKER_SERVICE=kvalitetsit/hjemmebehandling-medarbejder-web" >> $GITHUB_ENV
+        echo "DOCKER_DOCUMENTATION=kvalitetsit/hjemmebehandling-medarbejder-web-documentation" >> $GITHUB_ENV
 # Checkout source code
     - uses: actions/checkout@v2
 
-# Cache maven stuff
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-
     - name: Build and test
-      run: ./build/build.sh
-
-    - name: Log coverage percentage
-      run: |
-        echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+      run: docker build .
