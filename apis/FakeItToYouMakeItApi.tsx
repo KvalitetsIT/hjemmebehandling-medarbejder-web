@@ -185,6 +185,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
         this.planDefinition2.id = "def2"
+        this.planDefinition2.status = BaseModelStatus.DRAFT
         this.planDefinition2.questionnaires = [this.questionnaire3]
 
         this.allPlanDefinitions = [this.planDefinition1, this.planDefinition2];
@@ -371,7 +372,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         }
     }
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
-        const allplanDefinitions = await this.GetAllPlanDefinitions()
+        const allplanDefinitions = await this.GetAllPlanDefinitions([])
         const result = allplanDefinitions.find(x => x.id == planDefinitionId);
         if (!result)
             throw new NotFoundError()
@@ -456,9 +457,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     }
 
-    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]> {
         try {
-            return this.allPlanDefinitions;
+            if (statusesToInclude.length > 0)
+                return this.allPlanDefinitions.filter(pd => statusesToInclude.includes(pd.status!));
+            return this.allPlanDefinitions
         } catch (error: any) {
             return await this.HandleError(error);
         }

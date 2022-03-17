@@ -3,10 +3,11 @@ import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 /**
  * Containing all methods that should call the actual api
@@ -61,9 +62,11 @@ export interface IBackendApi {
     GetAllQuestionnaires(): Promise<Questionnaire[]>
 
     /**
-     * Returns all plandefinitions in system
+     * Fetches all plandefinitions based on filters
+     * @param statusesToInclude If empty, all statuses are included in response
+     * @returns all plandefinitions in system complying to the filters
      */
-    GetAllPlanDefinitions(): Promise<PlanDefinition[]>;
+    GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]>
 
     /**
      * Returns one single plandefinitions in system

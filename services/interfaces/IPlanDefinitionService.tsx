@@ -1,4 +1,5 @@
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 
 /**
  * QuestionnaireService 
@@ -22,10 +23,11 @@ export interface IPlanDefinitionService {
     updatePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
 
     /**
-     * Get all plan definitions
-     * @returns all plandefinitions
-    */
-    GetAllPlanDefinitions(): Promise<Array<PlanDefinition>>
+     * Fetches all plandefinitions based on filters
+     * @param statusesToInclude If empty, all statuses are included in response
+     * @returns all plandefinitions in system complying to the filters
+     */
+    GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]>
 
 
 

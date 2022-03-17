@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
+import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 
 export interface Props {
     careplan : PatientCareplan
@@ -124,7 +125,7 @@ export class AddQuestionnaireButton extends Component<Props,State> {
   }
 
   async populateQuestionnairesList() : Promise<void>{
-    const allPlanDefinitions = await this.planDefinitionService.GetAllPlanDefinitions()
+    const allPlanDefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.ACTIVE])
     this.setState({
         allPlanDefinitions : allPlanDefinitions ?? []
     })
