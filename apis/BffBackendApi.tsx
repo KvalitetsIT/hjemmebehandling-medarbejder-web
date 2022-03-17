@@ -232,9 +232,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const api = this.planDefinitionApi;
 
             const request: GetPlanDefinitionsRequest = {
-                request: {
-                    statusesToInclude: statusesToInclude.map(status => status.toString())
-                }
+                statusesToInclude: statusesToInclude.map(status => status.toString())
             }
             const planDefinitions = await api.getPlanDefinitions(request);
 
