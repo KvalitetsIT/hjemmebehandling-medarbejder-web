@@ -28,7 +28,8 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the external models (used in bff-api) to the internal models (used in frontend)
  */
 export default class ExternalToInternalMapper extends BaseMapper {
-    mapMeasurementType(mt: MeasurementTypeDto): MeasurementType {
+    mapMeasurementType(mt: MeasurementTypeDto | undefined): MeasurementType | undefined {
+        if (mt == undefined) return undefined;
         const toReturn = new MeasurementType();
         toReturn.displayName = mt.display
         toReturn.code = mt.code
@@ -166,7 +167,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.Id = questionDto.linkId!;
         question.abbreviation = questionDto.abbreviation;
         //question.helperText = questionDto.helperText;
+        question.measurementType = this.mapMeasurementType(questionDto.measurementType)
         switch (questionDto.questionType) {
+
             case QuestionDtoQuestionTypeEnum.Boolean:
                 question.type = QuestionTypeEnum.BOOLEAN;
                 break;
