@@ -1,6 +1,6 @@
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, PatchPlanDefinitionOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -24,6 +24,7 @@ import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { ValueSetApi } from "../generated/apis/ValueSetApi";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -106,7 +107,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
         try {
-            const allplanDefinitions = await this.GetAllPlanDefinitions()
+            const allplanDefinitions = await this.GetAllPlanDefinitions([])
             const result = allplanDefinitions.find(x => x.id == planDefinitionId);
             if (!result)
                 throw new NotFoundError()
@@ -226,10 +227,16 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[] ): Promise<PlanDefinition[]> {
         try {
             const api = this.planDefinitionApi;
-            const planDefinitions = await api.getPlanDefinitions()
+
+            const request: GetPlanDefinitionsRequest = {
+                request: {
+                    statusesToInclude: statusesToInclude.map(status => status.toString())
+                }
+            }
+            const planDefinitions = await api.getPlanDefinitions(request);
 
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
         } catch (error: unknown) {
@@ -322,7 +329,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             const questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
 
-            return questionnaireResponses.map(qr => this.toInternal.buildTaskFromQuestionnaireResponse(qr))
+            return questionnaireResponses.map(qr => this.toInternal.buildAnsweredTaskFromQuestionnaireResponse(qr))
         } catch (error: unknown) {
             return await this.HandleError(error)
         }
@@ -341,7 +348,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             const carePlans = await api.searchCarePlans(request)
 
-            return carePlans.map(cp => this.toInternal.buildTaskFromCarePlan(cp))
+            return carePlans.flatMap(cp => this.toInternal.buildUnansweredTaskFromCarePlan(cp))
         } catch (error: unknown) {
             return await this.HandleError(error)
         }

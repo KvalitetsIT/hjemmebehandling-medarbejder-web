@@ -11,6 +11,7 @@ import { IValidationService } from '../../services/interfaces/IValidationService
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
+import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 
 export interface Props {
   careplan: PatientCareplan
@@ -79,7 +80,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
     try {
 
-      const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions();
+      const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.ACTIVE]);
 
       this.setState({
         allPlanDefinitions: planDefinitions

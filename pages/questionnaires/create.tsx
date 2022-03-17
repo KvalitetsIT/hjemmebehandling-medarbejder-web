@@ -1,7 +1,7 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
@@ -12,6 +12,7 @@ import { TextFieldValidation } from "../../components/Input/TextFieldValidation"
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../_context";
+import { v4 as uuid } from 'uuid';
 
 interface State {
     loading: boolean
@@ -58,7 +59,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             const questionnaireId = this.props.match.params.questionnaireId;
             let questionnaire = new Questionnaire();
             const question = new Question();
-            question.Id = this.generateQuestionId([]) + "";
+            question.Id = this.generateQuestionId();
             questionnaire.questions = [question];
             if (questionnaireId != undefined)
                 questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
@@ -107,6 +108,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         if (!this.state.questionnaire)
             return <>Ingen</>
 
+        console.log(this.state.questionnaire)
         const questionnaire = this.state.questionnaire;
         const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
         const parentQuestions = questionnaire.getParentQuestions();
@@ -115,7 +117,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const hasCallToActionQuestion = questionnaire.getCallToActions().find(() => true);
         if (hasCallToActionQuestion == undefined) {
             const newCallToActionQuestion = new CallToActionQuestion();
-            newCallToActionQuestion.Id = this.generateQuestionId(questionnaire.questions ?? []) + ""
+            newCallToActionQuestion.Id = this.generateQuestionId()
             newCallToActionQuestion.enableWhens = [];
             questionnaire.questions?.push(newCallToActionQuestion)
         }
@@ -214,17 +216,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         )
     }
 
-    generateQuestionId(existingQuestions: BaseQuestion[]): number {
-
-        let foundNewId = false;
-        let newId = 0;
-        while (!foundNewId) {
-            newId++;
-            const idIsAvailable = existingQuestions.findIndex(eq => eq.Id == newId.toString()) == -1
-            if (idIsAvailable)
-                foundNewId = true;
-        }
-        return newId
+    generateQuestionId(): string {
+        return uuid();
     }
 
     addQuestion(referenceQuestion: Question | undefined, isParent: boolean, enableWhenQuestionId?: string): void {
@@ -234,7 +227,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             return;
 
         const newQuestion = new Question();
-        newQuestion.Id = "" + this.generateQuestionId(beforeUpdate.questions)
+        newQuestion.Id = this.generateQuestionId()
         if (referenceQuestion && isParent) {
             const enableWhen = new EnableWhen<boolean>();
             enableWhen.questionId = enableWhenQuestionId ?? referenceQuestion.Id;

@@ -7,8 +7,10 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
-import { Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from '@mui/material';
+import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
+import { LoadingButton } from '@mui/lab';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 export interface Props {
   questionnaireResponse: QuestionnaireResponse
@@ -17,8 +19,9 @@ export interface Props {
 
 export interface State {
   status?: QuestionnaireResponseStatus;
-
-  toast?: JSX.Element;
+  openConfirmationBox: boolean;
+  changingState: boolean;
+  desiredStatus: QuestionnaireResponseStatus;
 }
 
 export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
@@ -29,7 +32,10 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      status: props.questionnaireResponse.status
+      status: props.questionnaireResponse.status,
+      openConfirmationBox: false,
+      changingState: false,
+      desiredStatus: props.questionnaireResponse.status
     }
   }
 
@@ -37,35 +43,35 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
     this.questionnaireService = this.context.questionnaireService;
   }
 
-  handleChange = async (event: SelectChangeEvent): Promise<void> => {
+  openConfirmationBox = async (event: SelectChangeEvent): Promise<void> => {
     const collectionStatus = event.target.value as QuestionnaireResponseStatus;
+    this.setState({ openConfirmationBox: true, desiredStatus: collectionStatus })
+  }
+
+  CloseVerificationBox(): void {
+    this.setState({ openConfirmationBox: false })
+  }
+
+  setStatus = async (collectionStatus: QuestionnaireResponseStatus): Promise<void> => {
     const changes = new QuestionnaireResponse();
     changes.status = collectionStatus;
 
-    const whileUpdateIsProcessingToast = (
-      <Toast snackbarTitle="Opdaterer ..." snackbarColor="info">
-        Ændrer status til: {changes.status}
-      </Toast>
-    )
-    this.setState({ status: collectionStatus, toast: whileUpdateIsProcessingToast })
-
+    this.setState({ changingState: true })
 
     try {
       const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
 
-      const afterUpdateIsCompletedToast = (
-        <Toast snackbarTitle="Opdateret!" snackbarColor="success">
-          Ny status: {changes.status}
-        </Toast>
-      )
+      new CreateToastEvent(new CreateToastEventData("Ny status: " + changes.status, "success")).dispatchEvent();
 
-      this.setState({ status: newStatus, toast: afterUpdateIsCompletedToast })
+      this.setState({ status: newStatus })
     } catch (error: unknown) {
       this.setState(() => { throw error })
     }
 
     if (this.props.onUpdate)
       this.props.onUpdate(this.state.status!);
+
+    this.setState({ changingState: false })
   };
 
   GetQuestionnaireCategoryClassName(category?: CategoryEnum): string {
@@ -89,7 +95,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   render(): JSX.Element {
     this.InitializeServices()
     const height = 50;
-    
+
     if (this.state.status == QuestionnaireResponseStatus.Processed)
       return <Typography height={height} variant='h6'>{this.state.status}</Typography>
 
@@ -100,14 +106,42 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
           id="demo-simple-select-standard"
           value={this.state.status}
           label="Status"
-          onChange={this.handleChange}
+          onChange={this.openConfirmationBox}
         >
           <MenuItem value={QuestionnaireResponseStatus.NotProcessed}>{QuestionnaireResponseStatus.NotProcessed}</MenuItem>
           <MenuItem value={QuestionnaireResponseStatus.Processed}>{QuestionnaireResponseStatus.Processed}</MenuItem>
         </Select>
       </FormControl>
 
-      {this.state.toast ?? <></>}
+      <Dialog
+        open={this.state.openConfirmationBox}
+        onClose={() => this.CloseVerificationBox()}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Skift status?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <Typography>Du er ved at skifte status på besvarelsen</Typography>
+            <Stack direction="row">
+              <Typography alignItems="center" variant='h6'>{this.state.status} </Typography>
+              <ArrowRightAltIcon />
+              <Typography alignItems="center" variant='h6'>{this.state.desiredStatus}</Typography>
+            </Stack>
+
+            <br />
+            <Typography>Er du sikker på du vil foretage denne handling?</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>Nej</Button>
+          <LoadingButton loading={this.state.changingState} className="accept__button" color="primary" variant="contained" onClick={async () => await this.setStatus(this.state.desiredStatus)} >
+            Ja
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </>
     )
   }

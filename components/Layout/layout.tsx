@@ -82,7 +82,7 @@ export class Layout extends Component<{}, State> {
                 </Box>
                 <ErrorBoundary ekstraText="Fejlen der opstod kræver opdatering af siden (F5)">
                   {this.state.createToastData ?
-                    <Toast onClose={() => this.resetToast()} icon={<CheckmarkIcon color='white' size='2rem' />} positionVertical='top' positionhorizontal='center' snackbarTitle={this.state.createToastData.title} snackbarColor='error'></Toast>
+                    <Toast textColor={this.state.createToastData.textColor} onClose={() => this.resetToast()} icon={<CheckmarkIcon color='white' size='2rem' />} positionVertical='bottom' positionhorizontal='right' snackbarTitle={this.state.createToastData.title} snackbarColor={this.state.createToastData.alertColor}></Toast>
                     : <></>
                   }
                   <Switch>

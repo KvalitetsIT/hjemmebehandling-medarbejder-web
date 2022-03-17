@@ -74,6 +74,14 @@ export default class ValidationService extends BaseService implements IValidatio
             errors.push(error)
         }
 
+        const questionnaires = planDefinitions.flatMap(plandefinition => plandefinition.questionnaires);
+        const duplicates = questionnaires.filter((item, index) => questionnaires.findIndex(q => q?.id == item?.id) != index);
+        if (duplicates.length > 0) {
+            const error = new InvalidInputModel(propName, "Spørgeskema '" + duplicates[0]?.name + "' er indeholdt i flere af de valgte patientgrupper")
+            errors.push(error)
+        }
+
+
         return errors
     }
 

@@ -31,7 +31,7 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
-    timeToWait: number = 0;
+    timeToWait: number = 1000;
 
     taskRemovedFromMissingOverview: Task[] = [];
     patient1: PatientDetail = new PatientDetail();
@@ -114,20 +114,24 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.person1.patientContactDetails = personContact;
 
         //======================================= Questions
-        this.question1.abbreviation = "q1";
+        this.question1.Id = "q1";
+        this.question1.abbreviation = "Bedre idag?";
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question2.abbreviation = "q2";
+        this.question2.abbreviation = "Temperatur";
+        this.question2.Id = "q2";
         this.question2.question = "Hvad er din temperatur idag?"
         this.question2.type = QuestionTypeEnum.OBSERVATION;
         this.question2.measurementType = this.measurementType2
 
-        this.question3.abbreviation = "q3";
+        this.question3.Id = "q3";
+        this.question3.abbreviation = "Frisk idag?";
         this.question3.question = "Føler du dig frisk idag?"
         this.question3.type = QuestionTypeEnum.BOOLEAN;
 
-        this.question4.abbreviation = "q4";
+        this.question4.Id = "q4";
+        this.question4.abbreviation = "Godt i dag?";
         const q4EnableWhen = new EnableWhen<boolean>();
         q4EnableWhen.questionId = this.question1.abbreviation;
         this.question4.enableWhen = q4EnableWhen;
@@ -152,7 +156,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.status = BaseModelStatus.ACTIVE
         this.questionnaire1.lastUpdated = this.CreateDate();
         this.questionnaire1.version = "1"
-
         this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
 
 
@@ -182,7 +185,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
         this.planDefinition2.id = "def2"
-        this.planDefinition2.questionnaires = []
+        this.planDefinition2.status = BaseModelStatus.DRAFT
+        this.planDefinition2.questionnaires = [this.questionnaire3]
 
         this.allPlanDefinitions = [this.planDefinition1, this.planDefinition2];
 
@@ -197,9 +201,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.tc2.questionId = "q2"
         this.tc2.thresholdNumbers = [
-            this.CreateThreshold("1", 120, 135, CategoryEnum.RED),
-            this.CreateThreshold("2", 37, 120, CategoryEnum.YELLOW),
             this.CreateThreshold("3", 0, 37, CategoryEnum.GREEN),
+            this.CreateThreshold("2", 37, 120, CategoryEnum.YELLOW),
+            this.CreateThreshold("1", 120, 135, CategoryEnum.RED),
             //this.CreateThreshold("3", -10, 0, CategoryEnum.YELLOW),
             //this.CreateThreshold("3", -50, -10, CategoryEnum.RED),
         ]
@@ -217,7 +221,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
 
-        //this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+
+        this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -367,7 +372,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         }
     }
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
-        const allplanDefinitions = await this.GetAllPlanDefinitions()
+        const allplanDefinitions = await this.GetAllPlanDefinitions([])
         const result = allplanDefinitions.find(x => x.id == planDefinitionId);
         if (!result)
             throw new NotFoundError()
@@ -452,9 +457,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     }
 
-    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]> {
         try {
-            return this.allPlanDefinitions;
+            if (statusesToInclude.length > 0)
+                return this.allPlanDefinitions.filter(pd => statusesToInclude.includes(pd.status!));
+            return this.allPlanDefinitions
         } catch (error: any) {
             return await this.HandleError(error);
         }

@@ -1,7 +1,8 @@
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { IPlanDefinitionService } from "./interfaces/IPlanDefinitionService";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 export default class PlanDefinitionService extends BaseService implements IPlanDefinitionService {
     backendApi: IBackendApi;
@@ -27,9 +28,9 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
     }
 
 
-    async GetAllPlanDefinitions(): Promise<PlanDefinition[]> {
+    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[] ): Promise<PlanDefinition[]> {
         try {
-            return await this.backendApi.GetAllPlanDefinitions();
+            return await this.backendApi.GetAllPlanDefinitions(statusesToInclude);
         } catch (error: unknown) {
             return this.HandleError(error);
         }

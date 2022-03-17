@@ -38,7 +38,7 @@ class InactivePatients extends React.Component<Props,State> {
         return (<>
             <Box paddingBottom={2}>
             <Typography variant="h6">
-            Inaktive patienter
+            Afsluttede patienter
           </Typography>
           </Box>
 

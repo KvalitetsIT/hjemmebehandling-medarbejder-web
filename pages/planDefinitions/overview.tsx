@@ -27,7 +27,7 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
     }
     async componentDidMount(): Promise<void> {
         try {
-            const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions();
+            const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions([]);
             this.setState({ planDefinitions: planDefinitions });
         } catch (error) {
             this.setState(() => { throw error })

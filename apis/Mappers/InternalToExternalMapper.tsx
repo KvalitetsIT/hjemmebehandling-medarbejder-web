@@ -10,7 +10,7 @@ import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto } from "../../generated/models";
+import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto, QuestionDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -73,8 +73,12 @@ export default class InternalToExternalMapper extends BaseMapper {
                 text: internalQuestion.question,
                 abbreviation: internalQuestion.abbreviation,
                 thresholds: this.mapThreshold(thresholdCollection),
-                measurementType: this.mapMeasurementType(internalQuestion.measurementType)
+
+                measurementType: this.mapMeasurementType(internalQuestion.measurementType),
                 //helpertext : internalQuestion.abbreviation
+                helperText : internalQuestion.helperText
+                //measurementType: this.mapMeasurementType(internalQuestion.measurementType)
+
             }
         }
 

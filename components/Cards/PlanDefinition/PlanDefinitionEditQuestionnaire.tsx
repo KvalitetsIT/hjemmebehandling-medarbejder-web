@@ -154,9 +154,9 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
                 <Box sx={{ height: 230, overflow: 'auto' }}>
                     <List role="list" dense component="div" >
                         {questionnaires.filter(questionnaire => {
-                          if (questionnaire?.status != BaseModelStatus.DRAFT){
-                            return questionnaire  
-                          }
+                            if (questionnaire?.status != BaseModelStatus.DRAFT) {
+                                return questionnaire
+                            }
                         }).map(questionnaire => {
                             const isChecked = this.isChecked(questionnaire!);
                             return (

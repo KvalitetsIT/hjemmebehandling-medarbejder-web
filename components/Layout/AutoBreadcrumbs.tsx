@@ -22,7 +22,7 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
     urlSegmentToDisplayName["edit"] = {displayName: "Redigér"}
     urlSegmentToDisplayName["create"] = {displayName: "Opret"}
     urlSegmentToDisplayName["active"] = {displayName: "Aktive patienter"}
-    urlSegmentToDisplayName["inactive"] = {displayName: "Inaktive patienter"}
+    urlSegmentToDisplayName["inactive"] = {displayName: "Afsluttede patienter"}
 
 
     

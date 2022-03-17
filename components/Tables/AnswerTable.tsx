@@ -192,10 +192,10 @@ export class AnswerTable extends Component<Props, State> {
                                                 severity = "info"
 
                                             return (
-                                                <TableCell 
+                                                <TableCell
                                                     className="answer__table-head"
                                                     align="center"
-                                                    >
+                                                >
 
                                                     <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor} minWidth={"250px"}>
                                                         <div className="answer__header">
@@ -227,7 +227,7 @@ export class AnswerTable extends Component<Props, State> {
 
                                                 <TableRow>
                                                     <TableCell>
-                                                        {question.abbreviation}
+                                                        {question.abbreviation ?? question.question}
                                                     </TableCell>
 
                                                     {questionnairesResponsesToShow.map(questionResponse => {
