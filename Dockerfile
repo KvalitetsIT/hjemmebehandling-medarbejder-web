@@ -5,7 +5,7 @@ WORKDIR /app
 
 # add app
 COPY . ./
-
+EXPOSE 3000:3000
 # install java for openapi-generator
 #RUN apt update; apt install -y openjdk-11-jre
 RUN apk --no-cache add openjdk11 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community

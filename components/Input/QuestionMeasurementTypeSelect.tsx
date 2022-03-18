@@ -44,6 +44,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     async componentDidMount(): Promise<void> {
         try {
             const measurementTypes = await this.questionAnswerService.GetAllMeasurementTypes();
+            
             this.setState({ allMeasurementTypes: measurementTypes })
         } catch (error) {
             this.setState(() => { throw error })

@@ -28,6 +28,8 @@ import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrgan
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
+import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -364,9 +366,29 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
-
         try {
-            return [this.measurementType1, this.measurementType2]
+            let toInternal = new ExternalToInternalMapper();
+            let toExternal = new InternalToExternalMapper();
+
+            let result = [toExternal.mapMeasurementType(this.measurementType1),toExternal.mapMeasurementType(this.measurementType2)]
+            
+            /*
+
+            let measurementTypes: MeasurementType[]
+
+            result.forEach(mt => {
+                if( mt !== typeof undefined ){
+                    measurementTypes.push(toInternal.mapMeasurementType(mt))
+                }
+            })
+            return measurementTypes
+
+            */
+            //return result.filter(mt => mt !== typeof undefined).map(mt => toInternal.mapMeasurementType(mt))
+
+            return result.map(mt => toInternal.mapMeasurementType(mt))
+
+    
         } catch (error) {
             return this.HandleError(error)
         }

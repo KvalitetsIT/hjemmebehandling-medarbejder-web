@@ -82,10 +82,8 @@ export default class InternalToExternalMapper extends BaseMapper {
 
 
     }
-    mapMeasurementType(measurementType?: MeasurementType): MeasurementTypeDto | undefined {
-        if (measurementType == undefined)
-            return undefined;
-
+    mapMeasurementType(measurementType?: MeasurementType): MeasurementTypeDto {
+        
         const toReturn: MeasurementTypeDto = {
             code: measurementType?.code,
             display: measurementType?.displayName,
