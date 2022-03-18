@@ -72,10 +72,9 @@ export default class InternalToExternalMapper extends BaseMapper {
                 questionType: this.mapQuestionType(internalQuestion.type),
                 text: internalQuestion.question,
                 abbreviation: internalQuestion.abbreviation,
+                measurementType: this.mapMeasurementType(internalQuestion.measurementType),
                 thresholds: this.mapThreshold(thresholdCollection),
                 helperText : internalQuestion.helperText
-                //measurementType: this.mapMeasurementType(internalQuestion.measurementType)
-                
             }
         }
 
