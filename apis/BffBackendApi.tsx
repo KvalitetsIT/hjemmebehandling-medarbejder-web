@@ -99,7 +99,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
         try {
             const result = await this.valueSetApi.getMeasurementTypes();
-            return result.map(mt => mt??this.toInternal.mapMeasurementType(mt))
+            const toReturn : MeasurementType[] = result.map(mt => mt ?? this.toInternal.mapMeasurementType(mt));
+            return toReturn
         } catch (error) {
             return this.HandleError(error)
         }
