@@ -9,17 +9,13 @@ import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import {IUserService} from '../../services/interfaces/IUserService';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { CreateToastEvent,CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
 
 export interface Props {
     patient: PatientDetail
 }
-export interface State {
-    toast?: JSX.Element
-}
 
-
-export class LoginInfoCard extends Component<Props, State> {
+export class LoginInfoCard extends Component<Props, {}> {
     static displayName = LoginInfoCard.name;
     static contextType = ApiContext;
     dateHelper!: IDateHelper
@@ -38,12 +34,8 @@ export class LoginInfoCard extends Component<Props, State> {
     async resetPassword(): Promise<void> {
         try {
             await this.userService.ResetPassword(this.props.patient)
-            const afterResetPasswordToast = (
-                <Toast snackbarTitle="Nulstil adgangskode" snackbarColor="success">
-                    Adgangskoden er nu nulstillet!
-                </Toast>
-            )
-            this.setState({ toast: afterResetPasswordToast })
+            new CreateToastEvent(new CreateToastEventData("Nulstil adgangskode","Adgangskoden er nu nulstillet!","success")).dispatchEvent();
+        
         } catch (error : unknown) {
             this.setState(() => { throw error })
         }
@@ -111,7 +103,6 @@ export class LoginInfoCard extends Component<Props, State> {
 
                     </CardContent>
                 </Card>
-                {this.state.toast ?? <></>}
             </>
         );
     }

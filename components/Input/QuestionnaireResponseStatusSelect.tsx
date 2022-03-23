@@ -61,7 +61,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
     try {
       const newStatus = await this.questionnaireService.UpdateQuestionnaireResponseStatus(this.props.questionnaireResponse.id, collectionStatus)
 
-      new CreateToastEvent(new CreateToastEventData("Ny status: " + changes.status, "success")).dispatchEvent();
+      new CreateToastEvent(new CreateToastEventData("Ny status: " + changes.status,"", "success")).dispatchEvent();
 
       this.setState({ status: newStatus })
     } catch (error: unknown) {
