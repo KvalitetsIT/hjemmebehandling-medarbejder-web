@@ -113,7 +113,7 @@ const redLight = '#FAD8D7'
 const blue = '#5D74AC'
 const blueLight = '#E8EFF7'
 
-const mainBackground = "#F2F2F2"
+const mainBackground = "#e8e8e8"
 
 const THEME = createTheme({
   palette: {
