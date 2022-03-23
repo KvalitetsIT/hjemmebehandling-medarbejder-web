@@ -2,7 +2,6 @@ import { Box } from '@material-ui/core';
 import React, { Component } from 'react';
 import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import AutoBreadcrumbs from './AutoBreadcrumbs';
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
@@ -76,10 +75,6 @@ export class Layout extends Component<{}, State> {
 
                 <Topbar />
 
-
-                <Box paddingBottom={3}>
-                  <AutoBreadcrumbs />
-                </Box>
                 <ErrorBoundary ekstraText="Fejlen der opstod kræver opdatering af siden (F5)">
                   {this.state.createToastData ?
                     <Toast textColor={this.state.createToastData.textColor} onClose={() => this.resetToast()} icon={<CheckmarkIcon color='white' size='2rem' />} positionVertical='bottom' positionhorizontal='right' snackbarTitle={this.state.createToastData.title} snackbarColor={this.state.createToastData.alertColor}></Toast>
