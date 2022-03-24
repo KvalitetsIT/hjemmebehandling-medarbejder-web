@@ -174,7 +174,7 @@ export class Tasklist extends Component<Props, State> {
                           <TableCell className="action-button__cell" align="right">
                             {task.category == CategoryEnum.BLUE ?
                               <ConfirmationButton variant="contained" color="primary" title="Fjern alarm" buttonText="Fjern alarm" className="remove-alarm__button" action={async () => await this.removeAlarm(task)}>
-                                Er du sikker på at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
+                                Er du sikker på, at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
                               </ConfirmationButton>
                               :
                               <Button className="answer__button" component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>

@@ -78,7 +78,7 @@ export class FinishMonitoringButton extends React.Component<Props, State>{
                     title="Afslut monitoreringsplan?"
                     buttonText="Afslut monitoreringsplan"
                     action={async () => await this.finishCareplan(this.props.careplan)}>
-                    Er du sikker på at du ønsker at afslutte patientens monitoreringsplan?
+                    Er du sikker på, at du ønsker at afslutte patientens monitoreringsplan?
                 </ConfirmationButton>
                 {this.state?.toast ?? <></>}
             </>

@@ -70,7 +70,7 @@ export class LoginInfoCard extends Component<Props, {}> {
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <Typography variant="subtitle1">
-                                                    Er du sikker på at du ønsker at nulstille adgangskoden for {patient.firstname} {patient.lastname}?
+                                                    Er du sikker på, at du ønsker at nulstille adgangskoden for {patient.firstname} {patient.lastname}?
                                                 </Typography>
                                                 <Typography variant="subtitle2">
                                                     Dette vil sætte adgangskoden tilbage til de første 6 cifre i CPR-nummeret

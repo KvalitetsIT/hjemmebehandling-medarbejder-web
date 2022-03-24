@@ -132,7 +132,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
             </Stack>
 
             <br />
-            <Typography>Er du sikker på du vil foretage denne handling?</Typography>
+            <Typography>Er du sikker på, at du vil foretage denne handling?</Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
