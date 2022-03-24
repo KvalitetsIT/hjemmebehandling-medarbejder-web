@@ -120,19 +120,13 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Skift status?
+          Skift af status?
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <Typography>Du er ved at skifte status på besvarelsen</Typography>
-            <Stack direction="row">
-              <Typography alignItems="center" variant='h6'>{this.state.status} </Typography>
-              <ArrowRightAltIcon />
-              <Typography alignItems="center" variant='h6'>{this.state.desiredStatus}</Typography>
-            </Stack>
-
+            <Typography>Du er ved at skifte status på besvarelsen fra '{this.state.status}' til '{this.state.desiredStatus}'. </Typography>
             <br />
-            <Typography>Er du sikker på, at du vil foretage denne handling?</Typography>
+            <Typography>Er du sikker på, at du vil foretage denne handling? Det er ikke muligt at skifte status tilbage til 'Ikke behandlet</Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
