@@ -134,7 +134,7 @@ export default class InternalToExternalMapper extends BaseMapper {
     mapCarePlan(carePlan: PatientCareplan): CarePlanDto {
         const carePlanDto = {
             id: "dummy",
-            title: "Ny behandlingsplan", // TODO - set a title ...
+            title: "Ny monitoreringsplan", // TODO - set a title ...
             patientDto: this.mapPatient(carePlan.patient!),
             questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
             planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))

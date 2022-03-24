@@ -31,7 +31,7 @@ export class PatientContextThumbnails extends Component<Props, {}> {
 
     return (
 
-      <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen behandlingsplan">
+      <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen monitoreringsplan">
         <IsEmptyCard object={currentCareplan?.patient} jsxWhenEmpty="Ingen patient">
 
 

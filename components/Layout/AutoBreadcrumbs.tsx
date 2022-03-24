@@ -17,7 +17,7 @@ class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
     urlSegmentToDisplayName["patients"] = {displayName: "Opgaveliste"}
     urlSegmentToDisplayName["questionnaires"] = {displayName: "Spørgeskemaer"}
     urlSegmentToDisplayName["plandefinitions"] = {displayName: "Patientgrupper"}
-    urlSegmentToDisplayName["careplans"] = {displayName: "Behandlingsplaner"}
+    urlSegmentToDisplayName["careplans"] = {displayName: "Monitoreringsplaner"}
     urlSegmentToDisplayName["newpatient"] = {displayName: "Opret patient"}
     urlSegmentToDisplayName["edit"] = {displayName: "Redigér"}
     urlSegmentToDisplayName["create"] = {displayName: "Opret"}

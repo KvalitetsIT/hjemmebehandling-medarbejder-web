@@ -97,7 +97,7 @@ class PatientCareplans extends React.Component<Props, State> {
   renderCareplanTab(): JSX.Element {
     const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
     return (
-      <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive behandlingsplaner fundet :-(">
+      <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive monitoreringsplaner fundet :-(">
         <Grid container spacing={3} sx={{ flexWrap: "inherit" }}>
           <Grid maxWidth={400} item xs="auto">
             <ErrorBoundary>
@@ -107,7 +107,7 @@ class PatientCareplans extends React.Component<Props, State> {
                     <PatientCard patient={activeCareplan?.patient}></PatientCard>
                     <LoginInfoCard patient={activeCareplan?.patient} />
                   </> :
-                  <div>Noget gik galt - Ingen aktiv-behandlingsplan, eller så var ingen patient tilknyttet</div>
+                  <div>Noget gik galt - Ingen aktiv monitoreringsplan, eller så var ingen patient tilknyttet</div>
                 }
 
 

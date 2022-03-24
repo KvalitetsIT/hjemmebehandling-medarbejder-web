@@ -33,7 +33,7 @@ import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
-    timeToWait: number = 1000;
+    timeToWait: number = 0;
 
     taskRemovedFromMissingOverview: Task[] = [];
     patient1: PatientDetail = new PatientDetail();
@@ -592,10 +592,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             "timestamp": "2022-01-11T13:31:21.337851392Z",
             "status": 400,
             "error": "Bad Request",
-            "message": "Aktiv behandlingsplan eksisterer allerede for det angivne cpr-nummer.",
+            "message": "Aktiv monitoreringsplan eksisterer allerede for det angivne cpr-nummer.",
             "path": "/api/v1/careplan",
             "errorCode": 10,
-            "errorText": "Aktiv behandlingsplan eksisterer allerede for det angivne cpr-nummer."
+            "errorText": "Aktiv monitoreringsplan eksisterer allerede for det angivne cpr-nummer."
         });
 
         const standardResponse: Response = new Response(body, { status: statusCode });

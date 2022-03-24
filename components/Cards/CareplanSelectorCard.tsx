@@ -24,7 +24,7 @@ export class CareplanSelectorCard extends Component<Props,State> {
   render () :JSX.Element {
     return (
         <Card component={Box} minWidth={100}>
-            <CardHeader subheader="Behandlingsplaner"/>
+            <CardHeader subheader="Monitoreringsplaner"/>
             <CardContent>
                 <Stack>
             {this.props.careplans.map(careplan => {

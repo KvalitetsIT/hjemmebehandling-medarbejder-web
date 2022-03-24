@@ -90,7 +90,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
     return (
 
-      <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen behandlingsplan">
+      <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen monitoreringsplan">
         <Grid container spacing={2}>
           <Grid item xs={12}>
 

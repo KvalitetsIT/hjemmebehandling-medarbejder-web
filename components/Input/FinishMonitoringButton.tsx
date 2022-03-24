@@ -56,7 +56,7 @@ export class FinishMonitoringButton extends React.Component<Props, State>{
                 <><CheckCircleOutlinedIcon color='success' /> Monitoreringsplanen er afsluttet</>,
                 "",
                 <>
-                    <Typography>Følgende behandlingsplan blev afsluttet</Typography>
+                    <Typography>Følgende monitoreringsplan blev afsluttet</Typography>
                     <Chip icon={<PersonOutlineOutlinedIcon />} label={<Typography padding={2}>{patientName} ({patientCpr})</Typography>} />
                 </>
             )

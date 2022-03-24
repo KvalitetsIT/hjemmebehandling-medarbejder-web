@@ -7,7 +7,7 @@ export class PatientIsAlreadyActivePatientError extends BaseServiceError {
   }
 
   displayMessage(): string {
-    return "Patienten har allerede en aktiv behandlingsplan"
+    return "Patienten har allerede en aktiv monitoreringsplan"
   }
 
   displayTitle(): string {
