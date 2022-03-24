@@ -125,7 +125,7 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
           <DialogContentText id="alert-dialog-description">
             <Typography>Du er ved at skifte status på besvarelsen fra '{this.state.status}' til '{this.state.desiredStatus}'. </Typography>
             <br />
-            <Typography>Er du sikker på, at du vil foretage denne handling? Det er ikke muligt at skifte status tilbage til 'Ikke behandlet</Typography>
+            <Typography>Er du sikker på, at du vil foretage denne handling? Det er ikke muligt at skifte status tilbage til 'Ikke behandlet'</Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
