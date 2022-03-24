@@ -7,10 +7,9 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
 import { LoadingButton } from '@mui/lab';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 export interface Props {
   questionnaireResponse: QuestionnaireResponse

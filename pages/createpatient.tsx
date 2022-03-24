@@ -388,7 +388,7 @@ export default class CreatePatient extends Component<Props, State> {
     const contactPrimary = this.state.patient?.contact?.primaryPhone ?? ""
 
     if (patientPrimary == "" && contactPrimary == "") {
-      errors.push(new InvalidInputModel("telefonnummer", "Et telefonnummer mangler", CriticalLevelEnum.ERROR))
+      errors.push(new InvalidInputModel("telefonnummer", "Der mangler at blive angivet et primært telefonnummer enten ved patient eller primær kontakt", CriticalLevelEnum.ERROR))
     }
 
     this.setState({ contactError: errors?.length == 0 ? undefined : errors[0].message })
