@@ -83,7 +83,7 @@ export class PatientCard extends Component<Props, State> {
               <Typography fontWeight="bold" variant="subtitle2">
                 Adresse
               </Typography>
-              <IsEmptyCard object={this.props.patient.address?.street} jsxWhenEmpty="Ingen addresse">
+              <IsEmptyCard object={this.props.patient.address?.street} jsxWhenEmpty="Ingen adresse">
 
                 <Typography variant="subtitle2">
                   {this.props.patient.address?.street}<br />
