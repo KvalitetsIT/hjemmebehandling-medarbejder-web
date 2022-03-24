@@ -96,7 +96,7 @@ export class TextFieldValidation extends Component<Props, State> {
                         onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
                         InputLabelProps={{ shrink: this.props.value ? true : false }}
                         InputProps={this.props.inputProps}
-                        label={<Typography color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
+                        label={<Typography sx={{textTransform : "capitalize"}} color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
                         variant={this.props.variant}
                         error={hasError}
                         color={color}
