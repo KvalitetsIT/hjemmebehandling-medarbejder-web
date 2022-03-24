@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { Box, FormControl, OutlinedInputProps, TextField } from '@mui/material';
+import { Box, FormControl, OutlinedInputProps, TextField, Typography } from '@mui/material';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
@@ -96,7 +96,7 @@ export class TextFieldValidation extends Component<Props, State> {
                         onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
                         InputLabelProps={{ shrink: this.props.value ? true : false }}
                         InputProps={this.props.inputProps}
-                        label={this.props.label}
+                        label={<Typography color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
                         variant={this.props.variant}
                         error={hasError}
                         color={color}
@@ -104,7 +104,7 @@ export class TextFieldValidation extends Component<Props, State> {
                         helperText={firstError?.message}
                         disabled={this.props.disabled}
                         onChange={(input) => this.props.onChange(input)}
-                        required={this.props.required}
+                        //required={this.props.required}
                         size={this.props.size}
                         type={this.props.type}
                         value={this.props.value}
