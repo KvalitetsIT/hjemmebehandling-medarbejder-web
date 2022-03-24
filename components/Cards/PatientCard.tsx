@@ -81,7 +81,7 @@ export class PatientCard extends Component<Props, State> {
           <Grid container>
             <Grid item xs={12}>
               <Typography fontWeight="bold" variant="subtitle2">
-                Addresse
+                Adresse
               </Typography>
               <IsEmptyCard object={this.props.patient.address?.street} jsxWhenEmpty="Ingen addresse">
 

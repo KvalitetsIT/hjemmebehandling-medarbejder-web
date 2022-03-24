@@ -224,7 +224,7 @@ export class PatientEditCard extends Component<Props, State> {
               </Stack>
               <Stack spacing={3} direction="row">
                 <TextFieldValidation
-                  sectionName={PatientEditCard.sectionName} uniqueId={inputId++} disabled label="Addresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
+                  sectionName={PatientEditCard.sectionName} uniqueId={inputId++} disabled label="Adresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName} disabled
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
