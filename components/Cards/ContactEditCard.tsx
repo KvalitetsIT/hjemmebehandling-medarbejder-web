@@ -103,13 +103,13 @@ export class ContactEditCard extends Component<Props, State> {
                 id="contactPrimaryPhone"
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
-                label="Primær telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
+                label="Primært telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
                 variant="outlined" />
               <PhonenumberInput
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
-                label="Sekundær telefonnummer"
+                label="Sekundært telefonnummer"
                 value={this.state.contact.secondaryPhone}
                 onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber, input)}
                 variant="outlined" />
