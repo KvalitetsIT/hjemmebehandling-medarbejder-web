@@ -12,6 +12,8 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
+import { CustomSelect, StyledOption } from '../CustomSelect';
+
 
 export interface Props {
   careplan: PatientCareplan
@@ -56,11 +58,17 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     this.validationService = this.context.validationService;
   }
 
-  handleChange(e: SelectChangeEvent<string>): void {
-    const clicked = e.target.value as unknown as string[]
+  handleChange(e: PlanDefinition | null): void {
 
-    const plandefinitions = clicked.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
+    let clicked = e instanceof PlanDefinition ? [e] : e;
+
+    console.log("e")
+    console.log(e)
+
+    const plandefinitions = clicked?.map(planDefinition => this.state.allPlanDefinitions.find(x => x.id === planDefinition.id))
     const careplan = this.state.editedCareplan;
+    const shouldRemove = careplan.planDefinitions.some(existingPlanDefinition => e?.some(planDefinitionToAdd => existingPlanDefinition.id == planDefinitionToAdd.id));
+
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
     careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
 
@@ -112,18 +120,20 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     return (
       <FormControl fullWidth required>
         <InputLabel error={this.state.errors.length !== 0} id="demo-simple-select-label">Vælg patientgrupper</InputLabel>
-        <Select onClose={() => this.validate()} label="Vælg patientgrupper" multiple value={this.state.editedCareplan.planDefinitions.map(x => x.id) as unknown as string} onChange={this.handleChange}>
+        <CustomSelect
+          onClose={() => this.validate()}
+          label="Vælg patientgrupper"
+          multiple
+          value={this.state.editedCareplan.planDefinitions}
+          onChange={x => this.handleChange(x)}>
           {this.state.allPlanDefinitions.map(patientGroup => {
             return (
-              <MenuItem key={patientGroup.name} value={patientGroup.id}>{patientGroup.name}</MenuItem>
+              <StyledOption key={patientGroup.name} value={patientGroup}>{patientGroup.name}</StyledOption>
             )
           })}
-        </Select>
+        </CustomSelect>
         {hasError ? <FormHelperText error={true}>{firstError}</FormHelperText> : <></>}
       </FormControl>
     )
   }
-
-
-
 }
