@@ -74,7 +74,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 abbreviation: internalQuestion.abbreviation,
                 measurementType: this.mapMeasurementType(internalQuestion.measurementType),
                 thresholds: this.mapThreshold(thresholdCollection),
-                helperText : internalQuestion.helperText
+                helperText: internalQuestion.helperText
             }
         }
 
@@ -83,7 +83,7 @@ export default class InternalToExternalMapper extends BaseMapper {
 
     }
     mapMeasurementType(measurementType?: MeasurementType): MeasurementTypeDto {
-        
+
         const toReturn: MeasurementTypeDto = {
             code: measurementType?.code,
             display: measurementType?.displayName,
@@ -132,12 +132,13 @@ export default class InternalToExternalMapper extends BaseMapper {
     }
 
     mapCarePlan(carePlan: PatientCareplan): CarePlanDto {
-        const carePlanDto = {
+        const carePlanDto: CarePlanDto = {
             id: "dummy",
             title: "Ny monitoreringsplan", // TODO - set a title ...
             patientDto: this.mapPatient(carePlan.patient!),
             questionnaires: carePlan.questionnaires.map(q => this.mapQuestionnaire(q)),
-            planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd))
+            planDefinitions: carePlan.planDefinitions.map(pd => this.mapPlanDefinition(pd)),
+            created : carePlan.creationDate
         }
 
         return carePlanDto
@@ -225,6 +226,7 @@ export default class InternalToExternalMapper extends BaseMapper {
                 id: questionnaire.id,
                 title: questionnaire.name
             },
+            satisfiedUntil: new Date(Date.parse("January 1, 1970")),
             thresholds: questionnaire.thresholds?.flatMap(threshold => this.mapThreshold(threshold)),
             frequency: this.mapFrequency(questionnaire.frequency)
         }

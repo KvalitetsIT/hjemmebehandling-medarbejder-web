@@ -29,7 +29,7 @@ import BaseMapper from "./BaseMapper";
  */
 export default class ExternalToInternalMapper extends BaseMapper {
     mapMeasurementType(mt: MeasurementTypeDto): MeasurementType {
-        
+
         const toReturn = new MeasurementType();
         toReturn.displayName = mt.display
         toReturn.code = mt.code
@@ -50,20 +50,52 @@ export default class ExternalToInternalMapper extends BaseMapper {
         carePlan.creationDate = carePlanDto.created
         carePlan.terminationDate = carePlanDto.endDate
         carePlan.organization = new SimpleOrganization();
-        carePlan.organization.name = carePlanDto?.departmentName ?? 'Ukendt afdeling   '
+        carePlan.organization.name = carePlanDto?.departmentName ?? 'Ukendt afdeling'
 
         return carePlan
+    }
+
+    findUnsatisfiedPlanDefinitions(careplanDto: CarePlanDto): PlanDefinitionDto[] {
+        console.log("=====NEW===")
+        const unsatisfiedPlanDefinitions: PlanDefinitionDto[] = [];
+        console.log("careplanDto")
+        console.log(careplanDto)
+
+        console.log("careplanDto.questionnaires")
+        console.log(careplanDto.questionnaires)
+
+        if (careplanDto.questionnaires == undefined)
+            return [];
+
+        const now = new Date().getTime()
+        const unsatisfiedQuestionnaires = careplanDto.questionnaires.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now);
+        console.log("unsatisfiedQuestionnaires")
+        console.log(unsatisfiedQuestionnaires)
+
+        console.log("careplanDto.planDefinitions")
+        console.log(careplanDto.planDefinitions)
+        if (careplanDto.planDefinitions == undefined)
+            return [];
+
+        careplanDto.planDefinitions.forEach(planDefinition => {
+            planDefinition.questionnaires?.forEach(questionnaire => {
+                if (unsatisfiedQuestionnaires.some(uq => uq.questionnaire?.id == questionnaire.questionnaire?.id))
+                    unsatisfiedPlanDefinitions.push(planDefinition)
+            });
+        })
+        console.log("unsatisfiedPlanDefinitions")
+        console.log(unsatisfiedPlanDefinitions)
+        return unsatisfiedPlanDefinitions;
     }
 
     buildUnansweredTaskFromCarePlan(carePlan: CarePlanDto): Task[] {
 
         const tasks: Task[] = []
         carePlan.questionnaires?.forEach(questionnaireWrapper => {
-            const planDefinition = carePlan.planDefinitions?.find(planDef => planDef.questionnaires?.find(questionnaire => questionnaire.questionnaire?.id == questionnaireWrapper.questionnaire?.id));
-            
+            const planDefinition: PlanDefinitionDto | undefined = this.findUnsatisfiedPlanDefinitions(carePlan).find(() => true)
             const task = new Task()
             task.cpr = carePlan.patientDto!.cpr!
-            task.planDefinitionName = planDefinition?.name ?? "Patientgruppe mangler"
+            task.planDefinitionName = planDefinition?.title ?? "Patientgruppe mangler"
             task.category = CategoryEnum.BLUE
             task.firstname = carePlan.patientDto!.givenName
             task.lastname = carePlan.patientDto!.familyName
@@ -73,12 +105,13 @@ export default class ExternalToInternalMapper extends BaseMapper {
             const questionnaire = questionnaireWrapper.questionnaire!
             task.questionnaireId = questionnaire.id!
             task.questionnaireName = questionnaire.title!
-            task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
+            //task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
 
             task.answeredTime = undefined
             task.responseLinkEnabled = false
-            if (task.isUnsatisfied())
-                tasks.push(task)
+
+            //  if (task.isUnsatisfied())
+            //      tasks.push(task)
         });
 
 
@@ -118,8 +151,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         const thresholds: ThresholdCollection[] = [];
 
+        thresholdDtos?.forEach(thresholdDto => {
 
-        for (const thresholdDto of thresholdDtos) {
             let threshold = thresholds.find(x => x.questionId == thresholdDto.questionId);
             if (threshold === undefined) {
                 threshold = new ThresholdCollection();
@@ -144,7 +177,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 );
                 threshold.thresholdNumbers!.push(thresholdNumber);
             }
-        }
+        })
+
         return thresholds;
 
     }
@@ -171,7 +205,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.Id = questionDto.linkId!;
         question.abbreviation = questionDto.abbreviation;
 
-        question.measurementType  = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
+        question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
 
         question.helperText = questionDto.helperText;
         switch (questionDto.questionType) {
@@ -412,7 +446,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.lastUpdated = questionnaire.lastUpdated;
         questionnaireResult.status = Questionnaire.stringToQuestionnaireStatus(questionnaire?.status)
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
-        const callToActions: BaseQuestion[] = questionnaire.callToActions!.map(x => this.mapCallToAction(x));
+        const callToActions: BaseQuestion[] = questionnaire.callToActions?.map(x => this.mapCallToAction(x)) ?? [];
         questionnaireResult.questions?.push(...callToActions);
         questionnaireResult.thresholds = questionnaire.questions?.flatMap(question => this.mapThresholdDtos(question.thresholds ?? []))
         questionnaireResult.version = questionnaire?.version;
