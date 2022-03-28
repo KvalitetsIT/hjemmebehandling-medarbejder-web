@@ -80,8 +80,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         super();
         this.measurementType1 = new MeasurementType();
         this.measurementType1.displayName = "CRP"
+        this.measurementType1.code = "CRP"
         this.measurementType2 = new MeasurementType();
         this.measurementType2.displayName = "Temperatur"
+        this.measurementType2.code = "Temperatur"
 
         //======================================= Patient
         this.patient1.cpr = "1212758392";
