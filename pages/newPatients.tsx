@@ -7,7 +7,7 @@ interface Props {
     match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
   }
 
-export class NewPatientPage extends Component<Props> {
+export default class NewPatientPage extends Component<Props> {
     render() : JSX.Element{
         return <CreatePatient {...this.props}/>
     }

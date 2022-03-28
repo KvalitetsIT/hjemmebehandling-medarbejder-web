@@ -17,7 +17,7 @@ import CreateQuestionnairePage from '../../pages/questionnaires/create';
 import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { CheckmarkIcon } from '../Icons/Icons';
-import { NewPatientPage } from '../../pages/newPatients';
+import  NewPatientPage  from '../../pages/newPatients';
 import  EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
 import  EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
 import  EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
