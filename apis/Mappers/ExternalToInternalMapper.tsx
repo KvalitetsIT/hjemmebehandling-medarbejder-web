@@ -112,7 +112,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 task.responseLinkEnabled = false
 
                 //  if (task.isUnsatisfied())
-                //      tasks.push(task)
+                tasks.push(task)
             })
         });
 
