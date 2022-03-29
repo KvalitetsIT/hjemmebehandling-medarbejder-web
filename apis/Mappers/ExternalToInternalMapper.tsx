@@ -92,26 +92,28 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         const tasks: Task[] = []
         carePlan.questionnaires?.forEach(questionnaireWrapper => {
-            const planDefinition: PlanDefinitionDto | undefined = this.findUnsatisfiedPlanDefinitions(carePlan).find(() => true)
-            const task = new Task()
-            task.cpr = carePlan.patientDto!.cpr!
-            task.planDefinitionName = planDefinition?.title ?? "Patientgruppe mangler"
-            task.category = CategoryEnum.BLUE
-            task.firstname = carePlan.patientDto!.givenName
-            task.lastname = carePlan.patientDto!.familyName
-            task.questionnaireResponseStatus = undefined
-            task.carePlanId = carePlan.id
+            this.findUnsatisfiedPlanDefinitions(carePlan).forEach(unsatisfiedPlanDefinition => {
 
-            const questionnaire = questionnaireWrapper.questionnaire!
-            task.questionnaireId = questionnaire.id!
-            task.questionnaireName = questionnaire.title!
-            //task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
+                const task = new Task()
+                task.cpr = carePlan.patientDto!.cpr!
+                task.planDefinitionName = unsatisfiedPlanDefinition?.title ?? "Patientgruppe mangler"
+                task.category = CategoryEnum.BLUE
+                task.firstname = carePlan.patientDto!.givenName
+                task.lastname = carePlan.patientDto!.familyName
+                task.questionnaireResponseStatus = undefined
+                task.carePlanId = carePlan.id
 
-            task.answeredTime = undefined
-            task.responseLinkEnabled = false
+                const questionnaire = questionnaireWrapper.questionnaire!
+                task.questionnaireId = questionnaire.id!
+                task.questionnaireName = questionnaire.title!
+                //task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
 
-            //  if (task.isUnsatisfied())
-            //      tasks.push(task)
+                task.answeredTime = undefined
+                task.responseLinkEnabled = false
+
+                //  if (task.isUnsatisfied())
+                tasks.push(task)
+            })
         });
 
 
