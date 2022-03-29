@@ -102,10 +102,10 @@ class PatientsTable extends React.Component<Props, State> {
                                     return (
                                         <TableRow>
                                             <TableCell>
-                                                <Button component={Link} to={"/patients/" + patient.cpr}>{patient.cprToString()}</Button>
+                                                {patient.cprToString()}
                                             </TableCell>
                                             <TableCell>
-                                                {patient.firstname} {patient.lastname}
+                                            <Button component={Link} to={"/patients/" + patient.cpr}>{patient.firstname} {patient.lastname}</Button>
                                             </TableCell>
                                         </TableRow>
                                     );
