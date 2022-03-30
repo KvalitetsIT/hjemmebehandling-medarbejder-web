@@ -91,7 +91,7 @@ export class ContactEditCard extends Component<Props, State> {
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={inputId++}
-                label="Tilhørsforhold"
+                label="Relation"
                 value={this.state.contact.affiliation}
                 onChange={input => this.modifyPatient(this.setRelativeContactsAffiliation, input)}
                 variant="outlined" />
