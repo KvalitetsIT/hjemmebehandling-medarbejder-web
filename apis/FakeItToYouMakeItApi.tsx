@@ -141,7 +141,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question4.Id = "q4";
         this.question4.abbreviation = "Godt i dag?";
         const q4EnableWhen = new EnableWhen<boolean>();
-        q4EnableWhen.questionId = this.question1.abbreviation;
+        q4EnableWhen.questionId = this.question1.Id;
         this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
@@ -165,8 +165,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.lastUpdated = this.CreateDate();
         this.questionnaire1.version = "1"
         this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
-
-
 
         this.questionnaire2.id = "qn2"
         this.questionnaire2.name = "Imundefekt medium"
@@ -260,7 +258,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap1 = new Map<Question, Answer>();
-        // questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+         questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
