@@ -56,24 +56,14 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
 
     findUnsatisfiedPlanDefinitions(careplanDto: CarePlanDto): PlanDefinitionDto[] {
-        console.log("=====NEW===")
         const unsatisfiedPlanDefinitions: PlanDefinitionDto[] = [];
-        console.log("careplanDto")
-        console.log(careplanDto)
-
-        console.log("careplanDto.questionnaires")
-        console.log(careplanDto.questionnaires)
-
+        
         if (careplanDto.questionnaires == undefined)
             return [];
 
         const now = new Date().getTime()
         const unsatisfiedQuestionnaires = careplanDto.questionnaires.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now);
-        console.log("unsatisfiedQuestionnaires")
-        console.log(unsatisfiedQuestionnaires)
-
-        console.log("careplanDto.planDefinitions")
-        console.log(careplanDto.planDefinitions)
+        
         if (careplanDto.planDefinitions == undefined)
             return [];
 
@@ -83,8 +73,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
                     unsatisfiedPlanDefinitions.push(planDefinition)
             });
         })
-        console.log("unsatisfiedPlanDefinitions")
-        console.log(unsatisfiedPlanDefinitions)
         return unsatisfiedPlanDefinitions;
     }
 

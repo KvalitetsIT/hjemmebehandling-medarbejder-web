@@ -201,7 +201,7 @@ export default class CreatePatient extends Component<Props, State> {
               </AccordianWrapper>
             </ErrorBoundary>
           </Grid>
-          <Grid paddingLeft={5} xs="auto">
+          <Grid paddingLeft={5} xs>
             <div>
               <Card>
                 {this.state.patient.cpr ?
