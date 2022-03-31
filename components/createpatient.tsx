@@ -210,7 +210,7 @@ export default class CreatePatient extends Component<Props, State> {
                       avatar={<PatientAvatar patient={this.state.patient} />}
                       title={
                         <Grid container>
-                          <Grid item xs="auto">
+                          <Grid item xs={12}>
                             <Typography>
                               {this.state.patient.firstname} {this.state.patient.lastname} <br />
                               {this.state.patient.cprToString()}
