@@ -187,7 +187,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
         this.planDefinition2.id = "def2"
-        this.planDefinition2.status = BaseModelStatus.DRAFT
+        this.planDefinition2.status = BaseModelStatus.ACTIVE
         this.planDefinition2.questionnaires = [this.questionnaire3]
 
         this.allPlanDefinitions = [this.planDefinition1, this.planDefinition2];
@@ -482,6 +482,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]> {
         try {
             if (statusesToInclude.length > 0)
+                
                 return this.allPlanDefinitions.filter(pd => statusesToInclude.includes(pd.status!));
             return this.allPlanDefinitions
         } catch (error: any) {
