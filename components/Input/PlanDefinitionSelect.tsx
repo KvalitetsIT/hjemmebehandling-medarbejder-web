@@ -10,7 +10,7 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
-import { MultiSelect, MultiSelectOption} from './MultiSelect';
+import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { FormControl, FormHelperText } from '@mui/material';
 
 export interface Props {
@@ -44,13 +44,13 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       errors: []
     }
     this.handleChange = this.handleChange.bind(this);
-    
+
     window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
       const data = (event as CustomEvent).detail as ValidateInputEventData
       if (PlanDefinitionSelect.sectionName == data.sectionName)
         await this.validate();
     });
-    
+
   }
 
   InitializeServices(): void {
@@ -70,10 +70,16 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     this.setState({ editedCareplan: careplan })
     if (this.props.SetEditedCareplan)
       this.props.SetEditedCareplan(careplan);
+
   }
 
-  handleSelection(plandefinitions: PlanDefinition[]): void {
-    
+
+
+
+  handleSelection(ids: string[]): void {
+    console.log("plandefinition ids", ids)
+
+    const plandefinitions = ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
     const careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
     careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
@@ -124,15 +130,11 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
     return (
       <FormControl fullWidth required>
-
-        <MultiSelect onChange={(planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions} id="select-plandefinition">
-
+        <MultiSelect onChange={(planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions.map((x) => x.id!)} id="select-plandefinition">
           {this.state.allPlanDefinitions.map(planDefinition => {
-            return <MultiSelectOption value={planDefinition}>{planDefinition.name}</MultiSelectOption>
+            return <MultiSelectOption key={"option" + planDefinition.id} value={planDefinition.id}>{planDefinition.name}</MultiSelectOption>
           })}
-
         </MultiSelect>
- 
         {hasError ? <FormHelperText error={true}>{firstError}</FormHelperText> : <></>}
       </FormControl>
     )

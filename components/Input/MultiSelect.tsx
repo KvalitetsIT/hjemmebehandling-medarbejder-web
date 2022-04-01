@@ -5,7 +5,6 @@ import { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
 import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
 import { styled } from '@mui/system';
-import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import React from 'react';
 
 const blue = {
@@ -68,8 +67,9 @@ export const MultiSelectOption = styled(OptionUnstyled)(
 
 
 
-export interface MultiSelectProps extends MultiSelectUnstyledProps<PlanDefinition> {
+export interface MultiSelectProps extends MultiSelectUnstyledProps<string> {
     id: string
+  
 }
 
 
@@ -77,7 +77,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
 
     private ref: React.RefObject<HTMLElement> = React.createRef()
 
-    private components: MultiSelectUnstyledProps<PlanDefinition>['components'] = {
+    private components: MultiSelectUnstyledProps<string>['components'] = {
         Root: styled('button')(
             ({ theme }) => `
           font-family: ${theme.typography};
@@ -139,21 +139,24 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
             ({}) => `
                 z-index: 1;
             `,),
-        ...this.props,
     };
 
     constructor(props: MultiSelectProps) {
         super(props)
+
+        this.state = {
+          selected: this.props.value
+        }
     
     }
-
-    
     render(): JSX.Element {
+        
         return (
-            <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components}>
+            <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components} >
                 {this.props.children}
             </MultiSelectUnstyled>
         );
 
     }
 }
+
