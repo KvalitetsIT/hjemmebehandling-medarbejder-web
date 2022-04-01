@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
-import ApiContext from './_context';
+import ApiContext from '../pages/_context';
 import { IPatientService } from '../services/interfaces/IPatientService';
-import { LoadingBackdropComponent } from '../components/Layout/LoadingBackdropComponent';
+import { LoadingBackdropComponent } from './Layout/LoadingBackdropComponent';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { QuestionnaireListSimple } from '../components/Cards/QuestionnaireListSimple';
-import { PatientEditCard } from '../components/Cards/PatientEditCard';
+import { QuestionnaireListSimple } from './Cards/QuestionnaireListSimple';
+import { PatientEditCard } from './Cards/PatientEditCard';
 import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
-import { ContactEditCard } from '../components/Cards/ContactEditCard';
-import { PlanDefinitionSelect } from '../components/Input/PlanDefinitionSelect';
+import { ContactEditCard } from './Cards/ContactEditCard';
+import { PlanDefinitionSelect } from './Input/PlanDefinitionSelect';
 import { ICareplanService } from '../services/interfaces/ICareplanService';
 import { Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
@@ -19,11 +19,11 @@ import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/Ba
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { PatientAvatar } from '../components/Avatars/PatientAvatar';
+import { PatientAvatar } from './Avatars/PatientAvatar';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
-import { MissingContactDetailsError } from '../components/Errors/MissingContactDetailsError';
-import { AccordianWrapper } from '../components/Cards/PlanDefinition/AccordianWrapper';
+import { MissingContactDetailsError } from './Errors/MissingContactDetailsError';
+import { AccordianWrapper } from './Cards/PlanDefinition/AccordianWrapper';
 
 /**
  * 
@@ -201,7 +201,7 @@ export default class CreatePatient extends Component<Props, State> {
               </AccordianWrapper>
             </ErrorBoundary>
           </Grid>
-          <Grid paddingLeft={5} xs="auto">
+          <Grid paddingLeft={5} xs>
             <div>
               <Card>
                 {this.state.patient.cpr ?
@@ -210,7 +210,7 @@ export default class CreatePatient extends Component<Props, State> {
                       avatar={<PatientAvatar patient={this.state.patient} />}
                       title={
                         <Grid container>
-                          <Grid item xs="auto">
+                          <Grid item xs={12}>
                             <Typography>
                               {this.state.patient.firstname} {this.state.patient.lastname} <br />
                               {this.state.patient.cprToString()}

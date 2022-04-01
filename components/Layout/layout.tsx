@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
-import CreatePatient, { CreatePatientSectionsEnum } from '../../pages/createpatient';
+import { CreatePatientSectionsEnum } from '../createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
@@ -17,6 +17,10 @@ import CreateQuestionnairePage from '../../pages/questionnaires/create';
 import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { CheckmarkIcon } from '../Icons/Icons';
+import  NewPatientPage  from '../../pages/newPatients';
+import  EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
+import  EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
+import  EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
 
 
 export interface State {
@@ -90,10 +94,10 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props} />} />
                     <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
-                    <Route path="/patients/:cpr/edit/patient" render={(props) => <CreatePatient key={"patient"} editmode={true} openAccordians={accoridansPatient} {...props} />} />
-                    <Route path="/patients/:cpr/edit/contact" render={(props) => <CreatePatient key={"contact"} editmode={true} openAccordians={accoridansContact} {...props} />} />
-                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <CreatePatient key={"planDefinition"} editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
-                    <Route path="/patients/:cpr/edit" render={(props) => <CreatePatient key={"edit"} editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/patient" render={(props) => <EditPatientInfo key="patient" editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/contact" render={(props) => <EditPatientContact key="contact" editmode={true} openAccordians={accoridansContact} {...props} />} />
+                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <EditPatientPlandefinition key="planDefinition" editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
+                    <Route path="/patients/:cpr/edit" render={(props) => <EditPatientInfo key="edit" editmode={true} openAccordians={accoridansPatient} {...props} />} />
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
                     <Route path="/plandefinitions/:plandefinitionid/edit" render={(props) => <CreatePlandefinition {...props} />} />
@@ -110,7 +114,7 @@ export class Layout extends Component<{}, State> {
                     <Route path="/inactive" render={(props) => <Redirect to={"/inactive/1"} {...props} />} />
 
                     <Route path="/patients"><Patients /></Route>
-                    <Route path="/newpatient" render={(props) => <CreatePatient editmode={false} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/newpatient" render={(props) => <NewPatientPage editmode={false} openAccordians={accoridansPatient} {...props} />} />
 
                     <Route path="/"><Patients /></Route>
                   </Switch>

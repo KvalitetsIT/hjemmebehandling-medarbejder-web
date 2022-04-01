@@ -168,6 +168,7 @@ export class AnswerTable extends Component<Props, State> {
 
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
+        const allQuestions = this.questionnaireService.findAllQuestions(questionnairesResponsesToShow);
 
         return (<>
             <Grid container spacing={3}>
@@ -221,19 +222,15 @@ export class AnswerTable extends Component<Props, State> {
 
                                 </TableHead>
                                 <TableBody>
-                                    {this.questionnaireService.findAllQuestions(questionnairesResponsesToShow).map(question => {
+                                    {allQuestions.map(question => {
+                                        const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
+                                        if (question.enableWhen != undefined)
+                                            return <></>;
+
                                         return (
                                             <>
-
-                                                <TableRow>
-                                                    <TableCell>
-                                                        {question.abbreviation ?? question.question}
-                                                    </TableCell>
-
-                                                    {questionnairesResponsesToShow.map(questionResponse => {
-                                                        return this.renderSingleResponse(question, questionResponse)
-                                                    })}
-                                                </TableRow>
+                                                {this.renderRow([question], questionnairesResponsesToShow)}
+                                                {this.renderRow(childQuestions, questionnairesResponsesToShow)}
                                             </>
                                         )
                                     })}
@@ -248,6 +245,25 @@ export class AnswerTable extends Component<Props, State> {
                 </Grid>
             </Grid>
         </>
+        )
+    }
+    renderRow(questionsToRender: Question[], questionnairesResponsesToShow: QuestionnaireResponse[]) : JSX.Element{
+        return (
+            <>
+                {questionsToRender.map(question => {
+                    return (
+                        <TableRow>
+                            <TableCell>
+                                {question.abbreviation ?? question.question}
+                            </TableCell>
+
+                            {questionnairesResponsesToShow.map(questionResponse => {
+                                return this.renderSingleResponse(question, questionResponse)
+                            })}
+                        </TableRow>
+                    )
+                })}
+            </>
         )
     }
     renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse): JSX.Element {

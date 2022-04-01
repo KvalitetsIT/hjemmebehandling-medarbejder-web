@@ -44,6 +44,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     careplan1: PatientCareplan = new PatientCareplan();
     careplan2: PatientCareplan = new PatientCareplan();
+    allCareplans: PatientCareplan[] = [this.careplan1, this.careplan2];
 
     planDefinition1: PlanDefinition = new PlanDefinition();
     planDefinition2: PlanDefinition = new PlanDefinition();
@@ -76,12 +77,17 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     task3: Task = new Task();
 
 
+    toInternal = new ExternalToInternalMapper();
+    toExternal = new InternalToExternalMapper();
+
     constructor() {
         super();
         this.measurementType1 = new MeasurementType();
         this.measurementType1.displayName = "CRP"
+        this.measurementType1.code = "CRP"
         this.measurementType2 = new MeasurementType();
         this.measurementType2.displayName = "Temperatur"
+        this.measurementType2.code = "Temperatur"
 
         //======================================= Patient
         this.patient1.cpr = "1212758392";
@@ -135,7 +141,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question4.Id = "q4";
         this.question4.abbreviation = "Godt i dag?";
         const q4EnableWhen = new EnableWhen<boolean>();
-        q4EnableWhen.questionId = this.question1.abbreviation;
+        q4EnableWhen.questionId = this.question1.Id;
         this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
@@ -159,8 +165,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.lastUpdated = this.CreateDate();
         this.questionnaire1.version = "1"
         this.questionnaire1.questions = [this.question1, this.question2, this.question3, this.question4]
-
-
 
         this.questionnaire2.id = "qn2"
         this.questionnaire2.name = "Imundefekt medium"
@@ -254,7 +258,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap1 = new Map<Question, Answer>();
-        // questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
+         questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId == this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
@@ -367,11 +371,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetAllMeasurementTypes(): Promise<MeasurementType[]> {
         try {
-            let toInternal = new ExternalToInternalMapper();
-            let toExternal = new InternalToExternalMapper();
 
-            let result = [toExternal.mapMeasurementType(this.measurementType1),toExternal.mapMeasurementType(this.measurementType2)]
-            
+
+            let result = [this.toExternal.mapMeasurementType(this.measurementType1), this.toExternal.mapMeasurementType(this.measurementType2)]
+
             /*
 
             let measurementTypes: MeasurementType[]
@@ -386,9 +389,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             */
             //return result.filter(mt => mt !== typeof undefined).map(mt => toInternal.mapMeasurementType(mt))
 
-            return result.map(mt => toInternal.mapMeasurementType(mt))
+            return result.map(mt => this.toInternal.mapMeasurementType(mt))
 
-    
+
         } catch (error) {
             return this.HandleError(error)
         }
@@ -619,9 +622,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         await new Promise(f => setTimeout(f, this.timeToWait));
-        if (page == 1)
-            return [this.task1, this.task2, this.task3].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
-        return [];
+        console.log(this.allCareplans)
+        return (await this.allCareplans.flatMap(x => this.toInternal.buildUnansweredTaskFromCarePlan(this.toExternal.mapCarePlan(x))))
+
+       // if (page == 1)
+       //     return [this.task1, this.task2, this.task3].filter(x => x.category == CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+      //  return [];
     }
 
     async GetPatient(cpr: string): Promise<PatientDetail> {
@@ -660,7 +666,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetPatientCareplans(cpr: string): Promise<PatientCareplan[]> {
-        return [this.careplan1, this.careplan2].filter(x => x.patient!.cpr == cpr);
+        return [this.careplan1, this.careplan2]
+            .map(x => this.toExternal.mapCarePlan(x))
+            .map(x => this.toInternal.mapCarePlanDto(x))
+            .filter(x => x.patient!.cpr == cpr);
     }
 
     async GetPatientCareplanById(id: string): Promise<PatientCareplan> {
@@ -676,5 +685,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption): Promise<void> {
 
     }
+
+
 
 }
