@@ -110,6 +110,7 @@ export class QuestionEditCard extends Component<Props, State>{
 
                         <Divider />
                         <CardContent>
+                            {console.log(this.props.question.helperText)}
 
                             <Grid container spacing={2}>
                                 <Grid item xs>

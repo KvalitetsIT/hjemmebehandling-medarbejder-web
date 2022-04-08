@@ -85,10 +85,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.measurementType1 = new MeasurementType();
         this.measurementType1.displayName = "CRP"
         this.measurementType1.code = "CRP"
+        this.measurementType1.system = "system"
         this.measurementType2 = new MeasurementType();
         this.measurementType2.displayName = "Temperatur"
         this.measurementType2.code = "Temperatur"
-
+        this.measurementType2.system = "system"
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
@@ -126,6 +127,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question1.abbreviation = "Bedre idag?";
         this.question1.question = "Jeg har det bedre i dag"
         this.question1.type = QuestionTypeEnum.BOOLEAN;
+        this.question1.helperText = "Er du nu sikker på at du har det bedre i dag?"
 
         this.question2.abbreviation = "Temperatur";
         this.question2.Id = "q2";

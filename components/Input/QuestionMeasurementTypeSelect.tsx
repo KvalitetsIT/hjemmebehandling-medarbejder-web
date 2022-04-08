@@ -46,6 +46,9 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
             const measurementTypes = await this.questionAnswerService.GetAllMeasurementTypes();
 
             this.setState({ allMeasurementTypes: measurementTypes })
+            
+            console.log("state", this.state)
+
         } catch (error) {
             this.setState(() => { throw error })
         }
@@ -53,14 +56,19 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
 
     render(): JSX.Element {
         this.initialiseServices();
-
+        console.log("allMeasurementTypes", this.state.allMeasurementTypes)
+        console.log("measurementType", this.state.question.measurementType?.code)
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg målingstype</InputLabel>
-                <Select label="Vælg målingstype" value={this.state.question.measurementType?.code} onChange={this.handleChange}>
+                <Select
+                    label="Vælg målingstype"
+                    value={this.state.question.measurementType?.code}
+                    onChange={this.handleChange}>
+                    
                     {this.state.allMeasurementTypes.map((type) => {
                         return (
-                            <MenuItem key={type.displayName} value={type.code as any}>{type.displayName}</MenuItem>
+                            <MenuItem key={type.displayName} value={type.code}>{type.displayName}</MenuItem>
                         )
                     })}
                 </Select>
