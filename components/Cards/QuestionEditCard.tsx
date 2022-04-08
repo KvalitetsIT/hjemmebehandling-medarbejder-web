@@ -110,8 +110,6 @@ export class QuestionEditCard extends Component<Props, State>{
 
                         <Divider />
                         <CardContent>
-                            {console.log(this.props.question.helperText)}
-
                             <Grid container spacing={2}>
                                 <Grid item xs>
                                     <TextFieldValidation
@@ -170,12 +168,11 @@ export class QuestionEditCard extends Component<Props, State>{
 
     renderBooleanThreshold(): JSX.Element {
 
-
         if (!this.props.getThreshold)
             return <></>
 
         const thresholdCollection = this.props.getThreshold(this.state.question)
-
+        console.log("thresholdCollection", thresholdCollection)
         return (
             <TableContainer>
                 <Table>

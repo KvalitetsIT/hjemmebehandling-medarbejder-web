@@ -624,7 +624,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     async GetUnansweredQuestionnaireTasks(page: number, pagesize: number): Promise<Array<Task>> {
         await new Promise(f => setTimeout(f, this.timeToWait));
-        console.log(this.allCareplans)
         return (await this.allCareplans.flatMap(x => this.toInternal.buildUnansweredTaskFromCarePlan(this.toExternal.mapCarePlan(x))))
 
        // if (page == 1)

@@ -47,7 +47,6 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
 
             this.setState({ allMeasurementTypes: measurementTypes })
             
-            console.log("state", this.state)
 
         } catch (error) {
             this.setState(() => { throw error })
@@ -56,8 +55,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
 
     render(): JSX.Element {
         this.initialiseServices();
-        console.log("allMeasurementTypes", this.state.allMeasurementTypes)
-        console.log("measurementType", this.state.question.measurementType?.code)
+
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg målingstype</InputLabel>

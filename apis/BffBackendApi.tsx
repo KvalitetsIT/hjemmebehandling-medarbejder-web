@@ -141,7 +141,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async GetQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
         try {
-            console.log(questionnaireId)
             const request = {
                 id: questionnaireId
             }

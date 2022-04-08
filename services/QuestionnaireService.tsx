@@ -162,11 +162,11 @@ export default class QuestionnaireService extends BaseService implements IQuesti
 
     let thresholdCollection = questionnaire?.thresholds?.find(x => x.questionId == question.Id);
 
-    if (!thresholdCollection) {
-      thresholdCollection = new ThresholdCollection();
-      thresholdCollection.questionId = question.Id!;
-      questionnaire?.thresholds?.push(thresholdCollection);
-    }
+    if (thresholdCollection) return thresholdCollection;
+    
+    thresholdCollection = new ThresholdCollection();
+    thresholdCollection.questionId = question.Id!;
+    questionnaire?.thresholds?.push(thresholdCollection);
 
     const trueOption = new ThresholdOption();
     trueOption.option = true.toString();
@@ -174,9 +174,11 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     const falseOption = new ThresholdOption();
     falseOption.option = false.toString();
     falseOption.category = CategoryEnum.GREEN
-
     thresholdCollection.thresholdOptions = [trueOption, falseOption];
+
+
     return thresholdCollection;
+
   }
 
 
