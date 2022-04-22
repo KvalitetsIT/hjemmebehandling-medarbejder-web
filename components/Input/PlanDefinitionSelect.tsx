@@ -76,18 +76,19 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
 
 
-  handleSelection(ids: string[]): void {
-    console.log("plandefinition ids", ids)
-
+  async handleSelection(ids: string[]): Promise<void> {
     const plandefinitions = ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
     const careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
     careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
 
     this.setState({ editedCareplan: careplan })
-    if (this.props.SetEditedCareplan)
+    if (this.props.SetEditedCareplan){
       this.props.SetEditedCareplan(careplan);
-  }
+    }
+
+      await this.validate()
+    }
 
   async componentDidMount(): Promise<void> {
     try {

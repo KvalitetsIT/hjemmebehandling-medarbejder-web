@@ -9,9 +9,10 @@ import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnair
 import TimePicker from '@mui/lab/TimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { TextField } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 import daLocale from 'date-fns/locale/da';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { MultiSelect, MultiSelectOption } from './MultiSelect';
 
 export interface Props {
   questionnaire: Questionnaire
@@ -24,7 +25,6 @@ export interface State {
   questionnaire: Questionnaire
   deadineTime: Date
 }
-
 
 export class FrequencyTableRow extends Component<Props, State> {
   static displayName = FrequencyTableRow.name;
@@ -48,8 +48,6 @@ export class FrequencyTableRow extends Component<Props, State> {
     ]
   }
 
-
-
   constructor(props: Props) {
     super(props);
     const elevenOClock = "11:00";
@@ -59,7 +57,6 @@ export class FrequencyTableRow extends Component<Props, State> {
       questionnaire: props.questionnaire,
       deadineTime: deadlineTime,
     }
-
   }
 
   SetDays(daysSelected: string | DayEnum[]): void {
@@ -80,9 +77,7 @@ export class FrequencyTableRow extends Component<Props, State> {
       this.props.afterChange()
   }
 
-
   render(): JSX.Element {
-
     return this.renderContent();
   }
 
@@ -94,25 +89,38 @@ export class FrequencyTableRow extends Component<Props, State> {
             <Typography>{this.props.firstCell}</Typography>
 
           </TableCell>
-          <TableCell>
+          {/* <TableCell>
             <Select onChange={(a) => this.SetDays(a.target.value)} multiple value={this.state.questionnaire.frequency!.days}>
               {this.getAllDays().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
             </Select>
-          </TableCell>
+          </TableCell> */}
+
           <TableCell>
+            
+            <FormControl fullWidth required>
+              <MultiSelect id='frequenzy' onChange={(a) => this.SetDays(a as [])} value={this.state.questionnaire.frequency!.days}>
+                {this.getAllDays().map(day => {
+                  return <MultiSelectOption key={"option" + day} value={day}>{day}</MultiSelectOption>
+                })}
+              </MultiSelect>
+            </FormControl>
+          </TableCell>
+
+
+          <TableCell>
+            
             <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency!.repeated}>
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
-              
+
             </Select>
           </TableCell>
-          <TableCell>
+          <TableCell> 
             <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
               <TimePicker
-
                 disabled
                 label="Seneste besvarelses tidspunkt"
                 value={this.state.deadineTime}

@@ -1,5 +1,5 @@
 import MultiSelectUnstyled, {
-    MultiSelectUnstyledProps,
+  MultiSelectUnstyledProps,
 } from '@mui/base/MultiSelectUnstyled';
 import { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
 import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
@@ -8,42 +8,44 @@ import { styled } from '@mui/system';
 import React from 'react';
 
 const blue = {
-    100: '#DAECFF',
-    200: '#99CCF3',
-    400: '#3399FF',
-    500: '#007FFF',
-    600: '#0072E5',
-    900: '#003A75',
+  100: '#DAECFF',
+  200: '#99CCF3',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
 };
 
 const grey = {
-    100: '#E7EBF0',
-    200: '#E0E3E7',
-    300: '#CDD2D7',
-    400: '#B2BAC2',
-    500: '#A0AAB4',
-    600: '#6F7E8C',
-    700: '#3E5060',
-    800: '#2D3843',
-    900: '#1A2027',
+  100: '#E7EBF0',
+  200: '#E0E3E7',
+  300: '#CDD2D7',
+  400: '#B2BAC2',
+  500: '#A0AAB4',
+  600: '#6F7E8C',
+  700: '#3E5060',
+  800: '#2D3843',
+  900: '#1A2027',
 };
 
 
 
 export const MultiSelectOption = styled(OptionUnstyled)(
-    ({ theme }) => {
-        return `
+  ({ theme }) => {
+    return `
   list-style: none;
     padding: 8px;
   cursor: default;
-
+  &:hover {
+    cursor: pointer; 
+  }
   &:last-of-type {
     border-bottom: none;
   }
 
   &.${optionUnstyledClasses.selected} {
-    background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
-    color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+    background-color: rgba(25, 118, 210, 0.12);
+    
   }
 
 
@@ -61,62 +63,68 @@ export const MultiSelectOption = styled(OptionUnstyled)(
     color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
   }
   `;
-    },
+  },
 );
 
 
 
 
 export interface MultiSelectProps extends MultiSelectUnstyledProps<string> {
-    id: string
-  
+  id: string
+
 }
 
 
 export class MultiSelect extends React.Component<MultiSelectProps, {}> {
 
-    private ref: React.RefObject<HTMLElement> = React.createRef()
+  private ref: React.RefObject<HTMLElement> = React.createRef()
 
-    private components: MultiSelectUnstyledProps<string>['components'] = {
-        Root: styled('button')(
-            ({ theme }) => `
+  private components: MultiSelectUnstyledProps<string>['components'] = {
+    Root: styled('button')(
+      ({ theme }) => `
           font-family: ${theme.typography};
           font-size: 1rem;
           box-sizing: border-box;
-          min-height: calc(1.5em + 22px);
-          min-width: 320px;
+          min-height: 1.4375em;
+          min-width: 100vh;
+          
+          height: auto;
           background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
           border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
           border-radius: 0.75em;
           margin: 0.5em;
-          padding: 10px;
+          padding: 16.5px;
           text-align: left;
           line-height: 1.5;
-          color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-        
+          color: currentColor;
+
           &:hover {
-            background: ${theme.palette.mode === 'dark' ? '' : grey[100]};
-            border-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+            cursor: pointer; 
+            border-color: black;
           }
         
+    
           &.${selectUnstyledClasses.focusVisible} {
             outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
           }
         
           &.${selectUnstyledClasses.expanded} {
+            
             &::after {
+              margin-left: 1em;
               content: '▴';
             }
           }
         
           &::after {
+            margin-left: 1em;
             content: '▾';
             float: right;
           }
           `,
-        ),
-        Listbox: styled('ul')(
-            ({ theme }) => `
+    ),
+    Listbox: styled('ul')(
+      ({ theme }) => `
           font-family: ${theme.typography}
           font-size: 1rem;
           box-sizing: border-box;
@@ -125,7 +133,6 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
           padding-left: 0px;
           padding-right: 0px;
           margin: 0px;
-          min-width: 320px;
           background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
           border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
           border-radius: 0.75em;
@@ -133,30 +140,68 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
           width: ${this.ref.current!.offsetWidth + "px"};
           overflow: auto;
           outline: 0px;
+          
           `,
-        ),
-        Popper: styled(PopperUnstyled)(
-            ({}) => `
-                z-index: 1;
-            `,),
-    };
+    ),
+    Popper: styled(PopperUnstyled)(
+      ({ }) => `
 
-    constructor(props: MultiSelectProps) {
-        super(props)
-
-        this.state = {
-          selected: this.props.value
-        }
+      z-index: 1;
     
-    }
-    render(): JSX.Element {
-        
-        return (
-            <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components} >
-                {this.props.children}
-            </MultiSelectUnstyled>
-        );
+      
+      animation: fadeIn 0.2s;
+      -webkit-animation: fadeIn 0.2s;
+      -moz-animation: fadeIn 0.2s;
+      -o-animation: fadeIn 0.2s;
+      -ms-animation: fadeIn 0.2s;
 
+      @keyframes fadeIn {
+        0% {opacity:0;}
+        100% {opacity:1;}
+      }
+      
+      @-moz-keyframes fadeIn {
+        0% {opacity:0;}
+        100% {opacity:1;}
+      }
+      
+      @-webkit-keyframes fadeIn {
+        0% {opacity:0;}
+        100% {opacity:1;}
+      }
+      
+      @-o-keyframes fadeIn {
+        0% {opacity:0;}
+        100% {opacity:1;}
+      }
+      
+      @-ms-keyframes fadeIn {
+        0% {opacity:0;}
+        100% {opacity:1;}
+      }
+      `,),
+  };
+
+  constructor(props: MultiSelectProps) {
+    super(props)
+
+    this.state = {
+      selected: this.props.value
     }
+
+  }
+  render(): JSX.Element {
+
+    return (
+      <>
+      
+      <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components} >
+          {this.props.children}
+        </MultiSelectUnstyled>  
+      </>
+
+    );
+
+  }
 }
 

@@ -1,7 +1,5 @@
-import { CardHeader, Table } from '@material-ui/core';
+import { Table } from '@material-ui/core';
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
@@ -10,7 +8,7 @@ import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/Error
 import ApiContext from '../../pages/_context';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
-import { Alert, Typography } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export interface Props {
@@ -37,7 +35,7 @@ export class QuestionnaireListSimple extends Component<Props, State> {
         }
     }
 
-    async componentDidMount() : Promise<void>{
+    async componentDidMount(): Promise<void> {
         try {
             let isPatientOnUnanswered = false;
             if (this.props.careplan.patient?.cpr)
@@ -48,7 +46,7 @@ export class QuestionnaireListSimple extends Component<Props, State> {
             this.setState(() => { throw error });
         }
     }
-    initializeServices() : void{
+    initializeServices(): void {
         this.questionnaireService = this.context.questionnaireService;
     }
 
@@ -63,37 +61,43 @@ export class QuestionnaireListSimple extends Component<Props, State> {
         if (!this.props.careplan.patient)
             return <>Ingen patient på careplan</>
 
+
+
         return (
-            <Card>
+            <Box marginLeft={1.5}  marginTop={2}>
+                <Typography variant='h6'>
+                    Spørgeskemaer
+                    <ErrorBoundary rerenderChildren={false}>
+                    </ErrorBoundary>
+                </Typography>
 
-                <CardHeader subheader={
-                    <>
-                        Spørgeskemaer
-                        <ErrorBoundary rerenderChildren={false}>
-                        </ErrorBoundary>
-                    </>
-                } />
+                <Table>
 
-                <CardContent>
-                    <Table>
-                        {questionnaries.length === 0 ? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
-                        {questionnaries.map(questionnaire => {
-                            return (
-                                <FrequencyTableRow patient={this.props.careplan.patient!} firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
-                            )
-                        })}
+                    {questionnaries.length === 0 ? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
+                    {questionnaries.map(questionnaire => {
+                        return (
+                            <FrequencyTableRow patient={this.props.careplan.patient!} firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
+                        )
+                    })}
 
-                    </Table>
-                    {this.state.patientIsOnUnansweredList ?
-                        <Alert sx={{ margin: 2 }} color='warning' icon={<WarningAmberIcon />}>
-                            <Typography variant='h6'>Denne patient mangler at besvare et eller flere spørgeskemaer</Typography>
-                            <Typography>Ved ændring af frekvensen, genberegnes svarfrister og patienten vil som følge heraf ikke længere fremgå på listen under manglende besvarelser</Typography>
-                        </Alert>
-                        : <></>
-                    }
+                </Table>
+                {this.renderAlert()}
+            </Box>
+        )
+    }
 
-                </CardContent>
-            </Card>
-        );
+
+
+    renderAlert(): JSX.Element {
+
+        if (this.state.patientIsOnUnansweredList) {
+            return (
+                <Alert sx={{ margin: 2 }} color='warning' icon={<WarningAmberIcon />}>
+                    <Typography variant='h6'>Denne patient mangler at besvare et eller flere spørgeskemaer</Typography>
+                    <Typography>Ved ændring af frekvensen, genberegnes svarfrister og patienten vil som følge heraf ikke længere fremgå på listen under manglende besvarelser</Typography>
+                </Alert>
+            )
+        }
+        return <></>
     }
 }
