@@ -86,11 +86,14 @@ export function InactivePatientsIcon(props?: BaseIconProps): JSX.Element {
 }
 
 
+
+
 export function LogoIcon(props?: BaseIconProps): JSX.Element {
     return (
-        <BaseIcon {...props} src={'/assets/icons/_logo.svg'}></BaseIcon>
+        <BaseIcon {...props} src={'/assets/icons/logo.svg'}></BaseIcon>
     );
 }
+
 
 
 export function MessagesIcon(props?: BaseIconProps): JSX.Element {

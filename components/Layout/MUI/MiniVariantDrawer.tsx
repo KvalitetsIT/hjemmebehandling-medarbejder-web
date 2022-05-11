@@ -76,14 +76,14 @@ export default function MiniDrawer(): JSX.Element {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
+
   const things = React.useContext(ApiContext)
   const userService: IUserService = things.userService;
 
   React.useEffect(() => {
     async function fetchData() {
       const user = await userService.GetActiveUser();
-      setIsAdmin(user.isAdmin())    
+      setIsAdmin(user.isAdmin())
     };
 
     fetchData();
@@ -96,11 +96,15 @@ export default function MiniDrawer(): JSX.Element {
       <Drawer variant="permanent" open={open}>
         <List >
           <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
+
             <ListItemIcon>
-              <img width={30} src="/assets/images/logo.svg" alt="KOMO" />
+              <img height={30} width={30} src="/assets/images/logo.svg" alt="KOMO" />
             </ListItemIcon>
-            <ListItemText style={{ fontWeight: "bold", paddingTop: 20, paddingBottom: 20 }} primary="KOMO" secondary="Infektionssygdomme" />
-          </ListItem>
+            <ListItemIcon>
+              <img height={30} width={150} src="/assets/images/komo.svg" alt="KOMO" />
+            </ListItemIcon>
+            
+           </ListItem>
 
 
           <Divider />
