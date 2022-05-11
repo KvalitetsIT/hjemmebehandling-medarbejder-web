@@ -134,6 +134,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         planDefinition.questionnaires = planDefinitionDto.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
         planDefinition.status = PlanDefinition.stringToPlanDefinitionStatus(planDefinitionDto.status)
         planDefinition.created = planDefinitionDto.created
+        planDefinition.lastUpdated = planDefinitionDto.lastUpdated
         return planDefinition
     }
 

@@ -28,7 +28,8 @@ export class PlanDefinitionTable extends Component<Props>{
                         <TableRow>
                             <TableCell>Navn</TableCell>
                             <TableCell>Status</TableCell>
-                            <TableCell>Oprettelsesdato</TableCell>
+                            <TableCell>Senest ændret</TableCell>
+                            {/* <TableCell>Oprettelsesdato</TableCell> */}
                             <TableCell>Spørgeskemaer</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
@@ -39,15 +40,12 @@ export class PlanDefinitionTable extends Component<Props>{
                                 <TableRow>
                                     <TableCell><Typography>{planDefinition.name}</Typography></TableCell>
                                     <TableCell><Typography>{this.statusToString(planDefinition.status)}</Typography></TableCell>
-                                    <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>
-                                    <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
+                                    <TableCell><Typography>{planDefinition.lastUpdated ? this.dateHelper.DateToString(planDefinition.lastUpdated) : ""}</Typography></TableCell>
+                                    {/* <TableCell><Typography>{planDefinition.created ? this.dateHelper.DateToString(planDefinition.created) : ""}</Typography></TableCell>*/}
+                                     <TableCell><Typography>{planDefinition?.questionnaires?.map(q => q.name).join(" / ")}</Typography></TableCell>
                                     <TableCell>
                                         <Stack sx={{ float: "right" }} direction="row" spacing={2}>
                                             <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="outlined">Redigér</Button>
-                                            
-                                            
-                                            {/*<Button variant="contained">Se mere</Button>*/}
-
                                         </Stack>
                                     </TableCell>
 
@@ -60,7 +58,7 @@ export class PlanDefinitionTable extends Component<Props>{
         )
     }
 
-    statusToString(stringStatus?: BaseModelStatus | PlanDefinitionStatus) : string {
+    statusToString(stringStatus?: BaseModelStatus | PlanDefinitionStatus): string {
         switch (stringStatus) {
             case BaseModelStatus.ACTIVE:
                 return "Aktiv"

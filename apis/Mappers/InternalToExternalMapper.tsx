@@ -258,7 +258,9 @@ export default class InternalToExternalMapper extends BaseMapper {
             title: planDefinition.name,
             questionnaires: planDefinition!.questionnaires!.map(q => this.mapQuestionnaire(q)),
             status: planDefinition.status?.toString(),
-            created: planDefinition.created
+            created: planDefinition.created,
+            lastUpdated: planDefinition.lastUpdated
+
         }
 
     }
