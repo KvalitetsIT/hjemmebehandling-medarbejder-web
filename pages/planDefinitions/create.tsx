@@ -2,7 +2,7 @@ import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/Ba
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { AccordianWrapper } from "../../components/Cards/PlanDefinition/AccordianWrapper";
@@ -168,6 +168,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
                                 await this.submitQuestionnaire();
                             }}
+                            additionalButtonActions={[
+                                <Button onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }} variant="outlined">Gem som kladde</Button>
+                            ]}
                         >
 
                             <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
@@ -198,9 +201,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                                 </Stepper>
                             </CardContent>
-                            <CardActions>
-                                <Button fullWidth onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }} variant="outlined">Gem patientgruppen som kladde</Button>
-                            </CardActions>
                         </Card>
                     </Grid>
                 </Grid >

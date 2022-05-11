@@ -160,7 +160,7 @@ export class Tasklist extends Component<Props, State> {
                   <>
                     {!tasks ? <></> : tasks.map((task) => (
                       <>
-                        <TableRow key={""+task.cpr+task.questionnaireId}>
+                        <TableRow key={"" + task.cpr + task.questionnaireId}>
                           <TableCell component="th" scope="row">
                             <Chip className="chip__alarm" color={this.getChipColorFromCategory(task.category)} label={this.getDanishColornameFromCategory(task.category)} />
                           </TableCell>

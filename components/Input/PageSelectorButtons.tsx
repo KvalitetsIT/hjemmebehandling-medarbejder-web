@@ -46,6 +46,7 @@ export class PageSelectorButtons extends Component<Props, State> {
         return (
             <>
                 <Pagination
+                    sx={{marginTop: 1}}
                     count={this.state.hasNextPage ? this.props.currentPageNumber + 1 : this.props.currentPageNumber}
                     page={this.props.currentPageNumber}
                     onChange={async (e, number) => await this.changePage(number)}

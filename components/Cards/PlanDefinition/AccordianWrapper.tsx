@@ -9,7 +9,7 @@ export interface Props {
     title: JSX.Element | string
     continueButtonAction: () => void
     toggleExpandedButtonAction: () => void
-
+    additionalButtonActions?: JSX.Element[]
     previousButtonAction?: () => void
     continueButtonContentOverride?: JSX.Element | string
 }
@@ -43,6 +43,9 @@ export class AccordianWrapper extends Component<Props, {}> {
                     {this.props.previousButtonAction != undefined ?
                         <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button" variant="text">Forrige</Button> : <></>
                     }
+
+                    {this.props.additionalButtonActions && this.props.additionalButtonActions}
+
                     <Button onClick={() => this.props.continueButtonAction()} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>
                 </AccordionActions>
             </Accordion>
