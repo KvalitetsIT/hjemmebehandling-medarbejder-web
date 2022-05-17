@@ -91,7 +91,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     </Grid>
                                     <Grid item xs="auto">
                                         <TextFieldValidation
-                                            label="Forkortelse"
+                                            label="Forkortelse til kliniker"
                                             value={this.props.question.abbreviation}
                                             variant="standard"
                                             uniqueId={1}
