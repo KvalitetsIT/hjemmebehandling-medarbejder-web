@@ -12,6 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
+import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 
 interface Props {
     key: Key | null | undefined
@@ -23,6 +24,8 @@ interface Props {
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
     forceUpdate?: () => void
+    onValidation: (uniqueId: number, error: InvalidInputModel[]) => void
+    sectionName?: string
 }
 interface State {
     question: Question
@@ -31,6 +34,11 @@ interface State {
 export class QuestionEditCard extends Component<Props, State>{
     static defaultProps = {
     }
+    
+    
+  
+    
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -39,6 +47,26 @@ export class QuestionEditCard extends Component<Props, State>{
         this.modifyQuestion = this.modifyQuestion.bind(this);
         this.forceCardUpdate = this.forceCardUpdate.bind(this);
     }
+
+
+    async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = []
+        if (value.length <= 0 ) errors.push( new InvalidInputModel("abbreviation", "forkortelse til kliniker mangler"))
+        return errors 
+    };
+
+    async validateQuestionName(value: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = []
+        if (value.length <= 0 ) errors.push( new InvalidInputModel("question", "spørgsmål er endnu ikke udfyldt"))
+        return errors 
+    }
+
+    async validateHelperText(value: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = []
+        if (value.length <= 0 ) errors.push( new InvalidInputModel("helperText", "hjælpetekst er endnu ikke udfyldt"))
+        return errors 
+    }
+
 
     modifyQuestion(questionModifier: (question: Question, newValue: string) => Question, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         const valueFromInput = input.currentTarget.value;
@@ -61,6 +89,7 @@ export class QuestionEditCard extends Component<Props, State>{
         const className = this.props.parentQuestion != undefined ? "focusedChildQuestionEditCard" : "focusedParentQuestionEditCard"
         return (
             <Card>
+
                 <Grid key={this.props.key} container columns={48}>
                     <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} paddingTop={2} paddingBottom={2} className={className} item xs={1} >
                         <Button sx={{ minWidth: 0 }} onClick={() => this.props.moveItemUp(this.props.question)}><KeyboardArrowUpIcon fontSize="large" /></Button>
@@ -69,12 +98,15 @@ export class QuestionEditCard extends Component<Props, State>{
                     <Grid item xs={47 as GridSize}>
                         <CardHeader subheader={
                             <>
-                                <Grid container columns={12}>
+                                <Grid container marginTop={1} columns={12}>
 
                                     {this.props.parentQuestion ?
                                         <Grid item xs={12}>
                                             <Box>
-                                                <EnableWhenSelect enableWhen={this.state.question.enableWhen!} parentQuestion={this.props.parentQuestion} />
+                                                <EnableWhenSelect 
+                                                    enableWhen={this.state.question.enableWhen!} 
+                                                    parentQuestion={this.props.parentQuestion} 
+                                                    sectionName={this.props.sectionName} />
                                             </Box>
                                         </Grid>
                                         : <></>
@@ -83,19 +115,28 @@ export class QuestionEditCard extends Component<Props, State>{
                                         <TextFieldValidation
                                             label="Spørgsmål"
                                             value={this.props.question.question}
-                                            variant="standard"
+                                            variant="outlined"
+                                            size="medium"
                                             minWidth={500}
                                             uniqueId={1}
+                                            onValidation={this.props.onValidation}
+                                            validate={this.validateQuestionName}
                                             onChange={input => this.modifyQuestion(this.setQuestion, input)}
+                                            sectionName={this.props.sectionName}
                                         />
+                            
                                     </Grid>
                                     <Grid item xs="auto">
                                         <TextFieldValidation
                                             label="Forkortelse til kliniker"
                                             value={this.props.question.abbreviation}
-                                            variant="standard"
+                                            variant="outlined"
+                                            size="medium"
                                             uniqueId={1}
                                             onChange={input => this.modifyQuestion(this.setAbbreviation, input)}
+                                            onValidation={this.props.onValidation}
+                                            validate={this.validateAbbreviation}
+                                            sectionName={this.props.sectionName}
                                         />
                                     </Grid>
 
@@ -120,17 +161,27 @@ export class QuestionEditCard extends Component<Props, State>{
                                         uniqueId={1}
                                         minWidth={800}
                                         onChange={input => this.modifyQuestion(this.setHelperText, input)}
+                                        required
+                                        sectionName={this.props.sectionName}
+                                        onValidation={this.props.onValidation}
+                                        validate={this.validateHelperText}
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <QuestionTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
+                            <QuestionTypeSelect 
+                                forceUpdate={this.forceCardUpdate} 
+                                question={this.state.question} 
+                                sectionName={this.props.sectionName}
+                                onValidation={this.props.onValidation}
+                            />
                                 </Grid>
-                                {this.state.question.type == QuestionTypeEnum.OBSERVATION ?
-                                    <Grid item xs>
-                                        <QuestionMeasurementTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
-                                    </Grid>
-                                    : <></>}
+                                <Grid item xs>
+                                    {this.state.question.type == QuestionTypeEnum.OBSERVATION ?
 
+                                        <QuestionMeasurementTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
+
+                                        : <></>}
+                                </Grid>
                             </Grid>
 
 
@@ -172,7 +223,7 @@ export class QuestionEditCard extends Component<Props, State>{
             return <></>
 
         const thresholdCollection = this.props.getThreshold(this.state.question)
-        console.log("thresholdCollection", thresholdCollection)
+        
         return (
             <TableContainer>
                 <Table>

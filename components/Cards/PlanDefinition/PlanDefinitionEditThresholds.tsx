@@ -65,7 +65,6 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
     renderCard(): JSX.Element {
         this.InitializeServices();
-        console.log(this.props.planDefinition)
         return (
 
             <Grid container spacing={2}>
@@ -109,8 +108,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
 
         }
-        console.log("modified")
-        console.log(modified)
+        
         this.setState({ planDefinition: modified })
     }
 

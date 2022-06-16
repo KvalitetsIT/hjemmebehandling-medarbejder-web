@@ -13,6 +13,10 @@ import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdro
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext from "../_context";
 import { v4 as uuid } from 'uuid';
+import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
+import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
+
 
 interface State {
     loading: boolean
@@ -20,27 +24,35 @@ interface State {
     errorToast: JSX.Element
     questionnaire?: Questionnaire
     editMode: boolean
+    errors: Map<number, InvalidInputModel[]>
 }
 
 interface Props {
     match: { params: { questionnaireId?: string } }
 }
 class CreateQuestionnairePage extends React.Component<Props, State> {
+    static sectionName = "questionnaire";
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
-
+    event: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
+        
     constructor(props: Props) {
         super(props);
+
+        this.onValidation = this.onValidation.bind(this);
+
         this.state = {
             loading: true,
             questionnaire: undefined,
             errorToast: (<></>),
             submitted: false,
-            editMode: props.match.params.questionnaireId ? true : false
+            editMode: props.match.params.questionnaireId ? true : false,
+            errors: new Map(),
         }
     }
 
     render(): JSX.Element {
+
         this.InitializeServices();
         const contents = this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
         return contents;
@@ -71,21 +83,33 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
+
+
+
     async submitQuestionnaire(): Promise<void> {
+
+        this.setState({
+            loading: true
+        })
+         
+        
+        await this.event.dispatchEvent()
+       
         try {
-            this.setState({
-                loading: true
-            })
-
-            if (this.state.questionnaire && this.state.editMode)
-                await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
-
-            if (this.state.questionnaire && !this.state.editMode)
-                await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
-
-            this.setState({
-                submitted: true
-            })
+            const valid = this.state.errors.size == 0 
+            if ( valid || this.state.questionnaire?.status == "DRAFT") {
+                if (this.state.questionnaire && this.state.editMode)  await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
+                
+                if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
+                
+                
+                this.setState({
+                    submitted: true
+                })
+                
+            }else{
+                throw new MissingDetailsError([]);
+            } 
         } catch (error) {
             if (error instanceof BaseServiceError) {
                 this.setState({ errorToast: <ToastError severity="info" error={error} /> })
@@ -93,12 +117,34 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 this.setState(() => { throw error })
             }
         }
-
+      
         this.setState({
             loading: false
         })
     }
 
+    /*
+    getMissingDetails() : string[] {
+        let details: string[] = []        
+        Array.from(this.state.errors.values()).forEach(x => x.forEach(i => details.push(i.message)))
+        return details 
+    }
+    */
+    async validateQuestionnaireName(name: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = []
+        if (name.length <= 0) errors.push(new InvalidInputModel("Navn", "Navn er ikke udfyldt", CriticalLevelEnum.ERROR))
+        return errors
+    }
+
+
+    onValidation(uniqueId: number, error: InvalidInputModel[]): void { 
+        const errors = this.state.errors
+        if ( error.length == 0 ) {
+            errors.delete(uniqueId)
+            return 
+        } else errors.set(uniqueId, error)
+        this.setState({ errors: errors })
+    }
 
     renderContent(): JSX.Element {
 
@@ -108,7 +154,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         if (!this.state.questionnaire)
             return <>Ingen</>
 
-        console.log(this.state.questionnaire)
         const questionnaire = this.state.questionnaire;
         const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
         const parentQuestions = questionnaire.getParentQuestions();
@@ -123,13 +168,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         }
 
         const callToAction = questionnaire.getCallToActions().find(() => true);
-
+        let inputId = 0;
         return (
             <>
                 <Grid container>
-                    <Grid item xs={10}>
-
-
+                    <Grid item xs={12}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Card>
@@ -137,9 +180,14 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                     <Divider />
                                     <CardContent>
                                         <TextFieldValidation
+                                            validate={(value) => this.validateQuestionnaireName(value)}
+                                            onValidation={this.onValidation}
+                                            sectionName={CreateQuestionnairePage.sectionName}
                                             label="Navn"
                                             value={this.state.questionnaire.name}
-                                            variant="outlined" uniqueId={1}
+                                            size="medium"
+                                            variant="outlined"
+                                            uniqueId={inputId++}
                                             onChange={input => this.modifyQuestionnaire(this.setName, input)}
                                         />
                                     </CardContent>
@@ -158,16 +206,18 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                 moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
                                                 moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
                                                 forceUpdate={() => this.forceUpdate()}
-                                                question={question} />
+                                                question={question}
+                                                onValidation={this.onValidation}
+                                                sectionName={CreateQuestionnairePage.sectionName}
+                                            />
                                         </Grid>
                                         {childQuestions?.map(childQuestion => {
                                             return (
                                                 <>
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
-
                                                     </Grid>
                                                     <Grid item xs={11}>
-                                                        <QuestionEditCard
+                                                    <QuestionEditCard
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                             addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
@@ -177,17 +227,20 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                             parentQuestion={question}
                                                             question={childQuestion}
                                                             forceUpdate={() => this.forceUpdate()}
+                                                            onValidation={this.onValidation}
+                                                            sectionName={CreateQuestionnairePage.sectionName}
                                                         />
                                                     </Grid>
                                                 </>
                                             )
                                         })}
-
                                     </>
                                 )
-                            })}
+                            })
+
+                    }
                             <Grid item xs={12}>
-                                <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} />
+                                <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
                             </Grid>
                             <Grid item xs={12}>
                                 <Card>
@@ -197,24 +250,27 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
                                     </CardContent>
                                     <Divider />
-
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
                                         <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som kladde</Button>
-                                        <Button variant="contained" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE"); this.submitQuestionnaire() }}>Gem</Button>
+                                        <Button variant="contained" onClick={() => {
+                                            this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
+                                            this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                        }
+                                        }>Gem</Button>
                                     </CardActions>
-                                </Card>
 
+
+                                </Card>
+                                    
                             </Grid>
                         </Grid>
-
-
                     </Grid>
-
                 </Grid>
                 {this.state.errorToast ?? <></>}
             </>
         )
     }
+    
 
     generateQuestionId(): string {
         return uuid();
@@ -225,7 +281,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
         if (!beforeUpdate?.questions)
             return;
-
         const newQuestion = new Question();
         newQuestion.Id = this.generateQuestionId()
         if (referenceQuestion && isParent) {
@@ -247,7 +302,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     modifyQuestionnaire(questionnaireModifier: (questionnaire: Questionnaire, newValue: string) => Questionnaire, input: undefined | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, overrideInput?: string): void {
         if (!this.state.questionnaire)
             return;
-
         let valueFromInput = input?.currentTarget?.value ?? ""
         if (overrideInput)
             valueFromInput = overrideInput
@@ -266,9 +320,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         modifiedQuestionnaire.status = Questionnaire.stringToQuestionnaireStatus(newValue)
         return modifiedQuestionnaire;
     }
-
-
-
 }
 
 export default CreateQuestionnairePage

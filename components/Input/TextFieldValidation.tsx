@@ -52,6 +52,7 @@ export class TextFieldValidation extends Component<Props, State> {
         }
         window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
             const data = (event as CustomEvent).detail as ValidateInputEventData
+            
             if (props.sectionName == data.sectionName) {
                 await this.validate(this.props.value ?? "");
             }

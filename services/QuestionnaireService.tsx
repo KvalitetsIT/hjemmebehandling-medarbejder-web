@@ -241,8 +241,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     if (moveItemDown) {
       toPosition = this.FindClosestIndex(fromPosition, oldQuestions, (e, i) => i >= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
     }
-    console.log("toPosition")
-    console.log(toPosition)
+    
     if (toPosition == -1)
       return questionnaire;
 

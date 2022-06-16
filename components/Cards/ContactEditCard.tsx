@@ -57,6 +57,7 @@ export class ContactEditCard extends Component<Props, State> {
   }
 
   errorArray: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
+  
   onValidation(from: number, invalid: InvalidInputModel[]): void {
     this.errorArray.set(from, invalid);
 

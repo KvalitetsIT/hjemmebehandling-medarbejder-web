@@ -1,31 +1,30 @@
+export {}
+/*
 import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
-import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
+import { QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { InvalidInputModel, CriticalLevelEnum } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
 export interface Props {
-    sectionName: string;
-    allQuestions: Question[] | undefined
-    enableWhen: EnableWhen<boolean>
+    sectionName?: string;
     uniqueId: number
-    updateParent?: () => void
     onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
-    validate: (enableWhen: EnableWhen<boolean>) => Promise<InvalidInputModel[]>
+    validate: (value: string) => Promise<InvalidInputModel[]>
+    options: string[]
+    label: string
 }
 
 export interface State {
-    enableWhen: EnableWhen<boolean>
+    value: string
     errors: InvalidInputModel[];
 }
 
-export class QuestionSelector extends Component<Props, State> {
-    static displayName = QuestionSelector.name;
+export class SelectValidation extends Component<Props, State> {
     static contextType = ApiContext
 
     supportedTypes: Array<QuestionTypeEnum> = [
@@ -34,23 +33,25 @@ export class QuestionSelector extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            enableWhen: props.enableWhen,
+            value: "",
             errors: [],
         }
+
         this.handleChange = this.handleChange.bind(this)
         this.validate = this.validate.bind(this)
 
         window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
             const data = (event as CustomEvent).detail as ValidateInputEventData
             if (props.sectionName == data.sectionName) {
-                await this.validate(this.state.enableWhen);
+                await this.validate(this.state.value);
             }
         });
     }
-    async validate( enableWhen: EnableWhen<boolean>): Promise<void> {
+    async validate( value: string): Promise<void> {
         if (!this.props.validate)
             return;
-        const errors = await this.props.validate(enableWhen);
+        const errors = await this.props.validate(value);
+        console.log(errors)
         this.setState({errors: errors})
         if (this.props.onValidation) {
             this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel == CriticalLevelEnum.ERROR));
@@ -63,29 +64,33 @@ export class QuestionSelector extends Component<Props, State> {
         let hasError = false
 
 
+        let color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' = "primary"
         if (this.state.errors && this.state.errors.length !== 0) {
             firstError = this.state.errors[0];
 
             if (firstError.criticalLevel == CriticalLevelEnum.ERROR) {
                 hasError = true;
             }
-           
+            if (firstError.criticalLevel == CriticalLevelEnum.WARNING) {
+                color = "warning"
+            }
         }
-        const options = this.props.allQuestions?.filter(q => this.supportedTypes.some(type => q.type == type));
+        
         return (
             <FormControl sx={{ minWidth: 200 }} key={"enableWhen"} required>
-                <InputLabel id="demo-simple-select-label">Vælg spørgsmål</InputLabel>
+                <InputLabel id="demo-simple-select-label">{this.props.label}</InputLabel>
                 <Select 
-                    defaultValue="" 
-                    label="Vælg spørgsmål" 
-                    value={this.state.enableWhen.questionId} 
+                    defaultValue=""  
+                    value={this.state.value} 
                     onChange={this.handleChange}
                     error={hasError}
+                    {...this.props}
+                 
                 >
-                    {options?.map(question => {
+                    {this.props.options?.map((option, index) => {
                         return (
-                            <MenuItem key={question.Id} value={question.Id}>
-                                {question.question}
+                            <MenuItem key={"option-" +index} value={option}>
+                                {option.charAt(0).toUpperCase() + option.substr(1).toLowerCase()}
                             </MenuItem>
                         )
                     })}
@@ -97,12 +102,10 @@ export class QuestionSelector extends Component<Props, State> {
     }
 
     handleChange(e: SelectChangeEvent<string>): void {
-        const clicked = e.target.value as unknown as string
-        const enableWhenModified = this.state.enableWhen;
-        enableWhenModified.questionId = clicked;
-        if(this.props.updateParent)
-            this.props.updateParent();
-        this.setState({ enableWhen: enableWhenModified })
+        const selected = e.target.value as unknown as string
+        
+        this.setState({ value: selected})
     }
 
 }
+*/

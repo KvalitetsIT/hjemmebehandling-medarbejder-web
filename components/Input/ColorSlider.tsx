@@ -267,9 +267,6 @@ export class ColorSlider extends Component<Props, State> {
         let minOf: number[] = [0]
         if (thresholdCollection)
             minOf = thresholdCollection!.thresholdNumbers!.map(t => t?.from ?? 9999);
-        console.log("minOf")
-        console.log(minOf)
-        console.log(thresholdCollection)
         const minVal = Math.min(...minOf);
         return minVal;
     }
