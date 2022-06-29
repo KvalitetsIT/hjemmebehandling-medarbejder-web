@@ -6,14 +6,14 @@ import { Color } from "../Cards/PlanDefinition/PlanDefinitionEditThresholds"
 
 
 interface Props {
-
+    key: number
+    max?: number
+    min?: number
     threshold: ThresholdNumber
-    onChange: (state: ThresholdNumber) => void
+    onChange: (index: number, state: ThresholdNumber) => void
 }
 
-
-
-export default class TresholdInput extends Component<Props, {}> {
+export default class ThresholdInput extends Component<Props, {}> {
 
     constructor(props: Props) {
         super(props)
@@ -29,9 +29,10 @@ export default class TresholdInput extends Component<Props, {}> {
         return Color.grey
     }
 
-    async handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void>{
+    handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void{
 
         const change: ThresholdNumber = this.props.threshold;
+        
         switch (e.target.name) {
             case "category": {
                 change.category = parseInt(e.target.value) as CategoryEnum;
@@ -50,11 +51,12 @@ export default class TresholdInput extends Component<Props, {}> {
         //change[e.target.name as keyof change] = e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value
 
 
-        this.props.onChange(change)
+        this.props.onChange(this.props.key, change)
     }
 
 
     render(): JSX.Element{
+        console.log("Range:", this.props.min, this.props.max)
         return (
             <>
                 <Stack direction="row">
@@ -82,7 +84,6 @@ export default class TresholdInput extends Component<Props, {}> {
                             }
                         }}
                         inputProps={{
-                            min: 0,
                             step: ".01",
                             style: { textAlign: 'center'}
                         }}
@@ -104,7 +105,6 @@ export default class TresholdInput extends Component<Props, {}> {
                         }}
                         name="to"
                         inputProps={{
-                            min: this.props.threshold.from,
                             step: ".01",
                             style: { textAlign: 'center' }
                         }}
@@ -114,13 +114,8 @@ export default class TresholdInput extends Component<Props, {}> {
                     ></TextField>
                 </Stack>
             </>
-
-
-                            
         )
     }
 
-
 }
-
 

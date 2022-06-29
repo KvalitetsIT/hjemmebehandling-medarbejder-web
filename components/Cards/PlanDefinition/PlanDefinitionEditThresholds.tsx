@@ -106,6 +106,10 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
     setThreshold(newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire): void {
         const thresholdCollection = newThresholds
+
+        console.log(thresholdCollection)
+
+
         const modified = this.state.planDefinition;
 
         const questionnaireIndex = modified.questionnaires!.findIndex(q => q.id == questionnaire.id);

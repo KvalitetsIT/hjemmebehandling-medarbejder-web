@@ -9,28 +9,28 @@ import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent
 import { Component } from "react"
 import ApiContext from "../../../pages/_context"
 import { ColorSlider } from "../../Input/ColorSlider"
-import TresholdInput from "../../Input/TresholdInput"
+import ThresholdInput from "../../Input/ThresholdInput"
 
-interface TresholdEditorProps {
+interface ThresholdEditorProps {
     questionnaire: Questionnaire
     question: Question
     onChange: (values: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
 }
 
-interface TresholdEditorState {
+interface ThresholdEditorState {
     min: number
     max: number
     desiredNumberOfThresholds: number
 
 }
 
-export default class TresholdEditor extends Component<TresholdEditorProps, TresholdEditorState> {
+export default class ThresholdEditor extends Component<ThresholdEditorProps, ThresholdEditorState> {
 
     static displayName = ColorSlider.name;
     static contextType = ApiContext
     allowedNumberOfThresholds = [3, 5];
 
-    constructor(props: TresholdEditorProps) {
+    constructor(props: ThresholdEditorProps) {
         super(props);
         const questionThresholdCollection = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)
 
@@ -92,10 +92,11 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
     }
     NumbersToThresholdCollection(question: Question, numbers: number[]): ThresholdCollection {
         const thresholdCollection = new ThresholdCollection();
+        
         thresholdCollection.questionId = question.Id!
         thresholdCollection.thresholdNumbers = [];
 
-        const categoryByIndex = [CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW]
+        const categoryByIndex = [  CategoryEnum.GREEN ,CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW]
         for (let i = 0; i < numbers.length - 1; i++) {
             const threshold = new ThresholdNumber();
             threshold.from = numbers[i]
@@ -103,7 +104,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
             threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
         }
-        return thresholdCollection;
+
+        return thresholdCollection
     }
 
 
@@ -126,7 +128,9 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
 
-        thresholdNumbers = thresholdNumbers.sort((a, b) => b.to! - a.to!)
+        /*thresholdNumbers = thresholdNumbers.sort((a, b) => b.to! - a.to!)*/
+        console.log("thresholds", thresholdNumbers)
+        
         return (
 
 
@@ -176,16 +180,15 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                             </Grid>
                                         </Grid>
 
-                                        {thresholdNumbers?.map((x, i) => {  
+                                        {thresholdNumbers?.map((x, i) => {
                                             return (
-                                                <TresholdInput
-                                             
-                                                    threshold={x}   
-                                                    onChange={(x) => this.updateTreshold(i, x)}
-                                                ></TresholdInput>
+                                                <ThresholdInput
+                                                    key={i}
+                                                    threshold={x}
+                                                    onChange={this.updateThreshold}
+                                                ></ThresholdInput>
                                             )
                                         })}
-
                                     </Stack>
 
                                 </Grid>
@@ -210,21 +213,15 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         )
     }
 
-    updateTreshold(index: number, threshold: ThresholdNumber): void {
+    updateThreshold(index: number, threshold: ThresholdNumber): void {
+        console.log("updateThreshold", index, threshold)
         const question = this.props.question;
         const questionnaire = this.props.questionnaire;
-        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
-        const thresholdNumbers = thresholdCollection?.thresholdNumbers;
+        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id)!;
         
-
-
-        if (thresholdNumbers) {
-
-          
-
-            
-            this.props.onChange(thresholdCollection, question, questionnaire)
+        if (thresholdCollection && thresholdCollection.thresholdNumbers) {
+            //thresholdCollection.thresholdNumbers[index] = threshold;
         }
-
+        this.props.onChange(thresholdCollection, question, questionnaire)
     }
 }
