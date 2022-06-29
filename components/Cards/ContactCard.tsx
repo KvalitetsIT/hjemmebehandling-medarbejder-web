@@ -10,7 +10,7 @@ export interface Props {
     contact : Contact;
     iconTopLeftColor? : string;
     iconTopLeft? : JSX.Element;
-
+    
 }
 
 

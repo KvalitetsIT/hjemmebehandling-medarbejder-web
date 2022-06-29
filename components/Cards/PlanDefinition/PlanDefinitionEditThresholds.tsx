@@ -9,7 +9,16 @@ import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/ThresholdCollection';
-import { ColorSlider } from '../../Input/ColorSlider';
+import TresholdEditor from './TresholdEditor';
+
+
+export enum Color {
+    green = '#61BD84',
+    yellow = '#FFD78C',
+    red = '#EE6969',
+    grey = "grey"
+}
+
 
 export interface Props {
     planDefinition: PlanDefinition
@@ -63,6 +72,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
     errorArray: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
 
+
     renderCard(): JSX.Element {
         this.InitializeServices();
         return (
@@ -81,9 +91,10 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                             {questionnaire.questions?.filter(x => x.type == QuestionTypeEnum.OBSERVATION).map(question => {
 
                                 return (
-                                        <Grid item xs={12}>
-                                            <ColorSlider key={"colorslider" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></ColorSlider>
-                                        </Grid>
+                                    <Grid item xs={12}>
+                                        <TresholdEditor key={"tresholdEditor" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></TresholdEditor>
+                                    </Grid>
+
                                 )
                             })}
                         </>
@@ -105,14 +116,9 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
             } else {
                 modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
             }
-
-
         }
-        
         this.setState({ planDefinition: modified })
     }
-
-
 
     setPlanDefinitionName(planDefinition: PlanDefinition, newValue: string): PlanDefinition {
         const modifiedPlanDefinition = planDefinition;
@@ -120,7 +126,5 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         return modifiedPlanDefinition;
     }
 
-
 }
-
 
