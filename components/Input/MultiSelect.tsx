@@ -86,7 +86,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
           font-size: 1rem;
           box-sizing: border-box;
           min-height: 1.4375em;
-          min-width: 100vh;
+          min-width: 60vh;
           
           height: auto;
           background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
@@ -146,7 +146,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
     Popper: styled(PopperUnstyled)(
       ({ }) => `
 
-      z-index: 1;
+      z-index: 10;
     
       
       animation: fadeIn 0.2s;

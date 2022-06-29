@@ -99,7 +99,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
           <TableCell>
             
-            <FormControl fullWidth required>
+            <FormControl required>
               <MultiSelect id='frequenzy' onChange={(a) => this.SetDays(a as [])} value={this.state.questionnaire.frequency!.days}>
                 {this.getAllDays().map(day => {
                   return <MultiSelectOption key={"option" + day} value={day}>{day}</MultiSelectOption>

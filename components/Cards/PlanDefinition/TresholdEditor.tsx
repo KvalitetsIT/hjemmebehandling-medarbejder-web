@@ -35,9 +35,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         const questionThresholdCollection = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)
 
 
-        const questionThresholdNumbers = questionThresholdCollection?.thresholdNumbers?.sort((a, b) => parseInt(a.id) - parseInt(b.id)) ?? []
-        console.log("questionThresholdNumbers", questionThresholdNumbers)
-
+        const questionThresholdNumbers = questionThresholdCollection?.thresholdNumbers ?? []
+        
         const isNumberOfThresholdsInQuestionAllowed = this.allowedNumberOfThresholds.some(at => at == questionThresholdNumbers.length)
         let desiredThresholdCount = questionThresholdNumbers.length;
         if (!isNumberOfThresholdsInQuestionAllowed) {
@@ -213,17 +212,15 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
 
     updateTreshold(treshold: ThresholdNumber): void {
 
-        console.log("Change: ", treshold)
-
         const question = this.props.question;
         const questionnaire = this.props.questionnaire;
 
-        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id)!;
+        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id);
         if (thresholdCollection && thresholdCollection.thresholdNumbers) {
             const index = thresholdCollection.thresholdNumbers.findIndex(entry => entry.id == treshold.id)
             thresholdCollection.thresholdNumbers[index] = treshold;
+            this.props.onChange(thresholdCollection, question, questionnaire)
         }
 
-        this.props.onChange(thresholdCollection, question, questionnaire)
     }
 }
