@@ -73,7 +73,7 @@ export class QuestionSelector extends Component<Props, State> {
         }
         const options = this.props.allQuestions?.filter(q => this.supportedTypes.some(type => q.type == type));
         return (
-            <FormControl sx={{ minWidth: 200 }} key={"enableWhen"} required>
+            <FormControl sx={{ minWidth: 400 }} key={"enableWhen"} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmål</InputLabel>
                 <Select 
                     defaultValue="" 
@@ -81,6 +81,7 @@ export class QuestionSelector extends Component<Props, State> {
                     value={this.state.enableWhen.questionId} 
                     onChange={this.handleChange}
                     error={hasError}
+                    
                 >
                     {options?.map(question => {
                         return (
