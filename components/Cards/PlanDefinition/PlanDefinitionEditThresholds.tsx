@@ -9,7 +9,7 @@ import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/ThresholdCollection';
-import TresholdEditor from './TresholdEditor';
+import ThresholdEditor from './ThresholdEditor';
 
 
 export enum Color {
@@ -44,7 +44,6 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
             planDefinition: props.planDefinition,
             defaultNumberOfThresholds: 3
         }
-
         this.modifyPlandefinition = this.modifyPlandefinition.bind(this);
         this.setThreshold = this.setThreshold.bind(this)
     }
@@ -79,7 +78,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography>De valgte spørgeskemaer indeholder nedenstående Alarmgrænser</Typography>
+                    <Typography marginTop={2}>De valgte spørgeskemaer indeholder nedenstående Alarmgrænser</Typography>
                 </Grid>
 
                 {this.state.planDefinition.questionnaires?.map(questionnaire => {
@@ -92,7 +91,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
                                 return (
                                     <Grid item xs={12}>
-                                        <TresholdEditor key={"tresholdEditor" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></TresholdEditor>
+                                        <ThresholdEditor key={"tresholdEditor" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></ThresholdEditor>
                                     </Grid>
 
                                 )
@@ -104,11 +103,9 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         )
     }
 
+
     setThreshold(newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire): void {
         const thresholdCollection = newThresholds
-
-        console.log(thresholdCollection)
-
 
         const modified = this.state.planDefinition;
 

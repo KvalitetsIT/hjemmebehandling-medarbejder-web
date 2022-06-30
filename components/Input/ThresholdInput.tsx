@@ -1,22 +1,27 @@
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
-import { Stack, Select, MenuItem, TextField } from "@mui/material"
+import { Stack, Select, MenuItem, TextField, FormControl, FormHelperText } from "@mui/material"
 import { ChangeEvent, Component } from "react"
 import { Color } from "../Cards/PlanDefinition/PlanDefinitionEditThresholds"
 
 
 interface Props {
-    key: number
-    max?: number
-    min?: number
     threshold: ThresholdNumber
-    onChange: (index: number, state: ThresholdNumber) => void
+    onChange: (property: string) => void
+}
+interface State{
+    hasError?: Error
 }
 
-export default class ThresholdInput extends Component<Props, {}> {
+
+
+export default class ThresholdInput extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props)
+        this.state = {
+            hasError: undefined
+        }
     }
 
     getChipColorFromCategory(category: CategoryEnum): Color {
@@ -29,10 +34,10 @@ export default class ThresholdInput extends Component<Props, {}> {
         return Color.grey
     }
 
-    handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void{
+    handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
 
-        const change: ThresholdNumber = this.props.threshold;
         
+        const change: ThresholdNumber = this.props.threshold;
         switch (e.target.name) {
             case "category": {
                 change.category = parseInt(e.target.value) as CategoryEnum;
@@ -47,75 +52,96 @@ export default class ThresholdInput extends Component<Props, {}> {
                 break;
             }
         }
+        
+        const hasError = this.props.threshold.to! <= this.props.threshold.from! ?? true
+        if(hasError) {
+            
+            this.setState({hasError: new Error("Feltet 'til' skal være større end: "+this.props.threshold.from)}) 
 
-        //change[e.target.name as keyof change] = e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value
+        }else {
+            this.setState({hasError: undefined})
+        }
 
-
-        this.props.onChange(this.props.key, change)
+        this.props.onChange(e.target.name)
     }
 
+    render(): JSX.Element {
 
-    render(): JSX.Element{
-        console.log("Range:", this.props.min, this.props.max)
+        
+
         return (
             <>
-                <Stack direction="row">
-                    <Select fullWidth value={this.props.threshold.category} sx={{
-                        "& fieldset": {
-                            borderTopRightRadius: 0,
-                            borderBottomRightRadius: 0,
-                        },
-                        backgroundColor: this.getChipColorFromCategory(this.props.threshold.category),
-                        color: "white",
-                    }}
-                        name="category"
-                        onChange={x => this.handleChange(x as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)}
-                    >
-                        <MenuItem value={CategoryEnum.RED}>Red</MenuItem>
-                        <MenuItem value={CategoryEnum.YELLOW}>Yellow</MenuItem>
-                        <MenuItem value={CategoryEnum.GREEN}>Green</MenuItem>
-                    </Select>
-                    <TextField
-                        fullWidth
-                        type={"number"}
-                        sx={{
-                            "& fieldset": {
-                                borderRadius: 0
-                            }
-                        }}
-                        inputProps={{
-                            step: ".01",
-                            style: { textAlign: 'center'}
-                        }}
-                        InputLabelProps={{ shrink: false }}
-                        onChange={(x) => this.handleChange(x)}
-                        value={this.props.threshold.from}
-                        name="from"
-                    ></TextField>
+                <FormControl>
+                    <Stack direction="row">
 
-
-                    <TextField
-                        fullWidth
-                        type={"number"}
-                        sx={{
+                        <Select fullWidth value={this.props.threshold.category} sx={{
                             "& fieldset": {
-                                borderTopLeftRadius: 0,
-                                borderBottomLeftRadius: 0
+                                borderTopRightRadius: 0,
+                                borderBottomRightRadius: 0,
                             },
+                            backgroundColor: this.getChipColorFromCategory(this.props.threshold.category),
+                            color: "white",
                         }}
-                        name="to"
-                        inputProps={{
-                            step: ".01",
-                            style: { textAlign: 'center' }
-                        }}
-                        InputLabelProps={{ shrink: false }}
-                        value={this.props.threshold.to}
-                        onChange={x => this.handleChange(x)}
-                    ></TextField>
-                </Stack>
+                            name="category"
+                            onChange={x => this.handleChange(x as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)}
+                        >
+                            <MenuItem value={CategoryEnum.RED}>Red</MenuItem>
+                            <MenuItem value={CategoryEnum.YELLOW}>Yellow</MenuItem>
+                            <MenuItem value={CategoryEnum.GREEN}>Green</MenuItem>
+                        </Select>
+                        <TextField
+                            fullWidth
+                            type={"number"}
+                            sx={{
+                                "& fieldset": {
+                                    borderRadius: 0
+                                }
+                            }}
+                            inputProps={{
+                                step: ".01",
+                                style: { textAlign: 'center' }
+                            }}
+                            InputLabelProps={{ shrink: false }}
+                            onChange={(x) => this.handleChange(x)}
+                            value={this.props.threshold.from}
+                            name="from"
+                        ></TextField>
+
+
+                        <TextField
+                            fullWidth
+                            type={"number"}
+                            sx={{
+                                "& fieldset": {
+                                    borderTopLeftRadius: 0,
+                                    borderBottomLeftRadius: 0
+                                },
+                            }}
+                            name="to"
+                            inputProps={{
+                                step: ".01",
+                                style: { textAlign: 'center', borderColor: "green" }
+                            }}
+                            error={this.state.hasError? true : false}
+                            InputLabelProps={{ shrink: false }}
+                            value={this.props.threshold.to}
+                            onChange={x => this.handleChange(x)}
+                        ></TextField>
+
+                    </Stack>
+                
+                    { this.state.hasError ? <FormHelperText sx={{color: "red"}}>{this.state.hasError.message}</FormHelperText>:<></> }
+                    
+                </FormControl>
+
             </>
+
+
+
         )
     }
 
+
 }
+
 

@@ -11,32 +11,30 @@ import ApiContext from "../../../pages/_context"
 import { ColorSlider } from "../../Input/ColorSlider"
 import ThresholdInput from "../../Input/ThresholdInput"
 
-interface ThresholdEditorProps {
+interface TresholdEditorProps {
     questionnaire: Questionnaire
     question: Question
     onChange: (values: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
 }
 
-interface ThresholdEditorState {
+interface TresholdEditorState {
     min: number
     max: number
     desiredNumberOfThresholds: number
-
 }
 
-export default class ThresholdEditor extends Component<ThresholdEditorProps, ThresholdEditorState> {
+export default class TresholdEditor extends Component<TresholdEditorProps, TresholdEditorState> {
 
     static displayName = ColorSlider.name;
     static contextType = ApiContext
     allowedNumberOfThresholds = [3, 5];
 
-    constructor(props: ThresholdEditorProps) {
+    constructor(props: TresholdEditorProps) {
         super(props);
         const questionThresholdCollection = props.questionnaire.thresholds?.find(q => q.questionId == props.question.Id)
 
-
         const questionThresholdNumbers = questionThresholdCollection?.thresholdNumbers ?? []
-        
+
         const isNumberOfThresholdsInQuestionAllowed = this.allowedNumberOfThresholds.some(at => at == questionThresholdNumbers.length)
         let desiredThresholdCount = questionThresholdNumbers.length;
         if (!isNumberOfThresholdsInQuestionAllowed) {
@@ -49,7 +47,6 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
             desiredNumberOfThresholds: desiredThresholdCount,
         }
     }
-
 
     calculateMin(thresholdCollection?: ThresholdCollection): number {
         let minOf: number[] = [0]
@@ -67,7 +64,6 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
         return maxVal;
     }
 
-
     max(thresholdNumbers: ThresholdNumber[]): number {
         let totalWidth: number = 0;
         thresholdNumbers.forEach(threshold => {
@@ -77,8 +73,6 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
         })
         return totalWidth
     }
-
-
 
     CreateNewThresholds(): void {
         const defaultThreshold = Array.from(Array(this.state.desiredNumberOfThresholds + 1).keys());
@@ -92,20 +86,18 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
     }
     NumbersToThresholdCollection(question: Question, numbers: number[]): ThresholdCollection {
         const thresholdCollection = new ThresholdCollection();
-        
         thresholdCollection.questionId = question.Id!
         thresholdCollection.thresholdNumbers = [];
 
-        const categoryByIndex = [  CategoryEnum.GREEN ,CategoryEnum.YELLOW, CategoryEnum.RED, CategoryEnum.YELLOW]
-        for (let i = 0; i < numbers.length - 1; i++) {
+        const categoryByIndex = [CategoryEnum.YELLOW, CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED]
+        for (let i = numbers.length - 1; i > 0; i--) {
             const threshold = new ThresholdNumber();
-            threshold.from = numbers[i]
-            threshold.to = numbers[i + 1]
+            threshold.to = numbers[i] * 10
+            threshold.from = numbers[i - 1] * 10
             threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
         }
-
-        return thresholdCollection
+        return thresholdCollection;
     }
 
 
@@ -128,12 +120,7 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
 
-        /*thresholdNumbers = thresholdNumbers.sort((a, b) => b.to! - a.to!)*/
-        console.log("thresholds", thresholdNumbers)
-        
         return (
-
-
             <Card elevation={2}>
                 <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} action={
                     <ButtonGroup variant="text" >
@@ -152,14 +139,10 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
                 <Divider />
                 <CardContent>
                     <Grid container sx={{ alignItems: "center" }}>
-
                         <Grid item xs={12}>
-
-
-
                             <Grid container spacing={2} >
                                 <Grid item xs={8}>
-                                    <Box width="100%" marginBottom={5}>
+                                    <Box width="100%">
                                         <Typography>
                                             Vælg et maksimum og et minimum for alarmgrænnserne.
                                             Værdier bliver valideringspunkter for patientents indtastning.
@@ -167,61 +150,58 @@ export default class ThresholdEditor extends Component<ThresholdEditorProps, Thr
                                             Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
                                         </Typography>
                                     </Box>
-                                    <Stack spacing={1}>
-                                        <Grid container>
-                                            <Grid item xs={4} textAlign="center">
-                                                <Typography>Farve</Typography>
-                                            </Grid>
-                                            <Grid item xs={4} textAlign="center">
-                                                <Typography>Fra</Typography>
-                                            </Grid>
-                                            <Grid item xs={4} textAlign="center">
-                                                <Typography>Til (maksimum)</Typography>
-                                            </Grid>
-                                        </Grid>
+                                    <Box bottom={0} position="absolute" marginBottom={4} width={"90em"}> 
 
-                                        {thresholdNumbers?.map((x, i) => {
-                                            return (
-                                                <ThresholdInput
-                                                    key={i}
-                                                    threshold={x}
-                                                    onChange={this.updateThreshold}
-                                                ></ThresholdInput>
-                                            )
-                                        })}
-                                    </Stack>
-
+                                        <Stack spacing={2}>
+                                            <Grid container>
+                                                <Grid item xs={4} textAlign="center">
+                                                    <Typography>Farve</Typography>
+                                                </Grid>
+                                                <Grid item xs={4} textAlign="center">
+                                                    <Typography>Fra</Typography>
+                                                </Grid>
+                                                <Grid item xs={4} textAlign="center">
+                                                    <Typography>Til (maksimum)</Typography>
+                                                </Grid>
+                                            </Grid>
+                                            {thresholdNumbers?.map((x, i) => {
+                                                return (
+                                                    <ThresholdInput
+                                                        threshold={x}
+                                                        onChange={(property) => this.updateTreshold(i, property)}
+                                                    ></ThresholdInput>
+                                                )
+                                            })}
+                                        </Stack>
+                                    </Box>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <QuestionChart
                                         chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
                                         showThresholds={true}
                                         minimal={false}
+                                        minHeight={500}
                                     ></QuestionChart>
                                 </Grid>
                             </Grid>
-
-
                         </Grid>
-
                     </Grid>
                 </CardContent >
             </Card >
-
-
-
         )
     }
 
-    updateThreshold(index: number, threshold: ThresholdNumber): void {
-        console.log("updateThreshold", index, threshold)
+    updateTreshold(index: number, property: string): void {
         const question = this.props.question;
         const questionnaire = this.props.questionnaire;
-        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id)!;
-        
-        if (thresholdCollection && thresholdCollection.thresholdNumbers) {
-            //thresholdCollection.thresholdNumbers[index] = threshold;
+        const thresholdCollection = this.props.questionnaire.thresholds?.find(thres => thres.questionId == question.Id)
+        if (property == "to") {
+            if (index > 0) thresholdCollection!.thresholdNumbers![index - 1].from = thresholdCollection!.thresholdNumbers![index].to
         }
-        this.props.onChange(thresholdCollection, question, questionnaire)
+        if (property == "from") {
+            if (index < thresholdCollection!.thresholdNumbers!.length - 1) thresholdCollection!.thresholdNumbers![index + 1].to = thresholdCollection!.thresholdNumbers![index].from
+        }
+        if (thresholdCollection) this.props.onChange(thresholdCollection, question, questionnaire)
+
     }
 }
