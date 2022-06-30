@@ -67,10 +67,10 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         try {
             const providedPlanDefinitionId = this.props.match.params.plandefinitionid
             if (providedPlanDefinitionId) {
-                console.log("lool")
+
                 const planDefinitionToEdit = await this.planDefinitionService.GetPlanDefinitionById(providedPlanDefinitionId)
                 this.sortThresholds(planDefinitionToEdit)
-                
+
                 this.setState({ planDefinition: planDefinitionToEdit });
             }
         } catch (error) {
@@ -172,7 +172,18 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 await this.submitQuestionnaire();
                             }}
                             additionalButtonActions={[
-                                <Button onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }} variant="outlined">Gem som kladde</Button>
+                                <Button
+                                    onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }}
+                                    variant="outlined"
+                                    disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? true : false}
+                                    title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
+                                    sx={{
+                                        "&.Mui-disabled": {
+                                            pointerEvents: "auto"
+                                        }
+
+                                    }}
+                                >Gem som kladde</Button>
                             ]}
                         >
 
@@ -257,11 +268,10 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         return 0
     }
 
-    sortThresholds(planDefinition: PlanDefinition) : PlanDefinition{
+    sortThresholds(planDefinition: PlanDefinition): PlanDefinition {
         planDefinition.questionnaires?.forEach(x => {
-            x.thresholds?.forEach(y => y.thresholdNumbers?.sort((a,b) => b.from!-a.from!))
+            x.thresholds?.forEach(y => y.thresholdNumbers?.sort((a, b) => b.from! - a.from!))
         })
-
         return planDefinition;
     }
 }
