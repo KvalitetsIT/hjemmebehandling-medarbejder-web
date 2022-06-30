@@ -1,4 +1,5 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
+import { ErrorBoundary } from "@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
@@ -9,6 +10,7 @@ import { AccordianWrapper } from "../../components/Cards/PlanDefinition/Accordia
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
+import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext from "../_context";
@@ -21,6 +23,8 @@ interface State {
     planDefinition: PlanDefinition
     openAccordians: boolean[]
     editMode: boolean
+    error?: Error
+
 }
 
 interface Props {
@@ -50,7 +54,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             loading: false,
             submitted: false,
             errorToast: <></>,
-
+            error: undefined,
             openAccordians: accordian,
             planDefinition: newPlanDefinition,
             editMode: props.match.params.plandefinitionid ? true : false
@@ -156,41 +160,48 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                             continueButtonAction={() => this.expandNextPage(AccordianRowEnum.attachQuestionnaire)}
                             previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
                         >
-
                             <PlanDefinitionEditQuestionnaire planDefinition={this.state.planDefinition} />
 
                         </AccordianWrapper>
+                        <ErrorBoundary>
 
-                        <AccordianWrapper
-                            expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
-                            title="Alarmgrænser"
-                            toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
-                            previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
-                            continueButtonContentOverride="Gem"
-                            continueButtonAction={async () => {
-                                this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
-                                await this.submitQuestionnaire();
-                            }}
-                            additionalButtonActions={[
-                                <Button
-                                    onClick={async () => { this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT); await this.submitQuestionnaire(); }}
-                                    variant="outlined"
-                                    disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? true : false}
-                                    title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
-                                    sx={{
-                                        "&.Mui-disabled": {
-                                            pointerEvents: "auto"
-                                        }
-
+                            <AccordianWrapper
+                                expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
+                                title="Alarmgrænser"
+                                toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
+                                previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
+                                continueButtonContentOverride="Gem"
+                                continueButtonAction={
+                                    async () => {
+                                        this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
+                                        await this.submitQuestionnaire();
                                     }}
-                                >Gem som kladde</Button>
-                            ]}
-                        >
+                                additionalButtonActions={[
+                                    <Button
+                                        onClick={async () => {
+                                            this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT);
+                                            await this.submitQuestionnaire();
+                                        }}
+                                        variant="outlined"
+                                        disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? true : false}
+                                        title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
+                                        sx={{
+                                            "&.Mui-disabled": {
+                                                pointerEvents: "auto"
+                                            }
+                                        }}
+                                    >Gem som kladde</Button>
+                                ]}
+                            >
 
-                            <PlanDefinitionEditThresholds planDefinition={this.state.planDefinition} />
+                                <PlanDefinitionEditThresholds
+                                    onError={(error) => {
+                                        this.setState({ error: error })
+                                    }}
+                                    planDefinition={this.state.planDefinition} />
+                            </AccordianWrapper>
+                        </ErrorBoundary>
 
-
-                        </AccordianWrapper>
                     </Grid>
                     <Grid item xs={2}>
                         <Card>
@@ -224,10 +235,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     async submitQuestionnaire(): Promise<void> {
+        this.setState({ errorToast: <></> })
         try {
             this.setState({
                 loading: true
             })
+            if (this.state.error) throw this.state.error
 
             if (this.state.planDefinition && this.state.editMode)
                 await this.planDefinitionService.updatePlanDefinition(this.state.planDefinition);
@@ -239,6 +252,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                 submitted: true
             })
         } catch (error) {
+
             if (error instanceof BaseServiceError) {
                 this.setState({ errorToast: <ToastError severity="info" error={error} /> })
             } else {

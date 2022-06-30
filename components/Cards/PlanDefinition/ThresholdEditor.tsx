@@ -8,6 +8,7 @@ import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdN
 import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack } from "@mui/material"
 import { Component } from "react"
 import ApiContext from "../../../pages/_context"
+import { MissingDetailsError } from "../../Errors/MissingDetailsError"
 import { ColorSlider } from "../../Input/ColorSlider"
 import ThresholdInput from "../../Input/ThresholdInput"
 
@@ -15,12 +16,14 @@ interface TresholdEditorProps {
     questionnaire: Questionnaire
     question: Question
     onChange: (values: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
+    onError: (error?: Error) => void
 }
 
 interface TresholdEditorState {
     min: number
     max: number
     desiredNumberOfThresholds: number
+    errors: (Error | undefined)[]
 }
 
 export default class TresholdEditor extends Component<TresholdEditorProps, TresholdEditorState> {
@@ -45,6 +48,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
             min: this.calculateMin(questionThresholdCollection),
             max: this.calculateMax(questionThresholdCollection),
             desiredNumberOfThresholds: desiredThresholdCount,
+            errors: []
         }
     }
 
@@ -150,7 +154,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                             Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
                                         </Typography>
                                     </Box>
-                                    <Box bottom={0} position="absolute" marginBottom={4} width={"90em"}> 
+                                    <Box bottom={0} position="absolute" marginBottom={4} width={"90em"}>
 
                                         <Stack spacing={2}>
                                             <Grid container>
@@ -169,6 +173,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                                     <ThresholdInput
                                                         threshold={x}
                                                         onChange={(property) => this.updateTreshold(i, property)}
+                                                        onError={x => this.onError(i, x)}
                                                     ></ThresholdInput>
                                                 )
                                             })}
@@ -203,5 +208,21 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         }
         if (thresholdCollection) this.props.onChange(thresholdCollection, question, questionnaire)
 
+    }
+
+    onError(index: number, error?: Error) {
+        
+        
+        let errors = this.state.errors
+        if(error) {
+            errors[index] = error;
+                
+        }else{
+            errors[index] = undefined;
+        }
+        this.setState({ errors: errors});
+        
+        let errorStrings = errors.filter(x => x != undefined).map(x => x!.message)
+        this.props.onError(errorStrings.length > 0 ? new MissingDetailsError(errorStrings) : undefined) 
     }
 }

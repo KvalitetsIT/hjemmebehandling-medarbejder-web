@@ -8,6 +8,7 @@ import { Color } from "../Cards/PlanDefinition/PlanDefinitionEditThresholds"
 interface Props {
     threshold: ThresholdNumber
     onChange: (property: string) => void
+    onError: (error?: Error) => void
 }
 interface State{
     hasError?: Error
@@ -52,18 +53,14 @@ export default class ThresholdInput extends Component<Props, State> {
                 break;
             }
         }
+        const error = new Error("Feltet 'til' skal være større end: "+this.props.threshold.from)
+        const hasError = this.props.threshold.to! <= this.props.threshold.from! ? error : undefined
         
-        const hasError = this.props.threshold.to! <= this.props.threshold.from! ?? true
-        if(hasError) {
-            
-            this.setState({hasError: new Error("Feltet 'til' skal være større end: "+this.props.threshold.from)}) 
-
-        }else {
-            this.setState({hasError: undefined})
-        }
-
+        this.setState({hasError: hasError})
+        this.props.onError(hasError)
         this.props.onChange(e.target.name)
     }
+    
 
     render(): JSX.Element {
 

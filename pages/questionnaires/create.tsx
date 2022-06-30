@@ -17,6 +17,7 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { ErrorBoundary } from "@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary";
 
 
 interface State {
@@ -36,7 +37,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
     event: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
-        
+
     constructor(props: Props) {
         super(props);
 
@@ -92,25 +93,25 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({
             loading: true
         })
-         
-        
+
+
         await this.event.dispatchEvent()
-       
+
         try {
-            const valid = this.state.errors.size == 0 
-            if ( valid || this.state.questionnaire?.status == "DRAFT") {
-                if (this.state.questionnaire && this.state.editMode)  await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
-                
+            const valid = this.state.errors.size == 0
+            if (valid || this.state.questionnaire?.status == "DRAFT") {
+                if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
+
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
-                
-                
+
+
                 this.setState({
                     submitted: true
                 })
-                
-            }else{
+
+            } else {
                 throw new MissingDetailsError([]);
-            } 
+            }
         } catch (error) {
             if (error instanceof BaseServiceError) {
                 this.setState({ errorToast: <ToastError severity="info" error={error} /> })
@@ -118,7 +119,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 this.setState(() => { throw error })
             }
         }
-      
+
         this.setState({
             loading: false
         })
@@ -138,11 +139,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
 
 
-    onValidation(uniqueId: number, error: InvalidInputModel[]): void { 
+    onValidation(uniqueId: number, error: InvalidInputModel[]): void {
         const errors = this.state.errors
-        if ( error.length == 0 ) {
+        if (error.length == 0) {
             errors.delete(uniqueId)
-            return 
+            return
         } else errors.set(uniqueId, error)
         this.setState({ errors: errors })
     }
@@ -219,7 +220,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
                                                     </Grid>
                                                     <Grid item xs={11}>
-                                                    <QuestionEditCard
+                                                        <QuestionEditCard
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                             addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
@@ -240,30 +241,32 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 )
                             })
 
-                    }
+                            }
                             <Grid item xs={12}>
                                 <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
                             </Grid>
                             <Grid item xs={12}>
-                                <Card>
-                                    <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
-                                    <Divider />
-                                    <CardContent>
-                                        <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
-                                    </CardContent>
-                                    <Divider />
-                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                        <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som kladde</Button>
-                                        <Button variant="contained" onClick={() => {
-                                            this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                            this.submitQuestionnaire().then(() => this.event.dispatchEvent())
-                                        }
-                                        }>Gem</Button>
-                                    </CardActions>
+                                
+                                    <Card>
+                                        <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
+                                        <Divider />
+                                        <CardContent>
+                                            <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
+                                        </CardContent>
+                                        <Divider />
+                                        <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                            <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som kladde</Button>
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => {
+                                                    this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
+                                                    this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                                }
+                                                }>Gem</Button>
+                                        </CardActions>
 
 
-                                </Card>
-                                    
+                                    </Card>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -272,7 +275,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             </>
         )
     }
-    
+
 
     generateQuestionId(): string {
         return uuid();

@@ -22,6 +22,7 @@ export enum Color {
 
 export interface Props {
     planDefinition: PlanDefinition
+    onError: (error?: Error) => void
 }
 
 export interface State {
@@ -91,7 +92,13 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
                                 return (
                                     <Grid item xs={12}>
-                                        <ThresholdEditor key={"tresholdEditor" + question.Id} onChange={this.setThreshold} questionnaire={questionnaire} question={question}></ThresholdEditor>
+                                        <ThresholdEditor
+                                            key={"tresholdEditor" + question.Id}
+                                            onChange={this.setThreshold}
+                                            questionnaire={questionnaire}
+                                            question={question}
+                                            onError={ error => this.onError(error)}
+                                        ></ThresholdEditor>
                                     </Grid>
 
                                 )
@@ -101,6 +108,9 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                 })}
             </Grid>
         )
+    }
+    onError(error?: Error) {
+        this.props.onError(error)
     }
 
 
