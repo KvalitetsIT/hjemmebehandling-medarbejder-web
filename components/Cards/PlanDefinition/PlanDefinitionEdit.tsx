@@ -7,6 +7,7 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { IValidationService } from '../../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
+import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 
 export interface Props {
     planDefinition: PlanDefinition
@@ -69,7 +70,10 @@ export class PlanDefinitionEdit extends Component<Props, State> {
                         label="Navn"
                         value={this.state.planDefinition.name}
                         onChange={input => this.modifyPlandefinition(this.setPlanDefinitionName, input)}
-                        variant="outlined" />
+                        variant="outlined" 
+                        disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
+                        />
+                        
                 </Grid>
                 <Grid item xs={12}>
                     <Typography>Patientgruppen oprettes i den afdeling du er tilknyttet, derfor tilknyttes denne patientgruppe Infektionssygdomme</Typography>
