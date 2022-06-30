@@ -17,7 +17,6 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { ErrorBoundary } from "@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary";
 
 
 interface State {

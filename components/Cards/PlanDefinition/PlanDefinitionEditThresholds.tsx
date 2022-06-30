@@ -109,7 +109,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
             </Grid>
         )
     }
-    onError(error?: Error) {
+    onError(error?: Error): void {
         this.props.onError(error)
     }
 

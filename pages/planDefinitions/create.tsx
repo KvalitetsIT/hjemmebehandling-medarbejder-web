@@ -10,7 +10,6 @@ import { AccordianWrapper } from "../../components/Cards/PlanDefinition/Accordia
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
-import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext from "../_context";

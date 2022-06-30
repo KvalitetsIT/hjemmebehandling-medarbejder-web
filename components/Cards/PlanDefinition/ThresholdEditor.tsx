@@ -210,10 +210,10 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
 
     }
 
-    onError(index: number, error?: Error) {
+    onError(index: number, error?: Error): void {
         
         
-        let errors = this.state.errors
+        const errors = this.state.errors
         if(error) {
             errors[index] = error;
                 
@@ -222,7 +222,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         }
         this.setState({ errors: errors});
         
-        let errorStrings = errors.filter(x => x != undefined).map(x => x!.message)
+        const errorStrings = errors.filter(x => x != undefined).map(x => x!.message)
         this.props.onError(errorStrings.length > 0 ? new MissingDetailsError(errorStrings) : undefined) 
     }
 }
