@@ -186,6 +186,10 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                         showThresholds={true}
                                         minimal={false}
                                         minHeight={500}
+                                        range={{
+                                            min: Math.min(...thresholdNumbers.map(x => x.from!)), 
+                                            max: Math.max(...thresholdNumbers.map(x => x.to!)),
+                                        }}
                                     ></QuestionChart>
                                 </Grid>
                             </Grid>
