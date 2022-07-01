@@ -117,7 +117,8 @@ export default class ThresholdInput extends Component<Props, State> {
                             name="to"
                             inputProps={{
                                 step: ".01",
-                                style: { textAlign: 'center', borderColor: "green" }
+                                style: { textAlign: 'center', borderColor: "green" },
+                                
                             }}
                             error={this.state.hasError? true : false}
                             InputLabelProps={{ shrink: false }}

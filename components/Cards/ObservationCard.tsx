@@ -99,20 +99,16 @@ export class ObservationCard extends Component<Props, State> {
                 <></>
             )
         }
-
-        let counter = 0
-
         return (
             <>
-                {allQuestions.map(question => {
-                    const isFirst = counter++ == 0;
+                {allQuestions.map((question, i) => {
                     const threshold = this.props.questionnaire!.thresholds?.find(x => x.questionId == question.Id)
 
                     const dateToString = (date: Date) => this.dateHelper.DateToString(date);
                     const chartData = new ChartData(this.state.questionnaireResponses, question, threshold, dateToString);
                     const subheader = question.abbreviation ?? question.question ?? ""
                     return (
-                        <Grid paddingLeft={isFirst ? 0 : 2} item xs={this.getColumnSize(allQuestions.length)}>
+                        <Grid paddingLeft={i % 2 == 0  ? 0 : 2} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
                             <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
