@@ -94,11 +94,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         })
 
 
-        await this.event.dispatchEvent()
+        this.event.dispatchEvent()
 
         try {
             const valid = this.state.errors.size == 0
-            if (valid || this.state.questionnaire?.status == "DRAFT") {
+            if (valid) {
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
 
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
@@ -245,27 +245,32 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
                             </Grid>
                             <Grid item xs={12}>
-                                
-                                    <Card>
-                                        <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
-                                        <Divider />
-                                        <CardContent>
-                                            <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
-                                        </CardContent>
-                                        <Divider />
-                                        <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                            <Button variant="outlined" onClick={() => { this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT"); this.submitQuestionnaire() }}>Gem som kladde</Button>
-                                            <Button
-                                                variant="contained"
-                                                onClick={() => {
-                                                    this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                                    this.submitQuestionnaire().then(() => this.event.dispatchEvent())
-                                                }
-                                                }>Gem</Button>
-                                        </CardActions>
+
+                                <Card>
+                                    <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
+                                    <Divider />
+                                    <CardContent>
+                                        <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
+                                    </CardContent>
+                                    <Divider />
+                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
+                                                this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                            }}>Gem som kladde</Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => {
+                                                this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
+                                                this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                            }
+                                            }>Gem</Button>
+                                    </CardActions>
 
 
-                                    </Card>
+                                </Card>
                             </Grid>
                         </Grid>
                     </Grid>

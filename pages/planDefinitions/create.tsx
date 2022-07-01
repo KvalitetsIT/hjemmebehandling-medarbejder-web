@@ -52,7 +52,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.state = {
             loading: false,
             submitted: false,
-            errorToast: <></>,
+            errorToast: (<></>),
             error: undefined,
             openAccordians: accordian,
             planDefinition: newPlanDefinition,
@@ -234,7 +234,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     async submitQuestionnaire(): Promise<void> {
-        this.setState({ errorToast: <></> })
+        
         try {
             this.setState({
                 loading: true
@@ -253,7 +253,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         } catch (error) {
 
             if (error instanceof BaseServiceError) {
+
+                const before = this.state.errorToast
                 this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+                const after = this.state.errorToast
+                console.log("Setting state: ", before," => " , after )
+                
             } else {
                 this.setState(() => { throw error })
             }
@@ -266,6 +271,8 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
     setStatusOnPlanDefinition(newStatus: PlanDefinitionStatus | BaseModelStatus): void {
         const planDefinition = this.state.planDefinition
+        
+        console.log("Setting status => ","Old:", planDefinition.status ,"New:", newStatus)
         planDefinition.status = newStatus;
         this.setState({ planDefinition: planDefinition })
     }

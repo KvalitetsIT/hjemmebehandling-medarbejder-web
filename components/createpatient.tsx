@@ -223,17 +223,13 @@ export default class CreatePatient extends Component<Props, State> {
                   <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
                     <Step key="patient">
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
-
                     </Step>
                     <Step key="relativecontact">
-
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
-
                     </Step>
                     <Step key="plandefinition">
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
                     </Step>
-
                   </Stepper>
                 </CardContent>
               </Card>
