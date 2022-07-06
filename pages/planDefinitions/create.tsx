@@ -253,12 +253,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         } catch (error) {
 
             if (error instanceof BaseServiceError) {
-
-                const before = this.state.errorToast
-                this.setState({ errorToast: <ToastError severity="info" error={error} /> })
-                const after = this.state.errorToast
-                console.log("Setting state: ", before," => " , after )
-                
+                this.setState({ errorToast: <ToastError severity="info" error={error} /> })                
             } else {
                 this.setState(() => { throw error })
             }
@@ -272,7 +267,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     setStatusOnPlanDefinition(newStatus: PlanDefinitionStatus | BaseModelStatus): void {
         const planDefinition = this.state.planDefinition
         
-        console.log("Setting status => ","Old:", planDefinition.status ,"New:", newStatus)
         planDefinition.status = newStatus;
         this.setState({ planDefinition: planDefinition })
     }

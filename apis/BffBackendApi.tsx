@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -65,6 +65,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 id: planDefinition.id!,
                 patchPlanDefinitionRequest: {
                     questionnaireIds: planDefinition.questionnaires?.map(questionnaire => questionnaire.id),
+                    status: planDefinition.status as unknown as PatchPlanDefinitionRequestStatusEnum,
                     name: planDefinition.name,
                     thresholds: planDefinition.questionnaires?.flatMap(x => x.thresholds).flatMap(threshold => this.toExternal.mapThreshold(threshold))
                 }
