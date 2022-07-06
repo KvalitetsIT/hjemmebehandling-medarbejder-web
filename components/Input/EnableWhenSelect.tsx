@@ -64,7 +64,7 @@ export class EnableWhenSelect extends Component<Props, State> {
     renderBoolean() : JSX.Element {
         const hasError = this.state.errors.length > 0
         return (
-            <FormControl sx={{minWidth:150}}>
+            <FormControl sx={{minWidth:200}}>
                 <InputLabel id="demo-simple-select-label">Hvis spørgsmål er</InputLabel>
                 <Select 
                     defaultValue='' 
