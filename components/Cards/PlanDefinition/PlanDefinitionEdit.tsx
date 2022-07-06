@@ -7,7 +7,7 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { IValidationService } from '../../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
-import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
+
 
 export interface Props {
     planDefinition: PlanDefinition
@@ -71,7 +71,7 @@ export class PlanDefinitionEdit extends Component<Props, State> {
                         value={this.state.planDefinition.name}
                         onChange={input => this.modifyPlandefinition(this.setPlanDefinitionName, input)}
                         variant="outlined" 
-                        disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
+                        /*disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}*/
                         />
                         
                 </Grid>

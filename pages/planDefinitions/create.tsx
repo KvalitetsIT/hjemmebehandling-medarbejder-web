@@ -182,7 +182,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             await this.submitQuestionnaire();
                                         }}
                                         variant="outlined"
-                                        disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? true : false}
                                         title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
                                         sx={{
                                             "&.Mui-disabled": {

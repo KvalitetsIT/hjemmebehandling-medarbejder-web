@@ -37,6 +37,7 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
     }
 
     async GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition> {
+        console.log("looking for plandefinition with id: ", planDefinitionId)
         try {
             return await this.backendApi.GetPlanDefinitionById(planDefinitionId);
         } catch (error: unknown) {

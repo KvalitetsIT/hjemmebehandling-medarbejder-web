@@ -16,7 +16,6 @@ import { v4 as uuid } from 'uuid';
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 
 interface State {
@@ -189,7 +188,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                             size="medium"
                                             variant="outlined"
                                             uniqueId={inputId++}
-                                            disabled={this.state.questionnaire.status == BaseModelStatus.ACTIVE}
+                                            /*disabled={this.state.questionnaire.status == BaseModelStatus.ACTIVE}*/
                                             onChange={input => this.modifyQuestionnaire(this.setName, input)}
                                         />
                                     </CardContent>
