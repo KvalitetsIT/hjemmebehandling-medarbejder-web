@@ -5,7 +5,7 @@ import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question"
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire"
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection"
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
-import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack } from "@mui/material"
+import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack   } from "@mui/material"
 import { Component } from "react"
 import ApiContext from "../../../pages/_context"
 import { MissingDetailsError } from "../../Errors/MissingDetailsError"
@@ -185,7 +185,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                 chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
                                 showThresholds={true}
                                 minimal={false}
-                                minHeight={400}
+                                minHeight={450}
                                 range={{
                                     min: Math.min(...thresholdNumbers.map(x => x.from!)),
                                     max: Math.max(...thresholdNumbers.map(x => x.to!)),

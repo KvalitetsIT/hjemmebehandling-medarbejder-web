@@ -61,7 +61,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         
-        console.log("thresholds: ",planDefinition.questionnaires?.flatMap(x => x.thresholds).flatMap(threshold => this.toExternal.mapThreshold(threshold)))
         
         try {
             const request: PatchPlanDefinitionOperationRequest = {
