@@ -142,59 +142,61 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                 } />
                 <Divider />
                 <CardContent>
-                    <Grid container sx={{ alignItems: "center" }}>
-                        <Grid item xs={12}>
-                            <Grid container spacing={2} >
-                                <Grid item xs={8}>
-                                    <Box width="100%">
-                                        <Typography>
-                                            Vælg et maksimum og et minimum for alarmgrænnserne.
-                                            Værdier bliver valideringspunkter for patientents indtastning.
-                                            Værdierne kan derfor ikke overskrives.
-                                            Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
-                                        </Typography>
-                                    </Box>
-                                    <Box bottom={0} position="absolute" marginBottom={4} width={"90em"}>
 
-                                        <Stack spacing={2}>
-                                            <Grid container>
-                                                <Grid item xs={4} textAlign="center">
-                                                    <Typography>Farve</Typography>
-                                                </Grid>
-                                                <Grid item xs={4} textAlign="center">
-                                                    <Typography>Fra</Typography>
-                                                </Grid>
-                                                <Grid item xs={4} textAlign="center">
-                                                    <Typography>Til (maksimum)</Typography>
-                                                </Grid>
-                                            </Grid>
-                                            {thresholdNumbers?.map((x, i) => {
-                                                return (
-                                                    <ThresholdInput
-                                                        threshold={x}
-                                                        onChange={(property) => this.updateTreshold(i, property)}
-                                                        onError={x => this.onError(i, x)}
-                                                    ></ThresholdInput>
-                                                )
-                                            })}
-                                        </Stack>
-                                    </Box>
+                    <Grid container>
+                        <Grid item xs={8}>
+
+                            <Box width="100%">
+                                <Typography>
+                                    Vælg et maksimum og et minimum for alarmgrænnserne.
+                                    Værdier bliver valideringspunkter for patientents indtastning.
+                                    Værdierne kan derfor ikke overskrives.
+                                    Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
+                                </Typography>
+                            </Box>
+                            <Stack width="100vh" bottom={0} position="absolute" marginBottom={4} spacing={2}>
+                                <Grid container>
+                                    <Grid item xs={4} textAlign="center">
+                                        <Typography>Farve</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} textAlign="center">
+                                        <Typography>Fra</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} textAlign="center">
+                                        <Typography>Til (maksimum)</Typography>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <QuestionChart
-                                        chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
-                                        showThresholds={true}
-                                        minimal={false}
-                                        minHeight={500}
-                                        range={{
-                                            min: Math.min(...thresholdNumbers.map(x => x.from!)), 
-                                            max: Math.max(...thresholdNumbers.map(x => x.to!)),
-                                        }}
-                                    ></QuestionChart>
-                                </Grid>
-                            </Grid>
+                                {thresholdNumbers?.map((x, i) => {
+                                    return (
+                                        <ThresholdInput
+                                            threshold={x}
+                                            onChange={(property) => this.updateTreshold(i, property)}
+                                            onError={x => this.onError(i, x)}
+                                        ></ThresholdInput>
+                                    )
+                                })}
+                            </Stack>
+
+
                         </Grid>
+                        <Grid xs={4}>
+
+                            <QuestionChart
+                                chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
+                                showThresholds={true}
+                                minimal={false}
+                                minHeight={400}
+                                range={{
+                                    min: Math.min(...thresholdNumbers.map(x => x.from!)),
+                                    max: Math.max(...thresholdNumbers.map(x => x.to!)),
+                                }}
+                            ></QuestionChart>
+
+
+                        </Grid>
+
                     </Grid>
+
                 </CardContent >
             </Card >
         )
@@ -215,18 +217,18 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
     }
 
     onError(index: number, error?: Error): void {
-        
-        
+
+
         const errors = this.state.errors
-        if(error) {
+        if (error) {
             errors[index] = error;
-                
-        }else{
+
+        } else {
             errors[index] = undefined;
         }
-        this.setState({ errors: errors});
-        
+        this.setState({ errors: errors });
+
         const errorStrings = errors.filter(x => x != undefined).map(x => x!.message)
-        this.props.onError(errorStrings.length > 0 ? new MissingDetailsError(errorStrings) : undefined) 
+        this.props.onError(errorStrings.length > 0 ? new MissingDetailsError(errorStrings) : undefined)
     }
 }
