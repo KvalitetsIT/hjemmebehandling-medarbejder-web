@@ -18,6 +18,7 @@ import BaseMapper from "./BaseMapper";
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
  */
 export default class InternalToExternalMapper extends BaseMapper {
+
     mapThreshold(threshold: ThresholdCollection | undefined): ThresholdDto[] {
         const toReturn: ThresholdDto[] = []
 
@@ -30,6 +31,7 @@ export default class InternalToExternalMapper extends BaseMapper {
 
             toReturn.push(currentThreshold)
         })
+        
         threshold?.thresholdOptions?.forEach(thresholdOption => {
             const currentThreshold: ThresholdDto = {}
             currentThreshold.questionId = threshold?.questionId;
@@ -40,9 +42,12 @@ export default class InternalToExternalMapper extends BaseMapper {
 
             toReturn.push(currentThreshold)
         })
-
+        
         return toReturn
     }
+
+
+
     mapCategory(category: CategoryEnum): ThresholdDtoTypeEnum | undefined {
         switch (category) {
             case CategoryEnum.GREEN:
@@ -63,6 +68,7 @@ export default class InternalToExternalMapper extends BaseMapper {
 
 
         const isRegularQuestion = internalQuestion instanceof Question
+     
         if (isRegularQuestion) {
             const enableWhen: EnableWhen<boolean>[] = internalQuestion.enableWhen ? [internalQuestion.enableWhen] : []
             return {

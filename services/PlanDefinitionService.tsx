@@ -3,7 +3,6 @@ import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandl
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { IPlanDefinitionService } from "./interfaces/IPlanDefinitionService";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import InternalToExternalMapper from "../apis/Mappers/InternalToExternalMapper";
 
 export default class PlanDefinitionService extends BaseService implements IPlanDefinitionService {
     backendApi: IBackendApi;
@@ -14,16 +13,21 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
     }
 
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+
+        for (const questionnaire of planDefinition.questionnaires!) {
+            
+            questionnaire.thresholds = questionnaire.thresholds?.filter(x => x.thresholdNumbers ? x.thresholdNumbers.length > 0 : false)
+
+
+        }
+        
         try {
             return this.backendApi.createPlanDefinition(planDefinition)
         } catch (error) {
             return this.HandleError(error)
         }
     }
-    async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
-        const toExternal = new InternalToExternalMapper();
-        console.log("thresholds: ",planDefinition.questionnaires?.flatMap(x => x.thresholds).flatMap(threshold => toExternal.mapThreshold(threshold)))
-        
+    async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {        
         try {
             return this.backendApi.updatePlanDefinition(planDefinition)
         } catch (error) {

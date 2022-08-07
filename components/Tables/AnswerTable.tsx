@@ -17,6 +17,7 @@ import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/Error
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 
+
 export interface Props {
     questionnaires: Questionnaire
     careplan: PatientCareplan
@@ -271,7 +272,10 @@ export class AnswerTable extends Component<Props, State> {
             return <TableCell></TableCell>
 
         const answer = this.questionnaireService.findAnswer(question, questionResponse);
+
         const thresholdCollection = this.props.questionnaires.thresholds?.find(x => x.questionId == question.Id);
+        console.log("thresholdCollection: ", thresholdCollection);
+
         const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
 
         return (

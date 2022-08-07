@@ -144,7 +144,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                 <CardContent>
 
                     <Grid container>
-                        <Grid item xs={8}>
+                        <Grid item xs={8} sm>
 
                             <Box width="100%">
                                 <Typography>
@@ -154,7 +154,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                     Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
                                 </Typography>
                             </Box>
-                            <Stack width="100vh" bottom={0} position="absolute" marginBottom={4} spacing={2}>
+                            
+                            <Stack width="62%" bottom={0} position="absolute" marginBottom={4} spacing={2}>
                                 <Grid container>
                                     <Grid item xs={4} textAlign="center">
                                         <Typography>Farve</Typography>
@@ -176,6 +177,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                     )
                                 })}
                             </Stack>
+                            
 
 
                         </Grid>

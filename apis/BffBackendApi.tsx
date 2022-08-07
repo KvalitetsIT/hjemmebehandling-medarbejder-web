@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -60,16 +60,22 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
-        
-        
         try {
+            
+            let thresholds: ThresholdDto[] = []
+            planDefinition.questionnaires?.
+            forEach(questionnaire => questionnaire.thresholds?.
+                forEach(threshold => {
+                    thresholds = thresholds.concat(this.toExternal.mapThreshold(threshold))
+                }))
+            
             const request: PatchPlanDefinitionOperationRequest = {
                 id: planDefinition.id!,
                 patchPlanDefinitionRequest: {
                     questionnaireIds: planDefinition.questionnaires?.map(questionnaire => questionnaire.id),
                     status: planDefinition.status as unknown as PatchPlanDefinitionRequestStatusEnum,
                     name: planDefinition.name,
-                    thresholds: planDefinition.questionnaires?.flatMap(x => x.thresholds).flatMap(threshold => this.toExternal.mapThreshold(threshold))
+                    thresholds: thresholds
                 }
             }
             await this.planDefinitionApi.patchPlanDefinition(request)
@@ -136,6 +142,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id))),
                 }
             }
+            
             await this.questionnaireApi.patchQuestionnaire(request)
         } catch (error) {
             return this.HandleError(error)
@@ -238,7 +245,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 statusesToInclude: statusesToInclude.map(status => status.toString())
             }
             const planDefinitions = await api.getPlanDefinitions(request);
-
+        
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
         } catch (error: unknown) {
             return await this.HandleError(error)
