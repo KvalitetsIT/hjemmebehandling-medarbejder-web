@@ -75,6 +75,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                 this.sortThresholds(planDefinitionToEdit)
 
                 this.setState({ planDefinition: planDefinitionToEdit });
+                console.log("componentDidMount", planDefinitionToEdit)
             }
         } catch (error) {
             this.setState(() => { throw error });

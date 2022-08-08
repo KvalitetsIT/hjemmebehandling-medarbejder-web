@@ -51,19 +51,19 @@ export default class ExternalToInternalMapper extends BaseMapper {
         carePlan.terminationDate = carePlanDto.endDate
         carePlan.organization = new SimpleOrganization();
         carePlan.organization.name = carePlanDto?.departmentName ?? 'Ukendt afdeling'
-
+        carePlanDto.questionnaires?.flatMap(x => { x.thresholds })
         return carePlan
     }
 
     findUnsatisfiedPlanDefinitions(careplanDto: CarePlanDto): PlanDefinitionDto[] {
         const unsatisfiedPlanDefinitions: PlanDefinitionDto[] = [];
-        
+
         if (careplanDto.questionnaires == undefined)
             return [];
 
         const now = new Date().getTime()
         const unsatisfiedQuestionnaires = careplanDto.questionnaires.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now);
-        
+
         if (careplanDto.planDefinitions == undefined)
             return [];
 
@@ -425,7 +425,11 @@ export default class ExternalToInternalMapper extends BaseMapper {
     mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto): Questionnaire {
         const questionnaire = this.mapQuestionnaire(wrapper!.questionnaire!);
         questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
-        questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
+
+        const thresholdDtosYesNo: ThresholdDto[] = wrapper.questionnaire?.questions?.flatMap(x => x.thresholds??[]) ?? [];
+        const thresholdMeasurements: ThresholdDto[] = wrapper.thresholds!;
+
+        questionnaire.thresholds = this.mapThresholdDtos(thresholdDtosYesNo.concat(thresholdMeasurements));
         return questionnaire;
     }
 
@@ -440,6 +444,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const callToActions: BaseQuestion[] = questionnaire.callToActions?.map(x => this.mapCallToAction(x)) ?? [];
         questionnaireResult.questions?.push(...callToActions);
         questionnaireResult.thresholds = questionnaire.questions?.flatMap(question => this.mapThresholdDtos(question.thresholds ?? []))
+
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
