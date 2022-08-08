@@ -82,9 +82,9 @@ export default class ThresholdInput extends Component<Props, State> {
                             name="category"
                             onChange={x => this.handleChange(x as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)}
                         >
-                            <MenuItem value={CategoryEnum.RED}>Red</MenuItem>
-                            <MenuItem value={CategoryEnum.YELLOW}>Yellow</MenuItem>
-                            <MenuItem value={CategoryEnum.GREEN}>Green</MenuItem>
+                            <MenuItem value={CategoryEnum.RED}>Rød</MenuItem>
+                            <MenuItem value={CategoryEnum.YELLOW}>Gul</MenuItem>
+                            <MenuItem value={CategoryEnum.GREEN}>Grøn</MenuItem>
                         </Select>
                         <TextField
                             fullWidth
