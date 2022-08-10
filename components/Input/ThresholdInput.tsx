@@ -45,7 +45,7 @@ export default class ThresholdInput extends Component<Props, State> {
                 break;
             }
             case "from": {
-                change.from = parseFloat(e.target.value);
+                console.log(e.target.value);
                 break;
             }
             case "to": {
@@ -88,7 +88,7 @@ export default class ThresholdInput extends Component<Props, State> {
                         </Select>
                         <TextField
                             fullWidth
-                            type={"number"}
+                            type={"text"}
                             sx={{
                                 "& fieldset": {
                                     borderRadius: 0
@@ -96,9 +96,11 @@ export default class ThresholdInput extends Component<Props, State> {
                             }}
                             inputProps={{
                                 step: ".01",
-                                style: { textAlign: 'center' }
+                                style: { textAlign: 'center' },
+                                inputMode: 'numeric',
+                                pattern: '[0-5]*'
                             }}
-                            InputLabelProps={{ shrink: false }}
+                            InputLabelProps={{ shrink: false  }}
                             onChange={(x) => this.handleChange(x)}
                             value={this.props.threshold.from}
                             name="from"
