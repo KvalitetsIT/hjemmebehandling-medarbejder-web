@@ -27,6 +27,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.createQuestionnaire(questionnaire);
     } catch (error) {
+      console.log("ERROR: " + error)
       return this.HandleError(error);
     }
   }

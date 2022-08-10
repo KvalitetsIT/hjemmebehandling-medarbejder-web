@@ -18,6 +18,7 @@ import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmeb
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 
 
+
 interface State {
     loading: boolean
     submitted: boolean
@@ -34,12 +35,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     static sectionName = "questionnaire";
     static contextType = ApiContext
     questionnaireService!: IQuestionnaireService
-    event: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
+    validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
 
     constructor(props: Props) {
         super(props);
 
         this.onValidation = this.onValidation.bind(this);
+        //this.submitQuestionnaire = this.submitQuestionnaire.bind(this);
 
         this.state = {
             loading: true,
@@ -54,8 +56,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     render(): JSX.Element {
 
         this.InitializeServices();
-        const contents = this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
-        return contents;
+
+        return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
     }
 
     InitializeServices(): void {
@@ -87,17 +89,19 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
     async submitQuestionnaire(): Promise<void> {
-
         this.setState({
             loading: true
         })
 
 
-        this.event.dispatchEvent()
+        await this.validateEvent.dispatchEvent()
 
         try {
             const valid = this.state.errors.size == 0
+
+
             if (valid) {
+
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
 
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
@@ -121,6 +125,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({
             loading: false
         })
+
+
     }
 
     /*
@@ -257,13 +263,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                             variant="outlined"
                                             onClick={() => {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
-                                                this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
                                             }}>Gem som kladde</Button>
                                         <Button
                                             variant="contained"
                                             onClick={() => {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                                this.submitQuestionnaire().then(() => this.event.dispatchEvent())
+                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
                                             }
                                             }>Gem</Button>
                                     </CardActions>

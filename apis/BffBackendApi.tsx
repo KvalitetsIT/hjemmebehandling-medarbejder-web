@@ -60,7 +60,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
-        console.log("planDefinition", planDefinition);
         try {
             let thresholds: ThresholdDto[] = []
             planDefinition.questionnaires?.
@@ -81,7 +80,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     thresholds: thresholds
                 }
             }
-            console.log("request",request);
             await this.planDefinitionApi.patchPlanDefinition(request)
         } catch (error) {
             return this.HandleError(error)
@@ -89,7 +87,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         try {
-            console.log(questionnaire)
             const request: CreateQuestionnaireOperationRequest = {
                 createQuestionnaireRequest: {
                     questionnaire: this.toExternal.mapQuestionnaireToDto(questionnaire)

@@ -12,7 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
-import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import {InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 
 interface Props {
     key: Key | null | undefined
@@ -34,10 +34,10 @@ interface State {
 export class QuestionEditCard extends Component<Props, State>{
     static defaultProps = {
     }
-    
-    
-  
-    
+
+
+
+
 
     constructor(props: Props) {
         super(props);
@@ -48,25 +48,24 @@ export class QuestionEditCard extends Component<Props, State>{
         this.forceCardUpdate = this.forceCardUpdate.bind(this);
     }
 
-
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0 ) errors.push( new InvalidInputModel("abbreviation", "forkortelse til kliniker mangler"))
-        return errors 
+        if (value.length <= 0) errors.push(new InvalidInputModel("abbreviation", "forkortelse til kliniker mangler"))
+        return errors
     };
 
     async validateQuestionName(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0 ) errors.push( new InvalidInputModel("question", "spørgsmål er endnu ikke udfyldt"))
-        return errors 
+        if (value.length <= 0) errors.push(new InvalidInputModel("question", "spørgsmål er endnu ikke udfyldt"))
+        return errors
     }
-
+/*
     async validateHelperText(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0 ) errors.push( new InvalidInputModel("helperText", "hjælpetekst er endnu ikke udfyldt"))
-        return errors 
+        if (value.length <= 0) errors.push(new InvalidInputModel("helperText", "hjælpetekst er endnu ikke udfyldt"))
+        return errors
     }
-
+*/
 
     modifyQuestion(questionModifier: (question: Question, newValue: string) => Question, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         const valueFromInput = input.currentTarget.value;
@@ -103,9 +102,9 @@ export class QuestionEditCard extends Component<Props, State>{
                                     {this.props.parentQuestion ?
                                         <Grid item xs={12}>
                                             <Box>
-                                                <EnableWhenSelect 
-                                                    enableWhen={this.state.question.enableWhen!} 
-                                                    parentQuestion={this.props.parentQuestion} 
+                                                <EnableWhenSelect
+                                                    enableWhen={this.state.question.enableWhen!}
+                                                    parentQuestion={this.props.parentQuestion}
                                                     sectionName={this.props.sectionName} />
                                             </Box>
                                         </Grid>
@@ -124,7 +123,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             onChange={input => this.modifyQuestion(this.setQuestion, input)}
                                             sectionName={this.props.sectionName}
                                         />
-                            
+
                                     </Grid>
                                     <Grid item xs="auto">
                                         <TextFieldValidation
@@ -164,16 +163,16 @@ export class QuestionEditCard extends Component<Props, State>{
                                         required
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
-                                        validate={this.validateHelperText}
+                                        //validate={this.validateHelperText}
                                     />
                                 </Grid>
                                 <Grid item xs>
-                            <QuestionTypeSelect 
-                                forceUpdate={this.forceCardUpdate} 
-                                question={this.state.question} 
-                                sectionName={this.props.sectionName}
-                                onValidation={this.props.onValidation}
-                            />
+                                    <QuestionTypeSelect
+                                        forceUpdate={this.forceCardUpdate}
+                                        question={this.state.question}
+                                        sectionName={this.props.sectionName}
+                                        onValidation={this.props.onValidation}
+                                    />
                                 </Grid>
                                 <Grid item xs>
                                     {this.state.question.type == QuestionTypeEnum.OBSERVATION ?
@@ -223,7 +222,7 @@ export class QuestionEditCard extends Component<Props, State>{
             return <></>
 
         const thresholdCollection = this.props.getThreshold(this.state.question)
-        
+
         return (
             <TableContainer>
                 <Table>
