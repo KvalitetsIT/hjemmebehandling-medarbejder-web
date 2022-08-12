@@ -66,6 +66,7 @@ export default class ThresholdInput extends Component<Props, State> {
                             name="from"
                             value={this.props.threshold.from}
                             decimalSeparator={","}
+                            decimalScale={2}
                             onValueChange={(x) => {
                                 return this.handleValueChange(x.floatValue, "from")
                             }}
@@ -81,8 +82,6 @@ export default class ThresholdInput extends Component<Props, State> {
                             inputProps={{
                                 step: ".01",
                                 style: { textAlign: 'center' },
-                                inputMode: 'numeric',
-                                pattern: '[0-5]*'
                             }}
                             InputLabelProps={{ shrink: false }}
                             
@@ -92,6 +91,7 @@ export default class ThresholdInput extends Component<Props, State> {
                             name="to"
                             value={this.props.threshold.to}
                             decimalSeparator={","}
+                            decimalScale={2}
                             onValueChange={(x) => {
                                 return this.handleValueChange(x.floatValue, "to")
                             }}
@@ -101,7 +101,6 @@ export default class ThresholdInput extends Component<Props, State> {
                             inputProps={{
                                 step: ".01",
                                 style: { textAlign: 'center' },
-
                             }}
                             sx={{
                                 "& fieldset": {
