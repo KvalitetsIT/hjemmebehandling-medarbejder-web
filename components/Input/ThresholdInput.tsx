@@ -99,7 +99,7 @@ export default class ThresholdInput extends Component<Props, State> {
 
 
                             fullWidth
-                            type={"text"}
+                            type={"number"}
                             sx={{
                                 "& fieldset": {
                                     borderRadius: 0
@@ -107,13 +107,18 @@ export default class ThresholdInput extends Component<Props, State> {
                             }}
                             inputProps={{
                                 step: ".01",
-                                style: { textAlign: 'center' },
-                                inputMode: 'numeric',
-                                pattern: '[0-5]*'
+                                style: { textAlign: 'center' }
                             }}
                             InputLabelProps={{ shrink: false }}
+<<<<<<< HEAD
                             
                         ></NumberFormat>
+=======
+                            onChange={(x) => this.handleChange(x)}
+                            value={this.props.threshold.from}
+                            name="from"
+                        ></TextField>
+>>>>>>> d9808544a7e79ee3ae7ea108ca521c9415ae0da8
 
                         <NumberFormat
                             name="to"
