@@ -75,7 +75,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                 this.sortThresholds(planDefinitionToEdit)
 
                 this.setState({ planDefinition: planDefinitionToEdit });
-                console.log("componentDidMount", planDefinitionToEdit)
+               
             }
         } catch (error) {
             this.setState(() => { throw error });
@@ -174,13 +174,13 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 continueButtonAction={
                                     async () => {
                                         this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
-                                        await this.submitQuestionnaire();
+                                        await this.submitPlandefinition();
                                     }}
                                 additionalButtonActions={[
                                     <Button
                                         onClick={async () => {
                                             this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT);
-                                            await this.submitQuestionnaire();
+                                            await this.submitPlandefinition();
                                         }}
                                         variant="outlined"
                                         title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
@@ -233,7 +233,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         )
     }
 
-    async submitQuestionnaire(): Promise<void> {
+    async submitPlandefinition(): Promise<void> {
         
         try {
             this.setState({

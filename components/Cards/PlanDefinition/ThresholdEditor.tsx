@@ -5,7 +5,7 @@ import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question"
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire"
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection"
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
-import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack   } from "@mui/material"
+import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack } from "@mui/material"
 import { Component } from "react"
 import ApiContext from "../../../pages/_context"
 import { MissingDetailsError } from "../../Errors/MissingDetailsError"
@@ -146,7 +146,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                     <Grid container>
                         <Grid item xs={8} sm>
 
-                            <Box width="100%">
+                            <Box marginRight={4}>
                                 <Typography>
                                     Vælg et maksimum og et minimum for alarmgrænnserne.
                                     Værdier bliver valideringspunkter for patientents indtastning.
@@ -154,8 +154,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                     Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
                                 </Typography>
                             </Box>
-                            
                             <Stack width="62%" bottom={0} position="absolute" marginBottom={4} spacing={2}>
+
                                 <Grid container>
                                     <Grid item xs={4} textAlign="center">
                                         <Typography>Farve</Typography>
@@ -177,7 +177,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
                                     )
                                 })}
                             </Stack>
-                            
+
 
 
                         </Grid>
