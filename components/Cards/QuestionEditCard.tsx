@@ -13,6 +13,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
 import {InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import { QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 interface Props {
     key: Key | null | undefined
@@ -26,6 +28,7 @@ interface Props {
     forceUpdate?: () => void
     onValidation: (uniqueId: number, error: InvalidInputModel[]) => void
     sectionName?: string
+    status?: BaseModelStatus | QuestionnaireStatus
 }
 interface State {
     question: Question
@@ -172,12 +175,13 @@ export class QuestionEditCard extends Component<Props, State>{
                                         question={this.state.question}
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
+                                        disabled={this.props.status == BaseModelStatus.ACTIVE}
                                     />
                                 </Grid>
                                 <Grid item xs>
                                     {this.state.question.type == QuestionTypeEnum.OBSERVATION ?
 
-                                        <QuestionMeasurementTypeSelect forceUpdate={this.forceCardUpdate} question={this.state.question} />
+                                        <QuestionMeasurementTypeSelect disabled={this.props.status == BaseModelStatus.ACTIVE} forceUpdate={this.forceCardUpdate} question={this.state.question} />
 
                                         : <></>}
                                 </Grid>
@@ -233,7 +237,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     {option.option == "true" ? "Ja" : "Nej"}
                                 </TableCell>
                                 <TableCell>
-                                    <CategorySelect category={option.category} onChange={(newCategory) => { option.category = newCategory }} />
+                                    <CategorySelect disabled={this.props.status == BaseModelStatus.ACTIVE} category={option.category} onChange={(newCategory) => { option.category = newCategory }} />
                                 </TableCell>
                             </TableRow>
                         )

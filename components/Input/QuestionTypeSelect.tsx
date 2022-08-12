@@ -15,6 +15,7 @@ export interface Props {
     forceUpdate?: () => void
     validate?: (value: string) => Promise<InvalidInputModel[]>
     onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
+    disabled: boolean
 }
 
 export interface State {
@@ -77,7 +78,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
                 value={this.state.question.type} 
                 onChange={this.handleChange}
                 error={hasError}
-                
+                disabled={this.props.disabled}
                 >
                     {this.allTypes.map(type => {
                         return (

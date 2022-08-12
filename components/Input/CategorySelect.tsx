@@ -9,6 +9,7 @@ import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum'
 export interface Props {
     category : CategoryEnum
     onChange : (value : CategoryEnum) => void
+    disabled: boolean
 }
 
 export interface State {
@@ -55,6 +56,7 @@ getDanishColornameFromCategory(category : CategoryEnum) : string{
   render () : JSX.Element{
     return (
         <Select
+        disabled={this.props.disabled}
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
         value={this.state.category.toString()}

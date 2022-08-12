@@ -216,6 +216,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                 question={question}
                                                 onValidation={this.onValidation}
                                                 sectionName={CreateQuestionnairePage.sectionName}
+                                                status={this.state.questionnaire?.status}
                                             />
                                         </Grid>
                                         {childQuestions?.map(childQuestion => {
@@ -236,6 +237,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                             forceUpdate={() => this.forceUpdate()}
                                                             onValidation={this.onValidation}
                                                             sectionName={CreateQuestionnairePage.sectionName}
+                                                            status={this.state.questionnaire?.status}
                                                         />
                                                     </Grid>
                                                 </>
