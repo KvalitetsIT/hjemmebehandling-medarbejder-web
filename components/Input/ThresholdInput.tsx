@@ -2,7 +2,7 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
 import { Stack, Select, MenuItem, TextField, FormControl, FormHelperText } from "@mui/material"
 import React from "react"
-import { ChangeEvent, Component } from "react"
+import { Component } from "react"
 import NumberFormat from "react-number-format"
 import { Color } from "../Cards/PlanDefinition/PlanDefinitionEditThresholds"
 
@@ -35,32 +35,6 @@ export default class ThresholdInput extends Component<Props, State> {
         if (category === CategoryEnum.GREEN)
             return Color.green
         return Color.grey
-    }
-
-    handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
-
-
-        const change: ThresholdNumber = this.props.threshold;
-        switch (e.target.name) {
-            case "category": {
-                change.category = parseInt(e.target.value) as CategoryEnum;
-                break;
-            }
-            case "from": {
-                change.from = parseFloat(e.target.value);
-                break;
-            }
-            case "to": {
-                change.to = parseFloat(e.target.value);
-                break;
-            }
-        }
-        const error = new Error("Feltet 'til' skal være større end: " + this.props.threshold.from)
-        const hasError = this.props.threshold.to! <= this.props.threshold.from! ? error : undefined
-
-        this.setState({ hasError: hasError })
-        this.props.onError(hasError)
-        this.props.onChange(e.target.name)
     }
 
 
@@ -99,7 +73,6 @@ export default class ThresholdInput extends Component<Props, State> {
 
 
                             fullWidth
-                            type={"number"}
                             sx={{
                                 "& fieldset": {
                                     borderRadius: 0
@@ -107,18 +80,13 @@ export default class ThresholdInput extends Component<Props, State> {
                             }}
                             inputProps={{
                                 step: ".01",
-                                style: { textAlign: 'center' }
+                                style: { textAlign: 'center' },
+                                inputMode: 'numeric',
+                                pattern: '[0-5]*'
                             }}
                             InputLabelProps={{ shrink: false }}
-<<<<<<< HEAD
                             
                         ></NumberFormat>
-=======
-                            onChange={(x) => this.handleChange(x)}
-                            value={this.props.threshold.from}
-                            name="from"
-                        ></TextField>
->>>>>>> d9808544a7e79ee3ae7ea108ca521c9415ae0da8
 
                         <NumberFormat
                             name="to"
