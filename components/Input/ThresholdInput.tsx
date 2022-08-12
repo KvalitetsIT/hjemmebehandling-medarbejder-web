@@ -118,9 +118,6 @@ export default class ThresholdInput extends Component<Props, State> {
                 </FormControl>
 
             </>
-
-
-
         )
     }
 
@@ -149,8 +146,6 @@ export default class ThresholdInput extends Component<Props, State> {
         this.props.onError(hasError)
         this.props.onChange(fieldName)
     }
-
-
 }
 
  

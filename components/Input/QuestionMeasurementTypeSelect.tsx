@@ -11,6 +11,7 @@ import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswe
 export interface Props {
     question: Question
     forceUpdate?: () => void
+    disabled?: boolean
 }
 
 export interface State {
@@ -62,7 +63,9 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
                 <Select
                     label="Vælg målingstype"
                     value={this.state.question.measurementType?.code}
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange}
+                    disabled={this.props.disabled}
+                    >
                     
                     {this.state.allMeasurementTypes.map((type) => {
                         return (
