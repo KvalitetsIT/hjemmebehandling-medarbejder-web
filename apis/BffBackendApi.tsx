@@ -257,7 +257,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try {
-            console.log(careplan, questionnaireToAdd)
             throw new NotImplementedError();
         } catch (error: unknown) {
             return await this.HandleError(error)
@@ -338,7 +337,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             };
 
             const questionnaireResponses = await api.getQuestionnaireResponsesByStatus(request);
-
             return questionnaireResponses.map(qr => this.toInternal.buildAnsweredTaskFromQuestionnaireResponse(qr))
         } catch (error: unknown) {
             return await this.HandleError(error)

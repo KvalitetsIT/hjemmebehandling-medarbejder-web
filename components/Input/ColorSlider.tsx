@@ -163,7 +163,7 @@ export class ColorSlider extends Component<Props, State> {
     }
 
     setSliderPoint(sliderPoints: number[]): void {
-        console.log(sliderPoints)
+        
         if (this.hasDuplicates(sliderPoints)) //No point should have same value
             return;
 

@@ -274,7 +274,6 @@ export class AnswerTable extends Component<Props, State> {
         const answer = this.questionnaireService.findAnswer(question, questionResponse);
 
         const thresholdCollection = this.props.questionnaires.thresholds?.find(x => x.questionId == question.Id);
-        console.log("thresholdCollection: ", thresholdCollection);
 
         const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
 

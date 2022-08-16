@@ -27,7 +27,6 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.createQuestionnaire(questionnaire);
     } catch (error) {
-      console.log("ERROR: " + error)
       return this.HandleError(error);
     }
   }
@@ -94,7 +93,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     try {
       this.ValidatePagination(page, pagesize);
       const apiResult = await this.backendApi.GetUnfinishedQuestionnaireResponseTasks(page, pagesize)
-      return apiResult.sort((a, b) => b.category - a.category)
+      return apiResult.sort((a, b) => b.category - a.category )
     } catch (error: unknown) {
       return this.HandleError(error);
     }

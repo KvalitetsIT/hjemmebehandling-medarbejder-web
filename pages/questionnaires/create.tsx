@@ -26,6 +26,7 @@ interface State {
     questionnaire?: Questionnaire
     editMode: boolean
     errors: Map<number, InvalidInputModel[]>
+    changes: string[] // The id's of the questions that havent been saved yet
 }
 
 interface Props {
@@ -50,13 +51,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             submitted: false,
             editMode: props.match.params.questionnaireId ? true : false,
             errors: new Map(),
+            changes: []
         }
     }
 
     render(): JSX.Element {
-
         this.InitializeServices();
-
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
     }
 
@@ -209,14 +209,14 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                 key={question.Id}
                                                 getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                 addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
-                                                removeQuestionAction={(questionToRemove) => this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))}
+                                                removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
                                                 moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
                                                 moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
                                                 forceUpdate={() => this.forceUpdate()}
                                                 question={question}
                                                 onValidation={this.onValidation}
                                                 sectionName={CreateQuestionnairePage.sectionName}
-                                                status={this.state.questionnaire?.status}
+                                                disabled={!this.state.changes.includes(question.Id!)}
                                             />
                                         </Grid>
                                         {childQuestions?.map(childQuestion => {
@@ -229,7 +229,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                             addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
-                                                            removeQuestionAction={(questionToRemove) => this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))}
+                                                            removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
                                                             moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, -1))}
                                                             moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
                                                             parentQuestion={question}
@@ -237,7 +237,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                             forceUpdate={() => this.forceUpdate()}
                                                             onValidation={this.onValidation}
                                                             sectionName={CreateQuestionnairePage.sectionName}
-                                                            status={this.state.questionnaire?.status}
+                                                            disabled={!this.state.changes.includes(childQuestion.Id!)}
                                                         />
                                                     </Grid>
                                                 </>
@@ -286,10 +286,17 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             </>
         )
     }
+    removeQuestion(questionToRemove: Question, questionnaire: Questionnaire): void {
+        this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))
+        this.removeChange(questionToRemove.Id!)
+    }
 
 
     generateQuestionId(): string {
-        return uuid();
+        
+        const newID = uuid();
+        
+        return newID;
     }
 
     addQuestion(referenceQuestion: Question | undefined, isParent: boolean, enableWhenQuestionId?: string): void {
@@ -307,8 +314,19 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
         const indexOfRefQuestion = beforeUpdate.questions.findIndex(q => q.Id == referenceQuestion?.Id)
         beforeUpdate.questions.splice(indexOfRefQuestion + 1, 0, newQuestion)
-
         this.setState({ questionnaire: beforeUpdate })
+        this.addChange(newQuestion.Id!)
+    }
+
+    addChange(id: string): void{
+        this.setState(previousState => ({
+            changes: [...previousState.changes, id]
+        }));
+    }
+    removeChange(id: string): void{
+        this.setState(previousState => ({
+            changes: previousState.changes.filter(x => x == id)
+        }));
     }
 
     setQuestionnaire(questionnaire: Questionnaire): void {

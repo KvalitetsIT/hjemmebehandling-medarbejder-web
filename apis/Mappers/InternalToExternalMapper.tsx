@@ -71,7 +71,6 @@ export default class InternalToExternalMapper extends BaseMapper {
      
         if (isRegularQuestion) {
             const enableWhen: EnableWhen<boolean>[] = internalQuestion.enableWhen ? [internalQuestion.enableWhen] : []
-            console.log("internalQuestion",internalQuestion)
             return {
                 enableWhen: enableWhen.map(ew => this.mapEnableWhen(ew)),
                 linkId: internalQuestion.Id,
