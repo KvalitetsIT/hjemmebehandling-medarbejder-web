@@ -257,6 +257,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try {
+            console.log(careplan);
+            console.log(questionnaireToAdd);
             throw new NotImplementedError();
         } catch (error: unknown) {
             return await this.HandleError(error)
