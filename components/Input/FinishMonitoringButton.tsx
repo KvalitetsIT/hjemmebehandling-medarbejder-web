@@ -42,7 +42,7 @@ export class FinishMonitoringButton extends React.Component<Props, State>{
                 </DialogContent>
 
                 <DialogActions>
-                    <Button autoFocus onClick={this.reloadPage}><AssignmentIcon />Patientoverblik</Button>
+                    <Button autoFocus onClick={this.reloadPage}>Gå til Opgaveliste</Button>
                 </DialogActions>
             </Dialog>
         )
