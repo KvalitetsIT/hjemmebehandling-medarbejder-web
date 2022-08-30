@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { ConfirmationButton } from './ConfirmationButton';

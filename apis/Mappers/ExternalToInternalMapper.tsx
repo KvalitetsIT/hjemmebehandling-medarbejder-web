@@ -195,7 +195,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const question = new Question();
         question.Id = questionDto.linkId!;
         question.abbreviation = questionDto.abbreviation;
-
+        question.deprecated = questionDto.deprecated;
         question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
 
         question.helperText = questionDto.helperText;

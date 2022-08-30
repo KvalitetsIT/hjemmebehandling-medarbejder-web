@@ -1,6 +1,6 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
-import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip } from '@mui/material';
+import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip, TableFooter } from '@mui/material';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
@@ -18,6 +18,7 @@ import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 
 
+
 export interface Props {
     questionnaires: Questionnaire
     careplan: PatientCareplan
@@ -30,6 +31,7 @@ export interface State {
     loading: boolean
     pagesize: number
     page: number
+    hidden: boolean
 }
 
 export class AnswerTable extends Component<Props, State> {
@@ -43,6 +45,7 @@ export class AnswerTable extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            hidden: true,
             thresholdModalOpen: false,
             questionnaireResponses: [],
             nextQuestionnaireResponses: [],
@@ -223,7 +226,7 @@ export class AnswerTable extends Component<Props, State> {
 
                                 </TableHead>
                                 <TableBody>
-                                    {allQuestions.map(question => {
+                                    {allQuestions.filter(q => !q.deprecated).map(question => {
                                         const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
                                         if (question.enableWhen != undefined)
                                             return <></>;
@@ -235,7 +238,30 @@ export class AnswerTable extends Component<Props, State> {
                                             </>
                                         )
                                     })}
+                                    
+                                    {!this.state.hidden ? allQuestions.filter(q => q.deprecated).map(question => {
+                                        const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
+                                        if (question.enableWhen != undefined)
+                                            return <></>;
+
+                                        return (
+                                            <>
+                                                {this.renderRow([question], questionnairesResponsesToShow)}
+                                                {this.renderRow(childQuestions, questionnairesResponsesToShow)}
+                                            </>
+                                        )
+                                    }):""}
                                 </TableBody>
+                                <TableFooter>
+                                    
+                                    <Button sx={{marginTop: 2}} variant="text" onClick={()=>{
+                                        const hidden = !this.state.hidden; 
+                                        this.setState( {
+                                            hidden: hidden
+                                        })
+                                    }}>{this.state.hidden ? "Vis" : "Skjul"} forældede spørgsmål og svar</Button>
+                                    
+                                </TableFooter>
                             </Table>
 
                         </IsEmptyCard>
@@ -248,14 +274,16 @@ export class AnswerTable extends Component<Props, State> {
         </>
         )
     }
-    renderRow(questionsToRender: Question[], questionnairesResponsesToShow: QuestionnaireResponse[]) : JSX.Element{
+    renderRow(questionsToRender: Question[], questionnairesResponsesToShow: QuestionnaireResponse[]): JSX.Element{
         return (
             <>
                 {questionsToRender.map(question => {
                     return (
                         <TableRow>
                             <TableCell>
-                                {question.abbreviation ?? question.question}
+                                <Typography color={question.deprecated ? "grey": "black"}>
+                                {question.abbreviation ?? question.question} {question.deprecated ? "(forældet)":""}
+                                </Typography>
                             </TableCell>
 
                             {questionnairesResponsesToShow.map(questionResponse => {
@@ -267,6 +295,7 @@ export class AnswerTable extends Component<Props, State> {
             </>
         )
     }
+    
     renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse): JSX.Element {
         if (questionResponse == undefined)
             return <TableCell></TableCell>
