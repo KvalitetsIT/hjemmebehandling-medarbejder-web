@@ -16,6 +16,7 @@ import { v4 as uuid } from 'uuid';
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 
 
@@ -263,6 +264,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
                                         <Button
                                             variant="outlined"
+                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
                                             onClick={() => {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
                                                 this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
