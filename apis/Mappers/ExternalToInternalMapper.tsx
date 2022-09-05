@@ -148,7 +148,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
            
             if (!threshold) {
                 threshold = new ThresholdCollection();
-                threshold.questionId = thresholdDto.questionId;
+                threshold.questionId = thresholdDto.questionId!;
             }
             const isValueBoolean = thresholdDto.valueBoolean !== undefined;
             if ( isValueBoolean ) {
@@ -196,7 +196,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const question = new Question();
         question.Id = questionDto.linkId!;
         question.abbreviation = questionDto.abbreviation;
-        question.deprecated = questionDto.deprecated;
+        question.deprecated = questionDto.deprecated!;
         question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
 
         question.helperText = questionDto.helperText;
