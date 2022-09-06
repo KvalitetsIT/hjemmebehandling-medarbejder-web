@@ -209,7 +209,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     <IconButton onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                         <DeleteOutlineIcon />
                                     </IconButton>
-                                    <Button sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
+                                    <Button disabled={this.props.parentQuestion != undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
                                         <AddCircleIcon />
                                         Tilføj nyt spørgsmål
                                     </Button>
