@@ -97,10 +97,11 @@ export class QuestionEditCard extends Component<Props, State>{
                     </Grid>
                     <Grid item xs={47 as GridSize}>
                         <CardHeader subheader={
-                            <>
-                                <Grid container marginTop={1} columns={12}>
-
+                            <><div>
+                                
                                     {this.props.parentQuestion ?
+
+                                     <Grid container marginTop={1} marginBottom={3} columns={12}>
                                         <Grid item xs={12}>
                                             <Box>
                                                 <EnableWhenSelect
@@ -109,8 +110,11 @@ export class QuestionEditCard extends Component<Props, State>{
                                                     sectionName={this.props.sectionName} />
                                             </Box>
                                         </Grid>
-                                        : <></>
+                                     </Grid>
+                                      : <></>
                                     }
+                                <Grid container marginTop={1} columns={12}>
+
                                     <Grid item xs>
                                         <TextFieldValidation
                                             label="Spørgsmål"
@@ -141,6 +145,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     </Grid>
 
                                 </Grid>
+                                </div>
                             </>
                         } />
                         {parentQuestionHasGoodType ? <></> :
