@@ -76,9 +76,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             const question = new Question();
             question.Id = this.generateQuestionId();
             questionnaire.questions = [question];
-            if (questionnaireId != undefined)
+            if (questionnaireId != undefined){
                 questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
-
+            } else {
+                this.addChange(question.Id);
+            }
             this.setState({ questionnaire: questionnaire })
         } catch (error) {
             this.setState(() => { throw error })
