@@ -751,6 +751,14 @@ const THEME = createTheme({
             margin: 0,
             padding: '10px 20px'
           }
+        },
+        {
+          // Create patient button
+          props: { className: "decline__button" },
+          style: {
+            margin: 0,
+            padding: '10px 20px'
+          }
         }
       ],
     },
