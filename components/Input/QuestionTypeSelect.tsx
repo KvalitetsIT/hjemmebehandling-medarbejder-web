@@ -6,16 +6,17 @@ import ApiContext from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
 export interface Props {
     sectionName?: string;
-    question: Question
-    forceUpdate?: () => void
-    validate?: (value: string) => Promise<InvalidInputModel[]>
-    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
-    disabled: boolean
+    question: Question;
+    forceUpdate?: () => void;
+    validate?: (value: string) => Promise<InvalidInputModel[]>;
+    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void;
+    disabled: boolean;
+    uniqueId: number;
 }
 
 export interface State {
@@ -56,7 +57,12 @@ export class QuestionTypeSelect extends Component<Props, State> {
     async validate(): Promise<void> {
         const question = this.state.question
         const errors: InvalidInputModel[] = []
-        if (question.type == undefined) errors.push( new InvalidInputModel("QuestionType", "Typen på spørgsmålet mangler"))
+        if (question.type == undefined) {
+            errors.push( new InvalidInputModel("QuestionType", "Typen på spørgsmålet mangler", CriticalLevelEnum.ERROR))
+        }
+        if (this.props.onValidation) {
+            this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel == CriticalLevelEnum.ERROR));
+        }
         
         this.setState({errors: errors}) 
     }

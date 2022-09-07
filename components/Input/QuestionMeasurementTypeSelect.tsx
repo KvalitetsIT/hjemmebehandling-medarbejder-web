@@ -3,20 +3,28 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { FormControl, InputLabel } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
 import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 
+import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+
 export interface Props {
+    sectionName?: string;
     question: Question
     forceUpdate?: () => void
+    validate?: (value: string) => Promise<InvalidInputModel[]>
+    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
     disabled?: boolean
+    uniqueId: number;
 }
 
 export interface State {
     question: Question
     allMeasurementTypes: MeasurementType[]
+    errors: InvalidInputModel[]
 }
 
 export class QuestionMeasurementTypeSelect extends Component<Props, State> {
@@ -28,9 +36,30 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
         super(props);
         this.state = {
             question: props.question,
-            allMeasurementTypes: []
+            allMeasurementTypes: [],
+            errors: []
         }
         this.handleChange = this.handleChange.bind(this)
+
+        window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
+            const data = (event as CustomEvent).detail as ValidateInputEventData
+            
+            if (props.sectionName == data.sectionName) {
+                await this.validate();
+            }
+        });
+    }
+
+    async validate(): Promise<void> {
+        const question = this.state.question
+        const errors: InvalidInputModel[] = []
+        if (question.measurementType == undefined) {
+            errors.push( new InvalidInputModel("QuestionType", "Målingstype skal angives",CriticalLevelEnum.ERROR))
+        }
+         if (this.props.onValidation) {
+            this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel == CriticalLevelEnum.ERROR));
+        }
+        this.setState({errors: errors}) 
     }
 
     forceTypeSelectUpdate(): void {
@@ -56,7 +85,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
 
     render(): JSX.Element {
         this.initialiseServices();
-
+        const hasError = this.state.errors.length > 0
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg målingstype</InputLabel>
@@ -64,6 +93,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
                     label="Vælg målingstype"
                     value={this.state.question.measurementType?.code}
                     onChange={this.handleChange}
+                    error={hasError}
                     disabled={this.props.disabled}
                     >
                     
@@ -73,6 +103,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
                         )
                     })}
                 </Select>
+                {hasError ? <FormHelperText error={true}>{this.state.errors[0]?.message}</FormHelperText> : <></>}
             </FormControl>
         )
     }
@@ -84,5 +115,6 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
         newQuestion.measurementType = clicked;
         this.forceTypeSelectUpdate();
         this.setState({ question: newQuestion })
+        this.validate();
     }
 }

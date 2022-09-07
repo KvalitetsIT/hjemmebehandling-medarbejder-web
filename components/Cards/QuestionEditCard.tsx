@@ -136,7 +136,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             value={this.props.question.abbreviation}
                                             variant="outlined"
                                             size="medium"
-                                            uniqueId={1}
+                                            uniqueId={2}
                                             onChange={input => this.modifyQuestion(this.setAbbreviation, input)}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateAbbreviation}
@@ -163,7 +163,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         value={this.props.question.helperText}
                                         variant="outlined"
                                         size="medium"
-                                        uniqueId={1}
+                                        uniqueId={3}
                                         minWidth={800}
                                         onChange={input => this.modifyQuestion(this.setHelperText, input)}
                                         required
@@ -179,12 +179,19 @@ export class QuestionEditCard extends Component<Props, State>{
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
                                         disabled={this.props.disabled}
+                                        uniqueId={4}
                                     />
                                 </Grid>
                                 <Grid item xs>
                                     {this.state.question.type == QuestionTypeEnum.OBSERVATION ?
-
-                                        <QuestionMeasurementTypeSelect disabled={this.props.disabled} forceUpdate={this.forceCardUpdate} question={this.state.question} />
+                                      <QuestionMeasurementTypeSelect  
+                                        sectionName={this.props.sectionName} 
+                                        onValidation={this.props.onValidation} 
+                                        disabled={this.props.disabled} 
+                                        forceUpdate={this.forceCardUpdate}
+                                        question={this.state.question} 
+                                        uniqueId={5}
+                                        />
 
                                         : <></>}
                                 </Grid>
