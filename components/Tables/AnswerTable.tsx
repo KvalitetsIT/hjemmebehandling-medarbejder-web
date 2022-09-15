@@ -226,10 +226,8 @@ export class AnswerTable extends Component<Props, State> {
 
                                 </TableHead>
                                 <TableBody>
-                                    {allQuestions.filter(q => !q.deprecated).map(question => {
+                                    {allQuestions.filter(q => q.enableWhen == undefined).map(question => {
                                         const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
-                                        if (question.enableWhen != undefined)
-                                            return <></>;
 
                                         return (
                                             <>
@@ -239,18 +237,6 @@ export class AnswerTable extends Component<Props, State> {
                                         )
                                     })}
                                     
-                                    {!this.state.hidden ? allQuestions.filter(q => q.deprecated).map(question => {
-                                        const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
-                                        if (question.enableWhen != undefined)
-                                            return <></>;
-
-                                        return (
-                                            <>
-                                                {this.renderRow([question], questionnairesResponsesToShow)}
-                                                {this.renderRow(childQuestions, questionnairesResponsesToShow)}
-                                            </>
-                                        )
-                                    }):""}
                                 </TableBody>
                                 <TableFooter>
                                     
@@ -278,6 +264,7 @@ export class AnswerTable extends Component<Props, State> {
         return (
             <>
                 {questionsToRender.map(question => {
+                    if (!question.deprecated || !this.state.hidden && question.deprecated)
                     return (
                         <TableRow>
                             <TableCell>
