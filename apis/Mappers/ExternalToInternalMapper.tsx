@@ -149,7 +149,9 @@ export default class ExternalToInternalMapper extends BaseMapper {
             if (!threshold) {
                 threshold = new ThresholdCollection();
                 threshold.questionId = thresholdDto.questionId!;
+                thresholds.push(threshold);
             }
+            
             const isValueBoolean = thresholdDto.valueBoolean !== undefined;
             if ( isValueBoolean ) {
                 const thresholdOption = this.CreateOption(
@@ -168,7 +170,6 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 );
                 threshold.thresholdNumbers!.push(thresholdNumber);
             }
-            thresholds.push(threshold);
         })
 
         return thresholds;
