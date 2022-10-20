@@ -426,7 +426,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
     mapQuestionnaireDto(wrapper: QuestionnaireWrapperDto): Questionnaire {
         const questionnaire = this.mapQuestionnaire(wrapper!.questionnaire!);
-        questionnaire.frequency = this.mapFrequencyDto(wrapper.frequency!);
+        questionnaire.frequency = wrapper.frequency != undefined ? this.mapFrequencyDto(wrapper.frequency) : undefined;
         questionnaire.thresholds = this.mapThresholdDtos(wrapper.thresholds!);
 
         return questionnaire;
