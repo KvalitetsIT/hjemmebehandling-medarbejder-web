@@ -12,6 +12,7 @@ import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitio
 import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { FormControl, FormHelperText } from '@mui/material';
+import { Frequency } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 
 export interface Props {
   careplan: PatientCareplan
@@ -81,6 +82,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     const careplan = this.state.editedCareplan;
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
     careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
+    careplan.questionnaires.forEach(q => q.frequency = new Frequency())
 
     this.setState({ editedCareplan: careplan })
     if (this.props.SetEditedCareplan){
