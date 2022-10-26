@@ -58,6 +58,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     render(): JSX.Element {
         this.InitializeServices();
+        console.log("state", this.state)
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
     }
 
@@ -228,6 +229,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
                                                     </Grid>
                                                     <Grid item xs={11}>
+                                                        
                                                         <QuestionEditCard
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -292,7 +294,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
     removeQuestion(questionToRemove: Question, questionnaire: Questionnaire): void {
         this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))
-        this.removeChange(questionToRemove.Id!)
+        //this.removeChange(questionToRemove.Id!)
     }
 
 
@@ -328,6 +330,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         }));
     }
     removeChange(id: string): void{
+        console.log("changes", this.state.changes)
         this.setState(previousState => ({
             changes: previousState.changes.filter(x => x == id)
         }));

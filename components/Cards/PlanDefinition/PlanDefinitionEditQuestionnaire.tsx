@@ -13,6 +13,7 @@ import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelS
 
 export interface Props {
     planDefinition: PlanDefinition
+    onChange: () => void
 }
 
 export interface State {
@@ -79,19 +80,16 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
         return (
 
             <Grid container textAlign="center" alignItems="center" spacing={2}>
-                <Grid item xs={4}>
-
+                <Grid item xs={5}>
                     {this.renderList("Valgte", this.state.planDefinition.questionnaires!)}
-
-
                 </Grid>
-                <Grid item xs={1}>
-                    <Button onClick={() => this.addToPlanDefinition()} variant='contained'>{"<"}</Button>
+                <Grid item xs={2}>
+                    <Button onClick={() => {this.addToPlanDefinition(); this.props.onChange()}} variant='contained'>{"<"}</Button>
                     <br />
                     <br />
-                    <Button onClick={() => this.removeFromPlanDefinition()} variant='contained'>{">"}</Button>
+                    <Button onClick={() => {this.removeFromPlanDefinition(); this.props.onChange()}} variant='contained'>{">"}</Button>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={5}>
 
                     {this.renderList("Tilgængelige", this.getQuestinnairesNotInPlandefinition())}
 
@@ -124,7 +122,6 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
             }
             newCheckedList.push(candidate);
         }
-
         return {
             newCheckedList: newCheckedList,
             wasFound: wasFound

@@ -12,6 +12,8 @@ export interface Props {
     additionalButtonActions?: JSX.Element[]
     previousButtonAction?: () => void
     continueButtonContentOverride?: JSX.Element | string
+    error?: boolean;
+    
 }
 
 export class AccordianWrapper extends Component<Props, {}> {
@@ -26,11 +28,12 @@ export class AccordianWrapper extends Component<Props, {}> {
 
     render(): JSX.Element {
         return (
-            <Accordion expanded={this.props.expanded} onChange={() => this.props.toggleExpandedButtonAction()}>
+            <Accordion sx={{border: 1, borderColor: this.props.error ? "red":"white"}} expanded={this.props.expanded} onChange={() => this.props.toggleExpandedButtonAction()}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
+                    sx={{borderBottom: this.props.expanded ? "3px solid #f2f2f2" : "0"}}
                 >
                     <Typography className="accordion__headline" sx={{ width: '33%', flexShrink: 0 }}>
                         {this.props.title}

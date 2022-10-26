@@ -79,7 +79,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography marginTop={2}>De valgte spørgeskemaer indeholder nedenstående Alarmgrænser</Typography>
+                    <Typography marginTop={2}>{this.state.planDefinition.questionnaires? "De valgte spørgeskemaer indeholder nedenstående Alarmgrænser" : "Der er endnu ikke valgt nogle spørgeskemaer"} </Typography>
                 </Grid>
 
                 {this.state.planDefinition.questionnaires?.map(questionnaire => {
