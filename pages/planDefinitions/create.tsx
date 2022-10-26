@@ -10,6 +10,7 @@ import { AccordianWrapper } from "../../components/Cards/PlanDefinition/Accordia
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
+import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext from "../_context";
@@ -171,17 +172,23 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.thresholds)}
                                 previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
                                 continueButtonContentOverride="Gem"
-                                continueButtonAction={
-                                    async () => {
-                                        this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
-                                        await this.submitPlandefinition();
-                                    }}
+                                continueButtonAction={()=>{
+                                    this.validate(
+                                        async () => {
+                                            this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
+                                            await this.submitPlandefinition();
+                                        }
+                                    )
+                                }}
                                 additionalButtonActions={[
                                     <Button
-                                        onClick={async () => {
-                                            this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT);
-                                            await this.submitPlandefinition();
-                                        }}
+                                        onClick={() => this.validate(
+                                                async () => {
+                                                    this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT);
+                                                    await this.submitPlandefinition();
+                                                })
+                                            }
+                                        disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
                                         variant="outlined"
                                         title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
                                         sx={{
@@ -287,5 +294,35 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             x.thresholds?.forEach(y => y.thresholdNumbers?.sort((a, b) => b.from! - a.from!))
         })
         return planDefinition;
+    }
+
+
+    validate(next: ()=> void){
+
+        this.setState({
+            loading: true
+        })
+
+        let valid: Boolean = false;
+
+        this.setState({
+            loading: false
+        })
+
+        try {
+            if(valid){
+                return next();
+            }else {
+                throw new MissingDetailsError(["test1", "test2"])
+            }
+        } catch (error) {
+            if (error instanceof BaseServiceError) {
+                this.setState({ errorToast: <ToastError severity="info" error={error} /> })
+            } else {
+                this.setState(() => { throw error })
+            }
+        }
+
+
     }
 }

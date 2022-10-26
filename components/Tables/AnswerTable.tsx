@@ -240,7 +240,7 @@ export class AnswerTable extends Component<Props, State> {
                                 </TableBody>
                                 <TableFooter>
                                     
-                                    <Button sx={{marginTop: 2}} variant="text" onClick={()=>{
+                                    <Button sx={{marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
                                         const hidden = !this.state.hidden; 
                                         this.setState( {
                                             hidden: hidden
