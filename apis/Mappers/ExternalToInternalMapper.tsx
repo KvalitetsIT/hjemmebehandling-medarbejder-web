@@ -55,52 +55,37 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return carePlan
     }
 
-    findUnsatisfiedPlanDefinitions(careplanDto: CarePlanDto): PlanDefinitionDto[] {
-        const unsatisfiedPlanDefinitions: PlanDefinitionDto[] = [];
-
-        if (careplanDto.questionnaires == undefined)
-            return [];
-
-        const now = new Date().getTime()
-        const unsatisfiedQuestionnaires = careplanDto.questionnaires.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now);
-
-        if (careplanDto.planDefinitions == undefined)
-            return [];
-
-        careplanDto.planDefinitions.forEach(planDefinition => {
-            planDefinition.questionnaires?.forEach(questionnaire => {
-                if (unsatisfiedQuestionnaires.some(uq => uq.questionnaire?.id == questionnaire.questionnaire?.id))
-                    unsatisfiedPlanDefinitions.push(planDefinition)
-            });
-        })
-        return unsatisfiedPlanDefinitions;
-    }
-
     buildUnansweredTaskFromCarePlan(carePlan: CarePlanDto): Task[] {
+        const now = new Date().getTime()
 
         const tasks: Task[] = []
-        carePlan.questionnaires?.forEach(questionnaireWrapper => {
-            this.findUnsatisfiedPlanDefinitions(carePlan).forEach(unsatisfiedPlanDefinition => {
+        carePlan.questionnaires?.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now).forEach(unsatisfiedQuestionnaire => {
+            //only unsatisfied questionnaires
+            
+            carePlan.planDefinitions?.forEach(planDefinition => {
+                // locate a plandefinition containing the unsatisfied questionnaire
+                if (planDefinition.questionnaires?.find(q => q.questionnaire?.id == unsatisfiedQuestionnaire.questionnaire?.id)) {
+                    const task = new Task()
 
-                const task = new Task()
-                task.cpr = carePlan.patientDto!.cpr!
-                task.planDefinitionName = unsatisfiedPlanDefinition?.title ?? "Patientgruppe mangler"
-                task.category = CategoryEnum.BLUE
-                task.firstname = carePlan.patientDto!.givenName
-                task.lastname = carePlan.patientDto!.familyName
-                task.questionnaireResponseStatus = undefined
-                task.carePlanId = carePlan.id
+                    task.cpr = carePlan.patientDto!.cpr!
+                    task.planDefinitionName = planDefinition?.title ?? "Patientgruppe mangler"
+                    task.category = CategoryEnum.BLUE
+                    task.firstname = carePlan.patientDto!.givenName
+                    task.lastname = carePlan.patientDto!.familyName
+                    task.questionnaireResponseStatus = undefined
+                    task.carePlanId = carePlan.id
 
-                const questionnaire = questionnaireWrapper.questionnaire!
-                task.questionnaireId = questionnaire.id!
-                task.questionnaireName = questionnaire.title!
-                //task.satisfiedUntil = questionnaireWrapper.satisfiedUntil
+                    const questionnaire = unsatisfiedQuestionnaire.questionnaire!
+                    task.questionnaireId = questionnaire.id!
+                    task.questionnaireName = questionnaire.title!
+                    task.satisfiedUntil = unsatisfiedQuestionnaire.satisfiedUntil
 
-                task.answeredTime = undefined
-                task.responseLinkEnabled = false
+                    task.answeredTime = undefined
+                    task.responseLinkEnabled = false
 
-                //  if (task.isUnsatisfied())
-                tasks.push(task)
+                    //  if (task.isUnsatisfied())
+                    tasks.push(task)
+                }
             })
         });
 
