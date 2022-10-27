@@ -25,8 +25,7 @@ interface State {
     openAccordians: boolean[]
     editMode: boolean
     error?: Error
-    activeAccordian: number
-    currentValidationScheme: number
+
 }
 
 interface Props {
@@ -46,6 +45,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     constructor(props: Props) {
         super(props)
         this.validate = this.validate.bind(this)
+        this.submitPlandefinition = this.submitPlandefinition.bind(this)
         const accordian: boolean[] = [];
         accordian[AccordianRowEnum.generelInfo] = true;
         accordian[AccordianRowEnum.attachQuestionnaire] = false;
@@ -60,8 +60,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             openAccordians: accordian,
             planDefinition: newPlanDefinition,
             editMode: props.match.params.plandefinitionid ? true : false,
-            activeAccordian: 0,
-            currentValidationScheme: 0
         }
     }
 
@@ -87,9 +85,11 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.setState({ loading: false })
     }
 
-    toggleAccordian(page: number): void {
-        this.setState({activeAccordian: page })
-        this.setState({currentValidationScheme: page})
+    toggleAccordian(page: AccordianRowEnum, overrideExpanded?: boolean): void {
+        this.closeAllAccordians();
+        const oldAccordians = this.state.openAccordians
+        oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
+        this.setState({ openAccordians: oldAccordians })
     }
 
     closeAllAccordians(): void {
@@ -100,19 +100,35 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.setState({ openAccordians: openAccordians })
     }
 
-    expandNextPage(): void {
-       this.setState({currentValidationScheme: this.state.currentValidationScheme + 1})
-        this.setState({activeAccordian: this.state.activeAccordian + 1 })
+    expandNextPage(currentPage: AccordianRowEnum): void {
+
+        this.toggleAccordian(currentPage, false)
+        switch (currentPage) {
+            case AccordianRowEnum.generelInfo:
+                this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
+                break
+            case AccordianRowEnum.attachQuestionnaire:
+                this.toggleAccordian(AccordianRowEnum.thresholds)
+                break
+        }
     }
 
-    expandPreviousPage(): void {
-        this.setState({currentValidationScheme: this.state.currentValidationScheme -1})
-        this.setState({activeAccordian: this.state.activeAccordian - 1 })
+    expandPreviousPage(currentPage: AccordianRowEnum): void {
+
+        this.toggleAccordian(currentPage, false)
+        switch (currentPage) {
+            case AccordianRowEnum.attachQuestionnaire:
+                this.toggleAccordian(AccordianRowEnum.generelInfo)
+                break
+            case AccordianRowEnum.thresholds:
+                this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
+                break
+        }
     }
 
     render(): JSX.Element {
-        
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
+
     }
 
 
@@ -121,13 +137,13 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
         if (this.state.submitted) return (<Redirect push to={"/plandefinitions"} />)
 
-        
-        const validationScheme = 
+
+        const validationScheme =
             yup.object().shape({
                 name: yup.string().required("'Navn' er påkrævet"),
                 questionnaires: yup.array().min(1, "Minimum et spørgeskema forventes"),
             })
-        
+
 
 
         return (
@@ -135,23 +151,25 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                 <Formik
                     initialValues={this.state.planDefinition}
-                    onSubmit={async (values: FormikValues) => {
-                        
-                        try {
-                            await this.validate(values)
-                        } catch (error) {
-                            // render the toast / snackbar
+                    onSubmit={(values: FormikValues) => {
+
+                        const modifiedPlanDefinition = this.state.planDefinition
+                        modifiedPlanDefinition.name = values.name
+                        modifiedPlanDefinition.questionnaires = values.questionnaires
+
+                        this.setState({planDefinition: modifiedPlanDefinition})
+
+                        this.validate(values).then(() => this.submitPlandefinition()).catch(error => {
+                            console.log("error:", error)
                             this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })
-                        }
+                        })
                     }}
-                    validate={
-                        (s) => console.log(s)
-                    }
+                    
                     
                     validationSchema={validationScheme}
 
                 >
-                    {({ errors, validateField, setFieldTouched, submitForm}) => (
+                    {({ errors, validateField, setFieldTouched, submitForm }) => (
 
                         <Form>
                             <Grid container spacing={2}>
@@ -161,12 +179,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 <Grid item xs>
                                     <AccordianWrapper
                                         error={errors.name != undefined}
-                                        expanded={this.state.activeAccordian == AccordianRowEnum.generelInfo}
+                                        expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
                                         title="Patientgruppe"
                                         toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
                                         continueButtonAction={() => {
                                             validateField("name")
-                                            this.expandNextPage()
+                                            this.expandNextPage(AccordianRowEnum.generelInfo)
                                         }
                                         }>
                                         <PlanDefinitionEdit errors={errors} planDefinition={this.state.planDefinition} />
@@ -174,7 +192,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                                     <AccordianWrapper
                                         error={errors.questionnaires != undefined}
-                                        expanded={this.state.activeAccordian == 1}
+                                        expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
                                         title="Tilknyt spørgeskema"
                                         toggleExpandedButtonAction={() => {
                                             validateField("name")
@@ -182,9 +200,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                         }}
                                         continueButtonAction={() => {
                                             validateField("questionnaires")
-                                            this.expandNextPage()
+                                            this.expandNextPage(AccordianRowEnum.attachQuestionnaire)
                                         }}
-                                        previousButtonAction={() => this.expandPreviousPage()}
+                                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
                                     >
                                         <PlanDefinitionEditQuestionnaire onChange={() => setFieldTouched("questionnaires")} planDefinition={this.state.planDefinition} />
 
@@ -192,27 +210,30 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
 
                                     <AccordianWrapper
-                                        expanded={this.state.activeAccordian == 2}
+                                        expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
                                         title="Alarmgrænser"
                                         toggleExpandedButtonAction={() => {
                                             validateField("name")
                                             validateField("questionnaires")
                                             this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
-                                        previousButtonAction={() => this.expandPreviousPage()}
+                                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
                                         continueButtonContentOverride="Gem"
-                                        continueButtonAction={() => {                                
+                                        continueButtonAction={() => {
+
+                                            this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
                                             submitForm()
                                         }}
                                         additionalButtonActions={[
                                             <Button
                                                 onClick={() => {
                                                     this.setStatusOnPlanDefinition(BaseModelStatus.DRAFT);
+                                                    submitForm()
                                                     //this.submitPlandefinition();
                                                 }
 
                                                 }
-                                                type="submit"
+
                                                 disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
                                                 variant="outlined"
                                                 title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
@@ -242,7 +263,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                                         <Divider />
                                         <CardContent>
-                                            <Stepper orientation="vertical" activeStep={this.state.activeAccordian}>
+                                            <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
                                                 <Step key="plandefinitionGeneral">
                                                     <StepLabel error={errors.name != undefined}>Udfyld patientgruppens navn</StepLabel>
                                                 </Step>
@@ -267,28 +288,44 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         )
     }
 
+    getActiveStep(): number {
+        const openAccordians = this.state.openAccordians;
+        if (openAccordians[AccordianRowEnum.generelInfo] == true)
+            return 0
+        if (openAccordians[AccordianRowEnum.attachQuestionnaire] == true)
+            return 1
+        if (openAccordians[AccordianRowEnum.thresholds] == true)
+            return 2
+
+        return 0
+    }
 
 
     async validate(values: FormikValues): Promise<void> {
 
         const missingDetails: string[] = [];
 
+
         if (this.state.planDefinition.questionnaires == undefined || this.state.planDefinition.questionnaires.length <= 0) {
             missingDetails.push("Manglende spørgeskema")
         }
 
-        const plandefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.ACTIVE])
+        const plandefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.DRAFT, BaseModelStatus.ACTIVE])
 
-        if (!plandefinitions.every(planDefinition => { planDefinition.name != values.name })) {
+        if (plandefinitions.map(plandefinition => plandefinition.name).includes(values.name)) {
             missingDetails.push("Navnet '" + values.name + "' er allerede i brug")
         }
 
         if (missingDetails.length > 0) throw new MissingDetailsError(missingDetails);
 
+
         return;
     }
 
     async submitPlandefinition(): Promise<void> {
+
+        console.log("Submitting: ", this.state.planDefinition)
+
         if (this.state.planDefinition && this.state.editMode)
             await this.planDefinitionService.updatePlanDefinition(this.state.planDefinition);
 
@@ -298,6 +335,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.setState({
             submitted: true
         })
+
     }
 
     setStatusOnPlanDefinition(newStatus: PlanDefinitionStatus | BaseModelStatus): void {
