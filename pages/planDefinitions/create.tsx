@@ -245,13 +245,15 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             >Gem som kladde</Button>
                                         ]}
                                     >
-
+ 
                                         <PlanDefinitionEditThresholds
                                             onError={(error) => {
                                                 this.setState({ error: error })
                                             }}
                                             planDefinition={this.state.planDefinition} />
                                     </AccordianWrapper>
+
+                                    
 
 
                                 </Grid>

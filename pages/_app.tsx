@@ -580,6 +580,9 @@ const THEME = createTheme({
           ":first-of-type": {
             borderRadius: 20
           },
+          ":last-of-type": {
+            borderRadius: 20
+          },
           ":before": {
             backgroundColor: 'transparent'
           }

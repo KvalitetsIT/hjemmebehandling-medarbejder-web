@@ -28,7 +28,7 @@ export class AccordianWrapper extends Component<Props, {}> {
 
     render(): JSX.Element {
         return (
-            <Accordion sx={{border: 1, borderColor: this.props.error ? "red":"white"}} expanded={this.props.expanded} onChange={() => this.props.toggleExpandedButtonAction()}>
+            <Accordion sx={{ border: 1, borderColor: this.props.error ? "red":"white"}} expanded={this.props.expanded} onChange={() => this.props.toggleExpandedButtonAction()}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
