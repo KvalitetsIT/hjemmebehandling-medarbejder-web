@@ -273,7 +273,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                     <StepLabel error={errors.questionnaires != undefined}>Tilknyt spørgeskema</StepLabel>
                                                 </Step>
                                                 <Step key="setThresholds">
-                                                    <StepLabel>Sætte alarmgrænser</StepLabel>
+                                                    <StepLabel error={this.state.error!= undefined}>Sætte alarmgrænser</StepLabel>
                                                 </Step>
 
                                             </Stepper>
@@ -312,12 +312,16 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             missingDetails.push("Manglende spørgeskema")
         }
 
+        if (this.state.error ) {
+            missingDetails.push("Fejl i alarmgrænser")
+        }
+
+
         const plandefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.DRAFT, BaseModelStatus.ACTIVE])
 
         const names = plandefinitions.filter(plandefinition => plandefinition.id != this.state.planDefinition.id).map(plandefinition => plandefinition.name);
 
         if (names.includes(values.name)) {
-
             missingDetails.push("Navnet '" + values.name + "' er allerede i brug")
         }
 
