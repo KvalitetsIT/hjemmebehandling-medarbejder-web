@@ -11,5 +11,6 @@ interface Props {
 export default class EditPatientInfo extends Component<Props> {
     render() : JSX.Element {
         return <CreatePatient {...this.props}/>
+        
     }
 }

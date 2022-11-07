@@ -13,6 +13,9 @@ import { FormControl, TextField } from '@mui/material';
 import daLocale from 'date-fns/locale/da';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
+import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { PlanDefinitionSelect } from './PlanDefinitionSelect';
+import { IValidationService } from '../../services/interfaces/IValidationService';
 
 export interface Props {
   questionnaire: Questionnaire
@@ -29,6 +32,9 @@ export interface State {
 export class FrequencyTableRow extends Component<Props, State> {
   static displayName = FrequencyTableRow.name;
   static contextType = ApiContext
+  validationService!: IValidationService
+  validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(PlanDefinitionSelect.sectionName))
+
 
   getAllDays(): DayEnum[] {
     return [
@@ -57,6 +63,7 @@ export class FrequencyTableRow extends Component<Props, State> {
       questionnaire: props.questionnaire,
       deadineTime: deadlineTime,
     }
+
   }
 
   SetDays(daysSelected: string | DayEnum[]): void {
@@ -78,10 +85,6 @@ export class FrequencyTableRow extends Component<Props, State> {
   }
 
   render(): JSX.Element {
-    return this.renderContent();
-  }
-
-  renderContent(): JSX.Element {
     return (
       <>
         <TableRow>
@@ -98,9 +101,12 @@ export class FrequencyTableRow extends Component<Props, State> {
           </TableCell> */}
 
           <TableCell>
-            
+
             <FormControl required>
-              <MultiSelect id='frequenzy' onChange={(a) => this.SetDays(a as [])} value={this.state.questionnaire.frequency!.days}>
+              <MultiSelect id='frequenzy' onChange={(a) => {
+                this.SetDays(a as []);
+                this.validateEvent.dispatchEvent()
+              }} value={this.state.questionnaire.frequency!.days}>
                 {this.getAllDays().map(day => {
                   return <MultiSelectOption key={"option" + day} value={day}>{day}</MultiSelectOption>
                 })}
@@ -110,15 +116,15 @@ export class FrequencyTableRow extends Component<Props, State> {
 
 
           <TableCell>
-            
-            <Select onChange={(a) => this.SetFrequency(a.target.value)} value={this.state.questionnaire.frequency!.repeated}>
+
+            <Select fullWidth onChange={(a) => {this.SetFrequency(a.target.value); this.validateEvent.dispatchEvent()}} value={this.state.questionnaire.frequency!.repeated}>
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
 
             </Select>
           </TableCell>
-          <TableCell> 
+          <TableCell>
             <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
               <TimePicker
                 disabled
@@ -137,6 +143,7 @@ export class FrequencyTableRow extends Component<Props, State> {
       </>
     )
   }
+
 
 
 

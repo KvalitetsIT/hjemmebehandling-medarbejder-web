@@ -64,19 +64,23 @@ export class QuestionnaireListSimple extends Component<Props, State> {
 
 
         return (
-            <Box marginLeft={1.5}  marginTop={2}>
+            <Box marginLeft={1.5} marginTop={2}>
                 <Typography variant='h6'>
-                    Spørgeskemaer
+                    Spørgeskemaer og frekvens
                     <ErrorBoundary rerenderChildren={false}>
                     </ErrorBoundary>
                 </Typography>
 
                 <Table>
 
-                    {questionnaries.length === 0 ? "Ingen spørgeskemaer for monitoreringsplanen endnu" : ""}
+                    {questionnaries.length === 0 ? "Monitoreringsplanen har endnu ingen spørgeskemaer" : ""}
                     {questionnaries.map(questionnaire => {
                         return (
-                            <FrequencyTableRow patient={this.props.careplan.patient!} firstCell={<div>{questionnaire.name}</div>} questionnaire={questionnaire}></FrequencyTableRow>
+                            <FrequencyTableRow
+                                patient={this.props.careplan.patient!}
+                                firstCell={<div>{questionnaire.name}</div>}
+                                questionnaire={questionnaire}
+                            ></FrequencyTableRow>
                         )
                     })}
 

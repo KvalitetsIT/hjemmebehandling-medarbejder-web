@@ -75,6 +75,18 @@ export default class ValidationService extends BaseService implements IValidatio
         }
 
         const questionnaires = planDefinitions.flatMap(plandefinition => plandefinition.questionnaires);
+
+        const frequencesWasSet = questionnaires.every(questionnaire => questionnaire?.frequency?.days && questionnaire?.frequency?.days.length > 0)
+
+        console.log("frekens:", questionnaires.map(questionnaire => questionnaire?.frequency?.days))
+        if(!frequencesWasSet) {
+            const error = new InvalidInputModel(propName, "Frekvensen for de angivede spørgeskemaer mangler")
+            errors.push(error)
+        }
+
+
+
+
         const duplicates = questionnaires.filter((item, index) => questionnaires.findIndex(q => q?.id == item?.id) != index);
         if (duplicates.length > 0) {
             const error = new InvalidInputModel(propName, "Spørgeskema '" + duplicates[0]?.name + "' er indeholdt i flere af de valgte patientgrupper")
