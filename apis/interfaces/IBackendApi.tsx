@@ -1,7 +1,7 @@
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
@@ -57,9 +57,11 @@ export interface IBackendApi {
     GetAllMeasurementTypes(): Promise<MeasurementType[]>;
 
     /**
-   * Returns all questionnaires
-   */
-    GetAllQuestionnaires(): Promise<Questionnaire[]>
+     * Returns all questionnaires based on filter
+     * @param statusesToInclude If empty, all statuses are included in response
+     * @returns all plandefinitions in system complying to the filters
+     */
+    GetAllQuestionnaires(statusesToInclude: (QuestionnaireStatus | BaseModelStatus)[]): Promise<Questionnaire[]>
 
     /**
      * Fetches all plandefinitions based on filters

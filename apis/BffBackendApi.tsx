@@ -1,7 +1,7 @@
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 
@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnairesRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -97,9 +97,13 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return this.HandleError(error)
         }
     }
-    async GetAllQuestionnaires(): Promise<Questionnaire[]> {
+
+    async GetAllQuestionnaires(statusesToInclude: (QuestionnaireStatus | BaseModelStatus)[] ): Promise<Questionnaire[]> {
         try {
-            const response = await this.questionnaireApi.getQuestionnaires();
+            const request: GetQuestionnairesRequest = {
+                statusesToInclude: statusesToInclude.map(status => status.toString())
+            }
+            const response = await this.questionnaireApi.getQuestionnaires(request);
             const toReturn = response.map(x => this.toInternal.mapQuestionnaire(x))
             return toReturn;
         } catch (error) {

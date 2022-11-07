@@ -2,7 +2,7 @@ import { IBackendApi } from "../apis/interfaces/IBackendApi";
 import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { BaseQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
@@ -10,6 +10,7 @@ import { IQuestionnaireService } from "./interfaces/IQuestionnaireService";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 
 
@@ -31,9 +32,9 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
 
-  async GetAllQuestionnaires(): Promise<Questionnaire[]> {
+  async GetAllQuestionnaires(statusesToInclude: (QuestionnaireStatus | BaseModelStatus)[]): Promise<Questionnaire[]> {
     try {
-      return await this.backendApi.GetAllQuestionnaires();
+      return await this.backendApi.GetAllQuestionnaires(statusesToInclude);
     } catch (error) {
       return this.HandleError(error)
     }

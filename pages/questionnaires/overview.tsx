@@ -43,7 +43,7 @@ class QuestionnaireOverviewPage extends React.Component<{}, State> {
 
     async populateCareplans(): Promise<void> {
         try {
-            const questionnaires = await this.questionnaireService.GetAllQuestionnaires();
+            const questionnaires = await this.questionnaireService.GetAllQuestionnaires([]);
             this.setState({ questionnaires: questionnaires })
         } catch (error) {
             this.setState(() => { throw error })

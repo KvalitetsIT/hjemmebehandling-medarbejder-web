@@ -50,7 +50,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
 
     async componentDidMount(): Promise<void> {
         try {
-            const planDefinitions = await this.questionnaireService.GetAllQuestionnaires()
+            const planDefinitions = await this.questionnaireService.GetAllQuestionnaires([BaseModelStatus.ACTIVE])
             this.setState({ allQuestionnaires: planDefinitions })
         } catch (error) {
             this.setState(() => { throw error })
