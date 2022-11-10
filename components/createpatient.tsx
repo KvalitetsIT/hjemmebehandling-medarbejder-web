@@ -30,11 +30,11 @@ import { AccordianWrapper } from './Cards/PlanDefinition/AccordianWrapper';
  */
 export interface Props {
   editmode: boolean,
-  openAccordians?: boolean[]
+  activeAccordian: PatientAccordianSectionsEnum,
   match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
 }
 
-export enum CreatePatientSectionsEnum {
+export enum PatientAccordianSectionsEnum {
   patientInfo,
   primaryContactInfo,
   planDefinitionInfo
@@ -44,7 +44,7 @@ export enum CreatePatientSectionsEnum {
  * 
  */
 export interface State {
-  openAccordians: boolean[]
+  activeAccordian: PatientAccordianSectionsEnum;
   patient?: PatientDetail;
   careplan?: PatientCareplan;
   newCareplanId?: string;
@@ -71,16 +71,11 @@ export default class CreatePatient extends Component<Props, State> {
 
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
-    const accordian: boolean[] = [];
-    accordian[CreatePatientSectionsEnum.patientInfo] = true;
-    accordian[CreatePatientSectionsEnum.primaryContactInfo] = false;
-    accordian[CreatePatientSectionsEnum.planDefinitionInfo] = false;
-
     this.state = {
       loading: true,
       submitted: false,
       errorToast: (<></>),
-      openAccordians: props.openAccordians ?? accordian,
+      activeAccordian: props.activeAccordian ?? PatientAccordianSectionsEnum.patientInfo,
       validating: false,
     }
 
@@ -90,45 +85,12 @@ export default class CreatePatient extends Component<Props, State> {
     this.patientService = this.context.patientService;
   }
 
-  toggleAccordian(page: CreatePatientSectionsEnum, overrideExpanded?: boolean): void {
-    this.closeAllAccordians();
-    const oldAccordians = this.state.openAccordians
-    oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
-    this.triggerValidationOnInputs(page);
-    this.setState({ openAccordians: oldAccordians })
-  }
-
-  closeAllAccordians(): void {
-    const openAccordians = this.state.openAccordians
-    openAccordians[CreatePatientSectionsEnum.patientInfo] = false;
-    openAccordians[CreatePatientSectionsEnum.primaryContactInfo] = false;
-    openAccordians[CreatePatientSectionsEnum.planDefinitionInfo] = false;
-    this.setState({ openAccordians: openAccordians })
-  }
-
-  expandNextPage(currentPage: CreatePatientSectionsEnum): void {
-
-    this.toggleAccordian(currentPage, false)
-    switch (currentPage) {
-      case CreatePatientSectionsEnum.patientInfo:
-        this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)
-        break
-      case CreatePatientSectionsEnum.primaryContactInfo:
-        this.toggleAccordian(CreatePatientSectionsEnum.planDefinitionInfo)
-        break
-    }
-  }
-
-  expandPreviousPage(currentPage: CreatePatientSectionsEnum): void {
-
-    this.toggleAccordian(currentPage, false)
-    switch (currentPage) {
-      case CreatePatientSectionsEnum.primaryContactInfo:
-        this.toggleAccordian(CreatePatientSectionsEnum.patientInfo)
-        break
-      case CreatePatientSectionsEnum.planDefinitionInfo:
-        this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)
-        break
+  toggleAccordian(page: PatientAccordianSectionsEnum): void {
+    if (page != this.state.activeAccordian) {
+      this.triggerValidationOnInputs(page);
+      this.setState({
+        activeAccordian: page
+      })
     }
   }
 
@@ -144,18 +106,16 @@ export default class CreatePatient extends Component<Props, State> {
       return (<div>Fandt ikke patienten</div>)
 
     return (
-      <form
-        noValidate
-        onBlur={() => this.forceUpdate()}  >
+      <form noValidate>
         <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
           <Grid item spacing={5} xs={10} minWidth={500}>
             <ErrorBoundary>
               <AccordianWrapper
-                key={CreatePatientSectionsEnum.patientInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.openAccordians[CreatePatientSectionsEnum.patientInfo]}
+                key={PatientAccordianSectionsEnum.patientInfo + "_" + this.state.patient.cpr}
+                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.patientInfo}
                 title="Patient"
-                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.patientInfo)}
-                continueButtonAction={() => this.expandNextPage(CreatePatientSectionsEnum.patientInfo)}>
+                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}
+                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}>
 
                 <Typography>
                   <PatientEditCard
@@ -171,12 +131,12 @@ export default class CreatePatient extends Component<Props, State> {
             <ErrorBoundary>
 
               <AccordianWrapper
-                key={CreatePatientSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.openAccordians[CreatePatientSectionsEnum.primaryContactInfo]}
+                key={PatientAccordianSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
+                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.primaryContactInfo}
                 title="Primærkontakt"
-                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.primaryContactInfo)}
-                continueButtonAction={() => this.expandNextPage(CreatePatientSectionsEnum.primaryContactInfo)}
-                previousButtonAction={() => this.expandPreviousPage(CreatePatientSectionsEnum.primaryContactInfo)}>
+                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
+                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}
+                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}>
                 <Typography>
                   <ContactEditCard
                     onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
@@ -187,12 +147,12 @@ export default class CreatePatient extends Component<Props, State> {
 
             <ErrorBoundary>
               <AccordianWrapper
-                key={CreatePatientSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.openAccordians[CreatePatientSectionsEnum.planDefinitionInfo]}
+                key={PatientAccordianSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
+                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.planDefinitionInfo}
                 title="Patientgruppe"
-                toggleExpandedButtonAction={() => this.toggleAccordian(CreatePatientSectionsEnum.planDefinitionInfo)}
+                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
                 continueButtonAction={() => this.submitPatient()}
-                previousButtonAction={() => this.expandPreviousPage(CreatePatientSectionsEnum.planDefinitionInfo)}
+                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
                 continueButtonContentOverride={"Gem patient"}>
                 <Typography>
                   <PlanDefinitionSelect onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan} />
@@ -254,11 +214,14 @@ export default class CreatePatient extends Component<Props, State> {
 
 
   getActiveStep(): number {
-    if (this.state.openAccordians[CreatePatientSectionsEnum.patientInfo])
-      return 1
-    if (this.state.openAccordians[CreatePatientSectionsEnum.primaryContactInfo])
-      return 2
-    return 3;
+    switch (this.state.activeAccordian) {
+      case PatientAccordianSectionsEnum.patientInfo:
+        return 1;
+      case PatientAccordianSectionsEnum.primaryContactInfo:
+        return 2;
+      default:
+        return 3;
+    }
   }
 
 
@@ -340,18 +303,18 @@ export default class CreatePatient extends Component<Props, State> {
     marginTop: 2
   }
 
-  triggerValidationOnInputs(page: CreatePatientSectionsEnum): void {
+  triggerValidationOnInputs(page: PatientAccordianSectionsEnum): void {
 
-    if (page == CreatePatientSectionsEnum.patientInfo) {
+    if (page == PatientAccordianSectionsEnum.patientInfo) {
       new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
     }
 
-    if (page == CreatePatientSectionsEnum.primaryContactInfo) {
+    if (page == PatientAccordianSectionsEnum.primaryContactInfo) {
       new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
       new ValidateInputEvent(new ValidateInputEventData(ContactEditCard.sectionName)).dispatchEvent();
 
     }
-    if (page == CreatePatientSectionsEnum.planDefinitionInfo) {
+    if (page == PatientAccordianSectionsEnum.planDefinitionInfo) {
       new ValidateInputEvent(new ValidateInputEventData(PatientEditCard.sectionName)).dispatchEvent();
       new ValidateInputEvent(new ValidateInputEventData(ContactEditCard.sectionName)).dispatchEvent();
       new ValidateInputEvent(new ValidateInputEventData(PlanDefinitionSelect.sectionName)).dispatchEvent();

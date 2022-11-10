@@ -1,9 +1,9 @@
 import { Component } from "react"
-import CreatePatient from "../../../../components/createpatient"
+import CreatePatient, { PatientAccordianSectionsEnum } from "../../../../components/createpatient"
 
 interface Props {
     editmode: boolean,
-    openAccordians?: boolean[]
+    activeAccordian: PatientAccordianSectionsEnum,
     match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
   }
 

@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
-import { CreatePatientSectionsEnum } from '../createpatient';
+import { PatientAccordianSectionsEnum } from '../createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
@@ -48,22 +48,6 @@ export class Layout extends Component<{}, State> {
   }
 
   render(): JSX.Element {
-
-    const accoridansPatient: boolean[] = [];
-    accoridansPatient[CreatePatientSectionsEnum.patientInfo] = true;
-    accoridansPatient[CreatePatientSectionsEnum.primaryContactInfo] = false;
-    accoridansPatient[CreatePatientSectionsEnum.planDefinitionInfo] = false;
-
-    const accoridansContact: boolean[] = [];
-    accoridansContact[CreatePatientSectionsEnum.patientInfo] = false;
-    accoridansContact[CreatePatientSectionsEnum.primaryContactInfo] = true;
-    accoridansContact[CreatePatientSectionsEnum.planDefinitionInfo] = false;
-
-    const accoridansPlanDefinition: boolean[] = [];
-    accoridansPlanDefinition[CreatePatientSectionsEnum.patientInfo] = false;
-    accoridansPlanDefinition[CreatePatientSectionsEnum.primaryContactInfo] = false;
-    accoridansPlanDefinition[CreatePatientSectionsEnum.planDefinitionInfo] = true;
-
     return (
       <>
 
@@ -94,10 +78,10 @@ export class Layout extends Component<{}, State> {
                     <Route path="/patients/:cpr/careplans/:careplanId" render={(props) => <PatientCareplans {...props} />} />
                     <Route path="/patients/:cpr/careplans" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
-                    <Route path="/patients/:cpr/edit/patient" render={(props) => <EditPatientInfo key="patient" editmode={true} openAccordians={accoridansPatient} {...props} />} />
-                    <Route path="/patients/:cpr/edit/contact" render={(props) => <EditPatientContact key="contact" editmode={true} openAccordians={accoridansContact} {...props} />} />
-                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <EditPatientPlandefinition key="planDefinition" editmode={true} openAccordians={accoridansPlanDefinition} {...props} />} />
-                    <Route path="/patients/:cpr/edit" render={(props) => <EditPatientInfo key="edit" editmode={true} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/patients/:cpr/edit/patient" render={(props) => <EditPatientInfo key="patient" editmode={true} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...props} />} />
+                    <Route path="/patients/:cpr/edit/contact" render={(props) => <EditPatientContact key="contact" editmode={true} activeAccordian={PatientAccordianSectionsEnum.primaryContactInfo} {...props} />} />
+                    <Route path="/patients/:cpr/edit/plandefinition" render={(props) => <EditPatientPlandefinition key="planDefinition" editmode={true} activeAccordian={PatientAccordianSectionsEnum.planDefinitionInfo} {...props} />} />
+                    <Route path="/patients/:cpr/edit" render={(props) => <EditPatientInfo key="edit" editmode={true} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...props} />} />
                     <Route path="/patients/:cpr" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
 
                     <Route path="/plandefinitions/:plandefinitionid/edit" render={(props) => <CreatePlandefinition {...props} />} />
@@ -114,7 +98,7 @@ export class Layout extends Component<{}, State> {
                     <Route path="/inactive" render={(props) => <Redirect to={"/inactive/1"} {...props} />} />
 
                     <Route path="/patients"><Patients /></Route>
-                    <Route path="/newpatient" render={(props) => <NewPatientPage editmode={false} openAccordians={accoridansPatient} {...props} />} />
+                    <Route path="/newpatient" render={(props) => <NewPatientPage editmode={false} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...props} />} />
 
                     <Route path="/"><Patients /></Route>
                   </Switch>
