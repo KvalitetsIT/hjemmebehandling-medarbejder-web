@@ -135,8 +135,8 @@ export default class CreatePatient extends Component<Props, State> {
                 expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.primaryContactInfo}
                 title="Primærkontakt"
                 toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
-                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}
-                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}>
+                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
+                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}>
                 <Typography>
                   <ContactEditCard
                     onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
@@ -155,7 +155,10 @@ export default class CreatePatient extends Component<Props, State> {
                 previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
                 continueButtonContentOverride={"Gem patient"}>
                 <Typography>
-                  <PlanDefinitionSelect onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })} SetEditedCareplan={this.SaveCareplan} careplan={this.state.careplan} />
+                  <PlanDefinitionSelect
+                    onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })}
+                    SetEditedCareplan={this.SaveCareplan}
+                    careplan={this.state.careplan} />
                   <QuestionnaireListSimple careplan={this.state.careplan} />
                 </Typography>
               </AccordianWrapper>
@@ -277,6 +280,7 @@ export default class CreatePatient extends Component<Props, State> {
   }
 
   SaveCareplan(editedCareplan: PatientCareplan): void {
+    console.log("SaveCareplan", editedCareplan)
     this.setState({ careplan: editedCareplan })
     this.forceUpdate();
   }

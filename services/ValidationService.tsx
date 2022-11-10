@@ -4,6 +4,7 @@ import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinit
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import { IValidationService } from "./interfaces/IValidationService";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 
 export default class ValidationService extends BaseService implements IValidationService {
     async ValidateZipCode(zipCode: string): Promise<InvalidInputModel[]> {
@@ -66,6 +67,7 @@ export default class ValidationService extends BaseService implements IValidatio
     }
 
     async ValidatePlanDefinitions(planDefinitions: PlanDefinition[]): Promise<InvalidInputModel[]> {
+        
         const errors: InvalidInputModel[] = []
         const propName = "Patientgruppe"
 
@@ -76,17 +78,6 @@ export default class ValidationService extends BaseService implements IValidatio
 
         const questionnaires = planDefinitions.flatMap(plandefinition => plandefinition.questionnaires);
 
-        const frequencesWasSet = questionnaires.every(questionnaire => questionnaire?.frequency?.days && questionnaire?.frequency?.days.length > 0)
-
-        console.log("frekens:", questionnaires.map(questionnaire => questionnaire?.frequency?.days))
-        if(!frequencesWasSet) {
-            const error = new InvalidInputModel(propName, "Frekvensen for de angivede spørgeskemaer mangler")
-            errors.push(error)
-        }
-
-
-
-
         const duplicates = questionnaires.filter((item, index) => questionnaires.findIndex(q => q?.id == item?.id) != index);
         if (duplicates.length > 0) {
             const error = new InvalidInputModel(propName, "Spørgeskema '" + duplicates[0]?.name + "' er indeholdt i flere af de valgte patientgrupper")
@@ -96,6 +87,34 @@ export default class ValidationService extends BaseService implements IValidatio
 
         return errors
     }
+
+
+
+
+    async ValidateQuestionnaires(questionnaires: Questionnaire[]): Promise<InvalidInputModel[]> {
+    
+        const errors: InvalidInputModel[] = []
+        const propName = "Patientgruppe"
+
+        const daysWasSet = questionnaires.every(questionnaire => questionnaire?.frequency?.days && questionnaire?.frequency?.days.length > 0)
+        if(!daysWasSet) {
+            const error = new InvalidInputModel(propName, "Dagene for de angivede spørgeskemaer mangler")
+            errors.push(error)
+        }
+
+        const frequencesWasSet =  questionnaires.every(questionnaire => questionnaire?.frequency?.repeated)
+        if(!frequencesWasSet) {
+            const error = new InvalidInputModel(propName, "Frekvensen for de angivede spørgeskemaer mangler")
+            errors.push(error)
+        }
+
+        return errors
+    }
+
+
+
+
+
 
 
     private CalculateCPR(cpr: string): boolean {

@@ -1,5 +1,6 @@
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 
 /**
  * ValidationService 
@@ -35,5 +36,14 @@ export interface IValidationService {
      * @returns List of errors
      */
     ValidateZipCode : (zipCode : string) => Promise<InvalidInputModel[]>;
+
+
+    /**
+     * Validate a list questionnaires
+     * @param questionnaires to validate
+     * @returns List of errors
+     */
+    ValidateQuestionnaires : (questionnaires: Questionnaire[]) => Promise<InvalidInputModel[]>
+
 }
   

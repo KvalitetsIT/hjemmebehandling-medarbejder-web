@@ -13,6 +13,7 @@ import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelS
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { FormControl, FormHelperText } from '@mui/material';
 import { Frequency } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 
 export interface Props {
   careplan: PatientCareplan
@@ -44,7 +45,9 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       allPlanDefinitions: [],
       errors: []
     }
+
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelection = this.handleSelection.bind(this);
 
     window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
       const data = (event as CustomEvent).detail as ValidateInputEventData
@@ -75,22 +78,51 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   }
 
 
+  private mergeQuestionnaires(a: Questionnaire[], b: Questionnaire[]) : Questionnaire[] {
+    return a.concat(b.filter(q =>  !a.map(q => q.id).includes(q.id)))
+  }
 
 
   async handleSelection(ids: string[]): Promise<void> {
+
+    console.log("ids", ids)
+
     const plandefinitions = ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
+    console.log("plandefinitions", plandefinitions)
+
     const careplan = this.state.editedCareplan;
+
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
-    careplan.questionnaires = plandefinitions ? plandefinitions.flatMap(pd => pd?.questionnaires ?? []) : []
-    careplan.questionnaires.forEach(q => q.frequency = new Frequency())
+    
+    //careplan.questionnaires = careplan.questionnaires.concat()
+
+
+    const selectedQuestionnaires = plandefinitions.flatMap(pd =>pd?.questionnaires ? pd.questionnaires as Questionnaire[] : []);
+    const existingQuestionnanires = careplan.questionnaires.filter(q => selectedQuestionnaires.map(q => q.id).includes( q.id));
+    
+    
+    console.log("existingQuestionnanires", existingQuestionnanires)
+    console.log("selectedQuestionnaires", selectedQuestionnaires)
+
+    careplan.questionnaires = this.mergeQuestionnaires(existingQuestionnanires,  selectedQuestionnaires)
+    
+    console.log("merged", careplan.questionnaires)
+    
+
+
+
+    careplan.questionnaires.forEach(q => q.frequency = q.frequency ? q.frequency :  new Frequency()  )
+
+
+
 
     this.setState({ editedCareplan: careplan })
-    if (this.props.SetEditedCareplan){
+    if (this.props.SetEditedCareplan) {
       this.props.SetEditedCareplan(careplan);
     }
 
-      await this.validate()
-    }
+    await this.validate()
+  }
 
   async componentDidMount(): Promise<void> {
     try {
@@ -113,7 +145,12 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
 
   async validate(): Promise<void> {
-    const errors = await this.validationService.ValidatePlanDefinitions(this.state.editedCareplan.planDefinitions);
+    const plandefinitionErrors = await this.validationService.ValidatePlanDefinitions(this.state.editedCareplan.planDefinitions);
+    const questionnaireErrors = await this.validationService.ValidateQuestionnaires(this.state.editedCareplan.questionnaires);
+
+    const errors = plandefinitionErrors.concat(questionnaireErrors);
+
+
     this.setState({ errors: errors })
     if (this.props.onValidation)
       this.props.onValidation(errors);

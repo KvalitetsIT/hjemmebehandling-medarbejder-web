@@ -80,6 +80,7 @@ export class QuestionnaireListSimple extends Component<Props, State> {
                                 patient={this.props.careplan.patient!}
                                 firstCell={<div>{questionnaire.name}</div>}
                                 questionnaire={questionnaire}
+                                key={questionnaire.id}
                             ></FrequencyTableRow>
                         )
                     })}
