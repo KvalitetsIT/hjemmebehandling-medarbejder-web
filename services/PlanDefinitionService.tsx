@@ -30,7 +30,7 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
 
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {        
         try {
-            return this.backendApi.updatePlanDefinition(planDefinition)
+            return await this.backendApi.updatePlanDefinition(planDefinition)
         } catch (error) {
             return this.HandleError(error)
         }
