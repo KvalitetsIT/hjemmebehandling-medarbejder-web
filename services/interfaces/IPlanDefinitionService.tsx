@@ -23,6 +23,13 @@ export interface IPlanDefinitionService {
     updatePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
 
     /**
+     * Updates a plandefinition
+     * Uses the id of the provided plandefinition to target what plandefinition to be changed
+     * @param planDefinition the desired plandefinition
+     */
+     retirePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
+
+    /**
      * Fetches all plandefinitions based on filters
      * @param statusesToInclude If empty, all statuses are included in response
      * @returns all plandefinitions in system complying to the filters

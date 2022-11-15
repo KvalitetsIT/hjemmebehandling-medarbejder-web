@@ -3,7 +3,7 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { CallToActionCard } from "../../components/Cards/CallToActionCard";
@@ -44,6 +44,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
         this.onValidation = this.onValidation.bind(this);
         //this.submitQuestionnaire = this.submitQuestionnaire.bind(this);
+        this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
 
         this.state = {
             loading: true,
@@ -265,24 +266,38 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
                                     </CardContent>
                                     <Divider />
-                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                        <Button
-                                            variant="outlined"
-                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
-                                            onClick={() => {
-                                                this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
-                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
-                                            }}>Gem som kladde</Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
-                                            }
-                                            }>Gem</Button>
-                                    </CardActions>
-
-
+                                    <TableContainer component={Card}>
+                                        <Table sx={{ width:'100%' }} aria-label="simple table">
+                                            <TableRow>
+                                                <TableCell align="left">
+                                                    {this.state.editMode ? 
+                                                    <CardActions sx={{ display: "flex", justifyContent: "left" }}>
+                                                        <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Deaktiver spørgeskema</Button>
+                                                    </CardActions>
+                                                    :
+                                                    null
+                                                    }
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                                        <Button variant="outlined"
+                                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
+                                                            onClick={() => {
+                                                                this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
+                                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                            }}
+                                                        >Gem som kladde</Button>
+                                                        <Button variant="contained"
+                                                            onClick={() => {
+                                                                this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
+                                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                            }}
+                                                        >Gem</Button>
+                                                    </CardActions>
+                                                </TableCell>
+                                            </TableRow>
+                                        </Table>
+                                    </TableContainer>
                                 </Card>
                             </Grid>
                         </Grid>
@@ -292,6 +307,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             </>
         )
     }
+
     removeQuestion(questionToRemove: Question, questionnaire: Questionnaire): void {
         this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))
         //this.removeChange(questionToRemove.Id!)
@@ -360,6 +376,19 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const modifiedQuestionnaire = questionnaire;
         modifiedQuestionnaire.status = Questionnaire.stringToQuestionnaireStatus(newValue)
         return modifiedQuestionnaire;
+    }
+
+    deactivateQuestionnaire(): void {
+        if (this.state.questionnaire && this.state.editMode) {
+            this.questionnaireService.retireQuestionnaire(this.state.questionnaire)
+                .then(() => {
+                    this.setState({ submitted: true });
+                })
+                .catch((error) => {
+                    this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })
+                })
+            ;
+        }
     }
 }
 

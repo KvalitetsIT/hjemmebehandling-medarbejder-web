@@ -687,6 +687,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async SetThresholdOption(thresholdId: string, threshold: ThresholdOption): Promise<void> {
 
     }
+    async retireQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+
+    }
+    async retirePlanDefinition(plandefinition: PlanDefinition): Promise<void> {
+
+    }
 
 
 

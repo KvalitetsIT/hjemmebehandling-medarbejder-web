@@ -20,11 +20,19 @@ export interface IBackendApi {
     createPlanDefinition(planDefinition: PlanDefinition): Promise<void>;
 
     /**
-         * Updates a plandefinition
-         * Uses the id of the provided plandefinition to target what plandefinition to be changed
-         * @param planDefinition the desired plandefinition
-         */
+      * Updates a plandefinition
+      * Uses the id of the provided plandefinition to target what plandefinition to be changed
+      * @param planDefinition the desired plandefinition
+      */
     updatePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
+
+    /**
+      * Retires a plandefinition
+      * Uses the id of the provided plandefinition to target what plandefinition to be retired
+      * @param planDefinition the desired plandefinition
+      */
+     retirePlanDefinition(planDefinition: PlanDefinition): Promise<void>;
+    
 
     /**
      * Creates a questionnaire from provided paramater
@@ -38,6 +46,13 @@ export interface IBackendApi {
      * @param questionnaire the questionnaire to be updated
      */
     updateQuestionnaire(questionnaire: Questionnaire): Promise<void>;
+
+    /**
+     * Assumes the questionnaire already exists
+     * Retires the given questionnaire based on the id of the provided entity
+     * @param questionnaire the questionnaire to be retired
+     */
+     retireQuestionnaire(questionnaire: Questionnaire): Promise<void>;
 
     /**
      * Resets a patient-users password

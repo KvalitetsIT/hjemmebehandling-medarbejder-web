@@ -15,21 +15,18 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import * as yup from 'yup';
 
-
+interface Props {
+    match: { params: { plandefinitionid?: string } }
+}
 
 interface State {
     loading: boolean
     submitted: boolean
     errorToast: JSX.Element
     planDefinition: PlanDefinition
-    openAccordians: boolean[]
+    activeAccordian: AccordianRowEnum
     editMode: boolean
     error?: Error
-
-}
-
-interface Props {
-    match: { params: { plandefinitionid?: string } }
 }
 
 enum AccordianRowEnum {
@@ -46,10 +43,8 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         super(props)
         this.validate = this.validate.bind(this)
         this.submitPlandefinition = this.submitPlandefinition.bind(this)
-        const accordian: boolean[] = [];
-        accordian[AccordianRowEnum.generelInfo] = true;
-        accordian[AccordianRowEnum.attachQuestionnaire] = false;
-        accordian[AccordianRowEnum.thresholds] = false;
+        this.deactivatePlandefinition = this.deactivatePlandefinition.bind(this)
+
         const newPlanDefinition = new PlanDefinition()
         newPlanDefinition.questionnaires = []
         this.state = {
@@ -57,7 +52,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             submitted: false,
             errorToast: (<></>),
             error: undefined,
-            openAccordians: accordian,
+            activeAccordian: AccordianRowEnum.generelInfo,
             planDefinition: newPlanDefinition,
             editMode: props.match.params.plandefinitionid ? true : false,
         }
@@ -85,52 +80,17 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.setState({ loading: false })
     }
 
-    toggleAccordian(page: AccordianRowEnum, overrideExpanded?: boolean): void {
-        this.closeAllAccordians();
-        const oldAccordians = this.state.openAccordians
-        oldAccordians[page] = overrideExpanded ?? !oldAccordians[page]
-        this.setState({ openAccordians: oldAccordians })
-    }
-
-    closeAllAccordians(): void {
-        const openAccordians = this.state.openAccordians
-        openAccordians[AccordianRowEnum.generelInfo] = false
-        openAccordians[AccordianRowEnum.thresholds] = false
-        openAccordians[AccordianRowEnum.attachQuestionnaire] = false
-        this.setState({ openAccordians: openAccordians })
-    }
-
-    expandNextPage(currentPage: AccordianRowEnum): void {
-
-        this.toggleAccordian(currentPage, false)
-        switch (currentPage) {
-            case AccordianRowEnum.generelInfo:
-                this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
-                break
-            case AccordianRowEnum.attachQuestionnaire:
-                this.toggleAccordian(AccordianRowEnum.thresholds)
-                break
-        }
-    }
-
-    expandPreviousPage(currentPage: AccordianRowEnum): void {
-
-        this.toggleAccordian(currentPage, false)
-        switch (currentPage) {
-            case AccordianRowEnum.attachQuestionnaire:
-                this.toggleAccordian(AccordianRowEnum.generelInfo)
-                break
-            case AccordianRowEnum.thresholds:
-                this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
-                break
+    toggleAccordian(page: AccordianRowEnum): void {
+        if (page != this.state.activeAccordian) {
+          this.setState({
+            activeAccordian: page
+          })
         }
     }
 
     render(): JSX.Element {
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
-
     }
-
 
     renderCareplanTab(): JSX.Element {
         this.InitializeServices();
@@ -148,7 +108,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
         return (
             <>
-
                 <Formik
                     initialValues={this.state.planDefinition}
                     onSubmit={(values: FormikValues) => {
@@ -165,9 +124,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                         })
                     }}
                     
-                    
                     validationSchema={validationScheme}
-
                 >
                     {({ errors, validateField, setFieldTouched, submitForm }) => (
 
@@ -179,12 +136,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                 <Grid item xs>
                                     <AccordianWrapper
                                         error={errors.name != undefined}
-                                        expanded={this.state.openAccordians[AccordianRowEnum.generelInfo]}
+                                        expanded={this.state.activeAccordian == AccordianRowEnum.generelInfo}
                                         title="Patientgruppe"
                                         toggleExpandedButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
                                         continueButtonAction={() => {
                                             validateField("name")
-                                            this.expandNextPage(AccordianRowEnum.generelInfo)
+                                            this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
                                         }
                                         }>
                                         <PlanDefinitionEdit errors={errors} planDefinition={this.state.planDefinition} />
@@ -192,7 +149,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                                     <AccordianWrapper
                                         error={errors.questionnaires != undefined}
-                                        expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
+                                        expanded={this.state.activeAccordian == AccordianRowEnum.attachQuestionnaire}
                                         title="Tilknyt spørgeskema"
                                         toggleExpandedButtonAction={() => {
                                             validateField("name")
@@ -200,9 +157,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                         }}
                                         continueButtonAction={() => {
                                             validateField("questionnaires")
-                                            this.expandNextPage(AccordianRowEnum.attachQuestionnaire)
+                                            this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
-                                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.attachQuestionnaire)}
+                                        previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
                                     >
                                         <PlanDefinitionEditQuestionnaire onChange={() => setFieldTouched("questionnaires")} planDefinition={this.state.planDefinition} />
 
@@ -210,14 +167,14 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
 
                                     <AccordianWrapper
-                                        expanded={this.state.openAccordians[AccordianRowEnum.thresholds]}
+                                        expanded={this.state.activeAccordian == AccordianRowEnum.thresholds}
                                         title="Alarmgrænser"
                                         toggleExpandedButtonAction={() => {
                                             validateField("name")
                                             validateField("questionnaires")
                                             this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
-                                        previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
+                                        previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
                                         continueButtonContentOverride="Gem"
                                         continueButtonAction={() => {
 
@@ -240,10 +197,14 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                 sx={{
                                                     "&.Mui-disabled": {
                                                         pointerEvents: "auto"
-                                                    }
+                                                    },
+                                                    marginLeft: "8px"
                                                 }}
                                             >Gem som kladde</Button>
                                         ]}
+                                        deactivateButtonText={this.state.editMode ? "Deaktiver patientgruppe" : undefined}
+                                        deactivateButtonAction={this.deactivatePlandefinition}
+                                        
                                     >
  
                                         <PlanDefinitionEditThresholds
@@ -291,15 +252,14 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     getActiveStep(): number {
-        const openAccordians = this.state.openAccordians;
-        if (openAccordians[AccordianRowEnum.generelInfo] == true)
-            return 0
-        if (openAccordians[AccordianRowEnum.attachQuestionnaire] == true)
-            return 1
-        if (openAccordians[AccordianRowEnum.thresholds] == true)
-            return 2
-
-        return 0
+        switch (this.state.activeAccordian) {
+            case AccordianRowEnum.generelInfo:
+              return 0;
+            case AccordianRowEnum.attachQuestionnaire:
+              return 1;
+            default:
+              return 2;
+          }
     }
 
 
@@ -345,6 +305,19 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             submitted: true
         })
 
+    }
+
+    deactivatePlandefinition(): void {
+        if (this.state.planDefinition && this.state.editMode) {
+            this.planDefinitionService.retirePlanDefinition(this.state.planDefinition)
+                .then(() => {
+                    this.setState({ submitted: true });
+                })
+                .catch((error) => {
+                    this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })    
+                })
+            ;
+        }
     }
 
     setStatusOnPlanDefinition(newStatus: PlanDefinitionStatus | BaseModelStatus): void {

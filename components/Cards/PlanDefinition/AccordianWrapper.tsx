@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Card, Table, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -12,6 +12,8 @@ export interface Props {
     additionalButtonActions?: JSX.Element[]
     previousButtonAction?: () => void
     continueButtonContentOverride?: JSX.Element | string
+    deactivateButtonText?: string
+    deactivateButtonAction?: () => void
     error?: boolean;
     
 }
@@ -43,13 +45,28 @@ export class AccordianWrapper extends Component<Props, {}> {
                     {this.props.children}
                 </AccordionDetails>
                 <AccordionActions>
-                    {this.props.previousButtonAction != undefined ?
-                        <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button" variant="text">Forrige</Button> : <></>
-                    }
 
-                    {this.props.additionalButtonActions && this.props.additionalButtonActions}
-
-                    <Button onClick={() => this.props.continueButtonAction()} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>
+                <TableContainer component={Card}>
+                    <Table sx={{ width:'100%' }} aria-label="simple table">
+                        <TableRow>
+                            {this.props.deactivateButtonText != undefined ?
+                            <TableCell align="left">
+                                <Button color="error" onClick={() => this.props.deactivateButtonAction!()} className="accordion__button" variant="outlined" >{this.props.deactivateButtonText}</Button>
+                            </TableCell> 
+                            : <></>
+                            }
+                            <TableCell align="right">
+                                {this.props.previousButtonAction != undefined ?
+                                <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button" variant="text">Forrige</Button> : <></>
+                                }
+    
+                                {this.props.additionalButtonActions && this.props.additionalButtonActions}
+    
+                                <Button sx={{ marginLeft:"8px" }} onClick={() => this.props.continueButtonAction()} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>
+                            </TableCell>
+                        </TableRow>
+                    </Table>
+                </TableContainer>
                 </AccordionActions>
             </Accordion>
         )
