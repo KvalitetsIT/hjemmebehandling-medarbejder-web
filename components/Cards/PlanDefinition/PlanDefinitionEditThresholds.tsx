@@ -23,12 +23,13 @@ export enum Color {
 export interface Props {
     planDefinition: PlanDefinition
     onError: (error?: Error) => void
+    onSetThreshold: (newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
 }
 
 export interface State {
-    planDefinition: PlanDefinition
     loading: boolean
     defaultNumberOfThresholds: number
+
 }
 
 export class PlanDefinitionEditThresholds extends Component<Props, State> {
@@ -42,11 +43,8 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         super(props);
         this.state = {
             loading: false,
-            planDefinition: props.planDefinition,
             defaultNumberOfThresholds: 3
         }
-        this.modifyPlandefinition = this.modifyPlandefinition.bind(this);
-        this.setThreshold = this.setThreshold.bind(this)
     }
 
     render(): JSX.Element {
@@ -58,31 +56,18 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
         this.setState({ loading: false })
     }
 
-    InitializeServices(): void {
-        this.personService = this.context.personService;
-        this.validationService = this.context.validationService;
-        this.collectionHelper = this.context.collectionHelper
-    }
-
-    modifyPlandefinition(plandefinitionModifier: (planDefinition: PlanDefinition, newValue: string) => PlanDefinition, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
-        const valueFromInput = input.currentTarget.value;
-        const modifiedPlanDefinition = plandefinitionModifier(this.state.planDefinition, valueFromInput);
-        this.setState({ planDefinition: modifiedPlanDefinition })
-    }
-
     errorArray: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
 
 
     renderCard(): JSX.Element {
-        this.InitializeServices();
         return (
 
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography marginTop={2}>{this.state.planDefinition.questionnaires? "De valgte spørgeskemaer indeholder nedenstående Alarmgrænser" : "Der er endnu ikke valgt nogle spørgeskemaer"} </Typography>
+                    <Typography marginTop={2}>{this.props.planDefinition.questionnaires? "De valgte spørgeskemaer indeholder nedenstående Alarmgrænser" : "Der er endnu ikke valgt nogle spørgeskemaer"} </Typography>
                 </Grid>
 
-                {this.state.planDefinition.questionnaires?.map(questionnaire => {
+                {this.props.planDefinition.questionnaires?.map(questionnaire => {
                     if (!questionnaire.thresholds)
                         questionnaire.thresholds = [];
 
@@ -94,13 +79,12 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                                     <Grid item xs={12}>
                                         <ThresholdEditor
                                             key={"tresholdEditor" + question.Id}
-                                            onChange={this.setThreshold}
+                                            onChange={this.props.onSetThreshold}
                                             questionnaire={questionnaire}
                                             question={question}
                                             onError={ error => this.onError(error)}
                                         ></ThresholdEditor>
                                     </Grid>
-
                                 )
                             })}
                         </>
@@ -112,30 +96,5 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
     onError(error?: Error): void {
         this.props.onError(error)
     }
-
-
-    setThreshold(newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire): void {
-        const thresholdCollection = newThresholds
-
-        const modified = this.state.planDefinition;
-
-        const questionnaireIndex = modified.questionnaires!.findIndex(q => q.id == questionnaire.id);
-        if (modified.questionnaires && questionnaireIndex != -1) {
-            const thresholdIndex = modified.questionnaires![questionnaireIndex!].thresholds!.findIndex(t => t.questionId == question.Id)
-            if (thresholdIndex == -1) {
-                modified.questionnaires![questionnaireIndex].thresholds?.push(thresholdCollection);
-            } else {
-                modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
-            }
-        }
-        this.setState({ planDefinition: modified })
-    }
-
-    setPlanDefinitionName(planDefinition: PlanDefinition, newValue: string): PlanDefinition {
-        const modifiedPlanDefinition = planDefinition;
-        modifiedPlanDefinition.name = newValue;
-        return modifiedPlanDefinition;
-    }
-
 }
 

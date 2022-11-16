@@ -14,6 +14,9 @@ import { Formik, Form, FormikValues } from 'formik';
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import * as yup from 'yup';
+import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 
 interface Props {
     match: { params: { plandefinitionid?: string } }
@@ -44,6 +47,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         this.validate = this.validate.bind(this)
         this.submitPlandefinition = this.submitPlandefinition.bind(this)
         this.deactivatePlandefinition = this.deactivatePlandefinition.bind(this)
+        this.onAddQuestionnaires = this.onAddQuestionnaires.bind(this);
+        this.onRemoveQuestionnaires = this.onRemoveQuestionnaires.bind(this);
+        this.onSetThreshold = this.onSetThreshold.bind(this)
 
         const newPlanDefinition = new PlanDefinition()
         newPlanDefinition.questionnaires = []
@@ -105,7 +111,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             })
 
 
-
+        console.log("main-", this.state.planDefinition)
         return (
             <>
                 <Formik
@@ -114,7 +120,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
                         const modifiedPlanDefinition = this.state.planDefinition
                         modifiedPlanDefinition.name = values.name
-                        modifiedPlanDefinition.questionnaires = values.questionnaires
 
                         this.setState({planDefinition: modifiedPlanDefinition})
 
@@ -161,7 +166,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                         }}
                                         previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
                                     >
-                                        <PlanDefinitionEditQuestionnaire onChange={() => setFieldTouched("questionnaires")} planDefinition={this.state.planDefinition} />
+                                        <PlanDefinitionEditQuestionnaire onAdd={this.onAddQuestionnaires} onRemove={this.onRemoveQuestionnaires} onChange={() => setFieldTouched("questionnaires")} planDefinition={this.state.planDefinition} />
 
                                     </AccordianWrapper>
 
@@ -211,6 +216,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             onError={(error) => {
                                                 this.setState({ error: error })
                                             }}
+                                            onSetThreshold={this.onSetThreshold}
                                             planDefinition={this.state.planDefinition} />
                                     </AccordianWrapper>
 
@@ -332,5 +338,40 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             x.thresholds?.forEach(y => y.thresholdNumbers?.sort((a, b) => b.from! - a.from!))
         })
         return planDefinition;
+    }
+
+    onAddQuestionnaires(questionnaires: Questionnaire[]): void {
+        const currentQuestionnaires = this.state.planDefinition.questionnaires;
+        const newQuestionnaires = questionnaires.filter(q => !currentQuestionnaires?.includes(q));
+
+        const pd  = this.state.planDefinition
+        pd.questionnaires?.push(...newQuestionnaires)
+        this.setState({ planDefinition: pd })
+    }
+
+    onRemoveQuestionnaires(questionnaires: Questionnaire[]): void {
+        const currentQuestionnaires = this.state.planDefinition.questionnaires;
+        const remainingQuestionnaires = currentQuestionnaires?.filter(q => !questionnaires.includes(q));
+        
+        const pd  = this.state.planDefinition;
+        pd.questionnaires = remainingQuestionnaires;
+        this.setState({ planDefinition: pd })
+    }
+
+    onSetThreshold(newThresholds: ThresholdCollection, question: Question, questionnaire: Questionnaire): void {
+        const thresholdCollection = newThresholds
+
+        const modified = this.state.planDefinition;
+
+        const questionnaireIndex = modified.questionnaires!.findIndex(q => q.id == questionnaire.id);
+        if (modified.questionnaires && questionnaireIndex != -1) {
+            const thresholdIndex = modified.questionnaires![questionnaireIndex!].thresholds!.findIndex(t => t.questionId == question.Id)
+            if (thresholdIndex == -1) {
+                modified.questionnaires![questionnaireIndex].thresholds?.push(thresholdCollection);
+            } else {
+                modified.questionnaires![questionnaireIndex].thresholds![thresholdIndex] = thresholdCollection;
+            }
+        }
+        this.setState({ planDefinition: modified })
     }
 }
