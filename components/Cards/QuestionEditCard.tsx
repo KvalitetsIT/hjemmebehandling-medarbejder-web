@@ -24,7 +24,7 @@ interface Props {
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
     forceUpdate?: () => void
-    onValidation: (uniqueId: number, error: InvalidInputModel[]) => void
+    onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
     sectionName?: string
     disabled: boolean
 }
@@ -122,7 +122,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             variant="outlined"
                                             size="medium"
                                             minWidth={500}
-                                            uniqueId={1}
+                                            uniqueId={this.props.question.Id!}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateQuestionName}
                                             onChange={input => this.modifyQuestion(this.setQuestion, input)}
@@ -136,7 +136,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             value={this.props.question.abbreviation}
                                             variant="outlined"
                                             size="medium"
-                                            uniqueId={2}
+                                            uniqueId={this.props.question.Id!}
                                             onChange={input => this.modifyQuestion(this.setAbbreviation, input)}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateAbbreviation}
@@ -163,7 +163,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         value={this.props.question.helperText}
                                         variant="outlined"
                                         size="medium"
-                                        uniqueId={3}
+                                        uniqueId={this.props.question.Id!}
                                         minWidth={800}
                                         onChange={input => this.modifyQuestion(this.setHelperText, input)}
                                         required
@@ -179,7 +179,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
                                         disabled={this.props.disabled}
-                                        uniqueId={4}
+                                        uniqueId={this.props.question.Id!}
                                     />
                                 </Grid>
                                 <Grid item xs>
@@ -190,7 +190,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         disabled={this.props.disabled} 
                                         forceUpdate={this.forceCardUpdate}
                                         question={this.state.question} 
-                                        uniqueId={5}
+                                        uniqueId={this.props.question.Id!}
                                         />
 
                                         : <></>}

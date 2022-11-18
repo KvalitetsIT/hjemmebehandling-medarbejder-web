@@ -12,7 +12,7 @@ export interface Props {
     sectionName?: string;
     required: boolean;
     disabled?: boolean;
-    uniqueId: number;
+    uniqueId: string;
     inputProps?: Partial<OutlinedInputProps>
 
     label: string;
@@ -25,7 +25,7 @@ export interface Props {
     onWheel?: () => void;
     onChange: (input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate?: (value: string) => Promise<InvalidInputModel[]>
-    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
+    onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
 }
 
 export interface State {
@@ -50,13 +50,27 @@ export class TextFieldValidation extends Component<Props, State> {
         this.state = {
             errors: []
         }
-        window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
-            const data = (event as CustomEvent).detail as ValidateInputEventData
+        this.onValidateEvent = this.onValidateEvent.bind(this)
+    }
+
+    componentDidMount(): void {
+        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+
+        if (this.props.onValidation && this.state.errors.length > 0) {
+            this.props.onValidation(this.props.uniqueId, []); // reset errors, if any was registeret preveously
+        }
+    }
+
+    onValidateEvent(event: Event): void {
+        const data = (event as CustomEvent).detail as ValidateInputEventData
             
-            if (props.sectionName == data.sectionName) {
-                await this.validate(this.props.value ?? "");
-            }
-        });
+        if (this.props.sectionName == data.sectionName) {
+            this.validate(this.props.value ?? "");
+        }
     }
 
     async validate(input: string): Promise<void> {

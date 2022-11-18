@@ -14,9 +14,9 @@ export interface Props {
     question: Question;
     forceUpdate?: () => void;
     validate?: (value: string) => Promise<InvalidInputModel[]>;
-    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void;
+    onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void;
     disabled: boolean;
-    uniqueId: number;
+    uniqueId: string;
 }
 
 export interface State {
@@ -45,13 +45,27 @@ export class QuestionTypeSelect extends Component<Props, State> {
         }
         this.handleChange = this.handleChange.bind(this)
      
-        window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
-            const data = (event as CustomEvent).detail as ValidateInputEventData
+        this.onValidateEvent = this.onValidateEvent.bind(this)
+    }
+
+    componentDidMount(): void {
+        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+        
+        if (this.props.onValidation && this.state.errors.length > 0) {
+            this.props.onValidation(this.props.uniqueId, []);
+        }
+    }
+
+    onValidateEvent(event: Event): void {
+        const data = (event as CustomEvent).detail as ValidateInputEventData
             
-            if (props.sectionName == data.sectionName) {
-                await this.validate();
-            }
-        });
+        if (this.props.sectionName == data.sectionName) {
+            this.validate();
+        }
     }
 
     async validate(): Promise<void> {

@@ -17,7 +17,7 @@ export interface Props {
     callToActionQuestion: CallToActionQuestion
     allQuestions: Question[] | undefined
     sectionName: string
-    onValidation: (uniqueId: number, error: InvalidInputModel[]) => void
+    onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
 }
 
 interface State {
@@ -66,7 +66,7 @@ export class CallToActionCard extends Component<Props, State> {
                                 value={callToActionQuestion?.message}
                                 variant="outlined"
                                 size="medium"
-                                uniqueId={1}
+                                uniqueId={this.state.callToActionQuestion.Id!}
                                 minWidth={800}
                                 onChange={input => this.modifyQuestion(this.setMessage, input.currentTarget.value)}
                                 sectionName={this.props.sectionName}
@@ -87,7 +87,7 @@ export class CallToActionCard extends Component<Props, State> {
                                                 onValidation={this.props.onValidation}
                                                 validate={this.validateQuestionSelect}
                                                 sectionName={this.props.sectionName}
-                                                uniqueId={2}
+                                                uniqueId={this.state.callToActionQuestion.Id! + index}
                                             />
                                             {enableWhen.questionId ?
                                                 <EnableWhenSelect key={index + "_whenselect_" + enableWhen.questionId} enableWhen={enableWhen} parentQuestion={this.getQuestionById(enableWhen.questionId)} />

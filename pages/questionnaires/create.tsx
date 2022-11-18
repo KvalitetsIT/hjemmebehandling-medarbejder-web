@@ -19,6 +19,9 @@ import { MissingDetailsError } from "../../components/Errors/MissingDetailsError
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 
+interface Props {
+    match: { params: { questionnaireId?: string } }
+}
 
 interface State {
     loading: boolean
@@ -26,13 +29,10 @@ interface State {
     errorToast: JSX.Element
     questionnaire?: Questionnaire
     editMode: boolean
-    errors: Map<number, InvalidInputModel[]>
+    errors: Map<string, InvalidInputModel[]>
     changes: string[] // The id's of the questions that havent been saved yet
 }
 
-interface Props {
-    match: { params: { questionnaireId?: string } }
-}
 class CreateQuestionnairePage extends React.Component<Props, State> {
     static sectionName = "questionnaire";
     static contextType = ApiContext
@@ -90,9 +90,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
-
-
-
     async submitQuestionnaire(): Promise<void> {
         this.setState({
             loading: true
@@ -130,8 +127,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({
             loading: false
         })
-
-
     }
 
     /*
@@ -148,12 +143,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
 
 
-    onValidation(uniqueId: number, error: InvalidInputModel[]): void {
+    onValidation(uniqueId: string, error: InvalidInputModel[]): void {
         const errors = this.state.errors
         if (error.length == 0) {
             errors.delete(uniqueId)
-            return
-        } else errors.set(uniqueId, error)
+        } else {
+            errors.set(uniqueId, error)
+        }
         this.setState({ errors: errors })
     }
 
@@ -179,7 +175,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         }
 
         const callToAction = questionnaire.getCallToActions().find(() => true);
-        let inputId = 0;
         return (
             <>
                 <Grid container>
@@ -198,7 +193,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                             value={this.state.questionnaire.name}
                                             size="medium"
                                             variant="outlined"
-                                            uniqueId={inputId++}
+                                            uniqueId={this.state.questionnaire.id}
                                             /*disabled={this.state.questionnaire.status == BaseModelStatus.ACTIVE}*/
                                             onChange={input => this.modifyQuestionnaire(this.setName, input)}
                                         />
@@ -310,7 +305,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     removeQuestion(questionToRemove: Question, questionnaire: Questionnaire): void {
         this.setQuestionnaire(this.questionnaireService.RemoveQuestion(questionnaire, questionToRemove))
-        //this.removeChange(questionToRemove.Id!)
+        this.removeChange(questionToRemove.Id!)
     }
 
 
@@ -348,7 +343,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     removeChange(id: string): void{
         console.log("changes", this.state.changes)
         this.setState(previousState => ({
-            changes: previousState.changes.filter(x => x == id)
+            changes: previousState.changes.filter(x => x !== id)
         }));
     }
 

@@ -10,7 +10,7 @@ export interface Props {
 
     id?: string;
     sectionName? : string
-    uniqueId: number;
+    uniqueId: string;
     value?: string;
     label: string;
     variant: "outlined";
@@ -18,7 +18,7 @@ export interface Props {
 
     onWheel?: () => void;
     onChange: (input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
-    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
+    onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
 }
 
 export interface State {
