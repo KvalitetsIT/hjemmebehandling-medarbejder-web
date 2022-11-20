@@ -13,9 +13,9 @@ export interface Props {
     sectionName: string;
     allQuestions: Question[] | undefined
     enableWhen: EnableWhen<boolean>
-    uniqueId: number
+    uniqueId: string
     updateParent?: () => void
-    onValidation?: (uniqueId: number, error: InvalidInputModel[]) => void
+    onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
     validate: (enableWhen: EnableWhen<boolean>) => Promise<InvalidInputModel[]>
 }
 
@@ -38,15 +38,29 @@ export class QuestionSelector extends Component<Props, State> {
             errors: [],
         }
         this.handleChange = this.handleChange.bind(this)
-        this.validate = this.validate.bind(this)
-
-        window.addEventListener(ValidateInputEvent.eventName, async (event: Event) => {
-            const data = (event as CustomEvent).detail as ValidateInputEventData
-            if (props.sectionName == data.sectionName) {
-                await this.validate(this.state.enableWhen);
-            }
-        });
+        this.onValidateEvent = this.onValidateEvent.bind(this)
     }
+
+    componentDidMount(): void {
+        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+
+        if (this.props.onValidation && this.state.errors.length > 0) {
+            this.props.onValidation(this.props.uniqueId, []); // reset errors, if any was registeret preveously
+        }
+    }
+    
+    onValidateEvent(event: Event): void {
+        const data = (event as CustomEvent).detail as ValidateInputEventData
+
+        if (this.props.sectionName == data.sectionName) {
+            this.validate(this.state.enableWhen);
+        }
+    }
+
     async validate( enableWhen: EnableWhen<boolean>): Promise<void> {
         if (!this.props.validate)
             return;

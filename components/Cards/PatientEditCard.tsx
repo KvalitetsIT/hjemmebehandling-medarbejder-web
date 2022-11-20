@@ -154,14 +154,14 @@ export class PatientEditCard extends Component<Props, State> {
   }
 
 
-  errorMap: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
+  errorMap: Map<string, InvalidInputModel[]> = new Map<string, InvalidInputModel[]>();
 
-  onValidation(from: number, invalid: InvalidInputModel[]): void {
+  onValidation(from: string, invalid: InvalidInputModel[]): void {
     const errorMap = this.errorMap;
     errorMap.set(from, invalid);
 
     const allErrors: InvalidInputModel[] =
-      this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(errorMap);
+      this.collectionHelper.MapValueCollectionToArray<string, InvalidInputModel>(errorMap);
 
     if (this.state.tempCpr !== this.state.patient.cpr) {
       allErrors.push(new InvalidInputModel("cpr", "Der er indtastet nyt cpr uden at trykke fremsøg", CriticalLevelEnum.WARNING))
@@ -188,7 +188,7 @@ export class PatientEditCard extends Component<Props, State> {
                   sectionName={PatientEditCard.sectionName}
                   disabled={this.state.patient.cpr ? true : false}
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   validate={(cpr) => this.validationService.ValidateCPR(cpr)}
                   required={true}
                   label="CPR"
@@ -207,7 +207,7 @@ export class PatientEditCard extends Component<Props, State> {
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName}
                   className='patientEditCardTextVali'
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   disabled
                   label="Fornavn"
                   value={this.state.patient.firstname}
@@ -215,7 +215,7 @@ export class PatientEditCard extends Component<Props, State> {
                   variant="outlined" />
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName}
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   disabled
                   label="Efternavn"
                   value={this.state.patient.lastname}
@@ -224,22 +224,22 @@ export class PatientEditCard extends Component<Props, State> {
               </Stack>
               <Stack spacing={3} direction="row">
                 <TextFieldValidation
-                  sectionName={PatientEditCard.sectionName} uniqueId={inputId++} disabled label="Adresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
+                  sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="Adresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName} disabled
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   label="Postnummer"
                   value={this.state.patient.address?.zipCode}
                   onChange={input => this.modifyPatient(this.setZipcode, input)}
                   variant="outlined" />
-                <TextFieldValidation sectionName={PatientEditCard.sectionName} uniqueId={inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
+                <TextFieldValidation sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
               </Stack>
               <Stack spacing={3} direction="row">
                 <PhonenumberInput
                   sectionName={PatientEditCard.sectionName}
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   label="Primært telefonnummer"
                   value={this.state.patient.primaryPhone}
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
@@ -249,7 +249,7 @@ export class PatientEditCard extends Component<Props, State> {
                 <PhonenumberInput
                   sectionName={PatientEditCard.sectionName}
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                  uniqueId={inputId++}
+                  uniqueId={'patient_' + inputId++}
                   label="sekundært telefonnummer"
                   value={this.state.patient.secondaryPhone}
                   onChange={input => this.modifyPatient(this.setSecondaryPhonenumber, input)}

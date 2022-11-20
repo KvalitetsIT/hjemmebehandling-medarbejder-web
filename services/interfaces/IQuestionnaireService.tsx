@@ -40,6 +40,13 @@ export interface IQuestionnaireService {
   updateQuestionnaire(questionnaire: Questionnaire): Promise<void>
 
   /**
+    * Assumes the questionnaire already exists
+    * Retires the given questionnaire based on the id of the provided entity
+    * @param questionnaire the questionnaire to be retired
+    */
+   retireQuestionnaire(questionnaire: Questionnaire): Promise<void>
+
+  /**
      * Creates a questionnaire from provided paramater
      * @param questionnaire the new questionnaire to be created
      */

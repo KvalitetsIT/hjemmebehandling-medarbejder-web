@@ -59,6 +59,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return this.HandleError(error)
         }
     }
+
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         try {
             let thresholds: ThresholdDto[] = []
@@ -85,6 +86,18 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return this.HandleError(error)
         }
     }
+
+    async retirePlanDefinition(planDefinition: PlanDefinition): Promise<void> {
+        try {
+            const request = {
+                id: planDefinition.id!
+            }
+            await this.planDefinitionApi.retirePlanDefinition(request)
+        } catch (error: unknown) {
+            return await this.HandleError(error)
+        }
+    }
+
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
         try {
             const request: CreateQuestionnaireOperationRequest = {
@@ -152,6 +165,17 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             await this.questionnaireApi.patchQuestionnaire(request)
         } catch (error) {
             return this.HandleError(error)
+        }
+    }
+
+    async retireQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        try {
+            const request = {
+                id: questionnaire.id!
+            }
+            await this.questionnaireApi.retireQuestionnaire(request)
+        } catch (error: unknown) {
+            return await this.HandleError(error)
         }
     }
 

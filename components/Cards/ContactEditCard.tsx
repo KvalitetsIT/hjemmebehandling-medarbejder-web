@@ -56,13 +56,13 @@ export class ContactEditCard extends Component<Props, State> {
     this.setState({ contact: modifiedPatient })
   }
 
-  errorArray: Map<number, InvalidInputModel[]> = new Map<number, InvalidInputModel[]>();
+  errorArray: Map<string, InvalidInputModel[]> = new Map<string, InvalidInputModel[]>();
   
-  onValidation(from: number, invalid: InvalidInputModel[]): void {
+  onValidation(from: string, invalid: InvalidInputModel[]): void {
     this.errorArray.set(from, invalid);
 
     const allErrors: InvalidInputModel[] =
-      this.collectionHelper.MapValueCollectionToArray<number, InvalidInputModel>(this.errorArray)
+      this.collectionHelper.MapValueCollectionToArray<string, InvalidInputModel>(this.errorArray)
 
     if (this.props.onValidation)
       this.props.onValidation(allErrors);
@@ -83,7 +83,7 @@ export class ContactEditCard extends Component<Props, State> {
               <TextFieldValidation
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                uniqueId={inputId++}
+                uniqueId={'contact_' + inputId++}
                 label="Navn"
                 value={this.state.contact.fullname}
                 onChange={input => this.modifyPatient(this.setRelativeContactsName, input)}
@@ -91,7 +91,7 @@ export class ContactEditCard extends Component<Props, State> {
               <TextFieldValidation
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                uniqueId={inputId++}
+                uniqueId={'contact_' + inputId++}
                 label="Relation"
                 value={this.state.contact.affiliation}
                 onChange={input => this.modifyPatient(this.setRelativeContactsAffiliation, input)}
@@ -103,13 +103,13 @@ export class ContactEditCard extends Component<Props, State> {
                 sectionName={ContactEditCard.sectionName}
                 id="contactPrimaryPhone"
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                uniqueId={inputId++}
+                uniqueId={'contact_' + inputId++}
                 label="Primært telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
                 variant="outlined" />
               <PhonenumberInput
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
-                uniqueId={inputId++}
+                uniqueId={'contact_' + inputId++}
                 label="Sekundært telefonnummer"
                 value={this.state.contact.secondaryPhone}
                 onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber, input)}

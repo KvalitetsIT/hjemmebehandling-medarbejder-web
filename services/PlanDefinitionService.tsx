@@ -27,14 +27,22 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
             return this.HandleError(error)
         }
     }
+
     async updatePlanDefinition(planDefinition: PlanDefinition): Promise<void> {        
         try {
-            return this.backendApi.updatePlanDefinition(planDefinition)
+            return await this.backendApi.updatePlanDefinition(planDefinition)
         } catch (error) {
             return this.HandleError(error)
         }
     }
 
+    async retirePlanDefinition(planDefinition: PlanDefinition): Promise<void> {        
+        try {
+            return await this.backendApi.retirePlanDefinition(planDefinition)
+        } catch (error) {
+            return this.HandleError(error)
+        }
+    }
 
     async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[] ): Promise<PlanDefinition[]> {
         try {
