@@ -6,13 +6,14 @@ import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { IValidationService } from '../../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
-import { FormikErrors } from 'formik';
+import { FormikErrors, FormikTouched } from 'formik';
 import { ValidatedInput } from '../../Input/ValidatedInput';
 
 
 export interface Props {
     planDefinition: PlanDefinition
     errors: FormikErrors<{name: string | undefined}>
+    touched: FormikTouched<PlanDefinition>
 }
 
 export interface State {
@@ -61,7 +62,7 @@ export class PlanDefinitionEdit extends Component<Props, State> {
                     <ValidatedInput
                         label={'Navn'}
                         name={'name'}
-                        error={this.props.errors?.name}
+                        error={  (this.props.errors?.name && this.props.touched.name)  ? this.props.errors?.name : undefined}
                         size="medium"
                         />
 

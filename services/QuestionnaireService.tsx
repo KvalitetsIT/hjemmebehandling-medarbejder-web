@@ -23,6 +23,16 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     this.backendApi = backendapi;
     this.questionnaireFiltering = new QuestionnaireFiltering();
   }
+
+  async IsQuestionnaireInUse(questionnaireId: string): Promise<boolean> {
+    console.log("ID:", questionnaireId)
+    try{
+      return await this.backendApi.IsQuestionnaireInUse(questionnaireId);
+    }catch(error){
+      return this.HandleError(error)
+    }
+  }
+
   async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
     try {
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
@@ -262,6 +272,8 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   }
 }
 
+
+
 export class QuestionnaireFiltering {
   removeOrphans(questions: Question[]): Question[] {
     const newQuestions: Question[] = [];
@@ -289,3 +301,4 @@ export class QuestionnaireFiltering {
   }
 
 }
+

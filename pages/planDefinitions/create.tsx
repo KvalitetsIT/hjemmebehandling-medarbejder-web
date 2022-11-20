@@ -169,7 +169,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                     validationSchema={validationScheme}
 
                 >
-                    {({ errors, validateField, setFieldTouched, submitForm }) => (
+                    {({ errors, validateField, setFieldTouched, submitForm, touched }) => (
 
                         <Form>
                             <Grid container spacing={2}>
@@ -187,11 +187,11 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             this.expandNextPage(AccordianRowEnum.generelInfo)
                                         }
                                         }>
-                                        <PlanDefinitionEdit errors={errors} planDefinition={this.state.planDefinition} />
+                                        <PlanDefinitionEdit touched={touched} errors={errors} planDefinition={this.state.planDefinition} />
                                     </AccordianWrapper>
 
                                     <AccordianWrapper
-                                        error={errors.questionnaires != undefined}
+                                        error={errors.questionnaires != undefined && touched.questionnaires}
                                         expanded={this.state.openAccordians[AccordianRowEnum.attachQuestionnaire]}
                                         title="Tilknyt spørgeskema"
                                         toggleExpandedButtonAction={() => {
@@ -215,6 +215,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                         toggleExpandedButtonAction={() => {
                                             validateField("name")
                                             validateField("questionnaires")
+                                            setFieldTouched("questionnaires")
                                             this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
                                         previousButtonAction={() => this.expandPreviousPage(AccordianRowEnum.thresholds)}
@@ -270,7 +271,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                     <StepLabel error={errors.name != undefined}>Udfyld patientgruppens navn</StepLabel>
                                                 </Step>
                                                 <Step key="attachQuestionnaire">
-                                                    <StepLabel error={errors.questionnaires != undefined}>Tilknyt spørgeskema</StepLabel>
+                                                    <StepLabel error={errors.questionnaires != undefined && touched.questionnaires}>Tilknyt spørgeskema</StepLabel>
                                                 </Step>
                                                 <Step key="setThresholds">
                                                     <StepLabel error={this.state.error!= undefined}>Sætte alarmgrænser</StepLabel>

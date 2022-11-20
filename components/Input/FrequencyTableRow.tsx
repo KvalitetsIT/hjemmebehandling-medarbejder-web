@@ -117,7 +117,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
           <TableCell>
 
-            <Select fullWidth onChange={(a) => {this.SetFrequency(a.target.value); this.validateEvent.dispatchEvent()}} value={this.state.questionnaire.frequency!.repeated}>
+            <Select fullWidth defaultValue={this.getAllRepeated()[0]} onChange={(a) => {this.SetFrequency(a.target.value); this.validateEvent.dispatchEvent()}} value={this.state.questionnaire.frequency!.repeated}>
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}

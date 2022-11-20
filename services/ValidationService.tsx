@@ -66,8 +66,10 @@ export default class ValidationService extends BaseService implements IValidatio
         return errors;
     }
 
+
+
     async ValidatePlanDefinitions(planDefinitions: PlanDefinition[]): Promise<InvalidInputModel[]> {
-        
+
         const errors: InvalidInputModel[] = []
         const propName = "Patientgruppe"
 

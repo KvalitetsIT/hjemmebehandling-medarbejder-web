@@ -17,6 +17,7 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
 
 
 
@@ -43,6 +44,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         super(props);
 
         this.onValidation = this.onValidation.bind(this);
+        this.isQuestionnaireInUse = this.isQuestionnaireInUse.bind(this)
         //this.submitQuestionnaire = this.submitQuestionnaire.bind(this);
 
         this.state = {
@@ -58,7 +60,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     render(): JSX.Element {
         this.InitializeServices();
-        console.log("state", this.state)
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
     }
 
@@ -67,6 +68,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
 
     async componentDidMount(): Promise<void> {
+        
         await this.populateCareplans()
     }
 
@@ -77,7 +79,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             const question = new Question();
             question.Id = this.generateQuestionId();
             questionnaire.questions = [question];
-            if (questionnaireId != undefined){
+            if (questionnaireId != undefined) {
                 questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
             } else {
                 this.addChange(question.Id);
@@ -89,7 +91,28 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
+    async isQuestionnaireInUse(): Promise<boolean> {
+        
+        const id: string | undefined = this.state.questionnaire?.id; 
 
+        if(id){
+            const isQuestionnaireUsed: boolean = await this.questionnaireService.IsQuestionnaireInUse(id);
+            return isQuestionnaireUsed
+        }
+        
+        return false;
+    }
+    async questionnaireContainsMeasurementsWhichisNew(): Promise<boolean> {
+
+        if (this.state.editMode) {
+            const questions = this.state.questionnaire?.questions?.filter(q => this.state.changes.includes(q.Id!)).filter(q => q.type == QuestionTypeEnum.OBSERVATION)
+
+            this.state.questionnaire?.questions
+            return questions != undefined && questions.length > 0
+        }
+
+        return false;
+    }
 
 
     async submitQuestionnaire(): Promise<void> {
@@ -103,18 +126,15 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         try {
             const valid = this.state.errors.size == 0
 
-
             if (valid) {
 
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
 
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
 
-
                 this.setState({
                     submitted: true
                 })
-
             } else {
                 throw new MissingDetailsError([]);
             }
@@ -229,7 +249,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
                                                     </Grid>
                                                     <Grid item xs={11}>
-                                                        
+
                                                         <QuestionEditCard
                                                             key={childQuestion.Id}
                                                             getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -268,18 +288,36 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                     <CardActions sx={{ display: "flex", justifyContent: "right" }}>
                                         <Button
                                             variant="outlined"
-                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
+                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT)}
                                             onClick={() => {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
                                                 this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
                                             }}>Gem som kladde</Button>
-                                        <Button
+
+
+
+                                        <ConfirmationButton
+                                            color="primary"
                                             variant="contained"
-                                            onClick={() => {
+                                            contentOfDoActionBtn="Forstået"
+                                            contentOfCancelBtn="Fortryd"
+                                            action={async () => {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
                                                 this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
-                                            }
-                                            }>Gem</Button>
+                                            }}
+                                            precondition={async () => { 
+                                                return !(await this.isQuestionnaireInUse() && await this.questionnaireContainsMeasurementsWhichisNew()) 
+                                            }}
+                                            title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}
+                                            buttonText={'Gem'}
+                                        >
+                                            <Typography>Alarmgrænser bør defineres for den/de nye målinger, der er tilføjet, ellers fremstår disse med standardalarmgrænser</Typography>
+                                        </ConfirmationButton>
+
+
+
+
+
                                     </CardActions>
 
 
@@ -299,9 +337,9 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
     generateQuestionId(): string {
-        
+
         const newID = uuid();
-        
+
         return newID;
     }
 
@@ -324,13 +362,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.addChange(newQuestion.Id!)
     }
 
-    addChange(id: string): void{
+    addChange(id: string): void {
         this.setState(previousState => ({
             changes: [...previousState.changes, id]
         }));
     }
-    removeChange(id: string): void{
-        console.log("changes", this.state.changes)
+    removeChange(id: string): void {
         this.setState(previousState => ({
             changes: previousState.changes.filter(x => x == id)
         }));

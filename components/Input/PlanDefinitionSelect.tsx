@@ -146,9 +146,9 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   async validate(): Promise<void> {
     const plandefinitionErrors = await this.validationService.ValidatePlanDefinitions(this.state.editedCareplan.planDefinitions);
-    const questionnaireErrors = await this.validationService.ValidateQuestionnaires(this.state.editedCareplan.questionnaires);
+    //const questionnaireErrors =  await this.validationService.ValidateQuestionnaires(this.state.editedCareplan.questionnaires);
 
-    const errors = plandefinitionErrors.concat(questionnaireErrors);
+    const errors = plandefinitionErrors.concat(/*questionnaireErrors*/);
 
 
     this.setState({ errors: errors })

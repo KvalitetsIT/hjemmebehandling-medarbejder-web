@@ -24,6 +24,7 @@ import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandl
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { MissingContactDetailsError } from './Errors/MissingContactDetailsError';
 import { AccordianWrapper } from './Cards/PlanDefinition/AccordianWrapper';
+import { ConfirmationButton } from './Input/ConfirmationButton';
 
 /**
  * 
@@ -55,6 +56,7 @@ export interface State {
   contactError?: string;
   planDefinitionError?: string
   validating: boolean
+  dialog: JSX.Element | undefined
 }
 
 
@@ -77,6 +79,7 @@ export default class CreatePatient extends Component<Props, State> {
       errorToast: (<></>),
       activeAccordian: props.activeAccordian ?? PatientAccordianSectionsEnum.patientInfo,
       validating: false,
+      dialog: undefined
     }
 
   }
@@ -151,9 +154,13 @@ export default class CreatePatient extends Component<Props, State> {
                 expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.planDefinitionInfo}
                 title="Patientgruppe"
                 toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
-                continueButtonAction={() => this.submitPatient()}
+                overrideContinueButton={
+                  <ConfirmationButton color="primary" variant="contained" action={() => this.submitPatient()} title={'Obs. frekvens ikke defineret'} buttonText={'Gem patient'}>
+                    <Typography>Ønsker du at fortsætte?</Typography>
+                  </ConfirmationButton>
+                }
                 previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
-                continueButtonContentOverride={"Gem patient"}>
+              >
                 <Typography>
                   <PlanDefinitionSelect
                     onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })}
@@ -206,8 +213,6 @@ export default class CreatePatient extends Component<Props, State> {
 
     )
   }
-
-
 
   GetCheckboxIcon(object: unknown): React.ElementType {
     if (!object)

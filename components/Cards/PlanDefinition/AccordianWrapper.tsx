@@ -7,11 +7,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 export interface Props {
     expanded: boolean
     title: JSX.Element | string
-    continueButtonAction: () => void
+    continueButtonAction?: () => void
     toggleExpandedButtonAction: () => void
     additionalButtonActions?: JSX.Element[]
     previousButtonAction?: () => void
     continueButtonContentOverride?: JSX.Element | string
+    overrideContinueButton?: JSX.Element 
     error?: boolean;
     
 }
@@ -49,7 +50,12 @@ export class AccordianWrapper extends Component<Props, {}> {
 
                     {this.props.additionalButtonActions && this.props.additionalButtonActions}
 
-                    <Button onClick={() => this.props.continueButtonAction()} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>
+                    {this.props.overrideContinueButton ? 
+                        this.props.overrideContinueButton
+                        :
+                        (<Button onClick={() => this.props.continueButtonAction ? this.props.continueButtonAction() : {} } className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>)
+                    }
+                    
                 </AccordionActions>
             </Accordion>
         )

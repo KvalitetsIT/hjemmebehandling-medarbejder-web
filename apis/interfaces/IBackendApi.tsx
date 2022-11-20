@@ -172,5 +172,11 @@ export interface IBackendApi {
      * Returns patients based on paramaters
      */
     GetPatients: (includeActive: boolean, includeCompleted: boolean, page: number, pageSize: number) => Promise<PatientDetail[]>
+
+
+    /*
+    * Returns true if the questionnanire is in use by any plandefinnition otherwise false
+    */
+    IsQuestionnaireInUse(questionnaireId: string): Promise<boolean>;
 }
 

@@ -132,5 +132,11 @@ export interface IQuestionnaireService {
    */
   MoveQuestion(questionnaire: Questionnaire, question: Question, step: number): Questionnaire
 
+  /**
+   * Checks if the given questionnaire is in use by any plandefinitions
+   * @param questionnaire the questionnaire that is supposed to be checked 
+   * @returns true if the questionnaire is in use by any active plandefintions otherwise false  
+  */
+  IsQuestionnaireInUse(questionnaireId: string): Promise<boolean>
 }
 
