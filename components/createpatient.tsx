@@ -97,6 +97,14 @@ export default class CreatePatient extends Component<Props, State> {
     }
   }
 
+
+  isFrequencySet(): boolean {
+    return this.state.careplan?.questionnaires != undefined && this.state.careplan?.questionnaires?.length > 0 && this.state.careplan?.questionnaires.every(questionnaire => {
+      return questionnaire?.frequency && questionnaire?.frequency.days?.length > 0
+    });
+
+  }
+
   render(): JSX.Element {
     this.InitializeServices();
     if (this.state.submitted)
@@ -130,7 +138,7 @@ export default class CreatePatient extends Component<Props, State> {
                 </Typography>
               </AccordianWrapper>
             </ErrorBoundary>
-
+            {console.log("isFrequencySet: ", this.isFrequencySet())}
             <ErrorBoundary>
 
               <AccordianWrapper
@@ -147,7 +155,6 @@ export default class CreatePatient extends Component<Props, State> {
                 </Typography>
               </AccordianWrapper>
             </ErrorBoundary>
-
             <ErrorBoundary>
               <AccordianWrapper
                 key={PatientAccordianSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
@@ -155,7 +162,16 @@ export default class CreatePatient extends Component<Props, State> {
                 title="Patientgruppe"
                 toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
                 overrideContinueButton={
-                  <ConfirmationButton color="primary" variant="contained" action={() => this.submitPatient()} title={'Obs. frekvens ikke defineret'} buttonText={'Gem patient'}>
+                  <ConfirmationButton
+                    skipDialog={async () => { return this.isFrequencySet() }}
+                    color="primary"
+                    variant="contained"
+                    action={() => this.submitPatient()}
+                    title={'Obs. frekvens ikke defineret'}
+                    buttonText={'Gem patient'}
+                    disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
+                    >
+                    
                     <Typography>Ønsker du at fortsætte?</Typography>
                   </ConfirmationButton>
                 }
@@ -195,7 +211,7 @@ export default class CreatePatient extends Component<Props, State> {
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
                     </Step>
                     <Step key="relativecontact">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(true)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(!this.state.contactError && this.getActiveStep() > 1)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
                     </Step>
                     <Step key="plandefinition">
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>

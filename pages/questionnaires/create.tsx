@@ -315,7 +315,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                 this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
                                                 this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
                                             }}
-                                            precondition={async () => { 
+                                            skipDialog={async () => { 
                                                 return !(await this.isQuestionnaireInUse() && await this.questionnaireContainsMeasurementsWhichisNew()) 
                                             }}
                                             title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}

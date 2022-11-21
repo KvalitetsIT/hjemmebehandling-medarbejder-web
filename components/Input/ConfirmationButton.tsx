@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 
 export interface Props {
   action: () => Promise<void>
-  precondition?: () => Promise<boolean> // If this returns true do action without dialog 
+  skipDialog?: () => Promise<boolean> // If this returns true do action without dialog 
   title: string
   buttonText: JSX.Element | string
   className: string
@@ -73,7 +73,7 @@ export class ConfirmationButton extends Component<Props, State> {
             disabled={this.props.disabled}
             fullWidth={this.props.fullWidth}
             className={this.props.className}
-            onClick={async () => { this.props.precondition && await this.props.precondition() ? this.doAction() : this.OpenVerificationBox() }}
+            onClick={async () => { this.props.skipDialog && await this.props.skipDialog() ? this.doAction() : this.OpenVerificationBox() }}
             color={this.props.color}
             variant={this.props.variant}>{this.props.buttonText}</Button>
 
