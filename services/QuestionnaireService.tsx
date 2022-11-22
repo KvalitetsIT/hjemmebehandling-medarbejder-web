@@ -7,7 +7,6 @@ import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit
 import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import { IQuestionnaireService } from "./interfaces/IQuestionnaireService";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
@@ -187,10 +186,8 @@ export default class QuestionnaireService extends BaseService implements IQuesti
 
     const trueOption = new ThresholdOption();
     trueOption.option = true.toString();
-    trueOption.category = CategoryEnum.GREEN
     const falseOption = new ThresholdOption();
     falseOption.option = false.toString();
-    falseOption.category = CategoryEnum.GREEN
     thresholdCollection.thresholdOptions = [trueOption, falseOption];
 
 

@@ -247,7 +247,14 @@ export class QuestionEditCard extends Component<Props, State>{
                                     {option.option == "true" ? "Ja" : "Nej"}
                                 </TableCell>
                                 <TableCell>
-                                    <CategorySelect disabled={this.props.disabled} category={option.category} onChange={(newCategory) => { option.category = newCategory }} />
+                                    <CategorySelect 
+                                        sectionName={this.props.sectionName} 
+                                        disabled={this.props.disabled} 
+                                        category={option.category} 
+                                        onChange={(newCategory) => { option.category = newCategory }} 
+                                        onValidation={this.props.onValidation}
+                                        uniqueId={this.props.question.Id!}
+                                    />
                                 </TableCell>
                             </TableRow>
                         )
