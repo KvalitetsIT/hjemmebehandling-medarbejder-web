@@ -29,6 +29,7 @@ interface State {
     submitted: boolean
     errorToast: JSX.Element
     questionnaire?: Questionnaire
+    questionnaireIsInUse?: boolean
     editMode: boolean
     errors: Map<string, InvalidInputModel[]>
     changes: string[] // The id's of the questions that havent been saved yet
@@ -44,13 +45,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         super(props);
 
         this.onValidation = this.onValidation.bind(this);
-        this.isQuestionnaireInUse = this.isQuestionnaireInUse.bind(this)
-        //this.submitQuestionnaire = this.submitQuestionnaire.bind(this);
         this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
 
         this.state = {
             loading: true,
             questionnaire: undefined,
+            questionnaireIsInUse: undefined,
             errorToast: (<></>),
             submitted: false,
             editMode: props.match.params.questionnaireId ? true : false,
@@ -80,38 +80,27 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             const question = new Question();
             question.Id = this.generateQuestionId();
             questionnaire.questions = [question];
+            let questionnaireIsInUse = false;
+
             if (questionnaireId != undefined) {
                 questionnaire = await this.questionnaireService.getQuestionnaire(questionnaireId) ?? questionnaire;
+                questionnaireIsInUse = await this.questionnaireService.IsQuestionnaireInUse(questionnaireId);
             } else {
                 this.addChange(question.Id);
             }
-            this.setState({ questionnaire: questionnaire })
+            this.setState({ questionnaire: questionnaire, questionnaireIsInUse: questionnaireIsInUse })
         } catch (error) {
             this.setState(() => { throw error })
         }
         this.setState({ loading: false })
     }
 
-    async isQuestionnaireInUse(): Promise<boolean> {
-        
-        const id: string | undefined = this.state.questionnaire?.id; 
-
-        if(id){
-            const isQuestionnaireUsed: boolean = await this.questionnaireService.IsQuestionnaireInUse(id);
-            return isQuestionnaireUsed
-        }
-        
-        return false;
-    }
-    async questionnaireContainsMeasurementsWhichisNew(): Promise<boolean> {
-
+     questionnaireContainsMeasurementsWhichisNew(): boolean {
         if (this.state.editMode) {
             const questions = this.state.questionnaire?.questions?.filter(q => this.state.changes.includes(q.Id!)).filter(q => q.type == QuestionTypeEnum.OBSERVATION)
-
-            this.state.questionnaire?.questions
+            
             return questions != undefined && questions.length > 0
         }
-
         return false;
     }
 
@@ -153,13 +142,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         })
     }
 
-    /*
-    getMissingDetails() : string[] {
-        let details: string[] = []        
-        Array.from(this.state.errors.values()).forEach(x => x.forEach(i => details.push(i.message)))
-        return details 
-    }
-    */
     async validateQuestionnaireName(name: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
         if (name.length <= 0) errors.push(new InvalidInputModel("Navn", "Navn er ikke udfyldt", CriticalLevelEnum.ERROR))
@@ -201,136 +183,126 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const callToAction = questionnaire.getCallToActions().find(() => true);
         return (
             <>
-                <Grid container>
+                <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Card>
-                                    <CardHeader subheader={<Typography variant="h6">Spørgeskema</Typography>} />
-                                    <Divider />
-                                    <CardContent>
-                                        <TextFieldValidation
-                                            validate={(value) => this.validateQuestionnaireName(value)}
-                                            onValidation={this.onValidation}
-                                            sectionName={CreateQuestionnairePage.sectionName}
-                                            label="Navn"
-                                            value={this.state.questionnaire.name}
-                                            size="medium"
-                                            variant="outlined"
-                                            uniqueId={this.state.questionnaire.id}
-                                            /*disabled={this.state.questionnaire.status == BaseModelStatus.ACTIVE}*/
-                                            onChange={input => this.modifyQuestionnaire(this.setName, input)}
-                                        />
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            {parentQuestions?.map((question) => {
-                                const childQuestions = questionnaire.getChildQuestions(question.Id)
-                                return (
-                                    <>
-                                        <Grid item xs={12}>
-                                            <QuestionEditCard
-                                                key={question.Id}
-                                                getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
-                                                addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
-                                                removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
-                                                moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
-                                                moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
-                                                forceUpdate={() => this.forceUpdate()}
-                                                question={question}
-                                                onValidation={this.onValidation}
-                                                sectionName={CreateQuestionnairePage.sectionName}
-                                                disabled={!this.state.changes.includes(question.Id!)}
-                                            />
-                                        </Grid>
-                                        {childQuestions?.map(childQuestion => {
-                                            return (
-                                                <>
-                                                    <Grid item xs={1} alignSelf="center" textAlign="center">
-                                                    </Grid>
-                                                    <Grid item xs={11}>
-
-                                                        <QuestionEditCard
-                                                            key={childQuestion.Id}
-                                                            getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
-                                                            addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
-                                                            removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
-                                                            moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, -1))}
-                                                            moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
-                                                            parentQuestion={question}
-                                                            question={childQuestion}
-                                                            forceUpdate={() => this.forceUpdate()}
-                                                            onValidation={this.onValidation}
-                                                            sectionName={CreateQuestionnairePage.sectionName}
-                                                            disabled={!this.state.changes.includes(childQuestion.Id!)}
-                                                        />
-                                                    </Grid>
-                                                </>
-                                            )
-                                        })}
-                                    </>
-                                )
-                            })
-
-                            }
-                            <Grid item xs={12}>
-                                <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
-                            </Grid>
-                            <Grid item xs={12}>
-
-                                <Card>
-                                    <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
-                                    <Divider />
-                                    <CardContent>
-                                        <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
-                                    </CardContent>
-                                    <Divider />
-                                    <TableContainer component={Card}>
-                                        <Table sx={{ width:'100%' }} aria-label="simple table">
-                                            <TableRow>
-                                                <TableCell align="left">
-                                                    {this.state.editMode ? 
-                                                    <CardActions sx={{ display: "flex", justifyContent: "left" }}>
-                                                        <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Deaktiver spørgeskema</Button>
-                                                    </CardActions>
-                                                    :
-                                                    null
-                                                    }
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                                        <Button variant="outlined"
-                                                            disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
-                                                            onClick={() => {
-                                                                this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
-                                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
-                                                            }}
-                                                        >Gem som kladde</Button>
-                                                         <ConfirmationButton
-                                            color="primary"
-                                            variant="contained"
-                                            contentOfDoActionBtn="Forstået"
-                                            contentOfCancelBtn="Fortryd"
-                                            action={async () => {
-                                                this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                                this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
-                                            }}
-                                            skipDialog={async () => { 
-                                                return !(await this.isQuestionnaireInUse() && await this.questionnaireContainsMeasurementsWhichisNew()) 
-                                            }}
-                                            title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}
-                                            buttonText={'Gem'}
-                                        >
-                                            <Typography>Alarmgrænser bør defineres for den/de nye målinger, der er tilføjet, ellers fremstår disse med standardalarmgrænser</Typography>
-                                        </ConfirmationButton>
-                                                    </CardActions>
-                                                </TableCell>
-                                            </TableRow>
-                                        </Table>
-                                    </TableContainer>
-                                </Card>
-                            </Grid>
-                        </Grid>
+                        <Card>
+                            <CardHeader subheader={<Typography variant="h6">Spørgeskema</Typography>} />
+                            <Divider />
+                            <CardContent>
+                                <TextFieldValidation
+                                    validate={(value) => this.validateQuestionnaireName(value)}
+                                    onValidation={this.onValidation}
+                                    sectionName={CreateQuestionnairePage.sectionName}
+                                    label="Navn"
+                                    value={this.state.questionnaire.name}
+                                    size="medium"
+                                    variant="outlined"
+                                    uniqueId={this.state.questionnaire.id}
+                                    /*disabled={this.state.questionnaire.status == BaseModelStatus.ACTIVE}*/
+                                    onChange={input => this.modifyQuestionnaire(this.setName, input)}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    {parentQuestions?.map((question) => {
+                        const childQuestions = questionnaire.getChildQuestions(question.Id)
+                        return (
+                            <>
+                                <Grid item xs={12}>
+                                    <QuestionEditCard
+                                        key={question.Id}
+                                        getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
+                                        addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
+                                        removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
+                                        moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
+                                        moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
+                                        forceUpdate={() => this.forceUpdate()}
+                                        question={question}
+                                        onValidation={this.onValidation}
+                                        sectionName={CreateQuestionnairePage.sectionName}
+                                        disabled={!this.state.changes.includes(question.Id!)}
+                                    />
+                                </Grid>
+                                {childQuestions?.map(childQuestion => {
+                                    return (
+                                        <>
+                                            <Grid item xs={1} alignSelf="center" textAlign="center">
+                                            </Grid>
+                                            <Grid item xs={11}>                                                
+                                                <QuestionEditCard
+                                                    key={childQuestion.Id}
+                                                    getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
+                                                    addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
+                                                    removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
+                                                    moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, -1))}
+                                                    moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
+                                                    parentQuestion={question}
+                                                    question={childQuestion}
+                                                    forceUpdate={() => this.forceUpdate()}
+                                                    onValidation={this.onValidation}
+                                                    sectionName={CreateQuestionnairePage.sectionName}
+                                                    disabled={!this.state.changes.includes(childQuestion.Id!)}
+                                                />
+                                            </Grid>
+                                        </>
+                                    )
+                                })}
+                            </>
+                        )
+                    })}
+                    <Grid item xs={12}>
+                        <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
+                            <Divider />
+                            <CardContent>
+                                <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
+                            </CardContent>
+                            <Divider />
+                            <TableContainer component={Card}>
+                                <Table sx={{ width:'100%' }} aria-label="simple table">
+                                    <TableRow>
+                                        <TableCell align="left">
+                                            {this.state.editMode ? 
+                                            <CardActions sx={{ display: "flex", justifyContent: "left" }}>
+                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Deaktiver spørgeskema</Button>
+                                            </CardActions>
+                                            :
+                                            null
+                                            }
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                                <Button variant="outlined"
+                                                    disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
+                                                    onClick={() => {
+                                                        this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
+                                                        this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                    }}
+                                                >Gem som kladde</Button>
+                                                <ConfirmationButton
+                                                    color="primary"
+                                                    variant="contained"
+                                                    contentOfDoActionBtn="Forstået"
+                                                    contentOfCancelBtn="Fortryd"
+                                                    action={async () => {
+                                                        this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
+                                                        this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                    }}
+                                                    skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
+                                                    title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}
+                                                    buttonText={'Gem'}
+                                                >
+                                                    <Typography>Alarmgrænser bør defineres for den/de nye målinger, der er tilføjet, ellers fremstår disse med standardalarmgrænser</Typography>
+                                                </ConfirmationButton>
+                                            </CardActions>
+                                        </TableCell>
+                                    </TableRow>
+                                </Table>
+                            </TableContainer>
+                        </Card>
                     </Grid>
                 </Grid>
                 {this.state.errorToast ?? <></>}

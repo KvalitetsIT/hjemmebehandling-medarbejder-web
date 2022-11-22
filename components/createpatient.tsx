@@ -163,7 +163,7 @@ export default class CreatePatient extends Component<Props, State> {
                 toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
                 overrideContinueButton={
                   <ConfirmationButton
-                    skipDialog={async () => { return this.isFrequencySet() }}
+                    skipDialog={ this.isFrequencySet() }
                     color="primary"
                     variant="contained"
                     action={() => this.submitPatient()}
