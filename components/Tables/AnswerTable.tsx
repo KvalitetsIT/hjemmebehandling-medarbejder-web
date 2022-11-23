@@ -154,6 +154,34 @@ export class AnswerTable extends Component<Props, State> {
 
     }
 
+    sortQuestionsForQuestionnaire(allQuestions: Question[], questionnaire: Questionnaire): Question[] {
+        const result: Question[] = [];
+
+        // tilføj spørgmål der er i det spørgeskemaet sorteres efter den rækkefølge de har her
+        questionnaire.getParentQuestions().forEach(element => {
+          result.push(element);
+          result.push(...questionnaire.getChildQuestions(element.Id));
+
+          // husk evt. deprecatede underspørgsmål til aktivt hovedspørgmål
+          const deprecatedChildQuestions = allQuestions.filter(q => q.deprecated).filter(q => q.enableWhen != undefined && q.enableWhen.questionId == element.Id);
+          result.push(...deprecatedChildQuestions);
+        });
+
+        // tilføj alle deprecated spørgmål sorteret alfabetisk, med tilhørende underspørgmål
+        allQuestions.filter(q => q.deprecated)
+            .filter(q => q.enableWhen == undefined)
+            .sort((a,b) => a.abbreviation!.localeCompare(b.abbreviation!))
+            .forEach(question => {
+                const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
+            
+                result.push(question);
+                result.push(...childQuestions);
+            })
+        ;
+            
+        return result;
+    }
+
     renderTableData(questionaire: Questionnaire): JSX.Element {
         if (this.state.loading)
             return (<LoadingSmallComponent />)
@@ -173,6 +201,7 @@ export class AnswerTable extends Component<Props, State> {
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
         const allQuestions = this.questionnaireService.findAllQuestions(questionnairesResponsesToShow);
+        const sortedQuestions = this.sortQuestionsForQuestionnaire(allQuestions, this.props.questionnaires);
 
         return (<>
             <Grid container spacing={3}>
@@ -226,8 +255,8 @@ export class AnswerTable extends Component<Props, State> {
 
                                 </TableHead>
                                 <TableBody>
-                                    {allQuestions.filter(q => q.enableWhen == undefined).map(question => {
-                                        const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
+                                    {sortedQuestions.filter(q => q.enableWhen == undefined).map(question => {
+                                        const childQuestions = sortedQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
 
                                         return (
                                             <>
