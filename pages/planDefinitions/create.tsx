@@ -181,7 +181,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
                                         previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
-                                        continueButtonContentOverride="Aktivere"
+                                        continueButtonContentOverride="Aktivér"
                                         continueButtonAction={() => {
 
                                             this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
