@@ -232,6 +232,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
 
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+        this.questionnaire2.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+        this.questionnaire3.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
