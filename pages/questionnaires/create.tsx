@@ -293,7 +293,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
                                                     title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}
-                                                    buttonText={'Gem'}
+                                                    buttonText={'Aktivere'}
                                                 >
                                                     <Typography>Alarmgrænser bør defineres for den/de nye målinger, der er tilføjet, ellers fremstår disse med standardalarmgrænser</Typography>
                                                 </ConfirmationButton>
