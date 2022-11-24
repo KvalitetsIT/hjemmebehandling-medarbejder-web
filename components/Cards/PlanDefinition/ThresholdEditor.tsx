@@ -148,7 +148,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
 
                             <Box marginRight={4}>
                                 <Typography>
-                                    Vælg et maksimum og et minimum for alarmgrænnserne.
+                                    Vælg et maksimum og et minimum for alarmgrænserne.
                                     Værdier bliver valideringspunkter for patientents indtastning.
                                     Værdierne kan derfor ikke overskrives.
                                     Minimum værdien kan også sættes, dette kan være relevant f.eks. temperatur.
