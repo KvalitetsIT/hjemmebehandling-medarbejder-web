@@ -274,7 +274,7 @@ export class AnswerTable extends Component<Props, State> {
                                         this.setState( {
                                             hidden: hidden
                                         })
-                                    }}>{this.state.hidden ? "Vis" : "Skjul"} forældede spørgsmål og svar</Button>
+                                    }}>{this.state.hidden ? "Vis" : "Skjul"} forældede spørgsmål</Button>
                                     
                                 </TableFooter>
                             </Table>
