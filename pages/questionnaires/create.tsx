@@ -5,7 +5,7 @@ import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/h
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Prompt, Redirect } from "react-router-dom";
 import { CallToActionCard } from "../../components/Cards/CallToActionCard";
 import { QuestionEditCard } from "../../components/Cards/QuestionEditCard";
 import { TextFieldValidation } from "../../components/Input/TextFieldValidation";
@@ -161,6 +161,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     renderContent(): JSX.Element {
 
+        const prompt = (
+            <Prompt
+                when={true}
+                message={() => "Du har ikke gemt eventuelle ændringerne - vil du fortsætte?"}
+            />
+        )
+
         if (this.state.submitted)
             return (<Redirect push to={"/questionnaires"} />)
 
@@ -183,6 +190,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const callToAction = questionnaire.getCallToActions().find(() => true);
         return (
             <>
+                {prompt}
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Card>

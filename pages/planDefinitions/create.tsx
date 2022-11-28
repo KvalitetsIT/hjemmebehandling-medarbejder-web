@@ -2,7 +2,7 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Prompt, Redirect } from "react-router-dom";
 import { AccordianWrapper } from "../../components/Cards/PlanDefinition/AccordianWrapper";
 import { PlanDefinitionEdit } from "../../components/Cards/PlanDefinition/PlanDefinitionEdit";
 import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefinition/PlanDefinitionEditQuestionnaire";
@@ -103,6 +103,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
         if (this.state.submitted) return (<Redirect push to={"/plandefinitions"} />)
 
+        const prompt = (
+            <Prompt
+                when={true}
+                message={() => "Du har ikke gemt eventuelle ændringerne - vil du fortsætte?"}
+            />
+        )
 
         const validationScheme =
             yup.object().shape({
@@ -114,6 +120,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         console.log("main-", this.state.planDefinition)
         return (
             <>
+                {prompt}
                 <Formik
                     initialValues={this.state.planDefinition}
                     onSubmit={(values: FormikValues) => {
