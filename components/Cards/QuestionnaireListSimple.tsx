@@ -99,7 +99,7 @@ export class QuestionnaireListSimple extends Component<Props, State> {
             return (
                 <Alert sx={{ margin: 2 }} color='warning' icon={<WarningAmberIcon />}>
                     <Typography variant='h6'>Denne patient mangler at besvare et eller flere spørgeskemaer</Typography>
-                    <Typography>OBS! Der er en blå alarm på patienten, der forsvinder, hvis du laver ændringer her på siden. HUSK at håndtere den blå alarm.</Typography>
+                    <Typography>OBS! Der er en blå alarm på patienten, der forsvinder, hvis du laver ændringer i frekvens. HUSK at håndtere den blå alarm.</Typography>
                 </Alert>
             )
         }
