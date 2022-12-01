@@ -9,7 +9,7 @@ function Patients(): JSX.Element {
       <Grid container spacing={3}>
         <Grid className="grid__headline" item xs={12}>
           <Typography variant="h6">
-            Ulæste besvarelser
+            Ubehandlede besvarelser
           </Typography>
         </Grid>
         <Grid className="grid__table" item xs={12}>
