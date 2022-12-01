@@ -68,7 +68,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
                 return thresholdPoint ? thresholdPoint.category : CategoryEnum.RED;
             }
 
-            throw new UnsupportedError(answer, "En besvarelse indeholder en ukendt svartype - Kontakt en adminstrator")
+            throw new UnsupportedError(answer, "En besvarelse indeholder en ukendt svartype - Kontakt en administrator")
 
         } catch (error: unknown) {
             return this.HandleError(error);

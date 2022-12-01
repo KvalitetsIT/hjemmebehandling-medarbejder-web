@@ -144,7 +144,7 @@ export default function MiniDrawer(): JSX.Element {
               <ListItem >
                 <ListItemIcon>
                 </ListItemIcon>
-                <ListItemText primary={<Typography variant="h6">Adminstrator</Typography>} />
+                <ListItemText primary={<Typography variant="h6">Administrator</Typography>} />
               </ListItem>
 
               <ListItem button component={Link} color="inherit" to="/questionnaires">
