@@ -144,7 +144,7 @@ export default class CreatePatient extends Component<Props, State> {
               <AccordianWrapper
                 key={PatientAccordianSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
                 expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.primaryContactInfo}
-                title="Primærkontakt"
+                title="Primær kontakt"
                 toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
                 continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
                 previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}>
@@ -213,7 +213,7 @@ export default class CreatePatient extends Component<Props, State> {
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
                     </Step>
                     <Step key="relativecontact">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(!this.state.contactError && this.getActiveStep() > 1)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primærkontakt</StepLabel>
+                      <StepLabel StepIconComponent={this.GetCheckboxIcon(!this.state.contactError && this.getActiveStep() > 1)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primær kontakt</StepLabel>
                     </Step>
                     <Step key="plandefinition">
                       <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>

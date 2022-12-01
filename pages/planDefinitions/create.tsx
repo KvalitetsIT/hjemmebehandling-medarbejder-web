@@ -248,7 +248,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                     <StepLabel error={errors.questionnaires != undefined && touched.questionnaires}>Tilknyt spørgeskema</StepLabel>
                                                 </Step>
                                                 <Step key="setThresholds">
-                                                    <StepLabel error={this.state.error!= undefined}>Sætte alarmgrænser</StepLabel>
+                                                    <StepLabel error={this.state.error!= undefined}>Sæt alarmgrænser</StepLabel>
                                                 </Step>
 
                                             </Stepper>
