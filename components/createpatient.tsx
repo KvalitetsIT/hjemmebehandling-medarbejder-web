@@ -167,12 +167,14 @@ export default class CreatePatient extends Component<Props, State> {
                     color="primary"
                     variant="contained"
                     action={() => this.submitPatient()}
-                    title={'Obs. frekvens ikke defineret'}
+                    title={'OBS - Der er ikke angivet frekvens for tildelte spørgeskemaer'}
                     buttonText={'Gem patient'}
                     disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
                     
-                    <Typography>Ønsker du at fortsætte?</Typography>
+                    <Typography>Vær opmærksom på følgende: <br />
+                    - Der vil ikke fremkomme blå alarmer, hvis borgeren mangler at indsende besvarelse.<br />
+                    - Borgeren kan ikke se, hvilke dage, der skal indsendes besvarelse.</Typography>
                   </ConfirmationButton>
                 }
                 previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}

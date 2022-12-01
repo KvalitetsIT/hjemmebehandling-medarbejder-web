@@ -84,6 +84,7 @@ export class ConfirmationButton extends Component<Props, State> {
           onClose={() => this.CloseVerificationBox()}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          maxWidth="lg"
         >
           <DialogTitle id="alert-dialog-title">
             {this.props.title}

@@ -57,7 +57,8 @@ export class PatientCard extends Component<Props, State> {
                   {this.props.patient.cprToString()}
                 </Typography>
                 <Typography variant="subtitle2">
-                  {this.props.patient.primaryPhonenumberToString()} {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhonenumberToString() + ")" : ""}
+                  {this.props.patient.primaryPhonenumberToString()}<br />
+                  {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhonenumberToString() + ")" : ""}
                 </Typography>
               </Grid>
             </Grid>
@@ -100,7 +101,7 @@ export class PatientCard extends Component<Props, State> {
                 <Typography variant="subtitle2">
                   {contact?.fullname} {contact?.affiliation ? "(" + contact.affiliation + ")" : ""}
                   <br />
-                  {contact?.primaryPhonenumberToString()} {contact?.secondaryPhone ? "(" + contact.secondaryPhonenumberToString() + ")" : ""}<br />
+                  {contact?.primaryPhonenumberToString()} <br />{contact?.secondaryPhone ? "(" + contact.secondaryPhonenumberToString() + ")" : ""}<br />
                 </Typography>
               </IsEmptyCard>
             </Grid>
