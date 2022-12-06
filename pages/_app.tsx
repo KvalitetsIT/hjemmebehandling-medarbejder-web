@@ -545,7 +545,10 @@ const THEME = createTheme({
           style: {
             backgroundColor: yellowLight,
             color: black,
-            fontSize: 16
+            fontSize: 16,
+            borderWidth: 2,
+            borderStyle: 'dashed'
+
           }
         },
         {
@@ -553,7 +556,9 @@ const THEME = createTheme({
           style: {
             backgroundColor: redLight,
             color: black,
-            fontSize: 16
+            fontSize: 16,
+            borderWidth: 2,
+            borderStyle: 'solid'
           }
         }
       ]

@@ -17,6 +17,20 @@ a {
   padding-bottom: 20px;
 }
 
+.answer__header-color.error {
+  border: solid 2px black;
+  background-color: #FAD8D7;
+}
+
+.answer__header-color.warning {
+  border: dashed 2px black;
+  background-color: #FFEFD0;
+}
+
+.answer__header-color.success {
+  background-color: #D0EFDC;
+}
+
 /*=========== Typography ===========*/
 
 /* answer table */

@@ -231,7 +231,7 @@ export class AnswerTable extends Component<Props, State> {
                                                     align="center"
                                                 >
 
-                                                    <Stack className='answer__header-color' component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor} minWidth={"250px"}>
+                                                    <Stack className={'answer__header-color' + ' ' + severity} component={Alert} spacing={1} alignItems="center" alignContent="center" alignSelf="center" textAlign="center" icon={false} severity={severity as AlertColor} minWidth={"250px"}>
                                                         <div className="answer__header">
                                                             <Typography className="answer__headline" align="center">{questionResponse.answeredTime ? this.datehelper.DayIndexToDay(questionResponse.answeredTime.getUTCDay()) : ""}</Typography>
                                                             <Typography className="answer__date" align="center" variant="caption">{questionResponse.answeredTime ? this.datehelper.DateToString(questionResponse.answeredTime) : ""}</Typography>
