@@ -228,7 +228,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             const api = this.careplanApi
             const request = {
-                id: FhirUtils.unqualifyId(task.carePlanId)
+                id: FhirUtils.unqualifyId(task.carePlanId),
+                questionnaireId: FhirUtils.unqualifyId(task.questionnaireId)
             }
 
             return await api.resolveAlarm(request)
