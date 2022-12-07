@@ -212,7 +212,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             </CardContent>
                         </Card>
                     </Grid>
-                    {parentQuestions?.map((question) => {
+                    {parentQuestions?.map((question, index) => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
                         return (
                             <>
@@ -229,6 +229,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         onValidation={this.onValidation}
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}
+                                        deletable={index==0}
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {

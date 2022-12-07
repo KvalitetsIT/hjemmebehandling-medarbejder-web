@@ -27,6 +27,7 @@ interface Props {
     onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
     sectionName?: string
     disabled: boolean
+    deletable?: boolean
 }
 interface State {
     question: Question
@@ -213,7 +214,7 @@ export class QuestionEditCard extends Component<Props, State>{
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
 
                                 <ButtonGroup variant="text" >
-                                    <IconButton onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                    <IconButton disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                         <DeleteOutlineIcon />
                                     </IconButton>
                                     <Button disabled={this.props.parentQuestion != undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
