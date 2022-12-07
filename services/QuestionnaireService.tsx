@@ -207,55 +207,43 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     return questionnaire;
   }
 
-  FindClosestIndex(closestToIndex: number, list: BaseQuestion[], predicate: (question: BaseQuestion, index: number) => boolean): number {
-    //FindIndex-method starts at index 0 and increments from there
-    //findClosestIndex-method starts at the closestToIndex-param and finds the index matching the given predicate that is closest to the the provided index
-
-    let left = closestToIndex;
-    let right = closestToIndex
-    let iterations = 0;
-
-    let result = -1;
-    while (!(left == 0 && right == list.length - 1) && result == -1 && iterations < list.length) {
-      if (predicate(list[left], left))
-        result = left;
-      if (predicate(list[right], right))
-        result = right;
-
-      left = left - 1 <= 0 ? 0 : left - 1;
-      right = right + 1 > list.length ? list.length : right + 1;
-      iterations++;
-    }
-
-    return result
-  }
-
   MoveQuestion(questionnaire: Questionnaire, question: Question, step: number): Questionnaire {
 
     const questionToMoveIsParent = question.enableWhen?.questionId == undefined
     if (!questionnaire)
       return questionnaire;
 
-    const oldQuestions = questionnaire.questions;
+    const oldQuestions: Question[] = questionnaire.questions!.filter(q => q instanceof Question);
     if (!oldQuestions)
       return questionnaire;
 
     const fromPosition = oldQuestions.findIndex(q => q.Id == question.Id)
 
-
-    const isQuestionParent = (question: Question) => question instanceof Question && question.enableWhen?.questionId == undefined;
     let toPosition = -1;
-
-    const moveItemUp = step < 0;
-    if (moveItemUp) {
-      toPosition = this.FindClosestIndex(fromPosition, oldQuestions, (e, i) => i <= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
+    if (step < 0) {
+      // moving up
+      for (let i = fromPosition+step; i >= 0; i--) {
+        console.log(i)
+        const nextIsParent = oldQuestions[i].enableWhen?.questionId == undefined
+        if ((questionToMoveIsParent && nextIsParent) || (!questionToMoveIsParent && !nextIsParent)) {
+          toPosition = i;
+          break;
+        }
+      }
+      //console.log("moving up", fromPosition, toPosition);
+    }
+    else {
+      // moving down
+      for (let i = fromPosition+step; i < oldQuestions.length; i++) {
+        const nextIsParent = oldQuestions[i].enableWhen?.questionId == undefined
+        if ((questionToMoveIsParent && nextIsParent) || (!questionToMoveIsParent && !nextIsParent)) {
+          toPosition = i;
+          break;
+        }
+      }
+      //console.log("moving down", fromPosition, toPosition);
     }
 
-    const moveItemDown = step > 0;
-    if (moveItemDown) {
-      toPosition = this.FindClosestIndex(fromPosition, oldQuestions, (e, i) => i >= fromPosition + step && isQuestionParent(e) == questionToMoveIsParent)
-    }
-    
     if (toPosition == -1)
       return questionnaire;
 
@@ -270,8 +258,9 @@ export default class QuestionnaireService extends BaseService implements IQuesti
 
     const afterQuestionnaire = questionnaire;
     afterQuestionnaire.questions = newQuestions;
-
+    
     return afterQuestionnaire;
+    
   }
 }
 
