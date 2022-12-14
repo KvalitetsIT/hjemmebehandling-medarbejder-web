@@ -35,6 +35,7 @@ export class CallToActionCard extends Component<Props, State> {
             callToActionQuestion: props.callToActionQuestion
         }
         this.modifyQuestion = this.modifyQuestion.bind(this);
+        this.validateMessage = this.validateMessage.bind(this);
     }
 
     modifyQuestion(questionModifier: (question: Question, newValue: string) => Question, input: string): void {
@@ -42,7 +43,14 @@ export class CallToActionCard extends Component<Props, State> {
         this.setState({ callToActionQuestion: modifiedQuestion })
     }
 
-
+    async validateMessage(message: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = [];
+        if(message) {
+            errors.push( new InvalidInputModel("condition", "betingelse er ikke valgt"));
+        }
+        return errors;
+    }
+    
     async validateQuestionSelect(enableWhen: EnableWhen<boolean>): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
         if(enableWhen.answer == undefined) errors.push( new InvalidInputModel("condition", "betingelse er ikke valgt"))
@@ -71,6 +79,7 @@ export class CallToActionCard extends Component<Props, State> {
                                 onChange={input => this.modifyQuestion(this.setMessage, input.currentTarget.value)}
                                 sectionName={this.props.sectionName}
                                 onValidation={this.props.onValidation}
+                                validate={this.validateMessage}
                             />
                         </Grid>
 
