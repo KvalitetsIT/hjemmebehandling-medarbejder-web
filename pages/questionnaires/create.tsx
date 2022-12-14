@@ -175,7 +175,12 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             return <>Ingen</>
 
         const questionnaire = this.state.questionnaire;
-        const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
+        const questions: Question[] = [];
+        questionnaire.getParentQuestions().map(question => {
+            questions.push(question);
+            questions.push(...questionnaire.getChildQuestions(question.Id));
+        });
+        //const questions = questionnaire.questions?.filter(q => q.type != QuestionTypeEnum.CALLTOACTION);
         const parentQuestions = questionnaire.getParentQuestions();
 
         //If there are no call-to-actions, we add one
