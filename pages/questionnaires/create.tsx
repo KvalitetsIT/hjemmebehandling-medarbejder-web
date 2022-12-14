@@ -301,10 +301,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                         this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
-                                                    title={'Obs. Husk at opdatere alarmgrænserne i patientgruppen'}
+                                                    title={'OBS - Husk at opdatere alarmgrænser for måling i patientgrupper, hvor spørgeskemaer er tilføjet.'}
                                                     buttonText={'Aktivér'}
                                                 >
-                                                    <Typography>Alarmgrænser bør defineres for den/de nye målinger, der er tilføjet, ellers fremstår disse med standardalarmgrænser</Typography>
+                                                    <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn.</Typography>
                                                 </ConfirmationButton>
                                             </CardActions>
                                         </TableCell>
