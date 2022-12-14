@@ -15,7 +15,7 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import * as yup from 'yup';
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 
 interface Props {
@@ -290,6 +290,13 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             missingDetails.push("Fejl i alarmgrænser")
         }
 
+        this.state.planDefinition.questionnaires?.map(questionnaire => {
+            if (questionnaire.questions?.find(x => x.type == QuestionTypeEnum.OBSERVATION)) {
+                if (questionnaire.thresholds?.flatMap(t => t.thresholdNumbers ?? []).find(t => (t.from == undefined || t.to == undefined) || Number.isNaN(t.from) || Number.isNaN(t.to))) {
+                    missingDetails.push("Alarmgrænser skal angives")
+                }
+            }
+        })
 
         const plandefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.DRAFT, BaseModelStatus.ACTIVE])
 

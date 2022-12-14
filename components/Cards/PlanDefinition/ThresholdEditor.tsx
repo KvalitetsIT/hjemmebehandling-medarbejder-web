@@ -96,8 +96,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         const categoryByIndex = [CategoryEnum.YELLOW, CategoryEnum.GREEN, CategoryEnum.YELLOW, CategoryEnum.RED]
         for (let i = numbers.length - 1; i > 0; i--) {
             const threshold = new ThresholdNumber();
-            threshold.to = numbers[i] * 10
-            threshold.from = numbers[i - 1] * 10
+            //threshold.to = numbers[i] * 10
+            //threshold.from = numbers[i - 1] * 10
             threshold.category = categoryByIndex[i % 4]
             thresholdCollection.thresholdNumbers.push(threshold);
         }
