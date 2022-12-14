@@ -45,9 +45,16 @@ export class CallToActionCard extends Component<Props, State> {
 
     async validateMessage(message: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = [];
-        if(message) {
-            errors.push( new InvalidInputModel("condition", "betingelse er ikke valgt"));
+        const emptyMessage = message.trim() == "";
+        const ewsLength = this.state.callToActionQuestion.enableWhens?.length == 0;
+
+        if(!emptyMessage && ewsLength) {
+            errors.push( new InvalidInputModel("message", "Betingelse er ikke valgt"));
         }
+        if (emptyMessage && !ewsLength) {
+            errors.push( new InvalidInputModel("message", "Besked er ikke angivet"));
+        }
+
         return errors;
     }
     
