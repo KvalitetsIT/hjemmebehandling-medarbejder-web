@@ -255,6 +255,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     const newQuestions = oldQuestions;
     newQuestions[fromPosition] = toPositionItem;
     newQuestions[toPosition] = fromPositionItem;
+    newQuestions.push(...questionnaire.getCallToActions());
 
     const afterQuestionnaire = questionnaire;
     afterQuestionnaire.questions = newQuestions;
