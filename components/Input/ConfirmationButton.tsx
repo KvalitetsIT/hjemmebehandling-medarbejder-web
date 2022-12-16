@@ -15,6 +15,7 @@ export interface Props {
   disabled?: boolean
   contentOfDoActionBtn?: string
   contentOfCancelBtn?: string 
+  cancelBtnIsPrimary?: boolean
   color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   variant: "outlined" | "contained" | "text"
 }
@@ -95,8 +96,20 @@ export class ConfirmationButton extends Component<Props, State> {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>{this.props.contentOfCancelBtn ? this.props.contentOfCancelBtn : "Nej"}</Button>
-            <LoadingButton loading={this.state.doingAction} className="accept__button" color="primary" variant="contained" onClick={async () => await this.doAction()} >
+            <Button className="decline__button"
+              variant={this.props.cancelBtnIsPrimary ? "contained" : "text"}
+              autoFocus={this.props.cancelBtnIsPrimary ? true : false}
+              onClick={() => this.CloseVerificationBox()}
+            >
+              {this.props.contentOfCancelBtn ? this.props.contentOfCancelBtn : "Nej"}
+            </Button>
+            <LoadingButton className="accept__button"
+              color="primary"
+              variant={this.props.cancelBtnIsPrimary ? "text" : "contained"}
+              autoFocus={this.props.cancelBtnIsPrimary ? false : true}
+              loading={this.state.doingAction}
+              onClick={async () => await this.doAction()}
+            >
               {this.props.contentOfDoActionBtn ? this.props.contentOfDoActionBtn : "Ja"}
             </LoadingButton>
           </DialogActions>

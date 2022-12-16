@@ -169,6 +169,9 @@ export default class CreatePatient extends Component<Props, State> {
                     action={() => this.submitPatient()}
                     title={'OBS - Der er ikke angivet frekvens for tildelte spørgeskemaer'}
                     buttonText={'Gem patient'}
+                    contentOfDoActionBtn={'Gem patient'}
+                    contentOfCancelBtn={'Angiv frekvens'}
+                    cancelBtnIsPrimary={true}
                     disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
                     
