@@ -72,7 +72,7 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
                 Frekvens
               </Typography>
               <Typography fontWeight="bold">
-                {questionnaire.frequency!.ToString()}
+                {questionnaire.frequency!.days.length != 0 ? questionnaire.frequency!.ToString() : ''}
               </Typography>
             </Stack>
           </Grid>
