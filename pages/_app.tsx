@@ -103,12 +103,15 @@ const black = '#4a4848'
 
 const green = '#61BD84'
 const greenLight = '#D0EFDC'
+const greenText = '#4A6F58'
 
 const yellow = '#FFD78C'
 const yellowLight = '#FFEFD0'
+const yellowTextAndBorder = '#C37300'
 
 const red = '#EE6969'
 const redLight = '#FAD8D7'
+const redTextAndBorder = '#BF2222'
 
 const blue = '#5D74AC'
 const blueLight = '#E8EFF7'
@@ -536,7 +539,7 @@ const THEME = createTheme({
           props: { variant: 'filled', color: 'success', className: 'answer__chip' },
           style: {
             backgroundColor: greenLight,
-            color: black,
+            color: greenText,
             fontSize: 16
           },
         },
@@ -544,7 +547,7 @@ const THEME = createTheme({
           props: { variant: 'filled', color: 'warning', className: 'answer__chip' },
           style: {
             backgroundColor: yellowLight,
-            color: black,
+            color: yellowTextAndBorder,
             fontSize: 16,
             borderWidth: 2,
             borderStyle: 'dashed'
@@ -555,7 +558,7 @@ const THEME = createTheme({
           props: { variant: 'filled', color: 'error', className: 'answer__chip' },
           style: {
             backgroundColor: redLight,
-            color: black,
+            color: redTextAndBorder,
             fontSize: 16,
             borderWidth: 2,
             borderStyle: 'solid'

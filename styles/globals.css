@@ -18,12 +18,12 @@ a {
 }
 
 .answer__header-color.error {
-  border: solid 2px black;
+  border: solid 2px #BF2222;
   background-color: #FAD8D7;
 }
 
 .answer__header-color.warning {
-  border: dashed 2px black;
+  border: dashed 2px #C37300;
   background-color: #FFEFD0;
 }
 
