@@ -17,6 +17,7 @@ import * as yup from 'yup';
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
 
 interface Props {
     match: { params: { plandefinitionid?: string } }
@@ -27,9 +28,11 @@ interface State {
     submitted: boolean
     errorToast: JSX.Element
     planDefinition: PlanDefinition
+    planDefinitionIsInUse: boolean
     activeAccordian: AccordianRowEnum
     editMode: boolean
     error?: Error
+    originalQuestionnaires: Questionnaire[]
 }
 
 enum AccordianRowEnum {
@@ -54,13 +57,15 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         const newPlanDefinition = new PlanDefinition()
         newPlanDefinition.questionnaires = []
         this.state = {
-            loading: false,
+            loading: true,
             submitted: false,
             errorToast: (<></>),
             error: undefined,
             activeAccordian: AccordianRowEnum.generelInfo,
             planDefinition: newPlanDefinition,
+            planDefinitionIsInUse: false,
             editMode: props.match.params.plandefinitionid ? true : false,
+            originalQuestionnaires: [],
         }
     }
 
@@ -69,21 +74,21 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     async componentDidMount(): Promise<void> {
-        this.setState({ loading: true })
-        try {
-            const providedPlanDefinitionId = this.props.match.params.plandefinitionid
-            if (providedPlanDefinitionId) {
+        const providedPlanDefinitionId = this.props.match.params.plandefinitionid
+        let planDefinitionToEdit = this.state.planDefinition
+        let planDefinitionIsInUse = this.state.planDefinitionIsInUse;
 
-                const planDefinitionToEdit = await this.planDefinitionService.GetPlanDefinitionById(providedPlanDefinitionId)
+        if (providedPlanDefinitionId) {
+            try {
+                planDefinitionToEdit = await this.planDefinitionService.GetPlanDefinitionById(providedPlanDefinitionId)
                 this.sortThresholds(planDefinitionToEdit)
 
-                this.setState({ planDefinition: planDefinitionToEdit });
-
+                planDefinitionIsInUse = await this.planDefinitionService.IsPlanDefinitionInUse(providedPlanDefinitionId);
+            } catch (error) {
+                this.setState(() => { throw error });
             }
-        } catch (error) {
-            this.setState(() => { throw error });
         }
-        this.setState({ loading: false })
+        this.setState({ planDefinition: planDefinitionToEdit, originalQuestionnaires: [...planDefinitionToEdit.questionnaires!], planDefinitionIsInUse: planDefinitionIsInUse, loading: false });
     }
 
     toggleAccordian(page: AccordianRowEnum): void {
@@ -95,12 +100,11 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     render(): JSX.Element {
+        this.InitializeServices();
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
     }
 
     renderCareplanTab(): JSX.Element {
-        this.InitializeServices();
-
         if (this.state.submitted) return (<Redirect push to={"/plandefinitions"} />)
 
         const prompt = (
@@ -117,7 +121,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             })
 
 
-        console.log("main-", this.state.planDefinition)
         return (
             <>
                 {prompt}
@@ -188,12 +191,23 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             this.toggleAccordian(AccordianRowEnum.thresholds)
                                         }}
                                         previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
-                                        continueButtonContentOverride="Aktivér"
-                                        continueButtonAction={() => {
-
-                                            this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
-                                            submitForm()
-                                        }}
+                                        overrideContinueButton={
+                                            <ConfirmationButton
+                                                skipDialog={ !(this.state.planDefinitionIsInUse && this.planDefinitionContainsNewQuestionnaires()) }
+                                                color="primary"
+                                                variant="contained"
+                                                action={() => {
+                                                  this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
+                                                  return submitForm()
+                                                }}
+                                                title={'Der er tilføjet et nyt spørgeskema til patientgruppen.'}
+                                                buttonText={'Aktivér'}
+                                                contentOfDoActionBtn={'OK'}
+                                                contentOfCancelBtn={'Annuller'}
+                                            >
+                                                <Typography>Husk at angive frekvens på spørgeskemaet hos de patienter, der er tilknyttet patientgruppen.</Typography>
+                                            </ConfirmationButton>
+                                        }
                                         additionalButtonActions={[
                                             <Button
                                                 onClick={() => {
@@ -388,5 +402,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             }
         }
         this.setState({ planDefinition: modified })
+    }
+
+    planDefinitionContainsNewQuestionnaires(): boolean {
+        const originalQuestionnaireIds = this.state.originalQuestionnaires.map(q => q.id);
+        const currentQuestionnairesIds = this.state.planDefinition.questionnaires!.map(q => q.id);
+
+        return currentQuestionnairesIds.filter(id => !originalQuestionnaireIds.includes(id)).length != 0;
     }
 }

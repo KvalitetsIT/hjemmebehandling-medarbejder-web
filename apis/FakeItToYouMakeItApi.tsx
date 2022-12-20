@@ -365,6 +365,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     IsQuestionnaireInUse(questionnaireId: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
+    IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }   
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         this.allPlanDefinitions.push(planDefinition);
     }

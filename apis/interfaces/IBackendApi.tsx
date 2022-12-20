@@ -193,5 +193,10 @@ export interface IBackendApi {
     * Returns true if the questionnanire is in use by any plandefinnition otherwise false
     */
     IsQuestionnaireInUse(questionnaireId: string): Promise<boolean>;
+
+    /**
+    * Returns true if the plandefinition is in use by any careplans otherwise false
+    */
+    IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean>;
 }
 

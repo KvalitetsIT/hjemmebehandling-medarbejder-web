@@ -46,5 +46,11 @@ export interface IPlanDefinitionService {
     */
     GetPlanDefinitionById(planDefinitionId: string): Promise<PlanDefinition>
 
+    /**
+     * Checks if the given plandefinition is in use by any careplans
+     * @param planDefinitionId the id of the plandefinition to fetch
+     * @returns true if the plandefinition is in use by any active careplans otherwise false  
+     */
+    IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean>;
 }
 

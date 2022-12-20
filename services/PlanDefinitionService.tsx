@@ -60,4 +60,11 @@ export default class PlanDefinitionService extends BaseService implements IPlanD
         }
     }
 
+    async IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
+        try{
+            return await this.backendApi.IsPlanDefinitionInUse(planDefinitionId);
+        }catch(error){
+            return this.HandleError(error)
+        }
+    }
 }

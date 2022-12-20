@@ -11,7 +11,7 @@ import { CarePlanApi } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnairesRequest, IsQuestionnaireInUseRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
+import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnairesRequest, IsPlanDefinitionInUseRequest, IsQuestionnaireInUseRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
 
 import FhirUtils from "../util/FhirUtils";
 import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
@@ -503,6 +503,24 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     }
 
+    async IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
+        try {
+            const api = this.planDefinitionApi
+            const request: IsPlanDefinitionInUseRequest = {
+                id: planDefinitionId
+            }
+
+            const result = await api.isPlanDefinitionInUse(request);
+            if (typeof result == 'string') {
+                return (result === 'true')
+            }
+            else {
+                return result;
+            }
+        } catch (error: unknown) {
+            return await this.HandleError(error)
+        }
+    }
 
 }
 
