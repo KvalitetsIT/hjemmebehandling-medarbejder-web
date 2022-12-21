@@ -123,7 +123,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             variant="outlined"
                                             size="medium"
                                             minWidth={500}
-                                            uniqueId={this.props.question.Id!}
+                                            uniqueId={this.props.question.Id!+'_question'}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateQuestionName}
                                             onChange={input => this.modifyQuestion(this.setQuestion, input)}
@@ -137,7 +137,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             value={this.props.question.abbreviation}
                                             variant="outlined"
                                             size="medium"
-                                            uniqueId={this.props.question.Id!}
+                                            uniqueId={this.props.question.Id!+'_abbreviation'}
                                             onChange={input => this.modifyQuestion(this.setAbbreviation, input)}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateAbbreviation}
@@ -164,7 +164,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         value={this.props.question.helperText}
                                         variant="outlined"
                                         size="medium"
-                                        uniqueId={this.props.question.Id!}
+                                        uniqueId={this.props.question.Id!+'_helperText'}
                                         minWidth={800}
                                         onChange={input => this.modifyQuestion(this.setHelperText, input)}
                                         required
@@ -180,7 +180,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
                                         disabled={this.props.disabled}
-                                        uniqueId={this.props.question.Id!}
+                                        uniqueId={this.props.question.Id!+'_questionType'}
                                     />
                                 </Grid>
                                 <Grid item xs>
@@ -191,7 +191,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         disabled={this.props.disabled} 
                                         forceUpdate={this.forceCardUpdate}
                                         question={this.state.question} 
-                                        uniqueId={this.props.question.Id!}
+                                        uniqueId={this.props.question.Id!+'_measurementType'}
                                         />
 
                                         : <></>}
@@ -254,7 +254,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         category={option.category} 
                                         onChange={(newCategory) => { option.category = newCategory }} 
                                         onValidation={this.props.onValidation}
-                                        uniqueId={this.props.question.Id!}
+                                        uniqueId={this.props.question.Id!+option.option}
                                     />
                                 </TableCell>
                             </TableRow>

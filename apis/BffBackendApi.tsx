@@ -25,6 +25,7 @@ import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/Servi
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { ValueSetApi } from "../generated/apis/ValueSetApi";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -158,7 +159,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     title: questionnaire.name,
                     status: questionnaire.status?.toString(),
                     callToActions: questionnaire.getCallToActions().map(x => this.toExternal.mapCallToAction(x)),
-                    questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id))),
+                    questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id && question.type == QuestionTypeEnum.BOOLEAN))),
                 }
             }
             

@@ -111,17 +111,37 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             loading: true
         })
 
-
         await this.validateEvent.dispatchEvent()
 
         try {
             const valid = this.state.errors.size == 0
 
             if (valid) {
+                const questionnaire = this.state.questionnaire!;
+            
+                const manualValidationError1 = questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .filter((q: Question) => q.type == QuestionTypeEnum.BOOLEAN)
+                    .map(q => questionnaire.thresholds!.find(t => t.questionId == q.Id))
+                    .flatMap(tc => tc?.thresholdOptions ?? [])
+                    .find(to => to.category == undefined)
+                const manualValidationError2 = questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .filter((q: Question) => q.type == QuestionTypeEnum.OBSERVATION)
+                    .find((q: Question) => q.measurementType == undefined);
+                
+                if (manualValidationError1 || manualValidationError2) {
+                    throw new MissingDetailsError([]);
+                }
+                
+                questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .filter((q: Question) => q.type == QuestionTypeEnum.BOOLEAN)
+                    .forEach((q: Question) => q.measurementType = undefined);
 
-                if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(this.state.questionnaire);
+                if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(questionnaire);
 
-                if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(this.state.questionnaire);
+                if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(questionnaire);
 
                 this.setState({
                     submitted: true

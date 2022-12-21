@@ -92,6 +92,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
         }
 
         window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+        this.validate();
     }
 
     render(): JSX.Element {
