@@ -68,7 +68,7 @@ export class CallToActionCard extends Component<Props, State> {
         const callToActionQuestion = this.state.callToActionQuestion;
         return (
             <Card component={Box} minWidth={100}>
-                <CardHeader subheader={<Typography variant="h6">Opfordring til patienthandling</Typography>} />
+                <CardHeader className="callToAction-cardHeader" subheader={<Typography variant="h6" className="callToActionTab">Opfordring til patienthandling</Typography>} />
                 <Divider />
                 <CardContent>
                     <Grid container spacing={2}>

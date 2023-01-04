@@ -100,6 +100,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
 
 const black = '#4a4848'
+const white = '#FFFFFF'
 
 const green = '#61BD84'
 const greenLight = '#D0EFDC'
@@ -142,6 +143,14 @@ const THEME = createTheme({
           props: { className: "labelTextTab" },
           style: {
             color: black,
+            textTransform: "none",
+            fontWeight: "bold",
+          }
+        },
+        {
+          props: { className: "callToActionTab" },
+          style: {
+            color: white,
             textTransform: "none",
             fontWeight: "bold",
           }
@@ -438,6 +447,16 @@ const THEME = createTheme({
           props: { className: 'user' },
           style: {
             backgroundColor: 'transparent'
+          }
+        }
+      ]
+    },
+    MuiCardHeader: {
+      variants: [
+        {
+          props: { className: 'callToAction-cardHeader' },
+          style: {
+            backgroundColor: blue,
           }
         }
       ]
