@@ -204,6 +204,10 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     if (indexOfElementToRemove > -1)
       questionnaire.questions.splice(indexOfElementToRemove, 1);
 
+    const callToActions =questionnaire.getCallToActions()[0];
+    const newEnableWhens = callToActions.enableWhens?.filter(ew => ew.questionId !== questionToRemove.Id);
+    callToActions.enableWhens = newEnableWhens;
+
     return questionnaire;
   }
 
