@@ -21,6 +21,7 @@ import  NewPatientPage  from '../../pages/newPatients';
 import  EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
 import  EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
 import  EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
+import  AboutPage  from '../../pages/about';
 
 
 export interface State {
@@ -99,6 +100,8 @@ export class Layout extends Component<{}, State> {
 
                     <Route path="/patients"><Patients /></Route>
                     <Route path="/newpatient" render={(props) => <NewPatientPage editmode={false} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...props} />} />
+
+                    <Route path="/about"><AboutPage /></Route>
 
                     <Route path="/"><Patients /></Route>
                   </Switch>

@@ -262,8 +262,6 @@ const THEME = createTheme({
           props: { className: 'toButtom' },
           style: {
             marginTop: "auto",
-            marginRight: 10,
-            marginLeft: 10
           }
         }
       ]

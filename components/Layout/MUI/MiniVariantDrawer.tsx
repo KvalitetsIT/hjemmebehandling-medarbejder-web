@@ -12,7 +12,8 @@ import { Typography } from '@mui/material';
 
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
-import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon } from '../../Icons/Icons';
+import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon, AboutIcon } from '../../Icons/Icons';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const drawerWidth = 270;
 
@@ -167,13 +168,12 @@ export default function MiniDrawer(): JSX.Element {
         </List>
 
         <List className='toButtom'>
-          <ListItem className='newPatientButton' button component={Link} color="inherit" to="/newpatient">
+          <ListItem button component={Link} color="inherit" to="/about">
             <ListItemIcon>
-              <AddIcon fontSize="medium" style={{ color: "white", marginLeft: -5 }} />
+              <AboutIcon size='2.5em' />
             </ListItemIcon>
-            <ListItemText primary="Opret patient" />
-
-          </ListItem>
+            <ListItemText primary="Om KOMO" />
+          </ListItem>          
         </List>
 
 
