@@ -163,7 +163,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                     </AccordianWrapper>
 
                                     <AccordianWrapper
-                                        error={errors.questionnaires != undefined}
+                                        error={touched.questionnaires && this.state.planDefinition.questionnaires?.length == 0}
                                         expanded={this.state.activeAccordian == AccordianRowEnum.attachQuestionnaire}
                                         title="Tilknyt spørgeskema"
                                         toggleExpandedButtonAction={() => {
@@ -171,8 +171,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)
                                         }}
                                         continueButtonAction={() => {
-                                            validateField("questionnaires")
-                                            this.toggleAccordian(AccordianRowEnum.thresholds)
+                                            validateField("questionnaires");
+                                            setFieldTouched("questionnaires");
+                                            this.toggleAccordian(AccordianRowEnum.thresholds);
                                         }}
                                         previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.generelInfo)}
                                     >
@@ -259,7 +260,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                     <StepLabel error={errors.name != undefined}>Udfyld patientgruppens navn</StepLabel>
                                                 </Step>
                                                 <Step key="attachQuestionnaire">
-                                                    <StepLabel error={errors.questionnaires != undefined && touched.questionnaires}>Tilknyt spørgeskema</StepLabel>
+                                                    <StepLabel error={touched.questionnaires && this.state.planDefinition.questionnaires?.length == 0}>Tilknyt spørgeskema</StepLabel>
                                                 </Step>
                                                 <Step key="setThresholds">
                                                     <StepLabel error={this.state.error!= undefined}>Sæt alarmgrænser</StepLabel>
