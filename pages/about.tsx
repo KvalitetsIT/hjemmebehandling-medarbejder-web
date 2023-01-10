@@ -1,17 +1,8 @@
-import { Card, CardHeader, CardContent, Stack, Typography, Divider, List, ListItem, ListItemIcon, ListItemText, Link, Box, Button } from "@mui/material"
+import { Card, CardHeader, CardContent, Stack, Typography, Divider, List, ListItem, ListItemIcon, ListItemText, Link } from "@mui/material"
 import { Component } from "react"
-import CreatePatient, { PatientAccordianSectionsEnum } from "../components/createpatient"
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
-import CircleIcon from '@mui/icons-material/Circle';
 import { AboutManufacturerIcon, AboutUserGuideIcon, AboutMedicalDeviceIcon, AboutWarningsIcon } from '../components/Icons/Icons';
 
-interface Props {
-    editmode: boolean,
-    activeAccordian: PatientAccordianSectionsEnum,
-    match: { params: { cpr?: string, questionnaireId?: string, careplanId?: string } }
-  }
-
-export default class AboutPage extends Component<Props> {
+export default class AboutPage extends Component<{}> {
     render() : JSX.Element{
         return (
             <Card>

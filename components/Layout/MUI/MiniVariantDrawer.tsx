@@ -7,13 +7,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
-
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
 import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon, AboutIcon } from '../../Icons/Icons';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const drawerWidth = 270;
 
