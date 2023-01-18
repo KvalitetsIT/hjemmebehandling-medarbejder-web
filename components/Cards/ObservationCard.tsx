@@ -16,6 +16,8 @@ import ChartData from '@kvalitetsit/hjemmebehandling/Charts/ChartData';
 import ResponseViewCard from '@kvalitetsit/hjemmebehandling/Charts/ResponseViewCard';
 import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
+import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
+import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 
 export interface Props {
     careplan: PatientCareplan;
@@ -103,9 +105,54 @@ export class ObservationCard extends Component<Props, State> {
             <>
                 {allQuestions.map((question, i) => {
                     const threshold = this.props.questionnaire!.thresholds?.find(x => x.questionId == question.Id)
+                    const graphThreshold = JSON.parse(JSON.stringify(threshold));
+
+                    // answer values can lie outside thresholds as a consequence of input validation when answering a question
+                    // was split out into system-wide (organization) threshold configured on the measurement type.
+                    // This code will search for such value(s), and if found add extra visual-only thresholds to be displayed by the graph.
+                    if (threshold && threshold.thresholdNumbers) {
+                        const froms = threshold.thresholdNumbers!.filter(t => t.from !== undefined).map(t => t.from!);
+                        const tos = threshold.thresholdNumbers!.filter(t => t.to !== undefined).map(t => t.to!);
+                        
+                        const minThreshold = Math.min(...froms);
+                        const maxThreshold = Math.max(...tos);
+
+                        let minAnswer, maxAnswer;
+                        for (const qr of this.state.questionnaireResponses) {
+                            const questionnaireQuestion = Array.from(qr.questions!.keys()).find(x => x.isEqual(question));
+                            const answer = qr.questions!.get(questionnaireQuestion!) as NumberAnswer | undefined
+
+                            if (answer?.answer != undefined) {
+                                if (minAnswer === undefined || minAnswer > answer.answer!) {
+                                    minAnswer = answer.answer
+                                }
+                                if (maxAnswer === undefined || maxAnswer < answer.answer!) {
+                                    maxAnswer = answer.answer
+                                }
+                            }
+                        }
+
+
+                        if (minAnswer !== undefined && minAnswer < minThreshold) {
+                            const extraVisualThreshold = new ThresholdNumber();
+                            extraVisualThreshold.category = CategoryEnum.RED;
+                            extraVisualThreshold.from = minThreshold;
+                            extraVisualThreshold.to = minAnswer;
+                    
+                            graphThreshold?.thresholdNumbers?.push(extraVisualThreshold);
+                        }
+                        if (maxAnswer !== undefined && maxAnswer > maxThreshold) {
+                            const extraVisualThreshold = new ThresholdNumber();
+                            extraVisualThreshold.category = CategoryEnum.RED;
+                            extraVisualThreshold.from = maxAnswer;
+                            extraVisualThreshold.to = maxThreshold;
+                    
+                            graphThreshold?.thresholdNumbers?.push(extraVisualThreshold);
+                        }
+                    }
 
                     const dateToString = (date: Date) => this.dateHelper.DateToString(date);
-                    const chartData = new ChartData(this.state.questionnaireResponses, question, threshold, dateToString);
+                    const chartData = new ChartData(this.state.questionnaireResponses, question, graphThreshold, dateToString);
                     const subheader = question.abbreviation ?? question.question ?? ""
                     return (
                         <Grid paddingLeft={i % 2 == 0  ? 0 : 2} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
