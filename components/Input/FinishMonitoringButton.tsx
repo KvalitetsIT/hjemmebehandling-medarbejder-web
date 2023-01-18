@@ -76,6 +76,7 @@ export class FinishMonitoringButton extends React.Component<Props, State>{
                     className='darkColor border'
                     title="Afslut monitoreringsplan?"
                     buttonText="Afslut monitoreringsplan"
+                    skipDialog={false}
                     action={async () => await this.finishCareplan(this.props.careplan)}>
                     Er du sikker på, at du ønsker at afslutte patientens monitoreringsplan?
                 </ConfirmationButton>
