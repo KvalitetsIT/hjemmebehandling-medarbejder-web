@@ -381,14 +381,17 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             const request = {
                 onlyUnsatisfiedSchedules: true,
                 onlyActiveCareplans: true,
-                pageNumber: page,
-                pageSize: pagesize
+                //pageNumber: undefined,
+                //pageSize: undefined
             }
 
 
             const carePlans = await api.searchCarePlans(request)
-
-            return carePlans.flatMap(cp => this.toInternal.buildUnansweredTaskFromCarePlan(cp))
+            const allUnanswered = carePlans.flatMap(cp => this.toInternal.buildUnansweredTaskFromCarePlan(cp))
+            const start = ((page-1)*pagesize);
+            const toReturn = allUnanswered.slice(start, start+pagesize);
+            //console.log(allUnanswered, "slice(", start, ",", start+pagesize, ") = ", toReturn)
+            return toReturn;
         } catch (error: unknown) {
             return await this.HandleError(error)
         }
