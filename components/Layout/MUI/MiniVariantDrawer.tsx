@@ -167,7 +167,7 @@ export default function MiniDrawer(): JSX.Element {
         <List className='toButtom'>
           <ListItem button component={Link} color="inherit" to="/about">
             <ListItemIcon>
-              <AboutIcon size='2.5em' />
+              <AboutIcon />
             </ListItemIcon>
             <ListItemText primary="Om KOMO" />
           </ListItem>          
