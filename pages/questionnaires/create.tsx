@@ -312,7 +312,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         <TableCell align="right">
                                             <CardActions sx={{ display: "flex", justifyContent: "right" }}>
                                                 <Button variant="outlined"
-                                                    disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
+                                                     disabled={(this.state.questionnaire.id != undefined) && (this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT)) }
                                                     onClick={() => {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
