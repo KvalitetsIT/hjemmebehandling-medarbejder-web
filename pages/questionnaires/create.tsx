@@ -2,7 +2,7 @@ import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/Ba
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { Prompt, Redirect } from "react-router-dom";
@@ -106,7 +106,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
 
-    async submitQuestionnaire(): Promise<void> {
+    async submitQuestionnaire(newStatus: QuestionnaireStatus | BaseModelStatus): Promise<void> {
         this.setState({
             loading: true
         })
@@ -138,6 +138,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type == QuestionTypeEnum.BOOLEAN)
                     .forEach((q: Question) => q.measurementType = undefined);
+
+                questionnaire.status = newStatus;
 
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(questionnaire);
 
@@ -312,8 +314,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                 <Button variant="outlined"
                                                     disabled={this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT) }
                                                     onClick={() => {
-                                                        this.modifyQuestionnaire(this.setStatus, undefined, "DRAFT");
-                                                        this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                        const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
+                                                        this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
                                                     }}
                                                 >Gem som kladde</Button>
                                                 <ConfirmationButton
@@ -322,8 +324,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     contentOfDoActionBtn="Forstået"
                                                     contentOfCancelBtn="Fortryd"
                                                     action={async () => {
-                                                        this.modifyQuestionnaire(this.setStatus, undefined, "ACTIVE");
-                                                        this.submitQuestionnaire().then(() => this.validateEvent.dispatchEvent())
+                                                        const newStatus = Questionnaire.stringToQuestionnaireStatus("ACTIVE");
+                                                        this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent()).catch(() => console.log("SUBMIT.. men med fejl"))
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
                                                     title={'OBS - Husk at opdatere alarmgrænser for måling i patientgrupper, hvor spørgeskemaer er tilføjet.'}
