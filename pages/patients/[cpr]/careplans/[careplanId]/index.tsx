@@ -14,7 +14,6 @@ import { IQuestionnaireService } from '../../../../../services/interfaces/IQuest
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
-import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 
 interface State {

@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import { PencilIcon } from '../Icons/Icons';
-import { textChangeRangeIsUnchanged } from 'typescript';
 
 export interface Props {
   careplan: PatientCareplan

@@ -52,7 +52,7 @@ export class ObservationCard extends Component<Props, State> {
         await this.getResponses()
     }
 
-    async getResponses() {
+    async getResponses(): Promise<void> {
         if (this.props.questionnaire) {     
             try {
                 const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50) ?? []
@@ -79,11 +79,11 @@ export class ObservationCard extends Component<Props, State> {
         return 6
     }
 
-    updateAndNotify(){
+    updateAndNotify(): void{
         this.getResponses()
     }
 
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<Props>): void {
         if (prevProps.questionnaire !== this.props.questionnaire) {
             this.updateAndNotify();
           }
