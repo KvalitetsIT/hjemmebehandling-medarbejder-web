@@ -20,6 +20,7 @@ export interface BasicTabsProps {
   tabContent: JSX.Element[]
   class: string
   linkToId: boolean
+  onChange?: (index: number) => void
 }
 export interface BasicTabsState {
   value: number
@@ -41,6 +42,7 @@ export class BasicTabs extends Component<BasicTabsProps, BasicTabsState> {
 
   handleChange = (event: React.SyntheticEvent, newValue: number): void => {
     this.setState({ value: newValue })
+    this.props.onChange && this.props.onChange(newValue)
   };
 
   render(): JSX.Element {

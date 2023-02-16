@@ -85,10 +85,8 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   async handleSelection(ids: string[]): Promise<void> {
 
-    console.log("ids", ids)
 
     const plandefinitions = ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
-    console.log("plandefinitions", plandefinitions)
 
     const careplan = this.state.editedCareplan;
 
@@ -100,13 +98,8 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     const selectedQuestionnaires = plandefinitions.flatMap(pd =>pd?.questionnaires ? pd.questionnaires as Questionnaire[] : []);
     const existingQuestionnanires = careplan.questionnaires.filter(q => selectedQuestionnaires.map(q => q.id).includes( q.id));
     
-    
-    console.log("existingQuestionnanires", existingQuestionnanires)
-    console.log("selectedQuestionnaires", selectedQuestionnaires)
-
     careplan.questionnaires = this.mergeQuestionnaires(existingQuestionnanires,  selectedQuestionnaires)
     
-    console.log("merged", careplan.questionnaires)
     
 
 

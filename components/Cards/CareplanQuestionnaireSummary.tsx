@@ -9,10 +9,13 @@ import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import ApiContext from '../../pages/_context';
 import { PencilIcon } from '../Icons/Icons';
+import { textChangeRangeIsUnchanged } from 'typescript';
 
 export interface Props {
   careplan: PatientCareplan
   questionnaireResponses: QuestionnaireResponse[]
+  onChange?: (questionnaire : Questionnaire ) => void 
+  initialQuestionnaire?: Questionnaire
 }
 
 
@@ -27,13 +30,13 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
   render(): JSX.Element {
     this.InitialiseServices()
     const questionnaires = this.props.careplan.questionnaires;
-    
+    const initialQuestionnaire = this.props.initialQuestionnaire ?? questionnaires[0];
+
     return (
       <>
-
-
             <BasicTabs
-              idOfStartTab={questionnaires[0].id}
+              onChange={ (value) => this.props.onChange && this.props.onChange(questionnaires[value]) }
+              idOfStartTab={initialQuestionnaire.id}
               tabIds={questionnaires.map(x => x.id)}
               tabLabels={questionnaires.map(x => x!.name!)}
               tabContent={questionnaires.map(x => this.renderQuestionnaireResponseTab(x))}

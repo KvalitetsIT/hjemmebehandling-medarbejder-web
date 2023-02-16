@@ -21,13 +21,12 @@ import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum'
 
 export interface Props {
     careplan: PatientCareplan;
-    questionnaire: Questionnaire;
+    questionnaire?: Questionnaire;
 }
 
 export interface State {
     questionnaireResponses: QuestionnaireResponse[]
     loading: boolean
-
 }
 
 export class ObservationCard extends Component<Props, State> {
@@ -40,20 +39,27 @@ export class ObservationCard extends Component<Props, State> {
         super(props);
         this.state = {
             questionnaireResponses: [],
-            loading: true
+            loading: false
         }
     }
+
     initialiseServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
-        this.dateHelper = this.context.dateHelper;
+        this.questionnaireService = this.context?.questionnaireService;
+        this.dateHelper = this.context?.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {
-        try {
-            const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50)
-            this.setState({ questionnaireResponses: responses, loading: false })
-        } catch (error: unknown) {
-            this.setState(() => { throw error })
+        await this.getResponses()
+    }
+
+    async getResponses() {
+        if (this.props.questionnaire) {     
+            try {
+                const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50) ?? []
+                this.setState({ questionnaireResponses: responses, loading: false })
+            } catch (error: unknown) {
+                this.setState(() => { throw error })
+            }
         }
     }
 
@@ -69,19 +75,24 @@ export class ObservationCard extends Component<Props, State> {
     }
 
     getColumnSize(elementsInArray: number): GridSize {
-
-        if (elementsInArray == 1)
-            return 12;
+        if (elementsInArray == 1) return 12;
         return 6
     }
 
+    updateAndNotify(){
+        this.getResponses()
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
+        if (prevProps.questionnaire !== this.props.questionnaire) {
+            this.updateAndNotify();
+          }
+    }
+
     render(): JSX.Element {
-        this.initialiseServices()
-
-        if (this.state.loading)
-            return (<LoadingSmallComponent />)
-
-
+        this.initialiseServices();
+        //this.getResponses()
+        if (this.state.loading) return (<LoadingSmallComponent />)
 
         const allQuestions: Question[] = [];
 
@@ -105,7 +116,7 @@ export class ObservationCard extends Component<Props, State> {
             <>
                 {allQuestions.map((question, i) => {
                     const threshold = this.props.questionnaire!.thresholds?.find(x => x.questionId == question.Id)
-                    const graphThreshold = JSON.parse(JSON.stringify(threshold));
+                    const graphThreshold = structuredClone(threshold);
 
                     // answer values can lie outside thresholds as a consequence of input validation when answering a question
                     // was split out into system-wide (organization) threshold configured on the measurement type.
@@ -113,7 +124,7 @@ export class ObservationCard extends Component<Props, State> {
                     if (threshold && threshold.thresholdNumbers) {
                         const froms = threshold.thresholdNumbers!.filter(t => t.from !== undefined).map(t => t.from!);
                         const tos = threshold.thresholdNumbers!.filter(t => t.to !== undefined).map(t => t.to!);
-                        
+
                         const minThreshold = Math.min(...froms);
                         const maxThreshold = Math.max(...tos);
 
@@ -138,7 +149,7 @@ export class ObservationCard extends Component<Props, State> {
                             extraVisualThreshold.category = CategoryEnum.RED;
                             extraVisualThreshold.from = minThreshold;
                             extraVisualThreshold.to = minAnswer;
-                    
+
                             graphThreshold?.thresholdNumbers?.push(extraVisualThreshold);
                         }
                         if (maxAnswer !== undefined && maxAnswer > maxThreshold) {
@@ -146,7 +157,7 @@ export class ObservationCard extends Component<Props, State> {
                             extraVisualThreshold.category = CategoryEnum.RED;
                             extraVisualThreshold.from = maxAnswer;
                             extraVisualThreshold.to = maxThreshold;
-                    
+
                             graphThreshold?.thresholdNumbers?.push(extraVisualThreshold);
                         }
                     }
@@ -155,7 +166,7 @@ export class ObservationCard extends Component<Props, State> {
                     const chartData = new ChartData(this.state.questionnaireResponses, question, graphThreshold, dateToString);
                     const subheader = question.abbreviation ?? question.question ?? ""
                     return (
-                        <Grid paddingLeft={i % 2 == 0  ? 0 : 2} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
+                        <Grid paddingLeft={i % 2 == 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
                             <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />

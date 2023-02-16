@@ -14,12 +14,15 @@ import { IQuestionnaireService } from '../../../../../services/interfaces/IQuest
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
+import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 
 interface State {
 
   loading: boolean
   careplans: PatientCareplan[]
   questionnaireResponses: QuestionnaireResponse[]
+  activeQuestionnaire?: Questionnaire
 }
 
 interface Props {
@@ -43,9 +46,9 @@ class PatientCareplans extends React.Component<Props, State> {
 
   render(): JSX.Element {
     this.InitializeServices();
-    const contents = this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
-    return contents;
+    return this.state.loading ? <LoadingBackdropComponent /> : this.renderCareplanTab();
   }
+  
   InitializeServices(): void {
     this.careplanService = this.context.careplanService;
     this.questionnaireService = this.context.questionnaireService;
@@ -84,7 +87,8 @@ class PatientCareplans extends React.Component<Props, State> {
       this.setState({
         loading: false,
         careplans: careplans,
-        questionnaireResponses: questionnaireResponses
+        questionnaireResponses: questionnaireResponses,
+        activeQuestionnaire: careplans.find(c => c?.id === this.props.match.params.careplanId)?.questionnaires[0] ?? this.state.careplans[0]?.questionnaires[0]
       });
     } catch (error) {
       this.setState(() => { throw error })
@@ -96,6 +100,9 @@ class PatientCareplans extends React.Component<Props, State> {
 
   renderCareplanTab(): JSX.Element {
     const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
+
+    const activeQuestionnaire = this.state.activeQuestionnaire ??  activeCareplan.questionnaires[0]
+
     return (
       <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive monitoreringsplaner fundet">
         <Grid container spacing={3} sx={{ flexWrap: "inherit" }}>
@@ -109,14 +116,7 @@ class PatientCareplans extends React.Component<Props, State> {
                   </> :
                   <div>Noget gik galt - Ingen aktiv monitoreringsplan, eller så var ingen patient tilknyttet</div>
                 }
-
-
-
                 <CareplanSummary careplan={activeCareplan}></CareplanSummary>
-
-
-
-
               </Stack>
             </ErrorBoundary>
           </Grid>
@@ -125,15 +125,11 @@ class PatientCareplans extends React.Component<Props, State> {
 
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <CareplanQuestionnaireSummary questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan} />
+                  <CareplanQuestionnaireSummary initialQuestionnaire={activeQuestionnaire} onChange={(selectedQuestionnaire) => {this.setState({activeQuestionnaire: selectedQuestionnaire})} } questionnaireResponses={this.state.questionnaireResponses} careplan={activeCareplan} />
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container>
-                    {activeCareplan?.questionnaires.map(questionnaire => {
-                      return (
-                        <ObservationCard questionnaire={questionnaire} careplan={activeCareplan} />
-                      )
-                    })}
+                    <ObservationCard questionnaire={activeQuestionnaire} careplan={activeCareplan} /> 
                   </Grid>
                 </Grid>
               </Grid>
