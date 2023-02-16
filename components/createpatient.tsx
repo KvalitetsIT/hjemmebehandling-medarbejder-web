@@ -12,7 +12,7 @@ import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { ContactEditCard } from './Cards/ContactEditCard';
 import { PlanDefinitionSelect } from './Input/PlanDefinitionSelect';
 import { ICareplanService } from '../services/interfaces/ICareplanService';
-import { Redirect } from 'react-router-dom';
+import { Prompt, Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CSSProperties } from '@material-ui/styles';
 import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
@@ -116,120 +116,130 @@ export default class CreatePatient extends Component<Props, State> {
     if (!(this.state.patient && this.state.careplan))
       return (<div>Fandt ikke patienten</div>)
 
+    const prompt = (
+      <Prompt
+        when={true} // <- Kunne sættes til true afhængig af om ændringer er blevet lavet 
+        message={() => "Evt. ændringer er endnu ikke gemt - Ønsker du at fortsætte?"}
+      />
+    )
+
     return (
-      <form noValidate>
-        <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
-          <Grid item spacing={5} xs={10} minWidth={500}>
-            <ErrorBoundary>
-              <AccordianWrapper
-                key={PatientAccordianSectionsEnum.patientInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.patientInfo}
-                title="Patient"
-                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}
-                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}>
+      <>
+        {prompt}
+        <form noValidate>
+          <Grid container sx={{ flexWrap: "inherit" }} columns={12}>
+            <Grid item spacing={5} xs={10} minWidth={500}>
+              <ErrorBoundary>
+                <AccordianWrapper
+                  key={PatientAccordianSectionsEnum.patientInfo + "_" + this.state.patient.cpr}
+                  expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.patientInfo}
+                  title="Patient"
+                  toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}
+                  continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}>
 
-                <Typography>
-                  <PatientEditCard
-                    onValidation={(errors) => {
-                      this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })
-                    }}
-                    initialPatient={this.state.patient}
-                  />
-                </Typography>
-              </AccordianWrapper>
-            </ErrorBoundary>
-            {console.log("isFrequencySet: ", this.isFrequencySet())}
-            <ErrorBoundary>
+                  <Typography>
+                    <PatientEditCard
+                      onValidation={(errors) => {
+                        this.setState({ patientError: errors?.length == 0 ? undefined : errors[0].message })
+                      }}
+                      initialPatient={this.state.patient}
+                    />
+                  </Typography>
+                </AccordianWrapper>
+              </ErrorBoundary>
+              <ErrorBoundary>
 
-              <AccordianWrapper
-                key={PatientAccordianSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.primaryContactInfo}
-                title="Primær kontakt"
-                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
-                continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
-                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}>
-                <Typography>
-                  <ContactEditCard
-                    onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
-                    initialContact={this.state.patient.contact} />
-                </Typography>
-              </AccordianWrapper>
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <AccordianWrapper
-                key={PatientAccordianSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
-                expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.planDefinitionInfo}
-                title="Patientgruppe"
-                toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
-                overrideContinueButton={
-                  <ConfirmationButton
-                    skipDialog={ this.isFrequencySet() }
-                    color="primary"
-                    variant="contained"
-                    action={() => this.submitPatient()}
-                    title={'OBS - Der er ikke angivet frekvens for tildelte spørgeskemaer'}
-                    buttonText={'Gem patient'}
-                    contentOfDoActionBtn={'Gem patient'}
-                    contentOfCancelBtn={'Angiv frekvens'}
-                    cancelBtnIsPrimary={true}
-                    disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
+                <AccordianWrapper
+                  key={PatientAccordianSectionsEnum.primaryContactInfo + "_" + this.state.patient.cpr}
+                  expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.primaryContactInfo}
+                  title="Primær kontakt"
+                  toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
+                  continueButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
+                  previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.patientInfo)}>
+                  <Typography>
+                    <ContactEditCard
+                      onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
+                      initialContact={this.state.patient.contact} />
+                  </Typography>
+                </AccordianWrapper>
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <AccordianWrapper
+                  key={PatientAccordianSectionsEnum.planDefinitionInfo + "_" + this.state.patient.cpr}
+                  expanded={this.state.activeAccordian == PatientAccordianSectionsEnum.planDefinitionInfo}
+                  title="Patientgruppe"
+                  toggleExpandedButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.planDefinitionInfo)}
+                  overrideContinueButton={
+                    <ConfirmationButton
+                      skipDialog={this.isFrequencySet()}
+                      color="primary"
+                      variant="contained"
+                      action={() => this.submitPatient()}
+                      title={'OBS - Der er ikke angivet frekvens for tildelte spørgeskemaer'}
+                      buttonText={'Gem patient'}
+                      contentOfDoActionBtn={'Gem patient'}
+                      contentOfCancelBtn={'Angiv frekvens'}
+                      cancelBtnIsPrimary={true}
+                      disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
-                    
-                    <Typography>Vær opmærksom på følgende: <br />
-                    - Der vil ikke fremkomme blå alarmer, hvis borgeren mangler at indsende besvarelse.<br />
-                    - Borgeren kan ikke se, hvilke dage, der skal indsendes besvarelse.</Typography>
-                  </ConfirmationButton>
-                }
-                previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
-              >
-                <Typography>
-                  <PlanDefinitionSelect
-                    onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })}
-                    SetEditedCareplan={this.SaveCareplan}
-                    careplan={this.state.careplan} />
-                  <QuestionnaireListSimple careplan={this.state.careplan} />
-                </Typography>
-              </AccordianWrapper>
-            </ErrorBoundary>
-          </Grid>
-          <Grid paddingLeft={5} xs>
-            <div>
-              <Card>
-                {this.state.patient.cpr ?
-                  <>
-                    <CardHeader
-                      avatar={<PatientAvatar patient={this.state.patient} />}
-                      title={
-                        <Grid container>
-                          <Grid item xs={12}>
-                            <Typography>
-                              {this.state.patient.firstname} {this.state.patient.lastname} <br />
-                              {this.state.patient.cprToString()}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      } />
-                    <Divider /></> : <></>}
-                <CardContent>
-                  <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
-                    <Step key="patient">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
-                    </Step>
-                    <Step key="relativecontact">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(!this.state.contactError && this.getActiveStep() > 1)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primær kontakt</StepLabel>
-                    </Step>
-                    <Step key="plandefinition">
-                      <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
-                    </Step>
-                  </Stepper>
-                </CardContent>
-              </Card>
-            </div>
-          </Grid>
 
-        </Grid>
-        {this.state.errorToast ?? <></>}
-      </form >
+                      <Typography>Vær opmærksom på følgende: <br />
+                        - Der vil ikke fremkomme blå alarmer, hvis borgeren mangler at indsende besvarelse.<br />
+                        - Borgeren kan ikke se, hvilke dage, der skal indsendes besvarelse.</Typography>
+                    </ConfirmationButton>
+                  }
+                  previousButtonAction={() => this.toggleAccordian(PatientAccordianSectionsEnum.primaryContactInfo)}
+                >
+                  <Typography>
+                    <PlanDefinitionSelect
+                      onValidation={(errors) => this.setState({ planDefinitionError: errors?.length == 0 ? undefined : errors[0].message })}
+                      SetEditedCareplan={this.SaveCareplan}
+                      careplan={this.state.careplan} />
+                    <QuestionnaireListSimple careplan={this.state.careplan} />
+                  </Typography>
+                </AccordianWrapper>
+              </ErrorBoundary>
+            </Grid>
+            <Grid paddingLeft={5} xs>
+              <div>
+                <Card>
+                  {this.state.patient.cpr ?
+                    <>
+                      <CardHeader
+                        avatar={<PatientAvatar patient={this.state.patient} />}
+                        title={
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <Typography>
+                                {this.state.patient.firstname} {this.state.patient.lastname} <br />
+                                {this.state.patient.cprToString()}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        } />
+                      <Divider /></> : <></>}
+                  <CardContent>
+                    <Stepper orientation="vertical" activeStep={this.getActiveStep()}>
+                      <Step key="patient">
+                        <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.patient.cpr)} optional={this.state.patientError} error={this.state.patientError ? true : false}>Patient *</StepLabel>
+                      </Step>
+                      <Step key="relativecontact">
+                        <StepLabel StepIconComponent={this.GetCheckboxIcon(!this.state.contactError && this.getActiveStep() > 1)} optional={this.state.contactError} error={this.state.contactError ? true : false}>Primær kontakt</StepLabel>
+                      </Step>
+                      <Step key="plandefinition">
+                        <StepLabel StepIconComponent={this.GetCheckboxIcon(this.state.careplan.planDefinitions.find(() => true))} optional={this.state.planDefinitionError} error={this.state.planDefinitionError ? true : false}>Patientgruppe *</StepLabel>
+                      </Step>
+                    </Stepper>
+                  </CardContent>
+                </Card>
+              </div>
+            </Grid>
+
+          </Grid>
+          {this.state.errorToast ?? <></>}
+        </form >
+      </>
+
 
 
     )
