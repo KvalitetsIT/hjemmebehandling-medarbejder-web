@@ -14,18 +14,20 @@ import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { FormControl, FormHelperText } from '@mui/material';
 import { Frequency } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { ICareplanService } from '../../services/interfaces/ICareplanService';
 
 export interface Props {
   careplan: PatientCareplan
   SetEditedCareplan?: (careplan: PatientCareplan) => void;
   onValidation?: (error: InvalidInputModel[]) => void;
+  plandefinitionsToDisable?: string[]
 }
 
 export interface State {
   editedCareplan: PatientCareplan
   allPlanDefinitions: PlanDefinition[]
   errors: InvalidInputModel[]
-
+  unresolvedQuestionnaires: string[]
 }
 
 
@@ -36,6 +38,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
   planDefinitionService!: IPlanDefinitionService
+  careplanService!: ICareplanService
 
   constructor(props: Props) {
     super(props);
@@ -43,7 +46,8 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     this.state = {
       editedCareplan: props.careplan.clone(),
       allPlanDefinitions: [],
-      errors: []
+      errors: [],
+      unresolvedQuestionnaires: []
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,6 +65,12 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     this.questionnaireService = this.context.questionnaireService;
     this.planDefinitionService = this.context.planDefinitionService;
     this.validationService = this.context.validationService;
+    this.careplanService = this.context.careplanService;
+  }
+
+
+  async getUnresolvedQuestionnaires(careplanId: string): Promise<string[]> {
+    return this.careplanService.GetUnresolvedQuestionnaires(careplanId)
   }
 
   handleChange(e: SelectChangeEvent<string>): void {
@@ -78,8 +88,8 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   }
 
 
-  private mergeQuestionnaires(a: Questionnaire[], b: Questionnaire[]) : Questionnaire[] {
-    return a.concat(b.filter(q =>  !a.map(q => q.id).includes(q.id)))
+  private mergeQuestionnaires(a: Questionnaire[], b: Questionnaire[]): Questionnaire[] {
+    return a.concat(b.filter(q => !a.map(q => q.id).includes(q.id)))
   }
 
 
@@ -91,23 +101,16 @@ export class PlanDefinitionSelect extends Component<Props, State> {
     const careplan = this.state.editedCareplan;
 
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
-    
+
     //careplan.questionnaires = careplan.questionnaires.concat()
 
 
-    const selectedQuestionnaires = plandefinitions.flatMap(pd =>pd?.questionnaires ? pd.questionnaires as Questionnaire[] : []);
-    const existingQuestionnanires = careplan.questionnaires.filter(q => selectedQuestionnaires.map(q => q.id).includes( q.id));
-    
-    careplan.questionnaires = this.mergeQuestionnaires(existingQuestionnanires,  selectedQuestionnaires)
-    
-    
+    const selectedQuestionnaires = plandefinitions.flatMap(pd => pd?.questionnaires ? pd.questionnaires as Questionnaire[] : []);
+    const existingQuestionnanires = careplan.questionnaires.filter(q => selectedQuestionnaires.map(q => q.id).includes(q.id));
 
+    careplan.questionnaires = this.mergeQuestionnaires(existingQuestionnanires, selectedQuestionnaires)
 
-
-    careplan.questionnaires.forEach(q => q.frequency = q.frequency ? q.frequency :  new Frequency()  )
-
-
-
+    careplan.questionnaires.forEach(q => q.frequency = q.frequency ? q.frequency : new Frequency())
 
     this.setState({ editedCareplan: careplan })
     if (this.props.SetEditedCareplan) {
@@ -120,6 +123,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   async componentDidMount(): Promise<void> {
     try {
       this.populatePlanDefinitions();
+      this.getUnresolvedQuestionnnaires();
     } catch (error: unknown) {
       this.setState(() => { throw error })
     }
@@ -135,6 +139,22 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       this.setState(() => { throw error });
     }
   }
+
+  async getUnresolvedQuestionnnaires(): Promise<void> {
+    try {
+      const unresolvedQuestionnaires = await this.getUnresolvedQuestionnaires(this.props.careplan.id!)
+      this.setState({
+        unresolvedQuestionnaires: unresolvedQuestionnaires
+      })
+    } catch (error) {
+      this.setState(() => { throw error });
+    }
+  }
+
+  isPlandefinitionUnresolved(planDefinition: PlanDefinition): boolean {
+    return planDefinition.questionnaires != undefined && planDefinition.questionnaires.every(questionnaire => this.state.unresolvedQuestionnaires.includes(questionnaire.id))
+  }
+
 
 
   async validate(): Promise<void> {
@@ -159,13 +179,15 @@ export class PlanDefinitionSelect extends Component<Props, State> {
       hasError = true;
     }
 
-
-
     return (
       <FormControl fullWidth required>
         <MultiSelect onChange={(planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions.map((x) => x.id!)} id="select-plandefinition">
           {this.state.allPlanDefinitions.map(planDefinition => {
-            return <MultiSelectOption key={"option" + planDefinition.id} value={planDefinition.id}>{planDefinition.name}</MultiSelectOption>
+            return (
+              <MultiSelectOption key={"option" + planDefinition.id} disabled={this.isPlandefinitionUnresolved(planDefinition)} value={planDefinition.id}>
+                {planDefinition.name}
+              </MultiSelectOption>
+            )
           })}
         </MultiSelect>
         {hasError ? <FormHelperText error={true}>{firstError}</FormHelperText> : <></>}

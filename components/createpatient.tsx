@@ -315,6 +315,8 @@ export default class CreatePatient extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
+ 
+
   SaveCareplan(editedCareplan: PatientCareplan): void {
     console.log("SaveCareplan", editedCareplan)
     this.setState({ careplan: editedCareplan })

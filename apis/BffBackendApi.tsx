@@ -7,7 +7,7 @@ import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
 
 import { IBackendApi } from "./interfaces/IBackendApi";
 
-import { CarePlanApi } from "../generated/apis/CarePlanApi";
+import { CarePlanApi, GetUnresolvedQuestionnairesRequest } from "../generated/apis/CarePlanApi";
 import { PersonApi } from "../generated/apis/PersonApi";
 import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
 
@@ -48,6 +48,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+    
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         try {
             const request: CreatePlanDefinitionOperationRequest = {
@@ -65,14 +66,14 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             let thresholds: ThresholdDto[] = []
             planDefinition.questionnaires?.
-            forEach(questionnaire => questionnaire.thresholds?.
-                forEach(threshold => {
-                    //Only include if the type of collection is ThresholdNumbers == exclude thresholdOptions
-                    if(threshold.thresholdNumbers!.length > 0) {
-                        thresholds = thresholds.concat(this.toExternal.mapThreshold(threshold))
-                    }
-                }))
-            
+                forEach(questionnaire => questionnaire.thresholds?.
+                    forEach(threshold => {
+                        //Only include if the type of collection is ThresholdNumbers == exclude thresholdOptions
+                        if (threshold.thresholdNumbers!.length > 0) {
+                            thresholds = thresholds.concat(this.toExternal.mapThreshold(threshold))
+                        }
+                    }))
+
             const request: PatchPlanDefinitionOperationRequest = {
                 id: planDefinition.id!,
                 patchPlanDefinitionRequest: {
@@ -112,7 +113,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetAllQuestionnaires(statusesToInclude: (QuestionnaireStatus | BaseModelStatus)[] ): Promise<Questionnaire[]> {
+    async GetAllQuestionnaires(statusesToInclude: (QuestionnaireStatus | BaseModelStatus)[]): Promise<Questionnaire[]> {
         try {
             const request: GetQuestionnairesRequest = {
                 statusesToInclude: statusesToInclude.map(status => status.toString())
@@ -162,7 +163,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId == question.Id && question.type == QuestionTypeEnum.BOOLEAN))),
                 }
             }
-            
+
             await this.questionnaireApi.patchQuestionnaire(request)
         } catch (error) {
             return this.HandleError(error)
@@ -269,7 +270,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[] ): Promise<PlanDefinition[]> {
+    async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]> {
         try {
             const api = this.planDefinitionApi;
 
@@ -277,7 +278,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 statusesToInclude: statusesToInclude.map(status => status.toString())
             }
             const planDefinitions = await api.getPlanDefinitions(request);
-        
+
             return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
         } catch (error: unknown) {
             return await this.HandleError(error)
@@ -388,8 +389,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
             const carePlans = await api.searchCarePlans(request)
             const allUnanswered = carePlans.flatMap(cp => this.toInternal.buildUnansweredTaskFromCarePlan(cp))
-            const start = ((page-1)*pagesize);
-            const toReturn = allUnanswered.slice(start, start+pagesize);
+            const start = ((page - 1) * pagesize);
+            const toReturn = allUnanswered.slice(start, start + pagesize);
             //console.log(allUnanswered, "slice(", start, ",", start+pagesize, ") = ", toReturn)
             return toReturn;
         } catch (error: unknown) {
@@ -500,7 +501,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                 id: questionnaireId
             }
 
-            return  await api.isQuestionnaireInUse(requesti)
+            return await api.isQuestionnaireInUse(requesti)
         } catch (error: unknown) {
             return await this.HandleError(error)
         }
@@ -525,6 +526,19 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
             return await this.HandleError(error)
         }
     }
+
+    async GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]> {
+        try {
+            const api = this.careplanApi
+            const request: GetUnresolvedQuestionnairesRequest = {
+                id: careplanId
+            }
+            return await api.getUnresolvedQuestionnaires(request);
+        } catch (error: unknown) {
+            return await this.HandleError(error)
+        }
+    }
+    
 
 }
 

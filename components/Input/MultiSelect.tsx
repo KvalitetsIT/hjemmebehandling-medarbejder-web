@@ -193,12 +193,10 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
   render(): JSX.Element {
 
     return (
-      <>
-      
+
       <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components} >
-          {this.props.children}
-        </MultiSelectUnstyled>  
-      </>
+        {this.props.children}
+      </MultiSelectUnstyled>
 
     );
 

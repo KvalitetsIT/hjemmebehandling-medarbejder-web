@@ -85,7 +85,6 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           >
             <CssBaseline />
             {typeof window === 'undefined' ? null :
-
               <ErrorBoundary>
                 <Layout>
                   <Component {...pageProps} />

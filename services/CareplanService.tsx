@@ -53,5 +53,15 @@ export default class CareplanService extends BaseService implements ICareplanSer
     }
   }
 
+  async GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]> {
+    try {
+      return await this.backendApi.GetUnresolvedQuestionnaires(careplanId);
+    } catch (error: unknown) {
+        return await this.HandleError(error)
+    }
+}
+
+
+
 
 }

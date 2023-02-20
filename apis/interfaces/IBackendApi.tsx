@@ -198,5 +198,12 @@ export interface IBackendApi {
     * Returns true if the plandefinition is in use by any careplans otherwise false
     */
     IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean>;
+
+
+    /**
+     * Returns an array of questionnaires ids corrosponding to the questionnaires with unanswered questions
+     * @param careplanId 
+     */
+    GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]>;
 }
 

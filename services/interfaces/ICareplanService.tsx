@@ -10,6 +10,13 @@ import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCar
 export interface ICareplanService {
 
     /**
+     * Returns ids of unresolved questionnaires
+     * The questionnaires with unanswered questions
+     * @param careplanId 
+     */
+    GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]>;
+
+    /**
      * Creates a careplan using the careplan provided
      * The ID wil always be auto-generated
      * @param careplan 
