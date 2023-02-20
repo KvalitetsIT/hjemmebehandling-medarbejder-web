@@ -235,7 +235,7 @@ export class PatientEditCard extends Component<Props, State> {
                   variant="outlined" />
                 <TextFieldValidation sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
               </Stack>
-              <Stack spacing={3} direction="row">
+              <Stack spacing={3} direction="row" sx={{paddingTop: 6}}>
                 <PhonenumberInput
                   sectionName={PatientEditCard.sectionName}
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
