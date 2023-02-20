@@ -129,9 +129,9 @@ export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>Nej</Button>
+          <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>fortryd</Button>
           <LoadingButton loading={this.state.changingState} className="accept__button" color="primary" variant="contained" onClick={async () => await this.setStatus(this.state.desiredStatus)} >
-            Ja
+            skift status
           </LoadingButton>
         </DialogActions>
       </Dialog>
