@@ -17,11 +17,11 @@ import CreateQuestionnairePage from '../../pages/questionnaires/create';
 import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { CheckmarkIcon } from '../Icons/Icons';
-import  NewPatientPage  from '../../pages/newPatients';
-import  EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
-import  EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
-import  EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
-import  AboutPage  from '../../pages/about';
+import NewPatientPage from '../../pages/newPatients';
+import EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
+import EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
+import EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
+import AboutPage from '../../pages/about';
 
 
 export interface State {
@@ -48,7 +48,12 @@ export class Layout extends Component<{}, State> {
     this.setState({ createToastData: undefined })
   }
 
+
+
   render(): JSX.Element {
+
+
+
     return (
       <>
 
@@ -104,6 +109,52 @@ export class Layout extends Component<{}, State> {
                     <Route path="/about"><AboutPage /></Route>
 
                     <Route path="/"><Patients /></Route>
+
+                    {/* The following routes applies to the newest version of router dom 
+                         
+                    <Route path='/' element={<Patients />} />
+                    <Route path="/about"><AboutPage /></Route>
+                    <Route path="/patients"><Patients /></Route>
+                    <Route path="/newpatient" element={<NewPatientPage editmode={false} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...this.props}/>} />
+                    <Route path="/active/:pagenr" element={<ActivePatients />} />
+                    <Route path="/inactive/:pagenr" element={<InactivePatients />} />
+                    <Route path="/active" element={<Redirect to={"/active/1"} />} />
+                    <Route path="/inactive" element={<Redirect to={"/inactive/1"} />} />
+
+                    <Route path='/patients/:cpr'>
+                      <Route index element={<Redirect to={"/patients/:cpr/careplans/Aktiv"} />} />
+                      <Route path='/edit'>
+                        <Route index element={<EditPatientInfo key="edit" editmode={true} activeAccordian={PatientAccordianSectionsEnum.patientInfo} />} />
+                        <Route path="patient" element={<EditPatientInfo key="patient" editmode={true} activeAccordian={PatientAccordianSectionsEnum.patientInfo} />} />
+                        <Route path="contact" element={<EditPatientContact key="contact" editmode={true} activeAccordian={PatientAccordianSectionsEnum.primaryContactInfo} />} />
+                        <Route path="plandefinition" element={<EditPatientPlandefinition key="planDefinition" editmode={true} activeAccordian={PatientAccordianSectionsEnum.planDefinitionInfo} />} />
+                      </Route>
+                      <Route path='/careplans'>
+                        <Route index element={<Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv"} />} />
+                        <Route path=':careplanId'>
+                          <Route index element={<PatientCareplans />} />
+                          <Route path="/questionnaires">
+                            <Route index element={<QuestionnaireResponseDetails />} />
+                            <Route path=":questionnaireId" element={<QuestionnaireResponseDetails />} />
+                          </Route>
+                        </Route>
+                      </Route>
+                      <Route path="questionnaires/:questionnaireId" element={<Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv/questionnaires/" + props.match.params.questionnaireId} />} />
+                    </Route>
+
+                    <Route path='/questionnaires'>
+                      <Route index element={<QuestionnaireOverviewPage />} />
+                      <Route path=":questionnaireId/edit" element={<CreateQuestionnairePage />} />
+                      <Route path="create" element={<CreateQuestionnairePage />} />
+                    </Route>
+
+                    <Route path='/plandefinitions'>
+                      <Route index element={<PlandefinitionOverview />} />
+                      <Route path=":plandefinitionid/edit" element={<CreatePlandefinition />} />
+                      <Route path="create" element={<CreatePlandefinition />} />
+                    </Route> 
+                    
+*/}
                   </Switch>
                 </ErrorBoundary>
               </Box>

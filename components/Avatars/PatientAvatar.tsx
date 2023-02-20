@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Component } from 'react';
 import { Avatar, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
 
 export interface Props {
-  patient: PatientDetail
-  size?: number
+  patient: PatientSimple
+  height?: number
 }
 
 
@@ -29,7 +29,7 @@ export class PatientAvatar extends Component<Props, {}> {
 
     return (
 
-      <Avatar variant="square">
+      <Avatar variant="square" sx={{height: this.props.height, width: this.props.height}}>
         <Typography fontWeight="bold" variant='h5'>{initials}</Typography>
       </Avatar>
     )
