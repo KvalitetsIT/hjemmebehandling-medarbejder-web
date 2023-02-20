@@ -303,7 +303,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         <TableCell align="left">
                                             {this.state.editMode ? 
                                             <CardActions sx={{ display: "flex", justifyContent: "left" }}>
-                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Deaktiver spørgeskema</Button>
+                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Inaktiver spørgeskema</Button>
                                             </CardActions>
                                             :
                                             null
