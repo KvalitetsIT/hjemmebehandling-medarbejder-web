@@ -679,7 +679,7 @@ const THEME = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 30,
-          textTransform: 'capitalize',
+          textTransform: 'initial',
           fontWeight: 'bold',
           padding: 10,
           boxShadow: 'none',
