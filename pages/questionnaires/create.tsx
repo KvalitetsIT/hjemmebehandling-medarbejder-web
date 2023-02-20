@@ -3,7 +3,7 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Alert, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { Prompt, Redirect } from "react-router-dom";
 import { CallToActionCard } from "../../components/Cards/CallToActionCard";
@@ -244,6 +244,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                         return (
                             <>
                                 <Grid item xs={12}>
+                                    {this.state.editMode ? 
+                                        <Grid item xs={12}>
+                                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                                        </Grid>
+                                    :null}
                                     <QuestionEditCard
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -261,7 +266,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
                                     return (
-                                        <>
+                                        <> 
                                             <Grid item xs={1} alignSelf="center" textAlign="center">
                                             </Grid>
                                             <Grid item xs={11}>                                                
