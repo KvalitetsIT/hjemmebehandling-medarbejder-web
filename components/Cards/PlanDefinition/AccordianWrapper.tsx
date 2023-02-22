@@ -53,7 +53,7 @@ export class AccordianWrapper extends Component<Props, {}> {
                     </div>
                     <div>
                         {this.props.previousButtonAction != undefined ?
-                            <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button previous-button" variant="contained" >Forrige</Button> : <></>
+                            <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button previous-button" variant="text" >Forrige</Button> : <></>
                         }
                         {this.props.additionalButtonActions && this.props.additionalButtonActions}
                         {this.props.overrideContinueButton ?

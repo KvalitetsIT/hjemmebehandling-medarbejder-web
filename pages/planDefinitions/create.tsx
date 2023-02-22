@@ -202,7 +202,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                   return submitForm()
                                                 }}
                                                 title={'Der er tilføjet et nyt spørgeskema til patientgruppen.'}
-                                                buttonText={'Aktivér'}
+                                                buttonText={'Gem og aktivér'}
                                                 contentOfDoActionBtn={'OK'}
                                                 contentOfCancelBtn={'Annuller'}
                                             >

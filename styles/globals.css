@@ -87,6 +87,7 @@ a {
 /*=========== Buttons ===========*/
 .MuiButton-root.MuiButton-containedPrimary {
   background-color: #5D74AC;
+  box-sizing: border-box;
 }
 
 .MuiButton-root.MuiButton-containedPrimary:hover {
@@ -95,15 +96,27 @@ a {
 }
 
 .MuiButton-root.draft-button {
-  background-color: #9EACCD;
-  color: white;
+  border:#5D74AC solid 2px;
+  color: #5D74AC;
+  box-sizing: border-box;
   margin-right: 10px;
+}
+.MuiButton-root.draft-button:hover {
+  border:#5D74AC solid 2px;
+  background-color: #5D74AC;
+  color: white;
 }
 
 .MuiButton-root.previous-button {
-  background-color: #DFE3EE;
   color: #5D74AC;
   margin-right: 10px;
+  padding: 10px; 
+  box-sizing: border-box;
+}
+.MuiButton-root.previous-button:hover {
+  background-color: #5D74AC;
+  color: white;
+  box-sizing: border-box;
 }
 
 .MuiButton-root.previous-button:hover {
@@ -113,6 +126,7 @@ a {
 
 .MuiButton-root.deactivate-button {
   background-color: #EE6969;
+  box-sizing: border-box;
 }
 
 /*=========== MuiBox ===========*/
