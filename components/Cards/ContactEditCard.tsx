@@ -1,7 +1,7 @@
-import { CardContent, Typography } from '@material-ui/core';
+import { CardContent } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton } from '@mui/material';
+import { Card, Skeleton, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
@@ -98,6 +98,7 @@ export class ContactEditCard extends Component<Props, State> {
                 variant="outlined" />
 
             </Stack>
+            <Typography variant='h6' sx={{paddingTop: 6}}>Telefonnummer</Typography>
             <Stack spacing={3} direction="row">
               <PhonenumberInput
                 sectionName={ContactEditCard.sectionName}
@@ -115,11 +116,7 @@ export class ContactEditCard extends Component<Props, State> {
                 onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber, input)}
                 variant="outlined" />
             </Stack>
-
-
           </Stack>
-
-
         </CardContent>
       </Card>
     )

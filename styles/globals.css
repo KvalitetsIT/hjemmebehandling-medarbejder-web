@@ -94,6 +94,27 @@ a {
   opacity: 0.8;
 }
 
+.MuiButton-root.draft-button {
+  background-color: #9EACCD;
+  color: white;
+  margin-right: 10px;
+}
+
+.MuiButton-root.previous-button {
+  background-color: #DFE3EE;
+  color: #5D74AC;
+  margin-right: 10px;
+}
+
+.MuiButton-root.previous-button:hover {
+  color: white;
+  margin-right: 10px;
+}
+
+.MuiButton-root.deactivate-button {
+  background-color: #EE6969;
+}
+
 /*=========== MuiBox ===========*/
 
 /* Answer table */

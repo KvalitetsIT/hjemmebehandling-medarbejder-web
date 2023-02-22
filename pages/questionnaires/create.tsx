@@ -296,8 +296,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
-                            <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
-                            <Divider />
                             <CardContent>
                                 <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
                             </CardContent>
@@ -316,7 +314,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         </TableCell>
                                         <TableCell align="right">
                                             <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                                <Button variant="outlined"
+                                                <Button className='draft-button' 
+                                                    variant="contained"
                                                      disabled={(this.state.questionnaire.id != undefined) && (this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT)) }
                                                     onClick={() => {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");

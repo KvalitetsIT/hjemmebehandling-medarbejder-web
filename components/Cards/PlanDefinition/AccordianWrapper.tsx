@@ -45,35 +45,24 @@ export class AccordianWrapper extends Component<Props, {}> {
                 <AccordionDetails>
                     {this.props.children}
                 </AccordionDetails>
-                <AccordionActions>
-
-                    <TableContainer component={Card}>
-                        <Table sx={{ width: '100%' }} aria-label="simple table">
-                            <TableRow>
-                                {this.props.deactivateButtonText != undefined ?
-                                    <TableCell align="left">
-                                        <Button color="error" onClick={() => this.props.deactivateButtonAction!()} className="accordion__button" variant="outlined" >{this.props.deactivateButtonText}</Button>
-                                    </TableCell>
-                                    : <></>
-                                }
-                                <TableCell align="right">
-                                    {this.props.previousButtonAction != undefined ?
-                                        <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button" variant="text">Forrige</Button> : <></>
-                                    }
-
-                                    {this.props.additionalButtonActions && this.props.additionalButtonActions}
-
-
-                                    {this.props.overrideContinueButton ?
-                                        this.props.overrideContinueButton
-                                        :
-                                        (<Button onClick={() => this.props.continueButtonAction ? this.props.continueButtonAction() : {}} className="accordion__button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>)
-                                    }
-                                </TableCell>
-                            </TableRow>
-                        </Table>
-                    </TableContainer>
-
+                <AccordionActions sx={{ justifyContent: 'space-between' }}>
+                    <div>
+                        {this.props.deactivateButtonText != undefined ?
+                            <Button color="error" onClick={() => this.props.deactivateButtonAction!()} className="accordion__button deactivate-button" variant="contained" >{this.props.deactivateButtonText}</Button>
+                        : <></>}
+                    </div>
+                    <div>
+                        {this.props.previousButtonAction != undefined ?
+                            <Button onClick={() => this.props.previousButtonAction!()} className="accordion__button previous-button" variant="contained" >Forrige</Button> : <></>
+                        }
+                        {this.props.additionalButtonActions && this.props.additionalButtonActions}
+                        {this.props.overrideContinueButton ?
+                            this.props.overrideContinueButton
+                            :
+                            (<Button onClick={() => this.props.continueButtonAction ? this.props.continueButtonAction() : {}} className="accordion__button continue-button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>)
+                        }
+                        
+                    </div>
                 </AccordionActions>
             </Accordion>
         )
