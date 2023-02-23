@@ -94,7 +94,7 @@ export default class AboutPage extends Component<{}> {
                                 <ListItemText disableTypography
                                     primary={<Typography variant="h6">Fabrikant</Typography>}
                                     secondary={
-                                        <List dense sx = {{listStyleType: 'disc', pl: 3, '& .MuiListItem-root': {display: 'list-item', mt: -1 },}}>
+                                        <List dense sx = {{listStyleType: 'none', '& .MuiListItem-root': {display: 'list-item', mt: -1 },}}>
                                             <ListItem disableGutters>
                                                 <Typography>Center for Telemedicin, Region Midtjylland</Typography>
                                             </ListItem>

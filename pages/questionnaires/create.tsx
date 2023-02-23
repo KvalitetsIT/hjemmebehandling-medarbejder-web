@@ -3,7 +3,7 @@ import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastErr
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Alert, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { Prompt, Redirect } from "react-router-dom";
 import { CallToActionCard } from "../../components/Cards/CallToActionCard";
@@ -244,6 +244,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                         return (
                             <>
                                 <Grid item xs={12}>
+                                    {this.state.editMode ? 
+                                        <Grid item xs={12}>
+                                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                                        </Grid>
+                                    :null}
                                     <QuestionEditCard
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -261,7 +266,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
                                     return (
-                                        <>
+                                        <> 
                                             <Grid item xs={1} alignSelf="center" textAlign="center">
                                             </Grid>
                                             <Grid item xs={11}>                                                
@@ -291,8 +296,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
-                            <CardHeader subheader={<Typography variant="h6">Gem Spørgeskema</Typography>} />
-                            <Divider />
                             <CardContent>
                                 <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
                             </CardContent>
@@ -303,7 +306,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         <TableCell align="left">
                                             {this.state.editMode ? 
                                             <CardActions sx={{ display: "flex", justifyContent: "left" }}>
-                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Deaktiver spørgeskema</Button>
+                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Inaktiver spørgeskema</Button>
                                             </CardActions>
                                             :
                                             null
@@ -311,7 +314,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         </TableCell>
                                         <TableCell align="right">
                                             <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                                <Button variant="outlined"
+                                                <Button className='draft-button' 
+                                                    variant="contained"
                                                      disabled={(this.state.questionnaire.id != undefined) && (this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT)) }
                                                     onClick={() => {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
@@ -329,7 +333,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
                                                     title={'OBS - Husk at opdatere alarmgrænser for måling i patientgrupper, hvor spørgeskemaer er tilføjet.'}
-                                                    buttonText={'Aktivér'}
+                                                    buttonText={'Gem og aktivér'}
                                                 >
                                                     <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn.</Typography>
                                                 </ConfirmationButton>

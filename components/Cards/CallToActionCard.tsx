@@ -49,7 +49,7 @@ export class CallToActionCard extends Component<Props, State> {
         const ewsLength = this.state.callToActionQuestion.enableWhens?.length == 0;
 
         if(!emptyMessage && ewsLength) {
-            errors.push( new InvalidInputModel("message", "Betingelse er ikke valgt"));
+            errors.push( new InvalidInputModel("message", "Spørgsmål er ikke valgt"));
         }
         if (emptyMessage && !ewsLength) {
             errors.push( new InvalidInputModel("message", "Besked er ikke angivet"));
@@ -60,7 +60,7 @@ export class CallToActionCard extends Component<Props, State> {
     
     async validateQuestionSelect(enableWhen: EnableWhen<boolean>): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if(enableWhen.answer == undefined) errors.push( new InvalidInputModel("condition", "betingelse er ikke valgt"))
+        if(enableWhen.answer == undefined) errors.push( new InvalidInputModel("condition", "Spørgsmål er ikke valgt"))
         return errors 
     }
 
@@ -124,8 +124,8 @@ export class CallToActionCard extends Component<Props, State> {
 
                 </CardContent>
                 <Divider />
-                <CardActions sx={{ display: "flex", justifyContent: "left", padding: 2 }}>
-                    <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon />Tilføj betingelse</Button>
+                <CardActions sx={{ display: "flex", justifyContent: "right", padding: 2 }}>
+                    <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon />Tilføj spørgsmål</Button>
                 </CardActions>
             </Card>
         );
