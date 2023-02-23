@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Card, Table, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
