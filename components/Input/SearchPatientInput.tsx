@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Autocomplete, Button, CircularProgress, InputAdornment, Stack, TextField } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { Typography } from '@material-ui/core';
 import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
 import { IPatientService } from '../../services/interfaces/IPatientService';
-import { Link } from 'react-router-dom';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-
+import { PatientAvatar } from '../Avatars/PatientAvatar';
+import { Redirect } from 'react-router-dom';
 export interface State {
   patientResults: PatientSimple[]
   loading: boolean
+  selected: PatientSimple | null
 }
 
 
@@ -24,7 +25,8 @@ export class SearchPatientInput extends Component<{}, State> {
     super(props);
     this.state = {
       patientResults: [],
-      loading: false
+      loading: false,
+      selected: null
     }
 
   }
@@ -55,26 +57,68 @@ export class SearchPatientInput extends Component<{}, State> {
     this.setState({ patientResults: patientSearchResults, loading: false });
     this.forceUpdate();
   }
+
+
   render(): JSX.Element {
     this.InitialiseServices();
+
+    const redirectTo = this.state.selected ? "/patients/" + this.state.selected.cpr : "";
+    redirectTo.length > 0 && this.setState({ selected: null })
+
+
+
+
     return (
-      <Autocomplete
-        className="search"
-        autoComplete
-        getOptionLabel={(option) => option.firstname + " " + option.lastname + " (" + option.cpr + ")"}
-        noOptionsText="Ingen resultater"
-        options={this.state.patientResults}
-        onInputChange={async (a, b) => await this.searchForPatient(b)}
-        renderOption={(a, b) => (<Stack><Button component={Link} to={"/patients/" + b.cpr}>{b.firstname + " " + b.lastname + " (" + b.cpr + ")"}</Button></Stack>)}
-        renderInput={(params) => <TextField {...params} InputProps={{
-          ...params.InputProps,
-          endAdornment: (
-            <InputAdornment position="end" variant="standard">
-              {this.state.loading ? <CircularProgress color="inherit" size={20} /> : ""}
-            </InputAdornment>
-          ),
-        }} label={<Typography>Søg efter patient</Typography>} />}
-      />
+      <>
+        {this.state.selected && <Redirect to={redirectTo} key={new Date().toString()} push></Redirect>}
+        <Autocomplete
+          className="search"
+          getOptionLabel={(option) => option.firstname + " " + option.lastname + " (" + option.cpr + ")"}
+          noOptionsText="Ingen resultater"
+          options={this.state.patientResults}
+          autoHighlight={true}
+          isOptionEqualToValue={(option, value) => option.cpr == value.cpr}
+          onInputChange={async (a, b) => { await this.searchForPatient(b) }}
+          value={this.state.selected}
+
+          onChange={(e, value) => {
+            this.setState({ selected: value })
+          }}
+          renderOption={(props, patient) => (
+
+            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+              <ListItem disableGutters disablePadding >
+                <ListItemAvatar>
+                  <PatientAvatar height={50} patient={patient}></PatientAvatar>
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{ marginLeft: 2 }}
+                  primary={<Typography  style={{fontWeight: "bold"}}>{patient.firstname + " " + patient.lastname}</Typography>}
+                  secondary={<Typography>{patient.cpr?.substring(0, 6) + " - " + patient.cpr?.substring(6)}</Typography>}
+                >
+                </ListItemText>
+              </ ListItem>
+            </Box >
+          )}
+          renderInput={(params) => (
+
+            <TextField
+              {...params}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment position="end" variant="standard">
+                    {this.state.loading ? <CircularProgress color="inherit" size={20} /> : ""}
+                  </InputAdornment>
+                ),
+              }}
+              label={<Typography>Søg efter patient</Typography>}
+            />
+
+          )}
+        />
+      </>
+
     )
   }
 

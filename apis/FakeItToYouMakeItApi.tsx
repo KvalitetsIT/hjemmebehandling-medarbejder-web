@@ -362,11 +362,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
-    IsQuestionnaireInUse(questionnaireId: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async IsQuestionnaireInUse(questionnaireId: string): Promise<boolean> {
+        return false;
     }
-    IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
+        return false;
     }   
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         this.allPlanDefinitions.push(planDefinition);
