@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Tooltip } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
 import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon, AboutIcon } from '../../Icons/Icons';
@@ -113,26 +113,32 @@ export default function MiniDrawer(): JSX.Element {
             <ListItemText primary={<Typography variant="h6">Kliniker</Typography>} />
           </ListItem>
 
-          <ListItem button component={Link} color="inherit" to="/patients">
-            <ListItemIcon>
-              <TasklistIcon />
-            </ListItemIcon>
-            <ListItemText>Opgaveliste</ListItemText>
-          </ListItem>
+          <Tooltip title={'Opgaveliste'}>
+            <ListItem button component={Link} color="inherit" to="/patients">
+              <ListItemIcon>
+                <TasklistIcon />
+              </ListItemIcon>
+              <ListItemText>Opgaveliste</ListItemText>
+            </ListItem>
+          </Tooltip>
 
-          <ListItem button component={Link} color="inherit" to="/active/1">
-            <ListItemIcon>
-              <ActivePatientsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Aktive patienter" />
-          </ListItem>
+          <Tooltip title={'Aktive patienter'}>
+            <ListItem button component={Link} color="inherit" to="/active/1">
+              <ListItemIcon>
+                <ActivePatientsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Aktive patienter" />
+            </ListItem>
+          </Tooltip>
 
-          <ListItem button component={Link} color="inherit" to="/inactive/1">
-            <ListItemIcon>
-              <InactivePatientsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Afsluttede patienter" />
-          </ListItem>
+          <Tooltip title={'Afsluttede patienter'}>       
+            <ListItem button component={Link} color="inherit" to="/inactive/1">
+              <ListItemIcon>
+                <InactivePatientsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Afsluttede patienter" />
+            </ListItem>
+          </Tooltip>
 
 
           {isAdmin ?
@@ -145,19 +151,23 @@ export default function MiniDrawer(): JSX.Element {
                 <ListItemText primary={<Typography variant="h6">Administrator</Typography>} />
               </ListItem>
 
-              <ListItem button component={Link} color="inherit" to="/questionnaires">
-                <ListItemIcon>
-                  <SurveyIcon />
-                </ListItemIcon>
-                <ListItemText primary="Spørgeskema" />
-              </ListItem>
+              <Tooltip title={'Spørgeskema'}>
+                <ListItem button component={Link} color="inherit" to="/questionnaires">
+                  <ListItemIcon>
+                    <SurveyIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Spørgeskema" />
+                </ListItem>
+              </Tooltip>
 
-              <ListItem button component={Link} color="inherit" to="/plandefinitions">
-                <ListItemIcon>
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText primary="Patientgrupper" />
-              </ListItem>
+              <Tooltip title={'Patientgrupper'}>
+                <ListItem button component={Link} color="inherit" to="/plandefinitions">
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Patientgrupper" />
+                </ListItem>
+              </Tooltip>
             </> : <></>
           }
 
