@@ -103,7 +103,7 @@ export function MessagesIcon(props?: BaseIconProps): JSX.Element {
 }
 export function PencilIcon(props?: BaseIconProps): JSX.Element {
     props = {
-        color: props?.color ?? "#1976d2"
+        color: props?.color ?? "#5D74AC"
     }
     return (
         <BaseIcon {...props} src={'/assets/icons/_pencil.svg'}></BaseIcon>
