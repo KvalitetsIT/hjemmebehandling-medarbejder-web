@@ -100,6 +100,7 @@ a {
   color: #5D74AC;
   box-sizing: border-box;
   margin-right: 10px;
+  background-color: transparent;
 }
 .MuiButton-root.draft-button:hover {
   border:#5D74AC solid 2px;
@@ -129,6 +130,9 @@ a {
   box-sizing: border-box;
 }
 
+.MuiButton-root.delete-question {
+  border-color: red;
+}
 /*=========== MuiBox ===========*/
 
 /* Answer table */

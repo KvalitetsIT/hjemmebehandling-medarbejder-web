@@ -205,20 +205,20 @@ export class QuestionEditCard extends Component<Props, State>{
 
                         </CardContent>
 
+                        <Divider />
                         <CardActions disableSpacing>
-                            <Button disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
-                                <AddCircleOutlineIcon />
+                            <Button className="add-child-question" sx={{ padding: 2 }} disabled={this.props.question.type != QuestionTypeEnum.BOOLEAN || this.props.parentQuestion != undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
+                                <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
                                 Tilføj underspørgsmål
                             </Button>
 
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
-
                                 <ButtonGroup variant="text" >
-                                    <IconButton disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                    <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                         <DeleteOutlineIcon />
                                     </IconButton>
                                     <Button disabled={this.props.parentQuestion != undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
-                                        <AddCircleIcon />
+                                        <AddCircleIcon sx={{ paddingRight: 1, width: 'auto' }} />
                                         Tilføj nyt spørgsmål
                                     </Button>
                                 </ButtonGroup>
