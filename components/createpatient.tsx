@@ -175,6 +175,7 @@ export default class CreatePatient extends Component<Props, State> {
                       color="primary"
                       variant="contained"
                       action={() => this.submitPatient()}
+                      title={'Skal være udfyldt'}
                       buttonText={'Gem patient'}
                       contentOfDoActionBtn={'Gem patient'}
                       contentOfCancelBtn={'Angiv frekvens'}
