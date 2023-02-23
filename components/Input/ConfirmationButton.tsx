@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 export interface Props {
   action: () => Promise<void>
   skipDialog?: boolean
-  title: string
+  title?: string
   buttonText: JSX.Element | string
   className: string
   fullWidth: boolean
@@ -69,7 +69,7 @@ export class ConfirmationButton extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <>
-        <Tooltip title={this.props.title}>
+        {this.props.title && <Tooltip title={this.props.title}>
           <Button
             disabled={this.props.disabled}
             fullWidth={this.props.fullWidth}
@@ -79,7 +79,7 @@ export class ConfirmationButton extends Component<Props, State> {
             variant={this.props.variant}>{this.props.buttonText}</Button>
 
 
-        </Tooltip>
+        </Tooltip>}
         <Dialog
           open={this.state.openConfirmationBox}
           onClose={() => this.CloseVerificationBox()}

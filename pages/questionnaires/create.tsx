@@ -239,16 +239,16 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             </CardContent>
                         </Card>
                     </Grid>
+                    {this.state.editMode ? 
+                        <Grid item xs={12}>
+                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                        </Grid>
+                    :null}
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
                         return (
                             <>
                                 <Grid item xs={12}>
-                                    {this.state.editMode ? 
-                                        <Grid item xs={12}>
-                                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
-                                        </Grid>
-                                    :null}
                                     <QuestionEditCard
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
