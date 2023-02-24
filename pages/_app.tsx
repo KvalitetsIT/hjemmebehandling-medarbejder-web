@@ -33,7 +33,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     , personBackend = backendApi
     , planDefinitionBackend = backendApi
     ;
-    
+
+    /*
     if (process?.env.NODE_ENV === 'development') {
       if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE === "true") {
         questionnaireBackend = mockApi;
@@ -58,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       }
   
     }
-    
+    */
   
   return (
     <>
