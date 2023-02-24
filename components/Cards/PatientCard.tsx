@@ -8,7 +8,7 @@ import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Stack, Typography } from '@mui/material';
-import { Skeleton } from '@mui/material';
+import { Skeleton, Tooltip } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { PencilIcon } from '../Icons/Icons';
@@ -66,9 +66,11 @@ export class PatientCard extends Component<Props, State> {
           action={
             <Stack>
               <ErrorBoundary>
-                <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                  <PencilIcon/>
-                </Button>
+                <Tooltip title='Rediger patient' placement='right'>
+                  <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
+                    <PencilIcon/>
+                  </Button>
+                </Tooltip>
               </ErrorBoundary>
               <ErrorBoundary>
 

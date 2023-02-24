@@ -113,7 +113,7 @@ export default function MiniDrawer(): JSX.Element {
             <ListItemText primary={<Typography variant="h6">Kliniker</Typography>} />
           </ListItem>
 
-          <Tooltip title={'Opgaveliste'}>
+          <Tooltip title={'Opgaveliste'} placement='right'>
             <ListItem button component={Link} color="inherit" to="/patients">
               <ListItemIcon>
                 <TasklistIcon />
@@ -122,7 +122,7 @@ export default function MiniDrawer(): JSX.Element {
             </ListItem>
           </Tooltip>
 
-          <Tooltip title={'Aktive patienter'}>
+          <Tooltip title={'Aktive patienter'} placement='right'>
             <ListItem button component={Link} color="inherit" to="/active/1">
               <ListItemIcon>
                 <ActivePatientsIcon />
@@ -131,7 +131,7 @@ export default function MiniDrawer(): JSX.Element {
             </ListItem>
           </Tooltip>
 
-          <Tooltip title={'Afsluttede patienter'}>       
+          <Tooltip title={'Afsluttede patienter'} placement='right'>       
             <ListItem button component={Link} color="inherit" to="/inactive/1">
               <ListItemIcon>
                 <InactivePatientsIcon />
@@ -151,7 +151,7 @@ export default function MiniDrawer(): JSX.Element {
                 <ListItemText primary={<Typography variant="h6">Administrator</Typography>} />
               </ListItem>
 
-              <Tooltip title={'Spørgeskema'}>
+              <Tooltip title={'Spørgeskema'} placement='right'>
                 <ListItem button component={Link} color="inherit" to="/questionnaires">
                   <ListItemIcon>
                     <SurveyIcon />
@@ -160,7 +160,7 @@ export default function MiniDrawer(): JSX.Element {
                 </ListItem>
               </Tooltip>
 
-              <Tooltip title={'Patientgrupper'}>
+              <Tooltip title={'Patientgrupper'} placement='right'>
                 <ListItem button component={Link} color="inherit" to="/plandefinitions">
                   <ListItemIcon>
                     <GroupIcon />
@@ -174,14 +174,16 @@ export default function MiniDrawer(): JSX.Element {
 
         </List>
 
-        <List className='toButtom'>
-          <ListItem button component={Link} color="inherit" to="/about">
-            <ListItemIcon>
-              <AboutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Om KOMO" />
-          </ListItem>          
-        </List>
+        <Tooltip title={'Om KOMO'} placement='right'>
+          <List className='toButtom'>
+            <ListItem button component={Link} color="inherit" to="/about">
+              <ListItemIcon>
+                <AboutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Om KOMO" />
+            </ListItem>          
+          </List>
+        </Tooltip>
 
 
       </Drawer>
