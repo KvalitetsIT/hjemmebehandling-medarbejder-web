@@ -159,26 +159,26 @@ export class AnswerTable extends Component<Props, State> {
 
         // tilføj spørgmål der er i det spørgeskemaet sorteres efter den rækkefølge de har her
         questionnaire.getParentQuestions().forEach(element => {
-          result.push(element);
-          result.push(...questionnaire.getChildQuestions(element.Id));
+            result.push(element);
+            result.push(...questionnaire.getChildQuestions(element.Id));
 
-          // husk evt. deprecatede underspørgsmål til aktivt hovedspørgmål
-          const deprecatedChildQuestions = allQuestions.filter(q => q.deprecated).filter(q => q.enableWhen != undefined && q.enableWhen.questionId == element.Id);
-          result.push(...deprecatedChildQuestions);
+            // husk evt. deprecatede underspørgsmål til aktivt hovedspørgmål
+            const deprecatedChildQuestions = allQuestions.filter(q => q.deprecated).filter(q => q.enableWhen != undefined && q.enableWhen.questionId == element.Id);
+            result.push(...deprecatedChildQuestions);
         });
 
         // tilføj alle deprecated spørgmål sorteret alfabetisk, med tilhørende underspørgmål
         allQuestions.filter(q => q.deprecated)
             .filter(q => q.enableWhen == undefined)
-            .sort((a,b) => a.abbreviation!.localeCompare(b.abbreviation!))
+            .sort((a, b) => a.abbreviation!.localeCompare(b.abbreviation!))
             .forEach(question => {
                 const childQuestions = allQuestions.filter(q => q.enableWhen != undefined && q.enableWhen.questionId == question.Id);
-            
+
                 result.push(question);
                 result.push(...childQuestions);
             })
-        ;
-            
+            ;
+
         return result;
     }
 
@@ -202,7 +202,7 @@ export class AnswerTable extends Component<Props, State> {
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
         const allQuestions = this.questionnaireService.findAllQuestions(questionnairesResponsesToShow);
         const sortedQuestions = this.sortQuestionsForQuestionnaire(allQuestions, this.props.questionnaires);
-
+        const hasDeprecatedQuestions = allQuestions.filter(question => question.deprecated).length > 0;
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
@@ -265,18 +265,20 @@ export class AnswerTable extends Component<Props, State> {
                                             </>
                                         )
                                     })}
-                                    
+
                                 </TableBody>
-                                <TableFooter>
-                                    
-                                    <Button sx={{marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
-                                        const hidden = !this.state.hidden; 
-                                        this.setState( {
-                                            hidden: hidden
-                                        })
-                                    }}>{this.state.hidden ? "Vis" : "Skjul"} forældede spørgsmål</Button>
-                                    
-                                </TableFooter>
+
+                                {hasDeprecatedQuestions && (
+                                    <TableFooter>
+                                        <Button sx={{ marginTop: 2, textTransform: "none", textAlign: "left" }} onClick={() => {
+                                            const hidden = !this.state.hidden;
+                                            this.setState({
+                                                hidden: hidden
+                                            })
+                                        }}>{this.state.hidden ? "Vis" : "Skjul"} forældede spørgsmål</Button>
+                                    </TableFooter>
+                                )}
+
                             </Table>
 
                         </IsEmptyCard>
@@ -289,30 +291,30 @@ export class AnswerTable extends Component<Props, State> {
         </>
         )
     }
-    renderRow(questionsToRender: Question[], questionnairesResponsesToShow: QuestionnaireResponse[]): JSX.Element{
+    renderRow(questionsToRender: Question[], questionnairesResponsesToShow: QuestionnaireResponse[]): JSX.Element {
         return (
             <>
                 {questionsToRender.map(question => {
                     if (!question.deprecated || !this.state.hidden && question.deprecated)
-                    return (
-                        <TableRow>
-                            <TableCell>
-                                <Typography sx={{ fontStyle: 'italic' }} color={question.deprecated ? "grey": "black"}>
-                                    test
-                                {question.abbreviation ?? question.question} {question.deprecated ? "(forældet)":""}
-                                </Typography>
-                            </TableCell>
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    <Typography sx={{ fontStyle: 'italic' }} color={question.deprecated ? "grey" : "black"}>
+                                        test
+                                        {question.abbreviation ?? question.question} {question.deprecated ? "(forældet)" : ""}
+                                    </Typography>
+                                </TableCell>
 
-                            {questionnairesResponsesToShow.map(questionResponse => {
-                                return this.renderSingleResponse(question, questionResponse)
-                            })}
-                        </TableRow>
-                    )
+                                {questionnairesResponsesToShow.map(questionResponse => {
+                                    return this.renderSingleResponse(question, questionResponse)
+                                })}
+                            </TableRow>
+                        )
                 })}
             </>
         )
     }
-    
+
     renderSingleResponse(question: Question, questionResponse?: QuestionnaireResponse): JSX.Element {
         if (questionResponse == undefined)
             return <TableCell></TableCell>

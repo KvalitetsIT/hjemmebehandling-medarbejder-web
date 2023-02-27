@@ -69,7 +69,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
 
     async componentDidMount(): Promise<void> {
-        
+
         await this.populateCareplans()
     }
 
@@ -95,10 +95,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ loading: false })
     }
 
-     questionnaireContainsMeasurementsWhichisNew(): boolean {
+    questionnaireContainsMeasurementsWhichisNew(): boolean {
         if (this.state.editMode) {
             const questions = this.state.questionnaire?.questions?.filter(q => this.state.changes.includes(q.Id!)).filter(q => q.type == QuestionTypeEnum.OBSERVATION)
-            
+
             return questions != undefined && questions.length > 0
         }
         return false;
@@ -118,7 +118,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
             if (valid) {
                 const questionnaire = this.state.questionnaire!;
-            
+
                 const manualValidationError1 = questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type == QuestionTypeEnum.BOOLEAN)
@@ -129,11 +129,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type == QuestionTypeEnum.OBSERVATION)
                     .find((q: Question) => q.measurementType == undefined);
-                
+
                 if (manualValidationError1 || manualValidationError2) {
                     throw new MissingDetailsError([]);
                 }
-                
+
                 questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type == QuestionTypeEnum.BOOLEAN)
@@ -249,6 +249,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                         return (
                             <>
                                 <Grid item xs={12}>
+                                    {this.state.editMode ?
+                                        <Grid item xs={12}>
+                                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                                        </Grid>
+                                        : null}
                                     <QuestionEditCard
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -261,15 +266,15 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         onValidation={this.onValidation}
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}
-                                        deletable={parentQuestions.length<=1}
+                                        deletable={parentQuestions.length <= 1}
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
                                     return (
-                                        <> 
+                                        <>
                                             <Grid item xs={1} alignSelf="center" textAlign="center">
                                             </Grid>
-                                            <Grid item xs={11}>                                                
+                                            <Grid item xs={11}>
                                                 <QuestionEditCard
                                                     key={childQuestion.Id}
                                                     getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
@@ -301,22 +306,34 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             </CardContent>
                             <Divider />
                             <TableContainer component={Card}>
-                                <Table sx={{ width:'100%' }} aria-label="simple table">
+                                <Table sx={{ width: '100%' }} aria-label="simple table">
                                     <TableRow>
                                         <TableCell align="left">
-                                            {this.state.editMode ? 
-                                            <CardActions sx={{ display: "flex", justifyContent: "left" }}>
-                                                <Button color="error" variant="outlined" onClick={this.deactivateQuestionnaire}>Inaktiver spørgeskema</Button>
-                                            </CardActions>
-                                            :
-                                            null
+                                            {this.state.editMode ?
+                                                <CardActions sx={{ display: "flex", justifyContent: "left" }}>
+                                                    <ConfirmationButton
+                                                        color="error"
+                                                        variant="outlined"
+                                                        title={"Inaktiver spørgeskema"}
+                                                        action={async () => {
+                                                            await this.deactivateQuestionnaire();
+                                                        } }
+                                                        skipDialog={false} 
+                                                        buttonText={"Inaktivere spørgskema"}
+                                                        contentOfCancelBtn={"Fortryd"}
+                                                        contentOfDoActionBtn={"Inaktiver"}                                                    >
+                                                        <Typography>Ønsker du at inaktivere spørgskemaet {this.state.questionnaire.name}? </Typography>
+                                                    </ConfirmationButton>
+                                                </CardActions>
+                                                :
+                                                null
                                             }
                                         </TableCell>
                                         <TableCell align="right">
                                             <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-                                                <Button className='draft-button' 
+                                                <Button className='draft-button'
                                                     variant="contained"
-                                                     disabled={(this.state.questionnaire.id != undefined) && (this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT)) }
+                                                    disabled={(this.state.questionnaire.id != undefined) && (this.state.questionnaire.status != undefined && (this.state.questionnaire.status != BaseModelStatus.DRAFT))}
                                                     onClick={() => {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
@@ -427,7 +444,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 .catch((error) => {
                     this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })
                 })
-            ;
+                ;
         }
     }
 }
