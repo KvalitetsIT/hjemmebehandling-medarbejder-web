@@ -299,8 +299,7 @@ export class AnswerTable extends Component<Props, State> {
                         return (
                             <TableRow>
                                 <TableCell>
-                                    <Typography sx={{ fontStyle: 'italic' }} color={question.deprecated ? "grey" : "black"}>
-                                        test
+                                    <Typography color={question.deprecated ? "grey" : "black"}>
                                         {question.abbreviation ?? question.question} {question.deprecated ? "(forældet)" : ""}
                                     </Typography>
                                 </TableCell>

@@ -4,10 +4,11 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { TableCell } from "@kvalitetsit/hjemmebehandling/node_modules/@mui/material";
-import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter } from "@mui/material";
+import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import ApiContext from "../../pages/_context";
+import { PencilIcon } from '../Icons/Icons';
 
 interface Props {
     questionnaires: Questionnaire[]
@@ -56,7 +57,7 @@ export class QuestionnaireTable extends Component<Props, State>{
                     <TableFooter>
                         <TableRow >
                             <TableCell colSpan={5}>
-                                <Button sx={{marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
+                                <Button className="border" sx={{marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
                                     const showRetired = !this.state.showRetired; 
                                     this.setState( {
                                         showRetired: showRetired
@@ -107,7 +108,9 @@ export class QuestionnaireTable extends Component<Props, State>{
                                 <></>
                                 :
                                 <Stack sx={{ float: "right" }} direction="row" spacing={2}>
-                                    <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="outlined">Rediger</Button>
+                                    <Tooltip title="Rediger">
+                                        <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="text"><PencilIcon/></Button>
+                                    </Tooltip>
                                 </Stack>
                                 }
                             </TableCell>
