@@ -57,7 +57,7 @@ export class QuestionnaireTable extends Component<Props, State>{
                     <TableFooter>
                         <TableRow >
                             <TableCell colSpan={5}>
-                                <Button className="border" sx={{marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
+                                <Button className="border" sx={{ marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
                                     const showRetired = !this.state.showRetired; 
                                     this.setState( {
                                         showRetired: showRetired
