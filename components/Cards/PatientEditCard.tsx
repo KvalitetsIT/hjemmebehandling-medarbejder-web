@@ -192,6 +192,7 @@ export class PatientEditCard extends Component<Props, State> {
                   validate={(cpr) => this.validationService.ValidateCPR(cpr)}
                   required={true}
                   label="CPR"
+                  autoFocus={true}
                   value={this.state.tempCpr}
                   onChange={input => this.setState({ tempCpr: input.target.value })} />
                 <Stack>
