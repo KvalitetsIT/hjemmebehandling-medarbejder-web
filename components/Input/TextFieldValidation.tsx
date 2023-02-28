@@ -19,6 +19,7 @@ export interface Props {
     variant: "outlined" | "standard" | "filled"
     size: "small" | "medium";
     type: string
+    autoFocus?: boolean
     maxWidth: string | number
     minWidth: string | number
 
@@ -42,7 +43,8 @@ export class TextFieldValidation extends Component<Props, State> {
         disabled: false,
         type: "string",
         maxWidth: 1000,
-        minWidth: 300
+        minWidth: 300,
+        autoFocus: false
     }
 
     constructor(props: Props) {
@@ -123,6 +125,7 @@ export class TextFieldValidation extends Component<Props, State> {
                         size={this.props.size}
                         type={this.props.type}
                         value={this.props.value}
+                        autoFocus={this.props.autoFocus}
                         sx={{
                             minWidth: this.props.minWidth,
                             maxWidth: this.props.maxWidth,
