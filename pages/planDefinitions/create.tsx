@@ -201,7 +201,6 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                   this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
                                                   return submitForm()
                                                 }}
-                                                title={'Der er tilføjet et nyt spørgeskema til patientgruppen.'}
                                                 buttonText={'Gem og aktivér'}
                                                 contentOfDoActionBtn={'OK'}
                                                 contentOfCancelBtn={'Annuller'}
