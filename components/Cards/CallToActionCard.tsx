@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { CallToActionQuestion, Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { Button, CardActions, CardHeader, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Tooltip, Button, CardActions, CardHeader, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { EnableWhenSelect } from '../Input/EnableWhenSelect';
 import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
@@ -110,9 +110,11 @@ export class CallToActionCard extends Component<Props, State> {
                                                 :
                                                 <></>
                                             }
-                                            <IconButton onClick={() => this.removeEnableWhen(index)}>
-                                                <DeleteOutlineIcon />
-                                            </IconButton>
+                                            <Tooltip title='Slet' placement='right'>
+                                                <IconButton onClick={() => this.removeEnableWhen(index)}>
+                                                    <DeleteOutlineIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Stack>
 
                                     </Grid>
