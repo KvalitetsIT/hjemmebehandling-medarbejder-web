@@ -46,11 +46,22 @@
     "web-vitals": "^1.1.2",
     "yup": "^0.32.11"
   },
+  "devDependencies": {
+    "@playwright/test": "1.30.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/express": "^4.17.13",
+    "@types/uuid": "^8.3.4",
+    "http-proxy-middleware": "^2.0.1"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "e2e-test": "playwright test",
+    "update-visual-snapshot": "playwright test --update-snapshots",
     "preinstall": "rm -rf generated; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o generated --additional-properties=typescriptThreePlus=true"
   },
   "eslintConfig": {
@@ -70,10 +81,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/uuid": "^8.3.4",
-    "http-proxy-middleware": "^2.0.1"
   }
 }
