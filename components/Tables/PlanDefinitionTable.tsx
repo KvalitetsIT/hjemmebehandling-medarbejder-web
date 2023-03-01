@@ -1,8 +1,7 @@
 import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { TableCell } from "@kvalitetsit/hjemmebehandling/node_modules/@mui/material";
-import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter } from "@mui/material";
+import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import ApiContext from "../../pages/_context";

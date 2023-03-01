@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Button, Tooltip } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { Typography } from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';

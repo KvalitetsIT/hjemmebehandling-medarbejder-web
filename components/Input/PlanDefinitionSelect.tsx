@@ -181,7 +181,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
     return (
       <FormControl fullWidth required>
-        <MultiSelect onChange={(planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions.map((x) => x.id!)} id="select-plandefinition">
+        <MultiSelect onChange={(_, planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions.map((x) => x.id!)} id="select-plandefinition">
           {this.state.allPlanDefinitions.map(planDefinition => {
             return (
               <MultiSelectOption key={"option" + planDefinition.id} disabled={this.isPlandefinitionUnresolved(planDefinition)} value={planDefinition.id}>

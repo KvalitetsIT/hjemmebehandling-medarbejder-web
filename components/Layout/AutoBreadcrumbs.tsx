@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@material-ui/core';
+import { Breadcrumbs } from '@mui/material';
 import React, { Component } from 'react';
 import { Link,RouteComponentProps, withRouter } from 'react-router-dom';
 

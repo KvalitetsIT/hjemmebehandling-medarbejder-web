@@ -3,13 +3,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
-import { TableCell, TableRow, Typography } from '@material-ui/core';
 import { DayEnum, FrequencyEnum } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import TimePicker from '@mui/lab/TimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { FormControl, TextField } from '@mui/material';
+import { FormControl, TableCell, TableRow, TextField, Typography } from '@mui/material';
 import daLocale from 'date-fns/locale/da';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
@@ -104,7 +103,7 @@ export class FrequencyTableRow extends Component<Props, State> {
 
             <FormControl required>
               <MultiSelect id='frequenzy' onChange={(a) => {
-                this.SetDays(a as []);
+                this.SetDays(a as unknown as Array<DayEnum>);
                 this.validateEvent.dispatchEvent()
               }} value={this.state.questionnaire.frequency!.days}>
                 {this.getAllDays().map(day => {

@@ -1,10 +1,7 @@
-import MultiSelectUnstyled, {
-  MultiSelectUnstyledProps,
-} from '@mui/base/MultiSelectUnstyled';
-import { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
+import { MultiSelectUnstyled, MultiSelectUnstyledProps, selectUnstyledClasses } from '@mui/base';
 import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 import React from 'react';
 
 const blue = {
@@ -48,7 +45,6 @@ export const MultiSelectOption = styled(OptionUnstyled)(
     
   }
 
-
   &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
     background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
     color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
@@ -71,16 +67,15 @@ export const MultiSelectOption = styled(OptionUnstyled)(
 
 export interface MultiSelectProps extends MultiSelectUnstyledProps<string> {
   id: string
-
 }
 
 
 export class MultiSelect extends React.Component<MultiSelectProps, {}> {
 
-  private ref: React.RefObject<HTMLElement> = React.createRef()
+  private ref: React.RefObject<HTMLButtonElement> = React.createRef()
 
-  private components: MultiSelectUnstyledProps<string>['components'] = {
-    Root: styled('button')(
+  private slots: MultiSelectUnstyledProps<string>['slots'] = {
+    root: styled('button')(
       ({ theme }) => `
           font-family: ${theme.typography};
           font-size: 1rem;
@@ -123,7 +118,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
           }
           `,
     ),
-    Listbox: styled('ul')(
+    listbox: styled('ul')(
       ({ theme }) => `
           font-family: ${theme.typography}
           font-size: 1rem;
@@ -143,7 +138,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
           
           `,
     ),
-    Popper: styled(PopperUnstyled)(
+    popper: styled(PopperUnstyled)(
       ({ }) => `
 
       z-index: 10;
@@ -180,6 +175,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
         100% {opacity:1;}
       }
       `,),
+    ...this.props.slots
   };
 
   constructor(props: MultiSelectProps) {
@@ -191,15 +187,9 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
 
   }
   render(): JSX.Element {
-
     return (
-
-      <MultiSelectUnstyled {...this.props} ref={this.ref} components={this.components} >
-        {this.props.children}
-      </MultiSelectUnstyled>
-
+      <MultiSelectUnstyled {...this.props} ref={this.ref} slots={this.slots} />
     );
-
   }
 }
 

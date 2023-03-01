@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import React, { Component } from 'react';
 import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
@@ -22,6 +21,7 @@ import EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
 import EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
 import EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
 import AboutPage from '../../pages/about';
+import { Box } from '@mui/material';
 
 
 export interface State {

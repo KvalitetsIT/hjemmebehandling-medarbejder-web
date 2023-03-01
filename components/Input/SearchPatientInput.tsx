@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Autocomplete, Box, CircularProgress, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { Typography } from '@material-ui/core';
 import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
 import { IPatientService } from '../../services/interfaces/IPatientService';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
