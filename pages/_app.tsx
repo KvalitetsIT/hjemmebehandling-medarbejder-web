@@ -23,7 +23,9 @@ import PlanDefinitionService from '../services/PlanDefinitionService';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const mockApi: IBackendApi = new FakeItToYouMakeItApi();
+
   const backendApi: IBackendApi = new BffBackendApi();
+
 
   let questionnaireBackend = backendApi
     , questionAnswerBackend = backendApi
@@ -34,6 +36,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     , planDefinitionBackend = backendApi
     ;
 
+
+    
   if (process?.env.NODE_ENV === 'development') {
     if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE === "true") {
       questionnaireBackend = mockApi;
@@ -58,6 +62,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     }
 
   }
+
 
 
   return (

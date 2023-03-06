@@ -77,6 +77,8 @@ export class CallToActionCard extends Component<Props, State> {
                         </Grid>
                         <Grid item xs={12}>
                             <TextFieldValidation
+                                multiline
+                                rows={3}
                                 label="Besked til bruger"
                                 value={callToActionQuestion?.message}
                                 variant="outlined"
