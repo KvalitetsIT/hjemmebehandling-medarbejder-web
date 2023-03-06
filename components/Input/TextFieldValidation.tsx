@@ -4,6 +4,7 @@ import ApiContext from '../../pages/_context';
 import { Box, FormControl, OutlinedInputProps, TextField, Typography } from '@mui/material';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { MessageWithWarning } from '../Errors/MessageWithWarning';
 
 export interface Props {
     value?: string;
@@ -119,7 +120,7 @@ export class TextFieldValidation extends Component<Props, State> {
                         rows={this.props.rows}
                         color={color}
                         onWheel={() => this.props.onWheel ? this.props.onWheel() : {}}
-                        helperText={firstError?.message}
+                        helperText={hasError && (<MessageWithWarning message={firstError?.message} />)}
                         disabled={this.props.disabled}
                         onChange={(input) => this.props.onChange(input)}
                         //required={this.props.required}
@@ -142,4 +143,6 @@ export class TextFieldValidation extends Component<Props, State> {
             </FormControl>
         )
     }
+
+    
 }

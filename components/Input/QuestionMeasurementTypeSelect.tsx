@@ -10,6 +10,7 @@ import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswe
 
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { MessageWithWarning } from '../Errors/MessageWithWarning';
 
 export interface Props {
     sectionName?: string;
@@ -115,7 +116,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
                         )
                     })}
                 </Select>
-                {hasError ? <FormHelperText error={true}>{this.state.errors[0]?.message}</FormHelperText> : <></>}
+                {hasError ? <FormHelperText error={true}><MessageWithWarning message={this.state.errors[0]?.message} /></FormHelperText> : <></>}
             </FormControl>
         )
     }

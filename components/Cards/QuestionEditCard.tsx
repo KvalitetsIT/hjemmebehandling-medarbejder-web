@@ -53,13 +53,13 @@ export class QuestionEditCard extends Component<Props, State>{
 
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0) errors.push(new InvalidInputModel("abbreviation", "forkortelse til kliniker mangler"))
+        if (value.length <= 0) errors.push(new InvalidInputModel("abbreviation", "Forkortelse til kliniker mangler"))
         return errors
     };
 
     async validateQuestionName(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0) errors.push(new InvalidInputModel("question", "spørgsmål er endnu ikke udfyldt"))
+        if (value.length <= 0) errors.push(new InvalidInputModel("question", "Spørgsmål er endnu ikke udfyldt"))
         return errors
     }
 /*
