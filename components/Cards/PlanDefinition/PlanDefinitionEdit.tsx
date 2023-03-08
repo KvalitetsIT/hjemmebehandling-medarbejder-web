@@ -8,7 +8,7 @@ import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfa
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { FormikErrors, FormikTouched } from 'formik';
 import { ValidatedInput } from '../../Input/ValidatedInput';
-import { MessageWithWarning } from '../../Errors/MessageWithWarning';
+import { ErrorMessage } from '../../Errors/MessageWithWarning';
 
 
 export interface Props {
@@ -63,7 +63,7 @@ export class PlanDefinitionEdit extends Component<Props, State> {
                     <ValidatedInput
                         label={'Navn'}
                         name={'name'}
-                        error={(this.props.errors?.name && this.props.touched.name) ? <MessageWithWarning message={this.props.errors?.name} /> : undefined}
+                        error={(this.props.errors?.name && this.props.touched.name) ? <ErrorMessage message={this.props.errors?.name} /> : undefined}
                         size="medium"
                         />
 

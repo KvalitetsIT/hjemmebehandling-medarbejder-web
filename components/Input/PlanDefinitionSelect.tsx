@@ -15,7 +15,7 @@ import { FormControl, FormHelperText } from '@mui/material';
 import { Frequency } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
-import { MessageWithWarning } from '../Errors/MessageWithWarning';
+import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {
   careplan: PatientCareplan
@@ -191,7 +191,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
             )
           })}
         </MultiSelect>
-        {hasError ? <FormHelperText error={true}><MessageWithWarning message={firstError}/></FormHelperText> : <></>}
+        {hasError ? <FormHelperText error={true}><ErrorMessage message={firstError}/></FormHelperText> : <></>}
       </FormControl>
     )
   }

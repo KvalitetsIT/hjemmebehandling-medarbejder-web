@@ -1,7 +1,7 @@
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Typography } from '@mui/material';
 
-export function MessageWithWarning(props: {message: string|undefined}): JSX.Element{
+export function ErrorMessage(props: {message: string|undefined}): JSX.Element{
     
     if(props.message == undefined || "") (<></>)
     
@@ -9,5 +9,5 @@ export function MessageWithWarning(props: {message: string|undefined}): JSX.Elem
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-    }}><WarningAmberIcon /><Typography>{props.message}</Typography></div>)
+    }}><WarningAmberIcon /><Typography sx={{ fontWeight: 'bold' }}>{props.message}</Typography></div>)
 }
