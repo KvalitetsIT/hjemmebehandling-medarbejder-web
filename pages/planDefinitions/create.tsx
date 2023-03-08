@@ -93,9 +93,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
     toggleAccordian(page: AccordianRowEnum): void {
         if (page != this.state.activeAccordian) {
-          this.setState({
-            activeAccordian: page
-          })
+            this.setState({
+                activeAccordian: page
+            })
         }
     }
 
@@ -131,14 +131,14 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                         const modifiedPlanDefinition = this.state.planDefinition
                         modifiedPlanDefinition.name = values.name
 
-                        this.setState({planDefinition: modifiedPlanDefinition})
+                        this.setState({ planDefinition: modifiedPlanDefinition })
 
                         this.validate(values).then(() => this.submitPlandefinition()).catch(error => {
                             console.log("error:", error)
                             this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })
                         })
                     }}
-                    
+
                     validationSchema={validationScheme}
                 >
                     {({ errors, validateField, setFieldTouched, submitForm, touched }) => (
@@ -194,12 +194,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                         previousButtonAction={() => this.toggleAccordian(AccordianRowEnum.attachQuestionnaire)}
                                         overrideContinueButton={
                                             <ConfirmationButton
-                                                skipDialog={ !(this.state.planDefinitionIsInUse && this.planDefinitionContainsNewQuestionnaires()) }
+                                                skipDialog={!(this.state.planDefinitionIsInUse && this.planDefinitionContainsNewQuestionnaires())}
                                                 color="primary"
                                                 variant="contained"
                                                 action={() => {
-                                                  this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
-                                                  return submitForm()
+                                                    this.setStatusOnPlanDefinition(BaseModelStatus.ACTIVE);
+                                                    return submitForm()
                                                 }}
                                                 buttonText={'Gem og aktivér'}
                                                 contentOfDoActionBtn={'OK'}
@@ -219,7 +219,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                 }
 
                                                 disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
-                                                className='draft-button' 
+                                                className='draft-button'
                                                 variant="contained"
                                                 title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
                                                 sx={{
@@ -231,10 +231,26 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             >Gem som kladde</Button>
                                         ]}
                                         deactivateButtonText={this.state.editMode ? "Deaktiver patientgruppe" : undefined}
-                                        deactivateButtonAction={this.deactivatePlandefinition}
+                                        overrideDeactivateButton={
+                                            this.state.editMode ?
+                                            <ConfirmationButton
+                                                color="error"
+                                                variant="outlined"
+                                                title={"Deaktiver patientgruppe"}
+                                                action={async () => {
+                                                    this.deactivatePlandefinition();
+                                                }}
+                                                skipDialog={false}
+                                                buttonText={"Deaktiver patientgruppe"}
+                                                contentOfCancelBtn={"Fortryd"}
+                                                contentOfDoActionBtn={"Deaktiver"}                                                    >
+                                                <Typography>Ønsker du at deaktivere patientgruppen {this.state.planDefinition.name}? </Typography>
+                                            </ConfirmationButton>
+                                            : undefined
+                                        }
                                         
                                     >
- 
+
                                         <PlanDefinitionEditThresholds
                                             onError={(error) => {
                                                 this.setState({ error: error })
@@ -243,7 +259,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             planDefinition={this.state.planDefinition} />
                                     </AccordianWrapper>
 
-                                    
+
 
 
                                 </Grid>
@@ -263,7 +279,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                     <StepLabel error={touched.questionnaires && this.state.planDefinition.questionnaires?.length == 0}>Tilknyt spørgeskema</StepLabel>
                                                 </Step>
                                                 <Step key="setThresholds">
-                                                    <StepLabel error={this.state.error!= undefined}>Sæt alarmgrænser</StepLabel>
+                                                    <StepLabel error={this.state.error != undefined}>Sæt alarmgrænser</StepLabel>
                                                 </Step>
 
                                             </Stepper>
@@ -283,12 +299,12 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     getActiveStep(): number {
         switch (this.state.activeAccordian) {
             case AccordianRowEnum.generelInfo:
-              return 0;
+                return 0;
             case AccordianRowEnum.attachQuestionnaire:
-              return 1;
+                return 1;
             default:
-              return 2;
-          }
+                return 2;
+        }
     }
 
 
@@ -301,7 +317,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
             missingDetails.push("Manglende spørgeskema")
         }
 
-        if (this.state.error ) {
+        if (this.state.error) {
             missingDetails.push("Fejl i alarmgrænser")
         }
 
@@ -350,9 +366,9 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                     this.setState({ submitted: true });
                 })
                 .catch((error) => {
-                    this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })    
+                    this.setState({ errorToast: <ToastError key={new Date().getTime()} error={error}></ToastError> })
                 })
-            ;
+                ;
         }
     }
 
@@ -374,7 +390,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
         const currentQuestionnaires = this.state.planDefinition.questionnaires;
         const newQuestionnaires = questionnaires.filter(q => !currentQuestionnaires?.includes(q));
 
-        const pd  = this.state.planDefinition
+        const pd = this.state.planDefinition
         pd.questionnaires?.push(...newQuestionnaires)
         this.setState({ planDefinition: pd })
     }
@@ -382,8 +398,8 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     onRemoveQuestionnaires(questionnaires: Questionnaire[]): void {
         const currentQuestionnaires = this.state.planDefinition.questionnaires;
         const remainingQuestionnaires = currentQuestionnaires?.filter(q => !questionnaires.includes(q));
-        
-        const pd  = this.state.planDefinition;
+
+        const pd = this.state.planDefinition;
         pd.questionnaires = remainingQuestionnaires;
         this.setState({ planDefinition: pd })
     }

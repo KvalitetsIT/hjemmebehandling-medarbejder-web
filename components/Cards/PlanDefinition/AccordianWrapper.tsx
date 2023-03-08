@@ -16,7 +16,7 @@ export interface Props {
     deactivateButtonAction?: () => void
     overrideContinueButton?: JSX.Element
     error?: boolean;
-
+    overrideDeactivateButton?: JSX.Element
 }
 
 export class AccordianWrapper extends Component<Props, {}> {
@@ -48,8 +48,23 @@ export class AccordianWrapper extends Component<Props, {}> {
                 <AccordionActions sx={{ justifyContent: 'space-between' }}>
                     <div>
                         {this.props.deactivateButtonText != undefined ?
-                            <Button color="error" onClick={() => this.props.deactivateButtonAction!()} className="accordion__button deactivate-button" variant="contained" >{this.props.deactivateButtonText}</Button>
-                        : <></>}
+                            (
+                                <>
+                                    {this.props.overrideDeactivateButton ??
+                                        (
+                                            <Button
+                                                color="error"
+                                                onClick={() => this.props.deactivateButtonAction!()}
+                                                className="accordion__button deactivate-button"
+                                                variant="contained" >
+                                                {this.props.deactivateButtonText}
+                                            </Button>
+                                        )
+                                    }
+
+                                </>
+                            )
+                            : <></>}
                     </div>
                     <div>
                         {this.props.previousButtonAction != undefined ?
@@ -61,7 +76,7 @@ export class AccordianWrapper extends Component<Props, {}> {
                             :
                             (<Button onClick={() => this.props.continueButtonAction ? this.props.continueButtonAction() : {}} className="accordion__button continue-button" variant="contained">{this.props.continueButtonContentOverride ?? <>Fortsæt</>}</Button>)
                         }
-                        
+
                     </div>
                 </AccordionActions>
             </Accordion>
