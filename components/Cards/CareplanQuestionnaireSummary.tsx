@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { BasicTabs } from '../Layout/Tabs';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Tooltip, Button, Grid, Stack, Typography } from '@mui/material';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
@@ -42,8 +42,9 @@ export class CareplanQuestionnaireSummary extends Component<Props, {}> {
               linkToId = {false}
               class=""
             >
-              <Button component={Link} to={"/patients/" + this.props.careplan?.patient?.cpr + "/edit/plandefinition"}><PencilIcon/> </Button>
-
+              <Tooltip title='Rediger patientens spørgeskema' placement='right'>
+                <Button component={Link} to={"/patients/" + this.props.careplan?.patient?.cpr + "/edit/plandefinition"}><PencilIcon/> </Button>
+              </Tooltip>
 
             </BasicTabs>
       </>

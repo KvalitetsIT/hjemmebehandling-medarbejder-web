@@ -9,7 +9,7 @@ interface Props {
   type: "text" | "number"
   variant: "outlined" | "filled" | "standard"
   label: string
-  error?: string
+  error?: string | JSX.Element
   size: "small" | "medium";
   maxWidth?: string | number
   minWidth?: string | number
@@ -45,7 +45,7 @@ export class ValidatedInput extends Component<Props, {}> {
       onWheel={() => this.props.onWheel ? this.props.onWheel() : {}}
       helperText={this.props.error}
       disabled={this.props.disabled}
-  
+
       sx={{
           minWidth: this.props.minWidth,
           maxWidth: this.props.maxWidth,

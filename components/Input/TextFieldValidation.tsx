@@ -4,6 +4,7 @@ import ApiContext from '../../pages/_context';
 import { Box, FormControl, OutlinedInputProps, TextField, Typography } from '@mui/material';
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {
     value?: string;
@@ -14,14 +15,15 @@ export interface Props {
     disabled?: boolean;
     uniqueId: string;
     inputProps?: Partial<OutlinedInputProps>
-
+    rows?: number;
     label: string;
     variant: "outlined" | "standard" | "filled"
     size: "small" | "medium";
     type: string
+    autoFocus?: boolean
     maxWidth: string | number
     minWidth: string | number
-
+    multiline?: boolean;
     onWheel?: () => void;
     onChange: (input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate?: (value: string) => Promise<InvalidInputModel[]>
@@ -42,7 +44,8 @@ export class TextFieldValidation extends Component<Props, State> {
         disabled: false,
         type: "string",
         maxWidth: 1000,
-        minWidth: 300
+        minWidth: 300,
+        autoFocus: false
     }
 
     constructor(props: Props) {
@@ -114,20 +117,24 @@ export class TextFieldValidation extends Component<Props, State> {
                         label={<Typography sx={{textTransform : "capitalize"}} color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
                         variant={this.props.variant}
                         error={hasError}
+                        rows={this.props.rows}
                         color={color}
                         onWheel={() => this.props.onWheel ? this.props.onWheel() : {}}
-                        helperText={firstError?.message}
+                        helperText={hasError && (<ErrorMessage message={firstError?.message} />)}
                         disabled={this.props.disabled}
                         onChange={(input) => this.props.onChange(input)}
                         //required={this.props.required}
                         size={this.props.size}
                         type={this.props.type}
                         value={this.props.value}
+                        autoFocus={this.props.autoFocus}
+                        
                         sx={{
                             minWidth: this.props.minWidth,
                             maxWidth: this.props.maxWidth,
                         }}
                         className={this.props.className}
+                        multiline={this.props.multiline}
                     >
 
                     </TextField>
@@ -136,4 +143,6 @@ export class TextFieldValidation extends Component<Props, State> {
             </FormControl>
         )
     }
+
+    
 }

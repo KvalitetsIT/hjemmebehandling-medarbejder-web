@@ -239,6 +239,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             </CardContent>
                         </Card>
                     </Grid>
+                    {this.state.editMode ? 
+                        <Grid item xs={12}>
+                            <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                        </Grid>
+                    :null}
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
                         return (
@@ -344,7 +349,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent()).catch(() => console.log("SUBMIT.. men med fejl"))
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
-                                                    title={'OBS - Husk at opdatere alarmgrænser for måling i patientgrupper, hvor spørgeskemaer er tilføjet.'}
                                                     buttonText={'Gem og aktivér'}
                                                 >
                                                     <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn.</Typography>

@@ -1,10 +1,11 @@
 import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, TableCell } from "@mui/material";
+import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import ApiContext from "../../pages/_context";
+import { PencilIcon } from '../Icons/Icons';
 
 interface Props {
     planDefinitions: PlanDefinition[]
@@ -100,7 +101,9 @@ export class PlanDefinitionTable extends Component<Props, State>{
                                 <></>
                                 :
                                 <Stack sx={{ float: "right" }} direction="row" spacing={2}>
-                                    <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="outlined">Redigér</Button>
+                                    <Tooltip title="Rediger">
+                                        <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="text"><PencilIcon/></Button>
+                                    </Tooltip>
                                 </Stack>
                                 }
                             </TableCell>

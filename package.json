@@ -5,9 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@kvalitetsit/hjemmebehandling": "^1.4.93",
+    "@kvalitetsit/hjemmebehandling": "^1.4.94",
     "@mui/base": "^5.0.0-alpha.74",
-    "@mui/icons-material": "^5.2.5",
+    "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.2.8",
     "chart.js": "^3.5.1",

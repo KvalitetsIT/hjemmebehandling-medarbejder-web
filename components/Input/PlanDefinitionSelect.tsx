@@ -15,6 +15,7 @@ import { FormControl, FormHelperText } from '@mui/material';
 import { Frequency } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
+import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {
   careplan: PatientCareplan
@@ -69,9 +70,6 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   }
 
 
-  async getUnresolvedQuestionnaires(careplanId: string): Promise<string[]> {
-    return this.careplanService.GetUnresolvedQuestionnaires(careplanId)
-  }
 
   handleChange(e: SelectChangeEvent<string>): void {
     const clicked = e.target.value as unknown as string[]
@@ -142,14 +140,17 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   async getUnresolvedQuestionnnaires(): Promise<void> {
     try {
-      const unresolvedQuestionnaires = await this.getUnresolvedQuestionnaires(this.props.careplan.id!)
-      this.setState({
-        unresolvedQuestionnaires: unresolvedQuestionnaires
-      })
+      if (this.props.careplan.id) {
+        const unresolvedQuestionnaires = await this.careplanService.GetUnresolvedQuestionnaires(this.props.careplan.id)
+        this.setState({
+          unresolvedQuestionnaires: unresolvedQuestionnaires
+        })
+      }
     } catch (error) {
       this.setState(() => { throw error });
     }
   }
+
 
   isPlandefinitionUnresolved(planDefinition: PlanDefinition): boolean {
     return planDefinition.questionnaires != undefined && planDefinition.questionnaires.every(questionnaire => this.state.unresolvedQuestionnaires.includes(questionnaire.id))
@@ -190,7 +191,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
             )
           })}
         </MultiSelect>
-        {hasError ? <FormHelperText error={true}>{firstError}</FormHelperText> : <></>}
+        {hasError ? <FormHelperText error={true}><ErrorMessage message={firstError}/></FormHelperText> : <></>}
       </FormControl>
     )
   }

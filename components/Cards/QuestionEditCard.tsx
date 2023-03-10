@@ -13,6 +13,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
 import {InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import { Tooltip } from '@mui/material'
 
 interface Props {
     key: Key | null | undefined
@@ -52,13 +53,13 @@ export class QuestionEditCard extends Component<Props, State>{
 
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0) errors.push(new InvalidInputModel("abbreviation", "forkortelse til kliniker mangler"))
+        if (value.length <= 0) errors.push(new InvalidInputModel("abbreviation", "Forkortelse til kliniker mangler"))
         return errors
     };
 
     async validateQuestionName(value: string): Promise<InvalidInputModel[]> {
         const errors: InvalidInputModel[] = []
-        if (value.length <= 0) errors.push(new InvalidInputModel("question", "spørgsmål er endnu ikke udfyldt"))
+        if (value.length <= 0) errors.push(new InvalidInputModel("question", "Spørgsmål er endnu ikke udfyldt"))
         return errors
     }
 /*
@@ -214,9 +215,11 @@ export class QuestionEditCard extends Component<Props, State>{
 
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
                                 <ButtonGroup variant="text" >
-                                    <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
-                                        <DeleteOutlineIcon />
-                                    </IconButton>
+                                    <Tooltip title='Slet' placement='right'>
+                                        <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                            <DeleteOutlineIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                     <Button disabled={this.props.parentQuestion != undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
                                         <AddCircleIcon sx={{ paddingRight: 1, width: 'auto' }} />
                                         Tilføj nyt spørgsmål

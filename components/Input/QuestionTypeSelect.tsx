@@ -8,6 +8,7 @@ import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models
 
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {
     sectionName?: string;
@@ -106,7 +107,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
                         )
                     })}
                 </Select>
-                {hasError ? <FormHelperText error={true}>{this.state.errors[0]?.message}</FormHelperText> : <></>}
+                {hasError ? <FormHelperText error={true}><ErrorMessage message={this.state.errors[0]?.message}/></FormHelperText> : <></>}
             </FormControl>
         )
     }

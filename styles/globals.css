@@ -107,6 +107,9 @@ a {
   background-color: #5D74AC;
   color: white;
 }
+.MuiButton-root.draft-button:disabled {
+  border: none;
+}
 
 .MuiButton-root.previous-button {
   color: #5D74AC;
@@ -126,7 +129,6 @@ a {
 }
 
 .MuiButton-root.deactivate-button {
-  background-color: #EE6969;
   box-sizing: border-box;
 }
 
