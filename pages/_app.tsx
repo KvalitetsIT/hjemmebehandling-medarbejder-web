@@ -479,6 +479,9 @@ const THEME = createTheme({
           position: 'relative',
           ":last-child": {
             paddingBottom: 20
+          },
+          "canvas": {
+            width: '100% !important'
           }
         }
       }
