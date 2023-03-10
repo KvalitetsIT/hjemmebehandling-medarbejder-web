@@ -9,5 +9,6 @@ export function ErrorMessage(props: {message: string|undefined}): JSX.Element{
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
+        gap: 5
     }}><WarningAmberIcon /><Typography sx={{ fontWeight: 'bold' }}>{props.message}</Typography></div>)
 }
