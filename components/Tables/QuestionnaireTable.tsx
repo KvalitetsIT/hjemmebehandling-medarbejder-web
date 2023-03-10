@@ -108,7 +108,7 @@ export class QuestionnaireTable extends Component<Props, State>{
                                 <></>
                                 :
                                 <Stack sx={{ float: "right" }} direction="row" spacing={2}>
-                                    <Tooltip title="Rediger">
+                                    <Tooltip title="Rediger spørgeskema">
                                         <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="text"><PencilIcon/></Button>
                                     </Tooltip>
                                 </Stack>

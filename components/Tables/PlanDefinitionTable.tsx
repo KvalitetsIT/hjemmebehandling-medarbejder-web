@@ -102,7 +102,7 @@ export class PlanDefinitionTable extends Component<Props, State>{
                                 <></>
                                 :
                                 <Stack sx={{ float: "right" }} direction="row" spacing={2}>
-                                    <Tooltip title="Rediger">
+                                    <Tooltip title="Rediger patientgruppe">
                                         <Button component={Link} to={"/plandefinitions/" + planDefinition.id + "/edit"} variant="text"><PencilIcon/></Button>
                                     </Tooltip>
                                 </Stack>
