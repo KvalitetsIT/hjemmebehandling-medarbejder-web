@@ -57,7 +57,7 @@ class QuestionnaireOverviewPage extends React.Component<{}, State> {
     renderCareplanTab(): JSX.Element {
         return (
             <>
-                <Grid container alignItems="center" spacing={1}>
+                <Grid container alignItems="center" spacing={1.5}>
                     <Grid item xs={6}>
                         <Typography variant="h6">Spørgeskemaer</Typography>
                     </Grid>
