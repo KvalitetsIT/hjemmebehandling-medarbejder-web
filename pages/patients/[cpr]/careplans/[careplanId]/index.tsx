@@ -100,7 +100,7 @@ class PatientCareplans extends React.Component<Props, State> {
   renderCareplanTab(): JSX.Element {
     const activeCareplan = this.state.careplans.find(c => c?.id === this.props.match.params.careplanId) ?? this.state.careplans[0]
 
-    const activeQuestionnaire = this.state.activeQuestionnaire ??  activeCareplan.questionnaires[0]
+    const activeQuestionnaire = this.state.activeQuestionnaire ??  activeCareplan?.questionnaires[0]
 
     return (
       <IsEmptyCard object={activeCareplan} jsxWhenEmpty="Ingen aktive monitoreringsplaner fundet">
