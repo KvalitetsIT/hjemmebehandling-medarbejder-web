@@ -65,7 +65,7 @@ export class LoginInfoCard extends Component<Props, {}> {
                             <Grid item xs={12}>
                                 <Typography variant="caption" align='left' alignItems="left" textAlign="left" alignContent="flex-start" alignSelf="self-start">
                                     Adgangskode
-<br/>
+                                    <br/>
                                     <ConfirmationButton 
                                     disabled={!patient.username} 
                                     variant="text" color="primary" 
