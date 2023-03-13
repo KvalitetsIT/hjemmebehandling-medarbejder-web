@@ -1,4 +1,3 @@
-import { Table } from '@material-ui/core';
 import * as React from 'react';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
@@ -8,7 +7,7 @@ import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/Error
 import ApiContext from '../../pages/_context';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
-import { Alert, Box, Typography } from '@mui/material';
+import { Alert, Box, Table, Typography } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export interface Props {

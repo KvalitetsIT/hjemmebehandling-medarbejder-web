@@ -1,4 +1,3 @@
-import { CardHeader, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -7,7 +6,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { Component } from 'react';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { Stack } from '@mui/material';
+import { CardHeader, Stack, Typography } from '@mui/material';
 
 export interface Props {
     careplans : PatientCareplan[]

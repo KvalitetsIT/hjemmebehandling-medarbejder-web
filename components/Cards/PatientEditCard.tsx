@@ -204,7 +204,7 @@ export class PatientEditCard extends Component<Props, State> {
                 </Stack>
 
               </Stack>
-              <Stack spacing={3} direction="row">
+              <Stack spacing={3} direction="row"> 
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName}
                   className='patientEditCardTextVali'
@@ -223,7 +223,7 @@ export class PatientEditCard extends Component<Props, State> {
                   onChange={input => this.modifyPatient(this.setLastname, input)}
                   variant="outlined" />
               </Stack>
-              <Stack spacing={3} direction="row">
+              <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 3 }}>
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="Adresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
                 <TextFieldValidation

@@ -40,3 +40,6 @@ node_modules
 .next/
 generated
 .vscode
+
+# test results
+test-results/

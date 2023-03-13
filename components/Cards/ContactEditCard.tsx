@@ -1,7 +1,6 @@
-import { CardContent } from '@material-ui/core';
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, Skeleton, Typography } from '@mui/material';
+import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';

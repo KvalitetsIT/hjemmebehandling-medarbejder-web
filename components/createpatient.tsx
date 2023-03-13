@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
@@ -14,7 +14,6 @@ import { PlanDefinitionSelect } from './Input/PlanDefinitionSelect';
 import { ICareplanService } from '../services/interfaces/ICareplanService';
 import { Prompt, Redirect } from 'react-router-dom';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { CSSProperties } from '@material-ui/styles';
 import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
 import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';

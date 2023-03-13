@@ -1,10 +1,10 @@
-import { Divider, Typography } from '@material-ui/core';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import { Component } from 'react';
+import { Divider, Typography } from '@mui/material';
 
 export interface Props {
     contact : Contact;
