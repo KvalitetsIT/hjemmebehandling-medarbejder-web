@@ -65,8 +65,15 @@ export class LoginInfoCard extends Component<Props, {}> {
                             <Grid item xs={12}>
                                 <Typography variant="caption" align='left' alignItems="left" textAlign="left" alignContent="flex-start" alignSelf="self-start">
                                     Adgangskode
-<br/>
-                                    <ConfirmationButton disabled={!patient.username} variant="text" color="primary" title="Nulstil adgangskode" buttonText="Nulstil adgangskode" skipDialog={false} action={async () => await this.resetPassword()}>
+                                    <br/>
+                                    <ConfirmationButton 
+                                    disabled={!patient.username} 
+                                    variant="text" color="primary" 
+                                    buttonText="Nulstil adgangskode" 
+                                    contentOfDoActionBtn={'Nulstil adgangskode'}
+                                    contentOfCancelBtn={'Fortryd'}
+                                    skipDialog={false} 
+                                    action={async () => await this.resetPassword()}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <Typography variant="subtitle1">
