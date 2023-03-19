@@ -48,6 +48,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         this.toInternal = new ExternalToInternalMapper();
         this.toExternal = new InternalToExternalMapper();
     }
+
     
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         try {
@@ -540,6 +541,21 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
     
 
+    async GetAllPlanDefinitionsForCarplan(statusesToInclude: (BaseModelStatus | PlanDefinitionStatus)[]): Promise<PlanDefinition[]> {
+        try {
+            const api = this.careplanApi;
+
+            const request: GetPlanDefinitionsRequest = {
+                statusesToInclude: statusesToInclude.map(status => status.toString())
+            }
+            const planDefinitions = await api.getPlanDefinitions1(request);
+
+            return planDefinitions.map(pd => this.toInternal.mapPlanDefinitionDto(pd))
+        } catch (error: unknown) {
+            return await this.HandleError(error)
+        }
+    }
+    
 }
 
 

@@ -8,7 +8,6 @@ import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireS
 import { IValidationService } from '../../services/interfaces/IValidationService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
-import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
 import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { FormControl, FormHelperText } from '@mui/material';
@@ -38,7 +37,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   static sectionName = "PlanDefinitionSelectSection"
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
-  planDefinitionService!: IPlanDefinitionService
+  //planDefinitionService!: IPlanDefinitionService
   careplanService!: ICareplanService
 
   constructor(props: Props) {
@@ -64,7 +63,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   InitializeServices(): void {
     this.questionnaireService = this.context.questionnaireService;
-    this.planDefinitionService = this.context.planDefinitionService;
+    //this.planDefinitionService = this.context.planDefinitionService;
     this.validationService = this.context.validationService;
     this.careplanService = this.context.careplanService;
   }
@@ -129,7 +128,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
   async populatePlanDefinitions(): Promise<void> {
     try {
-      const planDefinitions = await this.planDefinitionService.GetAllPlanDefinitions([BaseModelStatus.ACTIVE]);
+      const planDefinitions = await this.careplanService.GetAllPlanDefinitionsForCareplan([BaseModelStatus.ACTIVE]);
       this.setState({
         allPlanDefinitions: planDefinitions
       })

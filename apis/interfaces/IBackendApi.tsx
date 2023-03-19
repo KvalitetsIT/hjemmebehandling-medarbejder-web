@@ -205,5 +205,13 @@ export interface IBackendApi {
      * @param careplanId 
      */
     GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]>;
+
+
+    /**
+     * Returns an array of plandefintions
+     * @param statusesToInclude 
+     */
+    GetAllPlanDefinitionsForCarplan(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]>
+
 }
 

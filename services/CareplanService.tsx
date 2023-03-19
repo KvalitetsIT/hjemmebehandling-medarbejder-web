@@ -5,6 +5,8 @@ import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCar
 
 import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import {ICareplanService} from "./interfaces/ICareplanService";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { PlanDefinitionStatus, PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 
 export default class CareplanService extends BaseService implements ICareplanService {
   backendApi: IBackendApi
@@ -61,6 +63,13 @@ export default class CareplanService extends BaseService implements ICareplanSer
     }
 }
 
+async GetAllPlanDefinitionsForCareplan(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[] ): Promise<PlanDefinition[]> {
+  try {
+      return await this.backendApi.GetAllPlanDefinitionsForCarplan(statusesToInclude);
+  } catch (error: unknown) {
+      return this.HandleError(error);
+  }
+}
 
 
 

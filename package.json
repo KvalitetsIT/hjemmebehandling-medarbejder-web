@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@kvalitetsit/hjemmebehandling": "^1.4.97",
+    "@kvalitetsit/hjemmebehandling": "^1.4.94",
     "@mui/base": "^5.0.0-alpha.74",
     "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.54",
@@ -38,12 +38,12 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@types/express": "^4.17.13",
-    "@types/uuid": "^8.3.4",
     "@types/jest": "^26.0.24",
     "@types/node": "^17.0.29",
     "@types/react": "^17.0.31",
     "@types/react-dom": "^17.0.10",
     "@types/react-router-dom": "^5.3.1",
+    "@types/uuid": "^8.3.4",
     "http-proxy-middleware": "^2.0.1",
     "typescript": "4.9.5"
   },

@@ -362,6 +362,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.task3.questionnaireId = this.questionnaire1.id
         this.task3.responseLinkEnabled = true
     }
+    GetAllPlanDefinitionsForCarplan(statusesToInclude: (BaseModelStatus | PlanDefinitionStatus)[]): Promise<PlanDefinition[]> {
+        throw new Error("Method not implemented.");
+    }
     async IsQuestionnaireInUse(questionnaireId: string): Promise<boolean> {
         return false;
     }
@@ -412,7 +415,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         const result = allplanDefinitions.find(x => x.id == planDefinitionId);
         if (!result)
             throw new NotFoundError()
-
         return result
     }
 

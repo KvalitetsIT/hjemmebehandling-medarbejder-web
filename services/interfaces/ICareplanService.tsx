@@ -1,4 +1,6 @@
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import { PlanDefinitionStatus, PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 
 
 /**
@@ -52,4 +54,12 @@ export interface ICareplanService {
      * @returns the careplan that has been terminated
      */
     TerminateCareplan: (careplan: PatientCareplan) => Promise<PatientCareplan>;
+
+
+    /**
+     * Fetches all plandefinitions based on filters
+     * @param statusesToInclude If empty, all statuses are included in response
+     * @returns all plandefinitions in system complying to the filters
+     */
+    GetAllPlanDefinitionsForCareplan(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]>
 }
