@@ -102,8 +102,8 @@ export class FrequencyTableRow extends Component<Props, State> {
           <TableCell>
 
             <FormControl required>
-              <MultiSelect id='frequenzy' onChange={(a) => {
-                this.SetDays(a as unknown as Array<DayEnum>);
+              <MultiSelect id='frequenzy' onChange={(e, newValue) => {
+                this.SetDays(newValue as unknown as Array<DayEnum>);
                 this.validateEvent.dispatchEvent()
               }} value={this.state.questionnaire.frequency!.days}>
                 {this.getAllDays().map(day => {
