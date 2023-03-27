@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@kvalitetsit/hjemmebehandling": "^1.4.94",
+    "@kvalitetsit/hjemmebehandling": "^1.4.97",
     "@mui/base": "^5.0.0-alpha.74",
     "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.54",
