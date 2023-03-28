@@ -217,8 +217,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                                 }
 
                                                 }
-
-                                                disabled={this.state.planDefinition.status == BaseModelStatus.ACTIVE}
+                                                disabled={(this.state.planDefinition.id != undefined) && (this.state.planDefinition.status != undefined && (this.state.planDefinition.status != BaseModelStatus.DRAFT))}
                                                 className='draft-button'
                                                 variant="contained"
                                                 title={this.state.planDefinition.status == BaseModelStatus.ACTIVE ? "Du kan ikke gemme en aktiv patientgruppe som kladde" : undefined}
@@ -248,7 +247,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
                                             </ConfirmationButton>
                                             : undefined
                                         }
-                                        
+
                                     >
 
                                         <PlanDefinitionEditThresholds
