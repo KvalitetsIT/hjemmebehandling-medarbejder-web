@@ -93,7 +93,7 @@ export class PlanDefinitionTable extends Component<Props, State>{
                             </TableCell>
                             <TableCell>
                                 <Typography sx={retired ? {fontStyle: 'italic'}:{}} color={retired ? "grey": "black"}>
-                                    {planDefinition?.questionnaires?.map(q => q.name).join(" / ")}
+                                {planDefinition?.questionnaires?.map(q => (<div>{q.name}</div>))}
                                 </Typography>
                             </TableCell>
                             <TableCell>
