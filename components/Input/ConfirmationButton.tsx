@@ -9,6 +9,7 @@ export interface Props {
   action: () => Promise<void>
   skipDialog?: boolean
   title?: string
+  tooltip?: string
   buttonText: JSX.Element | string
   className: string
   fullWidth: boolean
@@ -69,12 +70,12 @@ export class ConfirmationButton extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <>
-        <Tooltip title={this.props.title || ""} >
+        <Tooltip title={this.props.tooltip} >
           <Button
             disabled={this.props.disabled}
             fullWidth={this.props.fullWidth}
             className={this.props.className}
-            onClick={() => {this.props.skipDialog == undefined || this.props.skipDialog ? this.doAction() : this.OpenVerificationBox() }}
+            onClick={() => {this.props.skipDialog ? this.doAction() : this.OpenVerificationBox() }}
             color={this.props.color}
             variant={this.props.variant}>{this.props.buttonText}</Button>
 
