@@ -83,7 +83,7 @@ export class QuestionnaireTable extends Component<Props, State>{
                     return (
                         <TableRow sx={!show ? {display: 'none'} : {}}>
                             <TableCell>
-                                <Typography sx={retired ? {fontStyle: 'italic'}:{}} color={retired ? "grey": "black"}>
+                                <Typography sx={retired ? {fontStyle: 'italic'}:{fontWeight: 'bold'}} color={retired ? "grey": "black"}>
                                     {questionnaire.name}
                                 </Typography>
                             </TableCell>
