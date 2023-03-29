@@ -6,8 +6,8 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom';
-import { Typography, Tooltip } from '@mui/material';
+import { Link, NavLink } from 'react-router-dom';
+import { Typography, Tooltip, ListItemButton } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
 import { ActivePatientsIcon, GroupIcon, InactivePatientsIcon, SurveyIcon, TasklistIcon, AboutIcon } from '../../Icons/Icons';
@@ -93,18 +93,14 @@ export default function MiniDrawer(): JSX.Element {
 
       <Drawer variant="permanent" open={open}>
         <List >
-          <ListItem button onClick={open ? handleDrawerClose : handleDrawerOpen}>
-
+          <ListItemButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
             <ListItemIcon>
               <img height={30} width={30} src="/assets/images/logo.svg" alt="KOMO" />
             </ListItemIcon>
             <ListItemIcon>
               <img height={30} width={150} src="/assets/images/komo.svg" alt="KOMO" />
             </ListItemIcon>
-            
-           </ListItem>
-
-
+           </ListItemButton>
           <Divider />
 
           <ListItem >
@@ -114,30 +110,30 @@ export default function MiniDrawer(): JSX.Element {
           </ListItem>
 
           <Tooltip title={'Opgaveliste'} placement='right'>
-            <ListItem button component={Link} color="inherit" to="/patients">
+            <ListItemButton component={NavLink} color="inherit" to="/patients">
               <ListItemIcon>
                 <TasklistIcon />
               </ListItemIcon>
               <ListItemText>Opgaveliste</ListItemText>
-            </ListItem>
+            </ListItemButton>
           </Tooltip>
 
           <Tooltip title={'Aktive patienter'} placement='right'>
-            <ListItem button component={Link} color="inherit" to="/active/1">
+            <ListItemButton component={NavLink} color="inherit" to="/active/1">
               <ListItemIcon>
                 <ActivePatientsIcon />
               </ListItemIcon>
               <ListItemText primary="Aktive patienter" />
-            </ListItem>
+            </ListItemButton>
           </Tooltip>
 
           <Tooltip title={'Afsluttede patienter'} placement='right'>       
-            <ListItem button component={Link} color="inherit" to="/inactive/1">
+            <ListItemButton component={NavLink} color="inherit" to="/inactive/1">
               <ListItemIcon>
                 <InactivePatientsIcon />
               </ListItemIcon>
               <ListItemText primary="Afsluttede patienter" />
-            </ListItem>
+            </ListItemButton>
           </Tooltip>
 
 
@@ -152,21 +148,21 @@ export default function MiniDrawer(): JSX.Element {
               </ListItem>
 
               <Tooltip title={'Spørgeskema'} placement='right'>
-                <ListItem button component={Link} color="inherit" to="/questionnaires">
+                <ListItemButton component={NavLink} color="inherit" to="/questionnaires">
                   <ListItemIcon>
                     <SurveyIcon />
                   </ListItemIcon>
                   <ListItemText primary="Spørgeskema" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
 
               <Tooltip title={'Patientgrupper'} placement='right'>
-                <ListItem button component={Link} color="inherit" to="/plandefinitions">
+                <ListItemButton component={NavLink} color="inherit" to="/plandefinitions">
                   <ListItemIcon>
                     <GroupIcon />
                   </ListItemIcon>
                   <ListItemText primary="Patientgrupper" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
             </> : <></>
           }
@@ -176,12 +172,12 @@ export default function MiniDrawer(): JSX.Element {
 
         <Tooltip title={'Om KOMO'} placement='right'>
           <List className='toButtom'>
-            <ListItem button component={Link} color="inherit" to="/about">
+            <ListItemButton component={NavLink} color="inherit" to="/about">
               <ListItemIcon>
                 <AboutIcon />
               </ListItemIcon>
               <ListItemText primary="Om KOMO" />
-            </ListItem>          
+            </ListItemButton>          
           </List>
         </Tooltip>
 
