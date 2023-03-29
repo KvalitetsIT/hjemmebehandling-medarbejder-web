@@ -152,7 +152,13 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
 
   isPlandefinitionUnresolved(planDefinition: PlanDefinition): boolean {
-    return planDefinition.questionnaires != undefined && planDefinition.questionnaires.every(questionnaire => this.state.unresolvedQuestionnaires.includes(questionnaire.id))
+    let result = false;
+    
+    this.state.unresolvedQuestionnaires.forEach((id) => {
+      if(planDefinition.questionnaires != undefined ) result = planDefinition.questionnaires?.map(x => x.id).includes(id)
+    })
+      
+    return result;
   }
 
 

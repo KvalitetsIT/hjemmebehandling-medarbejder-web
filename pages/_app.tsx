@@ -36,31 +36,30 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     , planDefinitionBackend = backendApi
     ;
 
-
-  if (process?.env.NODE_ENV === 'development') {
-    if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE === "true") {
-      questionnaireBackend = mockApi;
+    if (process?.env.NODE_ENV === 'development') {
+      if (process.env.NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE === "true") {
+        questionnaireBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE === "true") {
+        questionAnswerBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE === "true") {
+        careplanBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_PATIENT_SERVICE === "true") {
+        patientBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_PERSON_SERVICE === "true") {
+        personBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
+        userBackend = mockApi;
+      }
+      if (process.env.NEXT_PUBLIC_MOCK_PLANDEFINITION_SERVICE === "true") {
+        planDefinitionBackend = mockApi;
+      }
     }
-    if (process.env.NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE === "true") {
-      questionAnswerBackend = mockApi;
-    }
-    if (process.env.NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE === "true") {
-      careplanBackend = mockApi;
-    }
-    if (process.env.NEXT_PUBLIC_MOCK_PATIENT_SERVICE === "true") {
-      patientBackend = mockApi;
-    }
-    if (process.env.NEXT_PUBLIC_MOCK_PERSON_SERVICE === "true") {
-      personBackend = mockApi;
-    }
-    if (process.env.NEXT_PUBLIC_MOCK_USER_SERVICE === "true") {
-      userBackend = mockApi;
-    }
-    if (process.env.NEXT_PUBLIC_MOCK_PLANDEFINITION_SERVICE === "true") {
-      planDefinitionBackend = mockApi;
-    }
-  }
-
+    
 
   return (
     <>
