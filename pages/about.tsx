@@ -6,7 +6,7 @@ export default class AboutPage extends Component<{}> {
     render() : JSX.Element{
         return (
             <Card>
-                <CardHeader title="Om KOMO" />
+                <CardHeader title="Om Komo"/>
                 <Divider />
                 <CardContent>
                     <Stack spacing={3}>
@@ -82,6 +82,12 @@ export default class AboutPage extends Component<{}> {
                                             </ListItem>
                                             <ListItem disableGutters>
                                                 <Typography>Enhver fejl eller uhensigtsmæssighed, der er indtruffet i forbindelse med den medicinske software, skal indberettes til it.dias.support@rm.dk.</Typography>
+                                            </ListItem>
+                                            <ListItem disableGutters>
+                                                <Typography>
+                                                    Det erklærede formål beskriver den tiltænkte medicinske anvendelse af Komo, herunder hvordan Komo tiltænkes at blive anvendt, hvilken patientpopulation Komo kan anvendes til, og hvad/hvem Komo ikke må anvendes til.
+                                                    <span> <Link href="https://regionmidtjylland.service-now.com/kb?id=kb_article_view&sysparm_article=KB0023709" color="inherit">Læs mere om det erklærede formål her</Link></span>
+                                                </Typography>
                                             </ListItem>
                                         </List>
                                     }
