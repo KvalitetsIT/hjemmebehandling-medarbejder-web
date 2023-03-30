@@ -175,9 +175,10 @@ export default class CreatePatient extends Component<Props, State> {
                       variant="contained"
                       action={() => this.submitPatient()}
                       buttonText={'Gem patient'}
-                      contentOfDoActionBtn={'Angiv frekvens'}
-                      contentOfCancelBtn={'Gem patient'}
-                      cancelBtnIsPrimary={false}
+                      contentOfDoActionBtn={'Gem patient'}
+                      contentOfCancelBtn={'Angiv frekvens'}
+                      cancelBtnIsPrimary={true}
+                      cancelBtnIsLast={true}
                       title="Du har ikke angivet frekvens"
                       disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
