@@ -152,7 +152,13 @@ export class PlanDefinitionSelect extends Component<Props, State> {
 
 
   isPlandefinitionUnresolved(planDefinition: PlanDefinition): boolean {
-    return planDefinition.questionnaires != undefined && planDefinition.questionnaires.every(questionnaire => this.state.unresolvedQuestionnaires.includes(questionnaire.id))
+    let result = false;
+    
+    this.state.unresolvedQuestionnaires.forEach((id) => {
+      if(planDefinition.questionnaires != undefined ) result = planDefinition.questionnaires?.map(x => x.id).includes(id)
+    })
+      
+    return result;
   }
 
 
@@ -184,7 +190,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
         <MultiSelect onChange={(_, planDefinition) => this.handleSelection(planDefinition)} value={this.state.editedCareplan.planDefinitions.map((x) => x.id!)} id="select-plandefinition">
           {this.state.allPlanDefinitions.map(planDefinition => {
             return (
-              <MultiSelectOption key={"option" + planDefinition.id} disabled={this.isPlandefinitionUnresolved(planDefinition)} value={planDefinition.id}>
+              <MultiSelectOption key={"option" + planDefinition.id} /*disabled={this.isPlandefinitionUnresolved(planDefinition)}*/ value={planDefinition.id}>
                 {planDefinition.name}
               </MultiSelectOption>
             )
