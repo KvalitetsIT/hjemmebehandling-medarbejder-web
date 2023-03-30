@@ -15,8 +15,9 @@ export interface Props {
   fullWidth: boolean
   disabled?: boolean
   contentOfDoActionBtn?: string
-  contentOfCancelBtn?: string 
+  contentOfCancelBtn?: string
   cancelBtnIsPrimary?: boolean
+  cancelBtnIsLast?: boolean
   color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   variant: "outlined" | "contained" | "text"
 }
@@ -67,6 +68,28 @@ export class ConfirmationButton extends Component<Props, State> {
     this.setState({ openConfirmationBox: false })
   }
 
+  renderDeclientButton = () => (
+    <Button className="decline__button"
+      variant={this.props.cancelBtnIsPrimary ? "contained" : "text"}
+      autoFocus={this.props.cancelBtnIsPrimary ? true : false}
+      onClick={() => this.CloseVerificationBox()}
+    >
+      {this.props.contentOfCancelBtn ? this.props.contentOfCancelBtn : "Nej"}
+    </Button>
+  )
+
+  renderApproceButton = () => (
+    <LoadingButton className="accept__button"
+      color="primary"
+      variant={this.props.cancelBtnIsPrimary ? "text" : "contained"}
+      autoFocus={this.props.cancelBtnIsPrimary ? false : true}
+      loading={this.state.doingAction}
+      onClick={async () => await this.doAction()}
+    >
+      {this.props.contentOfDoActionBtn ? this.props.contentOfDoActionBtn : "Ja"}
+    </LoadingButton>
+  )
+
   render(): JSX.Element {
     return (
       <>
@@ -75,11 +98,9 @@ export class ConfirmationButton extends Component<Props, State> {
             disabled={this.props.disabled}
             fullWidth={this.props.fullWidth}
             className={this.props.className}
-            onClick={() => {this.props.skipDialog ? this.doAction() : this.OpenVerificationBox() }}
+            onClick={() => { this.props.skipDialog ? this.doAction() : this.OpenVerificationBox() }}
             color={this.props.color}
             variant={this.props.variant}>{this.props.buttonText}</Button>
-
-
         </Tooltip>
         <Dialog
           open={this.state.openConfirmationBox}
@@ -97,22 +118,17 @@ export class ConfirmationButton extends Component<Props, State> {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button className="decline__button"
-              variant={this.props.cancelBtnIsPrimary ? "contained" : "text"}
-              autoFocus={this.props.cancelBtnIsPrimary ? true : false}
-              onClick={() => this.CloseVerificationBox()}
-            >
-              {this.props.contentOfCancelBtn ? this.props.contentOfCancelBtn : "Nej"}
-            </Button>
-            <LoadingButton className="accept__button"
-              color="primary"
-              variant={this.props.cancelBtnIsPrimary ? "text" : "contained"}
-              autoFocus={this.props.cancelBtnIsPrimary ? false : true}
-              loading={this.state.doingAction}
-              onClick={async () => await this.doAction()}
-            >
-              {this.props.contentOfDoActionBtn ? this.props.contentOfDoActionBtn : "Ja"}
-            </LoadingButton>
+            {this.props.cancelBtnIsLast ? (
+              <>
+                {this.renderApproceButton()}
+                {this.renderDeclientButton()}
+              </>
+            ) : (
+              <>
+                {this.renderDeclientButton()}
+                {this.renderApproceButton()}
+              </>
+            )}
           </DialogActions>
         </Dialog>
       </>
