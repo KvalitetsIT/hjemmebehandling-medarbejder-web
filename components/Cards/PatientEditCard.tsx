@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, CardContent, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';

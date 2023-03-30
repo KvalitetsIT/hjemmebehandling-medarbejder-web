@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Typography, Tooltip, ListItemButton } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
