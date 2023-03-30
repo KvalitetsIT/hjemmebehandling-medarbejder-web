@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Typography, Tooltip, ListItemButton } from '@mui/material';
 import ApiContext from '../../../pages/_context';
 import { IUserService } from '../../../services/interfaces/IUserService';
@@ -66,6 +66,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer(): JSX.Element {
   const [open, setOpen] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const { pathname } = useLocation()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -88,6 +89,8 @@ export default function MiniDrawer(): JSX.Element {
 
   });
 
+  console.log('pathname', pathname)
+
   return (
     <>
 
@@ -100,7 +103,7 @@ export default function MiniDrawer(): JSX.Element {
             <ListItemIcon>
               <img height={30} width={150} src="/assets/images/komo.svg" alt="KOMO" />
             </ListItemIcon>
-           </ListItemButton>
+          </ListItemButton>
           <Divider />
 
           <ListItem >
@@ -110,7 +113,7 @@ export default function MiniDrawer(): JSX.Element {
           </ListItem>
 
           <Tooltip title={'Opgaveliste'} placement='right'>
-            <ListItemButton component={NavLink} color="inherit" to="/patients">
+            <ListItemButton component={NavLink} color="inherit" to="/patients" className={pathname === '/' ? 'active' : ''}>
               <ListItemIcon>
                 <TasklistIcon />
               </ListItemIcon>
@@ -127,7 +130,7 @@ export default function MiniDrawer(): JSX.Element {
             </ListItemButton>
           </Tooltip>
 
-          <Tooltip title={'Afsluttede patienter'} placement='right'>       
+          <Tooltip title={'Afsluttede patienter'} placement='right'>
             <ListItemButton component={NavLink} color="inherit" to="/inactive/1">
               <ListItemIcon>
                 <InactivePatientsIcon />
@@ -177,7 +180,7 @@ export default function MiniDrawer(): JSX.Element {
                 <AboutIcon />
               </ListItemIcon>
               <ListItemText primary="Om KOMO" />
-            </ListItemButton>          
+            </ListItemButton>
           </List>
         </Tooltip>
 
