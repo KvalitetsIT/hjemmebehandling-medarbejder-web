@@ -68,7 +68,7 @@ export class ConfirmationButton extends Component<Props, State> {
     this.setState({ openConfirmationBox: false })
   }
 
-  renderDeclientButton = () => (
+  renderDeclientButton = (): JSX.Element => (
     <Button className="decline__button"
       variant={this.props.cancelBtnIsPrimary ? "contained" : "text"}
       autoFocus={this.props.cancelBtnIsPrimary ? true : false}
@@ -78,7 +78,7 @@ export class ConfirmationButton extends Component<Props, State> {
     </Button>
   )
 
-  renderApproceButton = () => (
+  renderApproceButton = (): JSX.Element => (
     <LoadingButton className="accept__button"
       color="primary"
       variant={this.props.cancelBtnIsPrimary ? "text" : "contained"}
