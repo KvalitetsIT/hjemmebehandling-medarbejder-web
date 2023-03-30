@@ -73,6 +73,7 @@ export class LoginInfoCard extends Component<Props, {}> {
                                     contentOfDoActionBtn={'Nulstil adgangskode'}
                                     contentOfCancelBtn={'Fortryd'}
                                     skipDialog={false} 
+                                    title="Nulstil adgangskode"
                                     action={async () => await this.resetPassword()}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>

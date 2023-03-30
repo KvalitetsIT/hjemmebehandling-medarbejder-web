@@ -353,8 +353,9 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     }}
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
                                                     buttonText={'Gem og aktivér'}
+                                                    title="Definer alarmgrænser"
                                                 >
-                                                    <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn.</Typography>
+                                                    <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn. Alarmgrænserne defineres i den/de patiengrupper, hvor spørgeskemaet er tilføjet.</Typography>
                                                 </ConfirmationButton>
                                             </CardActions>
                                         </TableCell>

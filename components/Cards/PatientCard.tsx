@@ -49,26 +49,23 @@ export class PatientCard extends Component<Props, State> {
         <CardHeader
           avatar={<PatientAvatar patient={this.props.patient} />}
           title={
-            <Grid container>
-              <Grid item xs="auto">
-                <Typography>
-                  {this.props.patient.firstname} {this.props.patient.lastname} <br />
-
-                  {this.props.patient.cprToString()}
-                </Typography>
-                <Typography variant="subtitle2">
-                  {this.props.patient.primaryPhonenumberToString()}<br />
-                  {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhonenumberToString() + ")" : ""}
-                </Typography>
-              </Grid>
-            </Grid>
+            <>
+              <Typography>
+                {this.props.patient.firstname} {this.props.patient.lastname} <br />
+                {this.props.patient.cprToString()}
+              </Typography>
+              <Typography variant="subtitle2">
+                {this.props.patient.primaryPhonenumberToString()}<br />
+                {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhonenumberToString() + ")" : ""}
+              </Typography>
+            </>
           }
           action={
             <Stack>
               <ErrorBoundary>
                 <Tooltip title='Rediger patient' placement='right'>
                   <Button component={Link} to={"/patients/" + this.props.patient.cpr + "/edit"}>
-                    <PencilIcon/>
+                    <PencilIcon />
                   </Button>
                 </Tooltip>
               </ErrorBoundary>
@@ -96,7 +93,7 @@ export class PatientCard extends Component<Props, State> {
 
                 <br />
               </IsEmptyCard>
-              <IsEmptyCard  useRawJsxWhenEmpty={true} object={contact?.fullname == "" ? undefined : contact?.fullname} jsxWhenEmpty="">
+              <IsEmptyCard useRawJsxWhenEmpty={true} object={contact?.fullname == "" ? undefined : contact?.fullname} jsxWhenEmpty="">
                 <Typography fontWeight="bold" variant="subtitle2">
                   Primær kontakt
                 </Typography>

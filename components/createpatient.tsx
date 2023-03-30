@@ -175,12 +175,12 @@ export default class CreatePatient extends Component<Props, State> {
                       variant="contained"
                       action={() => this.submitPatient()}
                       buttonText={'Gem patient'}
-                      contentOfDoActionBtn={'Gem patient'}
-                      contentOfCancelBtn={'Angiv frekvens'}
-                      cancelBtnIsPrimary={true}
+                      contentOfDoActionBtn={'Angiv frekvens'}
+                      contentOfCancelBtn={'Gem patient'}
+                      cancelBtnIsPrimary={false}
+                      title="Du har ikke angivet frekvens"
                       disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
-
                       <Typography>Vær opmærksom på følgende: <br />
                         - Der vil ikke fremkomme blå alarmer, hvis borgeren mangler at indsende besvarelse.<br />
                         - Borgeren kan ikke se, hvilke dage, der skal indsendes besvarelse.</Typography>
