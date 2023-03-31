@@ -332,7 +332,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
 
         const names = plandefinitions.filter(plandefinition => plandefinition.id != this.state.planDefinition.id).map(plandefinition => plandefinition.name);
 
-        if (names.includes(values.name)) {
+        if (names.includes(values.name) || names.includes(values.name.trim())) {
             missingDetails.push("Navnet '" + values.name + "' er allerede i brug")
         }
 
