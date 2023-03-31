@@ -142,7 +142,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 const missingDetails: string[] = [];
                 const questionnaires = await this.questionnaireService.GetAllQuestionnaires([BaseModelStatus.DRAFT, BaseModelStatus.ACTIVE])
                 const names = questionnaires.filter(questionnaire => questionnaire.id != this.state.questionnaire?.id).map(questionnaire => questionnaire.name);
-                if (names.includes(this.state.questionnaire?.name)) {
+                if (names.includes(this.state.questionnaire?.name) || names.includes(this.state.questionnaire?.name?.trim()) ) {
                     missingDetails.push("Navnet '" + this.state.questionnaire?.name + "' er allerede i brug")
                 }
                 if (missingDetails.length > 0) throw new MissingDetailsError(missingDetails);
