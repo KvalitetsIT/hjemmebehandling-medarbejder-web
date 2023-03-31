@@ -281,7 +281,21 @@ const THEME = createTheme({
             }
           }
         }
-      ]
+      ],
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          transition: 'none',
+          "&.active": {
+            backgroundColor: blue,
+            color: white,
+            '.MuiListItemIcon-root > *': {
+              backgroundColor: 'white !important',
+            }
+          }
+        },
+      }
     },
     //End of create patient button
     MuiAutocomplete: {

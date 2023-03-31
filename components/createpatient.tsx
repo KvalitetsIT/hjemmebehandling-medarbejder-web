@@ -178,9 +178,10 @@ export default class CreatePatient extends Component<Props, State> {
                       contentOfDoActionBtn={'Gem patient'}
                       contentOfCancelBtn={'Angiv frekvens'}
                       cancelBtnIsPrimary={true}
+                      cancelBtnIsLast={true}
+                      title="Du har ikke angivet frekvens"
                       disabled={this.state.patientError != undefined || this.state.contactError != undefined || this.state.planDefinitionError != undefined}
                     >
-
                       <Typography>Vær opmærksom på følgende: <br />
                         - Der vil ikke fremkomme blå alarmer, hvis borgeren mangler at indsende besvarelse.<br />
                         - Borgeren kan ikke se, hvilke dage, der skal indsendes besvarelse.</Typography>

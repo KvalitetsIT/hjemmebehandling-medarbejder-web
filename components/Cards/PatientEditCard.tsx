@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
-import { Card, CardContent, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import ApiContext from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
@@ -196,11 +196,9 @@ export class PatientEditCard extends Component<Props, State> {
                   value={this.state.tempCpr}
                   onChange={input => this.setState({ tempCpr: input.target.value })} />
                 <Stack>
-                  <Tooltip title={firstError ?? "Hent fra CPR!"}>
-                    <div>
-                      <LoadingButton disabled={firstError !== undefined} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async () => await this.getPerson()}>Fremsøg</LoadingButton>
-                    </div>
-                  </Tooltip>
+                  <div>
+                    <LoadingButton disabled={firstError !== undefined} loading={this.state.loadingCprButton} size="small" variant="contained" onClick={async () => await this.getPerson()}>Fremsøg</LoadingButton>
+                  </div>
                 </Stack>
 
               </Stack>
