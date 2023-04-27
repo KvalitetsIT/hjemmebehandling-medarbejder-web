@@ -48,7 +48,7 @@ export default class AboutPage extends Component<{}> {
                                             </ListItem>
                                             
                                             <ListItem disableGutters sx={{pt: 3}}>
-                                                <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sys_kb_id=2dc8ceaf1bea4910c970dd72b24bcbd6" color="inherit">Til patient</Link>
+                                                <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021419" color="inherit">Til patient</Link>
                                             </ListItem>
                                             <ListItem disableGutters>
                                             <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021439" color="inherit">Til patient (kvikguide)</Link>
