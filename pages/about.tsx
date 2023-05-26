@@ -29,7 +29,7 @@ export default class AboutPage extends Component<{}> {
                                 </ListItemIcon>
                                 <ListItemText disableTypography
                                     primary={<Typography variant="h6">Medicinsk udstyr</Typography>}
-                                    secondary={<Typography>Versionsnummer på software: 2.0.0-2023-03-29</Typography>}
+                                    secondary={<Typography>Versionsnummer på software: 2.0.1-2023-05-26</Typography>}
                                 />
                             </ListItem>
                             <ListItem alignItems="flex-start">
@@ -48,10 +48,10 @@ export default class AboutPage extends Component<{}> {
                                             </ListItem>
                                             
                                             <ListItem disableGutters sx={{pt: 3}}>
-                                                <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021419" color="inherit">Til patient</Link>
+                                                <Link href="https://www.auh.dk/globalassets/allepatientinformationer/auh/afdelinger/infektionssygdomme/komo/komo_brugermanualer_patient_version2.0.pdf" color="inherit">Til patient</Link>
                                             </ListItem>
                                             <ListItem disableGutters>
-                                            <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021439" color="inherit">Til patient (kvikguide)</Link>
+                                            <Link href="https://www.auh.dk/globalassets/allepatientinformationer/auh/afdelinger/infektionssygdomme/komo/komo_brugermanualer_patientkvik_version2.0.pdf" color="inherit">Til patient (kvikguide)</Link>
                                             </ListItem>
                                         </List>
                                     }
