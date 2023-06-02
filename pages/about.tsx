@@ -48,10 +48,10 @@ export default class AboutPage extends Component<{}> {
                                             </ListItem>
                                             
                                             <ListItem disableGutters sx={{pt: 3}}>
-                                                <Link href="https://www.auh.dk/globalassets/allepatientinformationer/auh/afdelinger/infektionssygdomme/komo/komo_brugermanualer_patient_version2.0.pdf" color="inherit">Til patient</Link>
+                                                <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021419" color="inherit">Til patient</Link>
                                             </ListItem>
                                             <ListItem disableGutters>
-                                            <Link href="https://www.auh.dk/globalassets/allepatientinformationer/auh/afdelinger/infektionssygdomme/komo/komo_brugermanualer_patientkvik_version2.0.pdf" color="inherit">Til patient (kvikguide)</Link>
+                                            <Link href="https://regionmidtjylland.service-now.com/rmsp?id=kb_article_view&sysparm_article=KB0021439" color="inherit">Til patient (kvikguide)</Link>
                                             </ListItem>
                                         </List>
                                     }
