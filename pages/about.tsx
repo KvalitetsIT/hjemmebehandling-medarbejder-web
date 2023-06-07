@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardContent, Stack, Typography, Divider, List, ListItem, ListItemIcon, ListItemText, Link } from "@mui/material"
 import { Component } from "react"
 import { AboutManufacturerIcon, AboutUserGuideIcon, AboutMedicalDeviceIcon, AboutWarningsIcon } from '../components/Icons/Icons';
+import getConfig from 'next/config';
 
 export default class AboutPage extends Component<{}> {
     render() : JSX.Element{
@@ -29,7 +30,7 @@ export default class AboutPage extends Component<{}> {
                                 </ListItemIcon>
                                 <ListItemText disableTypography
                                     primary={<Typography variant="h6">Medicinsk udstyr</Typography>}
-                                    secondary={<Typography>Versionsnummer på software: 2.0.2-2023-06-02</Typography>}
+                                    secondary={<Typography>Versionsnummer på software: 2.0.0-2023-06-07</Typography>}
                                 />
                             </ListItem>
                             <ListItem alignItems="flex-start">
