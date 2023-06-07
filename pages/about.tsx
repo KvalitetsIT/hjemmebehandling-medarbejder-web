@@ -1,7 +1,6 @@
 import { Card, CardHeader, CardContent, Stack, Typography, Divider, List, ListItem, ListItemIcon, ListItemText, Link } from "@mui/material"
 import { Component } from "react"
 import { AboutManufacturerIcon, AboutUserGuideIcon, AboutMedicalDeviceIcon, AboutWarningsIcon } from '../components/Icons/Icons';
-import getConfig from 'next/config';
 
 export default class AboutPage extends Component<{}> {
     render() : JSX.Element{
