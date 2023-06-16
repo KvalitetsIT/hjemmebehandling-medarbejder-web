@@ -22,7 +22,7 @@ export interface Props {
 export class AccordianWrapper extends Component<PropsWithChildren<Props>, {}> {
     
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+   
     static displayName = AccordianWrapper.name;
 
     constructor(props: Props) {

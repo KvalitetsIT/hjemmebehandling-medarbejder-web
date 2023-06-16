@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Skeleton, Typography } from '@mui/material';
-import ApiContext from '../../../pages/_context';
+import ApiContext, { IApiContext } from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { IValidationService } from '../../../services/interfaces/IValidationService';
@@ -34,6 +34,7 @@ export interface State {
 
 export class PlanDefinitionEditThresholds extends Component<Props, State> {
     static contextType = ApiContext;
+private readonly api: IApiContext;
     static displayName = PlanDefinitionEditThresholds.name;
     personService!: IPersonService;
     validationService!: IValidationService;
@@ -41,6 +42,7 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             loading: false,
             defaultNumberOfThresholds: 3

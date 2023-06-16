@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Component } from 'react';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
@@ -26,11 +26,13 @@ export interface State {
 export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+  private readonly api: IApiContext;
+ 
 questionnaireService!: IQuestionnaireService
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       status: props.questionnaireResponse.status,
       openConfirmationBox: false,
@@ -40,7 +42,7 @@ questionnaireService!: IQuestionnaireService
   }
 
   InitializeServices(): void {
-    this.questionnaireService = this.context.questionnaireService;
+    this.questionnaireService =  this.api.questionnaireService;
   }
 
   openConfirmationBox = async (event: SelectChangeEvent): Promise<void> => {

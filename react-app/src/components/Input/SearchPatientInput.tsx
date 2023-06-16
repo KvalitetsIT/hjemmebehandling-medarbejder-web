@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Autocomplete, Box, CircularProgress, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
 import { IPatientService } from '../../services/interfaces/IPatientService';
 import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
@@ -18,11 +18,13 @@ export interface State {
 export class SearchPatientInput extends Component<{}, State> {
   static displayName = SearchPatientInput.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+  private readonly api: IApiContext;
+ 
 patientService!: IPatientService
 
   constructor(props: {}) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       patientResults: [],
       loading: false,
@@ -32,7 +34,7 @@ patientService!: IPatientService
   }
 
   InitialiseServices(): void {
-    this.patientService = this.context.patientService;
+    this.patientService =  this.api.patientService;
   }
 
   async searchForPatient(searchString: string): Promise<void> {

@@ -11,7 +11,7 @@ import { QuestionEditCard } from "../../components/Cards/QuestionEditCard";
 import { TextFieldValidation } from "../../components/Input/TextFieldValidation";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
-import ApiContext from "../_context";
+import ApiContext, { IApiContext } from "../_context";
 import { v4 as uuid } from 'uuid';
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
@@ -40,14 +40,16 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     
     
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+    private readonly api: IApiContext;
+   
 
     questionnaireService!: IQuestionnaireService
     validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
 
     constructor(props: Props) {
         super(props);
-
+        this.api = this.context as IApiContext
+        
         this.onValidation = this.onValidation.bind(this);
         this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
 
@@ -69,7 +71,7 @@ context!: React.ContextType<typeof ApiContext>
     }
 
     InitializeServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
+        this.questionnaireService =  this.api.questionnaireService;
     }
 
     async componentDidMount(): Promise<void> {

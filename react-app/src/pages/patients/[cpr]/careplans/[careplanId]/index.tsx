@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Grid, Stack } from '@mui/material';
 import { PatientCard } from '../../../../../components/Cards/PatientCard';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import ApiContext from '../../../../_context';
+import ApiContext, { IApiContext } from '../../../../_context';
 import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
 import { ICareplanService } from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
@@ -31,13 +31,14 @@ class PatientCareplans extends React.Component<Props, State> {
 
   
   static contextType = ApiContext
-  
+  private readonly api: IApiContext;
   
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
 
     this.state = {
       loading: true,
@@ -52,8 +53,8 @@ class PatientCareplans extends React.Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.careplanService = this.context.careplanService;
-    this.questionnaireService = this.context.questionnaireService;
+    this.careplanService =  this.api.careplanService;
+    this.questionnaireService =  this.api.questionnaireService;
   }
 
   async componentDidMount(): Promise<void> {

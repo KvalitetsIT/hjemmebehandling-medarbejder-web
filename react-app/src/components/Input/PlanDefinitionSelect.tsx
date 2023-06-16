@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
@@ -34,7 +34,8 @@ export interface State {
 export class PlanDefinitionSelect extends Component<Props, State> {
   static displayName = PlanDefinitionSelect.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+
+  private readonly api: IApiContext;
 static sectionName = "PlanDefinitionSelectSection"
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
@@ -43,6 +44,7 @@ static sectionName = "PlanDefinitionSelectSection"
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
 
     this.state = {
       editedCareplan: props.careplan.clone(),
@@ -63,10 +65,10 @@ static sectionName = "PlanDefinitionSelectSection"
   }
 
   InitializeServices(): void {
-    this.questionnaireService = this.context.questionnaireService;
-    //this.planDefinitionService = this.context.planDefinitionService;
-    this.validationService = this.context.validationService;
-    this.careplanService = this.context.careplanService;
+    this.questionnaireService =  this.api.questionnaireService;
+    //this.planDefinitionService =  this.api.planDefinitionService;
+    this.validationService =  this.api.validationService;
+    this.careplanService =  this.api.careplanService;
   }
 
 

@@ -7,7 +7,7 @@ import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { CardHeader, Divider, Grid, GridSize, Typography } from '@mui/material';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { ThresholdSlider } from '@kvalitetsit/hjemmebehandling/Charts/ThresholdSlider';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
@@ -31,13 +31,16 @@ export interface State {
 
 export class ObservationCard extends Component<Props, State> {
     static displayName = ObservationCard.name;
-    static contextType = ApiContext
     
+    static contextType = ApiContext
+    private readonly api: IApiContext;
+
     questionnaireService!: IQuestionnaireService;
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             questionnaireResponses: [],
             loading: false
@@ -45,8 +48,8 @@ export class ObservationCard extends Component<Props, State> {
     }
 
     initialiseServices(): void {
-        this.questionnaireService = this.context?.questionnaireService;
-        this.dateHelper = this.context?.dateHelper;
+        this.questionnaireService = this.api.questionnaireService;
+        this.dateHelper = this.api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {

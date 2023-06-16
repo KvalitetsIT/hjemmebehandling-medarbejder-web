@@ -4,7 +4,7 @@ import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, T
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
@@ -36,9 +36,9 @@ export interface State {
 
 export class AnswerTable extends Component<Props, State> {
     static displayName = AnswerTable.name;
-    
+
     static contextType = ApiContext
-    context!: React.ContextType<typeof ApiContext> 
+    private readonly api: IApiContext;
 
     questionAnswerService!: IQuestionAnswerService;
     questionnaireService!: IQuestionnaireService;
@@ -46,6 +46,7 @@ export class AnswerTable extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             hidden: true,
             thresholdModalOpen: false,
@@ -64,9 +65,9 @@ export class AnswerTable extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.questionAnswerService = this.context.questionAnswerService;
-        this.questionnaireService = this.context.questionnaireService;
-        this.datehelper = this.context.dateHelper;
+        this.questionAnswerService =  this.api.questionAnswerService;
+        this.questionnaireService =  this.api.questionnaireService;
+        this.datehelper =  this.api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {

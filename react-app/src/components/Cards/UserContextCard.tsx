@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { IUserService } from '../../services/interfaces/IUserService';
 import { User } from '@kvalitetsit/hjemmebehandling/Models/User';
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 
 
@@ -22,11 +22,13 @@ export class UserContextCard extends Component<Props, State> {
   static displayName = UserContextCard.name;
   
   static contextType = ApiContext;
+private readonly api: IApiContext;
   
   userService!: IUserService;
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       loadingUserContextButton: true,
       user: new User(),
@@ -50,7 +52,7 @@ export class UserContextCard extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.userService = this.context.userService;
+    this.userService =  this.api.userService;
   }
 
   logout(): void {

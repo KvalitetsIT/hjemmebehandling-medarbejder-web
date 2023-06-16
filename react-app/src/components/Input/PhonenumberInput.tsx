@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { MenuItem, Select } from '@mui/material';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { TextFieldValidation } from './TextFieldValidation';
@@ -9,7 +9,7 @@ import { IValidationService } from '../../services/interfaces/IValidationService
 export interface Props {
 
     id?: string;
-    sectionName? : string
+    sectionName?: string
     uniqueId: string;
     value?: string;
     label: string;
@@ -28,8 +28,9 @@ export interface State {
 export class PhonenumberInput extends Component<Props, State> {
     static displayName = PhonenumberInput.name;
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
-static defaultProps = {
+    private readonly api: IApiContext;
+    
+    static defaultProps = {
         variant: "outlined",
         size: "small",
         required: false,
@@ -43,17 +44,18 @@ static defaultProps = {
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             areaCode: "+45"
         }
     }
 
     initializeServer(): void {
-        this.validationService = this.context.validationService;
+        this.validationService = this.api.validationService;
     }
 
     formatPhoneNumber(input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> {
-        
+
         input.target.value = this.addAreaCodeToPhonenumber(input.target.value)
         return input;
     }
@@ -76,14 +78,14 @@ static defaultProps = {
                 id={this.props.id}
                 onValidation={(uid, errors) => this.props.onValidation ? this.props.onValidation(uid, errors) : {}}
                 uniqueId={this.props.uniqueId}
-                validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone??""))}
+                validate={(phone) => this.validationService.ValidatePhonenumber(this.addAreaCodeToPhonenumber(phone ?? ""))}
                 type="tel"
                 sectionName={this.props.sectionName}
                 label={this.props.label}
                 value={this.props.value?.replaceAll("+45", "") ?? ""}
-                onChange={input => this.props.onChange(this.formatPhoneNumber(input??""))}
+                onChange={input => this.props.onChange(this.formatPhoneNumber(input ?? ""))}
                 variant="outlined"
-                >
+            >
                 <Select
 
                     size={this.props.size}

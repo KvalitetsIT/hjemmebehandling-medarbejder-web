@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
@@ -35,8 +35,9 @@ export interface State {
 
 export class PatientEditCard extends Component<Props, State> {
   static contextType = ApiContext;
+private readonly api: IApiContext;
   
-  
+
 
   static sectionName = "PatientEditSection";
   static displayName = PatientEditCard.name;
@@ -47,6 +48,7 @@ export class PatientEditCard extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       loadingCprButton: false,
       loadingPage: true,
@@ -68,10 +70,10 @@ export class PatientEditCard extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.personService = this.context.personService;
-    this.careplanService = this.context.careplanService;
-    this.validationService = this.context.validationService;
-    this.collectionHelper = this.context.collectionHelper;
+    this.personService =  this.api.personService;
+    this.careplanService =  this.api.careplanService;
+    this.validationService =  this.api.validationService;
+    this.collectionHelper =  this.api.collectionHelper;
   }
 
   async getPerson(): Promise<void> {

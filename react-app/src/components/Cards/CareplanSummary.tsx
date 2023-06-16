@@ -6,7 +6,7 @@ import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCar
 import Button from '@mui/material/Button';
 import { CardHeader, Divider, Grid, Typography, Tooltip } from '@mui/material';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { Link } from 'react-router-dom';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import { PencilIcon } from '../Icons/Icons';
@@ -25,21 +25,22 @@ export interface State {
 export class CareplanSummary extends Component<Props, State> {
     static displayName = CareplanSummary.name;
     static contextType = ApiContext;
-    context!: React.ContextType<typeof ApiContext> 
+private readonly api: IApiContext; 
 
     dateHelper!: IDateHelper
     careplanService!: ICareplanService;
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             finishedCareplan: false
         }
     }
 
     InitialiseServices(): void {
-        this.dateHelper = this.context.dateHelper;
-        this.careplanService = this.context.careplanService
+        this.dateHelper =  this.api.dateHelper;
+        this.careplanService =  this.api.careplanService
     }
 
 

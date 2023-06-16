@@ -6,7 +6,7 @@ import { PatientAvatar } from '../Avatars/PatientAvatar';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import EventNoteIcon from '@mui/icons-material/EventNote';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
 import { Link } from 'react-router-dom';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
@@ -19,11 +19,18 @@ export interface Props {
 export class PatientContextThumbnails extends Component<Props, {}> {
   static displayName = PatientContextThumbnails.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
-dateHelper!: IDateHelper
+  private readonly api: IApiContext;
+  
+  dateHelper!: IDateHelper
+
+
+  constructor(props: Props) {
+    super(props)
+    this.api = this.context as IApiContext
+  }
 
   initialiseServices(): void {
-    this.dateHelper = this.context.dateHelper
+    this.dateHelper = this.api.dateHelper
   }
   render(): JSX.Element {
     this.initialiseServices()

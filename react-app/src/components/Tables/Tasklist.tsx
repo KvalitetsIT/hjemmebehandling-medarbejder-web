@@ -4,7 +4,7 @@ import { Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, Ta
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
 import { TaskType } from '@kvalitetsit/hjemmebehandling/Models/TaskType';
 import { Link } from 'react-router-dom';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { Task } from '@kvalitetsit/hjemmebehandling/Models/Task';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import FhirUtils from '../../util/FhirUtils';
@@ -30,13 +30,14 @@ export class Tasklist extends Component<Props, State> {
   static displayName = Tasklist.name;
   
   static contextType = ApiContext
-  context!: React.ContextType<typeof ApiContext> 
+  private readonly api: IApiContext;
 
   questionnaireService!: IQuestionnaireService;
   dateHelper!: IDateHelper
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       tasks: [],
       loading: false,
@@ -55,8 +56,8 @@ export class Tasklist extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.questionnaireService = this.context.questionnaireService;
-    this.dateHelper = this.context.dateHelper;
+    this.questionnaireService =  this.api.questionnaireService;
+    this.dateHelper =  this.api.dateHelper;
   }
 
   async getData(pageNumber: number): Promise<Task[]> {

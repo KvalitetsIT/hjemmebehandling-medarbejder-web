@@ -30,7 +30,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
 
     static displayName = ColorSlider.name;
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+   
 allowedNumberOfThresholds = [3, 5];
 
     constructor(props: TresholdEditorProps) {

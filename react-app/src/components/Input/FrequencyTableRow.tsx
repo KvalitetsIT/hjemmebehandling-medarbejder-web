@@ -31,7 +31,7 @@ export interface State {
 export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>, State> {
   static displayName = FrequencyTableRow.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+ 
 validationService!: IValidationService
   validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(PlanDefinitionSelect.sectionName))
 

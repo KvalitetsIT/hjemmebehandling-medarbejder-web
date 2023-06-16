@@ -9,7 +9,7 @@ import { PlanDefinitionEditQuestionnaire } from "../../components/Cards/PlanDefi
 import { PlanDefinitionEditThresholds } from "../../components/Cards/PlanDefinition/PlanDefinitionEditThresholds";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
-import ApiContext from "../_context";
+import ApiContext, { IApiContext } from "../_context";
 import { Formik, Form, FormikValues } from 'formik';
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
@@ -44,13 +44,13 @@ enum AccordianRowEnum {
 export default class CreatePlandefinition extends React.Component<Props, State> {
   
     static contextType = ApiContext
-    context!: React.ContextType<typeof ApiContext> 
-
+    private readonly api: IApiContext;
 
     planDefinitionService!: IPlanDefinitionService
 
     constructor(props: Props) {
         super(props)
+        this.api = this.context as IApiContext
         this.validate = this.validate.bind(this)
         this.submitPlandefinition = this.submitPlandefinition.bind(this)
         this.deactivatePlandefinition = this.deactivatePlandefinition.bind(this)
@@ -74,7 +74,7 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     InitializeServices(): void {
-        this.planDefinitionService = this.context.planDefinitionService;
+        this.planDefinitionService =  this.api.planDefinitionService;
     }
 
     async componentDidMount(): Promise<void> {

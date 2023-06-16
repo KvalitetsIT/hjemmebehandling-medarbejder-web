@@ -2,7 +2,7 @@ import React, { Component, CSSProperties } from 'react';
 import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
-import ApiContext from '../pages/_context';
+import ApiContext, { IApiContext } from '../pages/_context';
 import { IPatientService } from '../services/interfaces/IPatientService';
 import { LoadingBackdropComponent } from './Layout/LoadingBackdropComponent';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
@@ -62,6 +62,7 @@ export interface State {
 
 export default class CreatePatient extends Component<Props, State> {
   static contextType = ApiContext;
+  private readonly api: IApiContext;
 
   static displayName = CreatePatient.name;
   careplanService!: ICareplanService;
@@ -70,6 +71,7 @@ export default class CreatePatient extends Component<Props, State> {
   constructor(props: Props) {
 
     super(props);
+    this.api = this.context as IApiContext
 
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
@@ -84,8 +86,8 @@ export default class CreatePatient extends Component<Props, State> {
 
   }
   InitializeServices(): void {
-    this.careplanService = this.context.careplanService;
-    this.patientService = this.context.patientService;
+    this.careplanService =  this.api.careplanService;
+    this.patientService =  this.api.patientService;
   }
 
   toggleAccordian(page: PatientAccordianSectionsEnum): void {

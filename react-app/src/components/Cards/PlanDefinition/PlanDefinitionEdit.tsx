@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Skeleton, Typography } from '@mui/material';
-import ApiContext from '../../../pages/_context';
+import ApiContext, { IApiContext } from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { IValidationService } from '../../../services/interfaces/IValidationService';
@@ -23,6 +23,7 @@ export interface State {
 
 export class PlanDefinitionEdit extends Component<Props, State> {
     static contextType = ApiContext;
+    private readonly api: IApiContext;
     
     static displayName = PlanDefinitionEdit.name;
     personService!: IPersonService;
@@ -31,6 +32,7 @@ export class PlanDefinitionEdit extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             loading: false
         }
@@ -46,9 +48,9 @@ export class PlanDefinitionEdit extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.personService = this.context.personService;
-        this.validationService = this.context.validationService;
-        this.collectionHelper = this.context.collectionHelper
+        this.personService = this.api.personService;
+        this.validationService = this.api.validationService;
+        this.collectionHelper = this.api.collectionHelper
     }
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, CardHeader, Checkbox, Divider, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import ApiContext from '../../../pages/_context';
+import ApiContext, { IApiContext } from '../../../pages/_context';
 import { IQuestionnaireService } from '../../../services/interfaces/IQuestionnaireService';
 import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
@@ -23,12 +23,15 @@ export interface State {
 
 export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     static contextType = ApiContext;
+    private readonly api: IApiContext;
 
     static displayName = PlanDefinitionEditQuestionnaire.name;
     questionnaireService!: IQuestionnaireService;
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
+
         this.state = {
             loading: false,
             checked: [],
@@ -49,7 +52,7 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.questionnaireService = this.context.questionnaireService
+        this.questionnaireService = this.api.questionnaireService
     }
 
     render(): JSX.Element {

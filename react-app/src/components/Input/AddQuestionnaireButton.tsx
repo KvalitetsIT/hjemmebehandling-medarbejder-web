@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Button, Tooltip, Typography } from '@mui/material';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -27,21 +27,23 @@ export interface State {
 export class AddQuestionnaireButton extends Component<Props,State> {
   static displayName = AddQuestionnaireButton.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+  private readonly api: IApiContext;
+ 
 questionnaireService! : IQuestionnaireService
   planDefinitionService! : IPlanDefinitionService
 
 
   constructor(props : Props){
       super(props);
+      this.api = this.context as IApiContext
       this.state= {
             AddQuestionnaireBool : false,
             allPlanDefinitions : [],
       }
   }
   InitializeServices() : void{
-    this.questionnaireService = this.context.questionnaireService;
-    this.planDefinitionService = this.context.planDefinitionService;
+    this.questionnaireService =  this.api.questionnaireService;
+    this.planDefinitionService =  this.api.planDefinitionService;
   }
 
   async AddQuestionnaire(questionnaireToAdd : Questionnaire) : Promise<void>{

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
@@ -22,7 +22,8 @@ export interface State {
 
 export class ContactEditCard extends Component<Props, State> {
   static contextType = ApiContext;
-  
+  private readonly api: IApiContext;
+
   static displayName = ContactEditCard.name;
   static sectionName = "ContactEditSection";
   personService!: IPersonService;
@@ -31,6 +32,7 @@ export class ContactEditCard extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = { loading: true, contact: props.initialContact ?? new Contact() }
     this.modifyPatient = this.modifyPatient.bind(this);
   }
@@ -45,9 +47,9 @@ export class ContactEditCard extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.personService = this.context.personService;
-    this.validationService = this.context.validationService;
-    this.collectionHelper = this.context.collectionHelper
+    this.personService = this.api.personService;
+    this.validationService = this.api.validationService;
+    this.collectionHelper = this.api.collectionHelper
   }
 
   modifyPatient(patientModifier: (contact: Contact, newValue: string) => Contact, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {

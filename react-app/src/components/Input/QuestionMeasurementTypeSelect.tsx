@@ -2,7 +2,7 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
@@ -31,11 +31,14 @@ export interface State {
 export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     static displayName = QuestionMeasurementTypeSelect.name;
     static contextType = ApiContext
-
+    private readonly api: IApiContext;
+        
     questionAnswerService!: IQuestionAnswerService
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
+        
         this.state = {
             question: props.question,
             allMeasurementTypes: [],
@@ -80,7 +83,7 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     }
 
     initialiseServices(): void {
-        this.questionAnswerService = this.context.questionAnswerService
+        this.questionAnswerService = this.api.questionAnswerService
     }
     async componentDidMount(): Promise<void> {
         try {

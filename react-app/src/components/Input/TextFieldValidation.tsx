@@ -37,7 +37,7 @@ export interface State {
 export class TextFieldValidation extends Component<React.PropsWithChildren<Props>, State> {
     static displayName = TextFieldValidation.name;
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+   
 static defaultProps = {
         variant: "outlined",
         size: "small",

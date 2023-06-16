@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { PlanDefinitionTable } from "../../components/Tables/PlanDefinitionTable";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
-import ApiContext from "../_context";
+import ApiContext, { IApiContext } from "../_context";
 
 interface State {
     loading: boolean
@@ -15,13 +15,15 @@ interface State {
 
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+   
+    private readonly api: IApiContext;
     
     planDefinitionService!: IPlanDefinitionService
 
 
     constructor(props: {}) {
         super(props)
+        this.api = this.context as IApiContext
         this.state = {
             loading: true,
             planDefinitions: []
@@ -38,7 +40,7 @@ context!: React.ContextType<typeof ApiContext>
 
     }
     initialiseServices(): void {
-        this.planDefinitionService = this.context.planDefinitionService;
+        this.planDefinitionService =  this.api.planDefinitionService;
     }
     render(): JSX.Element {
         this.initialiseServices();

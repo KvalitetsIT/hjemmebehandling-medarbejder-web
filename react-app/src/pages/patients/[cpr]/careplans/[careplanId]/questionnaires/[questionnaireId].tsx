@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Grid } from '@mui/material';
 import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
 import { LoadingBackdropComponent } from '../../../../../../components/Layout/LoadingBackdropComponent';
-import ApiContext from '../../../../../_context';
+import ApiContext, { IApiContext } from '../../../../../_context';
 import { BasicTabs } from '../../../../../../components/Layout/Tabs';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
@@ -22,10 +22,12 @@ interface State {
 interface Props {
   match: { params: { cpr: string, questionnaireId?: string, careplanId?: string } }
 }
+
+
 export default class QuestionnaireResponseDetails extends React.Component<Props, State> {
 
   static contextType = ApiContext
-
+  private readonly api: IApiContext;
 
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService;
@@ -33,6 +35,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
   constructor(props: Props) {
     super(props);
+    this.api = this.context as IApiContext
     this.state = {
       loading: true,
       careplans: [],
@@ -47,8 +50,8 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   }
 
   InitializeServices(): void {
-    this.careplanService = this.context.careplanService;
-    this.questionnaireService = this.context.questionnaireService;
+    this.careplanService =  this.api.careplanService;
+    this.questionnaireService =  this.api.questionnaireService;
   }
 
   componentDidMount(): void {

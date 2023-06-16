@@ -7,7 +7,7 @@ import { Tooltip, Button, Grid, Stack, Typography } from '@mui/material';
 import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { PencilIcon } from '../Icons/Icons';
 
 export interface Props {
@@ -21,10 +21,18 @@ export interface Props {
 export class CareplanQuestionnaireSummary extends Component<Props, {}> {
   static displayName = CareplanQuestionnaireSummary.name;
   static contextType = ApiContext;
-  
+  private readonly api: IApiContext;
+
   dateHelper!: IDateHelper
+
+  constructor(props: Props) {
+    super(props)
+    this.api = this.context as IApiContext
+  }
+
+
   InitialiseServices(): void {
-    this.dateHelper = this.context.dateHelper;
+    this.dateHelper = this.api.dateHelper;
   }
 
   render(): JSX.Element {

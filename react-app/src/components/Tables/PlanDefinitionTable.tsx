@@ -4,7 +4,7 @@ import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandl
 import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import ApiContext from "../../pages/_context";
+import ApiContext, { IApiContext } from "../../pages/_context";
 import { PencilIcon } from '../Icons/Icons';
 
 interface Props {
@@ -18,18 +18,20 @@ interface State {
 export class PlanDefinitionTable extends Component<Props, State>{
 
     static contextType = ApiContext
+    private readonly api: IApiContext;
 
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props)
+        this.api = this.context as IApiContext
         this.state = {
             showRetired: false
         }
     }
 
     initialiseServices(): void {
-        this.dateHelper = this.context.dateHelper;
+        this.dateHelper =  this.api.dateHelper;
     }
 
     render(): ReactNode {

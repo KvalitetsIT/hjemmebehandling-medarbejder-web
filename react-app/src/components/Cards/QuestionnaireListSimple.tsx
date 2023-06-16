@@ -4,7 +4,7 @@ import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCar
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { FrequencyTableRow } from '../Input/FrequencyTableRow';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import { Alert, Box, Table, Typography } from '@mui/material';
@@ -23,11 +23,13 @@ export interface State {
 export class QuestionnaireListSimple extends Component<Props, State> {
     static displayName = QuestionnaireListSimple.name;
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
-questionnaireService!: IQuestionnaireService;
+    private readonly api: IApiContext;
+
+    questionnaireService!: IQuestionnaireService;
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
 
         this.state = {
             patientIsOnUnansweredList: false,
@@ -47,7 +49,7 @@ questionnaireService!: IQuestionnaireService;
         }
     }
     initializeServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
+        this.questionnaireService = this.api.questionnaireService;
     }
 
     render(): JSX.Element {

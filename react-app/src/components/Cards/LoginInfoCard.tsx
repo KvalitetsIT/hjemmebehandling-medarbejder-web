@@ -4,12 +4,12 @@ import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Typography } from '@mui/material';
 import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-import {IUserService} from '../../services/interfaces/IUserService';
+import { IUserService } from '../../services/interfaces/IUserService';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { CreateToastEvent,CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
+import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
 
 export interface Props {
     patient: PatientDetail
@@ -18,26 +18,26 @@ export interface Props {
 export class LoginInfoCard extends Component<Props, {}> {
     static displayName = LoginInfoCard.name;
     static contextType = ApiContext;
-    context!: React.ContextType<typeof ApiContext> 
-dateHelper!: IDateHelper
+    private readonly api: IApiContext;
+
+    dateHelper!: IDateHelper
     userService!: IUserService;
 
     constructor(props: Props) {
         super(props)
-        this.state = {
-        }
+        this.api = this.context as IApiContext
     }
     InitialiseServices(): void {
-        this.dateHelper = this.context.dateHelper;
-        this.userService = this.context.userService
+        this.dateHelper =  this.api.dateHelper;
+        this.userService =  this.api.userService
     }
 
     async resetPassword(): Promise<void> {
         try {
             await this.userService.ResetPassword(this.props.patient)
-            new CreateToastEvent(new CreateToastEventData("Nulstil adgangskode","Adgangskoden er nu nulstillet!","success")).dispatchEvent();
-        
-        } catch (error : unknown) {
+            new CreateToastEvent(new CreateToastEventData("Nulstil adgangskode", "Adgangskoden er nu nulstillet!", "success")).dispatchEvent();
+
+        } catch (error: unknown) {
             this.setState(() => { throw error })
         }
     }
@@ -66,16 +66,16 @@ dateHelper!: IDateHelper
                             <Grid item xs={12}>
                                 <Typography variant="caption" align='left' alignItems="left" textAlign="left" alignContent="flex-start" alignSelf="self-start">
                                     Adgangskode
-                                    <br/>
-                                    <ConfirmationButton 
-                                    disabled={!patient.username} 
-                                    variant="text" color="primary" 
-                                    buttonText="Nulstil adgangskode" 
-                                    contentOfDoActionBtn={'Nulstil adgangskode'}
-                                    contentOfCancelBtn={'Fortryd'}
-                                    skipDialog={false} 
-                                    title="Nulstil adgangskode"
-                                    action={async () => await this.resetPassword()}>
+                                    <br />
+                                    <ConfirmationButton
+                                        disabled={!patient.username}
+                                        variant="text" color="primary"
+                                        buttonText="Nulstil adgangskode"
+                                        contentOfDoActionBtn={'Nulstil adgangskode'}
+                                        contentOfCancelBtn={'Fortryd'}
+                                        skipDialog={false}
+                                        title="Nulstil adgangskode"
+                                        action={async () => await this.resetPassword()}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <Typography variant="subtitle1">

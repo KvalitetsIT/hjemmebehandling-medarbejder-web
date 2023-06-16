@@ -30,7 +30,7 @@ export class ConfirmationButton extends Component<React.PropsWithChildren<Props>
 
   static displayName = ConfirmationButton.name;
   static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext> 
+ 
 questionnaireService!: IQuestionnaireService;
 
   public static defaultProps = {

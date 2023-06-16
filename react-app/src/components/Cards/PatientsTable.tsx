@@ -5,7 +5,7 @@ import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { IPatientService } from '../../services/interfaces/IPatientService';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { Link } from 'react-router-dom';
-import ApiContext from '../../pages/_context';
+import ApiContext, { IApiContext } from '../../pages/_context';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard'
 import { PageSelectorButtons } from '../Input/PageSelectorButtons';
 
@@ -24,11 +24,13 @@ interface Props {
 
 class PatientsTable extends React.Component<Props, State> {
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+   
+    private readonly api: IApiContext;
 patientService!: IPatientService
 
     constructor(props: Props) {
         super(props);
+        this.api = this.context as IApiContext
         this.state = {
             loadingPage: false,
             loadingTable: true,
@@ -39,7 +41,7 @@ patientService!: IPatientService
     }
 
     InitializeServices(): void {
-        this.patientService = this.context.patientService;
+        this.patientService =  this.api.patientService;
     }
 
     async getData(pageNumber: number): Promise<PatientDetail[]> {

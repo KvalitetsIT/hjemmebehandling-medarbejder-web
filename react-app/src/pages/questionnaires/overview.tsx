@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { QuestionnaireTable } from "../../components/Tables/QuestionnaireTable";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
-import ApiContext from "../_context";
+import ApiContext, { IApiContext } from "../_context";
 
 
 interface State {
@@ -17,11 +17,14 @@ interface State {
 
 class QuestionnaireOverviewPage extends React.Component<{}, State> {
     static contextType = ApiContext
-context!: React.ContextType<typeof ApiContext>   
+    private readonly api: IApiContext;
+
     questionnaireService!: IQuestionnaireService
 
     constructor(props: {}) {
         super(props);
+        this.api = this.context as IApiContext
+        
         this.state = {
             loading: true,
             questionnaires: []
@@ -35,7 +38,7 @@ context!: React.ContextType<typeof ApiContext>
         return contents;
     }
     InitializeServices(): void {
-        this.questionnaireService = this.context.questionnaireService;
+        this.questionnaireService =  this.api.questionnaireService;
     }
 
     async componentDidMount(): Promise<void> {

@@ -6,7 +6,7 @@ import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandlin
 import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import ApiContext from "../../pages/_context";
+import ApiContext, { IApiContext } from "../../pages/_context";
 import { PencilIcon } from '../Icons/Icons';
 
 interface Props {
@@ -19,19 +19,20 @@ interface State {
 
 export class QuestionnaireTable extends Component<Props, State>{
     static contextType = ApiContext
-    context!: React.ContextType<typeof ApiContext>   
-    
+    private readonly api: IApiContext;
+
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props)
+        this.api = this.context as IApiContext
         this.state = {
             showRetired: false
         }
     }
 
     initialiseServices(): void {
-        this.dateHelper = this.context.dateHelper;
+        this.dateHelper = this.api.dateHelper;
     }
 
     render(): ReactNode {
@@ -58,9 +59,9 @@ export class QuestionnaireTable extends Component<Props, State>{
                     <TableFooter>
                         <TableRow >
                             <TableCell colSpan={5}>
-                                <Button className="border" sx={{ marginTop: 2, textTransform: "none", textAlign:"left"}} onClick={()=>{
-                                    const showRetired = !this.state.showRetired; 
-                                    this.setState( {
+                                <Button className="border" sx={{ marginTop: 2, textTransform: "none", textAlign: "left" }} onClick={() => {
+                                    const showRetired = !this.state.showRetired;
+                                    this.setState({
                                         showRetired: showRetired
                                     })
                                 }}>{this.state.showRetired ? "Skjul" : "Vis"} inaktive spørgeskemaer</Button>
@@ -83,36 +84,36 @@ export class QuestionnaireTable extends Component<Props, State>{
                     const observationQuestions = questionnaire.questions?.filter(question => question && question.type === QuestionTypeEnum.OBSERVATION).map(q => (q as Question));
 
                     return (
-                        <TableRow sx={!show ? {display: 'none'} : {}}>
+                        <TableRow sx={!show ? { display: 'none' } : {}}>
                             <TableCell>
-                                <Typography sx={retired ? {fontStyle: 'italic'}:{fontWeight: 'bold'}} color={retired ? "grey": "black"}>
+                                <Typography sx={retired ? { fontStyle: 'italic' } : { fontWeight: 'bold' }} color={retired ? "grey" : "black"}>
                                     {questionnaire.name}
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography sx={retired ? {fontStyle: 'italic'}:{}} color={retired ? "grey": "black"}>
+                                <Typography sx={retired ? { fontStyle: 'italic' } : {}} color={retired ? "grey" : "black"}>
                                     {this.statusToString(questionnaire.status)}
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography sx={retired ? {fontStyle: 'italic'}:{}} color={retired ? "grey": "black"}>
+                                <Typography sx={retired ? { fontStyle: 'italic' } : {}} color={retired ? "grey" : "black"}>
                                     {observationQuestions?.map(x => x.measurementType?.displayName?.toString())?.join(", ")}
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography sx={retired ? {fontStyle: 'italic'}:{}} color={retired ? "grey": "black"}>
+                                <Typography sx={retired ? { fontStyle: 'italic' } : {}} color={retired ? "grey" : "black"}>
                                     {lastUpdated}
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                {retired ? 
-                                <></>
-                                :
-                                <Stack sx={{ float: "right" }} direction="row" spacing={2}>
-                                    <Tooltip title="Rediger spørgeskema">
-                                        <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="text"><PencilIcon/></Button>
-                                    </Tooltip>
-                                </Stack>
+                                {retired ?
+                                    <></>
+                                    :
+                                    <Stack sx={{ float: "right" }} direction="row" spacing={2}>
+                                        <Tooltip title="Rediger spørgeskema">
+                                            <Button component={Link} to={"/questionnaires/" + questionnaire.id + "/edit"} variant="text"><PencilIcon /></Button>
+                                        </Tooltip>
+                                    </Stack>
                                 }
                             </TableCell>
                         </TableRow>
