@@ -1,81 +1,63 @@
-# kitTyAct
-KIT TYpescript reAct : Template project for frontend projects in typescript/react. 
+![Build Status](https://github.com/KvalitetsIT/hjemmebehandling-medarbejder-web/workflows/CICD/badge.svg)
+# Medarbejder-web
+## The Communication and monitoring project (KoMo)
+Image a person called Jens. Jens has a condition. His condition makes it nessecary to have his health monitored. He does not need to be monitored 24/7, he just needs to answer and send a questionnaire a couple times a week to the doctor, so the doctor can tell if his condition is getting worse.
 
-# Use KitTyAct as template
-1. Press the green button in github saying "Use template"
-1. Clone the new project to your own machine
-1. Run the file setup.sh with the name of your dockerhub-repo, so if your repo is kvalitetsit/medcom-sdn-ui, it should be executed like `sh setup.sh medcom-sdn-ui` 
-1. You are ready to go!
+Jens will have to send theese questionnaires somewhere, and this is where [patient-web](https://github.com/KvalitetsIT/hjemmebehandling-patient-web) comes ind. Here Jens will log in, and get an overview of his condition, how it evolves, and also give him the ability to tell the doctor how it goes, using a questionnaire. The patient-web will also provide Jens with contact-details for the hospital, at relevant and urgent times.
 
-# Requirements
-The project is installed using `npx create-react-app my-template-app --template typescript` 
+> The doctor will recieve the questionnaire using the [medarbejder-web](https://github.com/KvalitetsIT/hjemmebehandling-medarbejder-web) where he will be able to quickly see whether Jens' health is going the right or the wrong way. If Jens is getting worse, a form of communication will be performed, either on Jens' initiative or the doctors. 
 
-With:
-- Node : `16.1.15`
-
-# Get started
-1. Clone repo to your own machine
-1. cd into `react-app` folder
-1. run `npm install`
-1. run `npm run start` and you should be good to go
-
-# Tools used:
-## Redux
-> https://www.youtube.com/watch?v=HKU24nY8Hsc
-
-We are using Redux, and its toolkit to use redux state storage. By using this components are able to share state. If Redux was not used, we would have to share the data through properties insted.
-
-## Formik
-> https://www.youtube.com/watch?v=UVnKG6RmwMs (from 18th minute)
-
-We use formik to do the validation in our forms
-
-### Yup
-> https://github.com/jquense/yup
-
-Yup can provide us with great tools to make validation. We make a schema containing our validation like
+## Get started
+To run:
 ```
-let userSchema = object({
-  name: string().required(),
-  age: number().required().positive().integer(),
-  email: string().email(),
-  website: string().url().nullable(),
-  createdOn: date().default(() => new Date()),
-});
+npm install
+npm run-script build
+npm start
 ```
 
-## CASL
-> https://medium.com/dailyjs/managing-user-permissions-in-your-react-app-a93a94ff9b40
-
-We use CASL to manage user permissions. A user-model has been created, and contains a role. Then we can define what any role can do like
+Track changes and recompile for each new change (suitable for local development);
 ```
-        case Role.ADMIN:
-            can('manage', 'all'); //all is a wildcard, so fx a admin can manage all, or read all
-            break;
-        case Role.USER:
-            can('create', 'Todo');
-            can('read', 'Todo', { authorId: user.id });
-            can('update', 'Todo', { authorId: user.id });
-            can('delete', 'Todo', { authorId: user.id });
-            break;
+npm run dev
 ```
-And then we can use the following component in react, to check if a given user, is allowed to see or do something like: 
+If you use backend api (not mock). This example is the bff is at localhost:8000 
 ```
-<Can ability={loggedInAs.getAbility()} I="delete" a="Todo"> //Can I delete a todo, with the ability that my user has
-    ...
-</Can>
+BFF_BASE_URL=http://localhost:8080/
 ```
 
-## Toasty
-> https://devdojo.com/krissanawat101/getting-started-on-react-toast-notifications
+The app should now be available at http://localhost:3000
 
-We use toasy to make toasts happend anywhere at anytime, with a simple functioncall like
 ```
-toast.info("This is a toast")
+npm run lint
 ```
 
-## i18Next
-> https://www.i18next.com/
+## How project is created
+Created using the following command:
 
-We use i18Next to make it possible for us to translate to multiple languages later on. Everytime you are about to write something in the app, simply use the function t from i18next ( `import { t } from 'i18next'` ). To translate it, we go to the i18n.tsx-file (next to index.tsx) and in here, we can define translations. 
+```
+npx create-react-app my-app --template typescript
+```
+
+https://mui.com/getting-started/installation/ :
+```
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/icons-material
+npm install @mui/material @mui/styled-engine-sc styled-components
+npm install @openapitools/openapi-generator-cli
+```
+
+https://nextjs.org/docs :
+```
+npm install next react react-dom
+```
+## Configuration
+
+| Environment variable | Description | Required |
+|----------------------|-------------|---------- |
+| BFF_BASE_URL | Base URL for Backend API server. | Yes |
+| NEXT_PUBLIC_MOCK_QUESTIONNAIRE_SERVICE | If true the QuestionnaireApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_QUESTION_ANSWER_SERVICE | If true the QuestionnaireAnswerApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_CAREPLAN_SERVICE |If true the CareplanApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_PATIENT_SERVICE | If true the PatientApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_USER_SERVICE | If true the UserApi is mocked, and will not call backendApi | No |
+| NEXT_PUBLIC_MOCK_PERSON_SERVICE | If true the PersonApi is mocked, and will not call backendApi| No |
 
