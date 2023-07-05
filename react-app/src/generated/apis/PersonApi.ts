@@ -14,11 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ErrorDto,
+  PersonDto,
+} from '../models';
 import {
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PersonDto,
     PersonDtoFromJSON,
     PersonDtoToJSON,
 } from '../models';
@@ -34,7 +36,7 @@ export class PersonApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPersonRaw(requestParameters: GetPersonRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<PersonDto>> {
+    async getPersonRaw(requestParameters: GetPersonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PersonDto>> {
         if (requestParameters.cpr === null || requestParameters.cpr === undefined) {
             throw new runtime.RequiredError('cpr','Required parameter requestParameters.cpr was null or undefined when calling getPerson.');
         }
@@ -59,7 +61,7 @@ export class PersonApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPerson(requestParameters: GetPersonRequest, initOverrides?: RequestInit): Promise<PersonDto> {
+    async getPerson(requestParameters: GetPersonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PersonDto> {
         const response = await this.getPersonRaw(requestParameters, initOverrides);
         return await response.value();
     }

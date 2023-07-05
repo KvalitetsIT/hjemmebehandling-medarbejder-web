@@ -14,17 +14,19 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  CreatePatientRequest,
+  ErrorDto,
+  PatientDto,
+  PatientListResponse,
+} from '../models';
 import {
-    CreatePatientRequest,
     CreatePatientRequestFromJSON,
     CreatePatientRequestToJSON,
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PatientDto,
     PatientDtoFromJSON,
     PatientDtoToJSON,
-    PatientListResponse,
     PatientListResponseFromJSON,
     PatientListResponseToJSON,
 } from '../models';
@@ -59,7 +61,7 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async createPatientRaw(requestParameters: CreatePatientOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async createPatientRaw(requestParameters: CreatePatientOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.createPatientRequest === null || requestParameters.createPatientRequest === undefined) {
             throw new runtime.RequiredError('createPatientRequest','Required parameter requestParameters.createPatientRequest was null or undefined when calling createPatient.');
         }
@@ -83,13 +85,13 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async createPatient(requestParameters: CreatePatientOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async createPatient(requestParameters: CreatePatientOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createPatientRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getPatientRaw(requestParameters: GetPatientRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<PatientDto>> {
+    async getPatientRaw(requestParameters: GetPatientRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PatientDto>> {
         if (requestParameters.cpr === null || requestParameters.cpr === undefined) {
             throw new runtime.RequiredError('cpr','Required parameter requestParameters.cpr was null or undefined when calling getPatient.');
         }
@@ -114,14 +116,14 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPatient(requestParameters: GetPatientRequest, initOverrides?: RequestInit): Promise<PatientDto> {
+    async getPatient(requestParameters: GetPatientRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PatientDto> {
         const response = await this.getPatientRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getPatientListRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<PatientListResponse>> {
+    async getPatientListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PatientListResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -138,14 +140,14 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPatientList(initOverrides?: RequestInit): Promise<PatientListResponse> {
+    async getPatientList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PatientListResponse> {
         const response = await this.getPatientListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getPatientsRaw(requestParameters: GetPatientsRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<PatientListResponse>> {
+    async getPatientsRaw(requestParameters: GetPatientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PatientListResponse>> {
         if (requestParameters.includeActive === null || requestParameters.includeActive === undefined) {
             throw new runtime.RequiredError('includeActive','Required parameter requestParameters.includeActive was null or undefined when calling getPatients.');
         }
@@ -186,14 +188,14 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPatients(requestParameters: GetPatientsRequest, initOverrides?: RequestInit): Promise<PatientListResponse> {
+    async getPatients(requestParameters: GetPatientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PatientListResponse> {
         const response = await this.getPatientsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async resetPasswordRaw(requestParameters: ResetPasswordRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async resetPasswordRaw(requestParameters: ResetPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.cpr === null || requestParameters.cpr === undefined) {
             throw new runtime.RequiredError('cpr','Required parameter requestParameters.cpr was null or undefined when calling resetPassword.');
         }
@@ -218,13 +220,13 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async resetPassword(requestParameters: ResetPasswordRequest, initOverrides?: RequestInit): Promise<void> {
+    async resetPassword(requestParameters: ResetPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.resetPasswordRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async searchPatientsRaw(requestParameters: SearchPatientsRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<PatientListResponse>> {
+    async searchPatientsRaw(requestParameters: SearchPatientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PatientListResponse>> {
         if (requestParameters.searchString === null || requestParameters.searchString === undefined) {
             throw new runtime.RequiredError('searchString','Required parameter requestParameters.searchString was null or undefined when calling searchPatients.');
         }
@@ -249,7 +251,7 @@ export class PatientApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchPatients(requestParameters: SearchPatientsRequest, initOverrides?: RequestInit): Promise<PatientListResponse> {
+    async searchPatients(requestParameters: SearchPatientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PatientListResponse> {
         const response = await this.searchPatientsRaw(requestParameters, initOverrides);
         return await response.value();
     }

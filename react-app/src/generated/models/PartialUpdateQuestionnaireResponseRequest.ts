@@ -27,14 +27,25 @@ export interface PartialUpdateQuestionnaireResponseRequest {
     examinationStatus?: PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
-    NotExamined = 'NOT_EXAMINED',
-    UnderExamination = 'UNDER_EXAMINATION',
-    Examined = 'EXAMINED'
+ * @export
+ */
+export const PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum = {
+    NotExamined: 'NOT_EXAMINED',
+    UnderExamination: 'UNDER_EXAMINATION',
+    Examined: 'EXAMINED'
+} as const;
+export type PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum = typeof PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum[keyof typeof PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum];
+
+
+/**
+ * Check if a given object implements the PartialUpdateQuestionnaireResponseRequest interface.
+ */
+export function instanceOfPartialUpdateQuestionnaireResponseRequest(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function PartialUpdateQuestionnaireResponseRequestFromJSON(json: any): PartialUpdateQuestionnaireResponseRequest {

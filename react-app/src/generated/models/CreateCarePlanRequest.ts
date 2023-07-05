@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { CarePlanDto } from './CarePlanDto';
 import {
-    CarePlanDto,
     CarePlanDtoFromJSON,
     CarePlanDtoFromJSONTyped,
     CarePlanDtoToJSON,
-} from './';
+} from './CarePlanDto';
 
 /**
  * 
@@ -32,6 +32,16 @@ export interface CreateCarePlanRequest {
      * @memberof CreateCarePlanRequest
      */
     carePlan: CarePlanDto;
+}
+
+/**
+ * Check if a given object implements the CreateCarePlanRequest interface.
+ */
+export function instanceOfCreateCarePlanRequest(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "carePlan" in value;
+
+    return isInstance;
 }
 
 export function CreateCarePlanRequestFromJSON(json: any): CreateCarePlanRequest {

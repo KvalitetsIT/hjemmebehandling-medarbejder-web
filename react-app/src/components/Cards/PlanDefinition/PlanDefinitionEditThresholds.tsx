@@ -34,7 +34,7 @@ export interface State {
 
 export class PlanDefinitionEditThresholds extends Component<Props, State> {
     static contextType = ApiContext;
-private readonly api: IApiContext;
+ 
     static displayName = PlanDefinitionEditThresholds.name;
     personService!: IPersonService;
     validationService!: IValidationService;
@@ -42,7 +42,7 @@ private readonly api: IApiContext;
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             loading: false,
             defaultNumberOfThresholds: 3

@@ -40,7 +40,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     
     
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
    
 
     questionnaireService!: IQuestionnaireService
@@ -48,7 +48,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         
         this.onValidation = this.onValidation.bind(this);
         this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
@@ -71,7 +71,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.questionnaireService =  this.api.questionnaireService;
+        const api = this.context as IApiContext
+        this.questionnaireService =  api.questionnaireService;
     }
 
     async componentDidMount(): Promise<void> {

@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import { Layout } from '../components/Layout/layout'
-import ApiContext from './_context';
+import ApiContext, { IApiContext } from './_context';
 import { FakeItToYouMakeItApi } from '../apis/FakeItToYouMakeItApi';
 import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
@@ -84,6 +84,7 @@ export default function MyApp(): JSX.Element {
             <CssBaseline />
             {typeof window === 'undefined' ? null :
               <ErrorBoundary>
+                
                 <Layout/>
               </ErrorBoundary>}
           </ApiContext.Provider>

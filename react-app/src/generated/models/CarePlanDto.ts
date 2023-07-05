@@ -13,20 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { PatientDto } from './PatientDto';
 import {
-    PatientDto,
     PatientDtoFromJSON,
     PatientDtoFromJSONTyped,
     PatientDtoToJSON,
-    PlanDefinitionDto,
+} from './PatientDto';
+import type { PlanDefinitionDto } from './PlanDefinitionDto';
+import {
     PlanDefinitionDtoFromJSON,
     PlanDefinitionDtoFromJSONTyped,
     PlanDefinitionDtoToJSON,
-    QuestionnaireWrapperDto,
+} from './PlanDefinitionDto';
+import type { QuestionnaireWrapperDto } from './QuestionnaireWrapperDto';
+import {
     QuestionnaireWrapperDtoFromJSON,
     QuestionnaireWrapperDtoFromJSONTyped,
     QuestionnaireWrapperDtoToJSON,
-} from './';
+} from './QuestionnaireWrapperDto';
 
 /**
  * 
@@ -94,6 +98,16 @@ export interface CarePlanDto {
      * @memberof CarePlanDto
      */
     departmentName?: string;
+}
+
+/**
+ * Check if a given object implements the CarePlanDto interface.
+ */
+export function instanceOfCarePlanDto(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+
+    return isInstance;
 }
 
 export function CarePlanDtoFromJSON(json: any): CarePlanDto {

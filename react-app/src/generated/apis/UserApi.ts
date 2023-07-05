@@ -14,11 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ErrorDto,
+  UserContext,
+} from '../models';
 import {
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    UserContext,
     UserContextFromJSON,
     UserContextToJSON,
 } from '../models';
@@ -30,7 +32,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserContext>> {
+    async getUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserContext>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -47,7 +49,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUser(initOverrides?: RequestInit): Promise<UserContext> {
+    async getUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserContext> {
         const response = await this.getUserRaw(initOverrides);
         return await response.value();
     }

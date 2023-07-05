@@ -14,20 +14,22 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  CarePlanDto,
+  CreateCarePlanRequest,
+  ErrorDto,
+  PlanDefinitionDto,
+  UpdateCareplanRequest,
+} from '../models';
 import {
-    CarePlanDto,
     CarePlanDtoFromJSON,
     CarePlanDtoToJSON,
-    CreateCarePlanRequest,
     CreateCarePlanRequestFromJSON,
     CreateCarePlanRequestToJSON,
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PlanDefinitionDto,
     PlanDefinitionDtoFromJSON,
     PlanDefinitionDtoToJSON,
-    UpdateCareplanRequest,
     UpdateCareplanRequestFromJSON,
     UpdateCareplanRequestToJSON,
 } from '../models';
@@ -81,7 +83,7 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async completeCarePlanRaw(requestParameters: CompleteCarePlanRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async completeCarePlanRaw(requestParameters: CompleteCarePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling completeCarePlan.');
         }
@@ -102,7 +104,7 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async completeCarePlan(requestParameters: CompleteCarePlanRequest, initOverrides?: RequestInit): Promise<void> {
+    async completeCarePlan(requestParameters: CompleteCarePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.completeCarePlanRaw(requestParameters, initOverrides);
     }
 
@@ -110,7 +112,7 @@ export class CarePlanApi extends runtime.BaseAPI {
      * Create a CarePlan for a patient, based on a PlanDefinition.
      * Create a new CarePlan for a patient.
      */
-    async createCarePlanRaw(requestParameters: CreateCarePlanOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async createCarePlanRaw(requestParameters: CreateCarePlanOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.createCarePlanRequest === null || requestParameters.createCarePlanRequest === undefined) {
             throw new runtime.RequiredError('createCarePlanRequest','Required parameter requestParameters.createCarePlanRequest was null or undefined when calling createCarePlan.');
         }
@@ -136,7 +138,7 @@ export class CarePlanApi extends runtime.BaseAPI {
      * Create a CarePlan for a patient, based on a PlanDefinition.
      * Create a new CarePlan for a patient.
      */
-    async createCarePlan(requestParameters: CreateCarePlanOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async createCarePlan(requestParameters: CreateCarePlanOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createCarePlanRaw(requestParameters, initOverrides);
     }
 
@@ -144,7 +146,7 @@ export class CarePlanApi extends runtime.BaseAPI {
      * Retrieves a CarePlan by its id.
      * Get CarePlan by id.
      */
-    async getCarePlanByIdRaw(requestParameters: GetCarePlanByIdRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<CarePlanDto>> {
+    async getCarePlanByIdRaw(requestParameters: GetCarePlanByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CarePlanDto>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCarePlanById.');
         }
@@ -167,14 +169,14 @@ export class CarePlanApi extends runtime.BaseAPI {
      * Retrieves a CarePlan by its id.
      * Get CarePlan by id.
      */
-    async getCarePlanById(requestParameters: GetCarePlanByIdRequest, initOverrides?: RequestInit): Promise<CarePlanDto> {
+    async getCarePlanById(requestParameters: GetCarePlanByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CarePlanDto> {
         const response = await this.getCarePlanByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getPlanDefinitions1Raw(requestParameters: GetPlanDefinitions1Request, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<PlanDefinitionDto>>> {
+    async getPlanDefinitions1Raw(requestParameters: GetPlanDefinitions1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PlanDefinitionDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters.statusesToInclude) {
@@ -195,14 +197,14 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPlanDefinitions1(requestParameters: GetPlanDefinitions1Request, initOverrides?: RequestInit): Promise<Array<PlanDefinitionDto>> {
+    async getPlanDefinitions1(requestParameters: GetPlanDefinitions1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PlanDefinitionDto>> {
         const response = await this.getPlanDefinitions1Raw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getUnresolvedQuestionnairesRaw(requestParameters: GetUnresolvedQuestionnairesRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<string>>> {
+    async getUnresolvedQuestionnairesRaw(requestParameters: GetUnresolvedQuestionnairesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUnresolvedQuestionnaires.');
         }
@@ -223,14 +225,14 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUnresolvedQuestionnaires(requestParameters: GetUnresolvedQuestionnairesRequest, initOverrides?: RequestInit): Promise<Array<string>> {
+    async getUnresolvedQuestionnaires(requestParameters: GetUnresolvedQuestionnairesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
         const response = await this.getUnresolvedQuestionnairesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async patchCarePlanRaw(requestParameters: PatchCarePlanRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async patchCarePlanRaw(requestParameters: PatchCarePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling patchCarePlan.');
         }
@@ -258,13 +260,13 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async patchCarePlan(requestParameters: PatchCarePlanRequest, initOverrides?: RequestInit): Promise<void> {
+    async patchCarePlan(requestParameters: PatchCarePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.patchCarePlanRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async resolveAlarmRaw(requestParameters: ResolveAlarmRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async resolveAlarmRaw(requestParameters: ResolveAlarmRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling resolveAlarm.');
         }
@@ -289,13 +291,13 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async resolveAlarm(requestParameters: ResolveAlarmRequest, initOverrides?: RequestInit): Promise<void> {
+    async resolveAlarm(requestParameters: ResolveAlarmRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.resolveAlarmRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async searchCarePlansRaw(requestParameters: SearchCarePlansRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<CarePlanDto>>> {
+    async searchCarePlansRaw(requestParameters: SearchCarePlansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CarePlanDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters.cpr !== undefined) {
@@ -332,14 +334,14 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchCarePlans(requestParameters: SearchCarePlansRequest, initOverrides?: RequestInit): Promise<Array<CarePlanDto>> {
+    async searchCarePlans(requestParameters: SearchCarePlansRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CarePlanDto>> {
         const response = await this.searchCarePlansRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async updateCarePlanRaw(requestParameters: UpdateCarePlanRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async updateCarePlanRaw(requestParameters: UpdateCarePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -359,7 +361,7 @@ export class CarePlanApi extends runtime.BaseAPI {
 
     /**
      */
-    async updateCarePlan(requestParameters: UpdateCarePlanRequest, initOverrides?: RequestInit): Promise<void> {
+    async updateCarePlan(requestParameters: UpdateCarePlanRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.updateCarePlanRaw(requestParameters, initOverrides);
     }
 

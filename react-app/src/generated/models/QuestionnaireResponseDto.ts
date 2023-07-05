@@ -13,16 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { PatientDto } from './PatientDto';
 import {
-    PatientDto,
     PatientDtoFromJSON,
     PatientDtoFromJSONTyped,
     PatientDtoToJSON,
-    QuestionAnswerPairDto,
+} from './PatientDto';
+import type { QuestionAnswerPairDto } from './QuestionAnswerPairDto';
+import {
     QuestionAnswerPairDtoFromJSON,
     QuestionAnswerPairDtoFromJSONTyped,
     QuestionAnswerPairDtoToJSON,
-} from './';
+} from './QuestionAnswerPairDto';
 
 /**
  * 
@@ -92,22 +94,36 @@ export interface QuestionnaireResponseDto {
     planDefinitionTitle?: string;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum QuestionnaireResponseDtoExaminationStatusEnum {
-    NotExamined = 'NOT_EXAMINED',
-    UnderExamination = 'UNDER_EXAMINATION',
-    Examined = 'EXAMINED'
-}/**
-* @export
-* @enum {string}
-*/
-export enum QuestionnaireResponseDtoTriagingCategoryEnum {
-    Green = 'GREEN',
-    Yellow = 'YELLOW',
-    Red = 'RED'
+ * @export
+ */
+export const QuestionnaireResponseDtoExaminationStatusEnum = {
+    NotExamined: 'NOT_EXAMINED',
+    UnderExamination: 'UNDER_EXAMINATION',
+    Examined: 'EXAMINED'
+} as const;
+export type QuestionnaireResponseDtoExaminationStatusEnum = typeof QuestionnaireResponseDtoExaminationStatusEnum[keyof typeof QuestionnaireResponseDtoExaminationStatusEnum];
+
+/**
+ * @export
+ */
+export const QuestionnaireResponseDtoTriagingCategoryEnum = {
+    Green: 'GREEN',
+    Yellow: 'YELLOW',
+    Red: 'RED'
+} as const;
+export type QuestionnaireResponseDtoTriagingCategoryEnum = typeof QuestionnaireResponseDtoTriagingCategoryEnum[keyof typeof QuestionnaireResponseDtoTriagingCategoryEnum];
+
+
+/**
+ * Check if a given object implements the QuestionnaireResponseDto interface.
+ */
+export function instanceOfQuestionnaireResponseDto(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+
+    return isInstance;
 }
 
 export function QuestionnaireResponseDtoFromJSON(json: any): QuestionnaireResponseDto {

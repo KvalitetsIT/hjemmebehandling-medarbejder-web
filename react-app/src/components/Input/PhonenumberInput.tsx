@@ -28,7 +28,7 @@ export interface State {
 export class PhonenumberInput extends Component<Props, State> {
     static displayName = PhonenumberInput.name;
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
     
     static defaultProps = {
         variant: "outlined",
@@ -44,14 +44,15 @@ export class PhonenumberInput extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             areaCode: "+45"
         }
     }
 
     initializeServer(): void {
-        this.validationService = this.api.validationService;
+        const api = this.context as IApiContext
+        this.validationService =  api.validationService;
     }
 
     formatPhoneNumber(input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> {

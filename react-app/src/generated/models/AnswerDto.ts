@@ -39,15 +39,26 @@ export interface AnswerDto {
     answerType?: AnswerDtoAnswerTypeEnum;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum AnswerDtoAnswerTypeEnum {
-    Integer = 'INTEGER',
-    String = 'STRING',
-    Boolean = 'BOOLEAN',
-    Quantity = 'QUANTITY'
+ * @export
+ */
+export const AnswerDtoAnswerTypeEnum = {
+    Integer: 'INTEGER',
+    String: 'STRING',
+    Boolean: 'BOOLEAN',
+    Quantity: 'QUANTITY'
+} as const;
+export type AnswerDtoAnswerTypeEnum = typeof AnswerDtoAnswerTypeEnum[keyof typeof AnswerDtoAnswerTypeEnum];
+
+
+/**
+ * Check if a given object implements the AnswerDto interface.
+ */
+export function instanceOfAnswerDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AnswerDtoFromJSON(json: any): AnswerDto {

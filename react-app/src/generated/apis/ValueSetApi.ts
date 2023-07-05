@@ -14,11 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ErrorDto,
+  MeasurementTypeDto,
+} from '../models';
 import {
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    MeasurementTypeDto,
     MeasurementTypeDtoFromJSON,
     MeasurementTypeDtoToJSON,
 } from '../models';
@@ -32,7 +34,7 @@ export class ValueSetApi extends runtime.BaseAPI {
      * Retrieves list of measurement types supported by the requestors organization.
      * Get measurement types.
      */
-    async getMeasurementTypesRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<MeasurementTypeDto>>> {
+    async getMeasurementTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MeasurementTypeDto>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -51,7 +53,7 @@ export class ValueSetApi extends runtime.BaseAPI {
      * Retrieves list of measurement types supported by the requestors organization.
      * Get measurement types.
      */
-    async getMeasurementTypes(initOverrides?: RequestInit): Promise<Array<MeasurementTypeDto>> {
+    async getMeasurementTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MeasurementTypeDto>> {
         const response = await this.getMeasurementTypesRaw(initOverrides);
         return await response.value();
     }

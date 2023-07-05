@@ -38,7 +38,7 @@ export class AnswerTable extends Component<Props, State> {
     static displayName = AnswerTable.name;
 
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
 
     questionAnswerService!: IQuestionAnswerService;
     questionnaireService!: IQuestionnaireService;
@@ -46,7 +46,7 @@ export class AnswerTable extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             hidden: true,
             thresholdModalOpen: false,
@@ -65,9 +65,10 @@ export class AnswerTable extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.questionAnswerService =  this.api.questionAnswerService;
-        this.questionnaireService =  this.api.questionnaireService;
-        this.datehelper =  this.api.dateHelper;
+const api = this.context as IApiContext
+        this.questionAnswerService =   api.questionAnswerService;
+        this.questionnaireService =   api.questionnaireService;
+        this.datehelper =   api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {

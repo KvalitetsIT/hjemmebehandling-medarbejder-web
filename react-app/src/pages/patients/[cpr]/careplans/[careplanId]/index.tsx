@@ -31,14 +31,14 @@ class PatientCareplans extends React.Component<Props, State> {
 
   
   static contextType = ApiContext
-  private readonly api: IApiContext;
+   
   
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
 
     this.state = {
       loading: true,
@@ -53,8 +53,9 @@ class PatientCareplans extends React.Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.careplanService =  this.api.careplanService;
-    this.questionnaireService =  this.api.questionnaireService;
+    const api = this.context as IApiContext
+    this.careplanService =   api.careplanService;
+    this.questionnaireService =   api.questionnaireService;
   }
 
   async componentDidMount(): Promise<void> {

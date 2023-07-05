@@ -39,6 +39,15 @@ export interface MeasurementTypeDto {
     display?: string;
 }
 
+/**
+ * Check if a given object implements the MeasurementTypeDto interface.
+ */
+export function instanceOfMeasurementTypeDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function MeasurementTypeDtoFromJSON(json: any): MeasurementTypeDto {
     return MeasurementTypeDtoFromJSONTyped(json, false);
 }

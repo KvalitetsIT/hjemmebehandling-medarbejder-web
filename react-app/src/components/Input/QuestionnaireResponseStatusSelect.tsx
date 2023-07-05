@@ -26,13 +26,13 @@ export interface State {
 export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
-  private readonly api: IApiContext;
+   
  
 questionnaireService!: IQuestionnaireService
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = {
       status: props.questionnaireResponse.status,
       openConfirmationBox: false,
@@ -42,7 +42,8 @@ questionnaireService!: IQuestionnaireService
   }
 
   InitializeServices(): void {
-    this.questionnaireService =  this.api.questionnaireService;
+const api = this.context as IApiContext
+    this.questionnaireService =   api.questionnaireService;
   }
 
   openConfirmationBox = async (event: SelectChangeEvent): Promise<void> => {

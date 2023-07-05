@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { QuestionnaireFrequencyPairDto } from './QuestionnaireFrequencyPairDto';
 import {
-    QuestionnaireFrequencyPairDto,
     QuestionnaireFrequencyPairDtoFromJSON,
     QuestionnaireFrequencyPairDtoFromJSONTyped,
     QuestionnaireFrequencyPairDtoToJSON,
-} from './';
+} from './QuestionnaireFrequencyPairDto';
 
 /**
  * 
@@ -74,6 +74,15 @@ export interface UpdateCareplanRequest {
      * @memberof UpdateCareplanRequest
      */
     primaryRelativeSecondaryPhone?: string;
+}
+
+/**
+ * Check if a given object implements the UpdateCareplanRequest interface.
+ */
+export function instanceOfUpdateCareplanRequest(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function UpdateCareplanRequestFromJSON(json: any): UpdateCareplanRequest {

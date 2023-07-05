@@ -13,16 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { AnswerDto } from './AnswerDto';
 import {
-    AnswerDto,
     AnswerDtoFromJSON,
     AnswerDtoFromJSONTyped,
     AnswerDtoToJSON,
-    QuestionDto,
+} from './AnswerDto';
+import type { QuestionDto } from './QuestionDto';
+import {
     QuestionDtoFromJSON,
     QuestionDtoFromJSONTyped,
     QuestionDtoToJSON,
-} from './';
+} from './QuestionDto';
 
 /**
  * 
@@ -42,6 +44,15 @@ export interface QuestionAnswerPairDto {
      * @memberof QuestionAnswerPairDto
      */
     answer?: AnswerDto;
+}
+
+/**
+ * Check if a given object implements the QuestionAnswerPairDto interface.
+ */
+export function instanceOfQuestionAnswerPairDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function QuestionAnswerPairDtoFromJSON(json: any): QuestionAnswerPairDto {

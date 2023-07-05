@@ -23,7 +23,7 @@ export interface State {
 
 export class PlanDefinitionEdit extends Component<Props, State> {
     static contextType = ApiContext;
-    private readonly api: IApiContext;
+     
     
     static displayName = PlanDefinitionEdit.name;
     personService!: IPersonService;
@@ -32,7 +32,7 @@ export class PlanDefinitionEdit extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             loading: false
         }
@@ -48,9 +48,10 @@ export class PlanDefinitionEdit extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.personService = this.api.personService;
-        this.validationService = this.api.validationService;
-        this.collectionHelper = this.api.collectionHelper
+const api = this.context as IApiContext
+        this.personService =  api.personService;
+        this.validationService =  api.validationService;
+        this.collectionHelper =  api.collectionHelper
     }
 
 

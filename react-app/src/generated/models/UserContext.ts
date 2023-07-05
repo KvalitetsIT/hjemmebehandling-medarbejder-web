@@ -75,6 +75,15 @@ export interface UserContext {
     orgName?: string;
 }
 
+/**
+ * Check if a given object implements the UserContext interface.
+ */
+export function instanceOfUserContext(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function UserContextFromJSON(json: any): UserContext {
     return UserContextFromJSONTyped(json, false);
 }

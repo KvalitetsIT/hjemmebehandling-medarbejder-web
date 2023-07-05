@@ -33,18 +33,29 @@ export interface FrequencyDto {
     timeOfDay?: string;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum FrequencyDtoWeekdaysEnum {
-    Mon = 'MON',
-    Tue = 'TUE',
-    Wed = 'WED',
-    Thu = 'THU',
-    Fri = 'FRI',
-    Sat = 'SAT',
-    Sun = 'SUN'
+ * @export
+ */
+export const FrequencyDtoWeekdaysEnum = {
+    Mon: 'MON',
+    Tue: 'TUE',
+    Wed: 'WED',
+    Thu: 'THU',
+    Fri: 'FRI',
+    Sat: 'SAT',
+    Sun: 'SUN'
+} as const;
+export type FrequencyDtoWeekdaysEnum = typeof FrequencyDtoWeekdaysEnum[keyof typeof FrequencyDtoWeekdaysEnum];
+
+
+/**
+ * Check if a given object implements the FrequencyDto interface.
+ */
+export function instanceOfFrequencyDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function FrequencyDtoFromJSON(json: any): FrequencyDto {

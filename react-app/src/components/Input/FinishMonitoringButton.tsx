@@ -18,16 +18,17 @@ interface Props {
 export class FinishMonitoringButton extends React.Component<React.PropsWithChildren<Props>, State>{
     careplanService!: ICareplanService;
     static contextType = ApiContext;
-    private readonly api: IApiContext;
+     
 
     constructor(props: Props) {
         super(props)
 
-        this.api = this.context as IApiContext
+         
     }
 
 InitialiseServices(): void {
-    this.careplanService = this.api.careplanService
+    const api = this.context as IApiContext
+    this.careplanService =  api.careplanService
 }
 reloadPage(): void {
     window.location.replace("/");

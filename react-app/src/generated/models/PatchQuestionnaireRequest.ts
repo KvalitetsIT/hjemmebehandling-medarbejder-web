@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { QuestionDto } from './QuestionDto';
 import {
-    QuestionDto,
     QuestionDtoFromJSON,
     QuestionDtoFromJSONTyped,
     QuestionDtoToJSON,
-} from './';
+} from './QuestionDto';
 
 /**
  * 
@@ -56,6 +56,15 @@ export interface PatchQuestionnaireRequest {
      * @memberof PatchQuestionnaireRequest
      */
     callToActions?: Array<QuestionDto>;
+}
+
+/**
+ * Check if a given object implements the PatchQuestionnaireRequest interface.
+ */
+export function instanceOfPatchQuestionnaireRequest(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function PatchQuestionnaireRequestFromJSON(json: any): PatchQuestionnaireRequest {

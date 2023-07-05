@@ -14,14 +14,16 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ErrorDto,
+  PartialUpdateQuestionnaireResponseRequest,
+  QuestionnaireResponseDto,
+} from '../models';
 import {
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PartialUpdateQuestionnaireResponseRequest,
     PartialUpdateQuestionnaireResponseRequestFromJSON,
     PartialUpdateQuestionnaireResponseRequestToJSON,
-    QuestionnaireResponseDto,
     QuestionnaireResponseDtoFromJSON,
     QuestionnaireResponseDtoToJSON,
 } from '../models';
@@ -55,7 +57,7 @@ export class QuestionnaireResponseApi extends runtime.BaseAPI {
 
     /**
      */
-    async createQuestionnaireResponseRaw(requestParameters: CreateQuestionnaireResponseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async createQuestionnaireResponseRaw(requestParameters: CreateQuestionnaireResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -75,13 +77,13 @@ export class QuestionnaireResponseApi extends runtime.BaseAPI {
 
     /**
      */
-    async createQuestionnaireResponse(requestParameters: CreateQuestionnaireResponseRequest, initOverrides?: RequestInit): Promise<void> {
+    async createQuestionnaireResponse(requestParameters: CreateQuestionnaireResponseRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createQuestionnaireResponseRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getQuestionnaireResponsesByCarePlanIdRaw(requestParameters: GetQuestionnaireResponsesByCarePlanIdRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<QuestionnaireResponseDto>>> {
+    async getQuestionnaireResponsesByCarePlanIdRaw(requestParameters: GetQuestionnaireResponsesByCarePlanIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionnaireResponseDto>>> {
         if (requestParameters.carePlanId === null || requestParameters.carePlanId === undefined) {
             throw new runtime.RequiredError('carePlanId','Required parameter requestParameters.carePlanId was null or undefined when calling getQuestionnaireResponsesByCarePlanId.');
         }
@@ -126,14 +128,14 @@ export class QuestionnaireResponseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getQuestionnaireResponsesByCarePlanId(requestParameters: GetQuestionnaireResponsesByCarePlanIdRequest, initOverrides?: RequestInit): Promise<Array<QuestionnaireResponseDto>> {
+    async getQuestionnaireResponsesByCarePlanId(requestParameters: GetQuestionnaireResponsesByCarePlanIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionnaireResponseDto>> {
         const response = await this.getQuestionnaireResponsesByCarePlanIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getQuestionnaireResponsesByStatusRaw(requestParameters: GetQuestionnaireResponsesByStatusRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<QuestionnaireResponseDto>>> {
+    async getQuestionnaireResponsesByStatusRaw(requestParameters: GetQuestionnaireResponsesByStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionnaireResponseDto>>> {
         if (requestParameters.status === null || requestParameters.status === undefined) {
             throw new runtime.RequiredError('status','Required parameter requestParameters.status was null or undefined when calling getQuestionnaireResponsesByStatus.');
         }
@@ -174,14 +176,14 @@ export class QuestionnaireResponseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getQuestionnaireResponsesByStatus(requestParameters: GetQuestionnaireResponsesByStatusRequest, initOverrides?: RequestInit): Promise<Array<QuestionnaireResponseDto>> {
+    async getQuestionnaireResponsesByStatus(requestParameters: GetQuestionnaireResponsesByStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionnaireResponseDto>> {
         const response = await this.getQuestionnaireResponsesByStatusRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async patchQuestionnaireResponseRaw(requestParameters: PatchQuestionnaireResponseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async patchQuestionnaireResponseRaw(requestParameters: PatchQuestionnaireResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling patchQuestionnaireResponse.');
         }
@@ -209,18 +211,18 @@ export class QuestionnaireResponseApi extends runtime.BaseAPI {
 
     /**
      */
-    async patchQuestionnaireResponse(requestParameters: PatchQuestionnaireResponseRequest, initOverrides?: RequestInit): Promise<void> {
+    async patchQuestionnaireResponse(requestParameters: PatchQuestionnaireResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.patchQuestionnaireResponseRaw(requestParameters, initOverrides);
     }
 
 }
 
 /**
-    * @export
-    * @enum {string}
-    */
-export enum GetQuestionnaireResponsesByStatusStatusEnum {
-    NotExamined = 'NOT_EXAMINED',
-    UnderExamination = 'UNDER_EXAMINATION',
-    Examined = 'EXAMINED'
-}
+ * @export
+ */
+export const GetQuestionnaireResponsesByStatusStatusEnum = {
+    NotExamined: 'NOT_EXAMINED',
+    UnderExamination: 'UNDER_EXAMINATION',
+    Examined: 'EXAMINED'
+} as const;
+export type GetQuestionnaireResponsesByStatusStatusEnum = typeof GetQuestionnaireResponsesByStatusStatusEnum[keyof typeof GetQuestionnaireResponsesByStatusStatusEnum];

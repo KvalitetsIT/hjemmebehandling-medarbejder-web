@@ -44,13 +44,13 @@ enum AccordianRowEnum {
 export default class CreatePlandefinition extends React.Component<Props, State> {
   
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
 
     planDefinitionService!: IPlanDefinitionService
 
     constructor(props: Props) {
         super(props)
-        this.api = this.context as IApiContext
+         
         this.validate = this.validate.bind(this)
         this.submitPlandefinition = this.submitPlandefinition.bind(this)
         this.deactivatePlandefinition = this.deactivatePlandefinition.bind(this)
@@ -74,7 +74,8 @@ export default class CreatePlandefinition extends React.Component<Props, State> 
     }
 
     InitializeServices(): void {
-        this.planDefinitionService =  this.api.planDefinitionService;
+const api = this.context as IApiContext
+        this.planDefinitionService =   api.planDefinitionService;
     }
 
     async componentDidMount(): Promise<void> {

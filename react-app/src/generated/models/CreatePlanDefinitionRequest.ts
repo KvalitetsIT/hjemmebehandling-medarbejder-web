@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { PlanDefinitionDto } from './PlanDefinitionDto';
 import {
-    PlanDefinitionDto,
     PlanDefinitionDtoFromJSON,
     PlanDefinitionDtoFromJSONTyped,
     PlanDefinitionDtoToJSON,
-} from './';
+} from './PlanDefinitionDto';
 
 /**
  * 
@@ -32,6 +32,16 @@ export interface CreatePlanDefinitionRequest {
      * @memberof CreatePlanDefinitionRequest
      */
     planDefinition: PlanDefinitionDto;
+}
+
+/**
+ * Check if a given object implements the CreatePlanDefinitionRequest interface.
+ */
+export function instanceOfCreatePlanDefinitionRequest(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "planDefinition" in value;
+
+    return isInstance;
 }
 
 export function CreatePlanDefinitionRequestFromJSON(json: any): CreatePlanDefinitionRequest {

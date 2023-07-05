@@ -16,14 +16,12 @@ interface State {
 
 
 class QuestionnaireOverviewPage extends React.Component<{}, State> {
-    static contextType = ApiContext
-    private readonly api: IApiContext;
+    static contextType = ApiContext;
 
     questionnaireService!: IQuestionnaireService
 
     constructor(props: {}) {
         super(props);
-        this.api = this.context as IApiContext
         
         this.state = {
             loading: true,
@@ -38,7 +36,8 @@ class QuestionnaireOverviewPage extends React.Component<{}, State> {
         return contents;
     }
     InitializeServices(): void {
-        this.questionnaireService =  this.api.questionnaireService;
+        const api = this.context as IApiContext
+        this.questionnaireService =  api.questionnaireService;
     }
 
     async componentDidMount(): Promise<void> {

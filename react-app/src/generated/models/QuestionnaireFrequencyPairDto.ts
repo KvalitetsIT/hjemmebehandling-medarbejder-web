@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { FrequencyDto } from './FrequencyDto';
 import {
-    FrequencyDto,
     FrequencyDtoFromJSON,
     FrequencyDtoFromJSONTyped,
     FrequencyDtoToJSON,
-} from './';
+} from './FrequencyDto';
 
 /**
  * 
@@ -38,6 +38,15 @@ export interface QuestionnaireFrequencyPairDto {
      * @memberof QuestionnaireFrequencyPairDto
      */
     frequency?: FrequencyDto;
+}
+
+/**
+ * Check if a given object implements the QuestionnaireFrequencyPairDto interface.
+ */
+export function instanceOfQuestionnaireFrequencyPairDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function QuestionnaireFrequencyPairDtoFromJSON(json: any): QuestionnaireFrequencyPairDto {

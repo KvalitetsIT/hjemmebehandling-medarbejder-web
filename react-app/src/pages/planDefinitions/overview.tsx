@@ -16,14 +16,14 @@ interface State {
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
    
-    private readonly api: IApiContext;
+     
     
     planDefinitionService!: IPlanDefinitionService
 
 
     constructor(props: {}) {
         super(props)
-        this.api = this.context as IApiContext
+         
         this.state = {
             loading: true,
             planDefinitions: []
@@ -40,7 +40,8 @@ export default class PlandefinitionOverview extends React.Component<{}, State> {
 
     }
     initialiseServices(): void {
-        this.planDefinitionService =  this.api.planDefinitionService;
+        const api = this.context as IApiContext
+        this.planDefinitionService =   api.planDefinitionService;
     }
     render(): JSX.Element {
         this.initialiseServices();

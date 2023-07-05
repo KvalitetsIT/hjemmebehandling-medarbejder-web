@@ -14,17 +14,19 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  CreateQuestionnaireRequest,
+  ErrorDto,
+  PatchQuestionnaireRequest,
+  QuestionnaireDto,
+} from '../models';
 import {
-    CreateQuestionnaireRequest,
     CreateQuestionnaireRequestFromJSON,
     CreateQuestionnaireRequestToJSON,
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PatchQuestionnaireRequest,
     PatchQuestionnaireRequestFromJSON,
     PatchQuestionnaireRequestToJSON,
-    QuestionnaireDto,
     QuestionnaireDtoFromJSON,
     QuestionnaireDtoToJSON,
 } from '../models';
@@ -67,7 +69,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Create a Questionnaire.
      * Create a new Questionnaire.
      */
-    async createQuestionnaireRaw(requestParameters: CreateQuestionnaireOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async createQuestionnaireRaw(requestParameters: CreateQuestionnaireOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.createQuestionnaireRequest === null || requestParameters.createQuestionnaireRequest === undefined) {
             throw new runtime.RequiredError('createQuestionnaireRequest','Required parameter requestParameters.createQuestionnaireRequest was null or undefined when calling createQuestionnaire.');
         }
@@ -93,7 +95,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Create a Questionnaire.
      * Create a new Questionnaire.
      */
-    async createQuestionnaire(requestParameters: CreateQuestionnaireOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async createQuestionnaire(requestParameters: CreateQuestionnaireOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createQuestionnaireRaw(requestParameters, initOverrides);
     }
 
@@ -101,7 +103,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Retrieves a Questionnaire by its id.
      * Get Questionnaire by id.
      */
-    async getQuestionnaireByIdRaw(requestParameters: GetQuestionnaireByIdRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<QuestionnaireDto>> {
+    async getQuestionnaireByIdRaw(requestParameters: GetQuestionnaireByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionnaireDto>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestionnaireById.');
         }
@@ -124,7 +126,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Retrieves a Questionnaire by its id.
      * Get Questionnaire by id.
      */
-    async getQuestionnaireById(requestParameters: GetQuestionnaireByIdRequest, initOverrides?: RequestInit): Promise<QuestionnaireDto> {
+    async getQuestionnaireById(requestParameters: GetQuestionnaireByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionnaireDto> {
         const response = await this.getQuestionnaireByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -133,7 +135,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Retrieves a list of Questionnaire.
      * Get all Questionnaires.
      */
-    async getQuestionnairesRaw(requestParameters: GetQuestionnairesRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<QuestionnaireDto>>> {
+    async getQuestionnairesRaw(requestParameters: GetQuestionnairesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionnaireDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters.statusesToInclude) {
@@ -156,7 +158,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Retrieves a list of Questionnaire.
      * Get all Questionnaires.
      */
-    async getQuestionnaires(requestParameters: GetQuestionnairesRequest, initOverrides?: RequestInit): Promise<Array<QuestionnaireDto>> {
+    async getQuestionnaires(requestParameters: GetQuestionnairesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionnaireDto>> {
         const response = await this.getQuestionnairesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -165,7 +167,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
      * Returns true if the questionnaire is in use by planDefinition and otherwise false if not
      * Checks if the questionnaire is in use by any planDefinitions
      */
-    async isQuestionnaireInUseRaw(requestParameters: IsQuestionnaireInUseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<boolean>> {
+    async isQuestionnaireInUseRaw(requestParameters: IsQuestionnaireInUseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<boolean>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling isQuestionnaireInUse.');
         }
@@ -181,21 +183,25 @@ export class QuestionnaireApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.TextApiResponse(response) as any;
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<boolean>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Returns true if the questionnaire is in use by planDefinition and otherwise false if not
      * Checks if the questionnaire is in use by any planDefinitions
      */
-    async isQuestionnaireInUse(requestParameters: IsQuestionnaireInUseRequest, initOverrides?: RequestInit): Promise<boolean> {
+    async isQuestionnaireInUse(requestParameters: IsQuestionnaireInUseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<boolean> {
         const response = await this.isQuestionnaireInUseRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async patchQuestionnaireRaw(requestParameters: PatchQuestionnaireOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async patchQuestionnaireRaw(requestParameters: PatchQuestionnaireOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling patchQuestionnaire.');
         }
@@ -223,13 +229,13 @@ export class QuestionnaireApi extends runtime.BaseAPI {
 
     /**
      */
-    async patchQuestionnaire(requestParameters: PatchQuestionnaireOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async patchQuestionnaire(requestParameters: PatchQuestionnaireOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.patchQuestionnaireRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async retireQuestionnaireRaw(requestParameters: RetireQuestionnaireRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async retireQuestionnaireRaw(requestParameters: RetireQuestionnaireRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retireQuestionnaire.');
         }
@@ -250,13 +256,13 @@ export class QuestionnaireApi extends runtime.BaseAPI {
 
     /**
      */
-    async retireQuestionnaire(requestParameters: RetireQuestionnaireRequest, initOverrides?: RequestInit): Promise<void> {
+    async retireQuestionnaire(requestParameters: RetireQuestionnaireRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.retireQuestionnaireRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateQuestionnaireRaw(requestParameters: UpdateQuestionnaireRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async updateQuestionnaireRaw(requestParameters: UpdateQuestionnaireRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -276,7 +282,7 @@ export class QuestionnaireApi extends runtime.BaseAPI {
 
     /**
      */
-    async updateQuestionnaire(requestParameters: UpdateQuestionnaireRequest, initOverrides?: RequestInit): Promise<void> {
+    async updateQuestionnaire(requestParameters: UpdateQuestionnaireRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.updateQuestionnaireRaw(requestParameters, initOverrides);
     }
 

@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { QuestionDto } from './QuestionDto';
 import {
-    QuestionDto,
     QuestionDtoFromJSON,
     QuestionDtoFromJSONTyped,
     QuestionDtoToJSON,
-} from './';
+} from './QuestionDto';
 
 /**
  * 
@@ -68,6 +68,16 @@ export interface QuestionnaireDto {
      * @memberof QuestionnaireDto
      */
     lastUpdated?: Date;
+}
+
+/**
+ * Check if a given object implements the QuestionnaireDto interface.
+ */
+export function instanceOfQuestionnaireDto(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+
+    return isInstance;
 }
 
 export function QuestionnaireDtoFromJSON(json: any): QuestionnaireDto {

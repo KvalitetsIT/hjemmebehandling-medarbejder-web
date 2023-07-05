@@ -13,20 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { EnableWhen } from './EnableWhen';
 import {
-    EnableWhen,
     EnableWhenFromJSON,
     EnableWhenFromJSONTyped,
     EnableWhenToJSON,
-    MeasurementTypeDto,
+} from './EnableWhen';
+import type { MeasurementTypeDto } from './MeasurementTypeDto';
+import {
     MeasurementTypeDtoFromJSON,
     MeasurementTypeDtoFromJSONTyped,
     MeasurementTypeDtoToJSON,
-    ThresholdDto,
+} from './MeasurementTypeDto';
+import type { ThresholdDto } from './ThresholdDto';
+import {
     ThresholdDtoFromJSON,
     ThresholdDtoFromJSONTyped,
     ThresholdDtoToJSON,
-} from './';
+} from './ThresholdDto';
 
 /**
  * 
@@ -102,17 +106,28 @@ export interface QuestionDto {
     deprecated?: boolean;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum QuestionDtoQuestionTypeEnum {
-    Choice = 'CHOICE',
-    Integer = 'INTEGER',
-    Quantity = 'QUANTITY',
-    String = 'STRING',
-    Boolean = 'BOOLEAN',
-    Display = 'DISPLAY'
+ * @export
+ */
+export const QuestionDtoQuestionTypeEnum = {
+    Choice: 'CHOICE',
+    Integer: 'INTEGER',
+    Quantity: 'QUANTITY',
+    String: 'STRING',
+    Boolean: 'BOOLEAN',
+    Display: 'DISPLAY'
+} as const;
+export type QuestionDtoQuestionTypeEnum = typeof QuestionDtoQuestionTypeEnum[keyof typeof QuestionDtoQuestionTypeEnum];
+
+
+/**
+ * Check if a given object implements the QuestionDto interface.
+ */
+export function instanceOfQuestionDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function QuestionDtoFromJSON(json: any): QuestionDto {

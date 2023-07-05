@@ -63,6 +63,15 @@ export interface ErrorDto {
     errorText?: string;
 }
 
+/**
+ * Check if a given object implements the ErrorDto interface.
+ */
+export function instanceOfErrorDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function ErrorDtoFromJSON(json: any): ErrorDto {
     return ErrorDtoFromJSONTyped(json, false);
 }

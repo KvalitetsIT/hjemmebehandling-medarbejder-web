@@ -19,18 +19,19 @@ export interface Props {
 export class PatientContextThumbnails extends Component<Props, {}> {
   static displayName = PatientContextThumbnails.name;
   static contextType = ApiContext
-  private readonly api: IApiContext;
+   
   
   dateHelper!: IDateHelper
 
 
   constructor(props: Props) {
     super(props)
-    this.api = this.context as IApiContext
+     
   }
 
   initialiseServices(): void {
-    this.dateHelper = this.api.dateHelper
+    const api = this.context as IApiContext
+    this.dateHelper =  api.dateHelper
   }
   render(): JSX.Element {
     this.initialiseServices()

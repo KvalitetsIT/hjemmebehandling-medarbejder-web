@@ -24,13 +24,11 @@ interface Props {
 
 class PatientsTable extends React.Component<Props, State> {
     static contextType = ApiContext
-   
-    private readonly api: IApiContext;
-patientService!: IPatientService
+    patientService!: IPatientService
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             loadingPage: false,
             loadingTable: true,
@@ -41,7 +39,8 @@ patientService!: IPatientService
     }
 
     InitializeServices(): void {
-        this.patientService =  this.api.patientService;
+        const api = this.context as IApiContext
+        this.patientService = api.patientService;
     }
 
     async getData(pageNumber: number): Promise<PatientDetail[]> {
@@ -108,7 +107,7 @@ patientService!: IPatientService
                                                 {patient.cprToString()}
                                             </TableCell>
                                             <TableCell>
-                                            <Button component={Link} to={"/patients/" + patient.cpr}>{patient.firstname} {patient.lastname}</Button>
+                                                <Button component={Link} to={"/patients/" + patient.cpr}>{patient.firstname} {patient.lastname}</Button>
                                             </TableCell>
                                         </TableRow>
                                     );

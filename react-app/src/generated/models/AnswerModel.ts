@@ -39,15 +39,26 @@ export interface AnswerModel {
     answerType?: AnswerModelAnswerTypeEnum;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum AnswerModelAnswerTypeEnum {
-    Integer = 'INTEGER',
-    String = 'STRING',
-    Boolean = 'BOOLEAN',
-    Quantity = 'QUANTITY'
+ * @export
+ */
+export const AnswerModelAnswerTypeEnum = {
+    Integer: 'INTEGER',
+    String: 'STRING',
+    Boolean: 'BOOLEAN',
+    Quantity: 'QUANTITY'
+} as const;
+export type AnswerModelAnswerTypeEnum = typeof AnswerModelAnswerTypeEnum[keyof typeof AnswerModelAnswerTypeEnum];
+
+
+/**
+ * Check if a given object implements the AnswerModel interface.
+ */
+export function instanceOfAnswerModel(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AnswerModelFromJSON(json: any): AnswerModel {

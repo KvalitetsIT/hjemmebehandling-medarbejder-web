@@ -13,20 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { FrequencyDto } from './FrequencyDto';
 import {
-    FrequencyDto,
     FrequencyDtoFromJSON,
     FrequencyDtoFromJSONTyped,
     FrequencyDtoToJSON,
-    QuestionnaireDto,
+} from './FrequencyDto';
+import type { QuestionnaireDto } from './QuestionnaireDto';
+import {
     QuestionnaireDtoFromJSON,
     QuestionnaireDtoFromJSONTyped,
     QuestionnaireDtoToJSON,
-    ThresholdDto,
+} from './QuestionnaireDto';
+import type { ThresholdDto } from './ThresholdDto';
+import {
     ThresholdDtoFromJSON,
     ThresholdDtoFromJSONTyped,
     ThresholdDtoToJSON,
-} from './';
+} from './ThresholdDto';
 
 /**
  * 
@@ -58,6 +62,15 @@ export interface QuestionnaireWrapperDto {
      * @memberof QuestionnaireWrapperDto
      */
     thresholds?: Array<ThresholdDto>;
+}
+
+/**
+ * Check if a given object implements the QuestionnaireWrapperDto interface.
+ */
+export function instanceOfQuestionnaireWrapperDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function QuestionnaireWrapperDtoFromJSON(json: any): QuestionnaireWrapperDto {

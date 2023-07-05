@@ -14,17 +14,19 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  CreatePlanDefinitionRequest,
+  ErrorDto,
+  PatchPlanDefinitionRequest,
+  PlanDefinitionDto,
+} from '../models';
 import {
-    CreatePlanDefinitionRequest,
     CreatePlanDefinitionRequestFromJSON,
     CreatePlanDefinitionRequestToJSON,
-    ErrorDto,
     ErrorDtoFromJSON,
     ErrorDtoToJSON,
-    PatchPlanDefinitionRequest,
     PatchPlanDefinitionRequestFromJSON,
     PatchPlanDefinitionRequestToJSON,
-    PlanDefinitionDto,
     PlanDefinitionDtoFromJSON,
     PlanDefinitionDtoToJSON,
 } from '../models';
@@ -63,7 +65,7 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
      * Create a PlanDefinition.
      * Create a new PlanDefinition.
      */
-    async createPlanDefinitionRaw(requestParameters: CreatePlanDefinitionOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async createPlanDefinitionRaw(requestParameters: CreatePlanDefinitionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.createPlanDefinitionRequest === null || requestParameters.createPlanDefinitionRequest === undefined) {
             throw new runtime.RequiredError('createPlanDefinitionRequest','Required parameter requestParameters.createPlanDefinitionRequest was null or undefined when calling createPlanDefinition.');
         }
@@ -89,13 +91,13 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
      * Create a PlanDefinition.
      * Create a new PlanDefinition.
      */
-    async createPlanDefinition(requestParameters: CreatePlanDefinitionOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async createPlanDefinition(requestParameters: CreatePlanDefinitionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createPlanDefinitionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getPlanDefinitionsRaw(requestParameters: GetPlanDefinitionsRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<PlanDefinitionDto>>> {
+    async getPlanDefinitionsRaw(requestParameters: GetPlanDefinitionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PlanDefinitionDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters.statusesToInclude) {
@@ -116,7 +118,7 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getPlanDefinitions(requestParameters: GetPlanDefinitionsRequest, initOverrides?: RequestInit): Promise<Array<PlanDefinitionDto>> {
+    async getPlanDefinitions(requestParameters: GetPlanDefinitionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PlanDefinitionDto>> {
         const response = await this.getPlanDefinitionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -125,7 +127,7 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
      * Returns true if the plandefinition is in use by careplans and otherwise false if not
      * Checks if the plandefinition is in use by any careplans
      */
-    async isPlanDefinitionInUseRaw(requestParameters: IsPlanDefinitionInUseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<boolean>> {
+    async isPlanDefinitionInUseRaw(requestParameters: IsPlanDefinitionInUseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<boolean>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling isPlanDefinitionInUse.');
         }
@@ -141,21 +143,25 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.TextApiResponse(response) as any;
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<boolean>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Returns true if the plandefinition is in use by careplans and otherwise false if not
      * Checks if the plandefinition is in use by any careplans
      */
-    async isPlanDefinitionInUse(requestParameters: IsPlanDefinitionInUseRequest, initOverrides?: RequestInit): Promise<boolean> {
+    async isPlanDefinitionInUse(requestParameters: IsPlanDefinitionInUseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<boolean> {
         const response = await this.isPlanDefinitionInUseRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async patchPlanDefinitionRaw(requestParameters: PatchPlanDefinitionOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async patchPlanDefinitionRaw(requestParameters: PatchPlanDefinitionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling patchPlanDefinition.');
         }
@@ -183,13 +189,13 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
 
     /**
      */
-    async patchPlanDefinition(requestParameters: PatchPlanDefinitionOperationRequest, initOverrides?: RequestInit): Promise<void> {
+    async patchPlanDefinition(requestParameters: PatchPlanDefinitionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.patchPlanDefinitionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async retirePlanDefinitionRaw(requestParameters: RetirePlanDefinitionRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async retirePlanDefinitionRaw(requestParameters: RetirePlanDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retirePlanDefinition.');
         }
@@ -210,13 +216,13 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
 
     /**
      */
-    async retirePlanDefinition(requestParameters: RetirePlanDefinitionRequest, initOverrides?: RequestInit): Promise<void> {
+    async retirePlanDefinition(requestParameters: RetirePlanDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.retirePlanDefinitionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updatePlanDefinitionRaw(requestParameters: UpdatePlanDefinitionRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async updatePlanDefinitionRaw(requestParameters: UpdatePlanDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -236,7 +242,7 @@ export class PlanDefinitionApi extends runtime.BaseAPI {
 
     /**
      */
-    async updatePlanDefinition(requestParameters: UpdatePlanDefinitionRequest, initOverrides?: RequestInit): Promise<void> {
+    async updatePlanDefinition(requestParameters: UpdatePlanDefinitionRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.updatePlanDefinitionRaw(requestParameters, initOverrides);
     }
 

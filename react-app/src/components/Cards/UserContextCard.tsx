@@ -22,13 +22,13 @@ export class UserContextCard extends Component<Props, State> {
   static displayName = UserContextCard.name;
   
   static contextType = ApiContext;
-private readonly api: IApiContext;
+ 
   
   userService!: IUserService;
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = {
       loadingUserContextButton: true,
       user: new User(),
@@ -52,7 +52,8 @@ private readonly api: IApiContext;
   }
 
   InitializeServices(): void {
-    this.userService =  this.api.userService;
+const api = this.context as IApiContext
+    this.userService =   api.userService;
   }
 
   logout(): void {

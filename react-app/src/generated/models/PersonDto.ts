@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ContactDetailsDto } from './ContactDetailsDto';
 import {
-    ContactDetailsDto,
     ContactDetailsDtoFromJSON,
     ContactDetailsDtoFromJSONTyped,
     ContactDetailsDtoToJSON,
-} from './';
+} from './ContactDetailsDto';
 
 /**
  * 
@@ -68,6 +68,15 @@ export interface PersonDto {
      * @memberof PersonDto
      */
     patientContactDetails?: ContactDetailsDto;
+}
+
+/**
+ * Check if a given object implements the PersonDto interface.
+ */
+export function instanceOfPersonDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function PersonDtoFromJSON(json: any): PersonDto {

@@ -35,7 +35,7 @@ export class PlanDefinitionSelect extends Component<Props, State> {
   static displayName = PlanDefinitionSelect.name;
   static contextType = ApiContext
 
-  private readonly api: IApiContext;
+   
 static sectionName = "PlanDefinitionSelectSection"
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService
@@ -44,7 +44,7 @@ static sectionName = "PlanDefinitionSelectSection"
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
 
     this.state = {
       editedCareplan: props.careplan.clone(),
@@ -65,10 +65,11 @@ static sectionName = "PlanDefinitionSelectSection"
   }
 
   InitializeServices(): void {
-    this.questionnaireService =  this.api.questionnaireService;
-    //this.planDefinitionService =  this.api.planDefinitionService;
-    this.validationService =  this.api.validationService;
-    this.careplanService =  this.api.careplanService;
+const api = this.context as IApiContext
+    this.questionnaireService =   api.questionnaireService;
+    //this.planDefinitionService =   api.planDefinitionService;
+    this.validationService =   api.validationService;
+    this.careplanService =   api.careplanService;
   }
 
 

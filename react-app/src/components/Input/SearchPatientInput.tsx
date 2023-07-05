@@ -18,23 +18,21 @@ export interface State {
 export class SearchPatientInput extends Component<{}, State> {
   static displayName = SearchPatientInput.name;
   static contextType = ApiContext
-  private readonly api: IApiContext;
- 
-patientService!: IPatientService
+
+  patientService!: IPatientService
 
   constructor(props: {}) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = {
       patientResults: [],
       loading: false,
       selected: null
     }
-
   }
 
   InitialiseServices(): void {
-    this.patientService =  this.api.patientService;
+    this.patientService = (this.context as IApiContext).patientService;
   }
 
   async searchForPatient(searchString: string): Promise<void> {
@@ -67,9 +65,6 @@ patientService!: IPatientService
     const redirectTo = this.state.selected ? "/patients/" + this.state.selected.cpr : "";
     redirectTo.length > 0 && this.setState({ selected: null })
 
-
-
-
     return (
       <>
         {this.state.selected && <Redirect to={redirectTo} key={new Date().toString()} push></Redirect>}
@@ -95,7 +90,7 @@ patientService!: IPatientService
                 </ListItemAvatar>
                 <ListItemText
                   sx={{ marginLeft: 2 }}
-                  primary={<Typography  style={{fontWeight: "bold"}}>{patient.firstname + " " + patient.lastname}</Typography>}
+                  primary={<Typography style={{ fontWeight: "bold" }}>{patient.firstname + " " + patient.lastname}</Typography>}
                   secondary={<Typography>{patient.cpr?.substring(0, 6) + " - " + patient.cpr?.substring(6)}</Typography>}
                 >
                 </ListItemText>

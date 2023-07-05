@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { AnswerModel } from './AnswerModel';
 import {
-    AnswerModel,
     AnswerModelFromJSON,
     AnswerModelFromJSONTyped,
     AnswerModelToJSON,
-} from './';
+} from './AnswerModel';
 
 /**
  * 
@@ -40,16 +40,27 @@ export interface EnableWhen {
     operator?: EnableWhenOperatorEnum;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum EnableWhenOperatorEnum {
-    Equal = 'EQUAL',
-    GreaterThan = 'GREATER_THAN',
-    LessThan = 'LESS_THAN',
-    GreaterOrEqual = 'GREATER_OR_EQUAL',
-    LessOrEqual = 'LESS_OR_EQUAL'
+ * @export
+ */
+export const EnableWhenOperatorEnum = {
+    Equal: 'EQUAL',
+    GreaterThan: 'GREATER_THAN',
+    LessThan: 'LESS_THAN',
+    GreaterOrEqual: 'GREATER_OR_EQUAL',
+    LessOrEqual: 'LESS_OR_EQUAL'
+} as const;
+export type EnableWhenOperatorEnum = typeof EnableWhenOperatorEnum[keyof typeof EnableWhenOperatorEnum];
+
+
+/**
+ * Check if a given object implements the EnableWhen interface.
+ */
+export function instanceOfEnableWhen(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function EnableWhenFromJSON(json: any): EnableWhen {

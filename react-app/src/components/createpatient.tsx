@@ -62,8 +62,7 @@ export interface State {
 
 export default class CreatePatient extends Component<Props, State> {
   static contextType = ApiContext;
-  private readonly api: IApiContext;
-
+  
   static displayName = CreatePatient.name;
   careplanService!: ICareplanService;
   patientService!: IPatientService;
@@ -71,7 +70,6 @@ export default class CreatePatient extends Component<Props, State> {
   constructor(props: Props) {
 
     super(props);
-    this.api = this.context as IApiContext
 
     this.SaveCareplan = this.SaveCareplan.bind(this);
 
@@ -86,8 +84,9 @@ export default class CreatePatient extends Component<Props, State> {
 
   }
   InitializeServices(): void {
-    this.careplanService =  this.api.careplanService;
-    this.patientService =  this.api.patientService;
+    const api = this.context as IApiContext
+    this.careplanService =  api.careplanService;
+    this.patientService =  api.patientService;
   }
 
   toggleAccordian(page: PatientAccordianSectionsEnum): void {

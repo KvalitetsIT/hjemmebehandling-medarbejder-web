@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { PatientDto } from './PatientDto';
 import {
-    PatientDto,
     PatientDtoFromJSON,
     PatientDtoFromJSONTyped,
     PatientDtoToJSON,
-} from './';
+} from './PatientDto';
 
 /**
  * 
@@ -32,6 +32,15 @@ export interface CreatePatientRequest {
      * @memberof CreatePatientRequest
      */
     patient?: PatientDto;
+}
+
+/**
+ * Check if a given object implements the CreatePatientRequest interface.
+ */
+export function instanceOfCreatePatientRequest(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function CreatePatientRequestFromJSON(json: any): CreatePatientRequest {

@@ -30,14 +30,14 @@ export class Tasklist extends Component<Props, State> {
   static displayName = Tasklist.name;
   
   static contextType = ApiContext
-  private readonly api: IApiContext;
+   
 
   questionnaireService!: IQuestionnaireService;
   dateHelper!: IDateHelper
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = {
       tasks: [],
       loading: false,
@@ -56,8 +56,9 @@ export class Tasklist extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.questionnaireService =  this.api.questionnaireService;
-    this.dateHelper =  this.api.dateHelper;
+const api = this.context as IApiContext
+    this.questionnaireService =   api.questionnaireService;
+    this.dateHelper =   api.dateHelper;
   }
 
   async getData(pageNumber: number): Promise<Task[]> {

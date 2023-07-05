@@ -22,8 +22,7 @@ export interface State {
 
 export class ContactEditCard extends Component<Props, State> {
   static contextType = ApiContext;
-  private readonly api: IApiContext;
-
+  
   static displayName = ContactEditCard.name;
   static sectionName = "ContactEditSection";
   personService!: IPersonService;
@@ -32,7 +31,7 @@ export class ContactEditCard extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = { loading: true, contact: props.initialContact ?? new Contact() }
     this.modifyPatient = this.modifyPatient.bind(this);
   }
@@ -47,9 +46,10 @@ export class ContactEditCard extends Component<Props, State> {
   }
 
   InitializeServices(): void {
-    this.personService = this.api.personService;
-    this.validationService = this.api.validationService;
-    this.collectionHelper = this.api.collectionHelper
+    const api = this.context as IApiContext
+    this.personService = api.personService;
+    this.validationService = api.validationService;
+    this.collectionHelper = api.collectionHelper
   }
 
   modifyPatient(patientModifier: (contact: Contact, newValue: string) => Contact, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {

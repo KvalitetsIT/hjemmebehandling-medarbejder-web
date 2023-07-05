@@ -25,22 +25,23 @@ export interface State {
 export class CareplanSummary extends Component<Props, State> {
     static displayName = CareplanSummary.name;
     static contextType = ApiContext;
-private readonly api: IApiContext; 
+  
 
     dateHelper!: IDateHelper
     careplanService!: ICareplanService;
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
         this.state = {
             finishedCareplan: false
         }
     }
 
     InitialiseServices(): void {
-        this.dateHelper =  this.api.dateHelper;
-        this.careplanService =  this.api.careplanService
+        const api = this.context as IApiContext
+    
+        this.dateHelper =  api.dateHelper;
+        this.careplanService =  api.careplanService
     }
 
 

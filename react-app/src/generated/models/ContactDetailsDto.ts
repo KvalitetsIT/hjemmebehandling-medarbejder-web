@@ -57,6 +57,15 @@ export interface ContactDetailsDto {
     secondaryPhone?: string;
 }
 
+/**
+ * Check if a given object implements the ContactDetailsDto interface.
+ */
+export function instanceOfContactDetailsDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function ContactDetailsDtoFromJSON(json: any): ContactDetailsDto {
     return ContactDetailsDtoFromJSONTyped(json, false);
 }

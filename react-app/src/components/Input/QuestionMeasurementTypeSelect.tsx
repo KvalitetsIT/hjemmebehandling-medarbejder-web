@@ -31,13 +31,13 @@ export interface State {
 export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     static displayName = QuestionMeasurementTypeSelect.name;
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
         
     questionAnswerService!: IQuestionAnswerService
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         
         this.state = {
             question: props.question,
@@ -83,7 +83,8 @@ export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     }
 
     initialiseServices(): void {
-        this.questionAnswerService = this.api.questionAnswerService
+        const api = this.context as IApiContext
+        this.questionAnswerService =  api.questionAnswerService
     }
     async componentDidMount(): Promise<void> {
         try {

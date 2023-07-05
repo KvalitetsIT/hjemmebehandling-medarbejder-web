@@ -33,14 +33,14 @@ export class ObservationCard extends Component<Props, State> {
     static displayName = ObservationCard.name;
     
     static contextType = ApiContext
-    private readonly api: IApiContext;
+     
 
     questionnaireService!: IQuestionnaireService;
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
         this.state = {
             questionnaireResponses: [],
             loading: false
@@ -48,8 +48,9 @@ export class ObservationCard extends Component<Props, State> {
     }
 
     initialiseServices(): void {
-        this.questionnaireService = this.api.questionnaireService;
-        this.dateHelper = this.api.dateHelper;
+        const api = this.context as IApiContext
+        this.questionnaireService =  api.questionnaireService;
+        this.dateHelper =  api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {
@@ -171,12 +172,14 @@ export class ObservationCard extends Component<Props, State> {
                     const subheader = question.abbreviation ?? question.question ?? ""
                     return (
                         <Grid paddingLeft={i % 2 === 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
-                            <ResponseViewCard chartData={chartData} />
+                            {/* Nedenstående resulterer i fejl */}
+                            {/* <ResponseViewCard chartData={chartData} /> */}
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
                                 <Divider />
                                 <CardContent>
-                                    {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
+                                    {/* Nedenstående resulterer i fejl */}
+                                    {/* {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>} */}
                                 </CardContent>
                             </Card>
                         </Grid>

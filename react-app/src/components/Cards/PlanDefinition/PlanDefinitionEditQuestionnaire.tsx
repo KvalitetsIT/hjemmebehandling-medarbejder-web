@@ -23,14 +23,14 @@ export interface State {
 
 export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     static contextType = ApiContext;
-    private readonly api: IApiContext;
+     
 
     static displayName = PlanDefinitionEditQuestionnaire.name;
     questionnaireService!: IQuestionnaireService;
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
 
         this.state = {
             loading: false,
@@ -52,7 +52,8 @@ export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     }
 
     InitializeServices(): void {
-        this.questionnaireService = this.api.questionnaireService
+const api = this.context as IApiContext
+        this.questionnaireService =  api.questionnaireService
     }
 
     render(): JSX.Element {

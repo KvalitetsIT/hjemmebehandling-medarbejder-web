@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ThresholdDto } from './ThresholdDto';
 import {
-    ThresholdDto,
     ThresholdDtoFromJSON,
     ThresholdDtoFromJSONTyped,
     ThresholdDtoToJSON,
-} from './';
+} from './ThresholdDto';
 
 /**
  * 
@@ -52,14 +52,25 @@ export interface PatchPlanDefinitionRequest {
     status?: PatchPlanDefinitionRequestStatusEnum;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum PatchPlanDefinitionRequestStatusEnum {
-    Draft = 'DRAFT',
-    Active = 'ACTIVE',
-    Retired = 'RETIRED'
+ * @export
+ */
+export const PatchPlanDefinitionRequestStatusEnum = {
+    Draft: 'DRAFT',
+    Active: 'ACTIVE',
+    Retired: 'RETIRED'
+} as const;
+export type PatchPlanDefinitionRequestStatusEnum = typeof PatchPlanDefinitionRequestStatusEnum[keyof typeof PatchPlanDefinitionRequestStatusEnum];
+
+
+/**
+ * Check if a given object implements the PatchPlanDefinitionRequest interface.
+ */
+export function instanceOfPatchPlanDefinitionRequest(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function PatchPlanDefinitionRequestFromJSON(json: any): PatchPlanDefinitionRequest {

@@ -35,7 +35,7 @@ export interface State {
 
 export class PatientEditCard extends Component<Props, State> {
   static contextType = ApiContext;
-private readonly api: IApiContext;
+ 
   
 
 
@@ -48,7 +48,7 @@ private readonly api: IApiContext;
 
   constructor(props: Props) {
     super(props);
-    this.api = this.context as IApiContext
+     
     this.state = {
       loadingCprButton: false,
       loadingPage: true,
@@ -70,10 +70,11 @@ private readonly api: IApiContext;
   }
 
   InitializeServices(): void {
-    this.personService =  this.api.personService;
-    this.careplanService =  this.api.careplanService;
-    this.validationService =  this.api.validationService;
-    this.collectionHelper =  this.api.collectionHelper;
+const api = this.context as IApiContext
+    this.personService =   api.personService;
+    this.careplanService =   api.careplanService;
+    this.validationService =   api.validationService;
+    this.collectionHelper =   api.collectionHelper;
   }
 
   async getPerson(): Promise<void> {

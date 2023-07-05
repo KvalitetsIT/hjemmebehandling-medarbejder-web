@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { QuestionnaireWrapperDto } from './QuestionnaireWrapperDto';
 import {
-    QuestionnaireWrapperDto,
     QuestionnaireWrapperDtoFromJSON,
     QuestionnaireWrapperDtoFromJSONTyped,
     QuestionnaireWrapperDtoToJSON,
-} from './';
+} from './QuestionnaireWrapperDto';
 
 /**
  * 
@@ -68,6 +68,16 @@ export interface PlanDefinitionDto {
      * @memberof PlanDefinitionDto
      */
     questionnaires?: Array<QuestionnaireWrapperDto>;
+}
+
+/**
+ * Check if a given object implements the PlanDefinitionDto interface.
+ */
+export function instanceOfPlanDefinitionDto(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+
+    return isInstance;
 }
 
 export function PlanDefinitionDtoFromJSON(json: any): PlanDefinitionDto {

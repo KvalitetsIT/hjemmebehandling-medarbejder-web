@@ -27,7 +27,7 @@ export interface State {
 export class AddQuestionnaireButton extends Component<Props,State> {
   static displayName = AddQuestionnaireButton.name;
   static contextType = ApiContext
-  private readonly api: IApiContext;
+   
  
 questionnaireService! : IQuestionnaireService
   planDefinitionService! : IPlanDefinitionService
@@ -35,15 +35,16 @@ questionnaireService! : IQuestionnaireService
 
   constructor(props : Props){
       super(props);
-      this.api = this.context as IApiContext
+       
       this.state= {
             AddQuestionnaireBool : false,
             allPlanDefinitions : [],
       }
   }
   InitializeServices() : void{
-    this.questionnaireService =  this.api.questionnaireService;
-    this.planDefinitionService =  this.api.planDefinitionService;
+    const api = this.context as IApiContext
+    this.questionnaireService =   api.questionnaireService;
+    this.planDefinitionService =   api.planDefinitionService;
   }
 
   async AddQuestionnaire(questionnaireToAdd : Questionnaire) : Promise<void>{

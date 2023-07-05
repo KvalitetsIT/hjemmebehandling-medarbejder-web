@@ -18,18 +18,19 @@ export interface Props {
 export class LoginInfoCard extends Component<Props, {}> {
     static displayName = LoginInfoCard.name;
     static contextType = ApiContext;
-    private readonly api: IApiContext;
+     
 
     dateHelper!: IDateHelper
     userService!: IUserService;
 
     constructor(props: Props) {
         super(props)
-        this.api = this.context as IApiContext
+         
     }
     InitialiseServices(): void {
-        this.dateHelper =  this.api.dateHelper;
-        this.userService =  this.api.userService
+        const api = this.context as IApiContext
+        this.dateHelper =   api.dateHelper;
+        this.userService =   api.userService
     }
 
     async resetPassword(): Promise<void> {
@@ -57,9 +58,10 @@ export class LoginInfoCard extends Component<Props, {}> {
                                     Brugernavn
                                 </Typography>
                                 <Typography fontWeight="bold">
-                                    <IsEmptyCard jsxWhenEmpty="Intet brugernavn" object={patient.username} >
+                                    {/* Nedenstående resulterer i fejl */}
+                                    {/* <IsEmptyCard jsxWhenEmpty="Intet brugernavn" object={patient.username} >
                                         {patient.username}
-                                    </IsEmptyCard>
+                                    </IsEmptyCard> */}
                                 </Typography>
 
                             </Grid>

@@ -23,13 +23,12 @@ export interface State {
 export class QuestionnaireListSimple extends Component<Props, State> {
     static displayName = QuestionnaireListSimple.name;
     static contextType = ApiContext
-    private readonly api: IApiContext;
-
+    
     questionnaireService!: IQuestionnaireService;
 
     constructor(props: Props) {
         super(props);
-        this.api = this.context as IApiContext
+         
 
         this.state = {
             patientIsOnUnansweredList: false,
@@ -48,12 +47,13 @@ export class QuestionnaireListSimple extends Component<Props, State> {
             this.setState(() => { throw error });
         }
     }
-    initializeServices(): void {
-        this.questionnaireService = this.api.questionnaireService;
+    InitializeServices(): void {
+        const api = this.context as IApiContext
+        this.questionnaireService = api.questionnaireService;
     }
 
     render(): JSX.Element {
-        this.initializeServices();
+        this.InitializeServices();
         return this.state.loading ? <LoadingSmallComponent /> : this.renderContent();
     }
 

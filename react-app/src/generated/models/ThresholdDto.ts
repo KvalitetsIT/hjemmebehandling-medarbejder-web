@@ -51,14 +51,25 @@ export interface ThresholdDto {
     valueQuantityHigh?: number;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum ThresholdDtoTypeEnum {
-    Normal = 'NORMAL',
-    Abnormal = 'ABNORMAL',
-    Critical = 'CRITICAL'
+ * @export
+ */
+export const ThresholdDtoTypeEnum = {
+    Normal: 'NORMAL',
+    Abnormal: 'ABNORMAL',
+    Critical: 'CRITICAL'
+} as const;
+export type ThresholdDtoTypeEnum = typeof ThresholdDtoTypeEnum[keyof typeof ThresholdDtoTypeEnum];
+
+
+/**
+ * Check if a given object implements the ThresholdDto interface.
+ */
+export function instanceOfThresholdDto(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function ThresholdDtoFromJSON(json: any): ThresholdDto {
