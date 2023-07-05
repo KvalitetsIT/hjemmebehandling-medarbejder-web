@@ -46,6 +46,9 @@ export class LoginInfoCard extends Component<Props, {}> {
     render(): JSX.Element {
         this.InitialiseServices()
         const patient = this.props.patient;
+        
+        console.log("patient", patient.username)
+
         return (
             <>
                 <Card>
