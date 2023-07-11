@@ -34,7 +34,7 @@ export default function MyApp(): JSX.Element {
     personBackend = backendApi,
     planDefinitionBackend = backendApi;
 
-  console.log("Environment" , getEnvironment())
+  console.log("Environment", getEnvironment())
 
   if (getEnvironment().REACT_APP_NODE_ENV === 'development') {
     if (getEnvironment().REACT_APP_MOCK_QUESTIONNAIRE_SERVICE === "true") {
@@ -59,7 +59,6 @@ export default function MyApp(): JSX.Element {
       planDefinitionBackend = mockApi;
     }
   }
-  
   return (
     <>
       <div suppressHydrationWarning>
@@ -84,8 +83,7 @@ export default function MyApp(): JSX.Element {
             <CssBaseline />
             {typeof window === 'undefined' ? null :
               <ErrorBoundary>
-                
-                <Layout/>
+                <Layout />
               </ErrorBoundary>}
           </ApiContext.Provider>
         </ThemeProvider>

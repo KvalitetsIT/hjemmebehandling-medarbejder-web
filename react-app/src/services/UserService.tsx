@@ -15,7 +15,6 @@ export default class UserService extends BaseService implements IUserService {
     }
     async ResetPassword(patient: PatientDetail): Promise<void> {
         try {
-
             return await this.backendApi.ResetPassword(patient);
         } catch (error) {
             return this.HandleError(error);

@@ -178,8 +178,7 @@ export class ObservationCard extends Component<Props, State> {
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
                                 <Divider />
                                 <CardContent>
-                                    {/* Nedenstående resulterer i fejl */}
-                                    {/* {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>} */}
+                                    {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>} 
                                 </CardContent>
                             </Card>
                         </Grid>
