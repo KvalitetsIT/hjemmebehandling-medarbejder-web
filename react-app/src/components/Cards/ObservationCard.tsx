@@ -117,6 +117,7 @@ export class ObservationCard extends Component<Props, State> {
                 <></>
             )
         }
+
         return (
             <>
                 {allQuestions.map((question, i) => {
@@ -173,7 +174,7 @@ export class ObservationCard extends Component<Props, State> {
                     return (
                         <Grid paddingLeft={i % 2 === 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
                             {/* Nedenstående resulterer i fejl */}
-                            {/* <ResponseViewCard chartData={chartData} /> */}
+                            <ResponseViewCard chartData={chartData} />
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
                                 <Divider />

@@ -188,7 +188,7 @@ export class MultiSelect extends React.Component<MultiSelectProps, {}> {
   }
   render(): JSX.Element {
     return (
-      <Select {...this.props} ref={this.ref} slots={this.slots} />
+      <Select multiple {...this.props} ref={this.ref} slots={this.slots} />
     );
   }
 }

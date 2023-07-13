@@ -6,15 +6,14 @@ import ApiContext from '../../pages/_context';
 import { DayEnum, FrequencyEnum } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import TimePicker from '@mui/lab/TimePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { FilledTextFieldProps, FormControl, OutlinedTextFieldProps, StandardTextFieldProps, TableCell, TableRow, TextField, TextFieldVariants, Typography } from '@mui/material';
-import daLocale from 'date-fns/locale/da';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { PlanDefinitionSelect } from './PlanDefinitionSelect';
 import { IValidationService } from '../../services/interfaces/IValidationService';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export interface Props {
   questionnaire: Questionnaire
@@ -31,8 +30,8 @@ export interface State {
 export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>, State> {
   static displayName = FrequencyTableRow.name;
   static contextType = ApiContext
- 
-validationService!: IValidationService
+
+  validationService!: IValidationService
   validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(PlanDefinitionSelect.sectionName))
 
 
@@ -117,7 +116,7 @@ validationService!: IValidationService
 
           <TableCell>
 
-            <Select fullWidth defaultValue={this.getAllRepeated()[0]} onChange={(a) => {this.SetFrequency(a.target.value); this.validateEvent.dispatchEvent()}} value={this.state.questionnaire.frequency!.repeated}>
+            <Select fullWidth defaultValue={this.getAllRepeated()[0]} onChange={(a) => { this.SetFrequency(a.target.value); this.validateEvent.dispatchEvent() }} value={this.state.questionnaire.frequency!.repeated}>
               {this.getAllRepeated().map(day => {
                 return (<MenuItem key={day} value={day}>{day}</MenuItem>)
               })}
@@ -125,7 +124,7 @@ validationService!: IValidationService
             </Select>
           </TableCell>
           <TableCell>
-            <LocalizationProvider locale={daLocale} dateAdapter={AdapterDateFns}>
+            <LocalizationProvider adapterLocale={"da"} dateAdapter={AdapterDayjs}>
               <TimePicker
                 disabled
                 label="Seneste besvarelses tidspunkt"

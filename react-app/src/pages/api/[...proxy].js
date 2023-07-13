@@ -23,7 +23,6 @@ export default function (req, res)  {
       if (result instanceof Error) {
           throw result;
       }
-
       throw new Error(`Request '${req.url}' is not proxied! We should never reach here!`);
   });
 }

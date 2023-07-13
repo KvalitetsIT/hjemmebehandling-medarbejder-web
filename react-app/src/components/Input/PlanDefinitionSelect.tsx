@@ -93,18 +93,20 @@ const api = this.context as IApiContext
     return a.concat(b.filter(q => !a.map(q => q.id).includes(q.id)))
   }
 
+  getPlandefinitionFromIds(ids: string[]){
+    return ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id)).filter((x): x is PlanDefinition => !!x)
+  }
+
 
   async handleSelection(ids: string[]): Promise<void> {
 
+    if (!Array.isArray(ids)) ids = [ids]
 
-    const plandefinitions = ids.map(id => this.state.allPlanDefinitions.find(x => x.id === id))
+    const plandefinitions = this.getPlandefinitionFromIds(ids)
 
     const careplan = this.state.editedCareplan;
 
     careplan.planDefinitions = plandefinitions ? plandefinitions as PlanDefinition[] : [];
-
-    //careplan.questionnaires = careplan.questionnaires.concat()
-
 
     const selectedQuestionnaires = plandefinitions.flatMap(pd => pd?.questionnaires ? pd.questionnaires as Questionnaire[] : []);
     const existingQuestionnanires = careplan.questionnaires.filter(q => selectedQuestionnaires.map(q => q.id).includes(q.id));

@@ -180,9 +180,8 @@ allowedNumberOfThresholds = [3, 5];
 
                         </Grid>
                         <Grid xs={4}>
-                            {/* Nedenstående resulterer i fejl */}                           
-                            {/* 
-                            <QuestionChart
+                            {/* Nedenstående resulterer i fejl */}   
+                             <QuestionChart
                                 chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
                                 showThresholds={true}
                                 minimal={false}
@@ -192,13 +191,9 @@ allowedNumberOfThresholds = [3, 5];
                                     max: Math.max(...thresholdNumbers.map(x => x.to!)),
                                 }}
                             ></QuestionChart> 
-                            */}
-
-
+                             
                         </Grid>
-
                     </Grid>
-
                 </CardContent >
             </Card >
         )
