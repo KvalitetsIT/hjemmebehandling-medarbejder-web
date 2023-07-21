@@ -19,33 +19,29 @@ RUN go install github.com/lithictech/runtime-js-env@latest
 
 # Copy the built application into Nginx for serving
 FROM nginx:alpine3.17
+
 COPY --from=build /app/build /usr/share/nginx/html
+ 
+# Copy the runtime-js-env binary
 COPY --from=go-downloader /go/bin/runtime-js-env /
 
-# Copy nginx configuration
 COPY ./react-app/nginx/nginx.conf /usr/share/nginx/nginx.conf
 COPY ./react-app/nginx/mime.types /usr/share/nginx/mime.types
-
-# Remove default configuration
 RUN rm /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
 
-# Add caching directory
+
 RUN mkdir -p /var/cache/nginx/
 RUN chmod 777 /var/cache/nginx/
 
-# Create necessary directories
-RUN mkdir -p /temp/etc/nginx/html
-RUN mkdir -p /temp/etc/nginx/conf.d
-RUN mkdir -p /temp/var/cache/nginx
-RUN mkdir -p /temp/docker-entrypoint.d
-
 # Run envsubst to substitute environment variables in nginx.conf and save it to a temporary file
-RUN envsubst < /usr/share/nginx/nginx.conf > /tmp/nginx.conf
+# Run our startup script
+CMD /runtime-js-env -i usr/share/nginx/html/index.html && \
+    chmod 777 /usr/share/nginx/html/index.html &&\
+    envsubst < /usr/share/nginx/nginx.conf > /tmp/nginx.conf &&\
+    mv /tmp/nginx.conf /usr/share/nginx/nginx.conf &&\
+    cp -R /usr/share/nginx/* /temp/etc/nginx/ &&\
+    cp -R -p /var/cache/nginx /temp/var/cache/ &&\
+    cp -R /docker-entrypoint.d/* /temp/docker-entrypoint.d/
 
-# Copy the temporary file back to the original location
-RUN mv /tmp/nginx.conf /usr/share/nginx/nginx.conf
 
-# Add our startup script
-RUN echo "/runtime-js-env -i /usr/share/nginx/html/index.html && chmod 644 /usr/share/nginx/html/index.html" > /docker-entrypoint.d/docker-nginx-startup-runtime-env.sh
-RUN chmod a+x /docker-entrypoint.d/docker-nginx-startup-runtime-env.sh
- 
+

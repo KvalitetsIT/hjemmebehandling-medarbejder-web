@@ -1,0 +1,28 @@
+services:
+  init:
+    environment:
+    - REACT_APP_BFF_BASE_URL=http://localhost:3030/api
+    - REACT_APP_NODE_ENV=dev
+    - REACT_APP_KEYCLOAK_URL=https://keycloak.sdn.t0.hosting.kitkube.dk/auth
+    - REACT_APP_KEYCLOAK_REALM=aftaleportal-test
+    - REACT_APP_KEYCLOAK_CLIENTID=aftaleportal-ui
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./init/docker-entrypoint.d:/temp/docker-entrypoint.d
+      - ./init/etc/nginx:/temp/etc/nginx
+      - ./init/var/run:/temp/var/run
+      - ./init/var/cache/nginx:/temp/var/cache/nginx
+  frontend:
+    image: nginxinc/nginx-unprivileged:alpine3.17
+    restart: always
+    volumes:
+      - ./init/docker-entrypoint.d:/docker-entrypoint.d
+      - ./init/etc/nginx:/etc/nginx
+      - ./init/var/run:/var/run
+      - ./init/var/cache/nginx:/var/cache/nginx
+    ports:
+      - "3000:80"
+    depends_on:
+      - init
