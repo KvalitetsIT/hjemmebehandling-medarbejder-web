@@ -19,6 +19,7 @@ export interface Props {
 export class PatientContextThumbnails extends Component<Props, {}> {
   static displayName = PatientContextThumbnails.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   dateHelper!: IDateHelper
 
   initialiseServices(): void {

@@ -23,6 +23,7 @@ export interface State {
 
 export class PlanDefinitionEdit extends Component<Props, State> {
     static contextType = ApiContext;
+    declare context: React.ContextType<typeof ApiContext>;
     static displayName = PlanDefinitionEdit.name;
     personService!: IPersonService;
     validationService!: IValidationService;

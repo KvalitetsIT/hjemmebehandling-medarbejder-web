@@ -17,6 +17,7 @@ interface State {
 
 class QuestionnaireOverviewPage extends React.Component<{}, State> {
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     questionnaireService!: IQuestionnaireService
 
     constructor(props: {}) {

@@ -38,6 +38,7 @@ interface State {
 class CreateQuestionnairePage extends React.Component<Props, State> {
     static sectionName = "questionnaire";
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     questionnaireService!: IQuestionnaireService
     validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
 

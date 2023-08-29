@@ -18,6 +18,7 @@ export interface State {
 export class SearchPatientInput extends Component<{}, State> {
   static displayName = SearchPatientInput.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   patientService!: IPatientService
 
   constructor(props: {}) {

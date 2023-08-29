@@ -26,6 +26,7 @@ export interface State {
 export class QuestionnaireResponseStatusSelect extends Component<Props, State> {
   static displayName = QuestionnaireResponseStatusSelect.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   questionnaireService!: IQuestionnaireService
 
   constructor(props: Props) {

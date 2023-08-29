@@ -34,6 +34,7 @@ export interface State {
 export class PlanDefinitionSelect extends Component<Props, State> {
   static displayName = PlanDefinitionSelect.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   static sectionName = "PlanDefinitionSelectSection"
   questionnaireService!: IQuestionnaireService;
   validationService!: IValidationService

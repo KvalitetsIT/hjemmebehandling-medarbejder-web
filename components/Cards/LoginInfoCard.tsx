@@ -18,6 +18,7 @@ export interface Props {
 export class LoginInfoCard extends Component<Props, {}> {
     static displayName = LoginInfoCard.name;
     static contextType = ApiContext;
+    declare context: React.ContextType<typeof ApiContext>
     dateHelper!: IDateHelper
     userService!: IUserService;
 

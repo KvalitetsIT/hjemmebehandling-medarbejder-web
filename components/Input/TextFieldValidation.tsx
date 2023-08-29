@@ -28,6 +28,7 @@ export interface Props {
     onChange: (input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     validate?: (value: string) => Promise<InvalidInputModel[]>
     onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
+    children?: JSX.Element
 }
 
 export interface State {

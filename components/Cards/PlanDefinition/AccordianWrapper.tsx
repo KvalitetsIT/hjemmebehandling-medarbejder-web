@@ -17,6 +17,7 @@ export interface Props {
     overrideContinueButton?: JSX.Element
     error?: boolean;
     overrideDeactivateButton?: JSX.Element
+    children: JSX.Element
 }
 
 export class AccordianWrapper extends Component<Props, {}> {

@@ -32,6 +32,7 @@ export interface State {
 export class ObservationCard extends Component<Props, State> {
     static displayName = ObservationCard.name;
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     questionnaireService!: IQuestionnaireService;
     dateHelper!: IDateHelper
 

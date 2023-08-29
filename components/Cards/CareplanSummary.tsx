@@ -25,6 +25,7 @@ export interface State {
 export class CareplanSummary extends Component<Props, State> {
     static displayName = CareplanSummary.name;
     static contextType = ApiContext;
+    declare context: React.ContextType<typeof ApiContext>
     dateHelper!: IDateHelper
     careplanService!: ICareplanService;
 
@@ -83,7 +84,7 @@ export class CareplanSummary extends Component<Props, State> {
                             </Grid>
                             <Grid item xs={12}>
                                 <ErrorBoundary>
-                                    <FinishMonitoringButton careplan={this.props.careplan}>                                    </FinishMonitoringButton>
+                                    <FinishMonitoringButton careplan={this.props.careplan}></FinishMonitoringButton>
                                 </ErrorBoundary>
                             </Grid>
 

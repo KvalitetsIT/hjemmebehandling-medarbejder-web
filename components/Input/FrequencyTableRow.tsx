@@ -21,6 +21,7 @@ export interface Props {
   patient: PatientDetail
   firstCell?: JSX.Element
   afterChange?: () => void
+  children?: JSX.Element
 }
 
 export interface State {

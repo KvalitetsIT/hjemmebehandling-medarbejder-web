@@ -21,6 +21,7 @@ export interface State {
 export class UserContextCard extends Component<Props, State> {
   static displayName = UserContextCard.name;
   static contextType = ApiContext;
+  declare context: React.ContextType<typeof ApiContext>;
   userService!: IUserService;
 
   constructor(props: Props) {

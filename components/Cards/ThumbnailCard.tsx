@@ -11,6 +11,7 @@ export interface Props {
   headline: string;
   color?: string;
   boxContent: JSX.Element
+  children: JSX.Element[]
 }
 
 export class ThumbnailCard extends Component<Props, {}> {

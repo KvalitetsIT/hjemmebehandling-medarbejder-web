@@ -22,6 +22,7 @@ export interface State {
 
 export class ContactEditCard extends Component<Props, State> {
   static contextType = ApiContext;
+  declare context: React.ContextType<typeof ApiContext>
   static displayName = ContactEditCard.name;
   static sectionName = "ContactEditSection";
   personService!: IPersonService;

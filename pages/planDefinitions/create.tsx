@@ -43,6 +43,7 @@ enum AccordianRowEnum {
 
 export default class CreatePlandefinition extends React.Component<Props, State> {
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     planDefinitionService!: IPlanDefinitionService
 
     constructor(props: Props) {

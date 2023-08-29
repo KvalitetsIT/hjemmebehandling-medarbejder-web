@@ -21,6 +21,7 @@ export interface BasicTabsProps {
   class: string
   linkToId: boolean
   onChange?: (index: number) => void
+  children?: JSX.Element
 }
 export interface BasicTabsState {
   value: number

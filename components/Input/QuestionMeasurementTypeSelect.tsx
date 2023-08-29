@@ -31,6 +31,7 @@ export interface State {
 export class QuestionMeasurementTypeSelect extends Component<Props, State> {
     static displayName = QuestionMeasurementTypeSelect.name;
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     questionAnswerService!: IQuestionAnswerService
 
     constructor(props: Props) {

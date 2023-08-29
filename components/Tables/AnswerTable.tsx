@@ -37,6 +37,7 @@ export interface State {
 export class AnswerTable extends Component<Props, State> {
     static displayName = AnswerTable.name;
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
 
     questionAnswerService!: IQuestionAnswerService;
     questionnaireService!: IQuestionnaireService;

@@ -18,6 +18,7 @@ interface Props {
 export class FinishMonitoringButton extends React.Component<Props, State>{
     careplanService!: ICareplanService;
     static contextType = ApiContext;
+    declare context: React.ContextType<typeof ApiContext>
 
     InitialiseServices(): void {
         this.careplanService = this.context.careplanService
@@ -80,7 +81,9 @@ export class FinishMonitoringButton extends React.Component<Props, State>{
                     contentOfDoActionBtn={'Afslut monitoreringsplan'}
                     contentOfCancelBtn={'Fortryd'}
                     action={async () => await this.finishCareplan(this.props.careplan)}>
-                    Er du sikker på, at du ønsker at afslutte patientens monitoreringsplan?
+                        <>
+                            Er du sikker på, at du ønsker at afslutte patientens monitoreringsplan?
+                        </>
                 </ConfirmationButton>
                 {this.state?.toast ?? <></>}
             </>

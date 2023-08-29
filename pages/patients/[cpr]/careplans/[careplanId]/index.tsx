@@ -30,6 +30,7 @@ interface Props {
 
 class PatientCareplans extends React.Component<Props, State> {
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService
 

@@ -21,6 +21,7 @@ export interface Props {
 export class CareplanQuestionnaireSummary extends Component<Props, {}> {
   static displayName = CareplanQuestionnaireSummary.name;
   static contextType = ApiContext;
+  declare context: React.ContextType<typeof ApiContext>
   dateHelper!: IDateHelper
   InitialiseServices(): void {
     this.dateHelper = this.context.dateHelper;

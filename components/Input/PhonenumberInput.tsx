@@ -28,6 +28,7 @@ export interface State {
 export class PhonenumberInput extends Component<Props, State> {
     static displayName = PhonenumberInput.name;
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     static defaultProps = {
         variant: "outlined",
         size: "small",

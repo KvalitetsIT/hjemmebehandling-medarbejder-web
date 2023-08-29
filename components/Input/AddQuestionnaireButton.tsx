@@ -27,6 +27,7 @@ export interface State {
 export class AddQuestionnaireButton extends Component<Props,State> {
   static displayName = AddQuestionnaireButton.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   questionnaireService! : IQuestionnaireService
   planDefinitionService! : IPlanDefinitionService
 

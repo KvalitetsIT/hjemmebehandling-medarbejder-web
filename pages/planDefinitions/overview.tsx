@@ -15,6 +15,7 @@ interface State {
 
 export default class PlandefinitionOverview extends React.Component<{}, State> {
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     planDefinitionService!: IPlanDefinitionService
 
 

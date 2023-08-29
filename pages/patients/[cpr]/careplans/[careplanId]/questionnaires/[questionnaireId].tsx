@@ -24,6 +24,7 @@ interface Props {
 }
 export default class QuestionnaireResponseDetails extends React.Component<Props, State> {
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService;
 
@@ -104,8 +105,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
               tabLabels={questionnaires!.map(x => x!.name!)}
               tabContent={questionnaires.map(x => this.renderQuestionnaireResponseTab(currentCareplan!, x))}
               class="questionnaire__tab"
-            >
-            </BasicTabs>
+            ></BasicTabs>
           </Grid>
         </Grid>
       </IsEmptyCard>

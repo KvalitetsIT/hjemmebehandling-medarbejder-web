@@ -20,6 +20,7 @@ export interface Props {
   cancelBtnIsLast?: boolean
   color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   variant: "outlined" | "contained" | "text"
+  children: JSX.Element
 }
 export interface State {
   openConfirmationBox: boolean

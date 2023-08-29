@@ -19,6 +19,7 @@ interface State {
 
 export class QuestionnaireTable extends Component<Props, State>{
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     dateHelper!: IDateHelper
 
     constructor(props: Props) {

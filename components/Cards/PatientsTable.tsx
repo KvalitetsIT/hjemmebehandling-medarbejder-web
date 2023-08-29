@@ -24,6 +24,7 @@ interface Props {
 
 class PatientsTable extends React.Component<Props, State> {
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     patientService!: IPatientService
 
     constructor(props: Props) {

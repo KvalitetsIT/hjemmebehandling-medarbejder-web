@@ -29,6 +29,7 @@ export interface State {
 export class Tasklist extends Component<Props, State> {
   static displayName = Tasklist.name;
   static contextType = ApiContext
+  declare context: React.ContextType<typeof ApiContext>
   questionnaireService!: IQuestionnaireService;
   dateHelper!: IDateHelper
 
@@ -183,7 +184,9 @@ export class Tasklist extends Component<Props, State> {
                                 contentOfCancelBtn={'Fortryd'}
                                 action={async () => await this.removeAlarm(task)}
                               >
-                                Er du sikker på, at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
+                                <>
+                                  Er du sikker på, at du ønsker at fjerne alarmen? - Dette vil påvirke hele afdelingen
+                                </>
                               </ConfirmationButton>
                               :
                               <Button className="answer__button" component={Link} disabled={!task.responseLinkEnabled} to={"/patients/" + task.cpr + "/questionnaires/" + FhirUtils.unqualifyId(task.questionnaireId)} color="primary" variant="contained">Se besvarelse</Button>

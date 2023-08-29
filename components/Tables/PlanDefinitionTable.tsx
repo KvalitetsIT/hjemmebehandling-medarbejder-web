@@ -17,6 +17,7 @@ interface State {
 
 export class PlanDefinitionTable extends Component<Props, State>{
     static contextType = ApiContext
+    declare context: React.ContextType<typeof ApiContext>
     dateHelper!: IDateHelper
 
     constructor(props: Props) {

@@ -23,6 +23,7 @@ export interface State {
 
 export class PlanDefinitionEditQuestionnaire extends Component<Props, State> {
     static contextType = ApiContext;
+    declare context: React.ContextType<typeof ApiContext>;
     static displayName = PlanDefinitionEditQuestionnaire.name;
     questionnaireService!: IQuestionnaireService;
 

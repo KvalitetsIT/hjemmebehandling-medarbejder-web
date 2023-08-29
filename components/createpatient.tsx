@@ -62,6 +62,7 @@ export interface State {
 
 export default class CreatePatient extends Component<Props, State> {
   static contextType = ApiContext;
+  declare context: React.ContextType<typeof ApiContext>;
   static displayName = CreatePatient.name;
   careplanService!: ICareplanService;
   patientService!: IPatientService;
