@@ -90,7 +90,9 @@ export class PatientEditCard extends Component<Props, State> {
 
       const afterResetPasswordToast = (
         <Toast snackbarTitle="Resultat af fremsøgning" snackbarColor="success">
-          {newPerson.givenName} {newPerson.familyName} blev fundet og indsat i formularen
+          <>
+            {newPerson.givenName} {newPerson.familyName} blev fundet og indsat i formularen
+          </>
         </Toast>
       )
       this.setState({ toast: afterResetPasswordToast })

@@ -130,7 +130,7 @@ export class FrequencyTableRow extends Component<Props, State> {
                 label="Seneste besvarelses tidspunkt"
                 value={this.state.deadineTime}
                 onChange={() => { console.log("Deadline cannot be changed!") }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params: any) => <TextField {...params} />}
               />
             </LocalizationProvider>
           </TableCell>
