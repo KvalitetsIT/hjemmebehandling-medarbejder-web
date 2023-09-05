@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Line } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import TableRowsIcon from '@mui/icons-material/TableRows';

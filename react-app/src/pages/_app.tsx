@@ -13,7 +13,7 @@ import { IBackendApi } from '../apis/interfaces/IBackendApi';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
 import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
-import { ThemeProvider , createTheme} from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import PlanDefinitionService from '../services/PlanDefinitionService';

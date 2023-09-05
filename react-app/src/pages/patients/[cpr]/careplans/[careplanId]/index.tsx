@@ -116,11 +116,10 @@ class PatientCareplans extends React.Component<Props, State> {
                 {activeCareplan?.patient ?
                   <>
                     <PatientCard patient={activeCareplan?.patient}></PatientCard>
-                    <LoginInfoCard patient={activeCareplan?.patient} />
+                    {/* <LoginInfoCard patient={activeCareplan?.patient} /> */}
                   </> :
                   <div>Noget gik galt - Ingen aktiv monitoreringsplan, eller så var ingen patient tilknyttet</div>
                 }
-                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
               </Stack>
             </ErrorBoundary>
           </Grid>
@@ -133,6 +132,7 @@ class PatientCareplans extends React.Component<Props, State> {
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container>
+                
                     <ObservationCard questionnaire={activeQuestionnaire} careplan={activeCareplan} />
                   </Grid>
                 </Grid>

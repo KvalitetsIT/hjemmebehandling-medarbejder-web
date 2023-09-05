@@ -3,7 +3,6 @@ import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
-
 import { PatientAccordianSectionsEnum } from '../createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
@@ -93,7 +92,7 @@ export class Layout extends React.Component<{}, State> {
 
                     <Route path="/patients"><Patients /></Route>
                     <Route path="/newpatient" render={(props) => <NewPatientPage editmode={false} activeAccordian={PatientAccordianSectionsEnum.patientInfo} {...props} />} />
-                    
+
                     <Route path="/about"><AboutPage /></Route>
 
                     <Route path="/"><Patients /></Route>

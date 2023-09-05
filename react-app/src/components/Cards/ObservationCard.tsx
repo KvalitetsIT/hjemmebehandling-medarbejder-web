@@ -18,6 +18,7 @@ import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { LineChart, TableChart } from '@kvalitetsit/hjemmebehandling/Charts/Charts';
 
 export interface Props {
     careplan: PatientCareplan;
@@ -31,16 +32,16 @@ export interface State {
 
 export class ObservationCard extends Component<Props, State> {
     static displayName = ObservationCard.name;
-    
+
     static contextType = ApiContext
-     
+    //declare context: React.ContextType<typeof ApiContext>
 
     questionnaireService!: IQuestionnaireService;
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props);
-         
+
         this.state = {
             questionnaireResponses: [],
             loading: false
@@ -49,8 +50,8 @@ export class ObservationCard extends Component<Props, State> {
 
     initialiseServices(): void {
         const api = this.context as IApiContext
-        this.questionnaireService =  api.questionnaireService;
-        this.dateHelper =  api.dateHelper;
+        this.questionnaireService = api.questionnaireService;
+        this.dateHelper = api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {
@@ -171,17 +172,27 @@ export class ObservationCard extends Component<Props, State> {
                     const dateToString = (date: Date) => this.dateHelper.DateToString(date);
                     const chartData = new ChartData(this.state.questionnaireResponses, question, graphThreshold, dateToString);
                     const subheader = question.abbreviation ?? question.question ?? ""
+
+
                     return (
                         <Grid paddingLeft={i % 2 === 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
                             {/* Nedenstående resulterer i fejl */}
-                            <ResponseViewCard chartData={chartData} />
+                            <ResponseViewCard
+                                chartData={chartData}
+                                graph={<LineChart showThresholds={true} chartData={chartData} />}
+                                table={<TableChart chartData={chartData} />}
+                            />
+
                             <Card marginTop={3} component={Box}>
                                 <CardHeader subheader={<Typography variant="h6" fontWeight="bold">{subheader} - Alarmgrænser</Typography>} />
                                 <Divider />
+
                                 <CardContent>
-                                    {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>} 
+                                    {threshold && threshold.thresholdNumbers ? <ThresholdSlider threshold={threshold.thresholdNumbers} question={question} /> : <></>}
                                 </CardContent>
+
                             </Card>
+
                         </Grid>
                     )
                 })}

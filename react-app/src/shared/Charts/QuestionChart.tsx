@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Line } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Button, ButtonGroup, Table, TableCell, TableRow, Tooltip } from '@mui/material';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
-import TableRowsIcon from '@mui/icons-material/TableRows';
+
 import ChartData, { Dataset } from './ChartData';
 import IDateHelper from '../Helpers/interfaces/IDateHelper';
-import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,7 +21,7 @@ ChartJS && ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
-  annotationPlugin,
+  
   Title,
   Legend
 );
@@ -94,9 +91,7 @@ export class QuestionChart extends Component<Props, {}> {
       }
     }
     let plugins: any[] = []
-    if (!this.props.minimal) {
-      plugins = [ChartDataLabels as any]
-    }
+  
     return (<Line style={{ minHeight: this.props.minHeight, maxHeight: this.props.maxHeight }} plugins={plugins} options={options} data={data as any} />)
   }
 

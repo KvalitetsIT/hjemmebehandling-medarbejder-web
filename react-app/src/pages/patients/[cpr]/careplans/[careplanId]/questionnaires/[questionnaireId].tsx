@@ -126,8 +126,6 @@ const api = this.context as IApiContext
   renderQuestionnaireResponseTab(careplan: PatientCareplan, questionnaire: Questionnaire): JSX.Element {
     return (
       <>
-
-
         <ErrorBoundary rerenderChildren={false}>
           <AnswerTable careplan={careplan} questionnaires={questionnaire} />
         </ErrorBoundary>

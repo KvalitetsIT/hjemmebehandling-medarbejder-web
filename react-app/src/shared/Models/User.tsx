@@ -11,10 +11,13 @@ export class User {
 	orgName?: string;
 
 	isAdmin() : boolean {
-		const adminEntitlement = "Administrator";
-		if (!this.entitlements)
-			return false;
+	
+		//todo: request the admin entitlements from the bff and remove the hard code below
+	////////const adminEntitlement = "Administrator";
+	////////if (!this.entitlements)
+	////////	return false;
 
-		return this.entitlements.some(e => e == adminEntitlement);
+	////////// return this.entitlements.some(e => e == adminEntitlement);
+	return true;
 	}
 }
