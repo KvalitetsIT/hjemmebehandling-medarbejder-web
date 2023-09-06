@@ -41,8 +41,4 @@ CMD /runtime-js-env -i usr/share/nginx/html/index.html && \
     mv /tmp/nginx.conf /usr/share/nginx/nginx.conf &&\
     cp -R /usr/share/nginx/* /temp/etc/nginx/ &&\
     cp -R -p /var/cache/nginx /temp/var/cache/ &&\
-    cp -R /docker-entrypoint.d/* /temp/docker-entrypoint.d/ &&\
-    cat /usr/share/nginx/nginx.conf &&\
-    printenv
-
-
+    cp -R /docker-entrypoint.d/* /temp/docker-entrypoint.d/
