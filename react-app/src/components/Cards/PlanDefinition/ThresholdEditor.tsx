@@ -32,8 +32,8 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
 
     static displayName = ColorSlider.name;
     static contextType = ApiContext
-   
-allowedNumberOfThresholds = [3, 5];
+
+    allowedNumberOfThresholds = [3, 5];
 
     constructor(props: TresholdEditorProps) {
         super(props);
@@ -177,29 +177,9 @@ allowedNumberOfThresholds = [3, 5];
                                     )
                                 })}
                             </Stack>
-
-
-
                         </Grid>
                         <Grid xs={4}>
-                            {/* Nedenstående resulterer i fejl */}   
-
                             <LineChart renderChart={(options, data, plugins) => <Line style={{ minHeight: "400px", maxHeight: "600px" }} plugins={plugins} options={options} data={data as any} />} showThresholds={true} chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })} />
-                            {/*
-                            
-                             <QuestionChart
-                                chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
-                                showThresholds={true}
-                                minimal={false}
-                                minHeight={450}
-                                range={{
-                                    min: Math.min(...thresholdNumbers.map(x => x.from!)),
-                                    max: Math.max(...thresholdNumbers.map(x => x.to!)),
-                                }}
-                            ></QuestionChart> 
-                            
-                            */}
-                             
                         </Grid>
                     </Grid>
                 </CardContent >
