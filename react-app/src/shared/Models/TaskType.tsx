@@ -1,4 +1,0 @@
-export enum TaskType {
-    UNFINISHED_RESPONSE = 0,
-    UNANSWERED_QUESTIONNAIRE = 1
-}

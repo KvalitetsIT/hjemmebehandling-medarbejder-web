@@ -18,7 +18,31 @@ import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { LineChart, TableChart } from '@kvalitetsit/hjemmebehandling/Charts/Charts';
+import { LineChart} from '@kvalitetsit/hjemmebehandling/Charts/LineChart';
+import { TableChart} from '@kvalitetsit/hjemmebehandling/Charts/TableChart';
+import { Line } from 'react-chartjs-2';
+import annotationPlugin from "chartjs-plugin-annotation";
+
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Legend,
+  } from 'chart.js';
+  
+  ChartJS && ChartJS.register(
+  
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    annotationPlugin,
+    Title,
+    Legend
+  );
 
 export interface Props {
     careplan: PatientCareplan;
@@ -179,7 +203,7 @@ export class ObservationCard extends Component<Props, State> {
                             {/* Nedenstående resulterer i fejl */}
                             <ResponseViewCard
                                 chartData={chartData}
-                                graph={<LineChart showThresholds={true} chartData={chartData} />}
+                                graph={<LineChart renderChart={(options, data, plugins) => <Line style={{ minHeight: "400px", maxHeight: "600px" }} plugins={plugins} options={options} data={data as any} />} showThresholds={true} chartData={chartData} />}
                                 table={<TableChart chartData={chartData} />}
                             />
 

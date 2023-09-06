@@ -11,6 +11,8 @@ import ApiContext from "../../../pages/_context"
 import { MissingDetailsError } from "../../Errors/MissingDetailsError"
 import { ColorSlider } from "../../Input/ColorSlider"
 import ThresholdInput from "../../Input/ThresholdInput"
+import { LineChart } from "@kvalitetsit/hjemmebehandling/Charts/LineChart"
+import { Line } from "react-chartjs-2"
 
 interface TresholdEditorProps {
     questionnaire: Questionnaire
@@ -181,6 +183,10 @@ allowedNumberOfThresholds = [3, 5];
                         </Grid>
                         <Grid xs={4}>
                             {/* Nedenstående resulterer i fejl */}   
+
+                            <LineChart renderChart={(options, data, plugins) => <Line style={{ minHeight: "400px", maxHeight: "600px" }} plugins={plugins} options={options} data={data as any} />} showThresholds={true} chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })} />
+                            {/*
+                            
                              <QuestionChart
                                 chartData={new ChartData([], this.props.question, thresholdForQuestion, () => { return "" })}
                                 showThresholds={true}
@@ -191,6 +197,8 @@ allowedNumberOfThresholds = [3, 5];
                                     max: Math.max(...thresholdNumbers.map(x => x.to!)),
                                 }}
                             ></QuestionChart> 
+                            
+                            */}
                              
                         </Grid>
                     </Grid>
