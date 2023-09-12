@@ -8,7 +8,7 @@ RUN ["java", "-jar", "/opt/openapi-generator/modules/openapi-generator-cli/targe
 FROM node:20.4.0-alpine as build
 WORKDIR /app
 COPY ./react-app /app
-COPY --from=api-generator /generator/generated .
+COPY --from=api-generator /generator/generated ./src/generated 
 RUN npm install
 RUN npm run build
 
