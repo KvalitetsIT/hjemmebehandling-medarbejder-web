@@ -58,7 +58,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-api": "rm -rf generated; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o src/generated --additional-properties=typescriptThreePlus=true"
+    "generate-api": "rm -rf generated; npm i -g @openapitools/openapi-generator-cli@2.6.0; openapi-generator-cli generate -i resources/bff.json -g typescript-fetch -o src/generated --additional-properties=typescriptThreePlus=true"
   },
   "eslintConfig": {
     "extends": [
