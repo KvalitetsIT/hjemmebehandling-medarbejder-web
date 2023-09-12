@@ -1,0 +1,50 @@
+import { Breadcrumbs } from '@mui/material';
+import React, { Component } from 'react';
+import { Link,RouteComponentProps, withRouter } from 'react-router-dom';
+
+
+interface Props {
+  match : { params : {cpr : string} }
+  location : { pathname : string }
+}
+
+class AutoBreadcrumbs extends Component<Props & RouteComponentProps> {
+  static displayName = AutoBreadcrumbs.name;
+
+  render () {
+    const urlSegmentToDisplayName: any = { };
+
+    urlSegmentToDisplayName["patients"] = {displayName: "Opgaveliste"}
+    urlSegmentToDisplayName["questionnaires"] = {displayName: "Spørgeskemaer"}
+    urlSegmentToDisplayName["plandefinitions"] = {displayName: "Patientgrupper"}
+    urlSegmentToDisplayName["careplans"] = {displayName: "Monitoreringsplaner"}
+    urlSegmentToDisplayName["newpatient"] = {displayName: "Opret patient"}
+    urlSegmentToDisplayName["edit"] = {displayName: "Redigér"}
+    urlSegmentToDisplayName["create"] = {displayName: "Opret"}
+    urlSegmentToDisplayName["active"] = {displayName: "Aktive patienter"}
+    urlSegmentToDisplayName["inactive"] = {displayName: "Afsluttede patienter"}
+
+
+    
+    const urlSegments = this.props.location.pathname.split("/")
+    let totalUrlIncremental = "";
+  return (
+    
+
+    <Breadcrumbs aria-label="breadcrumb">
+        {urlSegments.slice(1).map(seg => {
+            totalUrlIncremental += "/" + seg;
+            return (
+            <Link color="inherit" to={totalUrlIncremental}>
+                {urlSegmentToDisplayName[seg] !== undefined ? urlSegmentToDisplayName[seg].displayName : seg}
+            </Link>
+            )
+        })}
+        
+    </Breadcrumbs>
+    
+  )
+  }
+}
+
+export default withRouter(AutoBreadcrumbs);

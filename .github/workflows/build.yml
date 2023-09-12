@@ -16,12 +16,17 @@ jobs:
     - name: Setup env variables
       run: |
 <<<<<<< HEAD
+<<<<<<< HEAD
         echo "DOCKER_SERVICE=kvalitetsit/kittyact" >> $GITHUB_ENV
         echo "DOCKER_DOCUMENTATION=kvalitetsit/kittyact-documentation" >> $GITHUB_ENV
 =======
         echo "DOCKER_SERVICE=kvalitetsit/hjemmebehandling-medarbejder-web" >> $GITHUB_ENV
         echo "DOCKER_DOCUMENTATION=kvalitetsit/hjemmebehandling-medarbejder-web-documentation" >> $GITHUB_ENV
 >>>>>>> 47fa5c009642b9ad82d46380bc3b75acd41bb8ab
+=======
+        echo "DOCKER_SERVICE=kvalitetsit/stakit-frontend" >> $GITHUB_ENV
+        echo "DOCKER_DOCUMENTATION=kvalitetsit/stakit-frontend-documentation" >> $GITHUB_ENV
+>>>>>>> dev
 
 # Checkout source code
     - uses: actions/checkout@v2
@@ -54,19 +59,6 @@ jobs:
     - name: Push service git id docker image.
       run: ./build/docker-push.sh ${{ env.DOCKER_SERVICE }}:${{ github.sha }}
 
-# TODO: Figure out whether we want this or not.
-    # - name: Tag documentation dev docker image
-    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:dev
-
-    # - name: Push documentation dev docker image
-    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:dev
-
-    # - name: Tag documentation git id docker image
-    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
-
-    # - name: Push documentation git id docker image.
-    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ github.sha }}
-
     - name: Push latest service docker image
       if: ${{ steps.tag.conclusion != 'skipped' }}
       run: ./build/docker-push.sh ${{ env.DOCKER_SERVICE }}:latest
@@ -78,16 +70,3 @@ jobs:
     - name: Push version service docker image.
       if: ${{ steps.tag.conclusion != 'skipped' }}
       run: ./build/docker-push.sh ${{ env.DOCKER_SERVICE }}:${{ steps.tag.outputs.VERSION }}
-
-# TODO: Figure out whether we want this or not.      
-    # - name: Push latest documentation docker image
-    #   if: ${{ steps.tag.conclusion != 'skipped' }}
-    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:latest
-
-    # - name: Tag version documentation docker image
-    #   if: ${{ steps.tag.conclusion != 'skipped' }}
-    #   run: ./build/docker-tag.sh ${{ env.DOCKER_DOCUMENTATION }}:latest ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}
-
-    # - name: Push version documentation docker image.
-    #   if: ${{ steps.tag.conclusion != 'skipped' }}
-    #   run: ./build/docker-push.sh ${{ env.DOCKER_DOCUMENTATION }}:${{ steps.tag.outputs.VERSION }}

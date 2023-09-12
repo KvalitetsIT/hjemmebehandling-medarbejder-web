@@ -1,0 +1,13 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+    <defs>
+        <style>.cls-1,.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-2{stroke-linecap:round;}</style>
+    </defs>
+    <rect class="cls-1" x="5.18" y="9.2" width="2.12" height="2.26" rx="0.7" />
+    <line class="cls-2" x1="9.53" y1="10.33" x2="19.82" y2="10.33" />
+    <rect class="cls-1" x="5.18" y="13.54" width="2.12" height="2.26" rx="0.7" />
+    <line class="cls-2" x1="9.53" y1="14.67" x2="19.82" y2="14.67" />
+    <line class="cls-2" x1="9.53" y1="19" x2="19.82" y2="19" />
+    <rect class="cls-1" x="5.18" y="17.87" width="2.12" height="2.26" rx="0.7" />
+    <rect class="cls-1" x="5.18" y="4.87" width="2.12" height="2.26" rx="0.7" />
+    <line class="cls-2" x1="9.53" y1="6" x2="19.82" y2="6" />
+</svg>

@@ -1,0 +1,172 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.MuiPaper-root.MuiDialog-paper {
+  border-radius: 20px;
+}
+
+/* answer table */
+.answer__header {
+  padding-bottom: 20px;
+}
+
+.answer__header-color.error {
+  border: solid 2px #BF2222;
+  background-color: #FAD8D7;
+}
+
+.answer__header-color.warning {
+  border: dashed 2px #C37300;
+  background-color: #FFEFD0;
+}
+
+.answer__header-color.success {
+  background-color: #D0EFDC;
+}
+
+/*=========== Typography ===========*/
+
+/* answer table */
+.MuiTypography-root.answer__headline {
+  color: #4a4848;
+  font-weight: bold;
+}
+
+.MuiTypography-root.answer__date {
+  color: #4a4848;
+}
+
+/* User context card */
+.MuiTypography-root.user__context-name {
+  font-weight: bold;
+}
+
+.MuiTypography-root.user__context-role {
+  color: #999;
+}
+
+/* Thumbnail */
+.MuiTypography-root.thumbnail__headline {
+  font-weight: bold;
+} 
+
+.MuiTypography-root.thumbnail__subheader {
+  margin-top: -3px;
+}
+
+.MuiTypography-root.thumbnail__text {
+  margin-top: 10px;
+}
+
+/* Accordion */
+.MuiTypography-root.accordion__headline {
+  font-weight: bold;
+}
+
+/* Selected */
+.MuiTab-root.MuiTab-textColorPrimary, .MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
+  color: #4a4848;
+  /*padding: 0; */
+  min-height: initial;
+  text-transform: inherit;
+}
+
+
+.MuiTab-root.MuiTab-textColorPrimary.Mui-selected {
+  font-weight: bold;
+}
+
+
+/*=========== Buttons ===========*/
+.MuiButton-root.MuiButton-containedPrimary {
+  background-color: #5D74AC;
+  box-sizing: border-box;
+}
+
+.MuiButton-root.MuiButton-containedPrimary:hover {
+  background-color: #5D74AC;
+  opacity: 0.8;
+}
+
+.MuiButton-root.draft-button {
+  border:#5D74AC solid 2px;
+  color: #5D74AC;
+  box-sizing: border-box;
+  margin-right: 10px;
+  background-color: transparent;
+}
+.MuiButton-root.draft-button:hover {
+  border:#5D74AC solid 2px;
+  background-color: #5D74AC;
+  color: white;
+}
+.MuiButton-root.draft-button:disabled {
+  border: none;
+}
+
+.MuiButton-root.previous-button {
+  color: #5D74AC;
+  margin-right: 10px;
+  padding: 10px; 
+  box-sizing: border-box;
+}
+.MuiButton-root.previous-button:hover {
+  background-color: #5D74AC;
+  color: white;
+  box-sizing: border-box;
+}
+
+.MuiButton-root.previous-button:hover {
+  color: white;
+  margin-right: 10px;
+}
+
+.MuiButton-root.deactivate-button {
+  box-sizing: border-box;
+}
+
+.MuiButton-root.delete-question {
+  border-color: red;
+}
+/*=========== MuiBox ===========*/
+
+/* Answer table */
+.css-19kzrtu {
+  padding: 0 !important;
+}
+
+.MuiFormControl-root.answer__status {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 30px;
+  width: 190px;
+}
+
+.MuiFormControl-root.answer__status > .MuiInput-root{
+  color: white;
+}
+
+.MuiFormControl-root.answer__status > .MuiInput-root > .MuiSvgIcon-root {
+  color: white;
+}
+
+.MuiFormControl-root.answer__status.green-answer {
+  background-color: #61BD84;
+}
+
+.MuiFormControl-root.answer__status.red-answer {
+  background-color: #EE6969;
+}
+
+.MuiFormControl-root.answer__status.yellow-answer {
+  background-color: #F4B156;
+}
+
+

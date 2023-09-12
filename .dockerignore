@@ -1,5 +1,2 @@
-node_modules
-build
-.dockerignore
-Dockerfile
-Dockerfile.prod
+eact-app/node_modules
+npm-debug.log
