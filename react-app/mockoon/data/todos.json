@@ -1,9 +1,0 @@
-[
-  {{#repeat (queryParam 'limit' '5')}}
-  {
-    "id": {{ faker 'datatype.number' min=0 max=10}},
-    "authorId": {{ faker 'datatype.number' min=0 max=10}},
-    "text": "{{ faker 'lorem.words'}}"
-  }
-  {{/repeat}}
-]

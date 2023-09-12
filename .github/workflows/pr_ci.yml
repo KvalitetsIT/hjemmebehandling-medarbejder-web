@@ -11,8 +11,13 @@ jobs:
 # Set docker image names.
     - name: Setup env variables
       run: |
+<<<<<<< HEAD
         echo "DOCKER_SERVICE=kvalitetsit/kittyact" >> $GITHUB_ENV
         echo "DOCKER_DOCUMENTATION=kvalitetsit/kittyact-documentation" >> $GITHUB_ENV
+=======
+        echo "DOCKER_SERVICE=kvalitetsit/hjemmebehandling-medarbejder-web" >> $GITHUB_ENV
+        echo "DOCKER_DOCUMENTATION=kvalitetsit/hjemmebehandling-medarbejder-web-documentation" >> $GITHUB_ENV
+>>>>>>> 47fa5c009642b9ad82d46380bc3b75acd41bb8ab
 # Checkout source code
     - uses: actions/checkout@v2
 

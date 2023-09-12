@@ -1,0 +1,72 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 13
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "jsdoc"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "services/interfaces/*.tsx",
+                "apis/interfaces/*.tsx"
+            ],
+            "rules": {
+                "jsdoc/require-jsdoc": [
+                    "error",
+                    {
+                        "contexts": [
+                            "TSInterfaceDeclaration",
+                            "TSTypeAliasDeclaration",
+                            "TSPropertySignature",
+                            "TSEnumDeclaration",
+                            "TSMethodSignature",
+                            "TSMethodDefinition",
+                            "TSArrowFunctionExpression",
+                            "TSValueDeclaration"
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "settings": {
+        "jsdoc": {
+            "mode": "typescript"
+        }
+    },
+    "rules": {
+        "@typescript-eslint/no-var-requires": "error",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-extra-semi": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/explicit-module-boundary-types": [
+            "error"
+        ],
+        "@typescript-eslint/no-unused-vars": [
+            "error"
+        ],
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "extendDefaults": true,
+                "types": {
+                    "{}": false
+                }
+            }
+        ]
+    }
+}
