@@ -28,12 +28,13 @@ RUN rm /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
 RUN mkdir -p /var/cache/nginx/
 RUN chmod 777 /var/cache/nginx/
 
+EXPOSE 80
+
 # Run envsubst to substitute environment variables in nginx.conf and save it to a temporary file
 # Run our startup script
 CMD /runtime-js-env -i usr/share/nginx/html/index.html && \
     chmod 777 /usr/share/nginx/html/index.html &&\
     envsubst  '$REACT_APP_BFF_BASE_URL' < /usr/share/nginx/nginx.conf > /tmp/nginx.conf &&\
-    mv /tmp/nginx.conf /usr/share/nginx/nginx.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+    mv /tmp/nginx.conf /usr/share/nginx/nginx.conf &&\
+    cp -R /usr/share/nginx/* /etc/nginx/ &&\
+    nginx -g "daemon off;"
