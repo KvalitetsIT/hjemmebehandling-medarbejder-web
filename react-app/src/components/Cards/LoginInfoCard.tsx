@@ -61,7 +61,6 @@ export class LoginInfoCard extends Component<Props, {}> {
                                     Brugernavn
                                 </Typography>
                                 <Typography fontWeight="bold">
-                                    {/* Nedenstående resulterer i fejl */}
                                     <IsEmptyCard jsxWhenEmpty="Intet brugernavn" object={patient.username} >
                                         {patient.username}
                                     </IsEmptyCard> 

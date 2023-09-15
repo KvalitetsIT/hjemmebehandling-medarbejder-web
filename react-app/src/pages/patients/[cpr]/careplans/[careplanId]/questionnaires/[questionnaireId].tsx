@@ -27,7 +27,7 @@ interface Props {
 export default class QuestionnaireResponseDetails extends React.Component<Props, State> {
 
   static contextType = ApiContext
-   
+
 
   careplanService!: ICareplanService
   questionnaireService!: IQuestionnaireService;
@@ -35,7 +35,7 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
 
   constructor(props: Props) {
     super(props);
-     
+
     this.state = {
       loading: true,
       careplans: [],
@@ -50,9 +50,9 @@ export default class QuestionnaireResponseDetails extends React.Component<Props,
   }
 
   InitializeServices(): void {
-const api = this.context as IApiContext
-    this.careplanService =   api.careplanService;
-    this.questionnaireService =   api.questionnaireService;
+    const api = this.context as IApiContext
+    this.careplanService = api.careplanService;
+    this.questionnaireService = api.questionnaireService;
   }
 
   componentDidMount(): void {

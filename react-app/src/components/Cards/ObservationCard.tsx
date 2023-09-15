@@ -200,7 +200,7 @@ export class ObservationCard extends Component<Props, State> {
 
                     return (
                         <Grid paddingLeft={i % 2 === 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
-                            {/* Nedenstående resulterer i fejl */}
+                           
                             <ResponseViewCard
                                 chartData={chartData}
                                 graph={<LineChart renderChart={(options, data, plugins) => <Line style={{ minHeight: "400px", maxHeight: "600px" }} plugins={plugins} options={options} data={data as any} />} showThresholds={true} chartData={chartData} />}
