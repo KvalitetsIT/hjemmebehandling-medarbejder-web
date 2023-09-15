@@ -18,7 +18,7 @@ export class Topbar extends Component<{}, State> {
     return (
       <>
         <Box sx={{ display: 'flex' }} pb={3}>
-          <Box sx={{flex: '0 1 270px'}}>
+          <Box sx={{flex: '0 1 270px', paddingRight:1}}>
             <ErrorBoundary>
               <SearchPatientInput />
             </ErrorBoundary>
