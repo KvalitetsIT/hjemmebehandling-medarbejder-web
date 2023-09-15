@@ -120,6 +120,7 @@ class PatientCareplans extends React.Component<Props, State> {
                   </> :
                   <div>Noget gik galt - Ingen aktiv monitoreringsplan, eller så var ingen patient tilknyttet</div>
                 }
+                <CareplanSummary careplan={activeCareplan}></CareplanSummary>
               </Stack>
             </ErrorBoundary>
           </Grid>
