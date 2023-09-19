@@ -27,7 +27,6 @@ class QuestionnaireOverviewPage extends React.Component<{}, State> {
             loading: true,
             questionnaires: []
         }
-
     }
 
     render(): JSX.Element {

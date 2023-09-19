@@ -241,13 +241,12 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+    async TerminateCareplan(careplan: PatientCareplan): Promise<void> {
         try {
             const request = {
                 id: careplan.id!
             }
-            await this.careplanApi.completeCarePlan(request)
-            return careplan;
+            return await this.careplanApi.completeCarePlan(request)
         } catch (error: unknown) {
             return await this.HandleError(error)
         }
@@ -289,8 +288,6 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
     async AddQuestionnaireToCareplan(careplan: PatientCareplan, questionnaireToAdd: Questionnaire): Promise<PatientCareplan> {
         try {
-            console.log(careplan);
-            console.log(questionnaireToAdd);
             throw new NotImplementedError();
         } catch (error: unknown) {
             return await this.HandleError(error)

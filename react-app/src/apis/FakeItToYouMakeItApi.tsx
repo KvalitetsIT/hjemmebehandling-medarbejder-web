@@ -470,10 +470,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         return responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
     }
 
-    async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
-        return new PatientCareplan()
+    async TerminateCareplan(_careplan: PatientCareplan): Promise<void> {
     }
-    async SetQuestionnaire(questionnaireEdit: Questionnaire): Promise<void> {
+    async SetQuestionnaire(_questionnaireEdit: Questionnaire): Promise<void> {
     }
 
     async EditPatient(patient: PatientDetail): Promise<PatientDetail> {

@@ -31,9 +31,9 @@ export default class CareplanService extends BaseService implements ICareplanSer
     }
   }
 
-  async TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
+  async TerminateCareplan(careplan: PatientCareplan): Promise<void> {
     try {
-      return await this.backendApi.TerminateCareplan(careplan);
+      await this.backendApi.TerminateCareplan(careplan);
     } catch (error : unknown) {
       return this.HandleError(error);
     }

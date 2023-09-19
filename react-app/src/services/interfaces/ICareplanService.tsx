@@ -53,7 +53,7 @@ export interface ICareplanService {
      * @param careplan the careplan to complete
      * @returns the careplan that has been terminated
      */
-    TerminateCareplan: (careplan: PatientCareplan) => Promise<PatientCareplan>;
+    TerminateCareplan: (careplan: PatientCareplan) => Promise<void>;
 
 
     /**

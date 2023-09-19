@@ -119,7 +119,7 @@ export interface IBackendApi {
      * Is used to terminate a careplan
      * @param careplan careplan to terminate
      */
-    TerminateCareplan(careplan: PatientCareplan): Promise<PatientCareplan>;
+    TerminateCareplan(careplan: PatientCareplan): Promise<void>;
 
     /**
      * Update status on QuestionnaireResponse.
