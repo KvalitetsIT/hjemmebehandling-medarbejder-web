@@ -1,7 +1,7 @@
 import React, { Component, CSSProperties } from 'react';
 import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
+import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import ApiContext, { IApiContext } from '../pages/_context';
 import { IPatientService } from '../services/interfaces/IPatientService';
 import { LoadingBackdropComponent } from './Layout/LoadingBackdropComponent';
@@ -24,6 +24,7 @@ import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmeb
 import { MissingContactDetailsError } from './Errors/MissingContactDetailsError';
 import { AccordianWrapper } from './Cards/PlanDefinition/AccordianWrapper';
 import { ConfirmationButton } from './Input/ConfirmationButton';
+import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
 
 /**
  * 
@@ -160,7 +161,7 @@ export default class CreatePatient extends Component<Props, State> {
                   <Typography>
                     <ContactEditCard
                       onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
-                      initialContact={this.state.patient.contact} />
+                      initialContact={this.state.patient.primaryContact} />
                   </Typography>
                 </AccordianWrapper>
               </ErrorBoundary>
@@ -276,11 +277,13 @@ export default class CreatePatient extends Component<Props, State> {
 
 
   createNewEmptyCareplan(): PatientCareplan {
-    const relativeContact = new Contact();
+    const relativeContact = new PrimaryContact();
     const newPatient = new PatientDetail();
-    newPatient.address = new Address();
-
-    newPatient.contact = relativeContact
+    const contactDetails = new ContactDetails();
+    
+    contactDetails.address = new Address();
+    newPatient.primaryContact = relativeContact
+    newPatient.contact = contactDetails
 
     const newCareplan = new PatientCareplan();
     newCareplan.patient = newPatient;
@@ -393,7 +396,7 @@ export default class CreatePatient extends Component<Props, State> {
 
   validateMissingPhoneNumber(errors: InvalidInputModel[]): void {
 
-    const patientPrimary = this.state.patient?.primaryPhone ?? "";
+    const patientPrimary = (this.state.patient?.contact && this.state.patient?.contact.primaryPhone) ?? "";
     const contactPrimary = this.state.patient?.contact?.primaryPhone ?? ""
 
     if (patientPrimary === "" && contactPrimary === "") {

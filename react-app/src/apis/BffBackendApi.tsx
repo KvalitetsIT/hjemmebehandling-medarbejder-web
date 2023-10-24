@@ -331,12 +331,12 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                             frequency: this.toExternal.mapFrequency(q.frequency!)
                         }
                     }),
-                    patientPrimaryPhone: careplan?.patient?.primaryPhone,
-                    patientSecondaryPhone: careplan?.patient?.secondaryPhone,
-                    primaryRelativeName: careplan?.patient?.contact?.fullname,
-                    primaryRelativeAffiliation: careplan?.patient?.contact?.affiliation,
-                    primaryRelativePrimaryPhone: careplan?.patient?.contact?.primaryPhone,
-                    primaryRelativeSecondaryPhone: careplan?.patient?.contact?.secondaryPhone,
+                    patientPrimaryPhone: careplan?.patient?.contact?.primaryPhone,
+                    patientSecondaryPhone: careplan?.patient?.contact?.secondaryPhone,
+                    primaryRelativeName: careplan?.patient?.primaryContact?.fullname,
+                    primaryRelativeAffiliation: careplan?.patient?.primaryContact?.affiliation,
+                    primaryRelativePrimaryPhone: careplan?.patient?.primaryContact?.contact?.primaryPhone,
+                    primaryRelativeSecondaryPhone: careplan?.patient?.primaryContact?.contact?.secondaryPhone,
                 }
             }
 

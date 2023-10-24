@@ -1,5 +1,5 @@
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
@@ -13,6 +13,7 @@ import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/Thresh
 import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
+import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 
 /**
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
@@ -216,8 +217,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
     }
 
-    mapContactDetails(contactDetails: Contact): ContactDetailsDto {
-
+    mapContactDetails(contactDetails: ContactDetails): ContactDetailsDto {
         return {
             primaryPhone: contactDetails.primaryPhone,
             secondaryPhone: contactDetails.secondaryPhone,
@@ -273,11 +273,11 @@ export default class InternalToExternalMapper extends BaseMapper {
 
     mapPatient(patient: PatientDetail): PatientDto {
         const contactDetails: ContactDetailsDto = {}
-        contactDetails.street = patient.address?.street
-        contactDetails.postalCode = patient.address?.zipCode
-        contactDetails.city = patient.address?.city
-        contactDetails.primaryPhone = patient.primaryPhone
-        contactDetails.secondaryPhone = patient.secondaryPhone
+        contactDetails.street = patient.contact && patient.contact.address?.street
+        contactDetails.postalCode = patient.contact && patient.contact.address?.zipCode
+        contactDetails.city = patient.contact && patient.contact.address?.city
+        contactDetails.primaryPhone = patient.contact && patient.contact.primaryPhone
+        contactDetails.secondaryPhone = patient.contact && patient.contact.secondaryPhone
 
         let primaryRelativeContactDetails: ContactDetailsDto = {}
         if (patient.contact) {
@@ -292,8 +292,8 @@ export default class InternalToExternalMapper extends BaseMapper {
             familyName: patient.lastname,
             cpr: patient.cpr,
             patientContactDetails: contactDetails,
-            primaryRelativeName: patient?.contact?.fullname,
-            primaryRelativeAffiliation: patient?.contact?.affiliation,
+            primaryRelativeName: patient?.primaryContact?.fullname,
+            primaryRelativeAffiliation: patient?.primaryContact?.affiliation,
             primaryRelativeContactDetails: primaryRelativeContactDetails
         }
     }

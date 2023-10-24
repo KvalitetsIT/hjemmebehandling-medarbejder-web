@@ -2,7 +2,7 @@
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
 import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
@@ -22,6 +22,7 @@ import { AnswerDto, AnswerDtoAnswerTypeEnum, CarePlanDto, ContactDetailsDto, Ena
 import { MeasurementTypeDto } from "../../generated/models/MeasurementTypeDto";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
+import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 
 
 /**
@@ -432,6 +433,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
+    
     mapPatientDto(patientDto: PatientDto): PatientDetail {
         let address: Address = {}
         if (patientDto.patientContactDetails) {
@@ -439,34 +441,42 @@ export default class ExternalToInternalMapper extends BaseMapper {
         }
 
 
-        const contactDetails = this.buildContactDetails(patientDto)
+        const primaryContact = this.buildPrimaryContact(patientDto)
 
         const toReturn = new PatientDetail();
         toReturn.firstname = patientDto.givenName;
         toReturn.lastname = patientDto.familyName;
         toReturn.cpr = patientDto.cpr;
-        toReturn.primaryPhone = patientDto.patientContactDetails?.primaryPhone
-        toReturn.secondaryPhone = patientDto.patientContactDetails?.secondaryPhone
-        toReturn.address = address
-        toReturn.contact = contactDetails
+        
+        if( !toReturn.contact ) toReturn.contact = new ContactDetails()
+
+        toReturn.contact.primaryPhone = patientDto.patientContactDetails?.primaryPhone
+        toReturn.contact.secondaryPhone = patientDto.patientContactDetails?.secondaryPhone
+        toReturn.contact.address = address
+    
+        toReturn.primaryContact = primaryContact
         toReturn.username = patientDto.customUserName
         return toReturn;
     }
 
-    buildContactDetails(patientDto: PatientDto): Contact {
-        const toReturn = new Contact();
+    buildPrimaryContact(patientDto: PatientDto): PrimaryContact {
+        const toReturn = new PrimaryContact();
 
         toReturn.fullname = patientDto?.primaryRelativeName ?? ''
         toReturn.affiliation = patientDto?.primaryRelativeAffiliation ?? ''
-        toReturn.primaryPhone = patientDto?.primaryRelativeContactDetails?.primaryPhone ?? ''
-        toReturn.secondaryPhone = patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
+        
+        let contactDetails = new ContactDetails()
+        contactDetails.primaryPhone = patientDto?.primaryRelativeContactDetails?.primaryPhone ?? ''
+        contactDetails.secondaryPhone = patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
+        toReturn.contact = contactDetails
+        
         return toReturn;
 
     }
 
+
     buildAddress(contactDetails: ContactDetailsDto): Address {
         const address = new Address();
-
         address.city = contactDetails?.city;
         address.country = contactDetails?.country;
         address.zipCode = contactDetails?.postalCode;

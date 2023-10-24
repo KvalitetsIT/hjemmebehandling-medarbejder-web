@@ -3,21 +3,23 @@ import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
-import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
+
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { IValidationService } from '../../services/interfaces/IValidationService';
 import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
 import { PhonenumberInput } from '../Input/PhonenumberInput';
+import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
+import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 
 export interface Props {
-  initialContact?: Contact
+  initialContact?: PrimaryContact
   onValidation?: (error: InvalidInputModel[]) => void
 }
 
 export interface State {
   loading: boolean;
-  contact: Contact
+  primaryContact: PrimaryContact
 }
 
 export class ContactEditCard extends Component<Props, State> {
@@ -32,7 +34,7 @@ export class ContactEditCard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
      
-    this.state = { loading: true, contact: props.initialContact ?? new Contact() }
+    this.state = { loading: true, primaryContact: props.initialContact ?? new PrimaryContact() }
     this.modifyPatient = this.modifyPatient.bind(this);
   }
 
@@ -52,10 +54,10 @@ export class ContactEditCard extends Component<Props, State> {
     this.collectionHelper = api.collectionHelper
   }
 
-  modifyPatient(patientModifier: (contact: Contact, newValue: string) => Contact, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+  modifyPatient(patientModifier: (contact: PrimaryContact, newValue: string) => PrimaryContact, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     const valueFromInput = input.currentTarget.value;
-    const modifiedPatient = patientModifier(this.state.contact, valueFromInput);
-    this.setState({ contact: modifiedPatient })
+    const modifiedPatient = patientModifier(this.state.primaryContact, valueFromInput);
+    this.setState({ primaryContact: modifiedPatient })
   }
 
   errorArray: Map<string, InvalidInputModel[]> = new Map<string, InvalidInputModel[]>();
@@ -87,7 +89,7 @@ export class ContactEditCard extends Component<Props, State> {
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={'contact_' + inputId++}
                 label="Navn"
-                value={this.state.contact.fullname}
+                value={this.state.primaryContact.fullname}
                 onChange={input => this.modifyPatient(this.setRelativeContactsName, input)}
                 variant="outlined" />
               <TextFieldValidation
@@ -95,7 +97,7 @@ export class ContactEditCard extends Component<Props, State> {
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={'contact_' + inputId++}
                 label="Relation"
-                value={this.state.contact.affiliation}
+                value={this.state.primaryContact.affiliation}
                 onChange={input => this.modifyPatient(this.setRelativeContactsAffiliation, input)}
                 variant="outlined" />
 
@@ -107,14 +109,14 @@ export class ContactEditCard extends Component<Props, State> {
                 id="contactPrimaryPhone"
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={'contact_' + inputId++}
-                label="Primært telefonnummer" value={this.state.contact.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
+                label="Primært telefonnummer" value={this.state.primaryContact.contact?.primaryPhone} onChange={input => this.modifyPatient(this.setRelativeContactsPrimaryPhonenumber, input)}
                 variant="outlined" />
               <PhonenumberInput
                 sectionName={ContactEditCard.sectionName}
                 onValidation={(uid, errors) => this.onValidation(uid, errors)}
                 uniqueId={'contact_' + inputId++}
                 label="Sekundært telefonnummer"
-                value={this.state.contact.secondaryPhone}
+                value={this.state.primaryContact.contact?.secondaryPhone}
                 onChange={input => this.modifyPatient(this.setRelativeContactsSecondaryPhonenumber, input)}
                 variant="outlined" />
             </Stack>
@@ -124,26 +126,28 @@ export class ContactEditCard extends Component<Props, State> {
     )
   }
 
-  setRelativeContactsName(oldPatient: Contact, newValue: string): Contact {
+  setRelativeContactsName(oldPatient: PrimaryContact, newValue: string): PrimaryContact {
     const modifiedPatient = oldPatient;
     modifiedPatient.fullname = newValue;
     return modifiedPatient;
   }
 
-  setRelativeContactsAffiliation(oldPatient: Contact, newValue: string): Contact {
+  setRelativeContactsAffiliation(oldPatient: PrimaryContact, newValue: string): PrimaryContact {
     const modifiedPatient = oldPatient;
     modifiedPatient.affiliation = newValue;
     return modifiedPatient;
   }
 
-  setRelativeContactsPrimaryPhonenumber(oldPatient: Contact, newValue: string): Contact {
+  setRelativeContactsPrimaryPhonenumber(oldPatient: PrimaryContact, newValue: string): PrimaryContact {
     const modifiedPatient = oldPatient;
-    modifiedPatient.primaryPhone = newValue;
+    if(!modifiedPatient.contact) modifiedPatient.contact = new ContactDetails()
+    modifiedPatient.contact.primaryPhone = newValue;
     return modifiedPatient;
   }
-  setRelativeContactsSecondaryPhonenumber(oldPatient: Contact, newValue: string): Contact {
+  setRelativeContactsSecondaryPhonenumber(oldPatient: PrimaryContact, newValue: string): PrimaryContact {
     const modifiedPatient = oldPatient;
-    modifiedPatient.secondaryPhone = newValue;
+    if(!modifiedPatient.contact) modifiedPatient.contact = new ContactDetails()
+    modifiedPatient.contact.secondaryPhone = newValue;
     return modifiedPatient;
   }
 

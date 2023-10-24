@@ -3,7 +3,7 @@
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
 import { Answer, BooleanAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Contact } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
 import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
 import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
@@ -30,6 +30,7 @@ import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/Measuremen
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
+import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -95,21 +96,30 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
         this.patient1.username = "JENPET" //Username is 6 chars
-        this.patient1.primaryPhone = "+4529483749"
-        this.patient1.secondaryPhone = "29483749"
+        
+        
         const address = new Address();
         address.city = "Aarhus C"
         address.country = "Danmark"
         address.street = "Fiskergade 66"
         address.zipCode = "8000"
-        this.patient1.address = address;
+        
+        
+        const contactDetails = new ContactDetails()
+        contactDetails.address = address;
+        contactDetails.primaryPhone = "+4529483749"
+        contactDetails.secondaryPhone = "29483749"
+        
+        this.patient1.contact = contactDetails
 
-        const relativeContact = new Contact();
-        relativeContact.fullname = "Johanne Petersen"
-        relativeContact.affiliation = "Kone"
-        relativeContact.primaryPhone = "27384910"
-        relativeContact.secondaryPhone = "2222222"
-        this.patient1.contact = relativeContact;
+        const primaryContact = new PrimaryContact();
+        primaryContact.fullname = "Johanne Petersen"
+        primaryContact.affiliation = "Kone"
+
+        primaryContact.contact = new ContactDetails()
+        primaryContact.contact.primaryPhone = "27384910"
+        primaryContact.contact.secondaryPhone = "2222222"
+        this.patient1.primaryContact = primaryContact;
 
         this.person1.cpr = "2512489996"
         this.person1.givenName = "Nancy Ann"
