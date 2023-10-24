@@ -43,3 +43,5 @@ generated
 
 # test results
 test-results/
+
+react-app/build
