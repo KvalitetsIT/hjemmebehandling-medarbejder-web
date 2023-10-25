@@ -2,12 +2,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Contact } from '@kvalitetsit/hjemmebehandling/Models/Contact';
+import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
 import { Component } from 'react';
 import { Divider, Typography } from '@mui/material';
 
 export interface Props {
-    contact : Contact;
+    contact : PrimaryContact;
     iconTopLeftColor? : string;
     iconTopLeft? : JSX.Element;
     
@@ -35,7 +35,7 @@ export class ContactCard extends Component<React.PropsWithChildren<Props>,{}> {
               <br/>
               
               <Typography>
-                {contact.primaryPhone} {contact.secondaryPhone ? "("+contact.secondaryPhone+")" : ""}
+                {contact.contact?.primaryPhone} {contact.contact?.secondaryPhone ? "("+contact.contact?.secondaryPhone+")" : ""}
               </Typography>
             </CardContent>
         </Card>

@@ -41,7 +41,7 @@ export class PatientCard extends Component<Props, State> {
   }
 
   renderCard(): JSX.Element {
-    const contact = this.props.patient.contact
+    const primaryContact = this.props.patient.primaryContact
     return (
       <Card>
 
@@ -55,8 +55,8 @@ export class PatientCard extends Component<Props, State> {
                 {this.props.patient.cprToString()}
               </Typography>
               <Typography variant="subtitle2">
-                {this.props.patient.primaryPhonenumberToString()}<br />
-                {this.props.patient.secondaryPhone ? "(" + this.props.patient.secondaryPhonenumberToString() + ")" : ""}
+                {this.props.patient.contact?.primaryPhonenumberToString()}<br />
+                {this.props.patient.contact?.secondaryPhone ? "(" + this.props.patient.contact?.secondaryPhonenumberToString() + ")" : ""}
               </Typography>
             </>
           }
@@ -83,24 +83,24 @@ export class PatientCard extends Component<Props, State> {
               <Typography fontWeight="bold" variant="subtitle2">
                 Adresse
               </Typography>
-              <IsEmptyCard object={this.props.patient.address?.street} jsxWhenEmpty="Ingen adresse">
+              <IsEmptyCard object={this.props.patient.contact?.address?.street} jsxWhenEmpty="Ingen adresse">
 
                 <Typography variant="subtitle2">
-                  {this.props.patient.address?.street}<br />
-                  {this.props.patient.address?.zipCode}, {this.props.patient.address?.city}<br />
-                  {this.props.patient.address?.country}
+                  {this.props.patient.contact?.address?.street}<br />
+                  {this.props.patient.contact?.address?.zipCode}, {this.props.patient.contact?.address?.city}<br />
+                  {this.props.patient.contact?.address?.country}
                 </Typography>
 
                 <br />
               </IsEmptyCard>
-              <IsEmptyCard useRawJsxWhenEmpty={true} object={contact?.fullname === "" ? undefined : contact?.fullname} jsxWhenEmpty="">
+              <IsEmptyCard useRawJsxWhenEmpty={true} object={primaryContact?.fullname === "" ? undefined : primaryContact?.fullname} jsxWhenEmpty="">
                 <Typography fontWeight="bold" variant="subtitle2">
                   Primær kontakt
                 </Typography>
                 <Typography variant="subtitle2">
-                  {contact?.fullname} {contact?.affiliation ? "(" + contact.affiliation + ")" : ""}
+                  {primaryContact?.fullname} {primaryContact?.affiliation ? "(" + primaryContact.affiliation + ")" : ""}
                   <br />
-                  {contact?.primaryPhonenumberToString()} <br />{contact?.secondaryPhone ? "(" + contact.secondaryPhonenumberToString() + ")" : ""}<br />
+                  {primaryContact?.contact?.primaryPhonenumberToString()} <br />{primaryContact?.contact?.secondaryPhone ? "(" + primaryContact.contact?.secondaryPhonenumberToString() + ")" : ""}<br />
                 </Typography>
               </IsEmptyCard>
             </Grid>

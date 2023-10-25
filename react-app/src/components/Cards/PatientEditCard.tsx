@@ -18,6 +18,7 @@ import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { PhonenumberInput } from '../Input/PhonenumberInput';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import { PatientIsAlreadyActivePatientError } from '../Errors/PatientIsAlreadyActivePatientError';
+import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 
 export interface Props {
   initialPatient: PatientDetail
@@ -106,11 +107,11 @@ const api = this.context as IApiContext
 
       p.firstname = newPerson.givenName;
       p.lastname = newPerson.familyName;
-
-      p.address = new Address();
-      p.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
-      p.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
-      p.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
+      p.contact = new ContactDetails();
+      p.contact.address = new Address();
+      p.contact.address.city = newPerson.patientContactDetails?.city ? newPerson.patientContactDetails.city : "";
+      p.contact.address.zipCode = newPerson.patientContactDetails?.postalCode ? newPerson.patientContactDetails.postalCode : "";
+      p.contact.address.street = newPerson.patientContactDetails?.street ? newPerson.patientContactDetails.street : "";
       p.cpr = newPerson.cpr;
 
       this.setState({ patient: p });
@@ -134,13 +135,13 @@ const api = this.context as IApiContext
 
   clearPersonFields(): void {
     const p = this.state.patient;
-
+    p.contact = new ContactDetails();
     p.firstname = "";
     p.lastname = "";
-    p.address = new Address();
-    p.address.city = "";
-    p.address.zipCode = "";
-    p.address.street = "";
+    p.contact.address = new Address();
+    p.contact.address.city = "";
+    p.contact.address.zipCode = "";
+    p.contact.address.street = "";
 
     this.setState({ patient: p });
   }
@@ -229,16 +230,16 @@ const api = this.context as IApiContext
               </Stack>
               <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 3 }}>
                 <TextFieldValidation
-                  sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="Adresse" value={this.state.patient.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
+                  sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="Adresse" value={this.state.patient.contact?.address?.street} onChange={input => this.modifyPatient(this.setRoad, input)} variant="outlined" />
                 <TextFieldValidation
                   sectionName={PatientEditCard.sectionName} disabled
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={'patient_' + inputId++}
                   label="Postnummer"
-                  value={this.state.patient.address?.zipCode}
+                  value={this.state.patient.contact?.address?.zipCode}
                   onChange={input => this.modifyPatient(this.setZipcode, input)}
                   variant="outlined" />
-                <TextFieldValidation sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="By" value={this.state.patient.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
+                <TextFieldValidation sectionName={PatientEditCard.sectionName} uniqueId={'patient_' + inputId++} disabled label="By" value={this.state.patient.contact?.address?.city} onChange={input => this.modifyPatient(this.setCiy, input)} variant="outlined" />
               </Stack>
               <Typography variant='h6' sx={{ paddingTop: 6 }}>Telefonnummer</Typography>
               <Stack spacing={3} direction="row">
@@ -247,7 +248,7 @@ const api = this.context as IApiContext
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={'patient_' + inputId++}
                   label="Primært telefonnummer"
-                  value={this.state.patient.primaryPhone}
+                  value={this.state.patient.contact?.primaryPhone}
                   onChange={input => this.modifyPatient(this.setPrimaryPhonenumber, input)}
                   variant="outlined"
                 />
@@ -257,7 +258,7 @@ const api = this.context as IApiContext
                   onValidation={(uid, errors) => this.onValidation(uid, errors)}
                   uniqueId={'patient_' + inputId++}
                   label="sekundært telefonnummer"
-                  value={this.state.patient.secondaryPhone}
+                  value={this.state.patient.contact?.secondaryPhone}
                   onChange={input => this.modifyPatient(this.setSecondaryPhonenumber, input)}
                   variant="outlined" />
               </Stack>
@@ -290,30 +291,32 @@ const api = this.context as IApiContext
 
   setRoad(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient!.address!.street = newValue;
+    modifiedPatient!.contact!.address!.street = newValue;
     return modifiedPatient;
   }
   setZipcode(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient!.address!.zipCode = newValue;
+    modifiedPatient!.contact!.address!.zipCode = newValue;
     return modifiedPatient;
   }
 
   setCiy(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient!.address!.city = newValue;
+    modifiedPatient!.contact!.address!.city = newValue;
     return modifiedPatient;
   }
 
   setPrimaryPhonenumber(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.primaryPhone = newValue;
+    if(!modifiedPatient.contact) modifiedPatient.contact = new ContactDetails() 
+    modifiedPatient.contact.primaryPhone = newValue;
     return modifiedPatient;
   }
 
   setSecondaryPhonenumber(oldPatient: PatientDetail, newValue: string): PatientDetail {
     const modifiedPatient = oldPatient;
-    modifiedPatient.secondaryPhone = newValue;
+    if(!modifiedPatient.contact) modifiedPatient.contact = new ContactDetails() 
+    modifiedPatient.contact.secondaryPhone = newValue;
     return modifiedPatient;
   }
 
