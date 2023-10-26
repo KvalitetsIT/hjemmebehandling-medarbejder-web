@@ -217,14 +217,8 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
     }
 
-    mapContactDetails(contactDetails: ContactDetails): ContactDetailsDto {
-        return {
-            primaryPhone: contactDetails.primaryPhone,
-            secondaryPhone: contactDetails.secondaryPhone,
-        }
-
-    }
-
+   
+    
     mapQuestionnaire(questionnaire: Questionnaire): QuestionnaireWrapperDto {
 
         return {
@@ -270,31 +264,26 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
 
     }
+    mapContactDetails(contact: ContactDetails) : ContactDetailsDto{
+        const contactDetails: ContactDetailsDto = {}
+        contactDetails.street = contact.address?.street
+        contactDetails.postalCode = contact.address?.zipCode
+        contactDetails.city = contact.address?.city
+        contactDetails.primaryPhone = contact.primaryPhone
+        contactDetails.secondaryPhone = contact.secondaryPhone
+        return contactDetails
+    }
+
 
     mapPatient(patient: PatientDetail): PatientDto {
-        const contactDetails: ContactDetailsDto = {}
-        contactDetails.street = patient.contact && patient.contact.address?.street
-        contactDetails.postalCode = patient.contact && patient.contact.address?.zipCode
-        contactDetails.city = patient.contact && patient.contact.address?.city
-        contactDetails.primaryPhone = patient.contact && patient.contact.primaryPhone
-        contactDetails.secondaryPhone = patient.contact && patient.contact.secondaryPhone
-
-        let primaryRelativeContactDetails: ContactDetailsDto = {}
-        if (patient.contact) {
-            primaryRelativeContactDetails = {
-                primaryPhone: patient?.contact.primaryPhone,
-                secondaryPhone: patient?.contact.secondaryPhone
-            }
-        }
-
         return {
             givenName: patient.firstname,
             familyName: patient.lastname,
             cpr: patient.cpr,
-            patientContactDetails: contactDetails,
+            patientContactDetails: patient.contact && this.mapContactDetails(patient.contact),
             primaryRelativeName: patient?.primaryContact?.fullname,
             primaryRelativeAffiliation: patient?.primaryContact?.affiliation,
-            primaryRelativeContactDetails: primaryRelativeContactDetails
+            primaryRelativeContactDetails: patient.primaryContact?.contact && this.mapContactDetails(patient.primaryContact?.contact) 
         }
     }
 }
