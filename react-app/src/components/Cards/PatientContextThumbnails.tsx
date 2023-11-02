@@ -11,6 +11,7 @@ import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateH
 import { Link } from 'react-router-dom';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
 import { Grid, Typography } from '@mui/material';
+import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
 
 export interface Props {
   currentCareplan: PatientCareplan
@@ -38,6 +39,8 @@ export class PatientContextThumbnails extends Component<Props, {}> {
     const currentCareplan = this.props.currentCareplan;
     const patient = currentCareplan?.patient;
 
+    const primaryContact = patient!.primaryContact as PrimaryContact;
+
     return (
 
       <IsEmptyCard object={currentCareplan} jsxWhenEmpty="Ingen monitoreringsplan">
@@ -54,11 +57,11 @@ export class PatientContextThumbnails extends Component<Props, {}> {
               </Link>
             </Grid>
             <Grid item xs="auto">
-              {patient?.primaryContact?.fullname ?
+              {primaryContact?.fullname ?
                 <Link to={"/patients/" + patient!.cpr + "/careplans/" + currentCareplan.id}>
                   <ThumbnailCard headline="Primær kontakt" boxContent={<LocalPhoneOutlinedIcon fontSize="large" />}>
-                    <Typography className="thumbnail__subheader">{patient!.primaryContact.fullname}</Typography>
-                    <Typography className="thumbnail__text">{patient!.primaryContact.contact?.primaryPhone ? patient!.primaryContact.contact?.primaryPhonenumberToString() : "-"}</Typography>
+                    <Typography className="thumbnail__subheader">{primaryContact .fullname}</Typography>
+                    <Typography className="thumbnail__text">{primaryContact.contact?.primaryPhone ? primaryContact .contact?.primaryPhonenumberToString() : "-"}</Typography>
                   </ThumbnailCard>
                 </Link>
                 : <></>}

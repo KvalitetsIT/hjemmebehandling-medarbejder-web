@@ -14,6 +14,7 @@ import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum,
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 
 /**
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
@@ -276,14 +277,17 @@ export default class InternalToExternalMapper extends BaseMapper {
 
 
     mapPatient(patient: PatientDetail): PatientDto {
+    
+        const primaryContact = patient!.primaryContact as PrimaryContact;
+
         return {
             givenName: patient.firstname,
             familyName: patient.lastname,
             cpr: patient.cpr,
             patientContactDetails: patient.contact && this.mapContactDetails(patient.contact),
-            primaryRelativeName: patient?.primaryContact?.fullname,
-            primaryRelativeAffiliation: patient?.primaryContact?.affiliation,
-            primaryRelativeContactDetails: patient.primaryContact?.contact && this.mapContactDetails(patient.primaryContact?.contact) 
+            primaryRelativeName: primaryContact?.fullname,
+            primaryRelativeAffiliation:primaryContact?.affiliation,
+            primaryRelativeContactDetails:primaryContact?.contact && this.mapContactDetails(primaryContact?.contact) 
         }
     }
 }

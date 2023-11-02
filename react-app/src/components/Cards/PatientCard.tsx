@@ -13,6 +13,7 @@ import ApiContext from '../../pages/_context';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { PencilIcon } from '../Icons/Icons';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
 export interface Props {
   patient: PatientDetail
 
@@ -41,7 +42,7 @@ export class PatientCard extends Component<Props, State> {
   }
 
   renderCard(): JSX.Element {
-    const primaryContact = this.props.patient.primaryContact
+    const primaryContact = this.props.patient.primaryContact as PrimaryContact
     return (
       <Card>
 
