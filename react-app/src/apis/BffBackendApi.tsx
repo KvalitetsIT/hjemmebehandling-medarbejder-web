@@ -26,6 +26,7 @@ import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/Measuremen
 import { ValueSetApi } from "../generated/apis/ValueSetApi";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -321,6 +322,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     async SetCareplan(careplan: PatientCareplan): Promise<PatientCareplan> {
         try {
             const api = this.careplanApi
+
+            const primaryContact = careplan?.patient?.primaryContact as PrimaryContact
+
             const request = {
                 id: careplan.id!,
                 updateCareplanRequest: {
@@ -333,10 +337,10 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     }),
                     patientPrimaryPhone: careplan?.patient?.contact?.primaryPhone,
                     patientSecondaryPhone: careplan?.patient?.contact?.secondaryPhone,
-                    primaryRelativeName: careplan?.patient?.primaryContact?.fullname,
-                    primaryRelativeAffiliation: careplan?.patient?.primaryContact?.affiliation,
-                    primaryRelativePrimaryPhone: careplan?.patient?.primaryContact?.contact?.primaryPhone,
-                    primaryRelativeSecondaryPhone: careplan?.patient?.primaryContact?.contact?.secondaryPhone,
+                    primaryRelativeName: primaryContact?.fullname,
+                    primaryRelativeAffiliation: primaryContact?.affiliation,
+                    primaryRelativePrimaryPhone: primaryContact?.contact?.primaryPhone,
+                    primaryRelativeSecondaryPhone: primaryContact?.contact?.secondaryPhone,
                 }
             }
 
