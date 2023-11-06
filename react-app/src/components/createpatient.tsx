@@ -125,6 +125,9 @@ export default class CreatePatient extends Component<Props, State> {
       />
     )
 
+
+    const primaryContact = this.state.patient.primaryContact as PrimaryContact;
+
     return (
       <>
         {prompt}
@@ -161,7 +164,7 @@ export default class CreatePatient extends Component<Props, State> {
                   <Typography>
                     <ContactEditCard
                       onValidation={(errors) => this.validateMissingPhoneNumber(errors)}
-                      initialContact={this.state.patient.primaryContact} />
+                      initialContact={primaryContact} />
                   </Typography>
                 </AccordianWrapper>
               </ErrorBoundary>

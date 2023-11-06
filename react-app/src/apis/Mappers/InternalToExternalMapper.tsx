@@ -14,6 +14,7 @@ import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum,
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
+import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 
 /**
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)
@@ -217,14 +218,8 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
     }
 
-    mapContactDetails(contactDetails: ContactDetails): ContactDetailsDto {
-        return {
-            primaryPhone: contactDetails.primaryPhone,
-            secondaryPhone: contactDetails.secondaryPhone,
-        }
-
-    }
-
+   
+    
     mapQuestionnaire(questionnaire: Questionnaire): QuestionnaireWrapperDto {
 
         return {
@@ -270,31 +265,29 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
 
     }
+    mapContactDetails(contact: ContactDetails) : ContactDetailsDto{
+        const contactDetails: ContactDetailsDto = {}
+        contactDetails.street = contact.address?.street
+        contactDetails.postalCode = contact.address?.zipCode
+        contactDetails.city = contact.address?.city
+        contactDetails.primaryPhone = contact.primaryPhone
+        contactDetails.secondaryPhone = contact.secondaryPhone
+        return contactDetails
+    }
+
 
     mapPatient(patient: PatientDetail): PatientDto {
-        const contactDetails: ContactDetailsDto = {}
-        contactDetails.street = patient.contact && patient.contact.address?.street
-        contactDetails.postalCode = patient.contact && patient.contact.address?.zipCode
-        contactDetails.city = patient.contact && patient.contact.address?.city
-        contactDetails.primaryPhone = patient.contact && patient.contact.primaryPhone
-        contactDetails.secondaryPhone = patient.contact && patient.contact.secondaryPhone
-
-        let primaryRelativeContactDetails: ContactDetailsDto = {}
-        if (patient.contact) {
-            primaryRelativeContactDetails = {
-                primaryPhone: patient?.contact.primaryPhone,
-                secondaryPhone: patient?.contact.secondaryPhone
-            }
-        }
+    
+        const primaryContact = patient!.primaryContact as PrimaryContact;
 
         return {
             givenName: patient.firstname,
             familyName: patient.lastname,
             cpr: patient.cpr,
-            patientContactDetails: contactDetails,
-            primaryRelativeName: patient?.primaryContact?.fullname,
-            primaryRelativeAffiliation: patient?.primaryContact?.affiliation,
-            primaryRelativeContactDetails: primaryRelativeContactDetails
+            patientContactDetails: patient.contact && this.mapContactDetails(patient.contact),
+            primaryRelativeName: primaryContact?.fullname,
+            primaryRelativeAffiliation:primaryContact?.affiliation,
+            primaryRelativeContactDetails:primaryContact?.contact && this.mapContactDetails(primaryContact?.contact) 
         }
     }
 }
