@@ -38,7 +38,7 @@ export class SearchPatientInput extends Component<{}, State> {
   async searchForPatient(searchString: string): Promise<void> {
     this.setState({ loading: true })
 
-    if (searchString.length < 3) {
+    if (searchString.length < 2) {
       this.setState({ patientResults: [], loading: false });
       return;
     }
