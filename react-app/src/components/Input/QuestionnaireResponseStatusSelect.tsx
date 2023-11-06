@@ -133,9 +133,9 @@ const api = this.context as IApiContext
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>fortryd</Button>
+          <Button className="decline__button" onClick={() => this.CloseVerificationBox()} autoFocus>Fortryd</Button>
           <LoadingButton loading={this.state.changingState} className="accept__button" color="primary" variant="contained" onClick={async () => await this.setStatus(this.state.desiredStatus)} >
-            skift status
+            Skift status
           </LoadingButton>
         </DialogActions>
       </Dialog>
