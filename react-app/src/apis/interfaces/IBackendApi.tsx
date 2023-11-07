@@ -8,6 +8,7 @@ import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/Measuremen
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
 
 /**
  * Containing all methods that should call the actual api
@@ -174,7 +175,7 @@ export interface IBackendApi {
     /**
      * Returns all questionnaireresponses that has reference to, any of the provided questionnaireIds, and careplanId
      */
-    GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<QuestionnaireResponse[]>
+    GetQuestionnaireResponses: (careplanId: string, questionnaireIds: string[], page: number, pagesize: number) => Promise<PaginatedList<QuestionnaireResponse>>
 
     /**
      * Gets one questionnaire based on the given questionnaireId

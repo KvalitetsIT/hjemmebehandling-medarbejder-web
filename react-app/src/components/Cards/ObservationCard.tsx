@@ -85,8 +85,11 @@ export class ObservationCard extends Component<Props, State> {
     async getResponses(): Promise<void> {
         if (this.props.questionnaire) {
             try {
-                const responses = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50) ?? []
-                this.setState({ questionnaireResponses: responses, loading: false })
+                const response = await this.questionnaireService.GetQuestionnaireResponses(this.props.careplan!.id!, [this.props.questionnaire.id], 1, 50) ?? []
+                
+                const {list: questionnaireResponses} = response
+
+                this.setState({ questionnaireResponses: questionnaireResponses, loading: false })
             } catch (error: unknown) {
                 this.setState(() => { throw error })
             }

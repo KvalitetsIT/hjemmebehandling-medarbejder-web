@@ -10,6 +10,7 @@ import { IQuestionnaireService } from "./interfaces/IQuestionnaireService";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+import {PaginatedList} from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
 
 
 
@@ -81,17 +82,24 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
 
-  async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
+  async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<PaginatedList<QuestionnaireResponse>> {
     try {
       this.ValidatePagination(page, pagesize);
-      let toReturn = await this.backendApi.GetQuestionnaireResponses(careplanId, questionnaireIds, page, pagesize);
-      toReturn = toReturn.filter(x => x !== undefined)
-      toReturn.sort((a, b) => {
+      let response = await this.backendApi.GetQuestionnaireResponses(careplanId, questionnaireIds, page, pagesize);
+      
+  
+      let list = response.list.filter(x => x !== undefined)
+      list.sort((a, b) => {
         if (b.answeredTime && a.answeredTime)
           return b.answeredTime.getTime() - a.answeredTime.getTime();
         return -1;
       })
-      return toReturn;
+
+      return {
+        ...response,
+        list: list
+      };
+
     } catch (error: unknown) {
       return this.HandleError(error);
     }

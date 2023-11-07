@@ -31,6 +31,8 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
+import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
+
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
@@ -96,20 +98,20 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.patient1.firstname = "Jens"
         this.patient1.lastname = "Petersen"
         this.patient1.username = "JENPET" //Username is 6 chars
-        
-        
+
+
         const address = new Address();
         address.city = "Aarhus C"
         address.country = "Danmark"
         address.street = "Fiskergade 66"
         address.zipCode = "8000"
-        
-        
+
+
         const contactDetails = new ContactDetails()
         contactDetails.address = address;
         contactDetails.primaryPhone = "+4529483749"
         contactDetails.secondaryPhone = "29483749"
-        
+
         this.patient1.contact = contactDetails
 
         const primaryContact = new PrimaryContact();
@@ -222,7 +224,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateThreshold("1", 120, 135, CategoryEnum.RED),
             this.CreateThreshold("2", 37, 120, CategoryEnum.YELLOW),
             this.CreateThreshold("3", 0, 40, CategoryEnum.GREEN),
-            
+
             //this.CreateThreshold("3", -10, 0, CategoryEnum.YELLOW),
             //this.CreateThreshold("3", -50, -10, CategoryEnum.RED),
         ]
@@ -273,7 +275,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
         const questionAnswerMap1 = new Map<Question, Answer>();
-         questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
+        questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
@@ -383,7 +385,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
     async IsPlanDefinitionInUse(planDefinitionId: string): Promise<boolean> {
         return false;
-    }   
+    }
     async createPlanDefinition(planDefinition: PlanDefinition): Promise<void> {
         this.allPlanDefinitions.push(planDefinition);
     }
@@ -466,7 +468,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.taskRemovedFromMissingOverview.push(task)
     }
 
-    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
+    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<PaginatedList<QuestionnaireResponse>> {
 
         await new Promise(f => setTimeout(f, this.timeToWait));
         const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
@@ -477,7 +479,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             x.status = statusObject?.status ?? x.status
         })
 
-        return responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
+        return {
+            limit: pagesize,
+            offset: page,
+            total: pagesize * page,
+            list: responses.filter(x => questionnaireIds.includes(x.questionnaireId)).slice(start, end)
+        }
     }
 
     async TerminateCareplan(_careplan: PatientCareplan): Promise<void> {
@@ -510,7 +517,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetAllPlanDefinitions(statusesToInclude: (PlanDefinitionStatus | BaseModelStatus)[]): Promise<PlanDefinition[]> {
         try {
             if (statusesToInclude.length > 0)
-                
+
                 return this.allPlanDefinitions.filter(pd => statusesToInclude.includes(pd.status!));
             return this.allPlanDefinitions
         } catch (error: any) {
@@ -649,9 +656,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         await new Promise(f => setTimeout(f, this.timeToWait));
         return (await this.allCareplans.flatMap(x => this.toInternal.buildUnansweredTaskFromCarePlan(this.toExternal.mapCarePlan(x))))
 
-       // if (page === 1)
-       //     return [this.task1, this.task2, this.task3].filter(x => x.category === CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
-      //  return [];
+        // if (page === 1)
+        //     return [this.task1, this.task2, this.task3].filter(x => x.category === CategoryEnum.BLUE).filter(x => !this.taskRemovedFromMissingOverview.includes(x))
+        //  return [];
     }
 
     async GetPatient(cpr: string): Promise<PatientDetail> {
@@ -717,7 +724,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetUnresolvedQuestionnaires(careplanId: string): Promise<string[]> {
-     return [this.questionnaire1.id]
+        return [this.questionnaire1.id]
     }
 
 }

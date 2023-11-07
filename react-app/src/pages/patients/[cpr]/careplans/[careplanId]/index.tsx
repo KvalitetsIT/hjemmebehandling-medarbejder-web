@@ -84,7 +84,7 @@ class PatientCareplans extends React.Component<Props, State> {
         activeCareplanId = careplan.id
         for (const questionnaire of careplans.flatMap(c => c.questionnaires)) {
           const tempRes = await this.questionnaireService.GetQuestionnaireResponses(activeCareplanId, [questionnaire.id], 1, 5)
-          questionnaireResponses.push(...tempRes);
+          questionnaireResponses.push(...tempRes.list);
         }
       }
 

@@ -27,6 +27,7 @@ import { ValueSetApi } from "../generated/apis/ValueSetApi";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
+import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 
@@ -478,18 +479,23 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         }
     }
 
-    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<QuestionnaireResponse[]> {
+    async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], offset: number, limit: number): Promise<PaginatedList<QuestionnaireResponse>> {
         try {
             const api = this.questionnaireResponseApi
             const request = {
                 carePlanId: careplanId,
                 questionnaireIds: questionnaireIds,
-                pageNumber: page,
-                pageSize: pagesize
+                pageNumber: offset,
+                pageSize: limit
             }
-            const questionnaireResponses = await api.getQuestionnaireResponsesByCarePlanId(request)
+            const response = await api.getQuestionnaireResponsesByCarePlanId(request)
 
-            return questionnaireResponses.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr))
+            return {
+                offset: response.offset ?? 0,
+                limit: response.limit ?? 0,
+                total: response.total ?? 0,
+                list:  response.list ? response.list.map(qr => this.toInternal.mapQuestionnaireResponseDto(qr)) : []
+            }
         } catch (error: unknown) {
             return await this.HandleError(error)
         }

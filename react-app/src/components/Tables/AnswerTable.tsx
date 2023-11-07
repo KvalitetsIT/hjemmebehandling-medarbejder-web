@@ -27,18 +27,18 @@ export interface Props {
 export interface State {
     thresholdModalOpen: boolean
     questionnaireResponses: QuestionnaireResponse[]
-    nextQuestionnaireResponses: QuestionnaireResponse[]
     loading: boolean
-    pagesize: number
-    page: number
+    limit: number
+    offset: number
     hidden: boolean
+    total?: number
 }
 
 export class AnswerTable extends Component<Props, State> {
     static displayName = AnswerTable.name;
 
     static contextType = ApiContext
-     
+
 
     questionAnswerService!: IQuestionAnswerService;
     questionnaireService!: IQuestionnaireService;
@@ -46,34 +46,32 @@ export class AnswerTable extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-         
+
         this.state = {
             hidden: true,
             thresholdModalOpen: false,
             questionnaireResponses: [],
-            nextQuestionnaireResponses: [],
             loading: true,
-            pagesize: 5,
-            page: 1
+            limit: 5,
+            offset: 1
         }
     }
 
     render(): JSX.Element {
         this.InitializeServices();
-        const contents = this.renderTableData(this.props.questionnaires);
-        return contents;
+        return this.renderTableData(this.props.questionnaires);
     }
 
     InitializeServices(): void {
-const api = this.context as IApiContext
-        this.questionAnswerService =   api.questionAnswerService;
-        this.questionnaireService =   api.questionnaireService;
-        this.datehelper =   api.dateHelper;
+        const api = this.context as IApiContext
+        this.questionAnswerService = api.questionAnswerService;
+        this.questionnaireService = api.questionnaireService;
+        this.datehelper = api.dateHelper;
     }
 
     async componentDidMount(): Promise<void> {
         try {
-            await this.populateData(this.state.page)
+            await this.populateData(this.state.offset)
         } catch (error: unknown) {
             this.setState(() => { throw error })
         }
@@ -83,36 +81,22 @@ const api = this.context as IApiContext
         const careplan = this.props.careplan;
 
 
-        let questionnaireResponses = null
-        let nextQuestionnaireResponses = null
-
-        const isFirstPage = page === 1
-
-        if (isFirstPage) {
-            questionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.pagesize)
-            nextQuestionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page + 1, this.state.pagesize)
-        } else {
-            questionnaireResponses = this.state.nextQuestionnaireResponses
-            nextQuestionnaireResponses = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page + 1, this.state.pagesize)
-        }
-
-
-        this.setState({ questionnaireResponses: [], nextQuestionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
+        const {list: questionnaireResponses, total} = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.limit)
+    
+        
+        this.setState({ questionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
 
         this.setState({
-            nextQuestionnaireResponses: nextQuestionnaireResponses,
             questionnaireResponses: questionnaireResponses,
-            page: page,
-            loading: false
+            offset: page,
+            loading: false,
+            total: total
         })
     }
 
 
-
-
-
     async NextPage(): Promise<void> {
-        const currenpage = this.state.page;
+        const currenpage = this.state.offset;
         const nextPage = currenpage + 1
         await this.populateData(nextPage)
 
@@ -120,7 +104,7 @@ const api = this.context as IApiContext
     }
 
     async PreviousPage(): Promise<void> {
-        const currenpage = this.state.page;
+        const currenpage = this.state.offset;
         const nextPage = currenpage - 1
         await this.populateData(nextPage)
 
@@ -191,7 +175,7 @@ const api = this.context as IApiContext
             return (<LoadingSmallComponent />)
 
         const questionaireResponses = this.state.questionnaireResponses;
-        if ((!questionaireResponses || questionaireResponses.length === 0) && this.state.page === 1) {
+        if ((!questionaireResponses || questionaireResponses.length === 0) && this.state.offset === 1) {
             return (
                 <>
                     <Typography>Ingen besvarelser for spørgeskema endnu. </Typography>
@@ -200,7 +184,10 @@ const api = this.context as IApiContext
             )
         }
 
-        const hasMorePages: boolean = this.state.nextQuestionnaireResponses.length > 0;
+
+        const {offset, limit, total} = this.state;
+
+        const hasMorePages: boolean = total ? offset * limit < total : false
 
 
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
@@ -210,7 +197,7 @@ const api = this.context as IApiContext
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
-                    <Button sx={{ paddingRight: 2 }} disabled={this.state.page <= 1} onClick={async () => await this.PreviousPage()} startIcon={<NavigateBeforeIcon />}>Nyere</Button>
+                    <Button sx={{ paddingRight: 2 }} disabled={this.state.offset <= 1} onClick={async () => await this.PreviousPage()} startIcon={<NavigateBeforeIcon />}>Nyere</Button>
                     <Button disabled={!hasMorePages} onClick={async () => await this.NextPage()} endIcon={<NavigateNextIcon />}>Ældre</Button>
 
                 </Grid>
@@ -219,7 +206,6 @@ const api = this.context as IApiContext
                         <IsEmptyCard list={this.state.questionnaireResponses} jsxWhenEmpty={"Ikke flere besvarelser"} >
                             <Table aria-label="simple table">
                                 <TableHead>
-
                                     <TableRow className='table__row'>
                                         <TableCell width="10%">
                                         </TableCell>
