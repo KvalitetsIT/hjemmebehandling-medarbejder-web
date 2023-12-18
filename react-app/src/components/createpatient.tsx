@@ -400,7 +400,7 @@ export default class CreatePatient extends Component<Props, State> {
   validateMissingPhoneNumber(errors: InvalidInputModel[]): void {
 
     const patientPrimary = (this.state.patient?.contact && this.state.patient?.contact.primaryPhone) ?? "";
-    const contactPrimary = this.state.patient?.contact?.primaryPhone ?? ""
+    const contactPrimary = (this.state.patient?.primaryContact && (this.state.patient?.primaryContact as PrimaryContact).contact?.primaryPhone) ?? ""
 
     if (patientPrimary === "" && contactPrimary === "") {
       errors.push(new InvalidInputModel("telefonnummer", "Der mangler at blive angivet et primært telefonnummer enten ved patient eller primær kontakt", CriticalLevelEnum.ERROR))
