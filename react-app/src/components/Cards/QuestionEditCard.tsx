@@ -261,7 +261,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                     />
                                 </TableCell>
                             </TableRow>
-                        )
+                        )   
                     })}
                 </Table>
             </TableContainer>

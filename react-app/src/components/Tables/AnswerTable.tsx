@@ -14,8 +14,9 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
 import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { GroupAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
 
 
 
@@ -145,8 +146,11 @@ export class AnswerTable extends Component<Props, State> {
     sortQuestionsForQuestionnaire(allQuestions: Question[], questionnaire: Questionnaire): Question[] {
         const result: Question[] = [];
 
+        console.log("xx", questionnaire.getParentQuestions())
+        //result.push(...allQuestions)
         // tilføj spørgmål der er i det spørgeskemaet sorteres efter den rækkefølge de har her
         questionnaire.getParentQuestions().forEach(element => {
+            console.log("kommer her: 1")
             result.push(element);
             result.push(...questionnaire.getChildQuestions(element.Id));
 
@@ -189,11 +193,13 @@ export class AnswerTable extends Component<Props, State> {
 
         const hasMorePages: boolean = total ? offset * limit < total : false
 
-
+        console.log("11", this.state.questionnaireResponses)
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
         const allQuestions = this.questionnaireService.findAllQuestions(questionnairesResponsesToShow);
+        console.log("22", allQuestions)
         const sortedQuestions = this.sortQuestionsForQuestionnaire(allQuestions, this.props.questionnaires);
         const hasDeprecatedQuestions = allQuestions.filter(question => question.deprecated).length > 0;
+        console.log("33", sortedQuestions, hasDeprecatedQuestions)
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
@@ -313,7 +319,38 @@ export class AnswerTable extends Component<Props, State> {
         const thresholdCollection = this.props.questionnaires.thresholds?.find(x => x.questionId === question.Id);
 
         const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
+        console.log("renderSingleResponse", questionResponse.id, question, answer)
+        const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
+        if (isGroupQuestion) {
+            const groupAnswer = answer as GroupAnswer;
+            return (
+                <TableCell>
+                    <Grid container spacing={2} direction={'row'} alignItems={'center'}>
+                        
+                        {groupAnswer?.subAnswers?.map(sa => {
+                            return (
+                                <>
+                                  <Grid item xs={2} sx={{border:0}}></Grid>
+                                    <Grid item xs={6} sx={{border:0}}>
+                                        <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
+                                            <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={sa ? sa.ToString() : ""} variant="filled" />
+                                        </Tooltip>
+                                    </Grid>
+                                    <Grid item sx={{border:0}}>
+                                        <Typography>{this.getsubQuestionTest(question, sa.questionId)}</Typography>
+                                    </Grid>
+                                    <Grid item />
+                                    
+                                    </>
 
+                            )
+                        })}
+                        
+                    </Grid>
+                </TableCell>
+            )
+        }
+        else {
         return (
             <TableCell>
                 {category === CategoryEnum.BLUE ?
@@ -321,12 +358,21 @@ export class AnswerTable extends Component<Props, State> {
                         <Typography textAlign="center"> {answer ? answer.ToString() : ""}</Typography>
                     </Tooltip> :
 
+                    
                     <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
                         <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={answer ? answer.ToString() : ""} variant="filled" />
                     </Tooltip>
+
+                 
                 }
             </TableCell>
 
         )
+            }
+    }
+
+    getsubQuestionTest(question: Question, subQuestionId: string): string {
+        console.log("GGG", question, subQuestionId)
+        return question.subQuestions?.find(sq => sq.Id === subQuestionId)?.question ?? "";
     }
 }

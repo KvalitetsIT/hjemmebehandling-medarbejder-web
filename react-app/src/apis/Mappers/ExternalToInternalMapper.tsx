@@ -1,6 +1,6 @@
 
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
-import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { Answer, BooleanAnswer, GroupAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
@@ -204,6 +204,10 @@ export default class ExternalToInternalMapper extends BaseMapper {
             case QuestionDtoQuestionTypeEnum.String:
                 question.type = QuestionTypeEnum.STRING;
                 break;
+            case QuestionDtoQuestionTypeEnum.Group:
+                question.type = QuestionTypeEnum.GROUP;
+                question.subQuestions = questionDto.subQuestions?.map(q => this.mapQuestionDto(q))
+                break;
         }
 
         question.question = questionDto.text!
@@ -273,7 +277,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
     mapUserFromExternalToInternal(user: UserContext): User {
         const internalUser = new User();
-        internalUser.autorisationsids = user.autorisationsids;
+        internalUser.autorisationsids = user.authorizationIds;
         internalUser.email = user.email;
         internalUser.entitlements = user.entitlements?.map(e => this.mapSingleEntitlement(e)).filter(e => e !== undefined);
         internalUser.firstName = user.firstName;
@@ -338,27 +342,43 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 return this.mapNumberedAnswer(answerDto);
             case AnswerDtoAnswerTypeEnum.Boolean:
                 return this.mapBooleanAnswer(answerDto);
+            case AnswerDtoAnswerTypeEnum.Group:
+                return this.mapGroupAnswer(answerDto);
             default:
                 return this.mapStringAnswer(answerDto); //Treat as string as default
         }
 
 
     }
+    
+    mapGroupAnswer(answerDto: AnswerDto): GroupAnswer {
+        const toReturn = new GroupAnswer();
+        toReturn.questionId = answerDto.linkId!;
+        toReturn.subAnswers = [];
 
+        answerDto.subAnswers!.map(sa => {
+            toReturn.subAnswers.push(this.mapAnswerDto(sa))
+        })
+
+        return toReturn;
+    }
     mapStringAnswer(answerDto: AnswerDto): StringAnswer {
         const toReturn = new StringAnswer();
+        toReturn.questionId = answerDto.linkId!;
         toReturn.answer = answerDto.value!
         return toReturn;
     }
 
     mapNumberedAnswer(answerDto: AnswerDto): NumberAnswer {
         const toReturn = new NumberAnswer();
+        toReturn.questionId = answerDto.linkId!;
         toReturn.answer = Number.parseFloat(answerDto.value!)
         return toReturn;
     }
 
     mapBooleanAnswer(answerDto: AnswerDto): BooleanAnswer {
         const toReturn = new BooleanAnswer();
+        toReturn.questionId = answerDto.linkId!;
         const answerValue = answerDto.value?.toLowerCase()
 
         const isTrueOrFalse = answerValue === "true" || answerValue === "false"
@@ -426,8 +446,8 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.lastUpdated = questionnaire.lastUpdated;
         questionnaireResult.status = Questionnaire.stringToQuestionnaireStatus(questionnaire?.status)
         questionnaireResult.questions = questionnaire.questions?.map(q => this.mapQuestionDto(q))
-        const callToActions: BaseQuestion[] = questionnaire.callToActions?.map(x => this.mapCallToAction(x)) ?? [];
-        questionnaireResult.questions?.push(...callToActions);
+        //const callToActions: BaseQuestion[] = questionnaire.callToActions?.map(x => this.mapCallToAction(x)) ?? [];
+        questionnaireResult.questions?.push(this.mapCallToAction(questionnaire.callToAction!));
         questionnaireResult.thresholds = questionnaire.questions?.flatMap(question => this.mapThresholdDtos(question.thresholds ?? []))
 
         questionnaireResult.version = questionnaire?.version;

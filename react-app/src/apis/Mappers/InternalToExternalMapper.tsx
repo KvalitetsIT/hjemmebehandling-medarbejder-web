@@ -239,7 +239,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         const questions = questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions())
         return {
             id: questionnaire.id,
-            callToActions: questionnaire.getCallToActions().map(cta => this.mapCallToAction(cta)),
+            callToAction: this.mapCallToAction(questionnaire.getCallToActions()[0]),
             questions: questions.map(question => this.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id))),
             lastUpdated: questionnaire.lastUpdated,
             status: questionnaire.status?.toString(),

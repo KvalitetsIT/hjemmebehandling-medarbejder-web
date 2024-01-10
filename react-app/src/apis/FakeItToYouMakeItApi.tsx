@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
-import { Answer, BooleanAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
+import { Answer, BooleanAnswer, GroupAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
 import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
@@ -68,6 +68,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     question2: Question = new Question();
     question3: Question = new Question();
     question4: Question = new Question();
+    groupQuestion: Question = new Question();
     callToActionQuestion1: Question = new Question();
 
     tc1 = new ThresholdCollection();
@@ -159,6 +160,20 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.question4.enableWhen = q4EnableWhen;
         this.question4.question = "Har du det godt i dag?"
         this.question4.type = QuestionTypeEnum.BOOLEAN;
+
+        this.groupQuestion.Id = "q5";
+        this.groupQuestion.question = "Blodtryk?";
+        this.groupQuestion.type = QuestionTypeEnum.GROUP;
+
+        const sys = new Question();
+        sys.Id = "q5_sys";
+        sys.question = "SYS"
+        sys.type = QuestionTypeEnum.OBSERVATION;
+        const dia = new Question();
+        dia.Id = "q5_dia";
+        dia.question = "DIA"
+        dia.type = QuestionTypeEnum.OBSERVATION;
+        this.groupQuestion.subQuestions = [sys, dia]
 
         this.callToActionQuestion1.abbreviation = "callToAction1";
         this.callToActionQuestion1.type = QuestionTypeEnum.CALLTOACTION;
@@ -279,6 +294,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
         questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
+        questionAnswerMap1.set(this.groupQuestion, this.CreateGroupAnswer(this.groupQuestion));
         this.questionnaireResponse1.questions = questionAnswerMap1;
 
 
@@ -586,6 +602,21 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     private CreateBooleanAnswer(value: boolean) {
         const answer = new BooleanAnswer();
         answer.answer = value;
+        return answer;
+
+    }
+    private CreateGroupAnswer(groupQuestion: Question) {
+        const answer = new GroupAnswer();
+        answer.questionId = groupQuestion.Id!
+        answer.subAnswers = [];
+        groupQuestion.subQuestions?.map((sq, index) => {
+            const sa = this.CreateNumberAnswer(index,UnitType.NOUNIT);
+            sa.questionId = sq.Id!;
+
+            answer.subAnswers.push(sa);
+            
+        })
+        
         return answer;
 
     }
