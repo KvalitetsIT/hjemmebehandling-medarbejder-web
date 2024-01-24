@@ -164,7 +164,7 @@ export class ObservationCard extends Component<Props, State> {
 
                         let minAnswer, maxAnswer;
                         for (const qr of this.state.questionnaireResponses) {
-                            const questionnaireQuestion = Array.from(qr.questions!.keys()).find(x => x.isEqual(question));
+                            const questionnaireQuestion = Array.from(qr.questions!.keys()).find(x => x.Id === question.Id);
                             const answer = qr.questions!.get(questionnaireQuestion!) as NumberAnswer | undefined
 
                             if (answer?.answer !== undefined) {
