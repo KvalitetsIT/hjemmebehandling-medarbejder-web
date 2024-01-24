@@ -44,6 +44,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
 
     measurementType1: MeasurementType = new MeasurementType();
     measurementType2: MeasurementType = new MeasurementType();
+    measurementTypeSystolisk: MeasurementType = new MeasurementType();
+    measurementTypeDiastolisk: MeasurementType = new MeasurementType();
 
     careplan1: PatientCareplan = new PatientCareplan();
     careplan2: PatientCareplan = new PatientCareplan();
@@ -56,7 +58,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     questionnaire1: Questionnaire = new Questionnaire();
     questionnaire2: Questionnaire = new Questionnaire();
     questionnaire3: Questionnaire = new Questionnaire();
-    allQuestionnaires: Questionnaire[] = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
+    questionnaire4: Questionnaire = new Questionnaire();
+    allQuestionnaires: Questionnaire[] = [this.questionnaire1, this.questionnaire2, this.questionnaire3, this.questionnaire4]
 
     //Response1
     questionnaireResponse1: QuestionnaireResponse = new QuestionnaireResponse();
@@ -64,6 +67,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     questionnaireResponse3: QuestionnaireResponse = new QuestionnaireResponse();
     questionnaireResponse4: QuestionnaireResponse = new QuestionnaireResponse();
     questionnaireResponse5: QuestionnaireResponse = new QuestionnaireResponse();
+    questionnaireResponseGroupQuestionnaire: QuestionnaireResponse = new QuestionnaireResponse();
     question1: Question = new Question();
     question2: Question = new Question();
     question3: Question = new Question();
@@ -75,6 +79,8 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     tc2 = new ThresholdCollection();
     tc3 = new ThresholdCollection();
     tc4 = new ThresholdCollection();
+    tc5_sys = new ThresholdCollection();
+    tc5_dia = new ThresholdCollection();
 
     task1: Task = new Task();
     task2: Task = new Task();
@@ -94,6 +100,14 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.measurementType2.displayName = "Temperatur"
         this.measurementType2.code = "Temperatur"
         this.measurementType2.system = "system"
+        this.measurementTypeSystolisk = new MeasurementType();
+        this.measurementTypeSystolisk.displayName = "Systolisk; Arm"
+        this.measurementTypeSystolisk.code = "SYS"
+        this.measurementTypeSystolisk.system = "system"
+        this.measurementTypeDiastolisk = new MeasurementType();
+        this.measurementTypeDiastolisk.displayName = "Diastolisk; Arm"
+        this.measurementTypeDiastolisk.code = "DIA"
+        this.measurementTypeDiastolisk.system = "system"
         //======================================= Patient
         this.patient1.cpr = "1212758392";
         this.patient1.firstname = "Jens"
@@ -169,10 +183,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         sys.Id = "q5_sys";
         sys.question = "SYS"
         sys.type = QuestionTypeEnum.OBSERVATION;
+        sys.measurementType = this.measurementTypeSystolisk;
         const dia = new Question();
         dia.Id = "q5_dia";
         dia.question = "DIA"
         dia.type = QuestionTypeEnum.OBSERVATION;
+        dia.measurementType = this.measurementTypeDiastolisk;
         this.groupQuestion.subQuestions = [sys, dia]
 
         this.callToActionQuestion1.abbreviation = "callToAction1";
@@ -211,12 +227,20 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         frequency3.deadline = '11:00'
         this.questionnaire3.frequency = frequency3;
 
+        this.questionnaire4.id = "qn4"
+        this.questionnaire4.name = "skema med gruppe spørgsmål"
+        this.questionnaire4.frequency = frequency;
+        this.questionnaire4.status = BaseModelStatus.ACTIVE
+        this.questionnaire4.lastUpdated = this.CreateDate();
+        this.questionnaire4.version = "1"
+        this.questionnaire4.questions = [this.question2, this.groupQuestion]
+
 
         this.planDefinition1.name = "Infektionsmedicinsk patientgruppe"
         this.planDefinition1.id = "def1"
         this.planDefinition1.status = BaseModelStatus.ACTIVE
         this.planDefinition1.created = this.CreateDate();
-        this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3]
+        this.planDefinition1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire3, this. questionnaire4]
 
         this.planDefinition2.name = "Molekylar medicinsk patientgruppe"
         this.planDefinition2.id = "def2"
@@ -257,10 +281,23 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
             this.CreateOption("2", "false", CategoryEnum.GREEN),
         ]
 
+        this.tc5_sys.questionId = "q5_sys"
+        this.tc5_sys.thresholdNumbers = [
+            this.CreateThreshold("1", 0, 37, CategoryEnum.RED),
+            this.CreateThreshold("2", 37, 44, CategoryEnum.YELLOW),
+            this.CreateThreshold("3", 44, 100, CategoryEnum.GREEN),
+        ]
+        this.tc5_dia.questionId = "q5_dia"
+        this.tc5_dia.thresholdNumbers = [
+            this.CreateThreshold("1", 0, 37, CategoryEnum.RED),
+            this.CreateThreshold("2", 37, 44, CategoryEnum.YELLOW),
+            this.CreateThreshold("3", 44, 100, CategoryEnum.GREEN),
+        ]
 
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         this.questionnaire2.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         this.questionnaire3.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
+        this.questionnaire4.thresholds = [this.tc5_sys, this.tc5_dia]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -268,7 +305,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.careplan1.organization.name = "Infektionssygdomme";
         this.careplan1.planDefinitions = [this.planDefinition1, this.planDefinition2]
         this.careplan1.creationDate = this.CreateDate()
-        this.careplan1.questionnaires = [this.questionnaire1, this.questionnaire2]
+        this.careplan1.questionnaires = [this.questionnaire1, this.questionnaire2, this.questionnaire4]
 
 
         //======================================= careplan1
@@ -276,10 +313,10 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.careplan2.patient = this.patient1;
         this.careplan2.organization = new SimpleOrganization();
         this.careplan2.organization.name = "Infektionssygdomme";
-        this.careplan2.planDefinitions = [this.planDefinition2]
+        this.careplan2.planDefinitions = [this.planDefinition1]
         this.careplan2.creationDate = this.CreateDate()
         this.careplan2.terminationDate = this.CreateDate()
-        this.careplan2.questionnaires = [this.questionnaire1]
+        this.careplan2.questionnaires = [this.questionnaire4]
 
         //======================================= Response // QuestionResponse1
         this.questionnaireResponse1.id = "qr1"
@@ -357,6 +394,20 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(true));
         this.questionnaireResponse5.questions = questionAnswerMap5;
 
+        //======================================= Response // QuestionnaireResponseGroupQuestionnaire
+        this.questionnaireResponseGroupQuestionnaire.id = "qr6"
+        this.questionnaireResponseGroupQuestionnaire.questionnaireId = this.questionnaire4.id
+        this.questionnaireResponseGroupQuestionnaire.patient = this.patient1;
+        this.questionnaireResponseGroupQuestionnaire.category = CategoryEnum.RED;
+        this.questionnaireResponseGroupQuestionnaire.answeredTime = this.CreateDate()
+        this.questionnaireResponseGroupQuestionnaire.status = QuestionnaireResponseStatus.Processed;
+
+        const questionAnswerMap6 = new Map<Question, Answer>();
+        //questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
+        questionAnswerMap6.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap6.set(this.groupQuestion, this.CreateGroupAnswer(this.groupQuestion));
+        this.questionnaireResponseGroupQuestionnaire.questions = questionAnswerMap6;
+
 
         //======================================= tasks
         this.task1.cpr = this.patient1.cpr!
@@ -418,7 +469,12 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         try {
 
 
-            let result = [this.toExternal.mapMeasurementType(this.measurementType1), this.toExternal.mapMeasurementType(this.measurementType2)]
+            let result = [
+                this.toExternal.mapMeasurementType(this.measurementType1),
+                this.toExternal.mapMeasurementType(this.measurementType2),
+                this.toExternal.mapMeasurementType(this.measurementTypeSystolisk),
+                this.toExternal.mapMeasurementType(this.measurementTypeDiastolisk)
+            ]
 
             /*
 
@@ -487,7 +543,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<PaginatedList<QuestionnaireResponse>> {
 
         await new Promise(f => setTimeout(f, this.timeToWait));
-        const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5]
+        const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5, this.questionnaireResponseGroupQuestionnaire]
         const start = (page - 1) * pagesize
         const end = page * pagesize
         responses.forEach(x => {

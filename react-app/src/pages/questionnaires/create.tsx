@@ -1,6 +1,7 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
+import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Alert, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
@@ -11,6 +12,7 @@ import { QuestionEditCard } from "../../components/Cards/QuestionEditCard";
 import { TextFieldValidation } from "../../components/Input/TextFieldValidation";
 import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdropComponent";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
+import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 import ApiContext, { IApiContext } from "../_context";
 import { v4 as uuid } from 'uuid';
 import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
@@ -33,6 +35,7 @@ interface State {
     editMode: boolean
     errors: Map<string, InvalidInputModel[]>
     changes: string[] // The id's of the questions that havent been saved yet
+    allMeasurementTypes: MeasurementType[]
 }
 
 class CreateQuestionnairePage extends React.Component<Props, State> {
@@ -44,6 +47,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
    
 
     questionnaireService!: IQuestionnaireService
+    questionAnswerService!: IQuestionAnswerService
     validateEvent: ValidateInputEvent = new ValidateInputEvent(new ValidateInputEventData(CreateQuestionnairePage.sectionName)); //triggers validations of all fields
 
     constructor(props: Props) {
@@ -52,6 +56,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         
         this.onValidation = this.onValidation.bind(this);
         this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
+        this.updateQuestion = this.updateQuestion.bind(this);
 
         this.state = {
             loading: true,
@@ -61,7 +66,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             submitted: false,
             editMode: props.match.params.questionnaireId ? true : false,
             errors: new Map(),
-            changes: []
+            changes: [],
+            allMeasurementTypes: []
         }
     }
 
@@ -73,11 +79,14 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     InitializeServices(): void {
         const api = this.context as IApiContext
         this.questionnaireService =  api.questionnaireService;
+        this.questionAnswerService =  api.questionAnswerService;
     }
 
     async componentDidMount(): Promise<void> {
 
-        await this.populateCareplans()
+        await this.populateCareplans();
+        const measurementTypes = await this.questionAnswerService.GetAllMeasurementTypes();
+        this.setState({ allMeasurementTypes: measurementTypes })
     }
 
     async populateCareplans(): Promise<void> {
@@ -136,8 +145,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.OBSERVATION)
                     .find((q: Question) => q.measurementType === undefined);
+                const manualValidationError3 = questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .find((q: Question) => q.type === undefined);
 
-                if (manualValidationError1 || manualValidationError2) {
+                if (manualValidationError1 || manualValidationError2 || manualValidationError3) {
                     throw new MissingDetailsError([]);
                 }
 
@@ -271,12 +283,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
                                         moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
                                         moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
-                                        forceUpdate={() => this.forceUpdate()}
                                         question={question}
                                         onValidation={this.onValidation}
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}
                                         deletable={parentQuestions.length <= 1}
+                                        onUpdate={this.updateQuestion}
+                                        allMeasurementTypes={this.state.allMeasurementTypes}
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
@@ -294,10 +307,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, childQuestion, 1))}
                                                     parentQuestion={question}
                                                     question={childQuestion}
-                                                    forceUpdate={() => this.forceUpdate()}
                                                     onValidation={this.onValidation}
                                                     sectionName={CreateQuestionnairePage.sectionName}
                                                     disabled={!this.state.changes.includes(childQuestion.Id!)}
+                                                    onUpdate={this.updateQuestion}
+                                                    allMeasurementTypes={this.state.allMeasurementTypes}
                                                 />
                                             </Grid>
                                         </>
@@ -407,6 +421,31 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         beforeUpdate.questions.splice(indexOfRefQuestion + 1, 0, newQuestion)
         this.setState({ questionnaire: beforeUpdate })
         this.addChange(newQuestion.Id!)
+    }
+
+    updateQuestion(updatedQuestion: Question): void {
+        const beforeUpdate = this.state.questionnaire!;
+        
+        if (updatedQuestion.type !== QuestionTypeEnum.BOOLEAN) {
+            // remove old questions thresholds
+            const newThresholds = beforeUpdate.thresholds?.filter(tc => tc.questionId !== updatedQuestion.Id);
+            beforeUpdate.thresholds = newThresholds;
+        }
+        
+        let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);
+        if (currentQuestion instanceof CallToActionQuestion) {
+
+        }
+        else if (currentQuestion instanceof Question) {
+            currentQuestion.question = updatedQuestion.question;
+            currentQuestion.abbreviation = updatedQuestion.abbreviation;
+            currentQuestion.helperText = updatedQuestion.helperText;
+            currentQuestion.measurementType = updatedQuestion.measurementType;
+            currentQuestion.type = updatedQuestion.type
+            currentQuestion.subQuestions = updatedQuestion.subQuestions
+        }
+        this.setState({ questionnaire: beforeUpdate })
+
     }
 
     addChange(id: string): void {

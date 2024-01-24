@@ -14,6 +14,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
 import {InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
 import { Tooltip } from '@mui/material'
+import { v4 as uuid } from 'uuid';
+import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 
 interface Props {
     key: Key | null | undefined
@@ -24,31 +26,22 @@ interface Props {
     removeQuestionAction: (questionToRemove: Question) => void
     moveItemUp: (question: Question) => void
     moveItemDown: (question: Question) => void
-    forceUpdate?: () => void
     onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
     sectionName?: string
     disabled: boolean
     deletable?: boolean
+    onUpdate: (updatedQuestion: Question) => void
+    allMeasurementTypes: MeasurementType[]
 }
 interface State {
-    question: Question
 }
 
 export class QuestionEditCard extends Component<Props, State>{
     static defaultProps = {
     }
 
-
-
-
-
     constructor(props: Props) {
         super(props);
-        this.state = {
-            question: props.question
-        }
-        this.modifyQuestion = this.modifyQuestion.bind(this);
-        this.forceCardUpdate = this.forceCardUpdate.bind(this);
     }
 
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
@@ -70,24 +63,10 @@ export class QuestionEditCard extends Component<Props, State>{
     }
 */
 
-    modifyQuestion(questionModifier: (question: Question, newValue: string) => Question, input: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
-        const valueFromInput = input.currentTarget.value;
-        const modifiedQuestion = questionModifier(this.props.question, valueFromInput);
-        this.setState({ question: modifiedQuestion })
-
-    }
-
-    forceCardUpdate(): void {
-        if (this.props.forceUpdate)
-            this.props.forceUpdate();
-
-        this.forceUpdate();
-    }
-
     render(): ReactNode {
         const parrentQuestion = this.props.parentQuestion;
         const parentQuestionHasGoodType = parrentQuestion === undefined || parrentQuestion?.type === QuestionTypeEnum.BOOLEAN
-        const shouldShowThresholds = this.state.question.type === QuestionTypeEnum.BOOLEAN
+        const shouldShowThresholds = this.props.question.type === QuestionTypeEnum.BOOLEAN
         const className = this.props.parentQuestion !== undefined ? "focusedChildQuestionEditCard" : "focusedParentQuestionEditCard"
         return (
             <Card>
@@ -107,7 +86,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         <Grid item xs={12}>
                                             <Box>
                                                 <EnableWhenSelect
-                                                    enableWhen={this.state.question.enableWhen!}
+                                                    enableWhen={this.props.question.enableWhen!}
                                                     parentQuestion={this.props.parentQuestion}
                                                     sectionName={this.props.sectionName} />
                                             </Box>
@@ -127,7 +106,10 @@ export class QuestionEditCard extends Component<Props, State>{
                                             uniqueId={this.props.question.Id!+'_question'}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateQuestionName}
-                                            onChange={input => this.modifyQuestion(this.setQuestion, input)}
+                                            onChange={input => {
+                                                const newValue = input.currentTarget.value;
+                                                this.props.onUpdate({...this.props.question, question: newValue})
+                                            }}
                                             sectionName={this.props.sectionName}
                                         />
 
@@ -139,7 +121,10 @@ export class QuestionEditCard extends Component<Props, State>{
                                             variant="outlined"
                                             size="medium"
                                             uniqueId={this.props.question.Id!+'_abbreviation'}
-                                            onChange={input => this.modifyQuestion(this.setAbbreviation, input)}
+                                            onChange={input => {
+                                                const newValue = input.currentTarget.value;
+                                                this.props.onUpdate({...this.props.question, abbreviation: newValue})
+                                            }}
                                             onValidation={this.props.onValidation}
                                             validate={this.validateAbbreviation}
                                             sectionName={this.props.sectionName}
@@ -167,24 +152,33 @@ export class QuestionEditCard extends Component<Props, State>{
                                         size="medium"
                                         uniqueId={this.props.question.Id!+'_helperText'}
                                         minWidth={800}
-                                        onChange={input => this.modifyQuestion(this.setHelperText, input)}
+                                        onChange={input => {
+                                            const newValue = input.currentTarget.value;
+                                                this.props.onUpdate({...this.props.question, helperText: newValue})
+                                        }}
                                         required
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
-                                        //validate={this.validateHelperText}
                                     />
                                 </Grid>
                                 <Grid item xs>
                                     <QuestionTypeSelect
-                                        forceUpdate={this.forceCardUpdate}
-                                        question={this.state.question}
+                                        question={this.props.question}
                                         sectionName={this.props.sectionName}
                                         onValidation={this.props.onValidation}
                                         disabled={this.props.disabled}
                                         uniqueId={this.props.question.Id!+'_questionType'}
+                                        onChange={input => {
+                                            const newValue = input.target.value as unknown as QuestionTypeEnum
+                                            this.props.onUpdate({...this.props.question, type: newValue})
+                                        }}
                                     />
                                 </Grid>
-                                <Grid item xs>
+                            </Grid>
+                            {
+                                /*
+                            <Grid container spacing={2}>
+                                <Grid item xs={8}>
                                     {this.state.question.type === QuestionTypeEnum.OBSERVATION ?
                                       <QuestionMeasurementTypeSelect  
                                         sectionName={this.props.sectionName} 
@@ -197,10 +191,23 @@ export class QuestionEditCard extends Component<Props, State>{
 
                                         : <></>}
                                 </Grid>
+                                <Grid item xs={4}>
+                                <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
+                                <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                Tilføj yderligere måling
+                            </Button>
+                                </Grid>
                             </Grid>
+                                    */
+                                }
 
 
-
+                            {this.props.question.type === QuestionTypeEnum.OBSERVATION || QuestionTypeEnum.GROUP ? 
+                                this.renderObservationBlock(this.props.question)
+                                
+                                :
+                                <></>
+                            }
 
                             {shouldShowThresholds ? this.renderBooleanThreshold() : <></>}
 
@@ -234,12 +241,112 @@ export class QuestionEditCard extends Component<Props, State>{
         )
     }
 
+    renderObservationBlock(question: Question): JSX.Element {
+        let renderQuestions : Question[] = [];
+        if (question.type === QuestionTypeEnum.OBSERVATION) {
+            renderQuestions.push(question);
+        }
+        else if (question.type === QuestionTypeEnum.GROUP) {
+            renderQuestions.push(...question.subQuestions!);
+        }
+        
+        return (
+            <TableContainer>
+                <Table>
+                    {renderQuestions.map((question, index) => {
+                        const isLast = renderQuestions.length-1 == index
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    <Stack direction="row" spacing={2} >
+                                        <QuestionMeasurementTypeSelect  
+                                            sectionName={this.props.sectionName} 
+                                            onValidation={this.props.onValidation} 
+                                            disabled={this.props.disabled}
+                                            question={question} 
+                                            uniqueId={question.Id!}
+                                            onChange={input => {
+                                                const clickedMeasurementCode = input.target.value
+                                                const clicked = this.props.allMeasurementTypes.find(mt => mt.code === clickedMeasurementCode);
+
+                                                if (this.props.question.type === QuestionTypeEnum.GROUP) {
+                                                    //find correct subQuestion to update
+                                                    const subQuestion = this.props.question.subQuestions?.find(sq => sq.Id === question.Id);
+                                                    subQuestion!.measurementType =  clicked
+                                                    this.props.onUpdate({...this.props.question})
+                                                }
+                                                else {
+                                                    this.props.onUpdate({...this.props.question, measurementType: clicked})
+                                                }
+                                            }}
+                                             allMeasurementTypes={this.props.allMeasurementTypes}
+                                        />
+
+                                        <ButtonGroup variant="text" >
+                                            <Tooltip title='Slet' placement='right'>
+                                                <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={renderQuestions.length == 1} onClick={() => this.removeObservation(question)}>
+                                                    <DeleteOutlineIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            {isLast ? 
+                                                <Button className="add-child-question" sx={{ padding: 2 }} disabled={question.measurementType == undefined} onClick={() => this.addObservation()}>
+                                                    <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                                    Tilføj yderligere måling
+                                                </Button>
+                                                : 
+                                                <></>
+                                            }
+                                        </ButtonGroup>
+                                    </Stack>
+                                </TableCell>
+                            </TableRow>
+                            )
+                        })
+                    }
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    removeObservation(removeQuestion: Question): void {
+        const question = {...this.props.question};
+        question.subQuestions = question.subQuestions?.filter(sq => sq.Id !== removeQuestion.Id/*!sq.isEqual(removeQuestion)*/);
+
+        if (question.subQuestions?.length == 1) {
+            const subQuestion = question.subQuestions[0];
+            question.measurementType = subQuestion.measurementType
+            question.type = QuestionTypeEnum.OBSERVATION;
+            question.subQuestions = [];
+        }
+        this.props.onUpdate(question)
+    }
+
+    addObservation(): void {
+        let question = {...this.props.question};
+        if (question.type === QuestionTypeEnum.OBSERVATION) {
+            const subQuestion = new Question();
+            subQuestion.Id = uuid();
+            subQuestion.measurementType = question.measurementType;
+            subQuestion.type = QuestionTypeEnum.OBSERVATION; 
+            
+            question.type = QuestionTypeEnum.GROUP;
+            question.measurementType = undefined;
+            question.subQuestions = [subQuestion];
+        }
+        const newSubQuestion = new Question();
+        newSubQuestion.Id = uuid();
+        newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
+        
+        question.subQuestions!.push(newSubQuestion);
+
+        this.props.onUpdate(question);
+    }
     renderBooleanThreshold(): JSX.Element {
 
         if (!this.props.getThreshold)
             return <></>
 
-        const thresholdCollection = this.props.getThreshold(this.state.question)
+        const thresholdCollection = this.props.getThreshold(this.props.question)
 
         return (
             <TableContainer>
@@ -266,32 +373,5 @@ export class QuestionEditCard extends Component<Props, State>{
                 </Table>
             </TableContainer>
         )
-    }
-
-
-    setQuestion(oldQuestion: Question, newValue: string): Question {
-        const modifiedQuestion = oldQuestion;
-        modifiedQuestion.question = newValue;
-        return modifiedQuestion;
-    }
-    setHelperText(oldQuestion: Question, newValue: string): Question {
-        const modifiedQuestion = oldQuestion;
-        modifiedQuestion.helperText = newValue;
-        return modifiedQuestion;
-    }
-    setEnableWhenAnswer(oldQuestion: Question, newValue: string): Question {
-        const modifiedQuestion = oldQuestion;
-        modifiedQuestion!.enableWhen!.answer = newValue.toLowerCase() === 'ja';
-        return modifiedQuestion;
-    }
-    modifyQuestionType(oldQuestion: Question, newValue: string): Question {
-        const modifiedQuestion = oldQuestion;
-        modifiedQuestion!.type = newValue as QuestionTypeEnum;
-        return modifiedQuestion;
-    }
-    setAbbreviation(oldQuestion: Question, newValue: string): Question {
-        const modifiedQuestion = oldQuestion;
-        modifiedQuestion!.abbreviation = newValue as QuestionTypeEnum;
-        return modifiedQuestion;
     }
 }

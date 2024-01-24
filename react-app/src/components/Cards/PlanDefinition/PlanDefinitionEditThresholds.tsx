@@ -73,9 +73,16 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                     if (!questionnaire.thresholds)
                         questionnaire.thresholds = [];
 
+                    const questions = questionnaire.questions?.filter(x => x.type === QuestionTypeEnum.OBSERVATION);
+                    const groupQuestions: Question[]| undefined = questionnaire.questions?.filter(x => x.type === QuestionTypeEnum.GROUP);
+                    
+                    let allQuestions: Question[] = [...(questions ?? [])];
+                    groupQuestions?.forEach(g => allQuestions?.push(...g.subQuestions!))
+                    console.log("ALL", questions, groupQuestions, allQuestions)
                     return (
                         <>
-                            {questionnaire.questions?.filter(x => x.type === QuestionTypeEnum.OBSERVATION).map(question => {
+                            {
+                            allQuestions.map(question => {
 
                                 return (
                                     <Grid item xs={12}>

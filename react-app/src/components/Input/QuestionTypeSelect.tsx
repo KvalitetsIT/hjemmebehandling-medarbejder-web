@@ -13,15 +13,14 @@ import { ErrorMessage } from '../Errors/MessageWithWarning';
 export interface Props {
     sectionName?: string;
     question: Question;
-    forceUpdate?: () => void;
     validate?: (value: string) => Promise<InvalidInputModel[]>;
     onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void;
     disabled: boolean;
     uniqueId: string;
+    onChange: (input: SelectChangeEvent<string>) => void;
 }
 
 export interface State {
-    question: Question
     errors: InvalidInputModel[]
 }
 
@@ -33,7 +32,8 @@ export class QuestionTypeSelect extends Component<Props, State> {
 
     allTypes: Array<{ type: QuestionTypeEnum, displayName: string }> = [
         { type: QuestionTypeEnum.BOOLEAN, displayName: "Ja / Nej" },
-        { type: QuestionTypeEnum.OBSERVATION, displayName: "Måling" }
+        { type: QuestionTypeEnum.OBSERVATION, displayName: "Måling" },
+        { type: QuestionTypeEnum.GROUP, displayName: "Målingsgruppe" }
         //{ type: QuestionTypeEnum.CHOICE, displayName: "Multiplechoice" },
         //{ type: QuestionTypeEnum.INTEGER, displayName: "Heltal" },
         //{ type: QuestionTypeEnum.STRING, displayName: "Fritekst" }
@@ -41,10 +41,8 @@ export class QuestionTypeSelect extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            question: props.question,
             errors: [],
         }
-        this.handleChange = this.handleChange.bind(this)
      
         this.onValidateEvent = this.onValidateEvent.bind(this)
     }
@@ -69,8 +67,8 @@ export class QuestionTypeSelect extends Component<Props, State> {
         }
     }
 
-    async validate(): Promise<void> {
-        const question = this.state.question
+    validate(): void {
+        const question = this.props.question
         const errors: InvalidInputModel[] = []
         if (question.type === undefined) {
             errors.push( new InvalidInputModel("QuestionType", "Typen på spørgsmålet mangler", CriticalLevelEnum.ERROR))
@@ -82,13 +80,6 @@ export class QuestionTypeSelect extends Component<Props, State> {
         this.setState({errors: errors}) 
     }
 
-    forceTypeSelectUpdate() : void{
-        if (this.props.forceUpdate)
-            this.props.forceUpdate()
-        this.forceUpdate();
-    }
-    
-
     render(): JSX.Element {
         const hasError = this.state.errors.length > 0
         return (
@@ -96,8 +87,11 @@ export class QuestionTypeSelect extends Component<Props, State> {
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmålstype</InputLabel>
                 <Select 
                 defaultValue="" label="Vælg spørgsmålstype"    
-                value={this.state.question.type} 
-                onChange={this.handleChange}
+                value={this.props.question.type} 
+                onChange={(input) => {
+                    this.props.onChange(input);
+                    this.validate()}
+                }
                 error={hasError}
                 disabled={this.props.disabled}
                 >
@@ -111,15 +105,4 @@ export class QuestionTypeSelect extends Component<Props, State> {
             </FormControl>
         )
     }
-
-    handleChange(e: SelectChangeEvent<string>): void {
-        const clicked = e.target.value as unknown as QuestionTypeEnum
-        const newQuestion = this.state.question
-        newQuestion.type = clicked;
-        this.forceTypeSelectUpdate();
-        this.setState({ question: newQuestion })
-        this.validate()
-    }
-
-
 }

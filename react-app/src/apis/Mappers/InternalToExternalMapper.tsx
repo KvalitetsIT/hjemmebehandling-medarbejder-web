@@ -82,7 +82,8 @@ export default class InternalToExternalMapper extends BaseMapper {
                 abbreviation: internalQuestion.abbreviation,
                 measurementType: this.mapMeasurementType(internalQuestion.measurementType),
                 thresholds: this.mapThreshold(thresholdCollection),
-                helperText: internalQuestion.helperText
+                helperText: internalQuestion.helperText,
+                subQuestions: internalQuestion.subQuestions?.map(sq => this.mapQuestion(sq, undefined))
             }
         }
 
@@ -113,6 +114,8 @@ export default class InternalToExternalMapper extends BaseMapper {
                 return QuestionDtoQuestionTypeEnum.Quantity
             case QuestionTypeEnum.STRING:
                 return QuestionDtoQuestionTypeEnum.String
+            case QuestionTypeEnum.GROUP:
+                return QuestionDtoQuestionTypeEnum.Group
         }
         throw new Error("InternalToExternal) could not convert from " + type);
     }

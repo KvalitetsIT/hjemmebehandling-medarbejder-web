@@ -152,7 +152,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   findAnswer(desiredQuestion: Question, questionResponses: QuestionnaireResponse): Answer | undefined {
     let answer: Answer | undefined;
     questionResponses.questions!.forEach((responseAnswer, responseQuestion) => {
-      if (responseQuestion.isEqual(desiredQuestion)) {
+      if (responseQuestion.Id === desiredQuestion.Id/*responseQuestion.isEqual(desiredQuestion)*/) {
         answer = responseAnswer;
         return; //Return out of foreach-function
       }
@@ -168,7 +168,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       while (!element.done) {
 
         const candidate = element.value[0];
-        const questionAlreadyExists = questions.some(q => q.isEqual(candidate))
+        const questionAlreadyExists = questions.some(q => q.Id === candidate.Id/*q.isEqual(candidate)*/)
 
         if (!questionAlreadyExists) {
           questions.push(candidate)
