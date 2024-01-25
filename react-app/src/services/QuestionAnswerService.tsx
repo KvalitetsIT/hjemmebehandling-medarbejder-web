@@ -26,7 +26,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
         }
     }
 
-    FindCategory(thresholdCollection: ThresholdCollection, answer: Answer): CategoryEnum {
+    FindCategory(thresholdCollection: ThresholdCollection, answer: Answer<any>): CategoryEnum {
         try {
             if (answer instanceof NumberAnswer) {
                 const answerAsNumber = answer as NumberAnswer;
@@ -63,7 +63,7 @@ export default class QuestionAnswerService extends BaseService implements IQuest
                     if (thresholdCollection.thresholdOptions.length <= 0)
                         return CategoryEnum.GREEN;
 
-                    thresholdPoint = thresholdCollection.thresholdOptions.find(x => x.option === answerAsBoolean.answer.toString());
+                    thresholdPoint = thresholdCollection.thresholdOptions.find(x => x.option === answerAsBoolean.AnswerAsString());
                 }
                 return thresholdPoint ? thresholdPoint.category : CategoryEnum.RED;
             }

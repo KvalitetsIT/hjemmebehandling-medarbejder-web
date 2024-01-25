@@ -14,7 +14,7 @@ export interface IQuestionAnswerService {
      /**
       * Finds the answers risk-value (category)
       */
-     FindCategory : (thresholdCollection : ThresholdCollection, answer: Answer) => CategoryEnum
+     FindCategory : (thresholdCollection : ThresholdCollection, answer: Answer<any>) => CategoryEnum
 
      /**
       * @returns all meaasurementtypes

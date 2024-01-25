@@ -333,7 +333,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return internalPersonContact;
     }
 
-    mapAnswerDto(answerDto: AnswerDto): Answer {
+    mapAnswerDto(answerDto: AnswerDto): Answer<any> {
 
         switch (answerDto.answerType) {
             case AnswerDtoAnswerTypeEnum.Integer:
@@ -352,32 +352,40 @@ export default class ExternalToInternalMapper extends BaseMapper {
     }
     
     mapGroupAnswer(answerDto: AnswerDto): GroupAnswer {
-        const toReturn = new GroupAnswer();
+        if (!answerDto.linkId) throw new Error("Id is missing")
+
+        const toReturn = new GroupAnswer(answerDto.linkId);
         toReturn.questionId = answerDto.linkId!;
-        toReturn.subAnswers = [];
+        toReturn.answer = [];
 
         answerDto.subAnswers!.map(sa => {
-            toReturn.subAnswers.push(this.mapAnswerDto(sa))
+            toReturn.answer?.push(this.mapAnswerDto(sa))
         })
 
         return toReturn;
     }
     mapStringAnswer(answerDto: AnswerDto): StringAnswer {
-        const toReturn = new StringAnswer();
+        if (!answerDto.linkId) throw new Error("Id is missing")
+
+        const toReturn = new StringAnswer(answerDto.linkId);
         toReturn.questionId = answerDto.linkId!;
         toReturn.answer = answerDto.value!
         return toReturn;
     }
 
     mapNumberedAnswer(answerDto: AnswerDto): NumberAnswer {
-        const toReturn = new NumberAnswer();
+        if (!answerDto.linkId) throw new Error("Id is missing")
+
+        const toReturn = new NumberAnswer(answerDto.linkId);
         toReturn.questionId = answerDto.linkId!;
         toReturn.answer = Number.parseFloat(answerDto.value!)
         return toReturn;
     }
 
     mapBooleanAnswer(answerDto: AnswerDto): BooleanAnswer {
-        const toReturn = new BooleanAnswer();
+        if (!answerDto.linkId) throw new Error("Id is missing")
+
+        const toReturn = new BooleanAnswer(answerDto.linkId);
         toReturn.questionId = answerDto.linkId!;
         const answerValue = answerDto.value?.toLowerCase()
 
@@ -394,7 +402,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const response = new QuestionnaireResponse();
         //const response = this.getQuestionnaireResponse();
         response.id = questionnaireResponseDto.id!;
-        response.questions = new Map<Question, Answer>();
+        response.questions = new Map<Question, Answer<any>>();
 
         for (const pair of questionnaireResponseDto.questionAnswerPairs!) {
             const question = this.mapQuestionDto(pair.question!);

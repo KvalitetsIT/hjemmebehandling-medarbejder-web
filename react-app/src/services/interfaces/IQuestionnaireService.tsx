@@ -57,7 +57,7 @@ export interface IQuestionnaireService {
    * Provide a response, and a question - and you shall recieve the answer.
    * If the question does not exist in the response, you shall recieve undefined.
    */
-  findAnswer: (desiredQuestion: Question, questionResponses: QuestionnaireResponse) => Answer | undefined;
+  findAnswer: (desiredQuestion: Question, questionResponses: QuestionnaireResponse) => Answer<any> | undefined;
 
   //====================GET====================
   /**

@@ -327,7 +327,7 @@ export class AnswerTable extends Component<Props, State> {
                 <TableCell>
                     <Grid container spacing={2} direction={'row'} alignItems={'center'}>
                         
-                        {groupAnswer?.subAnswers?.map(sa => {
+                        {groupAnswer?.answer?.map(sa => {
                             return (
                                 <>
                                   <Grid item xs={2} sx={{border:0}}></Grid>

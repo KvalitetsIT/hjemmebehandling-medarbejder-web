@@ -68,6 +68,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     questionnaireResponse4: QuestionnaireResponse = new QuestionnaireResponse();
     questionnaireResponse5: QuestionnaireResponse = new QuestionnaireResponse();
     questionnaireResponseGroupQuestionnaire: QuestionnaireResponse = new QuestionnaireResponse();
+    questionnaireResponseGroupQuestionnaire2: QuestionnaireResponse = new QuestionnaireResponse();
     question1: Question = new Question();
     question2: Question = new Question();
     question3: Question = new Question();
@@ -297,7 +298,7 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaire1.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         this.questionnaire2.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
         this.questionnaire3.thresholds = [this.tc1, this.tc2, this.tc3, this.tc4]
-        this.questionnaire4.thresholds = [this.tc5_sys, this.tc5_dia]
+        this.questionnaire4.thresholds = [this.tc2, this.tc5_sys, this.tc5_dia]
         //======================================= careplan
         this.careplan1.id = "plan1"
         this.careplan1.patient = this.patient1;
@@ -326,11 +327,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse1.answeredTime = this.CreateDate()
         this.questionnaireResponse1.status = QuestionnaireResponseStatus.NotProcessed;
 
-        const questionAnswerMap1 = new Map<Question, Answer>();
-        questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
-        questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
-        questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
-        questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(false));
+        const questionAnswerMap1 = new Map<Question, Answer<any>>();
+        questionAnswerMap1.set(this.question1, this.CreateStringAnswer(this.question1, this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
+        questionAnswerMap1.set(this.question2, this.CreateNumberAnswer(this.question2, 37, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap1.set(this.question3, this.CreateNumberAnswer(this.question3, 50, UnitType.NOUNIT));
+        questionAnswerMap1.set(this.question4, this.CreateBooleanAnswer(this.question4, false));
         questionAnswerMap1.set(this.groupQuestion, this.CreateGroupAnswer(this.groupQuestion));
         this.questionnaireResponse1.questions = questionAnswerMap1;
 
@@ -343,11 +344,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse2.answeredTime = this.CreateDate()
         this.questionnaireResponse2.status = QuestionnaireResponseStatus.NotProcessed;
 
-        const questionAnswerMap2 = new Map<Question, Answer>();
+        const questionAnswerMap2 = new Map<Question, Answer<any>>();
         //  questionAnswerMap2.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
-        questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(35, UnitType.DEGREASE_CELSIUS));
-        questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(10, UnitType.NOUNIT));
-        questionAnswerMap2.set(this.question4, this.CreateBooleanAnswer(true));
+        questionAnswerMap2.set(this.question2, this.CreateNumberAnswer(this.question2, 35, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap2.set(this.question3, this.CreateNumberAnswer(this.question3, 10, UnitType.NOUNIT));
+        questionAnswerMap2.set(this.question4, this.CreateBooleanAnswer(this.question4, true));
         this.questionnaireResponse2.questions = questionAnswerMap2;
 
         //======================================= Response // QuestionResponse3
@@ -358,11 +359,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse3.answeredTime = this.CreateDate()
         this.questionnaireResponse3.status = QuestionnaireResponseStatus.Processed;
 
-        const questionAnswerMap3 = new Map<Question, Answer>();
+        const questionAnswerMap3 = new Map<Question, Answer<any>>();
         // questionAnswerMap3.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![1].option));
-        questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(37, UnitType.DEGREASE_CELSIUS));
-        questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(90, UnitType.NOUNIT));
-        questionAnswerMap3.set(this.question4, this.CreateBooleanAnswer(true));
+        questionAnswerMap3.set(this.question2, this.CreateNumberAnswer(this.question2, 37, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap3.set(this.question3, this.CreateNumberAnswer(this.question3, 90, UnitType.NOUNIT));
+        questionAnswerMap3.set(this.question4, this.CreateBooleanAnswer(this.question4, true));
         this.questionnaireResponse3.questions = questionAnswerMap3;
         //======================================= Response // QuestionResponse4
         this.questionnaireResponse4.id = "qr4"
@@ -372,11 +373,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse4.answeredTime = this.CreateDate()
         this.questionnaireResponse4.status = QuestionnaireResponseStatus.Processed;
 
-        const questionAnswerMap4 = new Map<Question, Answer>();
+        const questionAnswerMap4 = new Map<Question, Answer<any>>();
         //questionAnswerMap4.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![1].option));
-        questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(42, UnitType.DEGREASE_CELSIUS));
-        questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(100, UnitType.NOUNIT));
-        questionAnswerMap4.set(this.question4, this.CreateBooleanAnswer(true));
+        questionAnswerMap4.set(this.question2, this.CreateNumberAnswer(this.question2, 42, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap4.set(this.question3, this.CreateNumberAnswer(this.question3, 100, UnitType.NOUNIT));
+        questionAnswerMap4.set(this.question4, this.CreateBooleanAnswer(this.question4, true));
 
         this.questionnaireResponse4.questions = questionAnswerMap4;
         //======================================= Response // QuestionResponse5
@@ -387,11 +388,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponse5.answeredTime = this.CreateDate()
         this.questionnaireResponse5.status = QuestionnaireResponseStatus.Processed;
 
-        const questionAnswerMap5 = new Map<Question, Answer>();
+        const questionAnswerMap5 = new Map<Question, Answer<any>>();
         //questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
-        questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
-        questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(50, UnitType.NOUNIT));
-        questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(true));
+        questionAnswerMap5.set(this.question2, this.CreateNumberAnswer(this.question2, 44, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap5.set(this.question3, this.CreateNumberAnswer(this.question3, 50, UnitType.NOUNIT));
+        questionAnswerMap5.set(this.question4, this.CreateBooleanAnswer(this.question4, true));
         this.questionnaireResponse5.questions = questionAnswerMap5;
 
         //======================================= Response // QuestionnaireResponseGroupQuestionnaire
@@ -402,11 +403,24 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.questionnaireResponseGroupQuestionnaire.answeredTime = this.CreateDate()
         this.questionnaireResponseGroupQuestionnaire.status = QuestionnaireResponseStatus.Processed;
 
-        const questionAnswerMap6 = new Map<Question, Answer>();
+        const questionAnswerMap6 = new Map<Question, Answer<any>>();
         //questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
-        questionAnswerMap6.set(this.question2, this.CreateNumberAnswer(44, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap6.set(this.question2, this.CreateNumberAnswer(this.question2, 44, UnitType.DEGREASE_CELSIUS));
         questionAnswerMap6.set(this.groupQuestion, this.CreateGroupAnswer(this.groupQuestion));
         this.questionnaireResponseGroupQuestionnaire.questions = questionAnswerMap6;
+
+        this.questionnaireResponseGroupQuestionnaire2.id = "qr6"
+        this.questionnaireResponseGroupQuestionnaire2.questionnaireId = this.questionnaire4.id
+        this.questionnaireResponseGroupQuestionnaire2.patient = this.patient1;
+        this.questionnaireResponseGroupQuestionnaire2.category = CategoryEnum.RED;
+        this.questionnaireResponseGroupQuestionnaire2.answeredTime = this.CreateDate()
+        this.questionnaireResponseGroupQuestionnaire2.status = QuestionnaireResponseStatus.Processed;
+
+        const questionAnswerMap7 = new Map<Question, Answer<any>>();
+        //questionAnswerMap5.set(this.question1, this.CreateStringAnswer(this.questionnaire1.thresholds.find(x => x.questionId === this.question1.Id)!.thresholdOptions![0].option));
+        questionAnswerMap7.set(this.question2, this.CreateNumberAnswer(this.question2, 40, UnitType.DEGREASE_CELSIUS));
+        questionAnswerMap7.set(this.groupQuestion, this.CreateGroupAnswer(this.groupQuestion));
+        this.questionnaireResponseGroupQuestionnaire2.questions = questionAnswerMap7;
 
 
         //======================================= tasks
@@ -543,7 +557,14 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<PaginatedList<QuestionnaireResponse>> {
 
         await new Promise(f => setTimeout(f, this.timeToWait));
-        const responses = [this.questionnaireResponse1, this.questionnaireResponse2, this.questionnaireResponse3, this.questionnaireResponse4, this.questionnaireResponse5, this.questionnaireResponseGroupQuestionnaire]
+        const responses = [
+            this.questionnaireResponse1,
+            this.questionnaireResponse2,
+            this.questionnaireResponse3,
+            this.questionnaireResponse4,
+            this.questionnaireResponse5,
+            this.questionnaireResponseGroupQuestionnaire,
+            this.questionnaireResponseGroupQuestionnaire2]
         const start = (page - 1) * pagesize
         const end = page * pagesize
         responses.forEach(x => {
@@ -642,34 +663,34 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         FakeItToYouMakeItApi.date = new Date(FakeItToYouMakeItApi.date.getTime() - (1 * days))
         return FakeItToYouMakeItApi.date;
     }
-    private CreateStringAnswer(value: string) {
-        const answer = new StringAnswer();
+    private CreateStringAnswer(question: Question, value: string) {
+        const answer = new StringAnswer(question.Id!);
         answer.answer = value;
         return answer;
     }
 
-    private CreateNumberAnswer(value: number, unit: UnitType) {
-        const answer = new NumberAnswer();
+    private CreateNumberAnswer(question: Question, value: number, unit: UnitType) {
+        const answer = new NumberAnswer(question.Id!);
         answer.answer = value;
         answer.unit = unit;
         return answer;
 
     }
-    private CreateBooleanAnswer(value: boolean) {
-        const answer = new BooleanAnswer();
+    private CreateBooleanAnswer(question: Question, value: boolean) {
+        const answer = new BooleanAnswer(question.Id!);
         answer.answer = value;
         return answer;
 
     }
     private CreateGroupAnswer(groupQuestion: Question) {
-        const answer = new GroupAnswer();
+        const answer = new GroupAnswer(groupQuestion.Id!);
         answer.questionId = groupQuestion.Id!
-        answer.subAnswers = [];
+        answer.answer = [];
         groupQuestion.subQuestions?.map((sq, index) => {
-            const sa = this.CreateNumberAnswer(index,UnitType.NOUNIT);
-            sa.questionId = sq.Id!;
+            const sa = this.CreateNumberAnswer(sq, index,UnitType.NOUNIT);
+            //sa.questionId = sq.Id!;
 
-            answer.subAnswers.push(sa);
+            answer.answer?.push(sa);
             
         })
         

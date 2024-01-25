@@ -149,8 +149,8 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
 
-  findAnswer(desiredQuestion: Question, questionResponses: QuestionnaireResponse): Answer | undefined {
-    let answer: Answer | undefined;
+  findAnswer(desiredQuestion: Question, questionResponses: QuestionnaireResponse): Answer<any> | undefined {
+    let answer: Answer<any> | undefined;
     questionResponses.questions!.forEach((responseAnswer, responseQuestion) => {
       if (responseQuestion.Id === desiredQuestion.Id/*responseQuestion.isEqual(desiredQuestion)*/) {
         answer = responseAnswer;
