@@ -202,7 +202,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                 }
 
 
-                            {this.props.question.type === QuestionTypeEnum.OBSERVATION || QuestionTypeEnum.GROUP ? 
+                            {this.props.question.type === QuestionTypeEnum.OBSERVATION || this.props.question.type === QuestionTypeEnum.GROUP ? 
                                 this.renderObservationBlock(this.props.question)
                                 
                                 :

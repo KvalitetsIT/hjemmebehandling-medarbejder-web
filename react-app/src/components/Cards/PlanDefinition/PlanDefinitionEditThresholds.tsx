@@ -76,13 +76,10 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                     const questions = questionnaire.questions?.filter(x => x.type === QuestionTypeEnum.OBSERVATION);
                     const groupQuestions: Question[]| undefined = questionnaire.questions?.filter(x => x.type === QuestionTypeEnum.GROUP);
                     
-                    let allQuestions: Question[] = [...(questions ?? [])];
-                    groupQuestions?.forEach(g => allQuestions?.push(...g.subQuestions!))
-                    console.log("ALL", questions, groupQuestions, allQuestions)
                     return (
                         <>
                             {
-                            allQuestions.map(question => {
+                            questions!.map(question => {
 
                                 return (
                                     <Grid item xs={12}>
@@ -95,6 +92,24 @@ export class PlanDefinitionEditThresholds extends Component<Props, State> {
                                         ></ThresholdEditor>
                                     </Grid>
                                 )
+                            })}
+                            
+                            {
+                            groupQuestions!.map(question => {
+                                return question.subQuestions?.map(sub => {
+                                    return (
+                                        <Grid item xs={12}>
+                                            <ThresholdEditor
+                                                key={"tresholdEditor" + sub.Id}
+                                                onChange={this.props.onSetThreshold}
+                                                questionnaire={questionnaire}
+                                                question={sub}
+                                                onError={error => this.onError(error)}
+                                                isPartOfGroupQuestion={question.question}
+                                            ></ThresholdEditor>
+                                        </Grid>
+                                    )
+                                })
                             })}
                         </>
                     )

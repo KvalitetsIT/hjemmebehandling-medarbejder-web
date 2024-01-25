@@ -326,7 +326,7 @@ const api = this.context as IApiContext
         }
 
         this.state.planDefinition.questionnaires?.map(questionnaire => {
-            if (questionnaire.questions?.find(x => x.type === QuestionTypeEnum.OBSERVATION)) {
+            if (questionnaire.questions?.find(x => x.type === QuestionTypeEnum.OBSERVATION || x.type === QuestionTypeEnum.GROUP)) {
                 if (questionnaire.thresholds?.flatMap(t => t.thresholdNumbers ?? []).find(t => (t.from === undefined || t.to === undefined) || Number.isNaN(t.from) || Number.isNaN(t.to))) {
                     missingDetails.push("Alarmgrænser skal angives")
                 }

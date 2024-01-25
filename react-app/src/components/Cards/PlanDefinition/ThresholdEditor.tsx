@@ -1,5 +1,4 @@
 import ChartData from "@kvalitetsit/hjemmebehandling/Charts/ChartData"
-import { QuestionChart } from "@kvalitetsit/hjemmebehandling/Charts/QuestionChart"
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question"
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire"
@@ -19,6 +18,7 @@ interface TresholdEditorProps {
     question: Question
     onChange: (values: ThresholdCollection, question: Question, questionnaire: Questionnaire) => void
     onError: (error?: Error) => void
+    isPartOfGroupQuestion?: string
 }
 
 interface TresholdEditorState {
@@ -127,9 +127,13 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
 
+        let subHeader: string = question.question!;
+        if (this.props.isPartOfGroupQuestion) {
+            subHeader = this.props.isPartOfGroupQuestion + " - " + question.measurementType?.displayName;
+        }
         return (
             <Card elevation={2}>
-                <CardHeader subheader={<Typography variant="h6">{(question as Question).question}</Typography>} action={
+                <CardHeader subheader={<Typography variant="h6">{subHeader}</Typography>} action={
                     <ButtonGroup variant="text" >
                         {this.allowedNumberOfThresholds.map(number => {
                             const isDesired = number === this.state.desiredNumberOfThresholds
