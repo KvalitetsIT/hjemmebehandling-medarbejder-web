@@ -148,8 +148,14 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 const manualValidationError3 = questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .find((q: Question) => q.type === undefined);
+                const manualValidationError4 = questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .filter((q: Question) => q.type === QuestionTypeEnum.GROUP)
+                    .flatMap((q: Question) => q.subQuestions!)
+                    .find((q: Question) => q.measurementType === undefined);
 
-                if (manualValidationError1 || manualValidationError2 || manualValidationError3) {
+                if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4) {
+                    console.log("manualValidationError", manualValidationError1, manualValidationError2,manualValidationError3, manualValidationError4)
                     throw new MissingDetailsError([]);
                 }
 
@@ -431,6 +437,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             const newThresholds = beforeUpdate.thresholds?.filter(tc => tc.questionId !== updatedQuestion.Id);
             beforeUpdate.thresholds = newThresholds;
         }
+        
+
         
         let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);
         if (currentQuestion instanceof CallToActionQuestion) {

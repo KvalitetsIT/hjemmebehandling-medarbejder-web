@@ -241,12 +241,24 @@ export class QuestionEditCard extends Component<Props, State>{
         )
     }
 
+    createNewSubQuestion(): Question {
+        const newSubQuestion = new Question();
+        newSubQuestion.Id = uuid();
+        newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
+
+        return newSubQuestion;
+
+    }
     renderObservationBlock(question: Question): JSX.Element {
         let renderQuestions : Question[] = [];
         if (question.type === QuestionTypeEnum.OBSERVATION) {
             renderQuestions.push(question);
         }
         else if (question.type === QuestionTypeEnum.GROUP) {
+            console.log("HERHHERHERH")
+            if (!question.subQuestions) {
+                question.subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()]
+            }
             renderQuestions.push(...question.subQuestions!);
         }
         
@@ -289,7 +301,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                                 </IconButton>
                                             </Tooltip>
                                             {isLast ? 
-                                                <Button className="add-child-question" sx={{ padding: 2 }} disabled={question.measurementType == undefined} onClick={() => this.addObservation()}>
+                                                <Button className="add-child-question" sx={{ padding: 2 }}  onClick={() => this.addObservation()}>
                                                     <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
                                                     Tilføj yderligere måling
                                                 </Button>
@@ -322,6 +334,7 @@ export class QuestionEditCard extends Component<Props, State>{
     }
 
     addObservation(): void {
+        console.log("ADD 1", this.props.question)
         let question = {...this.props.question};
         if (question.type === QuestionTypeEnum.OBSERVATION) {
             const subQuestion = new Question();
@@ -339,6 +352,7 @@ export class QuestionEditCard extends Component<Props, State>{
         
         question.subQuestions!.push(newSubQuestion);
 
+        console.log("ADD 2", question)
         this.props.onUpdate(question);
     }
     renderBooleanThreshold(): JSX.Element {
