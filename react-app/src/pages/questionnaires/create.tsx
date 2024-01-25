@@ -40,11 +40,11 @@ interface State {
 
 class CreateQuestionnairePage extends React.Component<Props, State> {
     static sectionName = "questionnaire";
-    
-    
+
+
     static contextType = ApiContext
-     
-   
+
+
 
     questionnaireService!: IQuestionnaireService
     questionAnswerService!: IQuestionAnswerService
@@ -52,8 +52,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-         
-        
+
+
         this.onValidation = this.onValidation.bind(this);
         this.deactivateQuestionnaire = this.deactivateQuestionnaire.bind(this);
         this.updateQuestion = this.updateQuestion.bind(this);
@@ -78,8 +78,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     InitializeServices(): void {
         const api = this.context as IApiContext
+
         this.questionnaireService =  api.questionnaireService;
         this.questionAnswerService =  api.questionAnswerService;
+
     }
 
     async componentDidMount(): Promise<void> {
@@ -135,6 +137,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             if (valid) {
                 const questionnaire = this.state.questionnaire!;
 
+                console.log("Questionnaire", questionnaire)
                 const manualValidationError1 = questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.BOOLEAN)
@@ -175,7 +178,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 questionnaire.status = newStatus;
 
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(questionnaire);
-
+                
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(questionnaire);
 
                 this.setState({
@@ -283,6 +286,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             <>
                                 <Grid item xs={12}>
                                     <QuestionEditCard
+                                        active={undefined}
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                         addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
@@ -294,8 +298,24 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}
                                         deletable={parentQuestions.length <= 1}
+
                                         onUpdate={this.updateQuestion}
                                         allMeasurementTypes={this.state.allMeasurementTypes}
+
+                                        /*
+                                        onChange={(question) => {this.setState(prevState => {
+
+                                            const i = prevState.questionnaire?.questions?.findIndex(q => q.Id == question.Id);
+
+                                            let questionnaire = prevState.questionnaire
+                                            
+                                            if (questionnaire?.questions && i) questionnaire.questions[i] = question
+
+                                            let toReturn = {...prevState, questionnaire: questionnaire }
+                                            
+                                            return toReturn
+                                        })}}
+                                        */
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
@@ -365,8 +385,11 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     variant="contained"
                                                     disabled={(this.state.questionnaire.id !== undefined) && (this.state.questionnaire.status !== undefined && (this.state.questionnaire.status !== BaseModelStatus.DRAFT))}
                                                     onClick={() => {
+                                                        /*
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
+                                                        */
+                                                       console.log("questionnaire", this.state.questionnaire)
                                                     }}
                                                 >Gem som kladde</Button>
                                                 <ConfirmationButton
@@ -451,6 +474,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             currentQuestion.measurementType = updatedQuestion.measurementType;
             currentQuestion.type = updatedQuestion.type
             currentQuestion.subQuestions = updatedQuestion.subQuestions
+            currentQuestion.options = updatedQuestion.options
         }
         this.setState({ questionnaire: beforeUpdate })
 

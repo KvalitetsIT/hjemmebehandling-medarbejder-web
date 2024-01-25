@@ -56,6 +56,8 @@ export default function MyApp(): JSX.Element {
       planDefinitionBackend = mockApi;
     }
   }
+
+
   return (
     <>
       <div suppressHydrationWarning>

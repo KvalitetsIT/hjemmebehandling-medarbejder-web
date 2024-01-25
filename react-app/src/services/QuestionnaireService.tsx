@@ -33,6 +33,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
   async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+    console.log("questionnaire" , questionnaire)
     try {
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.createQuestionnaire(questionnaire);

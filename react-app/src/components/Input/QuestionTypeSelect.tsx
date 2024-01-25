@@ -33,8 +33,8 @@ export class QuestionTypeSelect extends Component<Props, State> {
     allTypes: Array<{ type: QuestionTypeEnum, displayName: string }> = [
         { type: QuestionTypeEnum.BOOLEAN, displayName: "Ja / Nej" },
         { type: QuestionTypeEnum.OBSERVATION, displayName: "Måling" },
-        { type: QuestionTypeEnum.GROUP, displayName: "Målingsgruppe" }
-        //{ type: QuestionTypeEnum.CHOICE, displayName: "Multiplechoice" },
+        { type: QuestionTypeEnum.GROUP, displayName: "Målingsgruppe" },
+        { type: QuestionTypeEnum.CHOICE, displayName: "Multiple-choice" },
         //{ type: QuestionTypeEnum.INTEGER, displayName: "Heltal" },
         //{ type: QuestionTypeEnum.STRING, displayName: "Fritekst" }
     ]
