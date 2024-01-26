@@ -47,8 +47,14 @@ export class QuestionEditCard extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            variant: undefined
+            variant: this.getVariant(props.question.options)
         }
+    }
+
+    getVariant(options: Option[] | undefined): "number" | "text" | undefined {
+        if(options === undefined || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
+        const isNumbers = options.every(x => !Number.isNaN(parseFloat(x.option)))
+        return isNumbers ? "number" : "text"
     }
 
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
