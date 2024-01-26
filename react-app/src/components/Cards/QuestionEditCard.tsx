@@ -52,7 +52,7 @@ export class QuestionEditCard extends Component<Props, State>{
     }
 
     getVariant(options: Option[] | undefined): "number" | "text" | undefined {
-        if(options === undefined || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
+        if (options === undefined || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
         const isNumbers = options.every(x => !Number.isNaN(parseFloat(x.option)))
         return isNumbers ? "number" : "text"
     }
@@ -375,7 +375,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             allMeasurementTypes={this.props.allMeasurementTypes}
                                         />
 
-                                        {isGroupQuestion && !this.props.disabled ? 
+                                        {isGroupQuestion && !this.props.disabled ?
                                             <ButtonGroup variant="text" >
                                                 <Tooltip title='Slet' placement='right'>
                                                     <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={renderQuestions.length == 2} onClick={() => this.removeObservation(question)}>
@@ -544,11 +544,6 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                 {props.options && props.options.map((item, i) => (
                     <>
                         <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
-                            <Tooltip title='Slet' placement='right'>
-                                <IconButton onClick={() => deleteItem(i)}>
-                                    <DeleteOutlineIcon />
-                                </IconButton>
-                            </Tooltip>
                             <TextField
                                 label={"Svarmulighed"}
                                 id="standard-basic"
@@ -567,23 +562,36 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 onChange={(x) => updateComment(i, x.target.value)}
                                 value={item.comment}
                             />
-                            <FormControl>
-                                <InputLabel>Triangering</InputLabel>
-                                <Select
-                                    placeholder={"Triangering"}
-                                    label={"Triangering"}
-                                    id="standard-basic"
-                                    variant="outlined"
-                                    onChange={(x) => updateTriage(i, x.target.value as string)}
-                                    value={item.triage}
-                                    sx={{ width: 150 }}
-                                >
-                                    <MenuItem value="grøn">Grøn</MenuItem>
-                                    <MenuItem value="gul">Gul</MenuItem>
-                                    <MenuItem value="rød">Rød</MenuItem>
-                                </Select>
+                            <div>
 
-                            </FormControl>
+                            <FormControl>
+                                    <InputLabel>Triangering</InputLabel>
+                                    <Select
+                                        placeholder={"Triangering"}
+                                        label={"Triangering"}
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        onChange={(x) => updateTriage(i, x.target.value as string)}
+                                        value={item.triage}
+                                        sx={{ width: 150 }}
+                                    >
+                                        <MenuItem value="grøn">Grøn</MenuItem>
+                                        <MenuItem value="gul">Gul</MenuItem>
+                                        <MenuItem value="rød">Rød</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            
+                            </div>
+                                
+                            
+
+                            <Tooltip title='Slet' placement='right'>
+                                <IconButton onClick={() => deleteItem(i)}>
+                                    <DeleteOutlineIcon />
+                                </IconButton>
+                            </Tooltip>
+
+
 
                         </Stack>
                     </>
