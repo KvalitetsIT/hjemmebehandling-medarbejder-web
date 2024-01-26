@@ -212,7 +212,11 @@ export class QuestionEditCard extends Component<Props, State>{
                                         uniqueId={this.props.question.Id! + '_questionType'}
                                         onChange={input => {
                                             const newValue = input.target.value as unknown as QuestionTypeEnum
-                                            this.props.onUpdate({ ...this.props.question, type: newValue })
+                                            let subQuestions: Question[] = [];
+                                            if (newValue === QuestionTypeEnum.GROUP) {
+                                                subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()];
+                                            }
+                                            this.props.onUpdate({ ...this.props.question, type: newValue, subQuestions: subQuestions })
                                         }}
 
                                     />
@@ -331,6 +335,7 @@ export class QuestionEditCard extends Component<Props, State>{
             }
             renderQuestions.push(...question.subQuestions!);
         }
+        const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
 
         return (
             <TableContainer>
@@ -364,21 +369,25 @@ export class QuestionEditCard extends Component<Props, State>{
                                             allMeasurementTypes={this.props.allMeasurementTypes}
                                         />
 
-                                        <ButtonGroup variant="text" >
-                                            <Tooltip title='Slet' placement='right'>
-                                                <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={renderQuestions.length == 1} onClick={() => this.removeObservation(question)}>
-                                                    <DeleteOutlineIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                            {isLast ?
-                                                <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.addObservation()}>
-                                                    <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
-                                                    Tilføj yderligere måling
-                                                </Button>
-                                                :
-                                                <></>
-                                            }
-                                        </ButtonGroup>
+                                        {isGroupQuestion && !this.props.disabled ? 
+                                            <ButtonGroup variant="text" >
+                                                <Tooltip title='Slet' placement='right'>
+                                                    <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={renderQuestions.length == 2} onClick={() => this.removeObservation(question)}>
+                                                        <DeleteOutlineIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                {isLast ?
+                                                    <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.addObservation()}>
+                                                        <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                                        Tilføj yderligere måling
+                                                    </Button>
+                                                    :
+                                                    <></>
+                                                }
+                                            </ButtonGroup>
+                                            :
+                                            <></>
+                                        }
                                     </Stack>
                                 </TableCell>
                             </TableRow>
@@ -392,39 +401,21 @@ export class QuestionEditCard extends Component<Props, State>{
 
     removeObservation(removeQuestion: Question): void {
         const question = { ...this.props.question };
-        question.subQuestions = question.subQuestions?.filter(sq => sq.Id !== removeQuestion.Id/*!sq.isEqual(removeQuestion)*/);
+        if (question.subQuestions && question.subQuestions.length > 2) {
+            question.subQuestions = question.subQuestions?.filter(sq => sq.Id !== removeQuestion.Id/*!sq.isEqual(removeQuestion)*/);
 
-        if (question.subQuestions?.length == 1) {
-            const subQuestion = question.subQuestions[0];
-            question.measurementType = subQuestion.measurementType
-            question.type = QuestionTypeEnum.OBSERVATION;
-            question.subQuestions = [];
+            this.props.onUpdate(question)
         }
-        this.props.onUpdate(question)
     }
 
     addObservation(): void {
-        console.log("ADD 1", this.props.question)
-        let question = { ...this.props.question };
-        if (question.type === QuestionTypeEnum.OBSERVATION) {
-            const subQuestion = new Question();
-            subQuestion.Id = uuid();
-            subQuestion.measurementType = question.measurementType;
-            subQuestion.type = QuestionTypeEnum.OBSERVATION;
+        const question = { ...this.props.question };
 
-            question.type = QuestionTypeEnum.GROUP;
-            question.measurementType = undefined;
-            question.subQuestions = [subQuestion];
+        if (question.subQuestions) {
+            question.subQuestions.push(this.createNewSubQuestion());
+
+            this.props.onUpdate(question);
         }
-        const newSubQuestion = new Question();
-        newSubQuestion.Id = uuid();
-        newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
-
-        if (!question.subQuestions) question.subQuestions = []
-        question.subQuestions.push(newSubQuestion);
-
-        console.log("ADD 2", question)
-        this.props.onUpdate(question);
     }
     renderBooleanThreshold(): JSX.Element {
 
