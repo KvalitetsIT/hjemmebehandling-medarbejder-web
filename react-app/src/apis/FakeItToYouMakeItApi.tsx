@@ -102,11 +102,11 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.measurementType2.code = "Temperatur"
         this.measurementType2.system = "system"
         this.measurementTypeSystolisk = new MeasurementType();
-        this.measurementTypeSystolisk.displayName = "Systolisk; Arm"
+        this.measurementTypeSystolisk.displayName = "Blodtryk systolisk; Arm"
         this.measurementTypeSystolisk.code = "SYS"
         this.measurementTypeSystolisk.system = "system"
         this.measurementTypeDiastolisk = new MeasurementType();
-        this.measurementTypeDiastolisk.displayName = "Diastolisk; Arm"
+        this.measurementTypeDiastolisk.displayName = "Blodtryk diastolisk; Arm"
         this.measurementTypeDiastolisk.code = "DIA"
         this.measurementTypeDiastolisk.system = "system"
         //======================================= Patient
@@ -179,6 +179,9 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
         this.groupQuestion.Id = "q5";
         this.groupQuestion.question = "Blodtryk?";
         this.groupQuestion.type = QuestionTypeEnum.GROUP;
+        const q5EnableWhen = new EnableWhen<boolean>();
+        q5EnableWhen.questionId = undefined;
+        //this.groupQuestion.enableWhen = q5EnableWhen
 
         const sys = new Question();
         sys.Id = "q5_sys";
@@ -555,7 +558,6 @@ export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {
     }
 
     async GetQuestionnaireResponses(careplanId: string, questionnaireIds: string[], page: number, pagesize: number): Promise<PaginatedList<QuestionnaireResponse>> {
-
         await new Promise(f => setTimeout(f, this.timeToWait));
         const responses = [
             this.questionnaireResponse1,

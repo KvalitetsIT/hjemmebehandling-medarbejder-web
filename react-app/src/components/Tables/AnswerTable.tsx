@@ -84,7 +84,6 @@ export class AnswerTable extends Component<Props, State> {
 
         const {list: questionnaireResponses, total} = await this.questionnaireService.GetQuestionnaireResponses(careplan!.id!, [this.props.questionnaires.id], page, this.state.limit)
     
-        
         this.setState({ questionnaireResponses: [] }) //Without this the StatusSelect will not destroy and recreate status-component, which will result it to show wrong status (JIRA: RIM-103)
 
         this.setState({
@@ -146,7 +145,6 @@ export class AnswerTable extends Component<Props, State> {
     sortQuestionsForQuestionnaire(allQuestions: Question[], questionnaire: Questionnaire): Question[] {
         const result: Question[] = [];
 
-        console.log("xx", questionnaire.getParentQuestions())
         //result.push(...allQuestions)
         // tilføj spørgmål der er i det spørgeskemaet sorteres efter den rækkefølge de har her
         questionnaire.getParentQuestions().forEach(element => {
@@ -193,13 +191,11 @@ export class AnswerTable extends Component<Props, State> {
 
         const hasMorePages: boolean = total ? offset * limit < total : false
 
-        console.log("11", this.state.questionnaireResponses)
         const questionnairesResponsesToShow = this.state.questionnaireResponses;
         const allQuestions = this.questionnaireService.findAllQuestions(questionnairesResponsesToShow);
-        console.log("22", allQuestions)
         const sortedQuestions = this.sortQuestionsForQuestionnaire(allQuestions, this.props.questionnaires);
         const hasDeprecatedQuestions = allQuestions.filter(question => question.deprecated).length > 0;
-        console.log("33", sortedQuestions, hasDeprecatedQuestions)
+        
         return (<>
             <Grid container spacing={3}>
                 <Grid item xs={12} textAlign="right" alignItems="baseline" >
@@ -317,9 +313,8 @@ export class AnswerTable extends Component<Props, State> {
         const answer = this.questionnaireService.findAnswer(question, questionResponse);
 
         const thresholdCollection = this.props.questionnaires.thresholds?.find(x => x.questionId === question.Id);
-
         const category = answer && thresholdCollection ? this.questionAnswerService.FindCategory(thresholdCollection, answer) : CategoryEnum.BLUE
-        console.log("renderSingleResponse", questionResponse.id, question, answer)
+        
         const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
         if (isGroupQuestion) {
             const groupAnswer = answer as GroupAnswer;
@@ -328,18 +323,21 @@ export class AnswerTable extends Component<Props, State> {
                     <Grid container spacing={2} direction={'row'} alignItems={'center'}>
                         
                         {groupAnswer?.answer?.map(sa => {
+                            const subQuestionThresholdCollection = this.props.questionnaires.thresholds?.find(x => x.questionId === sa.questionId);
+                            const subAnswercategory = sa && subQuestionThresholdCollection ? this.questionAnswerService.FindCategory(subQuestionThresholdCollection, sa) : CategoryEnum.BLUE
+
                             return (
                                 <>
-                                  <Grid item xs={2} sx={{border:0}}></Grid>
-                                    <Grid item xs={6} sx={{border:0}}>
+                                  
+                                    <Grid item xs={4} sx={{border:0}}>
                                         <Tooltip title={this.getDisplaynameColorFromCategory(category)}>
-                                            <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(category)} label={sa ? sa.ToString() : ""} variant="filled" />
+                                            <Chip className='answer__chip' component={Box} width="100%" size="medium" color={this.getChipColorFromCategory(subAnswercategory)} label={sa ? sa.ToString() : ""} variant="filled" />
                                         </Tooltip>
                                     </Grid>
                                     <Grid item sx={{border:0}}>
                                         <Typography>{this.getsubQuestionTest(question, sa.questionId)}</Typography>
                                     </Grid>
-                                    <Grid item />
+                                    
                                     
                                     </>
 
@@ -372,7 +370,6 @@ export class AnswerTable extends Component<Props, State> {
     }
 
     getsubQuestionTest(question: Question, subQuestionId: string): string {
-        console.log("GGG", question, subQuestionId)
-        return question.subQuestions?.find(sq => sq.Id === subQuestionId)?.question ?? "";
+        return question.subQuestions?.find(sq => sq.Id === subQuestionId)?.measurementType?.displayName ?? "";
     }
 }
