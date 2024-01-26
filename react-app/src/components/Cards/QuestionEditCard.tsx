@@ -1,4 +1,5 @@
 import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import { Component, Key, ReactNode, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
@@ -278,7 +279,14 @@ export class QuestionEditCard extends Component<Props, State>{
                             {(shouldShowMultipleChoice && this.state.variant !== undefined) && (
                                 <MultipleChoiceEditor
                                     variant={this.state.variant}
-                                    options={this.props.question.options}
+                                    options={this.props.question.options?.map((option, i) => {
+                                        const thresholdOptions = this.props.getThreshold && this.props.getThreshold(this.props.question).thresholdOptions
+
+                                        return {
+                                            ...option,
+                                            triage: thresholdOptions ? thresholdOptions[i].category : CategoryEnum.BLUE
+                                        }
+                                    })}
                                     onChange={(options) => {
                                         this.props.onUpdate && this.props.onUpdate({
                                             ...this.props.question,
@@ -515,14 +523,14 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         updateList(newList);
     }
 
-    const updateTriage = (index: number, triage: string) => {
+    const updateTriage = (index: number, triage: CategoryEnum) => {
         const newList = props.options ? [...props.options] : []
         newList[index].triage = triage;
         updateList(newList);
     }
 
     const addItem = () => {
-        const emptyItem = { option: "", comment: "", triage: "" };
+        const emptyItem = { option: "", comment: "", triage: CategoryEnum.BLUE };
         const newList = props.options ? [...props.options] : []
         newList.push(emptyItem)
         updateList(newList)
@@ -538,12 +546,15 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
     }
 
 
+
     return (
         <>
             <FormControl >
                 {props.options && props.options.map((item, i) => (
                     <>
                         <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
+
+
                             <TextField
                                 label={"Svarmulighed"}
                                 id="standard-basic"
@@ -562,28 +573,18 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 onChange={(x) => updateComment(i, x.target.value)}
                                 value={item.comment}
                             />
-                            <div>
+               
+                            <CategorySelect
+                                // sectionName={this.props.sectionName}
+                                // disabled={this.props.disabled}
+                                label="Triagering"
+                                category={item.triage}
+                                onChange={(newCategory) => { updateTriage(i, newCategory); }}
+                                // onValidation={this.props.onValidation}
+                                uniqueId={"category_" + i}
+                                disabled={false}
+                            />
 
-                            <FormControl>
-                                    <InputLabel>Triangering</InputLabel>
-                                    <Select
-                                        placeholder={"Triangering"}
-                                        label={"Triangering"}
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        onChange={(x) => updateTriage(i, x.target.value as string)}
-                                        value={item.triage}
-                                        sx={{ width: 150 }}
-                                    >
-                                        <MenuItem value="grøn">Grøn</MenuItem>
-                                        <MenuItem value="gul">Gul</MenuItem>
-                                        <MenuItem value="rød">Rød</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            
-                            </div>
-                                
-                            
 
                             <Tooltip title='Slet' placement='right'>
                                 <IconButton onClick={() => deleteItem(i)}>

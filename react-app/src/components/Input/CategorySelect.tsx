@@ -5,7 +5,7 @@ import { Component } from 'react';
 import { FormControl, FormHelperText, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
 import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-
+import { InputLabel} from "@mui/material";
 import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 
@@ -16,6 +16,7 @@ export interface Props {
     onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
     disabled: boolean
     uniqueId: string;
+    label?: string
 }
 
 export interface State {
@@ -95,7 +96,9 @@ export class CategorySelect extends Component<Props,State> {
         const hasError = this.state.errors.length > 0
         return (
             <FormControl sx={{ minWidth: 200 }} required>
+                { this.props.label && <InputLabel>{this.props.label}</InputLabel>}
                 <Select
+                    label={this.props.label}
                     disabled={this.props.disabled}
                     labelId="demo-multiple-name-label"
                     id="demo-multiple-name"
