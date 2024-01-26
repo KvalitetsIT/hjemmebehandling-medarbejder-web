@@ -1,5 +1,5 @@
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
+import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import { Component, Key, ReactNode, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
@@ -16,7 +16,6 @@ import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/S
 import { Tooltip } from '@mui/material'
 import { v4 as uuid } from 'uuid';
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-
 
 
 interface Props {
@@ -38,6 +37,7 @@ interface Props {
 
 }
 interface State {
+    variant?: "text" | "number"
 }
 
 export class QuestionEditCard extends Component<Props, State>{
@@ -46,6 +46,9 @@ export class QuestionEditCard extends Component<Props, State>{
 
     constructor(props: Props) {
         super(props);
+        this.state = {
+            variant: undefined
+        }
     }
 
     async validateAbbreviation(value: string): Promise<InvalidInputModel[]> {
@@ -78,7 +81,7 @@ export class QuestionEditCard extends Component<Props, State>{
 
 
         const BooleanThresholdEditor = () => {
-            
+
             const thresholdCollection = this.props.getThreshold ? this.props.getThreshold(this.props.question) : undefined
 
             return (
@@ -105,115 +108,6 @@ export class QuestionEditCard extends Component<Props, State>{
                         })}
                     </Table>
                 </TableContainer>
-            )
-        }
-
-        type Option = { option: string, comment: string, triage: string }
-
-        interface MultipleChoiceEditorProps {
-            variant: "text" | "number",
-            options?: Array<Option>
-            onChange?: (options: Option[]) => void
-        }
-
-        const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
-
-            const updateOption = (index: number, option: string) => {
-                const newList = props.options ? [...props.options] : []
-                newList[index].option = option;
-                updateList(newList);
-            }
-
-            const updateComment = (index: number, comment: string) => {
-                const newList = props.options ? [...props.options] : []
-                newList[index].comment = comment;
-                updateList(newList);
-            }
-
-            const updateTriage = (index: number, triage: string) => {
-                const newList = props.options ? [...props.options] : []
-                newList[index].triage = triage;
-                updateList(newList);
-
-            }
-
-            const addItem = () => {
-                const emptyItem = { option: "", comment: "", triage: "" };
-                const newList = props.options ? [...props.options] : []
-                newList.push(emptyItem)
-                updateList(newList)
-
-            }
-
-            const updateList = (updatedList: Option[]) => {
-                props.onChange && props.onChange(updatedList)
-            }
-
-            function deleteItem(i: number): void {
-
-                let options = props.options
-
-                updateList(options?.slice(0, i).concat(options.slice(i+1)) ?? [])
-
-            }
-
-            return (
-                <>
-                    <FormControl >
-                        {props.options && props.options.map((item, i) => (
-                            <>
-                                <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
-                                    <Tooltip title='Slet' placement='right'>
-                                        <IconButton onClick={() => deleteItem(i)}>
-                                            <DeleteOutlineIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <TextField
-                                        placeholder={"Svarmulighed"}
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        type={"text"}
-                                        onChange={(x) => updateOption(i, x.target.value)}
-                                        value={item.option}
-                                    />
-
-                                    <TextField
-                                        fullWidth
-                                        placeholder={"Kommentar"}
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        onChange={(x) => updateComment(i, x.target.value)}
-                                        value={item.comment}
-                                    />
-
-                                    <Select
-                                        placeholder={"Triangering"}
-                                        label={"Triangering"}
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        onChange={(x) => updateTriage(i, x.target.value as string)}
-                                        value={item.triage}
-                                        sx={{width: 150}}
-                                    >
-                                        <MenuItem value="grøn">Grøn</MenuItem>
-                                        <MenuItem value="gul">Gul</MenuItem>
-                                        <MenuItem value="rød">Rød</MenuItem>
-                                    </Select>
-                                </Stack>
-                            </>
-                        ))}
-
-                        <Button sx={{ marginTop: 2, width: 150 }} onClick={() => addItem()}>
-                            <AddCircleIcon sx={{ paddingRight: 1 }} />
-                            Tilføj svarmulighed
-                        </Button>
-                    </FormControl>
-
-
-
-                </>
-
-
             )
         }
 
@@ -323,21 +217,23 @@ export class QuestionEditCard extends Component<Props, State>{
 
                                     />
                                 </Grid>
-                                <Grid item xs>
-                                    <QuestionTypeSelect
-                                        question={this.props.question}
-                                        sectionName={this.props.sectionName}
-                                        onValidation={this.props.onValidation}
-                                        disabled={this.props.disabled}
-                                        uniqueId={this.props.question.Id! + '_questionType'}
-                                        onChange={input => {
-                                            const newValue = input.target.value as unknown as QuestionTypeEnum
-                                            this.props.onUpdate({ ...this.props.question, type: newValue })
-                                        }}
 
-                                    />
-                                </Grid>
-                                
+                                {this.props.question.type === QuestionTypeEnum.CHOICE && (
+                                    <Grid item xs>
+                                        <FormControl sx={{ minWidth: 200 }} required>
+                                            <InputLabel>Vælg typen af svar</InputLabel>
+                                            <Select
+                                                label="Vælg typen af svar"
+                                                onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
+                                                value={this.state.variant}
+                                            >
+                                                <MenuItem value="text">Tekst</MenuItem>
+                                                <MenuItem value="number">Tal</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                )}
                             </Grid>
                             {
                                 /*
@@ -364,49 +260,52 @@ export class QuestionEditCard extends Component<Props, State>{
                                     */
                             }
 
-                    
+
                             {shouldShowObservationBlock && this.renderObservationBlock(this.props.question)}
 
-                            
 
-                    {shouldShowMultipleChoice && <MultipleChoiceEditor
-                        variant="text"
-                        options={this.props.question.options?.map(x => ({ option: x, comment: "", triage: "" }))}
-                        onChange={(options) => {
-                            this.props.onUpdate && this.props.onUpdate({
-                                ...this.props.question,
-                                options: options.map(x => x.option)
-                            })
-                        }} />
-                    }
 
-                    {shouldShowThresholds && <BooleanThresholdEditor />}
+                            {(shouldShowMultipleChoice && this.state.variant !== undefined) && (
+                                <MultipleChoiceEditor
+                                    variant={this.state.variant}
+                                    options={this.props.question.options}
+                                    onChange={(options) => {
+                                        this.props.onUpdate && this.props.onUpdate({
+                                            ...this.props.question,
+                                            options: options
+                                        })
+                                    }}
+                                />
+                            )}
 
-                </CardContent >
 
-                <Divider />
-                <CardActions disableSpacing>
-                    <Button className="add-child-question" sx={{ padding: 2 }} disabled={this.props.question.type !== QuestionTypeEnum.BOOLEAN || this.props.parentQuestion !== undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
-                        <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
-                        Tilføj underspørgsmål
-                    </Button>
+                            {shouldShowThresholds && <BooleanThresholdEditor />}
 
-                    <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
-                        <ButtonGroup variant="text" >
-                            <Tooltip title='Slet' placement='right'>
-                                <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
-                                    <DeleteOutlineIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Button disabled={this.props.parentQuestion !== undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
-                                <AddCircleIcon sx={{ paddingRight: 1, width: 'auto' }} />
-                                Tilføj nyt spørgsmål
+                        </CardContent >
+
+                        <Divider />
+                        <CardActions disableSpacing>
+                            <Button className="add-child-question" sx={{ padding: 2 }} disabled={this.props.question.type !== QuestionTypeEnum.BOOLEAN || this.props.parentQuestion !== undefined} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
+                                <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                Tilføj underspørgsmål
                             </Button>
-                        </ButtonGroup>
-                    </Stack>
-                </CardActions>
 
-            </Grid >
+                            <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
+                                <ButtonGroup variant="text" >
+                                    <Tooltip title='Slet' placement='right'>
+                                        <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                            <DeleteOutlineIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Button disabled={this.props.parentQuestion !== undefined} sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, false)}>
+                                        <AddCircleIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                        Tilføj nyt spørgsmål
+                                    </Button>
+                                </ButtonGroup>
+                            </Stack>
+                        </CardActions>
+
+                    </Grid >
                 </Grid >
             </Card >
         )
@@ -471,8 +370,8 @@ export class QuestionEditCard extends Component<Props, State>{
                                                     <DeleteOutlineIcon />
                                                 </IconButton>
                                             </Tooltip>
-                                            {isLast ? 
-                                                <Button className="add-child-question" sx={{ padding: 2 }}  onClick={() => this.addObservation()}>
+                                            {isLast ?
+                                                <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.addObservation()}>
                                                     <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
                                                     Tilføj yderligere måling
                                                 </Button>
@@ -506,7 +405,7 @@ export class QuestionEditCard extends Component<Props, State>{
 
     addObservation(): void {
         console.log("ADD 1", this.props.question)
-        let question = {...this.props.question};
+        let question = { ...this.props.question };
         if (question.type === QuestionTypeEnum.OBSERVATION) {
             const subQuestion = new Question();
             subQuestion.Id = uuid();
@@ -521,7 +420,7 @@ export class QuestionEditCard extends Component<Props, State>{
         newSubQuestion.Id = uuid();
         newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
 
-        if( !question.subQuestions ) question.subQuestions = []
+        if (!question.subQuestions) question.subQuestions = []
         question.subQuestions.push(newSubQuestion);
 
         console.log("ADD 2", question)
@@ -597,3 +496,112 @@ setOptions(oldQuestion: Question, options: string[]): Question {
 
 }
 */
+
+
+interface MultipleChoiceEditorProps {
+    variant: "text" | "number",
+    options?: Array<Option>
+    onChange?: (options: Option[]) => void
+}
+
+const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
+
+    const updateOption = (index: number, option: string) => {
+        const newList = props.options ? [...props.options] : []
+        newList[index].option = option;
+        updateList(newList);
+    }
+
+    const updateComment = (index: number, comment: string) => {
+        const newList = props.options ? [...props.options] : []
+        newList[index].comment = comment;
+        updateList(newList);
+    }
+
+    const updateTriage = (index: number, triage: string) => {
+        const newList = props.options ? [...props.options] : []
+        newList[index].triage = triage;
+        updateList(newList);
+    }
+
+    const addItem = () => {
+        const emptyItem = { option: "", comment: "", triage: "" };
+        const newList = props.options ? [...props.options] : []
+        newList.push(emptyItem)
+        updateList(newList)
+    }
+
+    const deleteItem = (i: number) => {
+        let options = props.options
+        updateList(options?.slice(0, i).concat(options.slice(i + 1)) ?? [])
+    }
+
+    const updateList = (updatedList: Option[]) => {
+        props.onChange && props.onChange(updatedList)
+    }
+
+
+    return (
+        <>
+            <FormControl >
+                {props.options && props.options.map((item, i) => (
+                    <>
+                        <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
+                            <Tooltip title='Slet' placement='right'>
+                                <IconButton onClick={() => deleteItem(i)}>
+                                    <DeleteOutlineIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <TextField
+                                label={"Svarmulighed"}
+                                id="standard-basic"
+                                variant="outlined"
+                                type={props.variant}
+                                onChange={(x) => updateOption(i, x.target.value)}
+                                value={item.option}
+                                fullWidth
+                            />
+
+                            <TextField
+                                fullWidth
+                                label={"Kommentar"}
+                                id="standard-basic"
+                                variant="outlined"
+                                onChange={(x) => updateComment(i, x.target.value)}
+                                value={item.comment}
+                            />
+                            <FormControl>
+                                <InputLabel>Triangering</InputLabel>
+                                <Select
+                                    placeholder={"Triangering"}
+                                    label={"Triangering"}
+                                    id="standard-basic"
+                                    variant="outlined"
+                                    onChange={(x) => updateTriage(i, x.target.value as string)}
+                                    value={item.triage}
+                                    sx={{ width: 150 }}
+                                >
+                                    <MenuItem value="grøn">Grøn</MenuItem>
+                                    <MenuItem value="gul">Gul</MenuItem>
+                                    <MenuItem value="rød">Rød</MenuItem>
+                                </Select>
+
+                            </FormControl>
+
+                        </Stack>
+                    </>
+                ))}
+
+                <Button sx={{ marginTop: 2, width: 150 }} onClick={() => addItem()}>
+                    <AddCircleIcon sx={{ paddingRight: 1 }} />
+                    Tilføj svarmulighed
+                </Button>
+            </FormControl>
+
+
+
+        </>
+
+
+    )
+}

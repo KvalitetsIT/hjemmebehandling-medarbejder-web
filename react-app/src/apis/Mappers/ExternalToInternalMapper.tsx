@@ -11,7 +11,7 @@ import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetai
 import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
 import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
 import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
 import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
@@ -185,7 +185,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.abbreviation = questionDto.abbreviation;
         question.deprecated = questionDto.deprecated!;
         question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
-        question.options = questionDto.options
+        question.options = questionDto.options as Option[]
         question.helperText = questionDto.helperText;
         switch (questionDto.questionType) {
 
