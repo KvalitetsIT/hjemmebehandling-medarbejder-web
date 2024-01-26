@@ -211,7 +211,9 @@ export class ObservationCard extends Component<Props, State> {
                         })
                         
                         sorted.forEach(qr => {
-                            const answer = qr.questions?.get(question) as GroupAnswer | undefined;
+                            const questionnaireQuestion = Array.from(qr.questions!.keys()).find(x => x.Id === question.Id);
+                            const answer = qr.questions!.get(questionnaireQuestion!) as GroupAnswer | undefined
+
                             if (answer) {
                                 let row: (string|number|undefined)[] = [];
                                 row.push(dateToString(qr.answeredTime!));
@@ -228,7 +230,6 @@ export class ObservationCard extends Component<Props, State> {
                         })
                     }
                     const subheader = question.abbreviation ?? question.question ?? ""
-
 
                     return (
                         <Grid paddingLeft={i % 2 === 0 ? 0 : 3} marginBottom={2} item xs={this.getColumnSize(allQuestions.length)}>
