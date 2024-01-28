@@ -182,6 +182,9 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   }
 
   GetThresholds(questionnaire: Questionnaire, question: Question): ThresholdCollection {
+
+    const questionType = question.type
+
     if (questionnaire && !questionnaire.thresholds)
       questionnaire.thresholds = []
 
@@ -193,12 +196,13 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     thresholdCollection.questionId = question.Id!;
     questionnaire?.thresholds?.push(thresholdCollection);
 
-    const trueOption = new ThresholdOption();
-    trueOption.option = true.toString();
-    const falseOption = new ThresholdOption();
-    falseOption.option = false.toString();
-    thresholdCollection.thresholdOptions = [trueOption, falseOption];
-
+    if(questionType == QuestionTypeEnum.BOOLEAN){
+      const trueOption = new ThresholdOption();
+      trueOption.option = true.toString();
+      const falseOption = new ThresholdOption();
+      falseOption.option = false.toString();
+      thresholdCollection.thresholdOptions = [trueOption, falseOption];  
+    }
 
     return thresholdCollection;
 

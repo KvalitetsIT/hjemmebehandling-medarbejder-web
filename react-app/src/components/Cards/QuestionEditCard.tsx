@@ -284,7 +284,7 @@ export class QuestionEditCard extends Component<Props, State>{
 
                                         return {
                                             ...option,
-                                            triage: thresholdOptions ? thresholdOptions[i].category : CategoryEnum.BLUE
+                                            triage: thresholdOptions && thresholdOptions[i] !== undefined ? thresholdOptions[i].category : CategoryEnum.BLUE
                                         }
                                     })}
                                     onChange={(options) => {
@@ -544,7 +544,6 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
     const updateList = (updatedList: Option[]) => {
         props.onChange && props.onChange(updatedList)
     }
-
 
 
     return (

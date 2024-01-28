@@ -1,6 +1,7 @@
 import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
 import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
+import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
 import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
 import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
@@ -20,6 +21,7 @@ import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmeb
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
+import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 
 
 interface Props {
@@ -79,8 +81,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     InitializeServices(): void {
         const api = this.context as IApiContext
 
-        this.questionnaireService =  api.questionnaireService;
-        this.questionAnswerService =  api.questionAnswerService;
+        this.questionnaireService = api.questionnaireService;
+        this.questionAnswerService = api.questionAnswerService;
 
     }
 
@@ -158,7 +160,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .find((q: Question) => q.measurementType === undefined);
 
                 if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4) {
-                    console.log("manualValidationError", manualValidationError1, manualValidationError2,manualValidationError3, manualValidationError4)
+                    console.log("manualValidationError", manualValidationError1, manualValidationError2, manualValidationError3, manualValidationError4)
                     throw new MissingDetailsError([]);
                 }
 
@@ -178,7 +180,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 questionnaire.status = newStatus;
 
                 if (this.state.questionnaire && this.state.editMode) await this.questionnaireService.updateQuestionnaire(questionnaire);
-                
+
                 if (this.state.questionnaire && !this.state.editMode) await this.questionnaireService.createQuestionnaire(questionnaire);
 
                 this.setState({
@@ -302,20 +304,20 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         onUpdate={this.updateQuestion}
                                         allMeasurementTypes={this.state.allMeasurementTypes}
 
-                                        /*
-                                        onChange={(question) => {this.setState(prevState => {
+                                    /*
+                                    onChange={(question) => {this.setState(prevState => {
 
-                                            const i = prevState.questionnaire?.questions?.findIndex(q => q.Id == question.Id);
+                                        const i = prevState.questionnaire?.questions?.findIndex(q => q.Id == question.Id);
 
-                                            let questionnaire = prevState.questionnaire
-                                            
-                                            if (questionnaire?.questions && i) questionnaire.questions[i] = question
+                                        let questionnaire = prevState.questionnaire
+                                        
+                                        if (questionnaire?.questions && i) questionnaire.questions[i] = question
 
-                                            let toReturn = {...prevState, questionnaire: questionnaire }
-                                            
-                                            return toReturn
-                                        })}}
-                                        */
+                                        let toReturn = {...prevState, questionnaire: questionnaire }
+                                        
+                                        return toReturn
+                                    })}}
+                                    */
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
@@ -389,7 +391,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
                                                         */
-                                                       console.log("questionnaire", this.state.questionnaire)
+                                                        console.log("questionnaire", this.state.questionnaire)
                                                     }}
                                                 >Gem som kladde</Button>
                                                 <ConfirmationButton
@@ -454,19 +456,36 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
     updateQuestion(updatedQuestion: Question): void {
         const beforeUpdate = this.state.questionnaire!;
-        
+
         if (updatedQuestion.type !== QuestionTypeEnum.BOOLEAN) {
             // remove old questions thresholds
             const newThresholds = beforeUpdate.thresholds?.filter(tc => tc.questionId !== updatedQuestion.Id);
             beforeUpdate.thresholds = newThresholds;
         }
-        
 
+        // TODO!!! tilføj "triage" FRA QUESTION PÅ THRESHOLDS
+        const newThresholds = updatedQuestion.options?.map(opt => { 
+            if(updatedQuestion.Id === undefined) throw new Error("Missing id")            
+            let option = new ThresholdOption(); 
+            option.category = opt.triage 
+            option.id = updatedQuestion.Id
+            return option
+        }) ?? []
+
+        let collection = beforeUpdate.thresholds?.find(collection => collection.questionId === updatedQuestion.Id)
+        if (collection) {
+            collection.thresholdOptions = newThresholds
+        } else {
+            let newCollection = new ThresholdCollection();
+            if(updatedQuestion.Id == undefined ) throw new Error("Missing id")
+            newCollection.questionId = updatedQuestion.Id
+            newCollection.thresholdOptions = newThresholds
+            beforeUpdate.thresholds?.push()   
+        }
         
         let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);
-        if (currentQuestion instanceof CallToActionQuestion) {
-
-        }
+        
+        if (currentQuestion instanceof CallToActionQuestion) {}
         else if (currentQuestion instanceof Question) {
             currentQuestion.question = updatedQuestion.question;
             currentQuestion.abbreviation = updatedQuestion.abbreviation;
