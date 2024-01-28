@@ -33,7 +33,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
     }
   }
   async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
-    console.log("questionnaire" , questionnaire)
+    console.log("QuestionnaireService > createQuestionnaire" , questionnaire)
     try {
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.createQuestionnaire(questionnaire);
@@ -52,6 +52,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
 
   async updateQuestionnaire(questionnaire: Questionnaire): Promise<void> {
     try {
+      console.log("QuestionnaireService > updateQuestionnaire", questionnaire)
       questionnaire.questions = this.questionnaireFiltering.removeOrphans(questionnaire.questions!);
       await this.backendApi.updateQuestionnaire(questionnaire);
     } catch (error) {
@@ -68,8 +69,10 @@ export default class QuestionnaireService extends BaseService implements IQuesti
   }
 
   async getQuestionnaire(questionnaireId: string): Promise<Questionnaire | undefined> {
+    
     try {
       return await this.backendApi.GetQuestionnaire(questionnaireId);
+
     } catch (error) {
       return this.HandleError(error);
     }

@@ -469,6 +469,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             let option = new ThresholdOption(); 
             option.category = opt.triage 
             option.id = updatedQuestion.Id
+            option.option = opt.option
             return option
         }) ?? []
 
@@ -480,7 +481,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             if(updatedQuestion.Id == undefined ) throw new Error("Missing id")
             newCollection.questionId = updatedQuestion.Id
             newCollection.thresholdOptions = newThresholds
-            beforeUpdate.thresholds?.push()   
+            
+            beforeUpdate.thresholds?.push(newCollection)   
         }
         
         let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);

@@ -104,12 +104,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
 
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        console.log("BFFBackendApi > createQuestionnaire", questionnaire)
         try {
             const request: CreateQuestionnaireOperationRequest = {
                 createQuestionnaireRequest: {
                     questionnaire: this.toExternal.mapQuestionnaireToDto(questionnaire)
                 }
             }
+
+            console.log("request", request)
             await this.questionnaireApi.createQuestionnaire(request)
         } catch (error) {
             return this.HandleError(error)
