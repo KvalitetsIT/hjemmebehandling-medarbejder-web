@@ -146,6 +146,13 @@ export default class ExternalToInternalMapper extends BaseMapper {
                     this.mapTresholdCategory(thresholdDto.type!)
                 );
                 threshold.thresholdOptions!.push(thresholdOption);
+            }else if (thresholdDto.valueOption !== undefined) {
+                const thresholdOptions = this.CreateOption(
+                    thresholdDto.questionId!,
+                    thresholdDto.valueOption,
+                    this.mapTresholdCategory(thresholdDto.type!)
+                )
+                threshold.thresholdOptions?.push(thresholdOptions)
             }
             else {
                 const thresholdNumber = this.CreateThresholdNumber(
@@ -185,7 +192,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.abbreviation = questionDto.abbreviation;
         question.deprecated = questionDto.deprecated!;
         question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
-        question.options = questionDto.options as Option[]
+        
         question.helperText = questionDto.helperText;
         switch (questionDto.questionType) {
 
