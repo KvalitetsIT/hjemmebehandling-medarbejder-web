@@ -454,35 +454,49 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
     updateQuestion(updatedQuestion: Question): void {
         const beforeUpdate = this.state.questionnaire!;
 
-        if (updatedQuestion.type !== QuestionTypeEnum.BOOLEAN) {
-            // remove old questions thresholds
+        if (!(updatedQuestion.type === QuestionTypeEnum.BOOLEAN || updatedQuestion.type === QuestionTypeEnum.CHOICE)) {
+            // remove old questions thresholds if type not in (BOOLEAN,CHOICE)
             const newThresholds = beforeUpdate.thresholds?.filter(tc => tc.questionId !== updatedQuestion.Id);
             beforeUpdate.thresholds = newThresholds;
         }
 
-        // TODO!!! tilføj "triage" FRA QUESTION PÅ THRESHOLDS
-        const newThresholds = updatedQuestion.options?.map(opt => { 
-            if(updatedQuestion.Id === undefined) throw new Error("Missing id")            
-            let option = new ThresholdOption(); 
-            option.category = opt.triage 
-            option.id = updatedQuestion.Id
-            option.option = opt.option
-            return option
-        }) ?? []
-
+        
         let collection = beforeUpdate.thresholds?.find(collection => collection.questionId === updatedQuestion.Id)
-        if (collection) {
-            collection.thresholdOptions = newThresholds
-        } else {
-            let newCollection = new ThresholdCollection();
+        if (!collection) {
             if(updatedQuestion.Id == undefined ) throw new Error("Missing id")
-            newCollection.questionId = updatedQuestion.Id
-            newCollection.thresholdOptions = newThresholds
+
+            collection = new ThresholdCollection();
+            collection.questionId = updatedQuestion.Id
             
-            beforeUpdate.thresholds?.push(newCollection)   
+            beforeUpdate.thresholds?.push(collection);
         }
         
         let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);
+
+        // opdater thresholds
+        if (updatedQuestion.type === QuestionTypeEnum.BOOLEAN && currentQuestion?.type !== QuestionTypeEnum.BOOLEAN) {
+            // nulstil thresholds til BOOLEAN
+            const trueOption = new ThresholdOption();
+            trueOption.option = true.toString();
+            const falseOption = new ThresholdOption();
+            falseOption.option = false.toString();
+            collection.thresholdOptions = [trueOption, falseOption];  
+        }
+
+        if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
+            // opdater thresholds til at afspejle choices
+            const newThresholds = updatedQuestion.options?.map(opt => { 
+                if(updatedQuestion.Id === undefined) throw new Error("Missing id")            
+                let option = new ThresholdOption(); 
+                option.category = opt.triage 
+                option.id = updatedQuestion.Id
+                option.option = opt.option
+                return option
+            }) ?? []
+    
+            collection.thresholdOptions = newThresholds;            
+        }
+        console.log("efter update", collection)
         
         if (currentQuestion instanceof CallToActionQuestion) {}
         else if (currentQuestion instanceof Question) {
@@ -490,9 +504,15 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             currentQuestion.abbreviation = updatedQuestion.abbreviation;
             currentQuestion.helperText = updatedQuestion.helperText;
             currentQuestion.measurementType = updatedQuestion.measurementType;
-            currentQuestion.type = updatedQuestion.type
-            currentQuestion.subQuestions = updatedQuestion.subQuestions
-            currentQuestion.options = updatedQuestion.options
+            currentQuestion.type = updatedQuestion.type;
+            currentQuestion.subQuestions = updatedQuestion.subQuestions;
+            
+            if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
+                currentQuestion.options = updatedQuestion.options;
+            }
+            else {
+                currentQuestion.options = [];
+            }
         }
         this.setState({ questionnaire: beforeUpdate })
 
