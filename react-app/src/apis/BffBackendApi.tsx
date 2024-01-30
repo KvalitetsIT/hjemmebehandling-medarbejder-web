@@ -104,12 +104,15 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
     }
 
     async createQuestionnaire(questionnaire: Questionnaire): Promise<void> {
+        console.log("BFFBackendApi > createQuestionnaire", questionnaire)
         try {
             const request: CreateQuestionnaireOperationRequest = {
                 createQuestionnaireRequest: {
                     questionnaire: this.toExternal.mapQuestionnaireToDto(questionnaire)
                 }
             }
+
+            console.log("request", request)
             await this.questionnaireApi.createQuestionnaire(request)
         } catch (error) {
             return this.HandleError(error)
@@ -163,7 +166,8 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
                     title: questionnaire.name,
                     status: questionnaire.status?.toString(),
                     callToAction: this.toExternal.mapCallToAction(questionnaire.getCallToActions()[0]),
-                    questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id && question.type === QuestionTypeEnum.BOOLEAN))),
+                    //questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id && question.type === QuestionTypeEnum.BOOLEAN))),
+                    questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id ))),
                 }
             }
 

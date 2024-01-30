@@ -38,6 +38,8 @@ export default class InternalToExternalMapper extends BaseMapper {
             const currentThreshold: ThresholdDto = {}
             currentThreshold.questionId = threshold?.questionId;
             currentThreshold.type = this.mapCategory(thresholdOption.category);
+            currentThreshold.valueOption = thresholdOption.option
+            
             const isBoolean = thresholdOption.option.toLowerCase() === "true" || thresholdOption.option.toLowerCase() === "false"
             if (isBoolean)
                 currentThreshold.valueBoolean = thresholdOption.option.toLowerCase() === "true"
@@ -238,7 +240,7 @@ export default class InternalToExternalMapper extends BaseMapper {
     }
 
     mapQuestionnaireToDto(questionnaire: Questionnaire): QuestionnaireDto {
-
+        console.log("InternalToEcternalMapper > mapQuestionnaireToDto", questionnaire)
         const questions = questionnaire.getParentQuestions().concat(questionnaire.getChildQuestions())
         return {
             id: questionnaire.id,
@@ -248,6 +250,7 @@ export default class InternalToExternalMapper extends BaseMapper {
             status: questionnaire.status?.toString(),
             title: questionnaire.name,
             version: questionnaire.version,
+            
 
         }
 

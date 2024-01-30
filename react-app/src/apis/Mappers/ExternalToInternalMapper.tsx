@@ -52,7 +52,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         carePlan.terminationDate = carePlanDto.endDate
         carePlan.organization = new SimpleOrganization();
         carePlan.organization.name = carePlanDto?.departmentName ?? 'Ukendt afdeling'
-       // carePlanDto.questionnaires?.flatMap(x => { x.thresholds })
+        // carePlanDto.questionnaires?.flatMap(x => { x.thresholds })
         return carePlan
     }
 
@@ -62,7 +62,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         const tasks: Task[] = []
         carePlan.questionnaires?.filter(q => q.satisfiedUntil && q.satisfiedUntil.getTime() < now).forEach(unsatisfiedQuestionnaire => {
             //only unsatisfied questionnaires
-            
+
             carePlan.planDefinitions?.forEach(planDefinition => {
                 // locate a plandefinition containing the unsatisfied questionnaire
                 if (planDefinition.questionnaires?.find(q => q.questionnaire?.id === unsatisfiedQuestionnaire.questionnaire?.id)) {
@@ -128,24 +128,31 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         const thresholds: ThresholdCollection[] = [];
 
-        thresholdDtos.filter(thresholdDto => thresholdDto !== undefined ).forEach(thresholdDto => {
-            
+        thresholdDtos.filter(thresholdDto => thresholdDto !== undefined).forEach(thresholdDto => {
+
             let threshold = thresholds.find(threshold => threshold.questionId === thresholdDto.questionId);
-           
+
             if (!threshold) {
                 threshold = new ThresholdCollection();
                 threshold.questionId = thresholdDto.questionId!;
                 thresholds.push(threshold);
             }
-            
+
             const isValueBoolean = thresholdDto.valueBoolean !== undefined;
-            if ( isValueBoolean ) {
+            if (isValueBoolean) {
                 const thresholdOption = this.CreateOption(
                     thresholdDto.questionId!,
                     String(thresholdDto.valueBoolean!),
                     this.mapTresholdCategory(thresholdDto.type!)
                 );
                 threshold.thresholdOptions!.push(thresholdOption);
+            }else if (thresholdDto.valueOption !== undefined) {
+                const thresholdOptions = this.CreateOption(
+                    thresholdDto.questionId!,
+                    thresholdDto.valueOption,
+                    this.mapTresholdCategory(thresholdDto.type!)
+                )
+                threshold.thresholdOptions?.push(thresholdOptions)
             }
             else {
                 const thresholdNumber = this.CreateThresholdNumber(
@@ -185,7 +192,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         question.abbreviation = questionDto.abbreviation;
         question.deprecated = questionDto.deprecated!;
         question.measurementType = questionDto.measurementType ? this.mapMeasurementType(questionDto.measurementType) : undefined
-        question.options = questionDto.options as Option[]
+        
         question.helperText = questionDto.helperText;
         switch (questionDto.questionType) {
 
@@ -209,7 +216,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
                 question.subQuestions = questionDto.subQuestions?.map(q => this.mapQuestionDto(q))
                 break;
         }
-
+        question.options = this.mapOptions(questionDto)
         question.question = questionDto.text!
         question.enableWhen = this.mapEnableWhenDto(questionDto.enableWhen?.find(() => true));
         // TODO - handle options properly (there must be at least one option for the answer table to render).
@@ -350,7 +357,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
 
     }
-    
+
     mapGroupAnswer(answerDto: AnswerDto): GroupAnswer {
         if (!answerDto.linkId) throw new Error("Id is missing")
 
@@ -461,7 +468,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
         questionnaireResult.version = questionnaire?.version;
         return questionnaireResult;
     }
-    
+
     mapPatientDto(patientDto: PatientDto): PatientDetail {
         let address: Address = {}
         if (patientDto.patientContactDetails) {
@@ -475,13 +482,13 @@ export default class ExternalToInternalMapper extends BaseMapper {
         toReturn.firstname = patientDto.givenName;
         toReturn.lastname = patientDto.familyName;
         toReturn.cpr = patientDto.cpr;
-        
-        if( !toReturn.contact ) toReturn.contact = new ContactDetails()
+
+        if (!toReturn.contact) toReturn.contact = new ContactDetails()
 
         toReturn.contact.primaryPhone = patientDto.patientContactDetails?.primaryPhone
         toReturn.contact.secondaryPhone = patientDto.patientContactDetails?.secondaryPhone
         toReturn.contact.address = address
-    
+
         toReturn.primaryContact = primaryContact
         toReturn.username = patientDto.customUserName
         return toReturn;
@@ -492,12 +499,12 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         toReturn.fullname = patientDto?.primaryRelativeName ?? ''
         toReturn.affiliation = patientDto?.primaryRelativeAffiliation ?? ''
-        
+
         let contactDetails = new ContactDetails()
         contactDetails.primaryPhone = patientDto?.primaryRelativeContactDetails?.primaryPhone ?? ''
         contactDetails.secondaryPhone = patientDto?.primaryRelativeContactDetails?.secondaryPhone ?? ''
         toReturn.contact = contactDetails
-        
+
         return toReturn;
 
     }
@@ -512,4 +519,21 @@ export default class ExternalToInternalMapper extends BaseMapper {
 
         return address;
     }
+
+    mapOptions(questionDto: QuestionDto): Option[] | undefined {
+
+        return questionDto.options?.map(option => {
+            const type = questionDto.thresholds?.find(x => x.valueOption == option.option)?.type
+            
+            return {
+                option: option.option ?? "",
+                comment: option.comment ?? "",
+                triage: type ? this.mapTresholdCategory(type) : CategoryEnum.BLUE
+            }
+        })
+    }
+
+
+    
 }
+
