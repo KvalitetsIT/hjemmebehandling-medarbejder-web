@@ -387,11 +387,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                     variant="contained"
                                                     disabled={(this.state.questionnaire.id !== undefined) && (this.state.questionnaire.status !== undefined && (this.state.questionnaire.status !== BaseModelStatus.DRAFT))}
                                                     onClick={() => {
-                                                        /*
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("DRAFT");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent())
-                                                        */
-                                                        console.log("questionnaire", this.state.questionnaire)
                                                     }}
                                                 >Gem som kladde</Button>
                                                 <ConfirmationButton
