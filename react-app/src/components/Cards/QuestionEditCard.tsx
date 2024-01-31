@@ -69,6 +69,11 @@ export class QuestionEditCard extends Component<Props, State>{
         if (value.length <= 0) errors.push(new InvalidInputModel("question", "Spørgsmål er endnu ikke udfyldt"))
         return errors
     }
+    async validateChoiceInput(value: string): Promise<InvalidInputModel[]> {
+        const errors: InvalidInputModel[] = []
+        if (value.length <= 0) errors.push(new InvalidInputModel("question", "Svarmulighed er endnu ikke udfyldt"))
+        return errors
+    }
     /*
         async validateHelperText(value: string): Promise<InvalidInputModel[]> {
             const errors: InvalidInputModel[] = []
@@ -293,6 +298,8 @@ export class QuestionEditCard extends Component<Props, State>{
                                             options: options
                                         })
                                     }}
+                                    onValidation={this.props.onValidation}
+                                    validate={this.validateChoiceInput}
                                 />
                             )}
 
@@ -507,6 +514,8 @@ interface MultipleChoiceEditorProps {
     variant: "text" | "number",
     options?: Array<Option>
     onChange?: (options: Option[]) => void
+    onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
+    validate?: (value: string) => Promise<InvalidInputModel[]>
 }
 
 const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
@@ -553,21 +562,34 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                     <>
                         <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
 
-
-                            <TextField
+                            <TextFieldValidation
                                 label={"Svarmulighed"}
-                                id="standard-basic"
+                                uniqueId={'svarmulighed_'+i}
                                 variant="outlined"
-                                type={props.variant}
-                                onChange={(x) => updateOption(i, x.target.value)}
+                                size="medium"
+                                onChange={(x) => {
+                                    const typeIsNumber = (props.variant == 'number');
+                                    const valueIsNumber = !Number.isNaN(parseFloat(x.target.value));
+                                    const valueIsEmpty = x.target.value == '';
+                                    console.log("input:"+x.target.value,"typeIsNumber: "+typeIsNumber, "valueIsNumber: "+valueIsNumber, "valueIsEmpty: "+valueIsEmpty)
+                                    if (typeIsNumber && (valueIsNumber || valueIsEmpty)) {
+                                        updateOption(i, x.target.value)
+                                    }
+                                    else if ((props.variant == 'text')) {
+                                        updateOption(i, x.target.value)
+                                    }
+                                }}
                                 value={item.option}
-                                fullWidth
+                                onValidation={props.onValidation}
+                                validate={props.validate}
+                                sectionName={'questionnaire'}
+                                
                             />
 
-                            <TextField
-                                fullWidth
+                            <TextFieldValidation
                                 label={"Kommentar"}
-                                id="standard-basic"
+                                uniqueId={"kommentar_"+i}
+                                size="medium"
                                 variant="outlined"
                                 onChange={(x) => updateComment(i, x.target.value)}
                                 value={item.comment}

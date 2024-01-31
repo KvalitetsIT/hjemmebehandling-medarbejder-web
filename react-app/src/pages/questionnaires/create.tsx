@@ -158,9 +158,13 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter((q: Question) => q.type === QuestionTypeEnum.GROUP)
                     .flatMap((q: Question) => q.subQuestions!)
                     .find((q: Question) => q.measurementType === undefined);
+                const manualValidationError5 = questionnaire.questions!
+                    .filter(q => q instanceof Question)
+                    .filter((q: Question) => q.type === QuestionTypeEnum.CHOICE)
+                    .find((q: Question) => q.options?.find(o => o.option === undefined || o.option == ''))
 
-                if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4) {
-                    console.log("manualValidationError", manualValidationError1, manualValidationError2, manualValidationError3, manualValidationError4)
+                if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4 || manualValidationError5) {
+                    console.log("manualValidationError", manualValidationError1, manualValidationError2, manualValidationError3, manualValidationError4, manualValidationError5)
                     throw new MissingDetailsError([]);
                 }
 
