@@ -20,7 +20,6 @@ export interface Props {
 }
 
 export interface State {
-    category : CategoryEnum | undefined
     errors: InvalidInputModel[]
 }
 
@@ -35,7 +34,6 @@ export class CategorySelect extends Component<Props,State> {
         this.onValidateEvent = this.onValidateEvent.bind(this)
 
         this.state = {
-            category: props.category,
             errors: []
         }
     }
@@ -62,7 +60,7 @@ export class CategorySelect extends Component<Props,State> {
 
     async validate(): Promise<void> {
         const errors: InvalidInputModel[] = []
-        if (this.state.category === undefined) {
+        if (this.props.category === undefined) {
             errors.push( new InvalidInputModel("QuestionType", "Kategori skal angives",CriticalLevelEnum.ERROR))
         }
          if (this.props.onValidation) {
@@ -88,7 +86,6 @@ export class CategorySelect extends Component<Props,State> {
 
     handleChange (event: SelectChangeEvent) : void {
         const newValue = this.getAllCategories().find(x=>x.toString() === event.target.value.toString())
-        this.setState({category : newValue as CategoryEnum})
         this.props.onChange(newValue as CategoryEnum)
     }
 
@@ -102,7 +99,7 @@ export class CategorySelect extends Component<Props,State> {
                     disabled={this.props.disabled}
                     labelId="demo-multiple-name-label"
                     id="demo-multiple-name"
-                    value={this.state.category?.toString()}
+                    value={this.props.category?.toString()}
                     onChange={this.handleChange}
                     error={hasError}
                 >
