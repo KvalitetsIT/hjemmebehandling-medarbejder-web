@@ -242,6 +242,8 @@ export class QuestionEditCard extends Component<Props, State>{
                                                 label="Vælg typen af svar"
                                                 onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
                                                 value={this.state.variant}
+                                                disabled={this.props.question.options?.length != 0}
+                                                
                                             >
                                                 <MenuItem value="text">Tekst</MenuItem>
                                                 <MenuItem value="number">Tal</MenuItem>
