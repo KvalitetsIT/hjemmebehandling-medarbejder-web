@@ -5,8 +5,7 @@ import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { DayEnum, FrequencyEnum } from '@kvalitetsit/hjemmebehandling/Models/Frequency';
 import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import TimePicker from '@mui/lab/TimePicker';
-import { FilledTextFieldProps, FormControl, OutlinedTextFieldProps, StandardTextFieldProps, TableCell, TableRow, TextField, TextFieldVariants, Typography } from '@mui/material';
+import { FormControl, TableCell, TableRow, Typography } from '@mui/material';
 import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
 import { MultiSelect, MultiSelectOption } from './MultiSelect';
 import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
@@ -14,6 +13,9 @@ import { PlanDefinitionSelect } from './PlanDefinitionSelect';
 import { IValidationService } from '../../services/interfaces/IValidationService';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimeField } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/da';
 
 export interface Props {
   questionnaire: Questionnaire
@@ -24,7 +26,7 @@ export interface Props {
 
 export interface State {
   questionnaire: Questionnaire
-  deadineTime: Date
+  deadlineTime: Date
 }
 
 export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>, State> {
@@ -55,12 +57,20 @@ export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>,
 
   constructor(props: Props) {
     super(props);
-    const elevenOClock = "11:00";
-    const deadlineTime = new Date(0, 0, 0, 11, 0);
-    props.questionnaire!.frequency!.deadline = elevenOClock
+    
+    const deadline = props.questionnaire!.frequency!.deadline;
+    let deadlineHour = 0;
+    let deadlineMinutes = 0
+    if (deadline && deadline.includes(':')) {
+      deadlineHour = Number.parseInt(deadline.split(':')[0]);
+      deadlineMinutes = Number.parseInt(deadline.split(':')[1]);
+    }
+    // eks. 11:00 eller 10:00
+    const deadlineTime = new Date(0, 0, 0, deadlineHour, deadlineMinutes);
+    
     this.state = {
       questionnaire: props.questionnaire,
-      deadineTime: deadlineTime,
+      deadlineTime: deadlineTime,
     }
 
   }
@@ -125,12 +135,10 @@ export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>,
           </TableCell>
           <TableCell>
             <LocalizationProvider adapterLocale={"da"} dateAdapter={AdapterDayjs}>
-              <TimePicker
-                disabled
+              <TimeField
                 label="Seneste besvarelses tidspunkt"
-                value={this.state.deadineTime}
-                onChange={() => { console.log("Deadline cannot be changed!") }}
-                renderInput={(params: JSX.IntrinsicAttributes & { variant?: TextFieldVariants | undefined; } & Omit<FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps, "variant">) => <TextField {...params} />}
+                defaultValue={dayjs(this.state.deadlineTime)}
+                disabled
               />
             </LocalizationProvider>
           </TableCell>
@@ -142,8 +150,4 @@ export class FrequencyTableRow extends Component<React.PropsWithChildren<Props>,
       </>
     )
   }
-
-
-
-
 }
