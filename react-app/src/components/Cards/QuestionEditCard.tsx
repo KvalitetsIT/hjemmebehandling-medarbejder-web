@@ -91,7 +91,6 @@ export class QuestionEditCard extends Component<Props, State>{
         const shouldShowObservationBlock = this.props.question.type === QuestionTypeEnum.OBSERVATION || this.props.question.type === QuestionTypeEnum.GROUP
         const className = this.props.parentQuestion !== undefined ? "focusedChildQuestionEditCard" : "focusedParentQuestionEditCard"
 
-
         const BooleanThresholdEditor = () => {
 
             const thresholdCollection = this.props.getThreshold ? this.props.getThreshold(this.props.question) : undefined
@@ -242,8 +241,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                                 label="Vælg typen af svar"
                                                 onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
                                                 value={this.state.variant}
-                                                disabled={this.props.question.options?.length != 0}
-
+                                                disabled={this.props.question.options?.length !== 0 && this.props.question.options !== undefined}
                                             >
                                                 <MenuItem value="text">Tekst</MenuItem>
                                                 <MenuItem value="number">Tal</MenuItem>
@@ -353,7 +351,6 @@ export class QuestionEditCard extends Component<Props, State>{
             renderQuestions.push(question);
         }
         else if (question.type === QuestionTypeEnum.GROUP) {
-            console.log("HERHHERHERH")
             if (!question.subQuestions) {
                 question.subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()]
             }
@@ -562,7 +559,6 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         triage: CategoryEnum;
     }[] | undefined) => {
         let state = options?.map(option => option as Option) ?? [];
-        console.log("state", state);
         props.onChange && props.onChange(state);
     }
 
