@@ -42,11 +42,7 @@ interface State {
 
 class CreateQuestionnairePage extends React.Component<Props, State> {
     static sectionName = "questionnaire";
-
-
     static contextType = ApiContext
-
-
 
     questionnaireService!: IQuestionnaireService
     questionAnswerService!: IQuestionAnswerService

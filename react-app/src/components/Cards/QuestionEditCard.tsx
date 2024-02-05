@@ -1,7 +1,7 @@
 import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
-import { Component, Key, ReactNode, useState } from "react";
+import { Component, Key, ReactNode, useEffect, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
 import { TextFieldValidation } from "../Input/TextFieldValidation";
@@ -243,7 +243,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                                 onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
                                                 value={this.state.variant}
                                                 disabled={this.props.question.options?.length != 0}
-                                                
+
                                             >
                                                 <MenuItem value="text">Tekst</MenuItem>
                                                 <MenuItem value="number">Tal</MenuItem>
@@ -286,6 +286,7 @@ export class QuestionEditCard extends Component<Props, State>{
                             {(shouldShowMultipleChoice && this.state.variant !== undefined) && (
                                 <MultipleChoiceEditor
                                     variant={this.state.variant}
+                                    disabled={true}
                                     options={this.props.question.options?.map((option, i) => {
                                         const thresholdOptions = this.props.getThreshold && this.props.getThreshold(this.props.question).thresholdOptions
 
@@ -518,94 +519,100 @@ interface MultipleChoiceEditorProps {
     onChange?: (options: Option[]) => void
     onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
     validate?: (value: string) => Promise<InvalidInputModel[]>
+    disabled?: boolean
 }
 
 const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
 
-    const updateOption = (index: number, option: string) => {
-        const newList = props.options ? [...props.options] : []
-        newList[index].option = option;
-        updateList(newList);
-    }
+    let [options, setOptions] = useState(props.options?.map(option => { 
+        if (option.triage != CategoryEnum.BLUE) return { ...option, original: true } 
+        else return { ...option, original: false }
+    }))
 
-    const updateComment = (index: number, comment: string) => {
-        const newList = props.options ? [...props.options] : []
-        newList[index].comment = comment;
-        updateList(newList);
-    }
 
-    const updateTriage = (index: number, triage: CategoryEnum) => {
-        const newList = props.options ? [...props.options] : []
-        newList[index].triage = triage;
-        updateList(newList);
+    const updateItem = (index: number, item: Option) => {
+        setOptions(prevOptions => {
+            if (prevOptions) prevOptions[index] = { ...prevOptions[index], ...item };
+            triggerOnChange(prevOptions);
+            return prevOptions;
+        })
     }
 
     const addItem = () => {
-        const emptyItem = { option: "", comment: "", triage: CategoryEnum.BLUE };
-        const newList = props.options ? [...props.options] : []
-        newList.push(emptyItem)
-        updateList(newList)
+        setOptions(prevOptions => {
+            const emptyItem = { option: "", comment: "", triage: CategoryEnum.BLUE, original: false };
+            const newOptions = [...prevOptions ?? [], emptyItem];
+            triggerOnChange(newOptions);
+            return newOptions;
+        });
     }
 
     const deleteItem = (i: number) => {
-        let options = props.options
-        updateList(options?.slice(0, i).concat(options.slice(i + 1)) ?? [])
+        setOptions(prevOptions => {
+            const newOptions = prevOptions?.slice(0, i).concat(prevOptions.slice(i + 1));
+            triggerOnChange(newOptions);
+            return newOptions;
+        });
     }
 
-    const updateList = (updatedList: Option[]) => {
-        props.onChange && props.onChange(updatedList)
+    const triggerOnChange = (options: {
+        original: boolean;
+        option: string;
+        comment: string;
+        triage: CategoryEnum;
+    }[] | undefined) => {
+        let state = options?.map(option => option as Option) ?? [];
+        console.log("state", state);
+        props.onChange && props.onChange(state);
     }
 
 
     return (
         <>
             <FormControl >
-                {props.options && props.options.map((item, i) => (
+                {options && options.map((item, i) => (
                     <>
                         <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
 
                             <TextFieldValidation
                                 label={"Svarmulighed"}
-                                uniqueId={'svarmulighed_'+i}
+                                uniqueId={'svarmulighed_' + i}
                                 variant="outlined"
                                 size="medium"
                                 onChange={(x) => {
                                     const typeIsNumber = (props.variant == 'number');
                                     const valueIsNumber = !Number.isNaN(parseFloat(x.target.value));
                                     const valueIsEmpty = x.target.value == '';
-                                    console.log("input:"+x.target.value,"typeIsNumber: "+typeIsNumber, "valueIsNumber: "+valueIsNumber, "valueIsEmpty: "+valueIsEmpty)
-                                    if (typeIsNumber && (valueIsNumber || valueIsEmpty)) {
-                                        updateOption(i, x.target.value)
-                                    }
-                                    else if ((props.variant == 'text')) {
-                                        updateOption(i, x.target.value)
+
+                                    if ((typeIsNumber && (valueIsNumber || valueIsEmpty)) || (props.variant == 'text')) {
+                                        updateItem(i, { ...item, option: x.target.value })
                                     }
                                 }}
                                 value={item.option}
                                 onValidation={props.onValidation}
                                 validate={props.validate}
                                 sectionName={'questionnaire'}
-                                
+
                             />
 
                             <TextFieldValidation
                                 label={"Kommentar"}
-                                uniqueId={"kommentar_"+i}
+                                uniqueId={"kommentar_" + i}
                                 size="medium"
                                 variant="outlined"
-                                onChange={(x) => updateComment(i, x.target.value)}
+                                onChange={(x) => updateItem(i, { ...item, comment: x.target.value })}
                                 value={item.comment}
                             />
-               
+
                             <CategorySelect
                                 // sectionName={this.props.sectionName}
                                 // disabled={this.props.disabled}
                                 label="Triagering"
+                                disabled={item.original}
                                 category={item.triage}
-                                onChange={(newCategory) => { updateTriage(i, newCategory); }}
+                                onChange={(newCategory) => { updateItem(i, { ...item, triage: newCategory }); }}
                                 // onValidation={this.props.onValidation}
                                 uniqueId={"category_" + i}
-                                disabled={false}
                             />
 
 
