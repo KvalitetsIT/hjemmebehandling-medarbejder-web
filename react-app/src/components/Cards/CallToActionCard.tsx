@@ -20,8 +20,13 @@ export interface Props {
     onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
 }
 
+class EnableWhenExtended<T> extends EnableWhen<T> {
+    original?: boolean
+}
+
 interface State {
     callToActionQuestion: CallToActionQuestion
+    existingEnableWhens?: EnableWhenExtended<boolean>[]
 }
 
 export class CallToActionCard extends Component<Props, State> {
@@ -32,7 +37,12 @@ export class CallToActionCard extends Component<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {
-            callToActionQuestion: props.callToActionQuestion
+            callToActionQuestion: props.callToActionQuestion,
+            existingEnableWhens: props.callToActionQuestion.enableWhens?.map(ew => {
+                let ext: EnableWhenExtended<boolean> = ew as EnableWhenExtended<boolean>;
+                ext.original = true;
+                return ext;
+            })
         }
         this.modifyQuestion = this.modifyQuestion.bind(this);
         this.validateMessage = this.validateMessage.bind(this);
@@ -93,6 +103,9 @@ export class CallToActionCard extends Component<Props, State> {
                         </Grid>
 
                         {callToActionQuestion?.enableWhens?.map((enableWhen, index) => {
+                            //const idx = this.state.existingEnableWhens?.findIndex(ew => ew.questionId === enableWhen.questionId);
+                            const ew = this.state.existingEnableWhens && this.state.existingEnableWhens[index];
+
                             const questionsToShowInSelector = this.props.allQuestions;
                             return (
                                 <>
@@ -106,9 +119,10 @@ export class CallToActionCard extends Component<Props, State> {
                                                 validate={this.validateQuestionSelect}
                                                 sectionName={this.props.sectionName}
                                                 uniqueId={this.state.callToActionQuestion.Id! + index}
+                                                disabled={ew?.original}
                                             />
                                             {enableWhen.questionId ?
-                                                <EnableWhenSelect key={index + "_whenselect_" + enableWhen.questionId} enableWhen={enableWhen} parentQuestion={this.getQuestionById(enableWhen.questionId)} />
+                                                <EnableWhenSelect key={index + "_whenselect_" + enableWhen.questionId} enableWhen={enableWhen} disabled={ew?.original} parentQuestion={this.getQuestionById(enableWhen.questionId)} />
                                                 :
                                                 <></>
                                             }
@@ -129,7 +143,7 @@ export class CallToActionCard extends Component<Props, State> {
                 </CardContent>
                 <Divider />
                 <CardActions sx={{ display: "flex", justifyContent: "right", padding: 2 }}>
-                    <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon />Tilføj spørgsmål</Button>
+                    <Button variant="text" onClick={() => this.addEnableWhen()}><AddCircleIcon />Tilføj patienthandling</Button>
                 </CardActions>
             </Card>
         );
@@ -139,13 +153,22 @@ export class CallToActionCard extends Component<Props, State> {
         const newEnableWhen = new EnableWhen<boolean>();
         const modifiedQuestion = this.state.callToActionQuestion
         modifiedQuestion.enableWhens?.push(newEnableWhen);
-        this.setState({ callToActionQuestion: modifiedQuestion })
+
+        let localEnable: EnableWhenExtended<boolean> = newEnableWhen as EnableWhenExtended<boolean>;
+        localEnable.original = false;
+        
+        let localState = this.state.existingEnableWhens;
+        localState?.push(localEnable);
+        this.setState({ callToActionQuestion: modifiedQuestion, existingEnableWhens: localState })
     }
 
     removeEnableWhen(indexToRemove: number): void {
         const modifiedQuestion = this.state.callToActionQuestion
         modifiedQuestion.enableWhens?.splice(indexToRemove, 1)
-        this.setState({ callToActionQuestion: modifiedQuestion })
+
+        let localState = this.state.existingEnableWhens;
+        localState?.splice(indexToRemove, 1)
+        this.setState({ callToActionQuestion: modifiedQuestion, existingEnableWhens: localState })
     }
 
     getQuestionById(questionId: string): Question | undefined {

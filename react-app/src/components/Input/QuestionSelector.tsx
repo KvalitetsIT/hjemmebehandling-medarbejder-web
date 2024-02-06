@@ -18,6 +18,7 @@ export interface Props {
     updateParent?: () => void
     onValidation?: (uniqueId: string, error: InvalidInputModel[]) => void
     validate: (enableWhen: EnableWhen<boolean>) => Promise<InvalidInputModel[]>
+    disabled?: boolean
 }
 
 export interface State {
@@ -96,7 +97,7 @@ export class QuestionSelector extends Component<Props, State> {
                     value={this.state.enableWhen.questionId} 
                     onChange={this.handleChange}
                     error={hasError}
-                    
+                    disabled={this.props.disabled}
                 >
                     {options?.map(question => {
                         return (

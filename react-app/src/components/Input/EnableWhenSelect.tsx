@@ -14,6 +14,7 @@ export interface Props {
     //subQuestion: Question
     enableWhen: EnableWhen<boolean>
     sectionName?: string
+    disabled?: boolean
 }
 
 export interface State {
@@ -72,6 +73,7 @@ export class EnableWhenSelect extends Component<Props, State> {
                     value={this.state.enableWhen?.answer?.toString() ?? ""} 
                     onChange={this.handleChange}
                     error = {hasError}
+                    disabled={this.props.disabled}
                     >
                     <MenuItem value={true.toString()}>Ja</MenuItem>
                     <MenuItem value={false.toString()}>Nej</MenuItem>
