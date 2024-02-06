@@ -19,13 +19,13 @@ interface State {
 
 export class QuestionnaireTable extends Component<Props, State>{
     static contextType = ApiContext
-     
+
 
     dateHelper!: IDateHelper
 
     constructor(props: Props) {
         super(props)
-         
+
         this.state = {
             showRetired: false
         }
@@ -33,7 +33,7 @@ export class QuestionnaireTable extends Component<Props, State>{
 
     initialiseServices(): void {
         const api = this.context as IApiContext
-        this.dateHelper =  api.dateHelper;
+        this.dateHelper = api.dateHelper;
     }
 
     render(): ReactNode {
@@ -75,6 +75,8 @@ export class QuestionnaireTable extends Component<Props, State>{
     }
 
     renderTableRows(questionnaires: Questionnaire[]): JSX.Element {
+
+
         return (
             <>
                 {questionnaires.map(questionnaire => {
@@ -82,7 +84,21 @@ export class QuestionnaireTable extends Component<Props, State>{
                     const retired = questionnaire.status === BaseModelStatus.RETIRED
 
                     const lastUpdated = questionnaire.lastUpdated ? this.dateHelper.DateToString(questionnaire.lastUpdated, new DateProperties(true, true, true, true)) : ""
-                    const observationQuestions = questionnaire.questions?.filter(question => question && question.type === QuestionTypeEnum.OBSERVATION).map(q => (q as Question));
+                    const observationQuestions = questionnaire.questions?.filter(question => question && (question.type === QuestionTypeEnum.OBSERVATION || question.type === QuestionTypeEnum.GROUP)).map(q => (q as Question));
+
+                    //const q: String[] = observationQuestions?.map(x => x.subQuestions?.map(sub => sub.measurementType?.displayName?.toString()))
+
+                    const extractMeasurementTypes = (question: Question): string[] => {
+                        const measurementTypesOfSubQuestions: string[] = question.subQuestions?.map(sub => extractMeasurementTypes(sub)).flat().filter((name): name is string => !!name) ?? []
+                        const result: string[] = question.measurementType?.displayName ? [question.measurementType?.displayName, ...measurementTypesOfSubQuestions] : measurementTypesOfSubQuestions
+                        return result
+                    }
+
+                    const extractMeasurementTypesForQuestions = (questions: Question[]): string[] => {
+                        return questions.map(question => extractMeasurementTypes(question)).flat()
+                    }
+
+                    const questionTypes = observationQuestions ? extractMeasurementTypesForQuestions(observationQuestions).join(", ") : []
 
                     return (
                         <TableRow sx={!show ? { display: 'none' } : {}}>
@@ -98,8 +114,9 @@ export class QuestionnaireTable extends Component<Props, State>{
                             </TableCell>
                             <TableCell>
                                 <Typography sx={retired ? { fontStyle: 'italic' } : {}} color={retired ? "grey" : "black"}>
-                                    {observationQuestions?.map(x => x.measurementType?.displayName?.toString())?.join(", ")}
+                                    {questionTypes}
                                 </Typography>
+
                             </TableCell>
                             <TableCell>
                                 <Typography sx={retired ? { fontStyle: 'italic' } : {}} color={retired ? "grey" : "black"}>
