@@ -70,6 +70,7 @@ export class QuestionEditCard extends Component<Props, State>{
         return errors
     }
     async validateChoiceInput(value: string): Promise<InvalidInputModel[]> {
+        console.log("value", value)
         const errors: InvalidInputModel[] = []
         if (value.length <= 0) errors.push(new InvalidInputModel("question", "Svarmulighed er endnu ikke udfyldt"))
         return errors
@@ -319,7 +320,7 @@ export class QuestionEditCard extends Component<Props, State>{
                             <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
                                 <ButtonGroup variant="text" >
                                     <Tooltip title='Slet' placement='right'>
-                                        <IconButton sx={{ color: '#5D74AC', padding: 2 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
+                                        <IconButton sx={{ color: '#5D74AC', padding: 2, width: 50 }} className="delete-question" disabled={this.props.deletable} onClick={() => this.props.removeQuestionAction(this.props.question)}>
                                             <DeleteOutlineIcon />
                                         </IconButton>
                                     </Tooltip>
@@ -576,14 +577,10 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 variant="outlined"
                                 size="medium"
                                 onChange={(x) => {
-                                    const typeIsNumber = (props.variant == 'number');
-                                    const valueIsNumber = !Number.isNaN(parseFloat(x.target.value));
-                                    const valueIsEmpty = x.target.value == '';
-
-                                    if ((typeIsNumber && (valueIsNumber || valueIsEmpty)) || (props.variant == 'text')) {
                                         updateItem(i, { ...item, option: x.target.value })
-                                    }
+                                    
                                 }}
+                                type={props.variant}
                                 value={item.option}
                                 onValidation={props.onValidation}
                                 validate={props.validate}
@@ -613,7 +610,7 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
 
 
                             <Tooltip title='Slet' placement='right'>
-                                <IconButton onClick={() => deleteItem(i)}>
+                                <IconButton onClick={() => deleteItem(i)} sx={{width: 50}}>
                                     <DeleteOutlineIcon />
                                 </IconButton>
                             </Tooltip>
