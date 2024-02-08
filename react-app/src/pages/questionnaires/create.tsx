@@ -69,6 +69,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         }
     }
 
+
+
+
+
     render(): JSX.Element {
         this.InitializeServices();
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
@@ -88,6 +92,9 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         const measurementTypes = await this.questionAnswerService.GetAllMeasurementTypes();
         this.setState({ allMeasurementTypes: measurementTypes })
     }
+
+
+
 
     async populateCareplans(): Promise<void> {
         try {
@@ -135,7 +142,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             if (valid) {
                 const questionnaire = this.state.questionnaire!;
 
-                console.log("Questionnaire", questionnaire)
                 const manualValidationError1 = questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.BOOLEAN)
@@ -236,7 +242,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
         const questionnaire = this.state.questionnaire;
         const questions: Question[] = [];
-        questionnaire.getParentQuestions().map(question => {
+
+        questionnaire.getParentQuestions().forEach(question => {
             questions.push(question);
             questions.push(...questionnaire.getChildQuestions(question.Id));
         });
@@ -284,6 +291,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                         : null}
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
+                        
                         return (
                             <>
                                 <Grid item xs={12}>
@@ -400,6 +408,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                                         const newStatus = Questionnaire.stringToQuestionnaireStatus("ACTIVE");
                                                         this.submitQuestionnaire(newStatus).then(() => this.validateEvent.dispatchEvent()).catch(() => console.log("SUBMIT.. men med fejl"))
                                                     }}
+
                                                     skipDialog={!(this.state.questionnaireIsInUse && this.questionnaireContainsMeasurementsWhichisNew())}
                                                     buttonText={'Gem og aktivér'}
                                                     title="Definer alarmgrænser"
@@ -460,17 +469,17 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             beforeUpdate.thresholds = newThresholds;
         }
 
-        
+
         let collection = beforeUpdate.thresholds?.find(collection => collection.questionId === updatedQuestion.Id)
         if (!collection) {
-            if(updatedQuestion.Id == undefined ) throw new Error("Missing id")
+            if (updatedQuestion.Id == undefined) throw new Error("Missing id")
 
             collection = new ThresholdCollection();
             collection.questionId = updatedQuestion.Id
-            
+
             beforeUpdate.thresholds?.push(collection);
         }
-        
+
         let currentQuestion = beforeUpdate.questions!.find(q => q.Id === updatedQuestion.Id);
 
         // opdater thresholds
@@ -480,25 +489,25 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             trueOption.option = true.toString();
             const falseOption = new ThresholdOption();
             falseOption.option = false.toString();
-            collection.thresholdOptions = [trueOption, falseOption];  
+            collection.thresholdOptions = [trueOption, falseOption];
         }
 
         if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
             // opdater thresholds til at afspejle choices
-            const newThresholds = updatedQuestion.options?.map(opt => { 
-                if(updatedQuestion.Id === undefined) throw new Error("Missing id")            
-                let option = new ThresholdOption(); 
-                option.category = opt.triage 
+            const newThresholds = updatedQuestion.options?.map(opt => {
+                if (updatedQuestion.Id === undefined) throw new Error("Missing id")
+                let option = new ThresholdOption();
+                option.category = opt.triage
                 option.id = updatedQuestion.Id
                 option.option = opt.option
                 return option
             }) ?? []
-    
-            collection.thresholdOptions = newThresholds;            
+
+            collection.thresholdOptions = newThresholds;
         }
         console.log("efter update", collection)
-        
-        if (currentQuestion instanceof CallToActionQuestion) {}
+
+        if (currentQuestion instanceof CallToActionQuestion) { }
         else if (currentQuestion instanceof Question) {
             currentQuestion.question = updatedQuestion.question;
             currentQuestion.abbreviation = updatedQuestion.abbreviation;
@@ -506,7 +515,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             currentQuestion.measurementType = updatedQuestion.measurementType;
             currentQuestion.type = updatedQuestion.type;
             currentQuestion.subQuestions = updatedQuestion.subQuestions;
-            
+
             if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
                 currentQuestion.options = updatedQuestion.options;
             }

@@ -1,6 +1,6 @@
 import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { Component, Key, ReactNode, useEffect, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
@@ -18,6 +18,9 @@ import { Tooltip } from '@mui/material'
 import { v4 as uuid } from 'uuid';
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { ValidationError } from "yup";
+import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
+import CreateQuestionnairePage from "../../pages/questionnaires/create";
+import { ErrorMessage } from "../Errors/MessageWithWarning";
 
 
 interface Props {
@@ -40,6 +43,8 @@ interface Props {
 }
 interface State {
     variant?: "text" | "number"
+    errors: InvalidInputModel[];
+    test: string
 }
 
 export class QuestionEditCard extends Component<Props, State>{
@@ -49,13 +54,22 @@ export class QuestionEditCard extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            variant: this.getVariant(props.question.options)
+            variant: this.getVariant(props.question),
+            errors: [],
+            test: "hello"
         }
+        this.onValidateEvent = this.onValidateEvent.bind(this)
     }
 
-    getVariant(options: Option[] | undefined): "number" | "text" | undefined {
-        if (options === undefined || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
-        const isNumbers = options.every(x => !Number.isNaN(parseFloat(x.option)))
+
+    getVariant(question: Question): "number" | "text" | undefined {
+
+        const options: Option[] | undefined = question.options
+
+        let questionIsOfTypeChoice = question.type === QuestionTypeEnum.CHOICE;
+
+        if (!questionIsOfTypeChoice) return undefined
+        const isNumbers = options && options.every(x => !Number.isNaN(parseFloat(x.option)))
         return isNumbers ? "number" : "text"
     }
 
@@ -70,18 +84,186 @@ export class QuestionEditCard extends Component<Props, State>{
         if (value.length <= 0) errors.push(new InvalidInputModel("question", "Spørgsmål er endnu ikke udfyldt"))
         return errors
     }
-    async validateChoiceInput(value: string): Promise<InvalidInputModel[]> {
-        const errors: InvalidInputModel[] = []
-        if (value.length <= 0) errors.push(new InvalidInputModel("question", "Svarmulighed er endnu ikke udfyldt"))
-        return errors
+
+    componentDidMount(): void {
+        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
     }
-    /*
-        async validateHelperText(value: string): Promise<InvalidInputModel[]> {
-            const errors: InvalidInputModel[] = []
-            if (value.length <= 0) errors.push(new InvalidInputModel("helperText", "hjælpetekst er endnu ikke udfyldt"))
-            return errors
+
+
+    onValidateEvent(event: Event): void {
+        const data = (event as CustomEvent).detail as ValidateInputEventData
+
+        if (CreateQuestionnairePage.sectionName === data.sectionName) {
+            this.validate();
         }
-    */
+    }
+
+
+    validate(): void {
+        const optionsAreMissing = this.state.variant && this.props.question.type == QuestionTypeEnum.CHOICE && !(this.props.question.options != undefined && this.props.question.options?.length > 0)
+
+        const e = optionsAreMissing ? [new InvalidInputModel(CreateQuestionnairePage.sectionName, "Der mangler svarmuligheder")] : []
+
+        this.setState(prevState => {
+            return ({ ...prevState, errors: e })
+        })
+
+
+    }
+
+
+    onUpdate(updatedQuestion: Question) {
+        this.props.onUpdate(updatedQuestion)
+
+
+        this.validate()
+    }
+
+    createNewSubQuestion(): Question {
+        const newSubQuestion = new Question();
+        newSubQuestion.Id = uuid();
+        newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
+
+        return newSubQuestion;
+
+    }
+    renderObservationBlock(question: Question): JSX.Element {
+        let renderQuestions: Question[] = [];
+        if (question.type === QuestionTypeEnum.OBSERVATION) {
+            renderQuestions.push(question);
+        }
+        else if (question.type === QuestionTypeEnum.GROUP) {
+            if (!question.subQuestions) {
+                question.subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()]
+            }
+            renderQuestions.push(...question.subQuestions!);
+        }
+        const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
+
+
+
+
+        return (
+            <TableContainer>
+                <Table>
+                    {renderQuestions.map((question, index) => {
+                        const isLast = renderQuestions.length - 1 == index
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    <Stack direction="row" spacing={2} >
+                                        <QuestionMeasurementTypeSelect
+                                            sectionName={this.props.sectionName}
+                                            onValidation={this.props.onValidation}
+                                            disabled={this.props.disabled}
+                                            question={question}
+                                            uniqueId={question.Id!}
+                                            onChange={input => {
+                                                const clickedMeasurementCode = input.target.value
+                                                const clicked = this.props.allMeasurementTypes.find(mt => mt.code === clickedMeasurementCode);
+
+                                                if (this.props.question.type === QuestionTypeEnum.GROUP) {
+                                                    //find correct subQuestion to update
+                                                    const subQuestion = this.props.question.subQuestions?.find(sq => sq.Id === question.Id);
+                                                    subQuestion!.measurementType = clicked
+                                                    this.onUpdate({ ...this.props.question })
+                                                }
+                                                else {
+                                                    this.onUpdate({ ...this.props.question, measurementType: clicked })
+                                                }
+                                            }}
+                                            allMeasurementTypes={this.props.allMeasurementTypes}
+                                        />
+
+                                        {isGroupQuestion && !this.props.disabled ?
+                                            <ButtonGroup variant="text" >
+                                                <Tooltip title='Slet' placement='right'>
+                                                    <IconButton sx={{ color: '#5D74AC', padding: 2, width: 50 }} className="delete-question" disabled={renderQuestions.length == 2} onClick={() => this.removeObservation(question)}>
+                                                        <DeleteOutlineIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                {isLast ?
+                                                    <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.addObservation()}>
+                                                        <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
+                                                        Tilføj yderligere måling
+                                                    </Button>
+                                                    :
+                                                    <></>
+                                                }
+                                            </ButtonGroup>
+                                            :
+                                            <></>
+                                        }
+                                    </Stack>
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })
+                    }
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    removeObservation(removeQuestion: Question): void {
+        const question = { ...this.props.question };
+        if (question.subQuestions && question.subQuestions.length > 2) {
+            question.subQuestions = question.subQuestions?.filter(sq => sq.Id !== removeQuestion.Id/*!sq.isEqual(removeQuestion)*/);
+
+            this.onUpdate(question)
+        }
+    }
+
+    addObservation(): void {
+        const question = { ...this.props.question };
+
+        if (question.subQuestions) {
+            question.subQuestions.push(this.createNewSubQuestion());
+
+            this.onUpdate(question);
+        }
+    }
+    renderBooleanThreshold(): JSX.Element {
+
+
+        const thresholdCollection = this.props.getThreshold ? this.props.getThreshold(this.props.question) : undefined
+
+        return (
+            <TableContainer>
+                <Table>
+                    {thresholdCollection && thresholdCollection.thresholdOptions?.map(option => {
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    {option.option === "true" ? "Ja" : "Nej"}
+                                </TableCell>
+                                <TableCell>
+                                    <CategorySelect
+                                        sectionName={this.props.sectionName}
+                                        disabled={this.props.disabled}
+                                        category={option.category}
+                                        onChange={(newCategory) => { option.category = newCategory }}
+                                        onValidation={this.props.onValidation}
+                                        uniqueId={this.props.question.Id! + option.option}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </Table>
+            </TableContainer>
+        )
+    }
+
+
+    renderErrors(): ReactNode {
+        return (<>
+            {this.state.errors.map(e => (<ErrorMessage color={"warning"} message={e.message} />))}
+        </>)
+    }
+
+
+
 
     render(): ReactNode {
         const parrentQuestion = this.props.parentQuestion;
@@ -123,8 +305,15 @@ export class QuestionEditCard extends Component<Props, State>{
             )
         }
 
+        console.log("state", this.state)
         return (
+
             <Card>
+
+                <Typography>{this.state.test}</Typography>
+                <Button onClick={() => this.setState({ test: "world" })}>hello</Button>
+
+
 
                 <Grid key={this.props.key} container columns={48}>
                     <Grid sx={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }} paddingTop={2} paddingBottom={2} className={className} item xs={1} >
@@ -148,7 +337,6 @@ export class QuestionEditCard extends Component<Props, State>{
                                     : <></>
                                 }
                                 <Grid container marginTop={1} columns={12}>
-
                                     <Grid item xs>
                                         <TextFieldValidation
                                             label="Spørgsmål"
@@ -161,7 +349,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             validate={this.validateQuestionName}
                                             onChange={input => {
                                                 const newValue = input.currentTarget.value;
-                                                this.props.onUpdate({ ...this.props.question, question: newValue })
+                                                this.onUpdate({ ...this.props.question, question: newValue })
                                             }}
                                             sectionName={this.props.sectionName}
                                         />
@@ -176,7 +364,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             uniqueId={this.props.question.Id! + '_abbreviation'}
                                             onChange={input => {
                                                 const newValue = input.currentTarget.value;
-                                                this.props.onUpdate({ ...this.props.question, abbreviation: newValue })
+                                                this.onUpdate({ ...this.props.question, abbreviation: newValue })
                                             }}
 
                                             onValidation={this.props.onValidation}
@@ -208,7 +396,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                         minWidth={800}
                                         onChange={input => {
                                             const newValue = input.currentTarget.value;
-                                            this.props.onUpdate({ ...this.props.question, helperText: newValue })
+                                            this.onUpdate({ ...this.props.question, helperText: newValue })
                                         }}
                                         required
                                         sectionName={this.props.sectionName}
@@ -228,7 +416,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             if (newValue === QuestionTypeEnum.GROUP) {
                                                 subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()];
                                             }
-                                            this.props.onUpdate({ ...this.props.question, type: newValue, subQuestions: subQuestions })
+                                            this.onUpdate({ ...this.props.question, type: newValue, subQuestions: subQuestions })
                                         }}
 
                                     />
@@ -240,7 +428,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             <InputLabel>Vælg typen af svar</InputLabel>
                                             <Select
                                                 label="Vælg typen af svar"
-                                                onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
+                                                onChange={input => { console.log("input.target.value ", input.target.value); this.setState({ variant: input.target.value as "text" | "number" | undefined }) }}
                                                 value={this.state.variant}
                                                 disabled={this.props.question.options?.length !== 0 && this.props.question.options !== undefined}
                                             >
@@ -252,35 +440,9 @@ export class QuestionEditCard extends Component<Props, State>{
 
                                 )}
                             </Grid>
-                            {
-                                /*
-                            <Grid container spacing={2}>
-                                <Grid item xs={8}>
-                                    {this.state.question.type === QuestionTypeEnum.OBSERVATION ?
-                                        <QuestionMeasurementTypeSelect
-                                            sectionName={this.props.sectionName}
-                                            onValidation={this.props.onValidation}
-                                            disabled={this.props.disabled}
-                                            forceUpdate={this.forceCardUpdate}
-                                            question={this.state.question}
-                                            uniqueId={this.props.question.Id! + '_measurementType'}
-                                        />
-                                        : <></>}
-                                </Grid>
-                                <Grid item xs={4}>
-                                <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.props.addSubQuestionAction!(this.props.question, true)}>
-                                <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
-                                Tilføj yderligere måling
-                            </Button>
-                                </Grid>
-                            </Grid>
-                                    */
-                            }
 
 
                             {shouldShowObservationBlock && this.renderObservationBlock(this.props.question)}
-
-
 
                             {(shouldShowMultipleChoice && this.state.variant !== undefined) && (
                                 <MultipleChoiceEditor
@@ -295,18 +457,20 @@ export class QuestionEditCard extends Component<Props, State>{
                                         }
                                     })}
                                     onChange={(options) => {
-                                        this.props.onUpdate && this.props.onUpdate({
+                                        this.onUpdate && this.onUpdate({
                                             ...this.props.question,
                                             options: options
                                         })
+
                                     }}
                                     onValidation={this.props.onValidation}
-                                    validate={this.validateChoiceInput}
                                 />
                             )}
 
 
                             {shouldShowThresholds && <BooleanThresholdEditor />}
+
+                            {this.renderErrors()}
 
                         </CardContent >
 
@@ -338,177 +502,9 @@ export class QuestionEditCard extends Component<Props, State>{
         )
     }
 
-    createNewSubQuestion(): Question {
-        const newSubQuestion = new Question();
-        newSubQuestion.Id = uuid();
-        newSubQuestion.type = QuestionTypeEnum.OBSERVATION;
-
-        return newSubQuestion;
-
-    }
-    renderObservationBlock(question: Question): JSX.Element {
-        let renderQuestions: Question[] = [];
-        if (question.type === QuestionTypeEnum.OBSERVATION) {
-            renderQuestions.push(question);
-        }
-        else if (question.type === QuestionTypeEnum.GROUP) {
-            if (!question.subQuestions) {
-                question.subQuestions = [this.createNewSubQuestion(), this.createNewSubQuestion()]
-            }
-            renderQuestions.push(...question.subQuestions!);
-        }
-        const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
-
-        return (
-            <TableContainer>
-                <Table>
-                    {renderQuestions.map((question, index) => {
-                        const isLast = renderQuestions.length - 1 == index
-                        return (
-                            <TableRow>
-                                <TableCell>
-                                    <Stack direction="row" spacing={2} >
-                                        <QuestionMeasurementTypeSelect
-                                            sectionName={this.props.sectionName}
-                                            onValidation={this.props.onValidation}
-                                            disabled={this.props.disabled}
-                                            question={question}
-                                            uniqueId={question.Id!}
-                                            onChange={input => {
-                                                const clickedMeasurementCode = input.target.value
-                                                const clicked = this.props.allMeasurementTypes.find(mt => mt.code === clickedMeasurementCode);
-
-                                                if (this.props.question.type === QuestionTypeEnum.GROUP) {
-                                                    //find correct subQuestion to update
-                                                    const subQuestion = this.props.question.subQuestions?.find(sq => sq.Id === question.Id);
-                                                    subQuestion!.measurementType = clicked
-                                                    this.props.onUpdate({ ...this.props.question })
-                                                }
-                                                else {
-                                                    this.props.onUpdate({ ...this.props.question, measurementType: clicked })
-                                                }
-                                            }}
-                                            allMeasurementTypes={this.props.allMeasurementTypes}
-                                        />
-
-                                        {isGroupQuestion && !this.props.disabled ?
-                                            <ButtonGroup variant="text" >
-                                                <Tooltip title='Slet' placement='right'>
-                                                    <IconButton sx={{ color: '#5D74AC', padding: 2, width: 50 }} className="delete-question" disabled={renderQuestions.length == 2} onClick={() => this.removeObservation(question)}>
-                                                        <DeleteOutlineIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                {isLast ?
-                                                    <Button className="add-child-question" sx={{ padding: 2 }} onClick={() => this.addObservation()}>
-                                                        <AddCircleOutlineIcon sx={{ paddingRight: 1, width: 'auto' }} />
-                                                        Tilføj yderligere måling
-                                                    </Button>
-                                                    :
-                                                    <></>
-                                                }
-                                            </ButtonGroup>
-                                            :
-                                            <></>
-                                        }
-                                    </Stack>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })
-                    }
-                </Table>
-            </TableContainer>
-        )
-    }
-
-    removeObservation(removeQuestion: Question): void {
-        const question = { ...this.props.question };
-        if (question.subQuestions && question.subQuestions.length > 2) {
-            question.subQuestions = question.subQuestions?.filter(sq => sq.Id !== removeQuestion.Id/*!sq.isEqual(removeQuestion)*/);
-
-            this.props.onUpdate(question)
-        }
-    }
-
-    addObservation(): void {
-        const question = { ...this.props.question };
-
-        if (question.subQuestions) {
-            question.subQuestions.push(this.createNewSubQuestion());
-
-            this.props.onUpdate(question);
-        }
-    }
-    renderBooleanThreshold(): JSX.Element {
-
-
-        const thresholdCollection = this.props.getThreshold ? this.props.getThreshold(this.props.question) : undefined
-
-        return (
-            <TableContainer>
-                <Table>
-                    {thresholdCollection && thresholdCollection.thresholdOptions?.map(option => {
-                        return (
-                            <TableRow>
-                                <TableCell>
-                                    {option.option === "true" ? "Ja" : "Nej"}
-                                </TableCell>
-                                <TableCell>
-                                    <CategorySelect
-                                        sectionName={this.props.sectionName}
-                                        disabled={this.props.disabled}
-                                        category={option.category}
-                                        onChange={(newCategory) => { option.category = newCategory }}
-                                        onValidation={this.props.onValidation}
-                                        uniqueId={this.props.question.Id! + option.option}
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
-                </Table>
-            </TableContainer>
-        )
-    }
-}
-
-/*
-
-setQuestion(oldQuestion: Question, newValue: string): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion.question = newValue;
-    return modifiedQuestion;
-}
-setHelperText(oldQuestion: Question, newValue: string): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion.helperText = newValue;
-    return modifiedQuestion;
-}
-setEnableWhenAnswer(oldQuestion: Question, newValue: string): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion!.enableWhen!.answer = newValue.toLowerCase() === 'ja';
-    return modifiedQuestion;
-}
-modifyQuestionType(oldQuestion: Question, newValue: string): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion!.type = newValue as QuestionTypeEnum;
-    return modifiedQuestion;
-}
-setAbbreviation(oldQuestion: Question, newValue: string): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion!.abbreviation = newValue as QuestionTypeEnum;
-    return modifiedQuestion;
-}
-
-
-setOptions(oldQuestion: Question, options: string[]): Question {
-    const modifiedQuestion = oldQuestion;
-    modifiedQuestion!.options = options;
-    return modifiedQuestion;
-}
 
 }
-*/
+
 
 
 interface MultipleChoiceEditorProps {
@@ -516,17 +512,20 @@ interface MultipleChoiceEditorProps {
     options?: Array<Option>
     onChange?: (options: Option[]) => void
     onValidation: (uniqueId: string, error: InvalidInputModel[]) => void
-    validate?: (value: string) => Promise<InvalidInputModel[]>
     disabled?: boolean
 }
 
 const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
 
     let [options, setOptions] = useState(props.options?.map(option => {
-        if (option.triage != CategoryEnum.BLUE) return { ...option, original: true }
-        else return { ...option, original: false }
+        if (option.triage != CategoryEnum.BLUE) {
+            return ({
+                ...option,
+                // Determines if the option were originally read from the backend or if it is recently added
+                original: true
+            })
+        } else return { ...option, original: false }
     }))
-
 
     const updateItem = (index: number, item: Option) => {
         setOptions(prevOptions => {
@@ -560,6 +559,7 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         triage: CategoryEnum;
     }[] | undefined) => {
         let state = options?.map(option => option as Option) ?? [];
+
         props.onChange && props.onChange(state);
     }
 
@@ -573,27 +573,24 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
 
         const optionInUse = !(options?.slice(0, index).every(option => option.option !== value))
 
-        let validation: InvalidInputModel[] = []
+        let errors: InvalidInputModel[] = []
 
-        if(props.validate) {
-            validation = await props.validate(value)
-        }
+        if (value.length <= 0) errors.push(new InvalidInputModel("question", "Svarmulighed er endnu ikke udfyldt"))
 
-        if (optionInUse) validation.push(new InvalidInputModel("question", "Svarmuligheden er allerede i brug"))
+        if (optionInUse) errors.push(new InvalidInputModel("question", "Svarmuligheden er allerede i brug"))
 
-
-        
-        return validation
+        return errors
     }
 
 
     return (
         <>
             <FormControl >
+
+
                 {options && options.map((item, i) => (
                     <>
                         <Stack minWidth={800} direction={"row"} spacing={2} marginTop={2} width={"100%"}>
-
                             <TextFieldValidation
                                 label={"Svarmulighed"}
                                 uniqueId={'svarmulighed_' + i}

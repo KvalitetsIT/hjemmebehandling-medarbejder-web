@@ -43,7 +43,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
         this.state = {
             errors: [],
         }
-     
+
         this.onValidateEvent = this.onValidateEvent.bind(this)
     }
 
@@ -53,7 +53,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
 
     componentWillUnmount(): void {
         window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
-        
+
         if (this.props.onValidation && this.state.errors.length > 0) {
             this.props.onValidation(this.props.uniqueId, []);
         }
@@ -61,7 +61,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
 
     onValidateEvent(event: Event): void {
         const data = (event as CustomEvent).detail as ValidateInputEventData
-            
+
         if (this.props.sectionName === data.sectionName) {
             this.validate();
         }
@@ -71,13 +71,13 @@ export class QuestionTypeSelect extends Component<Props, State> {
         const question = this.props.question
         const errors: InvalidInputModel[] = []
         if (question.type === undefined) {
-            errors.push( new InvalidInputModel("QuestionType", "Typen på spørgsmålet mangler", CriticalLevelEnum.ERROR))
+            errors.push(new InvalidInputModel("QuestionType", "Typen på spørgsmålet mangler", CriticalLevelEnum.ERROR))
         }
         if (this.props.onValidation) {
             this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel === CriticalLevelEnum.ERROR));
         }
-        
-        this.setState({errors: errors}) 
+
+        this.setState({ errors: errors })
     }
 
     render(): JSX.Element {
@@ -85,15 +85,16 @@ export class QuestionTypeSelect extends Component<Props, State> {
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmålstype</InputLabel>
-                <Select 
-                defaultValue="" label="Vælg spørgsmålstype"    
-                value={this.props.question.type} 
-                onChange={(input) => {
-                    this.props.onChange(input);
-                    this.validate()}
-                }
-                error={hasError}
-                disabled={this.props.disabled}
+                <Select
+                    defaultValue="" label="Vælg spørgsmålstype"
+                    value={this.props.question.type}
+                    onChange={(input) => {
+                        this.props.onChange(input);
+                        this.validate()
+                    }
+                    }
+                    error={hasError}
+                    disabled={this.props.disabled}
                 >
                     {this.allTypes.map(type => {
                         return (
@@ -101,8 +102,47 @@ export class QuestionTypeSelect extends Component<Props, State> {
                         )
                     })}
                 </Select>
-                {hasError ? <FormHelperText error={true}><ErrorMessage message={this.state.errors[0]?.message}/></FormHelperText> : <></>}
+                {hasError ? <FormHelperText error={true}><ErrorMessage message={this.state.errors[0]?.message} /></FormHelperText> : <></>}
             </FormControl>
         )
     }
+}
+
+
+
+interface ValidatedQuestionTypeSelect extends ValidatedSelectionProps<QuestionTypeEnum> {
+
+}
+
+
+
+
+
+
+interface ValidatedSelectionProps<T> {
+    value: T,
+    options: T[]
+    renderOption: (option: T) => { key: string, value: string, label: string }
+    label: React.ReactNode
+    disabled?: boolean
+    onChange: (value: T) => void
+    error?: string
+}
+
+const ValidatedSelection = (props: ValidatedSelectionProps<any>) => {
+    const { label, options, error, disabled, renderOption } = props
+    return (
+        <FormControl sx={{ minWidth: 200 }} required>
+            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+            <Select
+                {...props}
+                disabled={disabled}
+                error={error !== undefined}
+            >
+                {options.map(option => { let { key, value, label } = renderOption(option); return (<MenuItem key={key} value={value}>{label}</MenuItem>) })}
+            </Select>
+            {error ? <FormHelperText error={true}><ErrorMessage message={error} /></FormHelperText> : <></>}
+        </FormControl>
+    )
+
 }
