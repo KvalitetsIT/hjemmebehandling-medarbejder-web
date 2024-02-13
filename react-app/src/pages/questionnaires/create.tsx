@@ -22,6 +22,7 @@ import { MissingDetailsError } from "../../components/Errors/MissingDetailsError
 import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 
 
 interface Props {
@@ -65,7 +66,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             editMode: props.match.params.questionnaireId ? true : false,
             errors: new Map(),
             changes: [],
-            allMeasurementTypes: []
+            allMeasurementTypes: [],
         }
     }
 
@@ -289,9 +290,20 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
                         </Grid>
                         : null}
+                    
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
-                        
+                    
+                        // Mapping of thresholds
+                        const questionWithThresholds = question.options?.map((option, i) => {
+                            const thresholds = this.questionnaireService.GetThresholds(questionnaire, question)
+                            const thresholdOptions = thresholds.thresholdOptions
+                            return {
+                                ...option,
+                                triage: thresholdOptions && thresholdOptions[i] !== undefined ? thresholdOptions[i].category : CategoryEnum.BLUE
+                            }
+                        })
+
                         return (
                             <>
                                 <Grid item xs={12}>
@@ -303,7 +315,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                         removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
                                         moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
                                         moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
-                                        question={question}
+                                        question={ question }
                                         onValidation={this.onValidation}
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}

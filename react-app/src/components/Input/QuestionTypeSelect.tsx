@@ -86,7 +86,8 @@ export class QuestionTypeSelect extends Component<Props, State> {
             <FormControl sx={{ minWidth: 200 }} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmålstype</InputLabel>
                 <Select
-                    defaultValue="" label="Vælg spørgsmålstype"
+                    //defaultValue={undefined} 
+                    label="Vælg spørgsmålstype"
                     value={this.props.question.type}
                     onChange={(input) => {
                         this.props.onChange(input);
