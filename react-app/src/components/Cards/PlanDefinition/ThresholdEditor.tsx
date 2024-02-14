@@ -127,10 +127,7 @@ export default class TresholdEditor extends Component<TresholdEditorProps, Tresh
         if (thresholdForQuestion?.thresholdNumbers)
             thresholdNumbers = thresholdForQuestion.thresholdNumbers;
 
-        let subHeader: string = question.question!;
-        if (this.props.isPartOfGroupQuestion) {
-            subHeader = this.props.isPartOfGroupQuestion + " - " + question.measurementType?.displayName;
-        }
+        let subHeader: string = (this.props.isPartOfGroupQuestion ?? question.question!) + " - " + question.measurementType?.displayName;
         return (
             <Card elevation={2}>
                 <CardHeader subheader={<Typography variant="h6">{subHeader}</Typography>} action={
