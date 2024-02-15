@@ -96,6 +96,23 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
 
+    initCallToActions(questionnaire: Questionnaire) {
+
+        //If there are no call-to-actions, we add one
+        const hasCallToActionQuestion = questionnaire.getCallToActions().length > 0
+        if (!hasCallToActionQuestion) {
+            const newCallToActionQuestion = new CallToActionQuestion();
+            newCallToActionQuestion.Id = this.generateQuestionId()
+            newCallToActionQuestion.enableWhens = [];
+
+            // TODO: I think the issue is here as the state is directly updated
+            questionnaire.questions?.push(newCallToActionQuestion)
+        }
+
+        return questionnaire
+
+
+    }
 
     async populateCareplans(): Promise<void> {
         try {
@@ -112,6 +129,9 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             } else {
                 this.addChange(question.Id);
             }
+
+            questionnaire = this.initCallToActions(questionnaire)
+
             this.setState({ questionnaire: questionnaire, questionnaireIsInUse: questionnaireIsInUse })
         } catch (error) {
             this.setState(() => { throw error })
@@ -226,6 +246,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ errors: errors })
     }
 
+
     renderContent(): JSX.Element {
 
         const prompt = (
@@ -241,26 +262,20 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         if (!this.state.questionnaire)
             return <>Ingen</>
 
-        const questionnaire = this.state.questionnaire;
-        const questions: Question[] = [];
 
-        questionnaire.getParentQuestions().forEach(question => {
-            questions.push(question);
-            questions.push(...questionnaire.getChildQuestions(question.Id));
-        });
+
         //const questions = questionnaire.questions?.filter(q => q.type !== QuestionTypeEnum.CALLTOACTION);
+
+        const questionnaire = this.state.questionnaire
+        
         const parentQuestions = questionnaire.getParentQuestions();
 
-        //If there are no call-to-actions, we add one
-        const hasCallToActionQuestion = questionnaire.getCallToActions().find(() => true);
-        if (hasCallToActionQuestion === undefined) {
-            const newCallToActionQuestion = new CallToActionQuestion();
-            newCallToActionQuestion.Id = this.generateQuestionId()
-            newCallToActionQuestion.enableWhens = [];
-            questionnaire.questions?.push(newCallToActionQuestion)
-        }
+        const allQuestions: Question[] = parentQuestions.map(question => {
+            return [question, ...questionnaire.getChildQuestions(question.Id)];
+        }).flat();
 
-        const callToAction = questionnaire.getCallToActions().find(() => true);
+        const callToAction = this.state.questionnaire.getCallToActions()[0];
+
         return (
             <>
                 {prompt}
@@ -290,10 +305,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                             <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
                         </Grid>
                         : null}
-                    
+
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
-                    
+
                         // Mapping of thresholds
                         const questionWithThresholds = question.options?.map((option, i) => {
                             const thresholds = this.questionnaireService.GetThresholds(questionnaire, question)
@@ -303,41 +318,23 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                 triage: thresholdOptions && thresholdOptions[i] !== undefined ? thresholdOptions[i].category : CategoryEnum.BLUE
                             }
                         })
-
                         return (
                             <>
                                 <Grid item xs={12}>
                                     <QuestionEditCard
-                                        active={undefined}
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                         addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
                                         removeQuestionAction={(questionToRemove) => this.removeQuestion(questionToRemove, questionnaire)}
                                         moveItemUp={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, -1))}
                                         moveItemDown={() => this.setQuestionnaire(this.questionnaireService.MoveQuestion(questionnaire, question, 1))}
-                                        question={ question }
+                                        question={question}
                                         onValidation={this.onValidation}
                                         sectionName={CreateQuestionnairePage.sectionName}
                                         disabled={!this.state.changes.includes(question.Id!)}
                                         deletable={parentQuestions.length <= 1}
-
                                         onUpdate={this.updateQuestion}
                                         allMeasurementTypes={this.state.allMeasurementTypes}
-
-                                    /*
-                                    onChange={(question) => {this.setState(prevState => {
-
-                                        const i = prevState.questionnaire?.questions?.findIndex(q => q.Id == question.Id);
-
-                                        let questionnaire = prevState.questionnaire
-                                        
-                                        if (questionnaire?.questions && i) questionnaire.questions[i] = question
-
-                                        let toReturn = {...prevState, questionnaire: questionnaire }
-                                        
-                                        return toReturn
-                                    })}}
-                                    */
                                     />
                                 </Grid>
                                 {childQuestions?.map(childQuestion => {
@@ -369,7 +366,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                         )
                     })}
                     <Grid item xs={12}>
-                        <CallToActionCard allQuestions={questions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
+                        <CallToActionCard allQuestions={allQuestions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePage.sectionName} onValidation={this.onValidation} />
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
@@ -447,7 +444,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
     generateQuestionId(): string {
-
         const newID = uuid();
 
         return newID;
@@ -471,6 +467,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
         this.addChange(newQuestion.Id!)
     }
+
 
     updateQuestion(updatedQuestion: Question): void {
         const beforeUpdate = this.state.questionnaire!;
@@ -521,6 +518,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
         if (currentQuestion instanceof CallToActionQuestion) { }
         else if (currentQuestion instanceof Question) {
+
             currentQuestion.question = updatedQuestion.question;
             currentQuestion.abbreviation = updatedQuestion.abbreviation;
             currentQuestion.helperText = updatedQuestion.helperText;
@@ -538,6 +536,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         this.setState({ questionnaire: beforeUpdate })
 
     }
+
+
 
     addChange(id: string): void {
         this.setState(previousState => ({
