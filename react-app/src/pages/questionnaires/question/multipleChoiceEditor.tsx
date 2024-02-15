@@ -28,7 +28,7 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         } else return { ...option, original: false }
     }))
 
-    const updateItem = (index: number, item: Option) => {
+    const updateOption = (index: number, item: Option) => {
         setOptions(prevOptions => {
             if (prevOptions) prevOptions[index] = { ...prevOptions[index], ...item };
             triggerOnChange(prevOptions);
@@ -81,9 +81,6 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         return errors
     }
 
-    if (props.variant == undefined) return <></>
-
-
     
     return (
         <>
@@ -97,7 +94,7 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 variant="outlined"
                                 size="medium"
                                 onChange={(x) => {
-                                    updateItem(i, { ...item, option: x.target.value })
+                                    updateOption(i, { ...item, option: x.target.value })
 
                                 }}
                                 type={props.variant}
@@ -113,7 +110,7 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 uniqueId={"kommentar_" + i}
                                 size="medium"
                                 variant="outlined"
-                                onChange={(x) => updateItem(i, { ...item, comment: x.target.value })}
+                                onChange={(x) => updateOption(i, { ...item, comment: x.target.value })}
                                 value={item.comment}
                             />
 
@@ -123,7 +120,7 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                                 label="Triagering"
                                 disabled={item.original}
                                 category={item.triage}
-                                onChange={(newCategory) => { updateItem(i, { ...item, triage: newCategory }); }}
+                                onChange={(newCategory) => { updateOption(i, { ...item, triage: newCategory }); }}
                                 // onValidation={this.props.onValidation}
                                 uniqueId={"category_" + i}
                             />
@@ -138,7 +135,7 @@ export const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
                     </>
                 ))}
 
-                <Button sx={{ marginTop: 2, width: 150 }} onClick={() => addItem()}>
+                <Button sx={{ marginTop: 2, width: 150 }} disabled={props.variant == undefined } onClick={() => addItem()}>
                     <AddCircleIcon sx={{ paddingRight: 1 }} />
                     Tilføj svarmulighed
                 </Button>

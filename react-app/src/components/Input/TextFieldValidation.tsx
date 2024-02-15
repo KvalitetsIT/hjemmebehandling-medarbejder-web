@@ -37,8 +37,8 @@ export interface State {
 export class TextFieldValidation extends Component<React.PropsWithChildren<Props>, State> {
     static displayName = TextFieldValidation.name;
     static contextType = ApiContext
-   
-static defaultProps = {
+
+    static defaultProps = {
         variant: "outlined",
         size: "small",
         required: false,
@@ -71,7 +71,6 @@ static defaultProps = {
 
     onValidateEvent(event: Event): void {
         const data = (event as CustomEvent).detail as ValidateInputEventData
-            
         if (this.props.sectionName === data.sectionName) {
             this.validate(this.props.value ?? "");
         }
@@ -88,8 +87,6 @@ static defaultProps = {
     }
 
     render(): JSX.Element {
-
-
         let firstError: InvalidInputModel | undefined = undefined
         let hasError = false
 
@@ -115,7 +112,7 @@ static defaultProps = {
                         onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.validate(e.target.value)}
                         InputLabelProps={{ shrink: this.props.value ? true : false }}
                         InputProps={this.props.inputProps}
-                        label={<Typography sx={{textTransform : "capitalize"}} color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
+                        label={<Typography sx={{ textTransform: "capitalize" }} color={this.props.disabled ? "#999" : undefined}>{this.props.label}</Typography>}
                         variant={this.props.variant}
                         error={hasError}
                         rows={this.props.rows}
@@ -129,7 +126,7 @@ static defaultProps = {
                         type={this.props.type}
                         value={this.props.value}
                         autoFocus={this.props.autoFocus}
-                        
+
                         sx={{
                             minWidth: this.props.minWidth,
                             maxWidth: this.props.maxWidth,
@@ -145,5 +142,5 @@ static defaultProps = {
         )
     }
 
-    
+
 }

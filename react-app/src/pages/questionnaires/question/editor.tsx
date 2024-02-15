@@ -25,8 +25,6 @@ export interface QuestionEditorProps extends EditorProps<Question> { variant: "t
 
 export const QuestionEditor = (props: QuestionEditorProps) => {
 
-    const [x, set_x] = useState(0)
-
     const question = props.value
 
     function updateThresholds(thresholds: ThresholdCollection) {
@@ -36,16 +34,14 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
     }
 
     function updateOptions(options: Option[]) {
+        console.log("updateOptions")
         props.onChange && props.onChange({
             ...question,
             options: options
         });
     }
 
-    return <>
-        <Typography variant="h1">{x}</Typography>
-        <Button onClick={() => set_x(x + 1)}>Increment</Button>
-    </>
+
     switch (question?.type) {
 
         case QuestionTypeEnum.CHOICE:

@@ -22,6 +22,7 @@ import EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefin
 import AboutPage from '../../pages/about';
 import { Box } from '@mui/material';
 import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
+import CreateQuestionnairePageF from '../../pages/questionnaires/create_functional';
 
 export interface State {
   drawerIsOpen: boolean,
@@ -81,8 +82,8 @@ export class Layout extends React.Component<{}, State> {
                     <Route path="/plandefinitions/create" render={(props) => <CreatePlandefinition {...props} />} />
                     <Route path="/plandefinitions" render={(props) => <PlandefinitionOverview {...props} />} />
 
-                    <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <CreateQuestionnairePage {...props} />} />
-                    <Route path="/questionnaires/create" render={(props) => <CreateQuestionnairePage {...props} />} />
+                    <Route path="/questionnaires/:questionnaireId/edit" render={(props) => <CreateQuestionnairePageF {...props} />} />
+                    <Route path="/questionnaires/create" render={(props) => <CreateQuestionnairePageF {...props} />} />
                     <Route path="/questionnaires" render={(props) => <QuestionnaireOverviewPage {...props} />} />
 
                     <Route path="/active/:pagenr" render={(props) => <ActivePatients {...props} />} />

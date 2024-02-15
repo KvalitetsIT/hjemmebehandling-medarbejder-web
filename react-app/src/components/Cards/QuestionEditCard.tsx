@@ -49,6 +49,7 @@ export class QuestionEditCard extends Component<Props, State>{
         this.state = {
             variant: undefined, //this.getVariant(props.question),
             errors: [],
+            
         }
         this.onValidateEvent = this.onValidateEvent.bind(this)
     }

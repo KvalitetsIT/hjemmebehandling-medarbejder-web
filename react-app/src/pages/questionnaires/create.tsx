@@ -23,6 +23,7 @@ import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelS
 import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { QuestionEditCardF } from "../../components/Cards/QuestionEditCardF";
 
 
 interface Props {
@@ -70,10 +71,6 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         }
     }
 
-
-
-
-
     render(): JSX.Element {
         this.InitializeServices();
         return this.state.loading ? <LoadingBackdropComponent /> : this.renderContent();
@@ -113,6 +110,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
 
 
     }
+
 
     async populateCareplans(): Promise<void> {
         try {
@@ -185,6 +183,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.CHOICE)
                     .find((q: Question) => q.options?.find(o => o.option === undefined || o.option == ''))
+
+
 
                 if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4 || manualValidationError5) {
                     console.log("manualValidationError", manualValidationError1, manualValidationError2, manualValidationError3, manualValidationError4, manualValidationError5)
@@ -267,7 +267,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
         //const questions = questionnaire.questions?.filter(q => q.type !== QuestionTypeEnum.CALLTOACTION);
 
         const questionnaire = this.state.questionnaire
-        
+
         const parentQuestions = questionnaire.getParentQuestions();
 
         const allQuestions: Question[] = parentQuestions.map(question => {
@@ -309,19 +309,10 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
 
-                        // Mapping of thresholds
-                        const questionWithThresholds = question.options?.map((option, i) => {
-                            const thresholds = this.questionnaireService.GetThresholds(questionnaire, question)
-                            const thresholdOptions = thresholds.thresholdOptions
-                            return {
-                                ...option,
-                                triage: thresholdOptions && thresholdOptions[i] !== undefined ? thresholdOptions[i].category : CategoryEnum.BLUE
-                            }
-                        })
                         return (
                             <>
                                 <Grid item xs={12}>
-                                    <QuestionEditCard
+                                    <QuestionEditCardF
                                         key={question.Id}
                                         getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                         addSubQuestionAction={(q, isParent) => this.addQuestion(q, isParent)}
@@ -343,7 +334,8 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                                             <Grid item xs={1} alignSelf="center" textAlign="center">
                                             </Grid>
                                             <Grid item xs={11}>
-                                                <QuestionEditCard
+                                                <QuestionEditCardF
+                                                    
                                                     key={childQuestion.Id}
                                                     getThreshold={(question) => this.questionnaireService.GetThresholds(questionnaire, question)}
                                                     addSubQuestionAction={(q) => this.addQuestion(q, true, question.Id)}
@@ -515,24 +507,25 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
             collection.thresholdOptions = newThresholds;
         }
         console.log("efter update", collection)
-
-        if (currentQuestion instanceof CallToActionQuestion) { }
-        else if (currentQuestion instanceof Question) {
-
-            currentQuestion.question = updatedQuestion.question;
-            currentQuestion.abbreviation = updatedQuestion.abbreviation;
-            currentQuestion.helperText = updatedQuestion.helperText;
-            currentQuestion.measurementType = updatedQuestion.measurementType;
-            currentQuestion.type = updatedQuestion.type;
-            currentQuestion.subQuestions = updatedQuestion.subQuestions;
-
-            if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
-                currentQuestion.options = updatedQuestion.options;
-            }
-            else {
-                currentQuestion.options = [];
-            }
-        }
+        
+        //        if (currentQuestion instanceof CallToActionQuestion) { }
+                 if (currentQuestion instanceof Question) {
+        
+                    currentQuestion.question = updatedQuestion.question;
+                    currentQuestion.abbreviation = updatedQuestion.abbreviation;
+                    currentQuestion.helperText = updatedQuestion.helperText;
+                    currentQuestion.measurementType = updatedQuestion.measurementType;
+                    currentQuestion.type = updatedQuestion.type;
+                    currentQuestion.subQuestions = updatedQuestion.subQuestions;
+        
+                    if (updatedQuestion.type === QuestionTypeEnum.CHOICE) {
+                        currentQuestion.options = updatedQuestion.options;
+                    }
+                    else {
+                        currentQuestion.options = [];
+                    }
+                }
+                
         this.setState({ questionnaire: beforeUpdate })
 
     }
