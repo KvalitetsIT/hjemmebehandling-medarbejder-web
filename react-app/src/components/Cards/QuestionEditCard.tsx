@@ -111,7 +111,7 @@ export class QuestionEditCard extends Component<Props, State>{
                                             disabled={this.props.disabled}
                                             category={option.category}
                                             onChange={(newCategory) => { option.category = newCategory }}
-                                            onValidation={this.props.onValidation}
+                                            //onValidation={this.props.onValidation}
                                             uniqueId={this.props.question.Id! + option.option}
                                         />
                                     </TableCell>

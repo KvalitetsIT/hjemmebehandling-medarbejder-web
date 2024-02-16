@@ -20,7 +20,8 @@ export interface Props {
 }
 
 export interface State {
-    errors: InvalidInputModel[]
+    //errors: InvalidInputModel[]
+    category: CategoryEnum
 }
 
 
@@ -31,44 +32,49 @@ export class CategorySelect extends Component<Props,State> {
     constructor(props : Props){
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.onValidateEvent = this.onValidateEvent.bind(this)
+//        this.onValidateEvent = this.onValidateEvent.bind(this)
 
         this.state = {
-            errors: []
+        //    errors: []
+            category: props.category ?? CategoryEnum.BLUE
         }
     }
 
-    async componentDidMount(): Promise<void> {
-        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
-    }
-
-
-    componentWillUnmount(): void {
-        window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
-        if (this.props.onValidation && this.state.errors.length > 0) {
-            this.props.onValidation(this.props.uniqueId, []);
-        }
-    }
-
-    onValidateEvent(event: Event): void {
-        const data = (event as CustomEvent).detail as ValidateInputEventData
-
-        if (this.props.sectionName === data.sectionName) {
-            this.validate();
-        }
-    }
-
-    async validate(): Promise<void> {
-        const errors: InvalidInputModel[] = []
-        if (this.props.category === undefined) {
-            errors.push( new InvalidInputModel("QuestionType", "Kategori skal angives",CriticalLevelEnum.ERROR))
-        }
-         if (this.props.onValidation) {
-            this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel === CriticalLevelEnum.ERROR));
-        }
-        this.setState({errors: errors}) 
-    }
-
+    /*
+     Disabler "validerings-framework" og laver manuel validering i stedet da jeg 
+     kan ikke få det andet til at opføre sig korrekt.
+     Hele spørgeskema editoren skal alligevel refaktoreres/skrives om.
+     */
+//    async componentDidMount(): Promise<void> {
+//        window.addEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+//    }
+//
+//    componentWillUnmount(): void {
+//        window.removeEventListener(ValidateInputEvent.eventName, this.onValidateEvent);
+//        if (this.props.onValidation && this.state.errors.length > 0) {
+//            this.props.onValidation(this.props.uniqueId, []);
+//        }
+//    }
+//
+//    onValidateEvent(event: Event): void {
+//        const data = (event as CustomEvent).detail as ValidateInputEventData
+//
+//        if (this.props.sectionName === data.sectionName) {
+//            this.validate();
+//        }
+//    }
+//
+//    async validate(): Promise<void> {
+//        const errors: InvalidInputModel[] = []
+//        if (this.props.category === undefined) {
+//            errors.push( new InvalidInputModel("QuestionType", "Kategori skal angives",CriticalLevelEnum.ERROR))
+//        }
+//         if (this.props.onValidation) {
+//            this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel === CriticalLevelEnum.ERROR));
+//        }
+//        this.setState({errors: errors}) 
+//    }
+//
     getAllCategories() : CategoryEnum[] {
         return [CategoryEnum.GREEN,CategoryEnum.YELLOW,CategoryEnum.RED]
     }
@@ -87,10 +93,14 @@ export class CategorySelect extends Component<Props,State> {
     handleChange (event: SelectChangeEvent) : void {
         const newValue = this.getAllCategories().find(x=>x.toString() === event.target.value.toString())
         this.props.onChange(newValue as CategoryEnum)
+
+        if (newValue) {
+            this.setState({ category: newValue })
+        }
     }
 
     render () : JSX.Element{
-        const hasError = this.state.errors.length > 0
+        const hasError = this.state.category === CategoryEnum.BLUE;
         return (
             <FormControl sx={{ minWidth: 200 }} required>
                 { this.props.label && <InputLabel>{this.props.label}</InputLabel>}
@@ -109,7 +119,7 @@ export class CategorySelect extends Component<Props,State> {
                     </MenuItem>
                 ))}
                 </Select> 
-                {hasError ? <FormHelperText error={true}>{this.state.errors[0]?.message}</FormHelperText> : <></>}
+                {hasError ? <FormHelperText error={true}>Kategori skal angives</FormHelperText> : <></>}
             </FormControl>
         )
     }
