@@ -157,7 +157,21 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                 const manualValidationError5 = questionnaire.questions!
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.CHOICE)
-                    .find((q: Question) => q.options?.find(o => o.option === undefined || o.option == ''))
+                    .find((q: Question) => {
+                        if (q.options && q.options.length > 0) {
+
+                            const optionMissing = q.options?.find(o => o.option === undefined || o.option == '');
+                            if (optionMissing) {
+                                return optionMissing;
+                            }
+
+                            const thresholds = questionnaire.thresholds!.find(t => t.questionId === q.Id);
+                            const thresholdMissing = thresholds?.thresholdOptions?.find(t => t.category === undefined || t.category === 0)
+                            if (thresholdMissing) {
+                                return thresholdMissing;
+                            }
+                        }
+                    })
 
                 if (manualValidationError1 || manualValidationError2 || manualValidationError3 || manualValidationError4 || manualValidationError5) {
                     console.log("manualValidationError", manualValidationError1, manualValidationError2, manualValidationError3, manualValidationError4, manualValidationError5)
