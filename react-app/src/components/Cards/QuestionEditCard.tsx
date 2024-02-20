@@ -1,6 +1,6 @@
 import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, FormHelperText, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import { Component, Key, ReactNode, useEffect, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
 import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
@@ -17,7 +17,6 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { Tooltip } from '@mui/material'
 import { v4 as uuid } from 'uuid';
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-import { ValidationError } from "yup";
 
 
 interface Props {
@@ -54,7 +53,7 @@ export class QuestionEditCard extends Component<Props, State>{
     }
 
     getVariant(options: Option[] | undefined): "number" | "text" | undefined {
-        if (options === undefined || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
+        if (options === undefined || options.length === 0 || this.props.question.type !== QuestionTypeEnum.CHOICE) return undefined
         const isNumbers = options.every(x => !Number.isNaN(parseFloat(x.option)))
         return isNumbers ? "number" : "text"
     }
@@ -242,11 +241,12 @@ export class QuestionEditCard extends Component<Props, State>{
                                                 label="Vælg typen af svar"
                                                 onChange={input => this.setState({ variant: input.target.value as "text" | "number" })}
                                                 value={this.state.variant}
-                                                disabled={this.props.question.options?.length !== 0 && this.props.question.options !== undefined}
+                                                disabled={this.props.disabled}
                                             >
                                                 <MenuItem value="text">Tekst</MenuItem>
                                                 <MenuItem value="number">Tal</MenuItem>
                                             </Select>
+                                            {this.state.variant === undefined ? <FormHelperText error={true}>Typen skal vælges</FormHelperText> : <></>}
                                         </FormControl>
                                     </Grid>
 
@@ -586,7 +586,9 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
         return validation
     }
 
-
+    if (!options || options?.length === 0) {
+        addItem();
+    }
     return (
         <>
             <FormControl >
@@ -633,7 +635,7 @@ const MultipleChoiceEditor = (props: MultipleChoiceEditorProps) => {
 
 
                             <Tooltip title='Slet' placement='right'>
-                                <IconButton onClick={() => deleteItem(i)} sx={{ width: 50 }}>
+                                <IconButton disabled={options?.length === 1} onClick={() => deleteItem(i)} sx={{ width: 50 }}>
                                     <DeleteOutlineIcon />
                                 </IconButton>
                             </Tooltip>

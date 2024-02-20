@@ -158,6 +158,7 @@ class CreateQuestionnairePage extends React.Component<Props, State> {
                     .filter(q => q instanceof Question)
                     .filter((q: Question) => q.type === QuestionTypeEnum.CHOICE)
                     .find((q: Question) => {
+                        if (!q.options || q.options.length === 0) return q
                         if (q.options && q.options.length > 0) {
 
                             const optionMissing = q.options?.find(o => o.option === undefined || o.option == '');
