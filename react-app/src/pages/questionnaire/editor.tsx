@@ -23,18 +23,50 @@ import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
 import QuestionnaireService from "../../services/QuestionnaireService";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
-import { QuestionEditCardF } from "../../components/Cards/QuestionEditCardF";
+import { QuestionEditCardF } from "./question/QuestionEditCardF";
 import { Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
-import { string } from "yup";
 
+
+interface IQuestion {
+    Id: string
+    question: string
+    options: string
+    helperText: string
+    abbreviation: string
+    enableWhen: EnableWhen<any>
+    measurementType: MeasurementType
+    deprecated: boolean
+    subQuestions: IQuestion
+}
 
 
 interface Props {
     match: { params: { questionnaireId?: string } }
 }
 
+    
+
 const CreateQuestionnairePageF = (props: Props) => {
-    const sectionName = "questionnaire";
+
+
+    const  clone_questionnaire = (questionnaire: Questionnaire) : Questionnaire  =>  {
+        let q = new Questionnaire()
+
+        q.id = questionnaire.id;
+        q.name = questionnaire.name
+        q.frequency = questionnaire.frequency
+        q.thresholds = questionnaire.thresholds
+        q.questions = questionnaire.questions
+        q.status = questionnaire.status
+        q.lastUpdated = questionnaire.lastUpdated
+        q.staticReviewSummaryHtml = questionnaire.staticReviewSummaryHtml;
+
+        return q;
+    }
+
+  
+    
+
     const contextType = ApiContext
 
     const api = useContext(ApiContext)
@@ -211,6 +243,8 @@ const CreateQuestionnairePageF = (props: Props) => {
 
 
     function renderContent(): JSX.Element {
+
+        console.log("rendering questionnaire", questionnaire)
         const prompt = (
             <Prompt
                 when={true}
@@ -248,7 +282,7 @@ const CreateQuestionnairePageF = (props: Props) => {
                                     key={questionnaire.id + "navn"}
                                     validate={(value) => validateQuestionnaireName(value)}
                                     onValidation={onValidation}
-                                    sectionName={sectionName}
+                                    sectionName={CreateQuestionnairePageF.sectionName}
                                     label="Navn"
                                     value={questionnaire.name}
                                     size="medium"
@@ -256,9 +290,9 @@ const CreateQuestionnairePageF = (props: Props) => {
                                     uniqueId={questionnaire.id}
                                     /*disabled={this.state.questionnaire.status === BaseModelStatus.ACTIVE}*/
                                     onChange={input => {
-                                        const q = new Questionnaire()
+                                        let q : Questionnaire = clone_questionnaire(questionnaire)
                                         q.name = input.target.value
-                                        updateQuestionnaire(q)
+                                        setQuestionnaire(q)
                                     }}
                                 />
                             </CardContent>
@@ -273,8 +307,6 @@ const CreateQuestionnairePageF = (props: Props) => {
                     {parentQuestions?.map(question => {
                         const childQuestions = questionnaire.getChildQuestions(question.Id)
 
-                        console.log("QUestion", question)
-
                         return (
                             <>
                                 <Grid item xs={12}>
@@ -287,7 +319,7 @@ const CreateQuestionnairePageF = (props: Props) => {
                                         moveItemDown={() => setQuestionnaire(questionnaireService.MoveQuestion(questionnaire, question, 1))}
                                         question={question}
                                         onValidation={onValidation}
-                                        sectionName={sectionName}
+                                        sectionName={CreateQuestionnairePageF.sectionName}
                                         disabled={!changes.includes(question.Id!)}
                                         deletable={parentQuestions.length <= 1}
                                         onUpdate = {q => { updateQuestion(q) }}
@@ -310,7 +342,7 @@ const CreateQuestionnairePageF = (props: Props) => {
                                                     parentQuestion={question}
                                                     question={childQuestion}
                                                     onValidation={onValidation}
-                                                    sectionName={sectionName}
+                                                    sectionName={CreateQuestionnairePageF.sectionName}
                                                     disabled={!changes.includes(childQuestion.Id!)}
                                                     onUpdate={updateQuestion}
                                                     allMeasurementTypes={allMeasurementTypes}
@@ -323,7 +355,7 @@ const CreateQuestionnairePageF = (props: Props) => {
                         )
                     })}
                     <Grid item xs={12}>
-                        <CallToActionCard allQuestions={allQuestions} callToActionQuestion={callToAction!} sectionName={sectionName} onValidation={onValidation} />
+                        <CallToActionCard allQuestions={allQuestions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePageF.sectionName} onValidation={onValidation} />
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
@@ -427,18 +459,9 @@ const CreateQuestionnairePageF = (props: Props) => {
 
 
     function updateQuestion(updatedQuestion: Question): void {
-
-
-        const newQuestion: Question= {...updatedQuestion}
-
-
-        console.log("newQuestion", newQuestion)
-
-        const question = questionnaire?.questions?.find(question => question.Id) as Question
-
-        question.abbreviation = updatedQuestion.abbreviation
-        question.helperText = updatedQuestion.helperText 
-
+        const index = questionnaire?.questions?.findIndex(question => question.Id)!
+        if(questionnaire && questionnaire.questions ) questionnaire.questions[index] = updatedQuestion
+        setQuestionnaire(clone_questionnaire(questionnaire!))
     }
 
 
@@ -452,11 +475,8 @@ const CreateQuestionnairePageF = (props: Props) => {
     }
 
     function updateQuestionnaire(updatedQuestionaire: Questionnaire): void {
-        
-        //let newQuestionnaire: Questionnaire = Object.assign( questionnaire!, updatedQuestionaire)
-        
         console.log("questionnaire", questionnaire, " + " , updatedQuestionaire , " > " , )
-        //setQuestionnaire(newQuestionnaire)
+        setQuestionnaire(updatedQuestionaire)
     }
 
   
@@ -473,5 +493,9 @@ const CreateQuestionnairePageF = (props: Props) => {
         }
     }
 }
+
+CreateQuestionnairePageF.sectionName = "questionnaire";
+
+
 
 export default CreateQuestionnairePageF

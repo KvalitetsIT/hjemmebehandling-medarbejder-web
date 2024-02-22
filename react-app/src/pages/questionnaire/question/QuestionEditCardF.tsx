@@ -1,9 +1,9 @@
 import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Table, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { Component, Key, ReactNode, useEffect, useState } from "react";
-import { EnableWhenSelect } from "../Input/EnableWhenSelect";
-import { QuestionTypeSelect } from "../Input/QuestionTypeSelect";
-import { TextFieldValidation } from "../Input/TextFieldValidation";
+import { EnableWhenSelect } from "../../../components/Input/EnableWhenSelect";
+import { QuestionTypeSelect } from "../../../components/Input/QuestionTypeSelect";
+import { TextFieldValidation } from "../../../components/Input/TextFieldValidation";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
@@ -14,9 +14,11 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { Tooltip } from '@mui/material'
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
-import CreateQuestionnairePage from "../../pages/questionnaires/create";
-import { ErrorMessage } from "../Errors/MessageWithWarning";
-import { QuestionEditor } from "../../pages/questionnaires/question/editor";
+import { ErrorMessage } from "../../../components/Errors/MessageWithWarning";
+import { QuestionEditor } from "./editor/editor";
+import CreateQuestionnairePageF from "../editor";
+
+
 
 interface Props {
     key: Key | null | undefined
@@ -76,14 +78,14 @@ export const QuestionEditCardF = (props: Props) => {
 
     function onValidateEvent(event: Event): void {
         const data = (event as CustomEvent).detail as ValidateInputEventData
-        if (CreateQuestionnairePage.sectionName === data.sectionName) {
+        if (CreateQuestionnairePageF.sectionName === data.sectionName) {
             validate();
         }
     }
 
     function validate(): void {
         const optionsAreMissing = variant && props.question.type === QuestionTypeEnum.CHOICE && !(props.question.options !== undefined && props.question.options?.length > 0)
-        const e = optionsAreMissing ? [new InvalidInputModel(CreateQuestionnairePage.sectionName, "Der mangler svarmuligheder")] : []
+        const e = optionsAreMissing ? [new InvalidInputModel(CreateQuestionnairePageF.sectionName, "Der mangler svarmuligheder")] : []
         setErrors(e)
     }
 
@@ -98,6 +100,21 @@ export const QuestionEditCardF = (props: Props) => {
         </>)
     }
 
+
+    const clone_question = (question: Question): Question =>  {
+        let q = new Question;
+
+        q.Id = question.Id
+        q.question = question.question
+        q.options = question.options
+        q.helperText = question.helperText
+        q.abbreviation = question.abbreviation
+        q.enableWhen = question.enableWhen
+        q.measurementType = question.measurementType
+        q.deprecated = question.deprecated 
+        q.subQuestions = question.subQuestions
+        return q
+    }
 
     const Header = () => (
         <CardHeader subheader={
@@ -130,7 +147,10 @@ export const QuestionEditCardF = (props: Props) => {
                                 validate={validateQuestionName}
                                 onChange={input => {
                                     const newValue = input.currentTarget.value;
-                                    updateQuestion({ ...props.question, question: newValue })
+
+                                    let q = clone_question(props.question)
+                                    q.question = newValue
+                                    updateQuestion(q)
                                 }}
                                 sectionName={props.sectionName}
 

@@ -4,12 +4,13 @@ import { FormControl, Stack, IconButton, Button, Tooltip } from "@mui/material"
 import { Option } from "@kvalitetsit/hjemmebehandling/Models/Question"
 
 import { useState } from "react"
-import { CategorySelect } from "../../../components/Input/CategorySelect"
-import { TextFieldValidation } from "../../../components/Input/TextFieldValidation"
+
 import { EditorProps } from "./editor"
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { CategorySelect } from "../../../../components/Input/CategorySelect"
+import { TextFieldValidation } from "../../../../components/Input/TextFieldValidation"
 
 export interface MultipleChoiceEditorProps extends EditorProps<Array<Option>> {
     variant?: "text" | "number",

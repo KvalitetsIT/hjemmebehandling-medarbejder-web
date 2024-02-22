@@ -1,7 +1,7 @@
 import React from 'react';
 import { Topbar } from './Topbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import QuestionnaireResponseDetails from '../../pages/patients/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
+import QuestionnaireResponseDetails from '../../pages/patient/[cpr]/careplans/[careplanId]/questionnaires/[questionnaireId]';
 import Patients from '../../pages/patients';
 import { PatientAccordianSectionsEnum } from '../createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
@@ -9,20 +9,21 @@ import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
 import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
 import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent'
-import PlandefinitionOverview from '../../pages/planDefinitions/overview';
-import CreatePlandefinition from '../../pages/planDefinitions/create';
-import CreateQuestionnairePage from '../../pages/questionnaires/create';
-import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
+import PlandefinitionOverview from '../../pages/planDefinition/overview';
+import CreatePlandefinition from '../../pages/planDefinition/create';
+
+import QuestionnaireOverviewPage from '../../pages/questionnaire/overview';
 import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
 import { CheckmarkIcon } from '../Icons/Icons';
 import NewPatientPage from '../../pages/newPatients';
-import EditPatientContact from '../../pages/patients/[cpr]/edit/contact';
-import EditPatientInfo from '../../pages/patients/[cpr]/edit/patient';
-import EditPatientPlandefinition from '../../pages/patients/[cpr]/edit/plandefinition';
+import EditPatientContact from '../../pages/patient/[cpr]/edit/contact';
+import EditPatientInfo from '../../pages/patient/[cpr]/edit/patient';
+import EditPatientPlandefinition from '../../pages/patient/[cpr]/edit/plandefinition';
 import AboutPage from '../../pages/about';
 import { Box } from '@mui/material';
-import PatientCareplans from '../../pages/patients/[cpr]/careplans/[careplanId]';
-import CreateQuestionnairePageF from '../../pages/questionnaires/create_functional';
+import PatientCareplans from '../../pages/patient/[cpr]/careplans/[careplanId]';
+import CreateQuestionnairePageF from '../../pages/questionnaire/editor';
+import { Test } from '../../pages/questionnaire/refactor/QuestionnaireEditor';
 
 export interface State {
   drawerIsOpen: boolean,
@@ -65,6 +66,9 @@ export class Layout extends React.Component<{}, State> {
                     : <></>
                   }
                   <Switch>
+
+                  <Route path="/test"><Test></Test></Route>
+
                     <Route path="/patients/:cpr/questionnaires/:questionnaireId" render={(props) => <Redirect to={"/patients/" + props.match.params.cpr + "/careplans/Aktiv/questionnaires/" + props.match.params.questionnaireId} />} />
 
                     <Route path="/patients/:cpr/careplans/:careplanId/questionnaires/:questionnaireId" render={(props) => <QuestionnaireResponseDetails {...props} />} />

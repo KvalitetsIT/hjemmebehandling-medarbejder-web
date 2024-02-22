@@ -2,7 +2,6 @@ import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models
 import { SelectChangeEvent, TableContainer, Table, TableRow, TableCell, Stack, ButtonGroup, IconButton, Button, Tooltip } from "@mui/material";
 
 import { useState, useEffect } from "react";
-import { QuestionMeasurementTypeSelect } from "../../../components/Input/QuestionMeasurementTypeSelect";
 import { EditorProps } from "./editor";
 
 import { ValidationError, bool } from "yup";
@@ -11,9 +10,11 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { QuestionMeasurementTypeSelect } from "../../../../components/Input/QuestionMeasurementTypeSelect";
 
 
 export interface ObservationEditorProps extends EditorProps<Question> { }
+
 
 
 export const ObservationEditor = (props: ObservationEditorProps) => {
@@ -38,6 +39,7 @@ export const ObservationEditor = (props: ObservationEditorProps) => {
 
 
     const isGroupQuestion = question.type === QuestionTypeEnum.GROUP;
+
 
     function createNewSubQuestion(): Question {
         const newSubQuestion = new Question();

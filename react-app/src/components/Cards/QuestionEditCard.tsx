@@ -14,9 +14,10 @@ import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandl
 import { Tooltip } from '@mui/material'
 import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
-import CreateQuestionnairePage from "../../pages/questionnaires/create";
+import CreateQuestionnairePage from "../../pages/questionnaire/editor";
 import { ErrorMessage } from "../Errors/MessageWithWarning";
-import { QuestionEditor } from "../../pages/questionnaires/question/editor";
+import { QuestionEditor } from "../../pages/questionnaire/question/editor/editor";
+
 
 interface Props {
     key: Key | null | undefined

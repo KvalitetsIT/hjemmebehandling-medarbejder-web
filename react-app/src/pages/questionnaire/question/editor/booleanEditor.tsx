@@ -2,8 +2,9 @@ import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
 import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection"
 import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption"
 import { TableContainer, Table, TableRow, TableCell } from "@mui/material"
-import { CategorySelect } from "../../../components/Input/CategorySelect"
+
 import { EditorProps } from "./editor"
+import { CategorySelect } from "../../../../components/Input/CategorySelect"
 
 export interface BooleanThresholdEditorProps extends EditorProps<ThresholdCollection> { }
 

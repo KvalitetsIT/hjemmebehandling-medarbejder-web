@@ -111,7 +111,7 @@ export class QuestionTypeSelect extends Component<Props, State> {
 
 
 
-interface ValidatedQuestionTypeSelect extends ValidatedSelectionProps<QuestionTypeEnum> {
+export interface ValidatedQuestionTypeSelect extends ValidatedSelectionProps<QuestionTypeEnum> {
 
 }
 
