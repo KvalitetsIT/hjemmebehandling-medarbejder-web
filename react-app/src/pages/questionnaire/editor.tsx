@@ -140,8 +140,6 @@ const CreateQuestionnairePageF = (props: Props) => {
 
     return loading ? <LoadingBackdropComponent /> : renderContent();
 
-
-
     function questionnaireContainsMeasurementsWhichisNew(): boolean {
         if (editMode) {
             const questions = questionnaire?.questions?.filter(q => changes.includes(q.Id!)).filter(q => q.type === QuestionTypeEnum.OBSERVATION)

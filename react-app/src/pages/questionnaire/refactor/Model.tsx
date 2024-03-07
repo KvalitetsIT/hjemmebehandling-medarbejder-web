@@ -1,26 +1,32 @@
+import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
+
 ///////// Model ///////////
-interface ThresholdNumber {
+export interface ThresholdNumber {
     id: string
     category: CategoryEnum
     from?: number
     to?: number
 }
 
-interface MeasurementType {
+export interface MeasurementType {
     displayName?: string;
     system?: string;
     code?: string;
     threshold?: ThresholdNumber;
 }
-type Option = { option: string, comment: string, triage: CategoryEnum }
+export type Option = { option: string, comment: string, triage: CategoryEnum }
 
-interface EnableWhen<T> {
+export interface EnableWhen<T> {
     questionId?: string
     answer?: T
     operator?: string
 
 }
-interface Question {
+export interface Question {
+    Id?: string
+    type?: QuestionTypeEnum
     question?: string,
     options?: Array<Option>;
     helperText?: string
@@ -31,7 +37,10 @@ interface Question {
     subQuestions?: Array<Question>
 }
 
-interface QuestionEditor extends FormProps<Question> {
-    loading?: boolean
-    question: Question
+export interface Questionnaire {
+    id?: string
+    status: BaseModelStatus
+    name?: string
+    questions?: Question[]
 }
+

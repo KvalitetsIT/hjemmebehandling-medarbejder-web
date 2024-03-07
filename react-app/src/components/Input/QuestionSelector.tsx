@@ -54,7 +54,7 @@ export class QuestionSelector extends Component<Props, State> {
             this.props.onValidation(this.props.uniqueId, []); // reset errors, if any was registeret preveously
         }
     }
-    
+
     onValidateEvent(event: Event): void {
         const data = (event as CustomEvent).detail as ValidateInputEventData
 
@@ -63,11 +63,11 @@ export class QuestionSelector extends Component<Props, State> {
         }
     }
 
-    async validate( enableWhen: EnableWhen<boolean>): Promise<void> {
+    async validate(enableWhen: EnableWhen<boolean>): Promise<void> {
         if (!this.props.validate)
             return;
         const errors = await this.props.validate(enableWhen);
-        this.setState({errors: errors})
+        this.setState({ errors: errors })
         if (this.props.onValidation) {
             this.props.onValidation(this.props.uniqueId, errors.filter(x => x.criticalLevel === CriticalLevelEnum.ERROR));
         }
@@ -85,16 +85,16 @@ export class QuestionSelector extends Component<Props, State> {
             if (firstError.criticalLevel === CriticalLevelEnum.ERROR) {
                 hasError = true;
             }
-           
+
         }
         const options = this.props.allQuestions?.filter(q => this.supportedTypes.some(type => q.type === type));
         return (
             <FormControl sx={{ minWidth: 400 }} key={"enableWhen"} required>
                 <InputLabel id="demo-simple-select-label">Vælg spørgsmål</InputLabel>
-                <Select 
-                    defaultValue="" 
-                    label="Vælg spørgsmål" 
-                    value={this.state.enableWhen.questionId} 
+                <Select
+                    defaultValue=""
+                    label="Vælg spørgsmål"
+                    value={this.state.enableWhen.questionId}
                     onChange={this.handleChange}
                     error={hasError}
                     disabled={this.props.disabled}
@@ -106,9 +106,9 @@ export class QuestionSelector extends Component<Props, State> {
                             </MenuItem>
                         )
                     })}
-                
+
                 </Select>
-                {hasError ? <FormHelperText error={true}><ErrorMessage message={firstError?.message}/></FormHelperText> : <></>}
+                {hasError ? <FormHelperText error={true}><ErrorMessage message={firstError?.message} /></FormHelperText> : <></>}
             </FormControl>
         )
     }
@@ -117,7 +117,7 @@ export class QuestionSelector extends Component<Props, State> {
         const clicked = e.target.value as unknown as string
         const enableWhenModified = this.state.enableWhen;
         enableWhenModified.questionId = clicked;
-        if(this.props.updateParent)
+        if (this.props.updateParent)
             this.props.updateParent();
         this.setState({ enableWhen: enableWhenModified })
     }

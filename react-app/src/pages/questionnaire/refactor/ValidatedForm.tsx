@@ -1,42 +1,91 @@
 import { FormControl } from "@mui/material"
 import { FormikErrors, FormikTouched, FormikValues, Formik, Form } from "formik"
+import { BaseSchema } from "yup"
 
-export interface FormProps<T> {
 
-    subject?: T
-    isLoading?: boolean
+export type FormValues<T> = Partial<T> & Record<string, any>
+
+
+export interface FormProps<T> extends SharedFormProps<T> {
+    /** The object of interrest */
+    subject: T
+
+    /** The fallback properties of the subject */
     default: T
-    scheme?: yup.BaseSchema<T>
+
+    /** The callback which is envoked if the subject is changed */
+    onChange: (item: T) => void
+
+    /** The callback which is envoked if the submit button is clicked */
     onSubmit: (submission: T) => Promise<void>
-    onCancel: () => void,
-    onError: (errors: FormikErrors<{ subject: T }>) => void,
-    onChange?: (subject: T) => void
+}
+
+
+interface BaseFormProps<T> extends SharedFormProps<T> {
+    /** This field is representing both the subject and the rest of the fields relevant to the form */
+    subject?: FormValues<T>
+
+    /** The default value for both the subject and the rest of the fields relevant to the form */
+    default: FormValues<T>
+
+    /** The callback which is envoked if any field was changed */
+    onChange?: (subject: FormValues<T>) => void
+
+    /** A callback which is used to render the "actual" form */
     children?: (
-        errors: FormikErrors<T>,
-        touched: FormikTouched<T>,
-        values: T,
+        errors: FormikErrors<FormValues<T>>,
+        touched: FormikTouched<FormValues<T>>,
+        values: FormValues<T>,
         setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{ subject: T }>>
     ) => React.ReactNode | React.ReactNode
 
+    /** The callback which is envoked if the submit button is clicked */
+    onSubmit: (submission: FormValues<T>) => Promise<void>
+}
+
+
+interface SharedFormProps<T> {
+    isLoading?: boolean
+    /** The scheme used to validate the data */
+    scheme?: BaseSchema<FormValues<T>>
+
+    /** Callback if the form was "canceled" */
+    onCancel: () => void,
+
+    /** Callback if any error were experienced */
+    onError: (errors: FormikErrors<FormValues<T>>) => void,
 }
 
 // This component is not supposed to be used directly but instead agregated by another component which handles the domain specifics
-export function ValidatedForm<T extends FormikValues>(props: FormProps<T>) {
+export function ValidatedForm<T extends FormikValues>(props: BaseFormProps<T>) {
 
     return (
         <FormControl fullWidth>
             <Formik
-
                 initialValues={props.subject ?? props.default}
-                onSubmit={(values, formik) => values.subject && props.onSubmit(values.subject).then(() => formik.resetForm())}
+                onSubmit={(values, formik) => values.subject && props.onSubmit(values).then(() => formik.resetForm())}
                 validationSchema={props.scheme}
                 enableReinitialize
+                
             >
-                {({ errors, touched, values, handleChange, setFieldValue }) => {
+                {({ errors, touched, values, handleChange, setFieldValue, isValidating }) => {
 
+                    props.onChange && props.onChange(values as FormValues<T>)
+
+
+                    console.log("")
+                    console.log("===============================================================")
+                    console.log("Values", values)
+                    console.log("Touched", touched)
+                    console.log("Errors", errors)
+                    console.log("isValidating", isValidating)
                     return (
                         <Form>
-                            {props.children && props.children(errors, touched, values, setFieldValue)}
+
+                            {
+                                // Forwards the formik fields to the underlying form/children
+                                props.children && props.children(errors, touched, values, setFieldValue)
+                            }
                             {/*
                             <Stack spacing={2} direction={"row"}>
                                 <Button

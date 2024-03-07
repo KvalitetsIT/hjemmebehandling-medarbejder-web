@@ -22,22 +22,26 @@ export function ValidatedAutoComplete<
     DisableClearable extends boolean | undefined,
     FreeSolo extends boolean | undefined
 >(props: Partial<ValidatedAutocompleProps<T, Multiple, DisableClearable, FreeSolo>>) {
-    return (<Field
-        as={Autocomplete}
-        renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
-            <TextField
-                {...params}
-                variant={props.variant}
-                label={props.label}
-                error={props.error}
-                helperText={props.error}
-                name={props.name}
-            />
-        )}
+    return (
+        <Field
+            as={Autocomplete}
+            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
+                <TextField
+                    {...params}
+                    variant={props.variant}
+                    label={props.label}
+                    error={props.error}
+                    helperText={props.error}
+                    name={props.name}
+                />
+            )}
 
-        getOptionLabel={props.getOptionLabel}
+            getOptionLabel={props.getOptionLabel}
 
-        {...props}
-    />
+            {...props}
+        />
     )
+}
+ValidatedAutoComplete.defaultProps = {
+    variant: "outlined"
 }

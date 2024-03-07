@@ -1,5 +1,5 @@
 
-import { FormControl, Stack, Button, CircularProgress, Container } from "@mui/material";
+import { FormControl, Stack, Button, CircularProgress, Container, Grid, CardHeader, Divider, CardContent, Typography, Alert, Card, TableCell, TableRow, TableContainer, Table, CardActions } from "@mui/material";
 import { Formik, Form, FormikTouched, FormikErrors, FormikValues } from "formik";
 import { t } from "i18next";
 
@@ -10,109 +10,24 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/de';
 import 'dayjs/locale/ar-sa';
 import 'dayjs/locale/da';
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { ValidatedTextField } from "../../../components/Input/validated/ValidatedTextField";
 import { TypedSchema } from "yup/lib/util/types";
 import { AnySchema, SchemaOf } from "yup";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 import { ValidatedSelect } from "../../../components/Input/validated/ValidatedSelect";
 import { ValidatedAutoComplete } from "../../../components/Input/validated/ValidatedAutocomplete";
+import { FormProps, ValidatedForm } from "./ValidatedForm";
+import { MeasurementType, Question, Questionnaire } from "./Model";
 import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-
-
-
-export const QuestionEditor = (props: QuestionEditor) => {
-
-
-    const validationSchema: yup.BaseSchema<Question> = yup.object().shape({
-        question: yup.string().required("Text is required"),
-        helperText: yup.string().required("Text is required"),
-        abbreviation: yup.string().required("Text is required"),
-        measurementType: yup.mixed<MeasurementType>().required("required")
-    })
-
-    if (props.isLoading) return (<></>)
-    return (
-        <ValidatedForm
-            {...props}
-            subject={props.question}
-            default={props.default}
-            scheme={validationSchema}
-            onError={function (errors: FormikErrors<{ subject: any; }>): void {
-                throw new Error("Function not implemented.");
-            }}
-        >
-            {(errors, touched, values, setFieldValue) => {
-
-                let e = errors as FormikErrors<Question>
-                let t = touched as FormikTouched<Question>
-
-                return (
-                    <>
-                        <ValidatedTextField
-                            label={"Question"}
-                            name={"question"}
-                            error={e.question && t.question ? e.question : undefined}
-                        />
-                        <ValidatedTextField
-                            label={"HelperText"}
-                            name={"helperText"}
-                            error={e.helperText && t.helperText ? e.helperText : undefined}
-                        />
-                        <ValidatedTextField
-                            label={"abbreviation"}
-                            name={"abbreviation"}
-                            error={e.abbreviation && t.abbreviation ? e.abbreviation : undefined}
-                        />
-                        <ValidatedSelect
-                            label={"Measurement Type"}
-                            name={"measurementType"}
-
-                        />
-                    </>
-
-                )
-            }}
-        </ValidatedForm>
-    )
-}
-const defaultQuestion: Question = {}
-
-QuestionEditor.defaultProps = {
-    default: defaultQuestion
-}
-
-export const Test = () => {
-
-    let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ name: "", questions: [{ helperText: "", abbreviation: "", question: "" }] })
-
-    return (
-        <>
-            <QuestionniareEditor
-                subject={questionnaire}
-                onChange={setQuestionnaire}
-                onSubmit={function (submission: Questionnaire): Promise<void> {
-                    throw new Error("Function not implemented.");
-                }}
-                onCancel={function (): void {
-                    throw new Error("Function not implemented.");
-                }}
-                onError={function (errors: FormikErrors<{ subject: Questionnaire; }>): void {
-                    throw new Error("Function not implemented.");
-                }}
-            />
-
-
-        </>
-    )
-}
-
-
-interface Questionnaire {
-    name?: string
-    questions?: Question[]
-}
-
+import { v3 } from "uuid";
+import { QuestionEditor, defaultQuestion } from "./QuestionEditor";
+import { Prompt, useParams } from "react-router-dom";
+import ApiContext from "../../_context";
+import { IQuestionnaireService } from "../../../services/interfaces/IQuestionnaireService";
+import { IQuestionAnswerService } from "../../../services/interfaces/IQuestionAnswerService";
+import { CallToActionCard } from "../../../components/Cards/CallToActionCard";
+import { ConfirmationButton } from "../../../components/Input/ConfirmationButton";
+import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 
 interface QuestionnaireEditorProps extends FormProps<Questionnaire> {
@@ -121,20 +36,31 @@ interface QuestionnaireEditorProps extends FormProps<Questionnaire> {
 
 export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
 
+    const contextType = ApiContext
 
-    const validationSchema: yup.BaseSchema<Questionnaire> = yup.object().shape({
-        name: yup.string().required("Name is required"),
-        questions: yup.array().required()
+    const api = useContext(ApiContext)
+    const questionnaireService: IQuestionnaireService = api.questionnaireService;
+    const questionAnswerService: IQuestionAnswerService = api.questionAnswerService;
+
+    // This is the path parameters
+    const { questionnaireId } = useParams<{ questionnaireId: string }>()
+
+    const editMode = questionnaireId ? true : false
+
+    const validationSchema: yup.BaseSchema<{ subject: Partial<Questionnaire> }> = yup.object().shape({
+        subject: yup.object().shape({
+            name: yup.string().required("Name is required"),
+            questions: yup.array().required()
+        }),
+        // additional fields
     })
-
-
 
     const updateQuestionnaire = (questionnaire: Questionnaire) => {
         props.onChange && props.onChange(questionnaire)
     }
 
     const updateQuestion = (question: Question, index: number) => {
-
+        console.log("Update Question")
         let questionnaire = props.subject
 
         if (questionnaire?.questions) questionnaire.questions[index] = question
@@ -143,44 +69,180 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
     }
 
     if (props.isLoading) return (<></>)
+
+    const parentQuestions = props.subject?.questions?.filter(q => q as Question && q.enableWhen?.questionId == undefined) ?? []
+
     return (
         <ValidatedForm
-            {...props}
+            subject={{ subject: props.subject }}
+            default={{ subject: props.default }}
+
             scheme={validationSchema}
-            default={props.default}
+
             onError={function (errors: FormikErrors<{ subject: any; }>): void {
                 throw new Error("Function not implemented.");
             }}
-        >
+            onSubmit={function (submission: Partial<Questionnaire> & Record<string, any>): Promise<void> {
+                throw new Error("Function not implemented.");
+            }}
+            onCancel={function (): void {
+                throw new Error("Function not implemented.");
+            }}        >
             {(errors, touched, values, setFieldValue) => {
 
                 const e = errors as FormikErrors<Questionnaire>
                 const t = touched as FormikTouched<Questionnaire>
 
+
+                const getChildQuestions = (questionId: string) => {
+                    let toReturn = props.subject?.questions?.filter(q => q as Question && q.enableWhen?.questionId != undefined)
+                    if (questionId) {
+                        toReturn = toReturn?.filter(q => q as Question && q.enableWhen?.questionId == questionId)
+                    }
+                    return toReturn ?? []
+                }
+
                 return (<>
-
-                    <ValidatedTextField
-                        label={"Name"}
-                        name={"name"}
-                        error={e.name && t.name ? e.name : undefined}
-                    />
-
-                    {props.subject?.questions?.map((question, index) => (
-                        <QuestionEditor
-                            onChange={(question) => updateQuestion(question, index)}
-                            onSubmit={function (submission: Question): Promise<void> {
-                                throw new Error("Function not implemented.");
-                            }}
-                            onError={function (errors: FormikErrors<{ subject: Question; }>): void {
-                                throw new Error("Function not implemented.");
-                            }}
-                            onCancel={function (): void {
-                                throw new Error("Function not implemented.");
-                            }}
-                            question={question!}
+                    <>
+                        <Prompt
+                            when={true}
+                            message={() => "Du har ikke gemt eventuelle ændringerne - vil du fortsætte?"}
                         />
-                    ))}
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Card>
+                                    <CardHeader subheader={<Typography variant="h6">Spørgeskema</Typography>} />
+                                    <Divider />
+                                    <CardContent>
 
+                                        <ValidatedTextField
+                                            label={"Name"}
+                                            name={"name"}
+                                            error={e.name && t.name ? e.name : undefined}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            {editMode ?
+                                <Grid item xs={12}>
+                                    <Alert severity="warning"><strong>OBS!</strong> Du kan rediger <i>spørgsmålstype</i>, <i>målingstype</i> eller <i>triagering</i>, ved at oprette spørgsmålet på ny og slette det oprindelige. </Alert>
+                                </Grid>
+                                : null}
+
+                            {parentQuestions?.map((question: Question, index) => {
+                                const childQuestions = getChildQuestions(question.Id!)
+
+                                return (
+                                    <>
+                                        <Grid item xs={12}>
+
+                                            <QuestionEditor
+                                                key={"questionEditor_" + index}
+                                                subject={question}
+                                                onSubmit={function (submission: Question): Promise<void> {
+                                                    throw new Error("Function not implemented.");
+                                                }}
+                                                onCancel={function (): void {
+                                                    throw new Error("Function not implemented.");
+                                                }}
+                                                onError={function (errors: FormikErrors<Question>): void {
+                                                    throw new Error("Function not implemented.");
+                                                }}
+                                                onChange={(q) => updateQuestion(q, index)}
+                                            />
+                                        </Grid>
+                                        {childQuestions?.map(childQuestion => {
+                                            return (
+                                                <>
+                                                    <Grid item xs={1} alignSelf="center" textAlign="center">
+                                                    </Grid>
+                                                    <Grid item xs={11}>
+                                                        <QuestionEditor
+                                                            subject={childQuestion}
+                                                            onError={function (errors: FormikErrors<Question>): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                            onSubmit={function (submission: Question): Promise<void> {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                            onCancel={function (): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }} onChange={function (item: Question): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }} />
+
+                                                    </Grid>
+                                                </>
+                                            )
+                                        })}
+                                    </>
+                                )
+                            })}
+                            <Grid item xs={12}>
+                                {/* <CallToActionCard allQuestions={allQuestions} callToActionQuestion={callToAction!} sectionName={CreateQuestionnairePageF.sectionName} onValidation={onValidation} />  */}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography>Hvis du ønsker at arbejde videre på spørgeskemaet, skal du gemme som kladde og kan fortsætte oprettelsen på et senere tidspunkt. Er du derimod færdig med spørgeskemaet, skal du blot trykke gem.</Typography>
+                                    </CardContent>
+                                    <Divider />
+                                    <TableContainer component={Card}>
+                                        <Table sx={{ width: '100%' }} aria-label="simple table">
+                                            <TableRow>
+                                                <TableCell align="left">
+                                                    {editMode ?
+                                                        <CardActions sx={{ display: "flex", justifyContent: "left" }}>
+                                                            <ConfirmationButton
+                                                                color="error"
+                                                                variant="outlined"
+                                                                title={"Inaktiver spørgeskema"}
+                                                                action={async () => { throw new Error("not Implemented") }}
+                                                                skipDialog={false}
+                                                                buttonText={"Inaktivere spørgskema"}
+                                                                contentOfCancelBtn={"Fortryd"}
+                                                                contentOfDoActionBtn={"Inaktiver"}                                                    >
+                                                                <Typography>Ønsker du at inaktivere spørgskemaet {props.subject?.name}? </Typography>
+                                                            </ConfirmationButton>
+                                                        </CardActions>
+                                                        :
+                                                        null
+                                                    }
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <CardActions sx={{ display: "flex", justifyContent: "right" }}>
+                                                        <Button className='draft-button'
+                                                            variant="contained"
+                                                            disabled={(props.subject?.id !== undefined) && (props.subject?.status !== undefined && (props.subject.status !== BaseModelStatus.DRAFT))}
+                                                            onClick={() => {
+                                                                throw new Error("Not implemented")
+                                                            }}
+                                                        >Gem som kladde</Button>
+                                                        <ConfirmationButton
+                                                            color="primary"
+                                                            variant="contained"
+                                                            contentOfDoActionBtn="Forstået"
+                                                            contentOfCancelBtn="Fortryd"
+                                                            action={async () => {
+                                                                throw new Error("Not implemented")
+                                                            }}
+
+                                                            skipDialog={false}
+                                                            buttonText={'Gem og aktivér'}
+                                                            title="Definer alarmgrænser"
+                                                        >
+                                                            <Typography>Alarmgrænser skal defineres for den/de nye målinger, der er tilføjet, ellers vil der ikke blive triageret på rød, gul, grøn. Alarmgrænserne defineres i den/de patiengrupper, hvor spørgeskemaet er tilføjet.</Typography>
+                                                        </ConfirmationButton>
+                                                    </CardActions>
+                                                </TableCell>
+                                            </TableRow>
+                                        </Table>
+                                    </TableContainer>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                        {/*errorToast ?? <></>*/}
+                    </>
                 </>)
             }}
         </ValidatedForm>
@@ -191,10 +253,38 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
 
 const defaultQuestionnaire: Questionnaire = {
     name: "",
-    questions: []
+    questions: [],
+    status: BaseModelStatus.DRAFT
 }
 
 QuestionniareEditor.defaultProps = {
     default: defaultQuestionnaire
+}
+
+
+
+export const Test = () => {
+
+    let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ ...defaultQuestionnaire, questions: [defaultQuestion] })
+
+    return (
+        <>
+            <QuestionniareEditor
+                subject={questionnaire}
+                onChange={(questionnaire) => {setQuestionnaire(questionnaire); console.log("questionnaire", questionnaire)}}
+                onSubmit={function (submission: Questionnaire): Promise<void> {
+                    throw new Error("Function not implemented.");
+                }}
+                onCancel={function (): void {
+                    throw new Error("Function not implemented.");
+                }}
+                onError={function (errors: FormikErrors<Questionnaire>): void {
+                    throw new Error("Function not implemented.");
+                }}
+            />
+
+
+        </>
+    )
 }
 
