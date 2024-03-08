@@ -55,7 +55,7 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
         <ValidatedForm
             subject={{ subject: props.subject }}
             default={{ subject: props.default }}
-            onChange={(values: FormValues<Question>) => { props.onChange(values as Question); console.log("values", values.subject as Question) }}
+            onChange={(values: FormValues<Question>) => { props.onChange(values as Question) }}
             scheme={validationSchema}
             onError={function (errors): void {
                 throw new Error("Function not implemented.");
@@ -80,14 +80,14 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
                                 <Grid item xs>
                                     <ValidatedTextField
                                         label={"Spørgsmål"}
-                                        name={"subject.question"}
+                                        name={"question"}
                                         error={e.question && t.question ? e.question : undefined}
                                     />
                                 </Grid>
                                 <Grid item xs="auto">
                                     <ValidatedTextField
                                         label={"Forkortelse til kliniker"}
-                                        name={"subject.abbreviation"}
+                                        name={"abbreviation"}
                                         error={e.abbreviation && t.abbreviation ? e.abbreviation : undefined}
                                     />
                                 </Grid>
@@ -126,7 +126,7 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
                                 <Grid item xs>
                                     <ValidatedAutoComplete
                                         label={"Vælg spørgsmålstype"}
-                                        name={"subject.type"}
+                                        name={"type"}
                                         loading={props.isLoading}
                                         options={Object.keys(QuestionTypeEnum) as QuestionTypeEnum[]}
                                         getOptionLabel={(type: QuestionTypeEnum) => getLabelFrom(type)}

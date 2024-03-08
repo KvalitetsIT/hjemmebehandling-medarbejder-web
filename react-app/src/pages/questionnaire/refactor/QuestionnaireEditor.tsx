@@ -16,7 +16,7 @@ import { TypedSchema } from "yup/lib/util/types";
 import { AnySchema, SchemaOf } from "yup";
 import { ValidatedSelect } from "../../../components/Input/validated/ValidatedSelect";
 import { ValidatedAutoComplete } from "../../../components/Input/validated/ValidatedAutocomplete";
-import { FormProps, ValidatedForm } from "./ValidatedForm";
+import { FormProps, FormValues, ValidatedForm } from "./ValidatedForm";
 import { MeasurementType, Question, Questionnaire } from "./Model";
 import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
 import { v3 } from "uuid";
@@ -47,11 +47,11 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
 
     const editMode = questionnaireId ? true : false
 
-    const validationSchema: yup.BaseSchema<{ subject: Partial<Questionnaire> }> = yup.object().shape({
-        subject: yup.object().shape({
-            name: yup.string().required("Name is required"),
-            questions: yup.array().required()
-        }),
+    const validationSchema: yup.BaseSchema<FormValues<Questionnaire>> = yup.object().shape({
+
+        name: yup.string().required("Name is required"),
+        questions: yup.array().required()
+
         // additional fields
     })
 
@@ -61,12 +61,13 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
 
     const updateQuestion = (question: Question, index: number) => {
         console.log("Update Question")
-        let questionnaire = props.subject
+        let questionnaire = props.subject as Questionnaire
 
         if (questionnaire?.questions) questionnaire.questions[index] = question
 
         updateQuestionnaire(questionnaire!) // fix the "!"
     }
+
 
     if (props.isLoading) return (<></>)
 
@@ -79,19 +80,18 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
 
             scheme={validationSchema}
 
-            onError={function (errors: FormikErrors<{ subject: any; }>): void {
-                throw new Error("Function not implemented.");
-            }}
             onSubmit={function (submission: Partial<Questionnaire> & Record<string, any>): Promise<void> {
                 throw new Error("Function not implemented.");
             }}
             onCancel={function (): void {
                 throw new Error("Function not implemented.");
+            }} onError={function (errors: FormikErrors<FormValues<Questionnaire>>): void {
+                throw new Error("Function not implemented.");
             }}        >
             {(errors, touched, values, setFieldValue) => {
 
-                const e = errors as FormikErrors<Questionnaire>
-                const t = touched as FormikTouched<Questionnaire>
+                const e = errors as FormikErrors<FormValues<Questionnaire>>
+                const t = touched as FormikTouched<FormValues<Questionnaire>>
 
 
                 const getChildQuestions = (questionId: string) => {
@@ -102,6 +102,25 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                     return toReturn ?? []
                 }
 
+                const deleteQuestion = (index: number) => {
+                    console.log("=====================================0")
+                    console.log("Deleting: ", index)
+                    console.log("deleting:", props.subject.questions && props.subject.questions[index])
+
+                    if (props.subject.questions == undefined || index > props.subject.questions?.length) { console.error("index out of bound"); return }
+
+                    let questions = [...props.subject.questions];
+
+                    //let deleted = questions?.splice(index, 1)
+
+                    //console.log("deleted", deleted)
+                    console.log("questions", questions)
+
+                    updateQuestionnaire({ ...props.subject })
+                }
+
+
+                console.log("questionnssssss", props.subject.questions)
                 return (<>
                     <>
                         <Prompt
@@ -129,7 +148,7 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                                 </Grid>
                                 : null}
 
-                            {parentQuestions?.map((question: Question, index) => {
+                            {parentQuestions?.map((question: Question, i) => {
                                 const childQuestions = getChildQuestions(question.Id!)
 
                                 return (
@@ -137,7 +156,7 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                                         <Grid item xs={12}>
 
                                             <QuestionEditor
-                                                key={"questionEditor_" + index}
+                                                key={"parentQuestion_" + i}
                                                 subject={question}
                                                 onSubmit={function (submission: Question): Promise<void> {
                                                     throw new Error("Function not implemented.");
@@ -148,16 +167,29 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                                                 onError={function (errors: FormikErrors<Question>): void {
                                                     throw new Error("Function not implemented.");
                                                 }}
-                                                onChange={(q) => updateQuestion(q, index)}
+                                                onChange={(q) => updateQuestion(q, i)}
+                                                onDelete={() => deleteQuestion(i)}
+                                                onAdd={() => {
+                                                    console.log("index", i)
+
+                                                    let questions = props.subject.questions ?? [];
+                                                    //questions.splice(i+1, 0, defaultQuestion)
+                                                    questions = [...questions?.slice(0, i + 1), defaultQuestion, ...questions?.slice(i + 1)]
+
+                                                    console.log("q", questions)
+
+                                                    updateQuestionnaire({ ...props.subject as Questionnaire, questions: questions })
+                                                }}
                                             />
                                         </Grid>
-                                        {childQuestions?.map(childQuestion => {
+                                        {childQuestions?.map((childQuestion, j) => {
                                             return (
                                                 <>
                                                     <Grid item xs={1} alignSelf="center" textAlign="center">
                                                     </Grid>
                                                     <Grid item xs={11}>
                                                         <QuestionEditor
+                                                            key={"childQuestion_" + i + "_" + j}
                                                             subject={childQuestion}
                                                             onError={function (errors: FormikErrors<Question>): void {
                                                                 throw new Error("Function not implemented.");
@@ -169,7 +201,9 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                                                                 throw new Error("Function not implemented.");
                                                             }} onChange={function (item: Question): void {
                                                                 throw new Error("Function not implemented.");
-                                                            }} />
+                                                            }}
+
+                                                        />
 
                                                     </Grid>
                                                 </>
@@ -265,13 +299,15 @@ QuestionniareEditor.defaultProps = {
 
 export const Test = () => {
 
-    let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ ...defaultQuestionnaire, questions: [defaultQuestion] })
+    let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ ...defaultQuestionnaire, questions: [{}, {}] })
+
 
     return (
         <>
             <QuestionniareEditor
+                key={"questionnaire" + questionnaire.id}
                 subject={questionnaire}
-                onChange={(questionnaire) => {setQuestionnaire(questionnaire); console.log("questionnaire", questionnaire)}}
+                onChange={(questionnaire) => { setQuestionnaire(questionnaire); console.log("questionnaire", questionnaire); console.log(questionnaire) }}
                 onSubmit={function (submission: Questionnaire): Promise<void> {
                     throw new Error("Function not implemented.");
                 }}

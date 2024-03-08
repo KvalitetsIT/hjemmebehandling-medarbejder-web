@@ -30,7 +30,7 @@ export function ValidatedAutoComplete<
                     {...params}
                     variant={props.variant}
                     label={props.label}
-                    error={props.error}
+                    error={props.error ? true : false }
                     helperText={props.error}
                     name={props.name}
                 />

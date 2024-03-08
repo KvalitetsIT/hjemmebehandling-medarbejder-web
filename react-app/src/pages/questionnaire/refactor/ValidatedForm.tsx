@@ -65,20 +65,12 @@ export function ValidatedForm<T extends FormikValues>(props: BaseFormProps<T>) {
                 initialValues={props.subject ?? props.default}
                 onSubmit={(values, formik) => values.subject && props.onSubmit(values).then(() => formik.resetForm())}
                 validationSchema={props.scheme}
-                enableReinitialize
+                //enableReinitialize
                 
             >
                 {({ errors, touched, values, handleChange, setFieldValue, isValidating }) => {
 
                     props.onChange && props.onChange(values as FormValues<T>)
-
-
-                    console.log("")
-                    console.log("===============================================================")
-                    console.log("Values", values)
-                    console.log("Touched", touched)
-                    console.log("Errors", errors)
-                    console.log("isValidating", isValidating)
                     return (
                         <Form>
 
