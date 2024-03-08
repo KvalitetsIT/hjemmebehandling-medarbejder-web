@@ -71,6 +71,7 @@ export function ValidatedForm<T extends FormikValues>(props: BaseFormProps<T>) {
                 {({ errors, touched, values, handleChange, setFieldValue, isValidating }) => {
 
                     props.onChange && props.onChange(values as FormValues<T>)
+
                     return (
                         <Form>
 

@@ -56,12 +56,13 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
     })
 
     const updateQuestionnaire = (questionnaire: Questionnaire) => {
+        console.log("UpdateQuestionnaire", questionnaire)
         props.onChange && props.onChange(questionnaire)
     }
 
     const updateQuestion = (question: Question, index: number) => {
         console.log("Update Question")
-        let questionnaire = props.subject as Questionnaire
+        let questionnaire = props.subject
 
         if (questionnaire?.questions) questionnaire.questions[index] = question
 
@@ -103,24 +104,18 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                 }
 
                 const deleteQuestion = (index: number) => {
-                    console.log("=====================================0")
-                    console.log("Deleting: ", index)
-                    console.log("deleting:", props.subject.questions && props.subject.questions[index])
 
-                    if (props.subject.questions == undefined || index > props.subject.questions?.length) { console.error("index out of bound"); return }
+                    // TODO : Deletes the wrong index - it keeps deleting the last element rather than the one specifyed
+
+                    if (props.subject.questions == undefined || index > props.subject.questions?.length) { console.error("Could not delete question - Index out of bound"); return }
 
                     let questions = [...props.subject.questions];
 
-                    //let deleted = questions?.splice(index, 1)
+                    let deleted = questions?.splice(index, 1)
 
-                    //console.log("deleted", deleted)
-                    console.log("questions", questions)
-
-                    updateQuestionnaire({ ...props.subject })
+                    updateQuestionnaire({ ...props.subject, questions: questions })
                 }
 
-
-                console.log("questionnssssss", props.subject.questions)
                 return (<>
                     <>
                         <Prompt
@@ -301,6 +296,8 @@ export const Test = () => {
 
     let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ ...defaultQuestionnaire, questions: [{}, {}] })
 
+    let [user, setUser] = useState<{name: string}>()
+    
 
     return (
         <>
@@ -318,6 +315,19 @@ export const Test = () => {
                     throw new Error("Function not implemented.");
                 }}
             />
+
+
+            <ValidatedForm
+                subject={user}
+                onChange={(name) => setName(name)}
+            >
+                {(errors, touched, values, setFieldValue) => {
+                    <ValidatedTextField
+                        label={""}
+                        name={""}
+                    />
+                }}
+            </ValidatedForm>
 
 
         </>
