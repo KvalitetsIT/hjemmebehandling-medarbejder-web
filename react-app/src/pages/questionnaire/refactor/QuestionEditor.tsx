@@ -51,12 +51,14 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
 
     })
 
+    console.log("Subject", props.subject)
     return (
         <ValidatedForm
             subject={{ subject: props.subject }}
             default={{ subject: props.default }}
             onChange={(values: FormValues<Question>) => { props.onChange(values as Question) }}
             scheme={validationSchema}
+
             onError={function (errors): void {
                 throw new Error("Function not implemented.");
             }}
@@ -82,6 +84,8 @@ export const QuestionEditor = (props: QuestionEditorProps) => {
                                         label={"Spørgsmål"}
                                         name={"question"}
                                         error={e.question && t.question ? e.question : undefined}
+                                        value={props.subject.question}
+                                        onChange={(e) => props.onChange({ ...props.subject, question: e.target.value })}
                                     />
                                 </Grid>
                                 <Grid item xs="auto">

@@ -1,6 +1,9 @@
 import { FormControl } from "@mui/material"
 import { FormikErrors, FormikTouched, FormikValues, Formik, Form } from "formik"
 import { BaseSchema } from "yup"
+import { LoadingSmallComponent } from "../../../components/Layout/LoadingSmallComponent"
+import { LoadingBackdropComponent } from "../../../components/Layout/LoadingBackdropComponent"
+import { Loading } from "../../../components/Layout/Loading"
 
 
 export type FormValues<T> = Partial<T> & Record<string, any>
@@ -65,12 +68,10 @@ export function ValidatedForm<T extends FormikValues>(props: BaseFormProps<T>) {
                 initialValues={props.subject ?? props.default}
                 onSubmit={(values, formik) => values.subject && props.onSubmit(values).then(() => formik.resetForm())}
                 validationSchema={props.scheme}
-                //enableReinitialize
-                
+                validateOnChange
+            // enableReinitialize
             >
                 {({ errors, touched, values, handleChange, setFieldValue, isValidating }) => {
-
-                    props.onChange && props.onChange(values as FormValues<T>)
 
                     return (
                         <Form>
@@ -79,6 +80,8 @@ export function ValidatedForm<T extends FormikValues>(props: BaseFormProps<T>) {
                                 // Forwards the formik fields to the underlying form/children
                                 props.children && props.children(errors, touched, values, setFieldValue)
                             }
+
+
                             {/*
                             <Stack spacing={2} direction={"row"}>
                                 <Button

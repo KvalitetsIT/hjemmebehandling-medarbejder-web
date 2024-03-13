@@ -133,6 +133,8 @@ export const QuestionniareEditor = (props: QuestionnaireEditorProps) => {
                                             label={"Name"}
                                             name={"name"}
                                             error={e.name && t.name ? e.name : undefined}
+                                            value={props.subject.name}
+                                            onChange={(event) => updateQuestionnaire({ ...props.subject, name: event?.target.value })}
                                         />
                                     </CardContent>
                                 </Card>
@@ -296,8 +298,9 @@ export const Test = () => {
 
     let [questionnaire, setQuestionnaire] = useState<Questionnaire>({ ...defaultQuestionnaire, questions: [{}, {}] })
 
-    let [user, setUser] = useState<{name: string}>()
-    
+    let [user, setUser] = useState<{ name: string }>()
+
+    let [question, setQuestion] = useState({ ...defaultQuestion })
 
     return (
         <>
@@ -317,17 +320,8 @@ export const Test = () => {
             />
 
 
-            <ValidatedForm
-                subject={user}
-                onChange={(name) => setName(name)}
-            >
-                {(errors, touched, values, setFieldValue) => {
-                    <ValidatedTextField
-                        label={""}
-                        name={""}
-                    />
-                }}
-            </ValidatedForm>
+
+
 
 
         </>

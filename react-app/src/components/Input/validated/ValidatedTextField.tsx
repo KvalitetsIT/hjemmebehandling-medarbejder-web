@@ -12,6 +12,7 @@ export function ValidatedTextField(props: ValidatedTextFieldProps) {
 
     return (
         <Field
+            validateOnChange
             id={props.name}
             error={props.error}
             helperText={props.error}
