@@ -29,7 +29,7 @@ export default class AboutPage extends Component<{}> {
                                 </ListItemIcon>
                                 <ListItemText disableTypography
                                     primary={<Typography variant="h6">Medicinsk udstyr</Typography>}
-                                    secondary={<Typography>Versionsnummer på software: 3.0.0-2024-02-22</Typography>}
+                                    secondary={<Typography>Versionsnummer på software: 3.0.1-2024-03-19</Typography>}
                                 />
                             </ListItem>
                             <ListItem alignItems="flex-start">
