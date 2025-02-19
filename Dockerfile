@@ -18,7 +18,7 @@ RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 RUN go install github.com/lithictech/runtime-js-env@latest
 
 # Copy the built application into Nginx for serving
-FROM nginx:alpine3.17
+FROM nginx:1.27.4-alpine3.21
 COPY --from=build /app/build /usr/share/nginx/html
 COPY --from=go-downloader /go/bin/runtime-js-env /
 COPY ./react-app/nginx/nginx.conf /usr/share/nginx/nginx.conf
