@@ -1,8 +1,8 @@
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import BaseService from "../components/BaseLayer/BaseService";
+import { BaseModelStatus } from "../components/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "../components/Models/PlanDefinition";
 import { IPlanDefinitionService } from "./interfaces/IPlanDefinitionService";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 
 export default class PlanDefinitionService extends BaseService implements IPlanDefinitionService {
     backendApi: IBackendApi;

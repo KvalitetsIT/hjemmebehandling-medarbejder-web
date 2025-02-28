@@ -1,8 +1,8 @@
-import DateProperties from "@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DateProperties";
-import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import DateProperties from "../Helpers/danishImpl/DateProperties";
+import IDateHelper from "../Helpers/interfaces/IDateHelper";
+import { BaseModelStatus } from "../Models/BaseModelStatus";
+import { Question, QuestionTypeEnum } from "../Models/Question";
+import { Questionnaire, QuestionnaireStatus } from "../Models/Questionnaire";
 import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";

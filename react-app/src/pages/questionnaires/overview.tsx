@@ -1,5 +1,3 @@
-import IsEmptyCard from "@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Button, Card, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +5,8 @@ import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdro
 import { QuestionnaireTable } from "../../components/Tables/QuestionnaireTable";
 import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireService";
 import ApiContext, { IApiContext } from "../_context";
+import IsEmptyCard from "../../components/Errorhandling/IsEmptyCard";
+import { Questionnaire } from "../../components/Models/Questionnaire";
 
 
 interface State {

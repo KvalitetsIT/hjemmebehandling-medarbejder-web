@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Box, FormControl, OutlinedInputProps, TextField, Typography } from '@mui/material';
-import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { CriticalLevelEnum, InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
 import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {

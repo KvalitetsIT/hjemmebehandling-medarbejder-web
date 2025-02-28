@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import { BasicTabs } from '../Layout/Tabs';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { Questionnaire } from '../Models/Questionnaire';
 import { Tooltip, Button, Grid, Stack, Typography } from '@mui/material';
-import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
+import { QuestionnaireResponse } from '../Models/QuestionnaireResponse';
 import { Link } from 'react-router-dom';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { PencilIcon } from '../Icons/Icons';
 

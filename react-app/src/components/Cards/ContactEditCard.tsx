@@ -5,12 +5,12 @@ import ApiContext, { IApiContext } from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 
 import { TextFieldValidation } from '../Input/TextFieldValidation';
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
 import { IValidationService } from '../../services/interfaces/IValidationService';
-import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
+import { ICollectionHelper } from '../Helpers/interfaces/ICollectionHelper';
 import { PhonenumberInput } from '../Input/PhonenumberInput';
-import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
-import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
+import { PrimaryContact } from '../Models/PrimaryContact';
+import { ContactDetails } from '../Models/Contact';
 
 export interface Props {
   initialContact?: PrimaryContact

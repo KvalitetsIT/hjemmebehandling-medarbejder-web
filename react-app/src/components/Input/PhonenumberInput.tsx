@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { MenuItem, Select } from '@mui/material';
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
 import { TextFieldValidation } from './TextFieldValidation';
 import { IValidationService } from '../../services/interfaces/IValidationService';
 

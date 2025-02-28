@@ -1,18 +1,19 @@
-import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { Answer } from "../../components/Models/Answer"
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus"
+import { PaginatedList } from "../../components/Models/PaginatedList"
+import { PatientCareplan } from "../../components/Models/PatientCareplan"
+import { Question } from "../../components/Models/Question"
+import { Questionnaire, QuestionnaireStatus } from "../../components/Models/Questionnaire"
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse"
+import { Task } from "../../components/Models/Task"
+import { ThresholdCollection } from "../../components/Models/ThresholdCollection"
+
 
 /**
  * QuestionnaireService 
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface IQuestionnaireService {
 

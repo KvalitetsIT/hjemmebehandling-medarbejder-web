@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {BaseIcon, BaseIconProps} from "@kvalitetsit/hjemmebehandling/Icons/BaseIcon"
+import {BaseIcon, BaseIconProps} from "../Icons/BaseIcon"
 
 
 export function ActivePatientsIcon(props?: BaseIconProps): JSX.Element {

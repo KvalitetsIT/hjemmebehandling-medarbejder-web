@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Component } from 'react';
 import { Autocomplete, Box, CircularProgress, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material';
 import ApiContext, { IApiContext } from '../../pages/_context';
-import { PatientSimple } from '@kvalitetsit/hjemmebehandling/Models/PatientSimple';
+import { PatientSimple } from '../Models/PatientSimple';
 import { IPatientService } from '../../services/interfaces/IPatientService';
-import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { NotFoundError } from '../Errorhandling/ServiceErrors/NotFoundError';
+import { PatientDetail } from '../Models/PatientDetail';
 import { PatientAvatar } from '../Avatars/PatientAvatar';
 import { Redirect } from 'react-router-dom';
 export interface State {

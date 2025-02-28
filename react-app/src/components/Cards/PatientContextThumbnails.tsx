@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { ThumbnailCard } from './ThumbnailCard';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import { PatientAvatar } from '../Avatars/PatientAvatar';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ApiContext, { IApiContext } from '../../pages/_context';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import { Link } from 'react-router-dom';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import IsEmptyCard from '../Errorhandling/IsEmptyCard';
 import { Grid, Typography } from '@mui/material';
-import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
+import { PrimaryContact } from '../Models/PrimaryContact';
 
 export interface Props {
   currentCareplan: PatientCareplan

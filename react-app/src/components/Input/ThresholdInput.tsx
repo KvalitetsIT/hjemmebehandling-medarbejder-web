@@ -1,5 +1,5 @@
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
+import { CategoryEnum } from "../Models/CategoryEnum"
+import { ThresholdNumber } from "../Models/ThresholdNumber"
 import { Stack, Select, MenuItem, TextField, FormControl, FormHelperText } from "@mui/material"
 import React from "react"
 import { Component } from "react"

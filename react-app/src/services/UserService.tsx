@@ -1,9 +1,9 @@
 
 
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import BaseService from "../components/BaseLayer/BaseService";
+import { PatientDetail } from "../components/Models/PatientDetail";
+import { User } from "../components/Models/User";
 import {IUserService} from "./interfaces/IUserService";
 
 export default class UserService extends BaseService implements IUserService {

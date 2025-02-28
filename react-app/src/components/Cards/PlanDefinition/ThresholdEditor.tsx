@@ -1,17 +1,18 @@
-import ChartData from "@kvalitetsit/hjemmebehandling/Charts/ChartData"
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum"
-import { Question } from "@kvalitetsit/hjemmebehandling/Models/Question"
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire"
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection"
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber"
+
 import { Card, CardHeader, Typography, ButtonGroup, Button, Divider, CardContent, Grid, Box, Stack } from "@mui/material"
 import { Component } from "react"
 import ApiContext from "../../../pages/_context"
 import { MissingDetailsError } from "../../Errors/MissingDetailsError"
 import { ColorSlider } from "../../Input/ColorSlider"
 import ThresholdInput from "../../Input/ThresholdInput"
-import { LineChart } from "@kvalitetsit/hjemmebehandling/Charts/LineChart"
 import { Line } from "react-chartjs-2"
+import ChartData from "../../Charts/ChartData"
+import { LineChart } from "../../Charts/LineChart"
+import { CategoryEnum } from "../../Models/CategoryEnum"
+import { Question } from "../../Models/Question"
+import { Questionnaire } from "../../Models/Questionnaire"
+import { ThresholdCollection } from "../../Models/ThresholdCollection"
+import { ThresholdNumber } from "../../Models/ThresholdNumber"
 
 interface TresholdEditorProps {
     questionnaire: Questionnaire

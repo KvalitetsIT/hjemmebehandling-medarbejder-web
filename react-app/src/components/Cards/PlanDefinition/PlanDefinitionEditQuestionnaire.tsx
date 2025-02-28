@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Button, Card, CardHeader, Checkbox, Divider, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import ApiContext, { IApiContext } from '../../../pages/_context';
 import { IQuestionnaireService } from '../../../services/interfaces/IQuestionnaireService';
-import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { Box } from '@mui/system';
-import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
+import { BaseModelStatus } from '../../Models/BaseModelStatus';
+import { PlanDefinition } from '../../Models/PlanDefinition';
+import { Questionnaire } from '../../Models/Questionnaire';
 
 export interface Props {
     planDefinition: PlanDefinition

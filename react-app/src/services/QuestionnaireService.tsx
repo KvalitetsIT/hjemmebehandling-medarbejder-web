@@ -1,16 +1,16 @@
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { Answer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import BaseService from "../components/BaseLayer/BaseService";
+import { Answer } from "../components/Models/Answer";
+import { BaseModelStatus } from "../components/Models/BaseModelStatus";
+import { PaginatedList } from "../components/Models/PaginatedList";
+import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { Question, QuestionTypeEnum } from "../components/Models/Question";
+import { Questionnaire, QuestionnaireStatus } from "../components/Models/Questionnaire";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
 import { IQuestionnaireService } from "./interfaces/IQuestionnaireService";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import {PaginatedList} from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
 
 
 
@@ -92,7 +92,7 @@ export default class QuestionnaireService extends BaseService implements IQuesti
       let response = await this.backendApi.GetQuestionnaireResponses(careplanId, questionnaireIds, page, pagesize);
       
   
-      let list = response.list.filter(x => x !== undefined)
+      let list = response.list.filter(x=> x !== undefined)
       list.sort((a, b) => {
         if (b.answeredTime && a.answeredTime)
           return b.answeredTime.getTime() - a.answeredTime.getTime();

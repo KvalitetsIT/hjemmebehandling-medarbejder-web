@@ -1,8 +1,8 @@
 import React, { Component, PropsWithChildren } from 'react';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import ApiContext from '../../../pages/_context';
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { InvalidInputModel } from '../../Errorhandling/ServiceErrors/InvalidInputError';
 
 export interface Props {
     expanded: boolean

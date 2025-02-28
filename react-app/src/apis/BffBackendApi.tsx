@@ -1,33 +1,23 @@
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-
-import { IBackendApi } from "./interfaces/IBackendApi";
-
-import { CarePlanApi, GetUnresolvedQuestionnairesRequest } from "../generated/apis/CarePlanApi";
-import { PersonApi } from "../generated/apis/PersonApi";
-import { QuestionnaireResponseApi, GetQuestionnaireResponsesByStatusStatusEnum } from "../generated/apis/QuestionnaireResponseApi";
-
-import { Configuration, CreatePlanDefinitionOperationRequest, CreateQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnairesRequest, IsPlanDefinitionInUseRequest, IsQuestionnaireInUseRequest, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, PatchQuestionnaireOperationRequest, PatientApi, PlanDefinitionApi, QuestionnaireApi, ThresholdDto, UserApi } from "../generated";
-
+import BaseApi from "../components/BaseLayer/BaseApi";
+import { NotImplementedError } from "../components/Errorhandling/ApiErrors/NotImplementedError";
+import { NotFoundError } from "../components/Errorhandling/ServiceErrors/NotFoundError";
+import { BaseModelStatus } from "../components/Models/BaseModelStatus";
+import { MeasurementType } from "../components/Models/MeasurementType";
+import { PaginatedList } from "../components/Models/PaginatedList";
+import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { PatientDetail } from "../components/Models/PatientDetail";
+import { Person } from "../components/Models/Person";
+import { PlanDefinition, PlanDefinitionStatus } from "../components/Models/PlanDefinition";
+import { PrimaryContact } from "../components/Models/PrimaryContact";
+import { Questionnaire, QuestionnaireStatus } from "../components/Models/Questionnaire";
+import { QuestionnaireResponseStatus, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
+import { Task } from "../components/Models/Task";
+import { User } from "../components/Models/User";
+import { Configuration, CarePlanApi, PlanDefinitionApi, QuestionnaireResponseApi, PersonApi, UserApi, PatientApi, QuestionnaireApi, ValueSetApi, CreatePlanDefinitionOperationRequest, ThresholdDto, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, CreateQuestionnaireOperationRequest, GetQuestionnairesRequest, PatchQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnaireResponsesByStatusStatusEnum, IsQuestionnaireInUseRequest, IsPlanDefinitionInUseRequest, GetUnresolvedQuestionnairesRequest } from "../generated";
 import FhirUtils from "../util/FhirUtils";
-import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
-
-import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import { IBackendApi } from "./interfaces/IBackendApi";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
 import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
-import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-import { ValueSetApi } from "../generated/apis/ValueSetApi";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
-import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
 
 export class BffBackendApi extends BaseApi implements IBackendApi {
 

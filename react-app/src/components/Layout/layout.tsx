@@ -7,13 +7,13 @@ import { PatientAccordianSectionsEnum } from '../createpatient';
 import ActivePatients from '../../pages/active/[pagenr]';
 import InactivePatients from '../../pages/inactive/[pagenr]';
 import MiniDrawer from './MUI/MiniVariantDrawer';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent'
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
+import { CreateToastEvent, CreateToastEventData } from '../Events/CreateToastEvent'
 import PlandefinitionOverview from '../../pages/planDefinitions/overview';
 import CreatePlandefinition from '../../pages/planDefinitions/create';
 import CreateQuestionnairePage from '../../pages/questionnaires/create';
 import QuestionnaireOverviewPage from '../../pages/questionnaires/overview';
-import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { Toast } from '../Errorhandling/Toast';
 import { CheckmarkIcon } from '../Icons/Icons';
 import NewPatientPage from '../../pages/newPatients';
 import EditPatientContact from '../../pages/patients/[cpr]/edit/contact';

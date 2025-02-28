@@ -1,10 +1,10 @@
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
+import { Person } from "../../components/Models/Person";
 
 /**
  * PersonService 
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface IPersonService {
     /**

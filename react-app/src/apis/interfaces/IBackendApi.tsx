@@ -1,14 +1,14 @@
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus";
+import { MeasurementType } from "../../components/Models/MeasurementType";
+import { PaginatedList } from "../../components/Models/PaginatedList";
+import { PatientCareplan } from "../../components/Models/PatientCareplan";
+import { PatientDetail } from "../../components/Models/PatientDetail";
+import { Person } from "../../components/Models/Person";
+import { PlanDefinition, PlanDefinitionStatus } from "../../components/Models/PlanDefinition";
+import { Questionnaire, QuestionnaireStatus } from "../../components/Models/Questionnaire";
+import { QuestionnaireResponseStatus, QuestionnaireResponse } from "../../components/Models/QuestionnaireResponse";
+import { Task } from "../../components/Models/Task";
+import { User } from "../../components/Models/User";
 
 /**
  * Containing all methods that should call the actual api

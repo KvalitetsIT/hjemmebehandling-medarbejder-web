@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';

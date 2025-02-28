@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { Box, Button, ButtonGroup, Card, CardContent, CardHeader, createTheme, Divider, Grid, Slider, TextField, ThemeProvider, Typography } from '@mui/material';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import { Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { ThresholdNumber } from '@kvalitetsit/hjemmebehandling/Models/ThresholdNumber';
-import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/ThresholdCollection';
+import { CategoryEnum } from '../Models/CategoryEnum';
+import { Questionnaire } from '../Models/Questionnaire';
+import { Question } from '../Models/Question';
+import { ThresholdNumber } from '../Models/ThresholdNumber';
+import { ThresholdCollection } from '../Models/ThresholdCollection';
 
 export interface Props {
     questionnaire: Questionnaire

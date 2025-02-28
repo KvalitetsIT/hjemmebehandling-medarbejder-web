@@ -6,9 +6,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
-import { QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { InvalidInputModel, CriticalLevelEnum } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { QuestionTypeEnum } from '../Models/Question';
+import { InvalidInputModel, CriticalLevelEnum } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
 
 export interface Props {
     sectionName?: string;

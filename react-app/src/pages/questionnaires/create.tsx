@@ -1,10 +1,3 @@
-import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
-import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
-import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
-import { CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 import { Alert, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Table, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import React from "react";
 import { Prompt, Redirect } from "react-router-dom";
@@ -16,12 +9,19 @@ import { IQuestionnaireService } from "../../services/interfaces/IQuestionnaireS
 import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 import ApiContext, { IApiContext } from "../_context";
 import { v4 as uuid } from 'uuid';
-import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
-import { ValidateInputEvent, ValidateInputEventData } from "@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
 import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { MeasurementType } from "../../components/Models/MeasurementType";
+import { Questionnaire, QuestionnaireStatus } from "../../components/Models/Questionnaire";
+import { CriticalLevelEnum, InvalidInputModel } from "../../components/Errorhandling/ServiceErrors/InvalidInputError";
+import { ValidateInputEvent, ValidateInputEventData } from "../../components/Events/ValidateInputEvent";
+import { CallToActionQuestion, Question, QuestionTypeEnum } from "../../components/Models/Question";
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus";
+import { ToastError } from "../../components/Errorhandling/ToastError";
+import { BaseServiceError } from "../../components/Errorhandling/BaseServiceError";
+import { EnableWhen } from "../../components/Models/EnableWhen";
+import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
+import { ThresholdOption } from "../../components/Models/ThresholdOption";
 
 
 interface Props {

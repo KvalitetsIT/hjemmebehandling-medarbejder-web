@@ -3,13 +3,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Typography } from '@mui/material';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { PatientDetail } from '../Models/PatientDetail';
 import { IUserService } from '../../services/interfaces/IUserService';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
+import IsEmptyCard from '../Errorhandling/IsEmptyCard';
+import { CreateToastEvent, CreateToastEventData } from '../Events/CreateToastEvent';
 
 export interface Props {
     patient: PatientDetail

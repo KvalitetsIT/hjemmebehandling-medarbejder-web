@@ -6,12 +6,12 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {IQuestionnaireService} from '../../services/interfaces/IQuestionnaireService';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { Questionnaire } from '../Models/Questionnaire';
 import CloseIcon from '@mui/icons-material/Close';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
+import { PatientCareplan } from '../Models/PatientCareplan';
+import { PlanDefinition } from '../Models/PlanDefinition';
 import { IPlanDefinitionService } from '../../services/interfaces/IPlanDefinitionService';
-import { BaseModelStatus } from '@kvalitetsit/hjemmebehandling/Models/BaseModelStatus';
+import { BaseModelStatus } from '../Models/BaseModelStatus';
 
 export interface Props {
     careplan : PatientCareplan

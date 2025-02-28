@@ -2,13 +2,13 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { Component } from 'react';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { CategoryEnum } from '../Models/CategoryEnum';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
-import { CreateToastEvent, CreateToastEventData } from '@kvalitetsit/hjemmebehandling/Events/CreateToastEvent';
+import { CreateToastEvent, CreateToastEventData } from '../Events/CreateToastEvent';
 import { LoadingButton } from '@mui/lab';
 
 export interface Props {

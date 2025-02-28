@@ -1,5 +1,5 @@
-import { Question, QuestionTypeEnum, Option } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
+import { Question, QuestionTypeEnum, Option } from "../Models/Question";
+import { CategoryEnum } from "../Models/CategoryEnum";
 import { Alert, Box, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, Container, Divider, FormControl, FormControlLabel, FormHelperText, Grid, GridSize, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, Table, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import { Component, Key, ReactNode, useEffect, useState } from "react";
 import { EnableWhenSelect } from "../Input/EnableWhenSelect";
@@ -8,15 +8,15 @@ import { TextFieldValidation } from "../Input/TextFieldValidation";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { CategorySelect } from "../Input/CategorySelect";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { ThresholdCollection } from "../Models/ThresholdCollection";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { QuestionMeasurementTypeSelect } from "../Input/QuestionMeasurementTypeSelect";
-import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import { CriticalLevelEnum, InvalidInputModel } from "../Errorhandling/ServiceErrors/InvalidInputError";
 import { Tooltip } from '@mui/material'
 import { v4 as uuid } from 'uuid';
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
+import { MeasurementType } from "../Models/MeasurementType";
 
 
 interface Props {

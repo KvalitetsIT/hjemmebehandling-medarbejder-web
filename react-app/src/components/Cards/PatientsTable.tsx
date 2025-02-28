@@ -1,12 +1,12 @@
 import { Box, Button, Card, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import * as React from 'react';
 import { LoadingBackdropComponent } from '../Layout/LoadingBackdropComponent';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { PatientDetail } from '../Models/PatientDetail';
 import { IPatientService } from '../../services/interfaces/IPatientService';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { Link } from 'react-router-dom';
 import ApiContext, { IApiContext } from '../../pages/_context';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard'
+import IsEmptyCard from '../Errorhandling/IsEmptyCard'
 import { PageSelectorButtons } from '../Input/PageSelectorButtons';
 
 interface State {

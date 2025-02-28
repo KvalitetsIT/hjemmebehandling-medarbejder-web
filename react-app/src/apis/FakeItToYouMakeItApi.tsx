@@ -1,37 +1,38 @@
 /* eslint-disable */
 
-import { Address } from "@kvalitetsit/hjemmebehandling/Models/Address";
-import { Answer, BooleanAnswer, GroupAnswer, NumberAnswer, StringAnswer, UnitType } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
-import { DayEnum, Frequency, FrequencyEnum } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import PersonContact from "@kvalitetsit/hjemmebehandling/Models/PersonContact";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire, QuestionnaireStatus } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { Task } from "@kvalitetsit/hjemmebehandling/Models/Task";
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
 
-import { QuestionnaireAlreadyOnCareplan } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
+import BaseApi from "../components/BaseLayer/BaseApi";
+import { NotImplementedError } from "../components/Errorhandling/ApiErrors/NotImplementedError";
+import { NotFoundError } from "../components/Errorhandling/ServiceErrors/NotFoundError";
+import { QuestionnaireAlreadyOnCareplan } from "../components/Errorhandling/ServiceErrors/QuestionnaireAlreadyOnCareplan";
+import { Address } from "../components/Models/Address";
+import { Answer, UnitType, StringAnswer, NumberAnswer, BooleanAnswer, GroupAnswer } from "../components/Models/Answer";
+import { BaseModelStatus } from "../components/Models/BaseModelStatus";
+import { CategoryEnum } from "../components/Models/CategoryEnum";
+import { ContactDetails } from "../components/Models/Contact";
+import { EnableWhen } from "../components/Models/EnableWhen";
+import { Frequency, DayEnum, FrequencyEnum } from "../components/Models/Frequency";
+import { MeasurementType } from "../components/Models/MeasurementType";
+import { PaginatedList } from "../components/Models/PaginatedList";
+import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { PatientDetail } from "../components/Models/PatientDetail";
+import { Person } from "../components/Models/Person";
+import PersonContact from "../components/Models/PersonContact";
+import { PlanDefinition, PlanDefinitionStatus } from "../components/Models/PlanDefinition";
+import { PrimaryContact } from "../components/Models/PrimaryContact";
+import { Question, QuestionTypeEnum } from "../components/Models/Question";
+import { Questionnaire } from "../components/Models/Questionnaire";
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from "../components/Models/QuestionnaireResponse";
+import SimpleOrganization from "../components/Models/SimpleOrganization";
+import { Task } from "../components/Models/Task";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { ThresholdNumber } from "../components/Models/ThresholdNumber";
+import { ThresholdOption } from "../components/Models/ThresholdOption";
+import { User } from "../components/Models/User";
 import { IBackendApi } from "./interfaces/IBackendApi";
-import { NotFoundError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { ThresholdOption } from "@kvalitetsit/hjemmebehandling/Models/ThresholdOption";
-import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
-import BaseApi from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseApi";
-import { NotImplementedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ApiErrors/NotImplementedError";
-import SimpleOrganization from "@kvalitetsit/hjemmebehandling/Models/SimpleOrganization";
-import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
-import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
-import { PaginatedList } from "@kvalitetsit/hjemmebehandling/Models/PaginatedList";
+import InternalToExternalMapper from "./Mappers/InternalToExternalMapper";
+
 
 
 export class FakeItToYouMakeItApi extends BaseApi implements IBackendApi {

@@ -2,17 +2,17 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import Button from '@mui/material/Button';
 import { CardHeader, Divider, Grid, Typography, Tooltip } from '@mui/material';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { Link } from 'react-router-dom';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import { PencilIcon } from '../Icons/Icons';
 
 import { FinishMonitoringButton } from '../Input/FinishMonitoringButton';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary';
 
 export interface Props {
     careplan: PatientCareplan

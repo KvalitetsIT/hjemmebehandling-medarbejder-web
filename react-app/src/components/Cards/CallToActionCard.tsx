@@ -3,15 +3,15 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Component } from 'react';
-import { CallToActionQuestion, Question } from '@kvalitetsit/hjemmebehandling/Models/Question';
+import { CallToActionQuestion, Question } from '../Models/Question';
 import { Tooltip, Button, CardActions, CardHeader, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { EnableWhenSelect } from '../Input/EnableWhenSelect';
-import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
+import { EnableWhen } from '../Models/EnableWhen';
 import { QuestionSelector } from '../Input/QuestionSelector';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
+import { InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
 
 export interface Props {
     callToActionQuestion: CallToActionQuestion

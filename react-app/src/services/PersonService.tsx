@@ -1,8 +1,9 @@
 
 
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { Person } from "@kvalitetsit/hjemmebehandling/Models/Person";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import BaseService from "../components/BaseLayer/BaseService";
+import { Person } from "../components/Models/Person";
+
 import {IPersonService} from "./interfaces/IPersonService";
 
 export default class PersonService extends BaseService implements IPersonService {

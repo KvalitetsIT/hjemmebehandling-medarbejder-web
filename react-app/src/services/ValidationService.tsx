@@ -1,10 +1,10 @@
 
 
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
-import { CriticalLevelEnum, InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
+import BaseService from "../components/BaseLayer/BaseService";
+import { CriticalLevelEnum, InvalidInputModel } from "../components/Errorhandling/ServiceErrors/InvalidInputError";
+import { PlanDefinition } from "../components/Models/PlanDefinition";
+import { Questionnaire } from "../components/Models/Questionnaire";
 import { IValidationService } from "./interfaces/IValidationService";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
 
 export default class ValidationService extends BaseService implements IValidationService {
     async ValidateZipCode(zipCode: string): Promise<InvalidInputModel[]> {

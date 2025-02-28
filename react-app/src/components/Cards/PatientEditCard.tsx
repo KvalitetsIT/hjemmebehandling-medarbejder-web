@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 import Stack from '@mui/material/Stack';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { PatientDetail } from '../Models/PatientDetail';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { IPersonService } from '../../services/interfaces/IPersonService';
 import { LoadingButton } from '@mui/lab';
 import { TextFieldValidation } from '../Input/TextFieldValidation';
 import { IValidationService } from '../../services/interfaces/IValidationService';
-import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
-import { NotFoundError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/NotFoundError';
-import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
-import { Toast } from '@kvalitetsit/hjemmebehandling/Errorhandling/Toast';
+import { CriticalLevelEnum, InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ICollectionHelper } from '../Helpers/interfaces/ICollectionHelper';
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
+import { Address } from '../Models/Address';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
+import { NotFoundError } from '../Errorhandling/ServiceErrors/NotFoundError';
+import { ToastError } from '../Errorhandling/ToastError'
+import { Toast } from '../Errorhandling/Toast';
 import { PhonenumberInput } from '../Input/PhonenumberInput';
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import { PatientIsAlreadyActivePatientError } from '../Errors/PatientIsAlreadyActivePatientError';
-import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
+import { ContactDetails } from '../Models/Contact';
 
 export interface Props {
   initialPatient: PatientDetail
