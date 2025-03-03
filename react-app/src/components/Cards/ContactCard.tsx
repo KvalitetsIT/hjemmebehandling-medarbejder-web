@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
+import { PrimaryContact } from '../Models/PrimaryContact';
 import { Component } from 'react';
 import { Divider, Typography } from '@mui/material';
 

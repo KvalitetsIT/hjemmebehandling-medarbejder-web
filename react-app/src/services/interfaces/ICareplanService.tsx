@@ -1,13 +1,13 @@
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PlanDefinitionStatus, PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus";
+import { PatientCareplan } from "../../components/Models/PatientCareplan";
+import { PlanDefinitionStatus, PlanDefinition } from "../../components/Models/PlanDefinition";
 
 
 /**
  * CareplanService
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface ICareplanService {
 

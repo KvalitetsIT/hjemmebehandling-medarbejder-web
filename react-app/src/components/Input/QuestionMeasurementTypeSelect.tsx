@@ -4,12 +4,12 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
-import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { MeasurementType } from '@kvalitetsit/hjemmebehandling/Models/MeasurementType';
+import { Question, QuestionTypeEnum } from '../Models/Question';
+import { MeasurementType } from '../Models/MeasurementType';
 import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 
-import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { CriticalLevelEnum, InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
 import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {

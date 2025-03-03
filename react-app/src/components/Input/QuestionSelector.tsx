@@ -4,10 +4,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import ApiContext from '../../pages/_context';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
-import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { EnableWhen } from '@kvalitetsit/hjemmebehandling/Models/EnableWhen';
-import { InvalidInputModel, CriticalLevelEnum } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { Question, QuestionTypeEnum } from '../Models/Question';
+import { EnableWhen } from '../Models/EnableWhen';
+import { InvalidInputModel, CriticalLevelEnum } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
 import { ErrorMessage } from '../Errors/MessageWithWarning';
 
 export interface Props {

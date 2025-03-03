@@ -1,11 +1,12 @@
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { User } from "@kvalitetsit/hjemmebehandling/Models/User";
+import { PatientDetail } from "../../components/Models/PatientDetail";
+import { User } from "../../components/Models/User";
+
 
 /**
  * UserService 
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface IUserService {
     /**

@@ -3,7 +3,7 @@ import { Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, 
 import { ICareplanService } from '../../services/interfaces/ICareplanService';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import { ConfirmationButton } from './ConfirmationButton';
 import ApiContext, { IApiContext } from '../../pages/_context';
 

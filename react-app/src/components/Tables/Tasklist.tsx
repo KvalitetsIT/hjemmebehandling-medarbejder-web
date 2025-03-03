@@ -1,16 +1,16 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Button, Card, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { TaskType } from '@kvalitetsit/hjemmebehandling/Models/TaskType';
+import { CategoryEnum } from '../Models/CategoryEnum';
+import { TaskType } from '../Models/TaskType';
 import { Link } from 'react-router-dom';
 import ApiContext, { IApiContext } from '../../pages/_context';
-import { Task } from '@kvalitetsit/hjemmebehandling/Models/Task';
+import { Task } from '../Models/Task';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
 import FhirUtils from '../../util/FhirUtils';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import { ConfirmationButton } from '../Input/ConfirmationButton';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import IsEmptyCard from '../Errorhandling/IsEmptyCard';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { PageSelectorButtons } from '../Input/PageSelectorButtons';
 

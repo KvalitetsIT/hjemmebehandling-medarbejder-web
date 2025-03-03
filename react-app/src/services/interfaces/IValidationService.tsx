@@ -1,11 +1,12 @@
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { InvalidInputModel } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
+import { InvalidInputModel } from "../../components/Errorhandling/ServiceErrors/InvalidInputError";
+import { PlanDefinition } from "../../components/Models/PlanDefinition";
+import { Questionnaire } from "../../components/Models/Questionnaire";
+
 
 /**
  * ValidationService 
  * - Should contain all validation-methods used in fx input-validation
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  * - Methods should always return InvalidInputModel, representing the things that are wrong with the input
  */
 export interface IValidationService {

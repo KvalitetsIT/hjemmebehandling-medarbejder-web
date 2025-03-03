@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Grid, Skeleton, Typography } from '@mui/material';
 import ApiContext, { IApiContext } from '../../../pages/_context';
 import { IPersonService } from '../../../services/interfaces/IPersonService';
-import { InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
 import { IValidationService } from '../../../services/interfaces/IValidationService';
-import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
-import { PlanDefinition } from '@kvalitetsit/hjemmebehandling/Models/PlanDefinition';
-import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import { ThresholdCollection } from '@kvalitetsit/hjemmebehandling/Models/ThresholdCollection';
 import ThresholdEditor from './ThresholdEditor';
+import { InvalidInputModel } from '../../Errorhandling/ServiceErrors/InvalidInputError';
+import { ICollectionHelper } from '../../Helpers/interfaces/ICollectionHelper';
+import { PlanDefinition } from '../../Models/PlanDefinition';
+import { Question, QuestionTypeEnum } from '../../Models/Question';
+import { Questionnaire } from '../../Models/Questionnaire';
+import { ThresholdCollection } from '../../Models/ThresholdCollection';
 
 
 export enum Color {

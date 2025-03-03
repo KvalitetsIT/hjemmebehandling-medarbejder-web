@@ -1,5 +1,3 @@
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, CardContent, CardHeader, Divider, Grid, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React from "react";
 import { Prompt, Redirect } from "react-router-dom";
@@ -11,13 +9,16 @@ import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdro
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext, { IApiContext } from "../_context";
 import { Formik, Form, FormikValues } from 'formik';
-import { ToastError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ToastError";
 import { MissingDetailsError } from "../../components/Errors/MissingDetailsError";
 import * as yup from 'yup';
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+
 import { ConfirmationButton } from "../../components/Input/ConfirmationButton";
+import { ToastError } from "../../components/Errorhandling/ToastError";
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "../../components/Models/PlanDefinition";
+import { QuestionTypeEnum, Question } from "../../components/Models/Question";
+import { Questionnaire } from "../../components/Models/Questionnaire";
+import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
 
 interface Props {
     match: { params: { plandefinitionid?: string } }

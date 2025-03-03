@@ -1,11 +1,11 @@
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
+import { PatientDetail } from "../../components/Models/PatientDetail"
 
 
 /**
  * PatientService 
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface IPatientService {
     /**

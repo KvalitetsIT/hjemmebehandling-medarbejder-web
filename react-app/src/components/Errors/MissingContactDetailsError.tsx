@@ -1,4 +1,4 @@
-import { BaseServiceError } from "@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError";
+import { BaseServiceError } from "../Errorhandling/BaseServiceError";
 
 export class MissingContactDetailsError extends BaseServiceError {
 

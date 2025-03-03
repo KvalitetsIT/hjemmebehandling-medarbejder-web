@@ -1,12 +1,13 @@
 
 
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
+import BaseService from "../components/BaseLayer/BaseService";
+import { BaseModelStatus } from "../components/Models/BaseModelStatus";
+import { PatientCareplan } from "../components/Models/PatientCareplan";
+import { PlanDefinitionStatus, PlanDefinition } from "../components/Models/PlanDefinition";
 
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
 import {ICareplanService} from "./interfaces/ICareplanService";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PlanDefinitionStatus, PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+
 
 export default class CareplanService extends BaseService implements ICareplanService {
   backendApi: IBackendApi

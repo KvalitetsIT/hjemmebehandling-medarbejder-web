@@ -6,19 +6,22 @@ import QuestionnaireService from '../services/QuestionnaireService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import CareplanService from '../services/CareplanService';
 import PatientService from '../services/PatientService';
-import DanishDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DanishDateHelper';
+
 import PersonService from '../services/PersonService';
 import { BffBackendApi } from '../apis/BffBackendApi';
 import { IBackendApi } from '../apis/interfaces/IBackendApi';
 import UserService from '../services/UserService';
 import ValidationService from '../services/ValidationService';
-import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
+
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+
 import PlanDefinitionService from '../services/PlanDefinitionService';
 
 import getEnvironment from '../env';
+import { ErrorBoundary } from '../components/Errorhandling/ErrorBoundary';
+import { CollectionHelper } from '../components/Helpers/danishImpl/CollectionHelper';
+import DanishDateHelper from '../components/Helpers/danishImpl/DanishDateHelper';
 
 export default function MyApp(): JSX.Element {
 

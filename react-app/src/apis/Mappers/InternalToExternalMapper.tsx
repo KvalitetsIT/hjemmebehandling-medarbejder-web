@@ -1,20 +1,20 @@
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
 
-import { EnableWhen } from "@kvalitetsit/hjemmebehandling/Models/EnableWhen";
-import { DayEnum, Frequency } from "@kvalitetsit/hjemmebehandling/Models/Frequency";
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
-import { PatientCareplan } from "@kvalitetsit/hjemmebehandling/Models/PatientCareplan";
-import { PatientDetail } from "@kvalitetsit/hjemmebehandling/Models/PatientDetail";
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
-import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "@kvalitetsit/hjemmebehandling/Models/Question";
-import { Questionnaire } from "@kvalitetsit/hjemmebehandling/Models/Questionnaire";
-import { QuestionnaireResponseStatus } from "@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
+import { CategoryEnum } from "../../components/Models/CategoryEnum";
+import { ContactDetails } from "../../components/Models/Contact";
+import { EnableWhen } from "../../components/Models/EnableWhen";
+import { Frequency, DayEnum } from "../../components/Models/Frequency";
+import { MeasurementType } from "../../components/Models/MeasurementType";
+import { PatientCareplan } from "../../components/Models/PatientCareplan";
+import { PatientDetail } from "../../components/Models/PatientDetail";
+import { PlanDefinition } from "../../components/Models/PlanDefinition";
+import { PrimaryContact } from "../../components/Models/PrimaryContact";
+import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "../../components/Models/Question";
+import { Questionnaire } from "../../components/Models/Questionnaire";
+import { QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
+import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
 import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
-import { ContactDetails } from "@kvalitetsit/hjemmebehandling/Models/Contact";
-import { PrimaryContact } from "@kvalitetsit/hjemmebehandling/Models/PrimaryContact";
 
 /**
  * This class maps from the internal models (used in frontend) to the external models (used in bff-api)

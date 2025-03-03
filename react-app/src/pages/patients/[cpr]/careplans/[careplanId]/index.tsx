@@ -2,19 +2,22 @@ import * as React from 'react';
 
 import { Grid, Stack } from '@mui/material';
 import { PatientCard } from '../../../../../components/Cards/PatientCard';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+
 import ApiContext, { IApiContext } from '../../../../_context';
 import { LoadingBackdropComponent } from '../../../../../components/Layout/LoadingBackdropComponent';
 import { ICareplanService } from '../../../../../services/interfaces/ICareplanService';
 import { CareplanSummary } from '../../../../../components/Cards/CareplanSummary';
 import { CareplanQuestionnaireSummary } from '../../../../../components/Cards/CareplanQuestionnaireSummary';
 import { ObservationCard } from '../../../../../components/Cards/ObservationCard';
-import { QuestionnaireResponse } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
+
 import { IQuestionnaireService } from '../../../../../services/interfaces/IQuestionnaireService';
 import { LoginInfoCard } from '../../../../../components/Cards/LoginInfoCard';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { ErrorBoundary } from '../../../../../components/Errorhandling/ErrorBoundary';
+import IsEmptyCard from '../../../../../components/Errorhandling/IsEmptyCard';
+import { PatientCareplan } from '../../../../../components/Models/PatientCareplan';
+import { Questionnaire } from '../../../../../components/Models/Questionnaire';
+import { QuestionnaireResponse } from '../../../../../components/Models/QuestionnaireResponse';
+
 
 interface State {
   loading: boolean

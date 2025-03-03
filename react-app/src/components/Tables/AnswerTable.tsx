@@ -1,22 +1,22 @@
 import Chip from '@mui/material/Chip';
 import React, { Component } from 'react';
 import { Alert, AlertColor, Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip, TableFooter } from '@mui/material';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
-import { QuestionnaireResponse, QuestionnaireResponseStatus } from '@kvalitetsit/hjemmebehandling/Models/QuestionnaireResponse';
+import { CategoryEnum } from '../Models/CategoryEnum';
+import { QuestionnaireResponse, QuestionnaireResponseStatus } from '../Models/QuestionnaireResponse';
 import { QuestionnaireResponseStatusSelect } from '../Input/QuestionnaireResponseStatusSelect';
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { IQuestionAnswerService } from '../../services/interfaces/IQuestionAnswerService';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
+import { Questionnaire } from '../Models/Questionnaire';
+import IDateHelper from '../Helpers/interfaces/IDateHelper';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
+import { PatientCareplan } from '../Models/PatientCareplan';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { Question, QuestionTypeEnum } from '@kvalitetsit/hjemmebehandling/Models/Question';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { GroupAnswer } from '@kvalitetsit/hjemmebehandling/Models/Answer';
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
+import { Question, QuestionTypeEnum } from '../Models/Question';
+import IsEmptyCard from '../Errorhandling/IsEmptyCard';
+import { GroupAnswer } from '../Models/Answer';
 
 
 

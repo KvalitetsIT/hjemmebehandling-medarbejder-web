@@ -1,11 +1,12 @@
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import { BaseModelStatus } from "../../components/Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "../../components/Models/PlanDefinition";
+
 
 /**
  * QuestionnaireService 
  * - should be in charge of validating responses
  * - should contain logic between the api and frontend
- * - should only use domain-models from @kvalitetsit/hjemmebehandling/Models
+ * - should only use domain-models from ../Models
  */
 export interface IPlanDefinitionService {
 

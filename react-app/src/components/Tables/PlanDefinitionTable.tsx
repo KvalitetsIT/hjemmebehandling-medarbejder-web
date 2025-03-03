@@ -1,6 +1,6 @@
-import IDateHelper from "@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper";
-import { BaseModelStatus } from "@kvalitetsit/hjemmebehandling/Models/BaseModelStatus";
-import { PlanDefinition, PlanDefinitionStatus } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
+import IDateHelper from "../Helpers/interfaces/IDateHelper";
+import { BaseModelStatus } from "../Models/BaseModelStatus";
+import { PlanDefinition, PlanDefinitionStatus } from "../Models/PlanDefinition";
 import { Button, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Typography, TableFooter, Tooltip, TableCell } from "@mui/material";
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";

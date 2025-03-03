@@ -1,30 +1,30 @@
 import React, { Component, CSSProperties } from 'react';
 import { CardContent, Card, Grid, Step, StepLabel, Stepper, Typography, CardHeader, Divider } from '@mui/material';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
-import { ContactDetails } from '@kvalitetsit/hjemmebehandling/Models/Contact';
 import ApiContext, { IApiContext } from '../pages/_context';
 import { IPatientService } from '../services/interfaces/IPatientService';
 import { LoadingBackdropComponent } from './Layout/LoadingBackdropComponent';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
 import { QuestionnaireListSimple } from './Cards/QuestionnaireListSimple';
 import { PatientEditCard } from './Cards/PatientEditCard';
-import { Address } from '@kvalitetsit/hjemmebehandling/Models/Address';
 import { ContactEditCard } from './Cards/ContactEditCard';
 import { PlanDefinitionSelect } from './Input/PlanDefinitionSelect';
 import { ICareplanService } from '../services/interfaces/ICareplanService';
 import { Prompt, Redirect } from 'react-router-dom';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import { BaseServiceError } from '@kvalitetsit/hjemmebehandling/Errorhandling/BaseServiceError'
-import { ToastError } from '@kvalitetsit/hjemmebehandling/Errorhandling/ToastError'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { PatientAvatar } from './Avatars/PatientAvatar';
-import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
 import { MissingContactDetailsError } from './Errors/MissingContactDetailsError';
 import { AccordianWrapper } from './Cards/PlanDefinition/AccordianWrapper';
 import { ConfirmationButton } from './Input/ConfirmationButton';
-import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
+import { BaseServiceError } from './Errorhandling/BaseServiceError';
+import { ErrorBoundary } from './Errorhandling/ErrorBoundary';
+import { InvalidInputModel, CriticalLevelEnum } from './Errorhandling/ServiceErrors/InvalidInputError';
+import { ToastError } from './Errorhandling/ToastError';
+import { ValidateInputEvent, ValidateInputEventData } from './Events/ValidateInputEvent';
+import { Address } from './Models/Address';
+import { ContactDetails } from './Models/Contact';
+import { PatientCareplan } from './Models/PatientCareplan';
+import { PatientDetail } from './Models/PatientDetail';
+import { PrimaryContact } from './Models/PrimaryContact';
 
 /**
  * 

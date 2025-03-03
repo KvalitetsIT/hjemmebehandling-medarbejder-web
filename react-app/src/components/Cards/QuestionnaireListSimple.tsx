@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
+import { PatientCareplan } from '../Models/PatientCareplan';
+import { Questionnaire } from '../Models/Questionnaire';
 import { FrequencyTableRow } from '../Input/FrequencyTableRow';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
 import ApiContext, { IApiContext } from '../../pages/_context';
 import { LoadingSmallComponent } from '../Layout/LoadingSmallComponent';
 import { IQuestionnaireService } from '../../services/interfaces/IQuestionnaireService';

@@ -11,18 +11,18 @@ import { IPatientService } from '../services/interfaces/IPatientService';
 import QuestionAnswerService from '../services/QuestionAnswerService';
 import QuestionnaireService from '../services/QuestionnaireService';
 import PatientService from '../services/PatientService';
-import IDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/IDateHelper';
-import DanishDateHelper from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/DanishDateHelper';
 import { IPersonService } from '../services/interfaces/IPersonService';
 import PersonService from '../services/PersonService';
 import UserService from '../services/UserService';
 import { IUserService } from '../services/interfaces/IUserService';
 import ValidationService from '../services/ValidationService';
 import { IValidationService } from '../services/interfaces/IValidationService';
-import { ICollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/interfaces/ICollectionHelper';
-import { CollectionHelper } from '@kvalitetsit/hjemmebehandling/Helpers/danishImpl/CollectionHelper';
 import PlanDefinitionService from '../services/PlanDefinitionService';
 import { IPlanDefinitionService } from '../services/interfaces/IPlanDefinitionService';
+import { CollectionHelper } from '../components/Helpers/danishImpl/CollectionHelper';
+import DanishDateHelper from '../components/Helpers/danishImpl/DanishDateHelper';
+import { ICollectionHelper } from '../components/Helpers/interfaces/ICollectionHelper';
+import IDateHelper from '../components/Helpers/interfaces/IDateHelper';
 
 /**
  * 

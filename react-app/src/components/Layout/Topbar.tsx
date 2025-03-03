@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { SearchPatientInput } from '../Input/SearchPatientInput';
 import { UserContextCard } from '../Cards/UserContextCard';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
 export interface State {
   drawerIsOpen: boolean
 }

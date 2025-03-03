@@ -4,16 +4,16 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { PatientDetail } from '@kvalitetsit/hjemmebehandling/Models/PatientDetail';
+import { PatientDetail } from '../Models/PatientDetail';
 import { PatientAvatar } from '../../components/Avatars/PatientAvatar';
 import { Component } from 'react';
 import { CardHeader, Divider, Grid, Stack, Typography } from '@mui/material';
 import { Skeleton, Tooltip } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
+import { ErrorBoundary } from '../Errorhandling/ErrorBoundary'
 import { PencilIcon } from '../Icons/Icons';
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
-import { PrimaryContact } from '@kvalitetsit/hjemmebehandling/Models/PrimaryContact';
+import IsEmptyCard from '../Errorhandling/IsEmptyCard';
+import { PrimaryContact } from '../Models/PrimaryContact';
 export interface Props {
   patient: PatientDetail
 

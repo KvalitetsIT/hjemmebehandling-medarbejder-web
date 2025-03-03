@@ -4,10 +4,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Component } from 'react';
 import { FormControl, FormHelperText, Typography } from '@mui/material';
 import ApiContext from '../../pages/_context';
-import { CategoryEnum } from '@kvalitetsit/hjemmebehandling/Models/CategoryEnum';
+import { CategoryEnum } from '../Models/CategoryEnum';
 import { InputLabel} from "@mui/material";
-import { CriticalLevelEnum, InvalidInputModel } from '@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/InvalidInputError';
-import { ValidateInputEvent, ValidateInputEventData } from '@kvalitetsit/hjemmebehandling/Events/ValidateInputEvent';
+import { CriticalLevelEnum, InvalidInputModel } from '../Errorhandling/ServiceErrors/InvalidInputError';
+import { ValidateInputEvent, ValidateInputEventData } from '../Events/ValidateInputEvent';
 
 export interface Props {
     sectionName?: string;

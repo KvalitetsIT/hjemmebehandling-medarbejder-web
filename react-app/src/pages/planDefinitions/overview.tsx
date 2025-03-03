@@ -1,4 +1,3 @@
-import { PlanDefinition } from "@kvalitetsit/hjemmebehandling/Models/PlanDefinition";
 import { Button, Card, Grid, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -6,6 +5,7 @@ import { LoadingBackdropComponent } from "../../components/Layout/LoadingBackdro
 import { PlanDefinitionTable } from "../../components/Tables/PlanDefinitionTable";
 import { IPlanDefinitionService } from "../../services/interfaces/IPlanDefinitionService";
 import ApiContext, { IApiContext } from "../_context";
+import { PlanDefinition } from "../../components/Models/PlanDefinition";
 
 interface State {
     loading: boolean

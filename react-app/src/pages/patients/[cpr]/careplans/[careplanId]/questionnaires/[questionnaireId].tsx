@@ -5,13 +5,13 @@ import { AnswerTable } from '../../../../../../components/Tables/AnswerTable';
 import { LoadingBackdropComponent } from '../../../../../../components/Layout/LoadingBackdropComponent';
 import ApiContext, { IApiContext } from '../../../../../_context';
 import { BasicTabs } from '../../../../../../components/Layout/Tabs';
-import { PatientCareplan } from '@kvalitetsit/hjemmebehandling/Models/PatientCareplan';
-import { Questionnaire } from '@kvalitetsit/hjemmebehandling/Models/Questionnaire';
 import { ICareplanService } from '../../../../../../services/interfaces/ICareplanService';
 import { PatientContextThumbnails } from '../../../../../../components/Cards/PatientContextThumbnails';
 import { IQuestionnaireService } from '../../../../../../services/interfaces/IQuestionnaireService';
-import { ErrorBoundary } from '@kvalitetsit/hjemmebehandling/Errorhandling/ErrorBoundary'
-import IsEmptyCard from '@kvalitetsit/hjemmebehandling/Errorhandling/IsEmptyCard';
+import { ErrorBoundary } from '../../../../../../components/Errorhandling/ErrorBoundary';
+import IsEmptyCard from '../../../../../../components/Errorhandling/IsEmptyCard';
+import { PatientCareplan } from '../../../../../../components/Models/PatientCareplan';
+import { Questionnaire } from '../../../../../../components/Models/Questionnaire';
 
 
 interface State {

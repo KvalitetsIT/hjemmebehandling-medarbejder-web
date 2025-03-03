@@ -1,14 +1,14 @@
 
 
 import { IBackendApi } from "../apis/interfaces/IBackendApi";
-import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "@kvalitetsit/hjemmebehandling/Models/Answer";
-import { CategoryEnum } from "@kvalitetsit/hjemmebehandling/Models/CategoryEnum";
-import { ThresholdCollection } from "@kvalitetsit/hjemmebehandling/Models/ThresholdCollection";
-import { ThresholdNumber } from "@kvalitetsit/hjemmebehandling/Models/ThresholdNumber";
-import BaseService from "@kvalitetsit/hjemmebehandling/BaseLayer/BaseService";
+import BaseService from "../components/BaseLayer/BaseService";
+import { UnsupportedError } from "../components/Errorhandling/ServiceErrors/UnsupportedError";
+import { Answer, BooleanAnswer, NumberAnswer, StringAnswer } from "../components/Models/Answer";
+import { CategoryEnum } from "../components/Models/CategoryEnum";
+import { MeasurementType } from "../components/Models/MeasurementType";
+import { ThresholdCollection } from "../components/Models/ThresholdCollection";
+import { ThresholdNumber } from "../components/Models/ThresholdNumber";
 import { IQuestionAnswerService } from "./interfaces/IQuestionAnswerService";
-import { UnsupportedError } from "@kvalitetsit/hjemmebehandling/Errorhandling/ServiceErrors/UnsupportedError";
-import { MeasurementType } from "@kvalitetsit/hjemmebehandling/Models/MeasurementType";
 
 export default class QuestionAnswerService extends BaseService implements IQuestionAnswerService {
     backendApi: IBackendApi
