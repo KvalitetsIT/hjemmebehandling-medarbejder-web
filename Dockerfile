@@ -1,8 +1,8 @@
 # Generates the required models from the openapi json file
 FROM openapitools/openapi-generator-cli:v6.6.0 AS api-generator
 WORKDIR /generator
-COPY ./react-app/resources/bff.json /generator
-RUN ["java", "-jar", "/opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar", "generate", "-i", "bff.json", "-g", "typescript-fetch", "-o", "./generated", "--additional-properties=typescriptThreePlus=true"]
+COPY ./react-app/resources/api.yaml /generator
+RUN ["java", "-jar", "/opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar", "generate", "-i", "api.yaml", "-g", "typescript-fetch", "-o", "./generated", "--additional-properties=typescriptThreePlus=true"]
 
 # Build the application using the generated api
 FROM node:20.4.0-alpine AS build

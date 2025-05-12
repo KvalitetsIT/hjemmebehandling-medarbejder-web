@@ -19,7 +19,7 @@ import SimpleOrganization from "../../components/Models/SimpleOrganization";
 import { Task } from "../../components/Models/Task";
 import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
 import { User } from "../../components/Models/User";
-import { MeasurementTypeDto, CarePlanDto,EnableWhen as EnableWhenDto, QuestionnaireResponseDto, PlanDefinitionDto, ThresholdDto, FrequencyDtoWeekdaysEnum, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDtoTriagingCategoryEnum, ThresholdDtoTypeEnum, UserContext, QuestionnaireResponseDtoExaminationStatusEnum, PersonDto, ContactDetailsDto, AnswerDto, AnswerDtoAnswerTypeEnum, FrequencyDto, QuestionnaireWrapperDto, QuestionnaireDto, PatientDto } from "../../generated";
+import { MeasurementTypeDto, CarePlanDto,EnableWhen as EnableWhenDto, QuestionnaireResponseDto, PlanDefinitionDto, ThresholdDto, FrequencyDtoWeekdaysEnum, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireResponseDtoTriagingCategoryEnum, ThresholdDtoTypeEnum, UserContext, PersonDto, ContactDetailsDto, AnswerDto, AnswerDtoAnswerTypeEnum, FrequencyDto, QuestionnaireWrapperDto, QuestionnaireDto, PatientDto, ExaminationStatusDto } from "../../generated";
 import FhirUtils from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -40,7 +40,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
     mapCarePlanDto(carePlanDto: CarePlanDto): PatientCareplan {
         const carePlan = new PatientCareplan()
 
-        carePlan.id = FhirUtils.unqualifyId(carePlanDto.id)
+        carePlan.id = carePlanDto.id ? FhirUtils.unqualifyId(carePlanDto.id) : undefined
         carePlan.planDefinitions = carePlanDto.planDefinitions!.map(pd => this.mapPlanDefinitionDto(pd))
         carePlan.questionnaires = carePlanDto?.questionnaires?.map(q => this.mapQuestionnaireDto(q)) ?? []
         carePlan.patient = this.mapPatientDto(carePlanDto.patientDto!)
@@ -73,7 +73,7 @@ export default class ExternalToInternalMapper extends BaseMapper {
                     task.firstname = carePlan.patientDto!.givenName
                     task.lastname = carePlan.patientDto!.familyName
                     task.questionnaireResponseStatus = undefined
-                    task.carePlanId = carePlan.id
+                    task.carePlanId = carePlan.id ?? ""
 
                     const questionnaire = unsatisfiedQuestionnaire.questionnaire!
                     task.questionnaireId = questionnaire.id!
@@ -303,13 +303,13 @@ export default class ExternalToInternalMapper extends BaseMapper {
         return mappedEntitlement;
     }
 
-    mapExaminationStatus(status: QuestionnaireResponseDtoExaminationStatusEnum): QuestionnaireResponseStatus {
+    mapExaminationStatus(status: ExaminationStatusDto): QuestionnaireResponseStatus {
         switch (status) {
-            case QuestionnaireResponseDtoExaminationStatusEnum.NotExamined:
+            case ExaminationStatusDto.NotExamined:
                 return QuestionnaireResponseStatus.NotProcessed
-            case QuestionnaireResponseDtoExaminationStatusEnum.UnderExamination:
+            case ExaminationStatusDto.UnderExamination:
                 return QuestionnaireResponseStatus.InProgress
-            case QuestionnaireResponseDtoExaminationStatusEnum.Examined:
+            case ExaminationStatusDto.Examined:
                 return QuestionnaireResponseStatus.Processed
             default:
                 throw new Error('Could not map ExaminationStatus ' + status)
