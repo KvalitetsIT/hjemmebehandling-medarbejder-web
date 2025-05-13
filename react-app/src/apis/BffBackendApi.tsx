@@ -13,7 +13,7 @@ import { Questionnaire, QuestionnaireStatus } from "../components/Models/Questio
 import { QuestionnaireResponseStatus, QuestionnaireResponse } from "../components/Models/QuestionnaireResponse";
 import { Task } from "../components/Models/Task";
 import { User } from "../components/Models/User";
-import { Configuration, CarePlanApi, PlanDefinitionApi, QuestionnaireResponseApi, PersonApi, UserApi, PatientApi, QuestionnaireApi, ValueSetApi, CreatePlanDefinitionOperationRequest, ThresholdDto, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, CreateQuestionnaireOperationRequest, GetQuestionnairesRequest, PatchQuestionnaireOperationRequest, GetPlanDefinitionsRequest, GetQuestionnaireResponsesByStatusStatusEnum, IsQuestionnaireInUseRequest, IsPlanDefinitionInUseRequest, GetUnresolvedQuestionnairesRequest } from "../generated";
+import { Configuration, CarePlanApi, PlanDefinitionApi, QuestionnaireResponseApi, PersonApi, UserApi, PatientApi, QuestionnaireApi, ValueSetApi, CreatePlanDefinitionOperationRequest, ThresholdDto, PatchPlanDefinitionOperationRequest, PatchPlanDefinitionRequestStatusEnum, CreateQuestionnaireOperationRequest, GetQuestionnairesRequest, PatchQuestionnaireOperationRequest, GetPlanDefinitionsRequest, IsQuestionnaireInUseRequest, IsPlanDefinitionInUseRequest, GetUnresolvedQuestionnairesRequest, ExaminationStatusDto } from "../generated";
 import FhirUtils from "../util/FhirUtils";
 import { IBackendApi } from "./interfaces/IBackendApi";
 import ExternalToInternalMapper from "./Mappers/ExternalToInternalMapper";
@@ -153,8 +153,9 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
 
                 id: questionnaire.id,
                 patchQuestionnaireRequest: {
-                    title: questionnaire.name,
-                    status: questionnaire.status?.toString(),
+                    title: questionnaire.name ?? "",
+                    status: questionnaire.status?.toString()?? "",
+                    description: "", 
                     callToAction: this.toExternal.mapCallToAction(questionnaire.getCallToActions()[0]),
                     //questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id && question.type === QuestionTypeEnum.BOOLEAN))),
                     questions: questions?.map(question => this.toExternal.mapQuestion(question, questionnaire.thresholds?.find(t => t.questionId === question.Id ))),
@@ -361,7 +362,7 @@ export class BffBackendApi extends BaseApi implements IBackendApi {
         try {
             const api = this.questionnaireResponseApi;
             const request = {
-                status: [GetQuestionnaireResponsesByStatusStatusEnum.NotExamined, GetQuestionnaireResponsesByStatusStatusEnum.UnderExamination],
+                status: [ExaminationStatusDto.NotExamined, ExaminationStatusDto.UnderExamination],
                 pageNumber: page,
                 pageSize: pagesize
             };

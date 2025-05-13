@@ -6,9 +6,9 @@ import { Questionnaire } from "./Questionnaire";
 
 export class PlanDefinition extends FhirRessource {
     id?: string;
-    name?: string;
+    name: string = "";
     questionnaires?: Questionnaire[]
-    status?: PlanDefinitionStatus | BaseModelStatus
+    status: PlanDefinitionStatus | BaseModelStatus = BaseModelStatus.UKENDT;
     created?: Date
     lastUpdated?: Date
     

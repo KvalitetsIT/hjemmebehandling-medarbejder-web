@@ -12,7 +12,7 @@ import { BaseQuestion, CallToActionQuestion, Question, QuestionTypeEnum } from "
 import { Questionnaire } from "../../components/Models/Questionnaire";
 import { QuestionnaireResponseStatus } from "../../components/Models/QuestionnaireResponse";
 import { ThresholdCollection } from "../../components/Models/ThresholdCollection";
-import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerModelAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto } from "../../generated/models";
+import { CarePlanDto, ContactDetailsDto, FrequencyDto, FrequencyDtoWeekdaysEnum, PatientDto, PlanDefinitionDto, QuestionDto, QuestionDtoQuestionTypeEnum, QuestionnaireWrapperDto, EnableWhen as EnableWhenDto, AnswerDtoAnswerTypeEnum, EnableWhenOperatorEnum, QuestionnaireDto, ThresholdDto, ThresholdDtoTypeEnum, MeasurementTypeDto, ExaminationStatusDto } from "../../generated/models";
 import FhirUtils, { Qualifier } from "../../util/FhirUtils";
 import BaseMapper from "./BaseMapper";
 
@@ -137,7 +137,7 @@ export default class InternalToExternalMapper extends BaseMapper {
         return {
             answer: {
                 linkId: enableWhen.questionId,
-                answerType: AnswerModelAnswerTypeEnum.Boolean,
+                answerType: AnswerDtoAnswerTypeEnum.Boolean,
                 value: enableWhen.answer + ""
             },
             operator: EnableWhenOperatorEnum.Equal
@@ -188,14 +188,14 @@ export default class InternalToExternalMapper extends BaseMapper {
         }
     }
 
-    mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus): PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum {
+    mapQuestionnaireResponseStatus(status: QuestionnaireResponseStatus): ExaminationStatusDto {
         switch (status) {
             case QuestionnaireResponseStatus.NotProcessed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.NotExamined
+                return ExaminationStatusDto.NotExamined
             case QuestionnaireResponseStatus.InProgress:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.UnderExamination
+                return ExaminationStatusDto.UnderExamination
             case QuestionnaireResponseStatus.Processed:
-                return PartialUpdateQuestionnaireResponseRequestExaminationStatusEnum.Examined
+                return ExaminationStatusDto.Examined
             default:
                 throw new Error('Could not map QuestionnaireResponseStatus ' + status)
         }
