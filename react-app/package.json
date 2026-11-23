@@ -7,7 +7,6 @@
     "@casl/ability": "^6.5.0",
     "@emotion/react": "^11.10.1",
     "@emotion/styled": "^11.10.0",
-    "@mockoon/cli": "^2.1.0",
     "@mui/base": "5.0.0-beta.1",
     "@mui/icons-material": "^5.13.7",
     "@mui/lab": "^5.0.0-alpha.54",
@@ -31,13 +30,13 @@
     "react-number-format": "^4.9.3",
     "react-redux": "^8.0.2",
     "react-router-dom": "^5.3.3",
-    "react-scripts": "^5.0.1",
     "react-toastify": "^9.0.4",
     "styled-components": "^5.3.11",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@mockoon/cli": "^2.1.0",
     "typescript": "^4.9.5",
     "@openapitools/openapi-generator-cli": "^2.6.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -48,7 +47,8 @@
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "stopapi": "mockoon-cli stop",
@@ -76,5 +76,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "express": "^4.22.3",
+    "http-proxy-middleware": "^2.0.12",
+    "nth-check": "^2.1.1",
+    "resolve-url-loader": "^5.0.0",
+    "serialize-javascript": "^7.1.4"
   }
 }

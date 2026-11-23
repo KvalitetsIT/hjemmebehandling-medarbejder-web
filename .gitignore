@@ -45,3 +45,5 @@ generated
 test-results/
 
 react-app/build
+# macOS
+.DS_Store

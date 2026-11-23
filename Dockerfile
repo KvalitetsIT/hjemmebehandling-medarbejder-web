@@ -5,7 +5,7 @@ COPY ./react-app/resources/bff.json /generator
 RUN ["java", "-jar", "/opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar", "generate", "-i", "bff.json", "-g", "typescript-fetch", "-o", "./generated", "--additional-properties=typescriptThreePlus=true"]
 
 # Build the application using the generated api
-FROM node:20.4.0-alpine AS build
+FROM node:24.22.3-alpine3.24 AS build
 WORKDIR /app
 COPY ./react-app /app
 COPY --from=api-generator /generator/generated ./src/generated
@@ -13,12 +13,13 @@ RUN npm install
 RUN npm run build
 
 # Download and build our environment injector
-FROM golang:1.24.2-alpine3.21 AS go-downloader
+FROM golang:1.27.4-alpine3.24 AS go-downloader
 RUN apk update && apk upgrade && apk add --no-cache bash git openssh
-RUN go install github.com/KvalitetsIT/runtime-js-env@83fdece6e4a6244909157ab100b091cb611ad481
+RUN go install github.com/KvalitetsIT/runtime-js-env@7685240c740f285914dcd7abbddd05052771c5f7
 
 # Copy the built application into Nginx for serving
-FROM nginx:1.27.5-alpine3.21
+FROM nginx:1.30.7-alpine3.24
+RUN apk upgrade --no-cache
 COPY --from=build /app/build /usr/share/nginx/html
 COPY --from=go-downloader /go/bin/runtime-js-env /
 COPY ./react-app/nginx/nginx.conf /usr/share/nginx/nginx.conf
